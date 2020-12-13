@@ -1,0 +1,218 @@
+#+TITLE: SECD Machine
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Wednesday December  9, 2020 at  3:01PM
+
+* Introduction
+
+Landin introduced the SECD machine back in 1964, Plotkin used it in
+the mid 1970s, and Henderson employed it in his book on Lispkit
+in 1980. 
+
+We will discuss the description of the theoretical architecture of
+the SECD machine (namely, its registers, its instruction
+set, and how each operation transforms the SECD machine
+state). Once we have finished this, we will consider a compiler
+from Lisp to SECD instructions.
+
+Why Lisp? Well, we don't need to consider a parser or grammar for a
+simple input language. It's nothing more than wishing to avoid
+difficulties. 
+
+* Machine Description
+
+Like any abstract machine, we have some instruction set which
+manipulates stacks or registers.
+
+** The four "registers"
+
+There are four "registers" (stacks):
+- =s= stack :: holds intermediate results, it's a list of expressions
+- =e= environment :: holds values bound to variables
+- =c= control :: contains the code being executed
+- =d= dump :: stores the contents of the other registers
+  temporarily when a function-call occurs (and restores them upon
+  return)
+
+Everything in the environment =e= is given a unique ID, which is
+essentially a tuple =(x, y)= where =x= is the location of the list
+on the stack, =y= is the position in that list.
+
+** Operations
+
+Following Henderson, we have the following instruction set for our
+SECD machine:
+
+- =LD= :: load
+- =LDC= :: load a constant onto the stack
+- =LDF= :: load a function onto the stack
+- =AP= :: apply a function
+- =RTN= :: return
+- =DUM= :: create a dummy environment
+- =RAP= :: recursively apply
+- =SEL= :: select subcontrol
+- =JOIN= :: rejoin main control
+- =CAR= :: take the =car= of the top of the =s= stack
+- =CDR= :: take the =cdr= of the top of the =s= stack
+- =ATOM= :: apply the =atom= predicate to the top stack item
+- =CONS= :: form =cons= of top two stack items
+- =EQ= :: apply =eq= predicate to top two stack items
+- =STOP= :: stop the machine, we're done
+
+And then about a half-dozen arithmetic operators (=ADD=, =SUB=,
+=MUL=, =DIV=, =REM=, =LEQ=).
+
+** Operation Transition Rules
+
+The semantics for our SECD machine is described using a transition
+relation which maps =s e c d -> s' e' c' d'=.
+
+*** S-Expression related Rules
+
+The =CONS=, =CDR=, =CAR= instructions behave as we would hope and
+expect:
+
+- =CONS= :: =(a b . s) e (CONS . c) d= becomes =((a . b) . s) e c d=
+- =CAR= :: =((a . b) . s) e (CAR . c) d= becomes =(a . s) e c d=
+- =CDR= :: =((a . b) . s) e (CDR . c) d= becomes =(b . s) e c d=
+
+The =ATOM= predicate tests if the top item in =s= is an atomic
+datum or not.
+
+- =ATOM= :: =(a . s) e (ATOM . c) d= becomes =(t . s) e c d= where
+  ~t=T~ if =a= is in fact an atom, ~t=F~ if =a= is a list.
+
+*** Arithmetic Rules
+
+The arithmetic operations applied to the top 2 items of the stack,
+but do not modify the other registers:
+
+- =ADD= takes =(a b . s)= and produces =(b + a . s)=
+- =SUB= takes =(a b . s)= and produces =(b - a . s)=
+- =MUL= takes =(a b . s)= and produces =(b * a . s)=
+- =DIV= takes =(a b . s)= and produces =(b / a . s)=
+- =REM= takes =(a b . s)= and produces =(b % a . s)=
+- =LEQ= takes =(a b . s)= and produces ~(b <= a . s)~
+- =EQ=  takes =(a b . s)= and produces ~(b = a . s)~
+  
+  
+*** Loading Rules
+
+- =LD= :: =s e (LD i . c) d= becomes =(x . s) e c d= where
+  ~x = locate(i, e)~ is the current value for the index =i=, and
+  =locate()= is a function in the meta-language
+- =LDC= :: =s e (LDC n . c) d= becomes =(n . s) e c d=
+- =LDF= :: =s e (LDF c' . c) d= becomes =((c' . e) . s) e c d=
+  where the closure is =(c' . e)=.
+
+The pseudocode for the ~locate()~ function requires first
+introducing a function which returns the ~nth~ member of a list
+(zero-indexed):
+
+#+begin_example
+index :: Int -> List -> a
+index 0 s = car(s)
+index n s = if n < 0 then error "Must have non-negative index number"
+            else index (n - 1) cdr(s)
+#+end_example
+
+We use this to define a function which determines, for an index
+pair ~i = (b . n)~ the corresponding value in the environment:
+
+#+begin_example
+locate :: (Int, Int) -> Env -> a
+locate (b, n) e = index n (index b e)
+#+end_example
+
+*** Conditional Form Rules
+
+There are two instructions for conditional forms, namely =SEL=
+selects a sublist of the control based on the value at the top of
+the stack, and =JOIN= rejoins the main control. We could then
+expect the control to look like
+
+~(... SEL c_TRUE c_FALSE c)~
+
+where both ~c_TRUE~ and ~c_FALSE~ look like a list whose last
+element is ~JOIN~, i.e., ~c_T = (... JOIN)~.
+
+- =SEL= :: =(x . s) e (SEL c_T c_F . c) d= becomes =s e c_X (c . d)=
+  where =c_X= is ~c_T~ if ~x = T~, and ~c_X~ is ~c_F~ if ~x = F~
+- =JOIN= :: =s e (JOIN) (c . d)= evaluates to =s e c d=
+
+So =SEL= is a jump instruction, =JOIN= jumps back to the function
+caller.
+
+*** Function Application
+
+We need to bear in mind how we encode closures, because they govern
+how we implement =AP=, =RTN=, etc. A closure is just =(c . e)= a
+pair of instructions plus an environment for it.
+
+- =AP= :: =((c' . e') v . s) e (AP .c) d= evaluates to
+  =NIL (v . e') c' (s e c . d)= a state with:
+  1. a fresh =NIL= stack,
+  2. a new environment =(v . e')=,
+  3. the instructions to execute =c'= given by the function body, and
+  4. the saved state at the time of function call =(s e c . d)=
+- =RTN= :: =(x) e' (RTN) (s e c . d)= becomes
+  =(x . s) e c d=, it restores the previous state of the =e=, =c=,
+  =d= registers, and pushes =x= to the top of the previous =s= register-state.
+- =DUM= :: creating a new environment with =PENDING= as the first
+  sublist, transforms =s e (DUM . c) d= into =s (PENDING . e) c d=.
+- =RAP= :: recursively apply, =((c' . e') v . s) (PENDING . e) (RAP . c) d=
+  becomes =NIL rplaca(e', v) c' (s e c . d)= where ~rplaca~ is a
+  function in the metalanguage (compare to =AP= which instead had
+  =(v . e')= directly)
+
+The recursive aspect of =RAP= is due to ~rplaca~ which amounts to
+be a =(setf (car e') v)= (thus replacing the =PENDING= dummy
+metasymbol introduced by =DUM=).
+
+Remember when we noted =e= is basically a stack of lists, and data
+stored in the =e= environment is given a unique identifier =(x, y)= ?
+In a typical function call with =AP=, a new list is pushed onto
+=e=. Any local variables now look like =(len(e), y)=. This =len(e)=
+is problematic for recursive functions, because the stack grows
+with each recursive function call.
+
+That's why =RAP=, instead of pushing a new list onto the
+environment stack, simply replaces whatever is at the head of =e=
+with a new environment list.
+
+#+begin_remark
+For further consideration about recursive functions in SECD,
+consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
+(1999).
+#+end_remark
+
+
+* References
+
+- Peter Henderson,
+  /Functional Programming: Application and Implementation/.
+  Prentice-Hall International Series in Computer Science,
+  1980. See especially chapter 6.
+- Gordon Plotkin,
+  "Call-byname, call-by-value and the lambda-calculus".
+  /Theoretical Computer Science/ *1* (1975) pp. 125-159.
+
+** SECD Machine
+
+- [[https://stackoverflow.com/q/7547951][StackOverflow thread]]
+- Jia-Huai You, [[https://webdocs.cs.ualberta.cs/~you/courses/325/Mynotes/Fun/SECD-slides.html][SECD Virtual Machine]] (lecture notes/slides)
+- John D. Ramsdell, "The Tail-Recursive SECD Machine". Manuscript
+  dated 1999.
+- [[https://netzhansa.blogspot.com/2008/09/revisiting-secd-and-power-of-lisp-while.html][Revisiting SECD and the Power of Lisp]]
+  
+** Lisp to SECD Compiler
+
+- Peter Henderson's book is about this very topic
+- Milos Radovanovic, Mirjana Ivanovic, "An Implementation of
+  Lispkit Lisp in Java". In /Proc. XV Conf. on Applied Math./,
+  2002, pp.169-178
+  
+  

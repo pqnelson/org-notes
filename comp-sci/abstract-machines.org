@@ -1,0 +1,55 @@
+#+TITLE: Abstract Machines
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Sunday December  6, 2020 at  7:10PM
+
+* Overview
+
+The idea, from about 1970, was to have a virtual machine which
+languages targeted. Except at the time, the virtual machine was
+implemented on paper: an actual program would be too costly. Hence
+they were called "abstract machines".
+
+Gordon Plotkin wrote an article in the mid '70s proving the
+correctness of an ISWIM compiler which emitted
+SECD-bytecode. Again, all on paper, no source code was actually
+developed and run.
+
+The idea took hold with the functional programming community thanks
+to Cardelli's ML targetting an abstract machine (leading to the FAM
+(functional abstract machine)), and independently Xavier Leroy
+devised the Zinc abstract machine for OCAML to target later.
+
+* Classifying Machines
+
+There are countless variations of about a dozen distinct abstract
+machines. The exact taxonomy varies depending on how one
+counts. Broadly speaking, the Linean classification begins with
+whether the abstract machine is lazy or eager in its
+evaluation. Then we can trace out the lineage from its
+structure. The abstract machines worth studying are:
+
+- Eager Machines
+  - [[./abstract-machines/secd.org][SECD]] :: The first abstract machine, invented by Landin in the '60s
+  - CAM :: The categorical abstract machine, underpins CAML
+  - ZINC :: An optimized improvement of CAM
+- Lazy Machines
+  - G-Machine :: Underpins Lazy ML
+  - Warren Machine :: Prolog's abstract machine
+  - STG-Machine :: Evolved from the G-Machine, used in Haskell.
+
+* Verifying Abstract Machines
+
+A concern we should have, whenever programming, is a matter of
+/correctness/. Since most abstract machines have a purely formal
+specification, there are two concerns to have:
+
+1. The specification is /sound/: just because it got published
+   doesn't mean it won't lead to bad results.
+2. The implementation adheres to the specification.
+
+My intuition thinks that, for better or worse, Hoare logic could be
+used to establish the second point.

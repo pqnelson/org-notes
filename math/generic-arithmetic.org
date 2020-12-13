@@ -1,0 +1,180 @@
+#+TITLE: Generic Arithmetic
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Saturday December  5, 2020 at  1:59PM
+#+PACKAGE: generic-arithmetic
+#+PROPERTY: header-args  :tangle ../src/generic-arithmetic.lisp
+
+* Introduction
+
+We have a notion of generic arithmetic where we can add symbols
+("variables") to numbers. For example $(3+x)^{2}$ is completely
+sensible in modern mathematics. We would like to similarly perform
+generic arithmetic in Lisp.
+
+Examples to bear in mind: operating on polynomials (taking their
+quotient results in a rational function), operating on matrices,
+and operating on numbers.
+
+* Generic Arithmetic
+** Acting on two operands alone
+
+We begin with making generic operations which act on two
+operands. Extending to an arbitrary number of operands is
+straightforward afterwards. We define generic functions on two
+operands, with default for numbers.
+
+*** Addition
+
+#+begin_src lisp :export both
+(defgeneric add (x y))
+
+(defmethod add ((x number) (y number))
+  (cl:+ x y))
+#+end_src
+
+*** Subtraction
+
+#+begin_src lisp :export both
+(defgeneric sub (x y)
+  (:documentation "Computes X - Y."))
+
+(defmethod sub ((x number) (y number))
+  (cl:- x y))
+#+end_src
+
+*** Multiplication
+
+#+begin_src lisp :export both
+(defgeneric times (x y))
+
+(defmethod times ((x number) (y number))
+  (cl:* x y))
+#+end_src
+
+*** Division
+
+#+begin_src lisp :export both
+(defgeneric div (x y))
+
+(defmethod div ((x number) (y number))
+  (cl:/ x y))
+#+end_src
+
+
+
+** Generic Unary Operations
+
+There are two special cases we need to consider when dealing with
+generic arithmetic, namely: negation and inversion. These are for
+the case when subtraction and division are given a single argument
+(respectively).
+
+*** Negation
+
+#+begin_src lisp
+(defgeneric negate (x))
+
+(defmethod negate ((x number))
+  (cl:- x))
+#+end_src
+
+*** Invert
+
+Of particular concern, in the future, will be having an =invert=
+for matrix classes.
+
+#+begin_src lisp
+(defgeneric invert (x))
+
+(defmethod invert ((x number))
+  (cl:/ x))
+#+end_src
+
+** Generic n-ary Operations
+
+We adhere to the signatures of arithmetic operators specified in
+/Common Lisp: The Language/, chapter 12, section 2.
+
+*** Addition
+
+Our first attempt at adding quantities should adhere to the
+function signature for =+= in /Common Lisp the Language/ (section
+12.2). We may naively expect:
+
+#+begin_src lisp :tangle no
+(defun + (&rest quantities)
+  (reduce add quantities))
+#+end_src
+
+But this will throw errors on =(+)= or =(+ 3)=. We revise our
+definition to be:
+
+#+begin_src lisp
+(defun + (&rest quantities)
+  (cond
+    ((null quantities) 0)
+    ((singleton? quantities) (car quantities))
+    (t (reduce add quantities))))
+#+end_src
+
+*** Subtraction
+
+#+begin_src lisp
+(defun - (minuend & subtrahends)
+  (if (null subtrahends)
+      (negate minuend)
+      (reduce sub subtrahends :initial-value minuend)))
+#+end_src
+
+*** Multiplication
+
+#+begin_src lisp
+(defun * (&rest quantities)
+  (cond
+    ((null quantities) 1)
+    ((singleton? quantities) (car quantities))
+    (t (reduce times quantities))))
+#+end_src
+
+*** Division
+
+#+begin_src lisp
+(defun / (numerator &rest denominators)
+  (if (null denominators)
+      (invert numerator)
+      (reduce div denominators :initial-value numerator)))
+#+end_src
+
+** Derived Operations
+
+We have operations derived from these basic ones. For example,
+exponentiation.
+
+#+begin_src lisp
+(defgeneric expt (x m))
+
+(defmethod expt ((x number) (m number))
+  (cl:expt x m))  
+#+end_src
+
+* SCMUTILS
+
+It seems SCMUTILS has a =make-generic-operator <arity> <name> <default-operation>=
+method to declare a generic operator.
+
+Then =assign-operation= will take a generic-operator, the
+appropriate handler, and some number of argument predicates. As
+SCMUTILS uses [[file:~/notes/comp-sci/generic-dispatch.org::*Predicate Dispatching][Predicate Dispatching]] the predicates control method
+selection. 
+
+* References
+
+- SCMUTILS is a library with daunting generic arithmetic
+  + =SCMUTILS/kernel/generic.scm=
+  + =SCMUTILS/kernel/ghelper.scm= for generic-operator dispatching
+    and infrastructure
+- 

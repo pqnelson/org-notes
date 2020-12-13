@@ -1,0 +1,166 @@
+#+TITLE: Literate Programming
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Saturday December 12, 2020 at  2:24PM
+
+* Overview
+
+Don Knuth coined the term "Literate Programming" to describing a
+method of exposition coupled to writing computer software. It was
+both literature and software. Unfortunately, since Javadoc,
+everyone has co-opted the term to refer to inline documentation of
+software, or something along those lines.
+
+Knuth's idea works well for static projects, or for writing code
+which non-programmer experts review. The latter case takes
+advantage of the "Web style" the documentation affords, so a
+non-programmer can read it as if it were pseudocode.
+
+But it doesn't adequately work with agile methods. I'm not even
+clear how to unit test code in this manner. If I had to iteratively
+refine some code, I wouldn't know how to do that effectively. There
+have been times when I wanted to create a stub, then revise it
+later (so the chapter could form a self-contained
+program). Literate programming doesn't handle the "then revise it
+later" step. Presumably I could have used function pointers to
+abstract away the methods used, or some other fancy trick.
+
+* Knuth's Web and CWeb
+
+The original software Knuth used for literate programming which
+allowed the author to extract Pascal code, which was then compiled
+into a binary for execution. This is how Knuth wrote TeX, which was
+then used to write Web (to make the documentation pretty).
+
+A web program consists of "chunks". Each chunk was numbered, and
+had some optional English text, followed by an optional source code
+fragment, but must have at least one of either. (Empty chunks were
+not allowed.) The code snippet could refer to other chunks as a
+sort of pseudocode, writing something like =<Sort applicants by
+height>= then later implement the code in a chunk named "Sort
+applicants by height".
+
+But Pascal didn't have the longevity of C.  Thus begat CWeb. It had
+the same style of chunks, labels, etc., but used C code instead of
+Pascal.
+
+** Intention: Communicate with Human Beings
+
+Knuth explicitly pleas in his article "Literate Programming"
+(1984):
+
+#+begin_quote
+Let us change the traditional attitude to the construction of
+programs. Instead of imagining that our main task is to instruct a
+/computer/ what to do, let us concentrate rather on explaining to
+/human beings/ what we want a computer to do.
+
+The practitioner of literate programming can be regarded as an
+essayist, whose main concern is with exposition and excellence of
+style. Such an author, with thesaurus in hand, chooses the names of
+variables carefully and explains what each variable means. He or
+she strives for a program that is comprehensible because its
+concepts have been introduced in an order that is best for human
+understanding, using a mixture of formal and informal methods that
+nicely reinforce each other.
+#+end_quote
+
+Sadly programmers do not view themselves as essayists while
+programming. It's probably for this reason that literate
+programming never caught on.
+
+
+* Misinterpretations of Knuth
+
+Following Knuth's enthusiastic examples, Javadoc added
+documentation for Java code using comments. (Lisp had this earlier
+in comment strings, but Javadoc extracted documentation from
+specific comments.) Since then, the programming community had
+misinterpreted "literate programming" as "programming with
+API documentation embedded as comments".
+
+Jupyter (formerly Python Notebooks) tried to introduce something
+closer to Knuth's sense of literate programming, but it didn't
+really adhere to Knuth's intentions. Org-babel seems to work along
+similar lines as Jupyter.
+
+
+* My own experiences
+
+For the most part, it's fine. After having acquired a taste for
+unit testing, it's a little unnatural at first (since C doesn't
+have a unit testing framework). My exposition has been at the level
+of documenting design decision, discussing alternatives, and so
+on. I suspect this is not quite what Knuth had in mind.
+
+The best example of a literate program, to my mind, is Bob
+Nystrom's [[https://www.craftinginterpreters.com][Crafting Interpreters]]. He wrote his own toolkit to splice
+into his book (written in markdown) segments of code from a C
+program (or Java program). This probably tells a lot about the
+approach taken to writing a literate program, that the best one
+wrote the code first (albeit with explanations in mind) and worked
+a book around the code.
+
+I dislike org-mode's literate programming features, since it
+doesn't mesh well with org-mode. There's no way to create "chunks"
+the same way I could in cweb. On the other hand, each chunk is
+really six or seven stars, and I get to cluster them together in a
+way that is natural for org-mode.
+
+** Open Questions
+
+There are a few things I'm uncertain about how to handle with
+literate programming.
+
+*** What /is/ the "Best" Order for Human Understanding?
+
+This was never clear to me, and I know myself well enough to
+know...how I analyze things differs from how anyone else
+would. Consequently, what's "best" for me differs from what's best
+for anyone else. But I don't know how to begin, what order to
+present material. Presumably this requires "big design up front",
+which does not lend itself to rapid prototyping.
+
+Explaining design choices, well, that doesn't seem to be taught
+anywhere, ever. Consequently, instead of working through the design
+in a manner suitable for human beings, it's easier to lapse back
+into talking to the computer.
+
+*** Contracts
+
+When I program, I have gotten in the habit of using =assert=
+preconditions and =assert= post-conditions. But literate
+programming blurs the distinction between functions and
+named-chunks. The former /can/ have contracts, the latter should
+not.
+
+I suppose for a fragment of code in a chunk, this would become a
+Hoare triple annotation. 
+
+*** Literate Proofs
+
+I'm writing a manuscript on implementing theorem provers. For this,
+literate programming is a natural technique. It works fine. But
+proving properties about the code I've written requires a different
+style of writing, a different mode of presentation. Because I've
+introduced a new metalanguage (the input language for the theorem
+prover used to prove these properties). More generally, whenever
+defining and implementing a language, I have the problems of
+smoothly using all the tools at hand.
+
+When I write the code in, say, C...I need something like [[./acsl.org][ACSL]] to
+provide an annotated proof of Hoare triples. But /proving/ the
+Hoare triple annotations hold is done in the text, and is
+/separate/ from the essay explanation (at least, in my
+mind). Consequently, I need some "literate proofs" of the Hoare
+tripled. I suppose I could just shrug and hand it off to Frama-C to
+check the annotations, but this doesn't seem friendly.
+
+* References
+
+- Donald Knuth,
+  {{{book-title(Literate Programming)}}}.
+  CSLI Lecture Notes no 27, 1992.

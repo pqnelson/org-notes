@@ -1,0 +1,42 @@
+#+TITLE: Meta-Notes
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Saturday December  5, 2020 at  5:41PM
+
+* Introduction
+
+Notes regarding org-mode commands and quirks.
+
+** Exporting Source code
+
+If I add to the header of an org file:
+
+#+begin_example
+ #+begin_src lang tangle: my-file.lisp ...
+#+end_example
+
+Then by default, all source code blocks will be evaluated /as if/
+it had =tangle: my-file.lisp=. 
+
+*** Keeping the Noweb labels in documentation
+
+If we want to keep the noweb labels inlined in the code blocks when
+exporting to HTML or whatever, then we should also add:
+
+#+begin_example
+ #+begin_src lang :noweb no-export ...
+#+end_example
+
+It appears that the Noweb label can include whitespace, though it
+may be useful to use =snake_case=. When we want to define or append
+code to a noweb label, we write
+
+#+begin_example
+ #+begin_src lang ... :noweb-ref [label]
+#+end_example
+
+It seems like it must be the last element in the "begin source"
+line. 

@@ -1,0 +1,45 @@
+#+TITLE: Real Numbers
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Saturday December  5, 2020 at 11:52AM
+
+* Scientific Notation
+
+We can represent any real number using three components:
+
+1. Its sign (+1 or -1)
+2. Its magnitude (an integer)
+3. Its mantissa (a real number less than the base)
+
+In base 10, we would write $x = s\times m\times 10^{p}$ where
+$s\in\{+1,-1\}$, $0\lt m\lt 10$, and $p\in\mathbb{Z}$. Every real
+number may be written in this manner, and it is called "scientific
+notation".
+
+** Binary
+
+When we work in base 2, the mantissa is a sequence of bits with
+leading bit being 1 (otherwise we could shift the mantissa down
+until it is 1, and the exponent decreases by the number of
+shifts). This has the advantage that $1\lt m\lt 2$, which can speed
+up Taylor series computations.
+
+For example, the logarithm of $x$ in this notation is given by
+\begin{equation}
+\log(x) = \log(s) + \log(m) + p\log(2)
+\end{equation}
+which consists of looking up stored values for $\log(2)$, and
+computing a series approximation for $\log(m)$.
+
+We can extract the components for a float in Common Lisp by
+
+#+begin_example
+(multiple-value-bind (mantissa expon sign)
+                     (decode-float f)
+  (scale-float mantissa expon))
+;; equivalent to (abs f)
+#+end_example
+

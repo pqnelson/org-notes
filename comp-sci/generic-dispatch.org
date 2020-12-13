@@ -1,0 +1,48 @@
+#+TITLE: Generic Dispatch
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Saturday December  5, 2020 at  2:34PM
+
+* Introduction
+
+Multimethods, or multiple dispatch, is a feature of Common
+Lisp. The exact details depend on the Common Lisp Object System.
+
+* Common Lisp
+
+We can have multiple inheritance in Common Lisp, which complicates
+things. If we avoid multiple inheritance, we can use =defgeneric=
+to create a generic function, and provide a =defmethod=
+implementation for each data type or class.
+
+The dispatch mechanism proceeds as follows:
+
+1. Compute the list of applicable methods
+2. If no method is applicable, signal an error
+3. Sort the applicable methods in order of specificity
+4. Invoke the most specific method.
+
+* Predicate Dispatching
+
+Apparently more sophisticated than Common Lisp's builtin
+=defgeneric= and =defmethod=. Predicates are used to determine if a
+generic method applies to its arguments, and method =m1= overrides
+=m2= if the predicate for =m1= implies =m2=. This relationship is
+computed at compile-time.
+
+One advantage predicate dispatching has over multiple dispatch,
+predicate dispatching allows for some degree of pattern
+matching. This is impossible with multiple dispatching.
+
+* References
+
+- Ernst, Kaplan, Chambers, "Predicate Dispatching: A Unified Theory
+  of Dispatch". In ECOOP'98, LNCS vol 1445, Springer, pp 186-211
+  (1998).
+- Aaron Mark Ucko, "Predicate Dispatching in the Common Lisp Object
+  System". MIT AI Tech Report 2001-006, dated June 2001.
+  
+  

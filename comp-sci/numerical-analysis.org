@@ -1,0 +1,64 @@
+#+TITLE: Numerical Analysis
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Monday December  7, 2020 at  8:57PM
+#+include: ../org-macros.or
+
+#+begin_quote
+Numerical analysis is the blackest of the black arts. (Gerald Sussman)
+#+end_quote
+
+* Overview
+
+The basic problem numerical analysis addresses: given some
+computation we want to perform in mathematics, how can we get the
+computer to do it? Specifically when we approximate real numbers by
+floating-point arithmetic, and we do not perform any symbolic
+manipulation.
+
+The basic outline of the subject, as presented in most textbooks,
+first presents floating-point arithmetic, then root finding
+algorithms, polynomial interpolation, quadrature, numerical linear algebra,
+then using the numerical linear algebra to solve differential
+equations. Once all this has been established, various other ways
+to solve differential equations are discussed in graduate courses
+or their own texts.
+
+* Floating-Point Arithmetic
+
+The basic idea could be discussed by first considering a number
+system where a "number" is a triple =(s, c, f)= where
+- =s= is either +1 or -1
+- =c= is a 7-tuple of digits =(c[0], ..., c[6])= where =c[0]= is nonzero
+- =f= is a 4-tuple of =(f[0], f[1], ..., f[3])= where =f[0]= is
+  either +1 or -1, and the remaining components are digits
+
+We intuitively think of this as a sort of truncated scientific
+notation =s*(c[0].c[1]c[2]c[3]c[4]c[5]c[6])*pow(10, f[0]*(f[1]f[2]f[3]))=
+where the =c= is a decimal encoding of a real number, =f[1:3]= encodes a
+3-digit natural number.
+
+Observe, if =c[0]= were zero, we could shift all the =c= tuple
+entries down by one (i.e., set ~c'[0] = c[1]~, ~c'[1] = c[2]~, ...,
+~c'[5]=c[6]~, then set ~c'[6]=0~ and use ~c'~ instead of ~c~ at the
+cost of decreasing the ~f~ exponent by 1). Consequently, the only
+time =c[0]= were zero is if we had zero.
+
+There's no reason why we /must/ use base-10, we could use base
+/b/. We just require =c[0]= is a nonzero /b/-igit, and we interpret
+the order of magnitude is taken to base-/b/, i.e., that we multiply
+now by =pow(b, f[0]*(f[1]f[2]f[3]))=. For base-2, this forces
+~c[0]~ to be 1, and hence we can just assume there is an implicit
+leading 1 (i.e., we can pretend the ~c~ tuple describes the bits
+"after the decimal point").
+
+* References
+
+- Richard L. Burden and J. Douglas Faires,
+  {{{book-title(Numerical Analysis)}}}.
+  8th ed., Thomson, 2005.
+- Peter Olver,
+  [[https://www-users.math.umn.edu/~olver/num.html][Lecture notes on Numerical Analysis]].
