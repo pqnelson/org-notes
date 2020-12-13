@@ -1,0 +1,321 @@
+#+TITLE: Proof Steps
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Sunday December 13, 2020 at  8:31AM
+
+* Definition
+
+In formal proof sketches, we can limit our "logical vocabulary" to
+about a half-dozen "proof steps". These correspond to certain
+specific inference rules in natural deduction. A few are "syntactic
+sugar" combining multiple steps into one.
+
+We define the semantics of proof steps by means of "proof
+skeletons", which are equivalent to relating the step to a rule of
+inference. The proof skeleton transforms a goal until the theorem
+is proven.
+
+** Formal Grammar
+
+Let's consider the formal grammar for formal proof
+sketches. Following Freek Wiedijk's "Mathematical Vernacular", we
+leave informal the following syntactic categories:
+
+- label :: Equation numbers, theorem numbers, definition numbers,
+  etc., are all left informally understood. LaTeX usually takes
+  care of this for us automatically.
+- variable :: A first-order variable term. Indeed, all variables in first-order
+  logic are terms.
+- term :: A logical term or a logical function (i.e., a term
+  parametrized by other terms or variables). Intuitively, terms
+  correspond to "mathematical objects" like numbers or vectors or
+  whatever.
+- formula :: A first-order logical formula, which is either true or
+  false. We ultimately are trying to prove a formula with our proof
+  sketches. These are intuitively "propositions".
+
+Using Wirth syntax notation:
+
+#+begin_example
+statement = proposition justification ";"
+          | term "=" term justification
+                {"=" term justification} .
+
+proposition = [ label ":" ] formula .
+
+justification = empty
+              | simple-justification
+              | "proof" { step } [ cases ] "end" .
+
+simple-justification = "by" label { "," label } .
+              
+step = statement
+     | "thus" statement
+     | "let" variable { "," variable } ";"
+     | "assume" proposition ";"
+     | "consider" variable {"," variable} "such that" proposition justification ";"
+     | "take" term {"," term} ";"
+
+cases = "per cases" simple-justification ";" {"suppose" proposition ";" {step}}
+#+end_example
+
+Note that justifications allow for nested proofs.
+
+* Steps
+** =let= or forall-introduction
+
+The proof skeleton for this step looks like:
+
+#+begin_example
+<proof of 'forall x, P(x)'> ::=
+    <preliminary steps>
+    let y;
+    <proof of P(y)>
+#+end_example
+
+This corresponds to the inference rule in natural deduction
+$\forall$-introduction:
+\begin{equation}
+\frac{\Gamma, y\vdash P(y)}{\Gamma\vdash\forall x, P(x)}\mbox{{\tt let}\ $y$}
+\end{equation}
+
+** =assume=
+*** implies-intro
+
+When we want to prove a goal of the form $A\implies B$, we begin by
+stipulating the hypothesis $A$ holds. That is to say, we =assume=
+$A$.
+
+#+begin_example
+<proof of $A\implies B$> ::=
+    <preliminary steps>
+    assume $A$;
+    <proof of $B$>
+#+end_example
+
+*** not-introduction
+
+We can take advantage of the logical equivalence of $\neg A$ with
+$A\implies\bot$. That is, if we want to prove $\neg A$, we
+stipulate $A$ is true, then demonstrate this leads to a
+contradiction. We're forced to conclude that our stipulation must
+be wrong, and that $A$ must be false (i.e., $\neg A$ is true).
+
+#+begin_example
+<proof of $\neg A$> ::=
+    <preliminary steps>
+    assume $A$;
+    <prove a contradiction from $A$>
+#+end_example
+
+*** Reductio ad Absurdum
+
+The other way to look at this is, if assuming $A$ and deriving a
+contradiction implies $\neg A$, then assuming $\neg A$ and deriving
+a contradiction implies $A$. This is the /reductio ad absurdum/
+rule. Usually I write in parentheses "=assume= $A$ (for contradiction)".
+
+#+begin_example
+<proof of $A$> ::=
+    <preliminary steps>
+    assume $\neg A$;
+    <prove a contradiction from $\neg A$>
+#+end_example
+
+** =thus= or and-introduction
+
+When we have multiple goals we want to prove conjoined together
+(i.e., our goal looks like $A\land B$), and we have proven $A$, we
+can update our goal to reflect this by writing "=thus= $A$".
+
+This is the first proof step which requires justification. Why?
+Well, in natural deduction, this corresponds to the inference rule
+\begin{equation}
+\frac{\Gamma\vdash A,\qquad \Gamma\vdash B}{\Gamma\vdash A\land B}.
+\end{equation}
+There are two proof obligations above the inference line, the
+upper-left obligation $\Gamma\vdash A$ is referenced as the
+justification for the step. The upper-right obligation is the new
+proof goal.
+
+#+begin_example
+<proof of $A\land B$> ::=
+    <preliminary steps>
+    thus $A$ by ...;
+    <proof of $B$>
+#+end_example
+
+** =per cases=, or-introduction
+
+When we want to prove a claim by cases. That is, we have
+established that $A_{1}\lor\dots\lor A_{n}$, but we want to prove
+$B$. If we can prove $A_{i}$ implies $B$ for each $i$, then we are golden.
+
+The natural deduction rule is of the form
+\begin{equation}
+\frac{\Gamma\vdash A_{1}\lor\dots\lor A_{n},\qquad \Gamma,A_{1}\vdash B,\quad\dots\quad, \Gamma,A_{n}\vdash B}{\Gamma\vdash B}
+\end{equation}
+The upper-left proof obligation is used to justify the =per cases= step.
+
+#+begin_example
+<proof of $B$> ::=
+    <preliminary steps>
+    per cases by ...;
+    suppose $A_{1}$;
+        <proof of $B$ from $A_{1}$>
+    <...>
+    suppose $A_{n}$;
+        <proof of $B$ from $A_{n}$>
+#+end_example
+
+Each =suppose= block acts as if we temporarily "=assume= $A_{i}$"
+for the duration of the block.
+
+** =consider=, exists-elimination
+
+If we have proven "$\exists x, P[x]$", then we may take a "witness"
+or term $t$ which satisfies the predicate. In other words, we may
+say we may =consider= $t$ =such that= $P[t]$ =by= the proven claim
+we're using.
+
+The natural deduction inference rule corresponding to this step is
+\begin{equation}
+\frac{\Gamma\vdash\exists x.P[x],\qquad\Gamma,x,P[x]\vdash A}{\Gamma\vdash A}
+\end{equation}
+The top-left subgoal is the justification for the proof step.
+
+#+begin_example
+<proof of $A$> ::=
+    <preliminary steps>
+    consider $t$ such that $P[t]$ (proof ... end | by ...);
+    <proof of $A$>
+#+end_example
+
+** =take=, exists-intro
+
+When we want to prove a claim of the form "$\exists x, P[x]$", the
+first thing we do is take a term $t$ then prove it satisfies
+$P[t]$.
+
+In natural deduction, this corresponds to $\exists$-intro:
+\begin{equation}
+\frac{\Gamma\vdash P[a]}{\Gamma\vdash \exists x, P[x]}
+\end{equation}
+
+#+begin_example
+<proof of $\exists x, P[x]$> ::=
+    <preliminary steps>
+    take $a$;
+    <proof of $P[a]$>
+#+end_example
+
+* Syntactic Sugar
+** =then= prefixes
+
+For steps requiring justification, if we use the previous step as
+part of the justification, we can prefix the step with =then=. For
+example:
+#+begin_example
+    <step>
+    then consider $t$ such that $P[t]$;
+#+end_example
+The justification for the =consider= step consists of just one
+reference, namely, the previous step.
+
+** ~hence~ = ~then thus~
+
+There is some awkwardness to writing "Then thus". Instead, we write
+"hence". It is an abbreviation for "then thus". They are literal
+synonyms.
+
+** ~given = assume + then consider~
+
+We also routinely write steps of the form
+
+#+begin_example
+    assume $\exists x, P[x]$;
+    then consider $t$ such that $P[t]$;
+#+end_example
+
+This is rather wordy. We contract the two steps into one:
+
+#+begin_example
+    given $t$ such that $P[t]$;
+#+end_example
+
+** =set=
+
+When we've already introduced an identifier (a symbol used for a
+term or variable) in a proof, but we want to re-use somewhere later
+in the proof, we can flag this to the reader by writing:
+
+#+begin_example
+"set" variable "=" term ";"
+#+end_example
+
+** =thesis= keyword
+
+When we start a =proof= environment, the initial goal we're trying
+to prove is stored in the =thesis= reserved keyword. In Mizar, it
+has become idiomatic to conclude a proof by writing =thus thesis=
+or =hence thesis=.
+
+* Conventions
+
+** Proving $A iff B$
+
+One of the conventions I've adopted is to use the proof skeleton:
+
+#+begin_example
+<proof of $A\iff B$> ::=
+    <preliminary steps>
+    thus $A\implies B$
+    proof
+        assume $A$;
+        <proof of $B$>
+    end
+    thus $B\implies A$
+    proof
+        assume $B$;
+        <proof of $A$>
+    end
+    hence $A\iff B$;
+#+end_example
+
+This is technically incorrect, it's certainly invalid Mizar. One
+step towards writing correct Mizar would be to instead use
+something of the form:
+
+#+begin_example
+<proof of $A\iff B$> ::=
+    <preliminary steps>
+    thus (1) $A\implies B$
+    proof
+        assume $A$;
+        <proof of $B$>
+    end
+    thus (2) $B\implies A$
+    proof
+        assume $B$;
+        <proof of $A$>
+    end
+    thus $A\iff B$ by (1), (2);
+#+end_example
+
+
+* References
+
+Most of this comes from Freek Wiedijk's work and Mizar.
+
+- Freek Wiedijk,
+  "Mathematical Vernacular".
+  Unpublished manuscript, undated, [[https://www.cs.ru.nl/~freek/notes/mv.pdf][PDF]]
+- Freek Wiedijk,
+  "Formal Proof Sketches".
+  In S. Berardi, M. Coppo, F. Damiani (eds),
+  {{{book-title(Types for Proofs and Programs: Third International Workshop, TYPES 2003)}}} 
+  Torino, Italy, Springer LNCS 3085, 378--393, 2004.
+  See especially section 3. [[https://www.cs.ru.nl/F.Wiedijk/pubs/sketches2.pdf][PDF]]
