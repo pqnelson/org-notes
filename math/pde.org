@@ -6,3 +6,611 @@
 #+HTML_DOCTYPE: html5
 # Created Saturday December 12, 2020 at 10:45AM
 
+* Introduction
+
+#+begin_remark
+The fundamental difference between partial differential equations
+and ordinary differential equations is the number of variables
+we're working with. For ODEs, we're usually working with functions
+of time (or some other single parameter). Partial differential
+equations use multiple independent variables (e.g., functions of
+space and time).
+
+One strategy to solve problems like
+\begin{equation}
+\sum^{n}_{\mu=0}a^{\mu}\partial_{\mu}f = 0
+\end{equation}
+is to rewrite this using a "linear operator"
+\begin{equation}
+\sum^{n}_{\mu=0}a^{\mu}\partial_{\mu} = L
+\end{equation}
+then our problem becomes
+\begin{equation}
+L(f) = 0.
+\end{equation}
+This amounts to finding the kernel of $L$.
+#+end_remark
+
+#+begin_proposition
+Recall an operator $L$ is linear if, for arbitrary constants
+$c_{1}$ and $c_{2}$, we have
+\begin{equation}
+L(c_{1}\mu_{1} + c_{2}\mu_{2}) = c_{1}L(\mu_{1}) + c_{2}L(\mu_{2}).
+\end{equation}
+#+end_proposition
+
+#+NAME: ex:linear-operator:transport-equation
+#+begin_math-example
+The {{{define(transport equation)}}} in 2-dimensions looks like
+\begin{equation}
+(\partial_{x} + \partial_{y})\mu(x,y) = 0.
+\end{equation}
+This is indeed a linear operator.
+#+end_math-example
+
+#+NAME: ex:linear-operator:quartic-qft
+#+begin_math-example
+One example of a nonlinear PDE is something like the $\phi^{4}$
+model in quantum field theory
+\begin{equation}
+(\partial_{t}^{2}-\partial_{x}^{2})\phi + \phi^{3} = 0.
+\end{equation}
+This isn't linear, but how can we see this? Suppose we had two
+solutions $\phi$ and $\psi$, then their sum equals
+\begin{equation}
+(\partial_{t}^{2}-\partial_{x}^{2})(\phi + \psi) + (\phi + \psi)^{3} = (\psi + \phi)^{3} - \phi^{3} - \psi^{3}.
+\end{equation}
+This is because only the cross terms in the cubic term remain after
+plugging in the RHS of the PDE.
+#+end_math-example
+
+#+begin_remark
+We belabor this point of linearity because, if we have a linear PDE
+described by a linear differential operator $L(-)$, and we have any
+two solutions $\mu_{1}$ and $\mu_{2}$, then we can construct
+infinitely many solutions as a linear combination of these two
+$c_{1}\mu_{1}+c_{2}\mu_{2}$ for any real number $c_{1}$, $c_{2}$.
+#+end_remark
+
+** Grocery List of Examples
+
+We've seen the transport equation and the $\phi^{4}$ field
+theory. Let's just enumerate some that we'd encounter in physics.
+
+#+NAME: ex:pde:shock-wave
+#+begin_math-example
+The shock wave
+\begin{equation}
+\partial_{t}\mu + \mu\partial_{x}\mu = 0.
+\end{equation}
+#+end_math-example
+
+#+begin_math-example
+Laplace's equation
+\begin{equation}
+\partial_{x}^{2}\mu + \partial_{y}^{2}\mu = 0.
+\end{equation}
+#+end_math-example
+
+#+NAME: ex:pde:wave-equation
+#+begin_math-example
+The wave equation
+\begin{equation}
+\partial_{t}^{2}\mu - \partial_{x}^{2}\mu = 0.
+\end{equation}
+We could add some self-interaction contribution, for example
+including a cubic self-interaction gives us:
+\begin{equation}
+(\partial_{t}^{2} - \partial_{x}^{2})\mu + \mu^{3} = 0.
+\end{equation}
+#+end_math-example
+
+#+NAME: ex:pde:dispersive-wave-equation
+#+begin_math-example
+The dispersive Wave equation
+\begin{equation}
+\partial_{t}\mu + \mu\partial_{x}\mu + \partial_{x}^{3}\mu = 0.
+\end{equation}
+#+end_math-example
+
+#+NAME: ex:pde:schrodinger-equation
+#+begin_math-example
+The Schrodinger equation
+\begin{equation}
+\partial_{t}\mu -i\partial_{x}^{2}\mu = 0.
+\end{equation}
+
+#+end_math-example
+
+#+NAME: defn:order-of-pdf
+#+begin_definition
+The {{{define(order)}}} of a partial differential equation is the
+highest derivative's order. For mixed derivatives like
+$\partial_{x}^{m}\partial_{y}^{n}$, we sum their order to get $m+n$.
+#+end_definition
+
+#+begin_theorem
+If $L_{1}(-)$ is a differential operator of order $m$, and
+$L_{2}(-)$ a differential operator of order $n$, then $L_{1}L_{2}$
+is a differential operator of order $m+n$. 
+#+end_theorem
+
+#+NAME: defn:linear-pde
+#+begin_definition
+We call a partial differential equation {{{define(Linear)}}} if any
+linear combination of its solutions is again a solution.
+#+end_definition
+
+#+begin_definition
+Let $L(f)=g(x,y,\dots,t)$ be a partial differential equation. Then
+we call it {{{define(Homogeneous)}}} if $g=0$. Otherwise we call it
+{{{define(Inhomogeneous)}}}.
+#+end_definition
+
+#+begin_math-example
+Consider the partial differential equation
+\begin{equation}
+\partial_{t}^{2}\mu - \partial_{x}^{2}\mu + x^{4} = 0.
+\end{equation}
+It is linear and inhomogeneous.
+#+end_math-example
+
+#+begin_math-example
+Consider the shockwave equation. We see we can rewrite it using the
+chain rule as
+\begin{equation}
+\partial_{t}\mu + \frac{1}{2}\partial_{x}(\mu^{2}) = 0.
+\end{equation}
+If we introduce
+\begin{equation}
+\vartheta(\mu) = \mu^{2}
+\end{equation}
+then we can write
+\begin{equation}
+L = \partial_{t} + \frac{1}{2}\partial_{x}\circ\vartheta
+\end{equation}
+to render our equation
+\begin{equation}
+L(\mu) = 0.
+\end{equation}
+But that $\vartheta$ makes it a /nonlinear/ PDE.
+#+end_math-example
+
+
+* ODEs and PDEs revisited
+
+** Solving an ODE
+Suppose we had the ODE
+\begin{equation}
+\frac{d^{2}\mu(x)}{d x^{2}} = 0.
+\end{equation}
+We can integrate it once. The left-hand side becomes
+\begin{equation}
+\int LHS\,dx = \int\frac{d}{dx}\left(\frac{d\mu(x)}{dx}\right)dx =
+\frac{d\mu(x)}{dx} + c_{1}.
+\end{equation}
+The right-hand side
+\begin{equation}
+\int RHS\,dx = \int 0\,dx = 0.
+\end{equation}
+Setting the two equal gives us
+\begin{equation}
+\frac{d\mu(x)}{dx} + c_{1} = 0.
+\end{equation}
+Integrating again with respect to $x$ gives us
+\begin{equation}
+\int LHS\,dx = \int \frac{d}{dx}(\mu(x))\,dx + \int c_{1}\,dx =
+\mu(x) + c_{0} + c_{1}x
+\end{equation}
+The right-hand side again vanishes. The constants of integration
+$c_{0}$ and $c_{1}$ encode the initial conditions:
+\begin{equation}
+\mu(0) = -c_{0}
+\end{equation}
+and
+\begin{equation}
+\mu'(0) = -c_{1}.
+\end{equation}
+
+** For PDEs
+
+If we try to solve a partial differential equation in this manner,
+well, let's just make $\mu$ a function of two variables. So solving
+\begin{equation}
+\partial_{x}^{2}\mu(x,y) = 0
+\end{equation}
+using the same strategy. The first integral with respect to $x$
+gives us
+\begin{equation}
+\partial_{x}\mu(x,y) + c_{1}(y) = 0
+\end{equation}
+and the second integral gives us
+\begin{equation}
+\mu(x,y) + c_{0}(y) + c_{1}(y)\cdot x = 0.
+\end{equation}
+Then we have
+\begin{equation}
+\mu(x,y) = -c_{0}(y) - c_{1}(y)\cdot x
+\end{equation}
+where $\mu(0,y) = \mu_{0}(y) = -c_{0}(y)$ is one initial condition,
+so
+\begin{equation}
+\mu(x,y) = \mu_{0}(y) - c_{1}(y)\cdot x.
+\end{equation}
+Compare this to the general solution to the second-order ODE.
+
+** Example with mixed derivatives
+
+Consider the PDE
+
+\begin{equation}
+\partial_{x}\partial_{y}\mu(x,y) = 0.
+\end{equation}
+
+We assume the function $\partial_{x}\partial_{y}\mu(x,y)$ is
+continuous, so we could ostensibly swap the order of
+differentiation. We integrate the left-hand side of our PDE with
+respect to $x$ to get
+
+\begin{equation}
+\int\partial_{x}\bigl(\partial_{y}\mu(x,y)\bigr)dx =
+\partial_{y}\mu(x,y) + f(y).
+\end{equation}
+
+Integrating the right-hand side of our PDE gives us zero, so we
+have the first-integral yield:
+
+\begin{equation}
+\partial_{y}\mu(x,y) + f(y) = 0.
+\end{equation}
+
+We can integrate with respect to $y$, rearranging terms, to find
+
+\begin{equation}
+\mu(x,y) = g(x) - \int f(y)\,dy.
+\end{equation}
+
+Here $g(x)$ is the "integration constant" with respect to $y$.
+
+* Geometric and Coordinate Perspectives
+
+We will start solving simple partial differential equations
+geometrically. Starting with simple first-order PDEs to demonstrate
+the method, it generalizes to more complicated first-order PDEs.
+
+Remember how we write vectors in calculus using the unit-vectors
+\begin{equation}
+\vec{v} = v_{1}\mathbf{i} + v_{2}\mathbf{j} + v_{3}\mathbf{k}.
+\end{equation}
+We can pretend that partial derivatives are unit vectors, writing
+instead
+\begin{equation}
+\vec{v} = v_{1}\partial_{x} + v_{2}\partial_{y} +
+v_{3}\partial_{z}.
+\end{equation}
+This is justified by appealing to differential geometry, where this
+is in fact a tangent vector.
+
+#+begin_remark
+In vector calculus, we have directional derivatives of scalar
+functions given by $\vec{v}\cdot\vec{\nabla} f$. This is also
+written as $\partial_{\vec{v}}f$ and is coordinate independent.
+#+end_remark
+
+#+begin_remark
+We frequently use Einstein notation to track sums for us. Instead
+of using subscripts, we could write
+\begin{equation}
+\vec{v} = v^{1}\partial_{1} + v^{2}\partial_{2} +
+v^{3}\partial_{3}.
+\end{equation}
+Then permitting us to contract upper indices with any matching
+lower indices
+\begin{equation}
+v^{\mu}\partial_{\mu} := \sum_{\mu=1}^{3}v^{\mu}\partial_{\mu}.
+\end{equation}
+This comes in handy. But be careful: we sum over contracted
+indices, when there's an index "upstairs" matching an index
+"downstairs". If both indices are "downstairs", there's no
+summation in Einstein convention.
+
+One quirk of Einstein convention, when we sum over a contracted
+index, we refer to that variable as a "dummy index". We can relabel
+it to any fresh variable
+\begin{equation}
+v^{\mu}\partial_{\mu} = v^{\alpha}\partial_{\alpha}
+\end{equation}
+because both sides are the same sums. We just have to be careful to
+relabel /all/ instances of the dummy variable.
+
+The other quirk is, if $x^{\mu}$ is a coordinate vector, then the
+partial derivative with respect to it (i.e., the gradient) is a
+lower-indexed quantity
+\begin{equation}
+\frac{\partial}{\partial x^{\mu}} = \partial_{\mu}.
+\end{equation}
+When we change coordinates to $y^{\nu}=y^{\nu}(x^{1},\dots,
+x^{n})$, we see the chain rule requires us
+\begin{equation}
+\frac{\partial}{\partial y^{\nu}}
+ = \frac{\partial x^{\mu}}{\partial y^{\nu}}\frac{\partial}{\partial x^{\mu}}
+\end{equation}
+multiply by the Jacobian matrix. On the other hand, the
+coefficients to a vector transforms as
+\begin{equation}
+v^{\mu}\to v^{\mu}\frac{\partial y^{\nu}}{\partial x^{\mu}},
+\end{equation}
+i.e., by multiplying by the inverse matrix of the Jacobian.
+
+Very rarely in the literature there's a "Euclidean summation
+convention" discussed where we sum over /any/ repeated index,
+regardless whether they both live upstairs, downstairs, or mixed.
+We use Einstein convention.
+#+end_remark
+
+#+begin_theorem
+The quantity
+\begin{equation}
+\vec{v} = v^{\mu}\partial_{\mu}
+\end{equation}
+is coordinate independent.
+#+end_theorem
+#+begin_proof
+We can see this by changing coordinates $x^{\mu}\to y^{\nu}$,
+the coefficients $v^{\mu}$ transform as
+\begin{equation}
+v^{\mu}\to\widetilde{v}^{\nu} = \frac{\partial y^{\nu}}{\partial x^{\mu}}v^{\mu}.
+\end{equation}
+The partial derivatives transform as
+\begin{equation}
+\partial_{\mu}\to\widetilde{\partial}_{\nu}=\frac{\partial x^{\mu}}{\partial y^{\nu}}\frac{}{\partial x^{\mu}}.
+\end{equation}
+Changing the dummy variables of the tilde quantities, we find
+\begin{equation}
+v^{\mu}\partial_{\mu} \to \widetilde{v}^{\nu}\widetilde{\partial}_{\nu}=\left(\frac{\partial y^{\nu}}{\partial x^{\alpha}}v^{\alpha}\right)\left(\frac{\partial x^{\beta}}{\partial y^{\nu}}\frac{}{\partial x^{\beta}}\right).
+\end{equation}
+Contracting the $\nu$ indices on the Jacobian and its inverse gives
+us the identity matrix (Kronecker delta)
+\begin{equation}
+\left(\frac{\partial y^{\nu}}{\partial x^{\alpha}}v^{\alpha}\right)\left(\frac{\partial x^{\beta}}{\partial y^{\nu}}\frac{}{\partial x^{\beta}}\right).
+={\delta_{\alpha}}^{\beta}v^{\alpha}\partial_{\beta}.
+\end{equation}
+This is precisely the same as summing over both $\alpha$ and
+$\beta$, but the Kronecker delta vanishes when $\alpha\neq\beta$,
+so
+\begin{equation}
+{\delta_{\alpha}}^{\beta}v^{\alpha}\partial_{\beta} = \sum_{\gamma}v^{\gamma}\partial_{\gamma}
+\end{equation}
+precisely as desired.
+#+end_proof
+
+** Example: First-Order PDE with Constant Coefficients
+
+Consider the partial differential equations
+\begin{equation}
+a\partial_{x}\mu(x,y) + b\partial_{y}\mu(x,y) = 0
+\end{equation}
+where $a$ and $b$ are real constants. We could introduce
+\begin{equation}
+v^{\alpha}\partial_{\alpha} = a\partial_{x} + b\partial_{y}
+\end{equation}
+so our PDE is
+\begin{equation}
+v^{\alpha}\partial_{\alpha}\mu = (\vec{v}\cdot\vec{\nabla})\mu 0.
+\end{equation}
+So far, so good, right?
+
+Our first step is to consider a vector /orthogonal/ to
+$v^{\alpha}$, i.e., a $\vec{w}$ such that $\vec{v}\cdot\vec{w}=0$.
+One obvious candidate is
+\begin{equation}
+\vec{w} = -b\mathbf{i} + a\mathbf{j}.
+\end{equation}
+So what do we do now? If we write
+\begin{equation}
+\mu(x,y) = f(-v^{2}x + v^{1}y)
+\end{equation}
+for some $f(-)$, then we see this satisfies our partial
+differential equation. The reader can verify
+\begin{equation}
+(v^{1}\partial_{1} + v^{2}\partial_{2})f(-v^{2}x + v^{1}y) = 0.
+\end{equation}
+More generally, we find for some $\vec{w}$ orthogonal to $\vec{v}$
+that the general solution to the PDE may be constructed as
+\begin{equation}
+\mu(x^{1},\dots,x^{n}) = f(\vec{w}\cdot\vec{x}) = f(w^{1}x^{1} + \dots + w^{n}x^{n})
+\end{equation}
+for arbitrary $f$, whenever we have
+$\mu\colon\mathbb{R}^{n}\to\mathbb{R}$.
+
+#+begin_definition
+The lines described by
+\begin{equation}
+\vec{w}\cdot\vec{x} = \mbox{constant}
+\end{equation}
+are called {{{define(Characteristic Lines)}}}.
+#+end_definition
+
+So $c = \vec{w}\cdot\vec{x}$ is a constant.
+And, ta-duh, remember from geometry that $f(c) = \mu(\vec{x})$
+describes a surface. This is where geometry comes up.
+
+** Coordinate Perspective
+
+When we write
+\begin{equation}
+a\partial_{x}\mu(x,y) + b\partial_{y}\mu(x,y) =
+\vec{v}\cdot\vec{\nabla}\mu(x,y) = 0
+\end{equation}
+then we just need to rotate to make $\vec{v}=(v,0)$. This rotation
+corresponds to the transformation of coordinates
+\begin{equation}
+x' = ax + by
+\end{equation}
+and
+\begin{equation}
+y' = -bx + ay.
+\end{equation}
+Then our differential operator becomes
+\begin{equation}
+a\partial_{x} + b\partial_{y} = a(a\partial_{x'} + b\partial_{y'})
+  + b a(b\partial_{x'} - a\partial_{y'})
+\end{equation}
+which simplifies to
+\begin{equation}
+a\partial_{x} + b\partial_{y} = (a^{2} + b^{2})\partial_{x'}.
+\end{equation}
+Hence we obtain the PDE
+\begin{equation}
+(a^{2} + b^{2})\partial_{x'}\mu(x',y') = 0
+\end{equation}
+which has its general solution be independent of $x'$
+\begin{equation}
+\mu(x',y') = f(y') = f(-bx + ay).
+\end{equation}
+This coincides completely with the geometric approach.
+
+
+
+* Variable Coefficient First-Order PDEs
+
+** Motivating Example
+
+Consider the PDE
+\begin{equation}
+\partial_{x}\mu(x,y) + y\partial_{y}\mu(x,y) = 0.
+\end{equation}
+This corresponds to the directional derivative in the direction of the vector field given by
+\begin{equation}
+\vec{v} = (1, y).
+\end{equation}
+
+*** More generally
+
+If we have
+\begin{equation}
+a(x,y)\partial_{x}\mu(x,y) + b(x,y)\partial_{y}\mu(x,y) = c(x,y)
+\end{equation}
+then we could look at the graph of the function $\mu(x,y)$
+\begin{equation}
+S := \{(x,y,\mu(x,y))\}
+\end{equation}
+as defining a surface. We really want to construct this surface,
+because it's the solution to our PDE.
+
+Its normal vector is given by
+\begin{equation}
+\vec{n} = (\partial_{x}\mu(x,y), \partial_{y}\mu(x,y), -1).
+\end{equation}
+Hence our PDE is equivalent to asserting the vector $(a(x,y),
+b(x,y), c(x,y))$ is orthogonal to the normal vector. Geometry tells
+us that this vector lies in the tangent plane to a point on the
+surface.
+
+We start by looking for a curve $\gamma\colon[0,1]\to S$ which fits
+the PDE's initial conditions. This is secretly the same as looking
+for a particular solution of the PDE. The tangent vector for
+$\gamma(s)$ is tangent to the surface. So it satisfies the system
+of equations
+\begin{align}
+\frac{dx(s)}{ds} &= a(x(s), y(s))\\
+\frac{dy(s)}{ds} &= b(x(s), y(s))\\
+\frac{dz(s)}{ds} &= c(x(s), y(s))
+\end{align}
+Once we have a solution, we reconstruct the surface $S$ as a union
+of these curves. The resulting surface is called the
+{{{define(Integral Surface)}}} for the vector field.
+
+#+NAME: defn:pde:characteristic-curves
+#+begin_definition
+Integral curves for the vector field $(a(x,y), b(x,y), c(x,y))$ are
+called {{{define(Characteristic Curves)}}}.
+#+end_definition
+
+
+
+
+
+*** Steps involved in solving Homogeneous PDEs
+
+To solve
+\begin{equation}
+\vec{a}(\vec{x})\cdot\vec{nabla}\mu = 0
+\end{equation}
+we enumerate the steps as follows:
+
+1. Parametrize the PDE: $dx^{i}(s)/ds = a^{i}(\vec{x}(s))$ for $i=1,\dots,n$, and
+   $du/ds = 0$
+2. Parametrize the initial conditions
+   - Introduce parameters $\xi$
+   - Set $s=0$
+   - This gives us initial conditions for $\vec{x}(0) = \vec{\xi}$ and $\mu(0)=f(\vec{\xi})$.
+3. Find the characteristic curves
+   - Solve the system of equations from step 1 to find $\vec{x}(s)$
+   - Substitute in $\vec\xi$ for $\vec{x}(0)$, and $f(\vec\xi)$ for $u(0)$
+4. Eliminate the parameters
+   - We write the parameters $\vec\xi$ introduced in step 2 in terms of the
+     independent variables $\vec{x}$ and dependent variable $\mu$
+5. Then we have the solution
+
+#+begin_math-example
+For the PDE
+\begin{equation}
+\partial_{t}\mu + e^{x}\partial_{x}\mu = 0
+\end{equation}
+subject to initial conditions $\mu(x, 0) = \cosh(x)$.
+
+1. Parametrize PDE: We have $dt/ds = 1$, $dx/ds = e^{x(s)}$, $d\mu/ds = 0$
+2. Parametrize initial conditions: at $s=0$ we have $t=0$, $x=\xi$,
+   and $u=\cosh(\xi)$.
+3. Find the characteristic curves:
+   - we find $dt/ds=1$ integrate both sides from $s'=0$ to $s'=s$
+     gives us $t=s$
+   - $dx/ds = e^{x(s)}$ becomes $e^{-x}dx/ds = 1$ hence integrating
+     both sides gives us $-e^{-x(s)}+e^{-x(0)}=s$. Substituting in
+     the initial condition $x(0) = \xi$ and rearranging terms gives
+     us $e^{-x} = e^{-\xi}-s$
+   - $d\mu/ds = 0$ gives us the constant value $\mu = \cosh(\xi)$.
+4. Eliminate the parameters, i.e., solve for $s$ and $\xi$ in
+   terms of $x$ and $t$:
+   - $s = t$
+   - From $e^{-x} = e^{-\xi}-s$ and $s=t$ we have $e^{-\xi} = e^{-x}+s = e^{-x} + t$.
+     Then the log of both sides $-\xi = -\xi(x,t) = \log(e^{-x} + t)$.
+   - NB: the solutions to $\xi = \mbox{constant}$ give us the characteristics
+5. Then we have the solution:
+   - $\mu = \cosh(\xi)$ and using our solution for $\xi$ gives us
+     the solution $\mu(x, t) = \cosh(\xi(x,t)) = 0.5(t + e^{-x}) + 0.5/(t + e^{-x})$.
+#+end_math-example
+
+#+begin_math-example
+Consider the nonlinear wave equation $\partial_{t}\mu(x,t) + \mu(x,t)\partial_{x}\mu(x,t)=0$.
+We impose initial conditions $\mu(x,0) = f(x)$.
+
+Let $a(x,t,\mu) = 1$, $b(x,t,\mu) = \mu$, $c(x,t,\mu) = 0$.
+
+1. Parametrize the PDE
+   - We have $dt(s)/ds = a(x,t,\mu) = 1$,
+   - $dx(s)/ds = b(x,t,\mu) = \mu$, and
+   - $d\mu(s)/ds = c(x,t,\mu) = 0$.
+2. Parametrize the initial conditions
+   - $t(s_{0}) = 0$
+   - $x(s_{0}) = \xi$
+   - $\mu(s_{0}) = f(\xi)$
+3. Find the characteristic curves
+   - $dt/ds = 1$ implies $t = s - s_{0} = s$
+   - $dx/ds = \mu$ implies $x(s) = s\mu(s) - s_{0}\mu(s_{0}) + x(s_{0})$
+     or $x(s) = s\mu(s) + \xi$
+   - $d\mu(s)/ds = 0$ implies $\mu(s) = \mu(s_{0}) = f(\xi)$
+4. Eliminate the parameters $s$ and $\xi$
+   - We find from $t = s$ that $s = t$
+   - From $x(s) = s\mu(s) + \xi$ and $\mu(s) = f(\xi)$ we have the
+     implicit relation $x = tf(\xi) + \xi$. In particular, this
+     means that $x - t\mu = \xi$.
+5. Solve for $\mu$
+   - We find $\mu = f(x -  t\mu)$ is the implicit relation for the
+     equation.
+
+Observe this relation breaks down at times $t>0$ since
+$\partial_{x}\mu = f'/(1 + tf')$ which fails to exist when the
+denominator vanishes $1 + tf' = 0$.
+#+end_math-example
