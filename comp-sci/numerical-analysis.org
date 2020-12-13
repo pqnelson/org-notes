@@ -5,7 +5,7 @@
 #+OPTIONS: H:5
 #+HTML_DOCTYPE: html5
 # Created Monday December  7, 2020 at  8:57PM
-#+include: ../org-macros.or
+#+include: ../org-macros.org
 
 #+begin_quote
 Numerical analysis is the blackest of the black arts. (Gerald Sussman)
@@ -28,6 +28,10 @@ to solve differential equations are discussed in graduate courses
 or their own texts.
 
 * Floating-Point Arithmetic
+
+** Representing numbers
+
+*** Motivational example
 
 The basic idea could be discussed by first considering a number
 system where a "number" is a triple =(s, c, f)= where
@@ -54,6 +58,48 @@ now by =pow(b, f[0]*(f[1]f[2]f[3]))=. For base-2, this forces
 ~c[0]~ to be 1, and hence we can just assume there is an implicit
 leading 1 (i.e., we can pretend the ~c~ tuple describes the bits
 "after the decimal point").
+
+*** Rounding, Truncating
+
+Given some number with decimal expansion
+=d[0]d[1]d[2]d[3]d[4]d[5]d[6]d[7]...=, how do we encode it in our
+toy number system? Do we simply throw away the digits =d[7]= and
+beyond? This is called "truncating".
+
+Or we could examine =d[7]= and if it is 5 or greater, add 1 to
+=d[6]= (which, if ~d[6]=9~, would become 0 and force us to "carry
+the one" to ~d[5]~, and so on). This is "rounding to infinity".
+
+Either way, rounding/truncating is one source of error. But it's a
+price we always have to pay for using a computer.
+
+#+NAME: fl-encoding-function
+#+begin_definition
+Let $x$ be a real number. Then the encoding of it to our number
+system corresponds to mapping it to the number $fl(x)$.
+#+end_definition
+
+*** Relative, Absolute Error
+
+#+NAME: absolute-error
+#+begin_definition
+Let $x$ be a real number and $x_{\ast}$ an approximation to
+$x$. Then its *absolute error* is $|x - x_{\ast}|$.
+#+end_definition
+
+#+NAME: relative-error
+#+begin_definition
+Let $x$ be a real number and $x_{\ast}$ an approximation to
+$x$. Then its *relative error* is $|x - x_{\ast}|/x$ if $x\neq0$.
+#+end_definition
+
+#+begin_math-example
+When we have two numbers close to each other $fl(x)\approx fl(y)$,
+say they agree to 4 digits, then $fl(x) - fl(y)$ has at most three
+digits of precision (we've lost more than half our precision).  The
+absolute error of $fl(x) - fl(y)$ compared to $x - y$ is small,
+though the relative error is large.
+#+end_math-example
 
 * References
 
