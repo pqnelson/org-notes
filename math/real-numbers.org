@@ -28,18 +28,27 @@ shifts). This has the advantage that $1\lt m\lt 2$, which can speed
 up Taylor series computations.
 
 For example, the logarithm of $x$ in this notation is given by
+
 \begin{equation}
 \log(x) = \log(s) + \log(m) + p\log(2)
 \end{equation}
+
 which consists of looking up stored values for $\log(2)$, and
 computing a series approximation for $\log(m)$.
 
 We can extract the components for a float in Common Lisp by
 
 #+begin_example
-(multiple-value-bind (mantissa expon sign)
-                     (decode-float f)
+USER => (multiple-value-bind (mantissa expon sign)
+(decode-float f)
   (scale-float mantissa expon))
 ;; equivalent to (abs f)
+
+USER> (multiple-value-bind (mantissa expon sign)
+          (decode-float pi)
+        (list :sign sign :mantissa mantissa :exponent expon))
+;; (:SIGN 1.0d0 :MANTISSA 0.7853981633974483d0 :EXPONENT 2)
 #+end_example
+
+
 
