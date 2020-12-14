@@ -1,0 +1,129 @@
+#+TITLE: Fluid Dynamics
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-13T20:08:49-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Sunday December 13, 2020 at  8:08PM
+#+INCLUDE: ../org-macros.org
+
+* Quickstart
+
+** Basic Quantities
+
+Basically, the idea is to model "infinitesimal parcels" of a fluid,
+so we think in terms of densities(?). There are 5 quantities which
+determine the state of a fluid:
+
+- $\vec{v}$ the 3 components of the velocity vector for a fluid parcel
+- $p$ fluid pressure
+- $\rho$ mass density
+
+We think of the velocity vector as a vector field parametrized by
+time.
+
+#+begin_remark
+Landau and Lifshitz note the pressure and density, plus the
+equations of state, determine the thermodynamics properties of the
+fluid (L&L, vol.6, \sect1). 
+#+end_remark
+
+The conservation of mass induces the continuity equation
+$\partial_{t}\rho + \vec{\nabla}\cdot(\rho\vec{v} = 0)$.
+
+** Euler's equations
+
+From Newton's second law, we have $\rho d\vec{v}/dt = -\vec\nabla p$.
+The derivative of the velocity vector, in this case, becomes the
+material derivative since $\vec{v}=\vec{v}(\vec{x}(t), t)$ so the
+total derivative is just $\partial_{t}\vec{v} + (\vec{v}\cdot\vec\nabla)\vec{v}$.
+We also add the force of gravity $\rho \vec{g}$ to get Euler's
+equations, if we divide through by $\rho$
+
+\begin{equation}
+\partial_{t}\vec{v} + (\vec{v}\cdot\vec\nabla)\vec{v}
+ = \frac{-1}{\rho}\vec\nabla p + \vec{g}.
+\end{equation}
+
+Note we didn't consider viscosity in deriving this equation, we
+just used Newton's second law modified for fluid packets (to give
+us the material derivative of velocity as the
+"acceleration"). Since we didn't consider viscosity, there is no
+heat exchange between different parts of the fluid, nor between the
+fluid and its environment.
+
+#+begin_corollary
+This absence of heat exchange between components of the fluid (and
+between the fluid and its environment) implies the motion is
+adiabatic throughout the fluid. As a consequence, the motion of an
+ideal fluid must necessarily be supposed adabiatic.
+#+end_corollary
+
+L&L note in adiabatic motion, the entropy of any particle of fluid
+remains constant as that particle moves around in space. So if $s$
+denotes the entropy per unit mass, we can express the adabiatic
+condition as
+
+\begin{equation}
+\frac{ds}{dt} = \partial_{t}s + (\vec{v}\cdot\vec\nabla)s = 0.
+\end{equation}
+
+L&L refer to the quantity $\rho s\vec{v}$ as the
+{{{define(Entropy Flux Density)}}} because we have the "equation of
+continuity" for entropy in terms of it:
+
+\begin{equation}
+\partial_{t}(\rho s) + \vec{\nabla}\cdot(\rho s\vec{v}) = 0.
+\end{equation}
+
+If, "as usually happens", the entropy is constant throughout the
+volume of the fluid at some initial instant, it retains everywhere
+the same constant value at all times and for any subsequent motion
+of the fluid. In this case we can write the adiabatic condition as
+
+\begin{equation}
+s = \mbox{constant}
+\end{equation}
+
+and L&L usually does so. In this case, such a motion is said to be
+{{{define(Isentropic)}}}.
+
+#+begin_theorem
+The Euler equations of motion for an isentropic fluid may be
+rewritten as
+
+\begin{equation}
+\partial_{t}(\vec{\nabla}\times\vec{v}) = \vec{\nabla}\times(\vec{v}\times(\vec{\nabla}\times\vec{v})).
+\end{equation}
+
+which involves only the velocity.
+#+end_theorem
+
+This requires some boundary condition. For an ideal fluid, this
+boundary condition is simply "the fluid cannot penetrate a surface
+solid". I.e., the component of the fluid velocity normal to the
+bounding surface must vanish if that surface is at rest:
+
+\begin{equation}
+v_{\vec{n}} = 0.
+\end{equation}
+
+In general, for the case when the surface is moving, $v_{n}$ must
+be equal to the corrsponding component of the velocity of the surface.
+
+
+#+begin_remark
+This derivation of Euler's equations, and isentropic stuff, comes from L&L, vol.6, \sect2.
+#+end_remark
+
+* References
+
+- George Batchelor,
+  {{{book-title(An Introduction to Fluid Dynamics)}}}.
+  Cambridge University Press, 2000.
+- Laurent Schoeffel, "Lectures on Fluid Dynamics". Eprint [[https://arxiv.org/abs/1407.3162][arXiv:1407.3162]].
+
+** Recommendations/Lookup
+
+- [ CFD Python: 12 steps to Navier-Stokes :: Lorena A. Barba Group ]
