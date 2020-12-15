@@ -5,6 +5,146 @@
 #+OPTIONS: H:5
 #+HTML_DOCTYPE: html5
 # Created Saturday December  5, 2020 at 11:52AM
+#+INCLUDE: ../org-macros.org
+
+* Number Systems
+
+The real numbers are typically taught as the final "target" in a
+sequence of number systems.
+
+** Natural Numbers
+
+We can begin with the natural numbers.
+
+*** Peano Arithmetic
+
+An axiomatic way to do so is assert there is some constant =Z=
+that's a natural number, and if =x= is a natural number then we can
+apply a function/constructor of a single argument =S= to it to get
+=S x= another distinct natural number. By iteratively applying =S=
+to =Z=, we get all the natural numbers.
+
+We identify =Z= with zero, =S Z= with one, =S (S Z)= with two, and
+so on. Further, =S= is injective as a mapping of the natural
+numbers to itself...so for any =m= and =n=, we have ~m=n~ if and
+only if ~S m = S n~.
+
+These are the Peano Axioms. We could define the familiar binary
+operators like addition, which satisfies the properties:
+
+- ~a + Z = a~
+- ~a + (S b) = (S a) + b~
+
+Multiplication could similarly be defined inductively:
+
+- ~a * Z = Z~
+- ~a * (S b) = a + a*b~
+
+*** Axioms
+
+We "know" arithmetic, but what axioms do we "need"? The ones we
+should hope for include, but are not limited to:
+
+- Closure under addition and multiplication, i.e., $a\times b$ is a
+  natural number, and $a + b$ is another natural number.
+- Addition
+  - Associativity :: $a + (b + c) = (a + b) + c$
+  - Commutativity :: $a + b = b + a$
+  - Identity Element :: $0 + a = a$
+- Multiplication
+  - Associativity :: $a\times(b\times c)=(a\times b)\times c$
+  - Commutativity :: $a\times b = b\times a$
+  - Identity Element :: $a\times 1 = a$
+  - Distributivity :: $a\times(b + c) = a\times b + a\times c$
+  - No nonzero zero divisors :: if $a\times b = 0$, then either $a = 0$
+    or $b = 0$
+
+** Integers
+
+We allow subtraction to natural numbers. Subtraction is a binary
+operation, written $a - b$ for integers $a$ and $b$, which is such
+that $(a - b) + b = a$. We generically write $0 - a$ as $-a$, and
+refer to it as the {{{define(negation)}}} of $a$.
+
+If we wanted to be rigorous, we could use the Grothendieck
+construction: work with pairs of natural numbers $(a,b)$ and
+instead of equality, we use an equalivalence relation
+
+\begin{equation}
+(a,b) \sim (x, y)\iff a+y = b+x.
+\end{equation}
+
+If $a > b$, then $(a,b)$ is intuitively the equivalence class
+corresponding to the number $a - b > 0$. On the other hand, for $a
+< b$, the pair corresponds to the equivalence class of the negative
+number $a - b$. We should think of the first component as a
+surplus, the second as a deficit.
+
+** Rational Numbers
+
+The intuitive construction of the rational numbers is any pair of
+integers $a/b$ where $b\neq0$ is nonzero. Addition is defined as
+
+\begin{equation}
+\frac{a}{b} + \frac{x}{y} = \frac{ay + bx}{by}
+\end{equation}
+
+Multiplication is defined as
+
+\begin{equation}
+\frac{a}{b}\times\frac{x}{y} = \frac{a\times x}{b\times y}.
+\end{equation}
+
+We could go through another Grothendieck construction to derive the
+rational numbers formally from the integers, but that's tedious.
+
+** Real Numbers
+
+There are a variety of ways to construct the real numbers, at least
+three I'm aware of:
+
+1. using Dedekind cuts,
+2. Bourbaki's topological closure of the rationals
+3. as the smallest ordered field containing the rationals
+
+The latter seems the most direct way to get cooking.
+
+*** Axioms
+
+1. $(\mathbb{R}, +, \times)$ form a field
+   - Associativity of multiplication and addition: for any
+     $x,y,z\in\mathbb{R}$ we have $(x + y) + z = x + (y + z)$ and
+     $(x\times y)\times z = x\times(y\times z)$
+   - Commutativity of addition and multiplication: for any
+     $x,y\in\mathbb{R}$ we have $x + y = y + x$ and
+     $x\times y=y\times x$
+   - Distributivity: for any $x,y,z\in\mathbb{R}$ we have
+     $x\times(y + z) = (x\times y) + (x\times z)$
+   - For any $x\in\mathbb{R}$, $x + 0 = x$
+   - 0 is not equal to 1, and for any $x\in\mathbb{R}$ we have $x\times1=x$
+   - For any $x\in\mathbb{R}$ there exists a unique
+     $-x\in\mathbb{R}$ such that $x+(-x)=0$
+   - For any nonzero $x\in\mathbb{R}$ there exists a unique
+     $x^{-1}\in\mathbb{R}$ such that $x\times x^{-1}=1$
+2. $(\mathbb{R}, \leq)$ form a totally ordered set
+   - Reflexivity :: For any $x\in\mathbb{R}$, we have $x\leq x$
+   - Antisymmetry :: For any $x,y\in\mathbb{R}$, if $x\leq y$ and $y\leq x$, then
+     $x = y$
+   - Transitivity :: For any $x,y,z\in\mathbb{R}$, if $x\leq y$ and $y\leq z$, then
+     $x\leq z$
+   - Totality :: For all $x,y\in\mathbb{R}$, either $x\leq y$ or $y\leq x$.
+3. The field operations $+$ and $\times$ are compatible with the
+   order $\leq$ on $\mathbb{R}$, in particular
+   - If $x,y\in\mathbb{R}$ are such that $x\leq y$, then for any
+     $z\in\mathbb{R}$ we have $x+z\leq y+z$.
+   - For any $x,y\in\mathbb{R}$, if $0\leq x$ and $0\leq y$, then
+     $0\leq x\times y$
+4. The order $\leq$ is complete (i.e., every non-empty subset of
+   $\mathbb{R}$ bounded above has a least upper bound)
+
+Tarski provided another axiomatization in 1936 with four undefined
+notions. Again, we don't need it for our purposes.
+
 
 * Scientific Notation
 
@@ -18,6 +158,13 @@ In base 10, we would write $x = s\times m\times 10^{p}$ where
 $s\in\{+1,-1\}$, $0\lt m\lt 10$, and $p\in\mathbb{Z}$. Every real
 number may be written in this manner, and it is called "scientific
 notation".
+
+The difficulty is, not every real number may be represented with
+finitely many digits. For example $\pi$ requires infinitely many,
+as does $\sqrt{2}$. We then form /approximations/ to these
+numbers. Since this is an approximation, we are left with errors,
+which propagate in our calculations. The entire field of
+[[file:../comp-sci/numerical-analysis.org][Numerical Analysis]] studies this matter.
 
 ** Binary
 
