@@ -19,7 +19,7 @@ the energy budget changes with latitude and/or longitude.
 
 Using Stefan-Boltzmann's law, we would have something like
 \begin{equation}
-\frac{d T(t)}{d t} \sim R - \sigma T(t)^{4}
+\frac{\D T(t)}{\D t} \sim R - \sigma T(t)^{4}
 \end{equation}
 where $R$ is net solar influx, $\sigma$ is the Stefan-Boltzmann
 constant, $T(t)$ is the temperature of the Earth at time $t$.
@@ -30,7 +30,7 @@ The first modification to Stefan-Boltzmann's law is to consider a
 system of coupled stochastic differential equations accounting for
 the concentration of greenhouse gases $c(t)$:
 \begin{equation}
-\rho C_{P}H \frac{d T(t)}{d t} \sim R(c) - \sigma(1 - g(c)) T(t)^{4} + \widehat{f}_{T}(t)
+\rho C_{P}H \frac{\D T(t)}{\D t} \sim R(c) - \sigma(1 - g(c)) T(t)^{4} + \widehat{f}_{T}(t)
 \end{equation}
 where now:
 - $\rho$ is the density of atmosphere
@@ -43,7 +43,7 @@ where now:
 
 We also have
 \begin{equation}
-\tau_{c}\frac{d c(t)}{dt} = -c(t)+\widehat{q}(t) + \widehat{f}_{c}(t)
+\tau_{c}\frac{\D c(t)}{\D t} = -c(t)+\widehat{q}(t) + \widehat{f}_{c}(t)
 \end{equation}
 where
 - $q$ is the addition of greenhouse gases per unit volume to the atmosphere
@@ -70,12 +70,12 @@ Can full-fledged general circulation models reproduce this result?
 
 For the second equation, we may write
 \begin{equation}
-\frac{d c(t)}{dt} + \frac{1}{\tau_{c}}c(t)
+\frac{\D c(t)}{\D t} + \frac{1}{\tau_{c}}c(t)
 = \frac{\widehat{q}(t) + \widehat{f}_{c}(t)}{\tau_{c}}
 \end{equation}
 Multiplying through by a multiplication factor $\mu(t)$
 \begin{equation}
-\mu(t)\frac{d c(t)}{dt} + \frac{\mu(t)}{\tau_{c}}c(t)
+\mu(t)\frac{\D c(t)}{\D t} + \frac{\mu(t)}{\tau_{c}}c(t)
 = \mu(t)\frac{\widehat{q}(t) + \widehat{f}_{c}(t)}{\tau_{c}}
 \end{equation}
 If we then let
@@ -84,13 +84,13 @@ If we then let
 \end{equation}
 we necessarily would have
 \begin{equation}
-e^{-t/\tau_{c}}\frac{d }{dt}(e^{t/\tau_{c}}c(t))
+e^{-t/\tau_{c}}\frac{\D}{\D t}(e^{t/\tau_{c}}c(t))
 = \frac{\widehat{q}(t) + \widehat{f}_{c}(t)}{\tau_{c}}.
 \end{equation}
 This doesn't get us very far, however. We would have
 \begin{equation}
 e^{t/\tau_{c}}c(t) - e^{t_{0}/\tau_{c}}c(t_{0})
-\sim\frac{1}{\tau_{c}}\int e^{t/\tau_{c}}\widehat{q}(t)\,dt
+\sim\frac{1}{\tau_{c}}\int e^{t/\tau_{c}}\widehat{q}(t)\,\D t
 \end{equation}
 ignoring the gaussian noise term.
 

@@ -1,17 +1,25 @@
+
 #+HTML_HEAD: <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 #+HTML_HEAD: <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 
-#+OPTIONS: html-postamble:nil
+#+OPTIONS: html-postamble:nil tex:t
 
 #+MACRO: define  @@html:<dfn>@@@@latex:\define{@@$1@@latex:}@@@@html:</dfn>@@
 
 # Bibliography related macros
 #+MACRO: book-title @@html:<cite class="book-title">@@$1@@html:</cite>@@
 
+
 #+begin_export html
-\(
-   \def\RR{\mathbb{R}}
-   \def\D{\mathrm{d}}
-\)
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+    Macros: {
+      RR: '\\mathbf{R}', // a simple string replacement
+      D: '\\mathrm{d}'   // this macro has one parameter
+    }
+  }
+});
+</script>
 #+end_export
