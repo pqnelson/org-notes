@@ -10,12 +10,18 @@
 #+HTML_LINK_UP: ./README.html
 #+HTML_LINK_HOME: ../README.html
 
+These are my reading notes of Landau and Lifshitz's {{{book-title(Fluid Mechanics)}}}
+(vol.6 of their series on Theoretical Physics).
+
 * Quickstart, Ideal Fluids
 
 ** Basic Quantities
 
 Basically, the idea is to model "infinitesimal parcels" of a fluid,
-so we think in terms of densities(?). There are 5 quantities which
+so we think in terms of densities(?). Like, if we took out an
+"infinitesimal microscope" in particle physics, a particle is a point.
+But in fluid mechanics, it's a "Kool Aide man": a "container" of
+infinitesimal volume of fluid. There are 5 quantities which
 determine the state of a fluid:
 
 - $\vec{v}$ the 3 components of the velocity vector for a fluid parcel
@@ -41,7 +47,7 @@ The conservation of mass induces the {{{define(Continuity Equation)}}}:
 
 ** Euler's equations
 
-From Newton's second law, we have $\rho d\vec{v}/dt = -\vec\nabla p$.
+From Newton's second law, we have $\rho \,\D\vec{v}/\D t = -\vec\nabla p$.
 The derivative of the velocity vector, in this case, becomes the
 material derivative since $\vec{v}=\vec{v}(\vec{x}(t), t)$ so the
 total derivative is just $\partial_{t}\vec{v} + (\vec{v}\cdot\vec\nabla)\vec{v}$.
@@ -75,7 +81,7 @@ denotes the entropy per unit mass, we can express the adabiatic
 condition as
 
 \begin{equation}
-\frac{ds}{dt} = \partial_{t}s + (\vec{v}\cdot\vec\nabla)s = 0.
+\frac{\D s}{\D t} = \partial_{t}s + (\vec{v}\cdot\vec\nabla)s = 0.
 \end{equation}
 
 L&L refer to the quantity $\rho s\vec{v}$ as the
@@ -130,6 +136,11 @@ This derivation of Euler's equations, and isentropic stuff, comes from L&L, vol.
 The next steps are to study this equation when
 $\vec{v}=0$ (hydrostatics) and when
 $\partial_{t}\vec{v}=0$ is constant (Bernoulli's law).
+
+#+begin_puzzle
+When will entropy *not* be constant throughout the fluid at some moment
+in time?
+#+end_puzzle
 
 ** Hydrostatics
 
@@ -200,14 +211,14 @@ equilibrium. So the temperature is the same at every point. We use
 the thermal relation
 
 \begin{equation}
-d\Phi = -s\,dT + V\,dp
+\D\Phi = -s\,\D T + V\,\D p
 \end{equation}
 
 where $\Phi$ is the thermodynamic potential (Gibbs free energy) per
 unit mass. For constant temperature, this becomes
 
 \begin{equation}
-d\Phi = V\,dp = dp/\rho.
+\D\Phi = V\,\D p = \frac{\D p}{\rho}.
 \end{equation}
 
 This let's us write
@@ -223,7 +234,7 @@ Euler's equation then becomes
 \end{equation}
 
 For a constant vector $\vec{g}$ directed along the negative
-$z$-axis, we have
+\(z\)-axis, we have
 
 \begin{equation}
 \vec{g}:=-\vec{\nabla}(gz)
@@ -261,7 +272,7 @@ different points with the same altitude, motion would follow).
 It follows then that the density
 
 \begin{equation}
-\rho = \frac{-1}{g}\frac{dp}{dz}
+\rho = \frac{-1}{g}\frac{\D p}{\D z}
 \end{equation}
 
 is also a function of $z$ only. The pressure and density determine
@@ -311,7 +322,7 @@ distributions will be spherically symmetric. We have in spherical
 coordinates our condition become
 
 \begin{equation}
-\frac{1}{r^{2}}\frac{d}{dr}\left(\frac{r^{2}}{\rho}\frac{dp}{dr}\right) = -4\pi G\rho.
+\frac{1}{r^{2}}\frac{\D}{\D r}\left(\frac{r^{2}}{\rho}\frac{\D p}{\D r}\right) = -4\pi G\rho.
 \end{equation}
 
 Again, this fails to hold for a rotating body (like the Earth).
@@ -357,7 +368,7 @@ point gives the direction of the velocity of that point. They are
 determined by the system of differential equations
 
 \begin{equation}
-\frac{dx}{v_{x}} = \frac{dy}{v_{y}} = \frac{dz}{v_{z}}.
+\frac{\D x}{v_{x}} = \frac{\D y}{v_{y}} = \frac{\D z}{v_{z}}.
 \end{equation}
 
 In steady flow, the streamlines do not vary with time, and coincide
@@ -414,10 +425,11 @@ the isentropic Euler equations for steady flows:
 \frac{1}{2}\vec{\nabla}(v^{2}) - \vec{v}\times(\vec{\nabla}\times\vec{v}) = -\vec{\nabla}w + \vec{g}.
 \end{equation}
 
-Let us take the direction of gravity as the $z$-axis, with $z$
+Let us take the direction of gravity as the \(z\)-axis, with $z$
 increasing upwards. This choice let's us relate the cosine of the
 angle between $\vec{g}$ and $\vec{\ell}$ to be equal to the derivative
-$-dz/d\ell$, so the projection of $\vec{g}$ on $\vec{\ell}$ is $-gdz/d\ell$.
+$-\D z/\D\ell$, so the projection of $\vec{g}$ on $\vec{\ell}$ is
+$-g\,\D z/\D\ell$.
 
 Then we have our projected equation become
 
@@ -490,7 +502,7 @@ In the last term, we replace
 \end{equation}
 
 and in the middle term we (use the thermodynamic relation
-$dw = T\,ds + (1/\rho)dp$ to) replace
+$\D w = T\,\D s + (1/\rho)\D p$ to) replace
 
 \begin{equation}
 \vec{\nabla}p = \rho\vec{\nabla}w - \rho T\vec{\nabla}s
@@ -511,15 +523,15 @@ Now we compute $\partial_{t}(\rho\varepsilon)$, we use the
 thermodynamic relation
 
 \begin{equation}
-d\varepsilon = T\,ds - p\,dV = T\,ds + (p/\rho^{2})d\rho.
+\D\varepsilon = T\,\D s - p\,\D V = T\,\D s + \frac{p}{\rho^{2}}\D\rho.
 \end{equation}
 
 Since $\varepsilon + p/\rho = \varepsilon + pV$ is the heat
 function $w$ per unit mass, we find
 
 \begin{equation}
-d(\rho\varepsilon) = \varepsilon\,d\rho + \rho\,d\varepsilon
-= w\,d\rho + \rho T\,ds.
+\D(\rho\varepsilon) = \varepsilon\,\D \rho + \rho\,\D \varepsilon
+= w\,\D \rho + \rho T\,\D s.
 \end{equation}
 
 Thus (using the general adiabatic equation of motion)
@@ -536,15 +548,15 @@ string of equations. Believe me? Well, let's see what it
 /means/. We need to integrate it over some volume $V$:
 
 \begin{equation}
-\partial_{t}\int\left(\frac{\rho v^{2}}{2} + \rho\varepsilon\right)dV
-= -\int\vec{\nabla}\cdot\left[\rho\vec{v}\left(\frac{v^{2}}{2}+w\right)\right] dV
+\partial_{t}\int\left(\frac{\rho v^{2}}{2} + \rho\varepsilon\right)\,\D V
+= -\int\vec{\nabla}\cdot\left[\rho\vec{v}\left(\frac{v^{2}}{2}+w\right)\right]\,\D V
 \end{equation}
 
 We convert the integral on the right to a surface integral
 
 \begin{equation}
-\partial_{t}\int\left(\frac{\rho v^{2}}{2} + \rho\varepsilon\right)dV
-= -\oint\left[\rho\vec{v}\left(\frac{v^{2}}{2}+w\right)\right]\cdot d\vec{f}.
+\partial_{t}\int\left(\frac{\rho v^{2}}{2} + \rho\varepsilon\right)\D V
+= -\oint\left[\rho\vec{v}\left(\frac{v^{2}}{2}+w\right)\right]\cdot \D\vec{f}.
 \end{equation}
 
 - The LHS is the rate of change of the energy of the fluid in some volume.
@@ -564,8 +576,8 @@ $w=\varepsilon + p/\rho$, we can write the flux of energy through a
 closed surface in the form
 
 \begin{equation}
--\oint\rho\vec{v}\left(\frac{v^{2}}{2}+\varepsilon\right)\cdot d\vec{f}
--\oint p\vec{v}\cdot d\vec{f}
+-\oint\rho\vec{v}\left(\frac{v^{2}}{2}+\varepsilon\right)\cdot\D\vec{f}
+-\oint p\vec{v}\cdot\D\vec{f}
 \end{equation}
 
 The first term is the energy (kinetic and internal) transported
@@ -598,7 +610,8 @@ We can use the [[*Continuity Equation][continuity equation]] in the form of
 and Euler's equations in the form of
 
 \begin{equation}
-\partial_{t}v_{i} = -\frac{1}{\rho}\frac{\partial p}{\partial x_{i}} - \sum_{k}v_{k}\frac{\partial v_{i}}{\partial x_{k}}
+\partial_{t}v_{i} = -\frac{1}{\rho}\frac{\partial p}{\partial x_{i}}
+ - \sum_{k}v_{k}\frac{\partial v_{i}}{\partial x_{k}}
 \end{equation}
 
 to obtain
@@ -652,26 +665,26 @@ We grasp the meaning of the momentum flux density tensor by looking
 at its integral over some volume
 
 \begin{equation}
-\partial_{t}\int \rho v_{i}\,dV = -\int\sum_{k}\frac{\partial\Pi_{ik}}{\partial x_{k}}\,dV.
+\partial_{t}\int \rho v_{i}\,\D V = -\int\sum_{k}\frac{\partial\Pi_{ik}}{\partial x_{k}}\,\D V.
 \end{equation}
 
 We can apply Green's theorem to the right hand side, obtaining
 
 \begin{equation}
-\partial_{t}\int \rho v_{i}\,dV =
--\sum_{k}\oint\Pi_{ik}\,d f_{k}.
+\partial_{t}\int \rho v_{i}\,\D V =
+-\sum_{k}\oint\Pi_{ik}\,\D f_{k}.
 \end{equation}
 
-- The left-hand side is the rate of change of the $i$-th component of
+- The left-hand side is the rate of change of the \(i\)-th component of
   momentum contained in the volume (i.e., the domain of integration).
 - The RHS is thus the amount of momentum flowing out through the
   bounding surface in unit time.
 
-So $\Pi_{ik}df^{k}$ is the $i$-th component of momentum flowing
-through the surface element $df$. If we write $df_{k}$ in the form
-of $n_{k}df$, where $df$ is the area of the surface element and
+So $\Pi_{ik}\,\D f^{k}$ is the \(i\)-th component of momentum flowing
+through the surface element $\D f$. If we write $\D f_{k}$ in the form
+of $n_{k}\,\D f$, where $\D f$ is the area of the surface element and
 $\vec{n}$ is a unit vector along the outward normal, we find that
-$\Pi_{ik}n^{k}$ is the flux of the $i$-th component of momentum
+$\Pi_{ik}n^{k}$ is the flux of the \(i\)-th component of momentum
 through unit surface area. Note that
 
 \begin{equation}
@@ -691,7 +704,7 @@ or in vector form
 The integral
 
 \begin{equation}
-\Gamma = \oint \vec{v}\cdot d\vec{\ell}
+\Gamma = \oint \vec{v}\cdot \D\vec{\ell}
 \end{equation}
 
 along some closed contour is called the {{{define(Velocity Circulation)}}}
@@ -714,12 +727,17 @@ around that contour.
 
 * References
 
+- Landau and Lifshits,
+  {{{book-title(Fluid Mechanics)}}}.
+  Second ed., Butterworth-Heinemann,
+  1987.
+  This is my primary reference.
+
+** Recommendations/Lookup
+
 - George Batchelor,
   {{{book-title(An Introduction to Fluid Dynamics)}}}.
   Cambridge University Press, 2000.
 - Laurent Schoeffel, "Lectures on Fluid Dynamics".
   Eprint [[https://arxiv.org/abs/1407.3162][arXiv:1407.3162]].
-
-** Recommendations/Lookup
-
 - [ CFD Python: 12 steps to Navier-Stokes :: Lorena A. Barba Group ]
