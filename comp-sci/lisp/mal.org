@@ -6,6 +6,8 @@
 #+HTML_DOCTYPE: html5
 # Created Saturday December 12, 2020 at 10:48AM
 #+include: ../../org-macros.org
+#+HTML_LINK_UP: ../lisp.hmtl
+#+HTML_LINK_HOME: ../../README.html
 
 * Roadmap
 
@@ -165,15 +167,15 @@ typedef enum {
 <<Lisp value base type>>
 
 <<Lisp Numbers declarations>>
-    
+
 <<Lisp Symbol declarations>>
 
 <<Lisp String declarations>>
 
 <<Lisp cons-cell declarations>>
-    
+
 <<Other lisp types>>
-    
+
 #endif /* LISP_TYPES_H */
 #+end_src
 
@@ -199,7 +201,7 @@ The base type of Lisp Values tracks metadata, like the
 =LispType type= constant, or reference counting. For now, I will
 stick a pin in the topic of garbage collection (it's rather
 tricky --- although [[https://nullprogram.com/blog/2015/02/17][reference counting in C]] is not too bad...thread
-safety's a pain, though). 
+safety's a pain, though).
 
 #+begin_src c :noweb no-export :noweb-ref Lisp value base type
 typedef struct LispValue {
@@ -293,7 +295,7 @@ typedef struct LispInt {
 
 The floating point could be either double or a =long double=. Since
 there's no support anywhere for 128-bit floating point arithmetic,
-I'm forced to use the next highest precision afforded by the IEEE 754 
+I'm forced to use the next highest precision afforded by the IEEE 754
 standard (double precision).
 
 #+begin_src c :noweb no-export :noweb-ref Lisp floating-point structure
@@ -343,7 +345,7 @@ We free the integer without much fanfare:
 void int_free(LispInt *integer) {
     if (!integer) return;
     assert (LISP_INT == integer->type);
-    
+
     free(integer);
 }
 #+end_src
@@ -435,7 +437,7 @@ char* symbol_name(LispSymbol *symbol);
 *** Constant definitions
 
 We define primitive constants
-#+begin_src c :noweb no-export :noweb-ref Symbol data structure 
+#+begin_src c :noweb no-export :noweb-ref Symbol data structure
 extern const LispSymbol lisp_nil;
 extern const LispSymbol lisp_true;
 extern const LispSymbol lisp_false;
@@ -658,7 +660,7 @@ LispList* list_new(LispValue *value, LispValue *next) {
 
 This is where reference counting would be really wonderful, since
 it would handle freeing memory if I've painted myself into an
-unreferenced corner. Instead, I'll defer that for now, and 
+unreferenced corner. Instead, I'll defer that for now, and
 
 #+begin_src c :tangle ../src/mal/types.c
 void list_free(LispList *list) {
