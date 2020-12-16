@@ -23,7 +23,7 @@ If I add to the header of an org file:
 #+end_example
 
 Then by default, all source code blocks will be evaluated /as if/
-it had =tangle: my-file.lisp=. 
+it had =tangle: my-file.lisp=.
 
 *** Keeping the Noweb labels in documentation
 
@@ -43,8 +43,36 @@ code to a noweb label, we write
 #+end_example
 
 It seems like it must be the last element in the "begin source"
-line. 
+line.
 
+** Publishing
+
+I'd need to add to my =~/.emacs= file
+
+#+begin_src elisp
+(require 'ox-publish)
+(setq org-publish-project-alist '())
+(add-to-list 'org-publish-project-alist
+      '("org-notes"
+         :base-directory "~/org-notes/"
+         :base-extension "org"
+         :publishing-directory "~/org-notes/html/"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :ignore "~/org-notes/ignore/*"))
+
+(add-to-list 'org-publish-project-alist
+        '("org-static"
+        :base-directory "~/org-notes/"
+        :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+        :publishing-directory "~/org-notes/html/"
+        :recursive t
+        :publishing-function org-publish-attachment
+        ))
+
+(add-to-list 'org-publish-project-alist
+             '("all" :components ("all-notes" "org-static")))
+#+end_src
 
 * Subject Classification
 

@@ -5,12 +5,13 @@
 #+OPTIONS: H:5
 #+HTML_DOCTYPE: html5
 # Created Wednesday December  9, 2020 at  3:01PM
+#+INCLUDE: ../../org-macros.org
 
 * Introduction
 
 Landin introduced the SECD machine back in 1964, Plotkin used it in
 the mid 1970s, and Henderson employed it in his book on Lispkit
-in 1980. 
+in 1980.
 
 We will discuss the description of the theoretical architecture of
 the SECD machine (namely, its registers, its instruction
@@ -20,7 +21,7 @@ from Lisp to SECD instructions.
 
 Why Lisp? Well, we don't need to consider a parser or grammar for a
 simple input language. It's nothing more than wishing to avoid
-difficulties. 
+difficulties.
 
 * Machine Description
 
@@ -97,8 +98,8 @@ but do not modify the other registers:
 - =REM= takes =(a b . s)= and produces =(b % a . s)=
 - =LEQ= takes =(a b . s)= and produces ~(b <= a . s)~
 - =EQ=  takes =(a b . s)= and produces ~(b = a . s)~
-  
-  
+
+
 *** Loading Rules
 
 - =LD= :: =s e (LD i . c) d= becomes =(x . s) e c d= where
@@ -207,12 +208,10 @@ consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
 - John D. Ramsdell, "The Tail-Recursive SECD Machine". Manuscript
   dated 1999.
 - [[https://netzhansa.blogspot.com/2008/09/revisiting-secd-and-power-of-lisp-while.html][Revisiting SECD and the Power of Lisp]]
-  
+
 ** Lisp to SECD Compiler
 
 - Peter Henderson's book is about this very topic
 - Milos Radovanovic, Mirjana Ivanovic, "An Implementation of
   Lispkit Lisp in Java". In /Proc. XV Conf. on Applied Math./,
   2002, pp.169-178
-  
-  
