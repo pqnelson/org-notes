@@ -8,11 +8,12 @@
 #+INCLUDE: ../org-macros.org
 #+HTML_LINK_UP: ./index.html
 #+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 
 * Real Infinity
 
 There are two infinities on the real number line, positive and
-negative infinity. These are constants
+negative infinity. In Lisp, these are represented by the constants
 
 #+begin_example
 GSLL:+POSITIVE-INFINITY+
@@ -28,11 +29,26 @@ concerned, it acts like a number.
 
 We can treat them like numbers, which gives us the extended real
 number line. The extended reals have the additional rules for
-operators when at most 1 operand is infinite.
+operators when at most 1 operand is infinite. The basic operations are
+
+- $a+\infty = \infty + a = \infty$ for finite $a$
+- $a-\infty = -\infty+ a = -\infty$ for finite $a$
+- $a\times(\pm\infty) = \pm\infty$ for $0\lt a\lt+\infty$
+- $a\times(\pm\infty) = \mp\infty$ for $-\infty\lt a\lt 0$
+- $a/(\pm\infty) = 0$ for finite $a$
+- $(\pm\infty)/a = \pm\infty$ for $0\lt a\lt\infty$
+- $(\pm\infty)/a = \mp\infty$ for $-\infty\lt a\lt 0$
+- $a^{\infty} = \infty$ and $a^{-\infty}=0$ for $1\lt a\lt\infty$
+- $0^{a} = 0$ and $(+\infty)^{a}=\infty$ for $0\lt a\lt\infty$
+- $0^{a} = \infty$ and $(+\infty)^{a}=0$ for $-\infty\lt a\lt 0$
 
 When both are infinite in disagreeable ways, like $\infty - \infty$,
 the operation is undefined. For agreeable situations, we could
 define the operation, like $\infty + \infty = \infty$.
+
+#+begin_exercise
+Prove or find a counter-example: the extended reals form a monoid.
+#+end_exercise
 
 ** Projective Real Number Line
 
