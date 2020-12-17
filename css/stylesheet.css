@@ -1,5 +1,6 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap'); */
 /* @import url('https://fonts.googleapis.com/css2?family=Spectral&display=swap'); */
+@import url("proof.css");
 html {
     /* background-color: wheat; */
     background-color: #252525;
@@ -11,14 +12,14 @@ code, pre, kbd {
 }
 
 body {
-    counter-reset: theorem;
+    counter-reset: theorem puzzle;
     background-color: white;
     font-family: "Spectral", Merriweather, Georgia, serif;
     font-size: 18px;
     line-height: 24px;
     margin: 0 auto;
     min-height: 100%;
-    padding: 0 1em;
+    padding: 0 1em 1em 1em;
     max-width: 34em;
 }
 
@@ -71,6 +72,21 @@ div.definition::before {
     font-weight: bold;
 }
 
+div.puzzle::before {
+    counter-increment: puzzle;
+    content: "Puzzle " counter(puzzle) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.puzzle {
+    background-color: #ffebcd;
+    padding: 0px 0px 0em 10px;
+    border-left-style: solid;
+    border-width: 5px;
+    border-color: orange;
+}
+
 div.corollary::before {
     counter-increment: theorem;
     content: "Corollary " counter(theorem) ".";
@@ -78,14 +94,47 @@ div.corollary::before {
     font-weight: bold;
 }
 
-div.theorem, div.corollary {
+div.lemma::before {
+    counter-increment: theorem;
+    content: "Lemma " counter(theorem) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.proposition::before {
+    counter-increment: theorem;
+    content: "Proposition " counter(theorem) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.math-example::before {
+    counter-increment: theorem;
+    content: "Example " counter(theorem) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+
+div.danger::before {
+    content: "Danger:";
+}
+div.danger {
+    background-color: #ffebcd;
+    padding: 0px 0px 0em 10px;
+    border-left-style: solid;
+    border-width: 5px;
+    border-color: red;
+}
+
+div.theorem, div.corollary, div.proposition, div.lemma {
     font-style: italic;
 }
 
-div.theorem > p, div.corollary > p, div.remark > p, div.definition > p {
+div.theorem > p, div.corollary > p, div.remark > p, div.definition > p, .puzzle > p, .lemma > p, .exercise > p, .math-example > p, .proposition > p {
     margin-top: 0;
 }
-div.definition > p:last-of-type {
+div.definition > p:last-of-type, .puzzle > p:last-of-type {
     margin-bottom: 0;
 }
 

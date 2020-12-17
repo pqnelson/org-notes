@@ -6,8 +6,8 @@
 #+HTML_DOCTYPE: html5
 # Created Saturday December 12, 2020 at 10:45AM
 #+INCLUDE: ../org-macros.org
-#+HTML_LINK_UP: ./README.html
-#+HTML_LINK_HOME: ../README.html
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
 
 * Introduction
 
@@ -216,32 +216,32 @@ But that $\vartheta$ makes it a /nonlinear/ PDE.
 Suppose we had the ODE
 
 \begin{equation}
-\frac{d^{2}\mu(x)}{d x^{2}} = 0.
+\frac{\D^{2}\mu(x)}{\D x^{2}} = 0.
 \end{equation}
 
 We can integrate it once. The left-hand side becomes
 
 \begin{equation}
-\int LHS\,dx = \int\frac{d}{dx}\left(\frac{d\mu(x)}{dx}\right)dx =
-\frac{d\mu(x)}{dx} + c_{1}.
+\int LHS\,\D x = \int\frac{\D}{\D x}\left(\frac{\D\mu(x)}{\D x}\right)\D x =
+\frac{\D\mu(x)}{\D x} + c_{1}.
 \end{equation}
 
 The right-hand side
 
 \begin{equation}
-\int RHS\,dx = \int 0\,dx = 0.
+\int RHS\,\D x = \int 0\,\D x = 0.
 \end{equation}
 
 Setting the two equal gives us
 
 \begin{equation}
-\frac{d\mu(x)}{dx} + c_{1} = 0.
+\frac{\D\mu(x)}{\D x} + c_{1} = 0.
 \end{equation}
 
 Integrating again with respect to $x$ gives us
 
 \begin{equation}
-\int LHS\,dx = \int \frac{d}{dx}(\mu(x))\,dx + \int c_{1}\,dx =
+\int LHS\,\D x = \int \frac{\D}{\D x}(\mu(x))\,\D x + \int c_{1}\,\D x =
 \mu(x) + c_{0} + c_{1}x
 \end{equation}
 
@@ -309,7 +309,7 @@ differentiation. We integrate the left-hand side of our PDE with
 respect to $x$ to get
 
 \begin{equation}
-\int\partial_{x}\bigl(\partial_{y}\mu(x,y)\bigr)dx =
+\int\partial_{x}\bigl(\partial_{y}\mu(x,y)\bigr)\D x =
 \partial_{y}\mu(x,y) + f(y).
 \end{equation}
 
@@ -323,7 +323,7 @@ have the first-integral yield:
 We can integrate with respect to $y$, rearranging terms, to find
 
 \begin{equation}
-\mu(x,y) = g(x) - \int f(y)\,dy.
+\mu(x,y) = g(x) - \int f(y)\,\D y.
 \end{equation}
 
 Here $g(x)$ is the "integration constant" with respect to $y$.
@@ -440,20 +440,20 @@ v^{\mu}\to\widetilde{v}^{\nu} = \frac{\partial y^{\nu}}{\partial x^{\mu}}v^{\mu}
 The partial derivatives transform as
 
 \begin{equation}
-\partial_{\mu}\to\widetilde{\partial}_{\nu}=\frac{\partial x^{\mu}}{\partial y^{\nu}}\frac{}{\partial x^{\mu}}.
+\partial_{\mu}\to\widetilde{\partial}_{\nu}=\frac{\partial x^{\mu}}{\partial y^{\nu}}\frac{\partial}{\partial x^{\mu}}.
 \end{equation}
 
 Changing the dummy variables of the tilde quantities, we find
 
 \begin{equation}
-v^{\mu}\partial_{\mu} \to \widetilde{v}^{\nu}\widetilde{\partial}_{\nu}=\left(\frac{\partial y^{\nu}}{\partial x^{\alpha}}v^{\alpha}\right)\left(\frac{\partial x^{\beta}}{\partial y^{\nu}}\frac{}{\partial x^{\beta}}\right).
+v^{\mu}\partial_{\mu} \to \widetilde{v}^{\nu}\widetilde{\partial}_{\nu}=\left(\frac{\partial y^{\nu}}{\partial x^{\alpha}}v^{\alpha}\right)\left(\frac{\partial x^{\beta}}{\partial y^{\nu}}\frac{\partial}{\partial x^{\beta}}\right).
 \end{equation}
 
 Contracting the $\nu$ indices on the Jacobian and its inverse gives
 us the identity matrix (Kronecker delta)
 
 \begin{equation}
-\left(\frac{\partial y^{\nu}}{\partial x^{\alpha}}v^{\alpha}\right)\left(\frac{\partial x^{\beta}}{\partial y^{\nu}}\frac{}{\partial x^{\beta}}\right).
+\left(\frac{\partial y^{\nu}}{\partial x^{\alpha}}v^{\alpha}\right)\left(\frac{\partial x^{\beta}}{\partial y^{\nu}}\frac{\partial}{\partial x^{\beta}}\right).
 ={\delta_{\alpha}}^{\beta}v^{\alpha}\partial_{\beta}.
 \end{equation}
 
@@ -485,7 +485,7 @@ v^{\alpha}\partial_{\alpha} = a\partial_{x} + b\partial_{y}
 so our PDE is
 
 \begin{equation}
-v^{\alpha}\partial_{\alpha}\mu = (\vec{v}\cdot\vec{\nabla})\mu 0.
+v^{\alpha}\partial_{\alpha}\mu = (\vec{v}\cdot\vec{\nabla})\mu.
 \end{equation}
 
 So far, so good, right?
@@ -601,13 +601,13 @@ This corresponds to the directional derivative in the direction of the vector fi
 The integral curves associated to this look like
 
 \begin{equation}
-\frac{dy}{dx} = y \implies y(x) = y_{0}e^{x}.
+\frac{\D y}{\D x} = y \implies y(x) = y_{0}e^{x}.
 \end{equation}
 
 We recover our original PDE from the total derivative
 
 \begin{equation}
-\frac{d}{dx}\mu(x, y(x)) = (\partial_{x} + \frac{dy}{dx}\partial_{y})\mu(x,y(x)) = 0.
+\frac{\D}{\D x}\mu(x, y(x)) = (\partial_{x} + \frac{\D y}{\D x}\partial_{y})\mu(x,y(x)) = 0.
 \end{equation}
 
 We find when we set $x=0$ that $\mu(0, y_{0})$ is independent of
@@ -615,7 +615,7 @@ $x$. So we write from $y = y_{0}e^{x}$ that $ye^{-x} = y_{0}$ which
 is constant with respect to $x$. Hence
 
 \begin{equation}
-\frac{d}{dx}f(y_{0}) = 0,
+\frac{\D}{\D x}f(y_{0}) = 0,
 \end{equation}
 
 and we just insist $\mu(x,y) = f(y_{0}) = f(ye^{-x})$.
@@ -655,9 +655,9 @@ $\gamma(s)$ is tangent to the surface. So it satisfies the system
 of equations
 
 \begin{align}
-\frac{dx(s)}{ds} &= a(x(s), y(s))\\
-\frac{dy(s)}{ds} &= b(x(s), y(s))\\
-\frac{dz(s)}{ds} &= c(x(s), y(s))
+\frac{\D x(s)}{\D s} &= a(x(s), y(s))\\
+\frac{\D y(s)}{\D s} &= b(x(s), y(s))\\
+\frac{\D z(s)}{\D s} &= c(x(s), y(s))
 \end{align}
 
 Once we have a solution, we reconstruct the surface $S$ as a union
@@ -675,13 +675,13 @@ called {{{define(Characteristic Curves)}}}.
 To solve
 
 \begin{equation}
-\vec{a}(\vec{x})\cdot\vec{nabla}\mu = 0
+\vec{a}(\vec{x})\cdot\vec{\nabla}\mu = 0
 \end{equation}
 
 we enumerate the steps as follows:
 
-1. Parametrize the PDE: $dx^{i}(s)/ds = a^{i}(\vec{x}(s))$ for $i=1,\dots,n$, and
-   $d\mu(s)/ds = 0$
+1. Parametrize the PDE: $\D x^{i}(s)/\D s = a^{i}(\vec{x}(s))$ for $i=1,\dots,n$, and
+   $\D\mu(s)/\D s = 0$
 2. Parametrize the initial conditions
    - Introduce parameters $\xi$
    - Set $s=0$
@@ -703,13 +703,14 @@ For the PDE
 
 subject to initial conditions $\mu(x, 0) = \cosh(x)$.
 
-1. Parametrize PDE: We have $dt/ds = 1$, $dx/ds = e^{x(s)}$, $d\mu/ds = 0$
+1. Parametrize PDE: We have $\D t/\D s = 1$, $\D x/\D s = e^{x(s)}$,
+   $\D\mu/\D s = 0$
 2. Parametrize initial conditions: at $s=0$ we have $t=0$, $x=\xi$,
    and $u=\cosh(\xi)$.
 3. Find the characteristic curves:
-   - we find $dt/ds=1$ integrate both sides from $s'=0$ to $s'=s$
+   - we find $\D t/\D s=1$ integrate both sides from $s'=0$ to $s'=s$
      gives us $t=s$
-   - $dx/ds = e^{x(s)}$ becomes $e^{-x}dx/ds = 1$ hence integrating
+   - $\D x/\D s = e^{x(s)}$ becomes $e^{-x}\D x/\D s = 1$ hence integrating
      both sides gives us $-e^{-x(s)}+e^{-x(0)}=s$. Substituting in
      the initial condition $x(0) = \xi$ and rearranging terms gives
      us $e^{-x} = e^{-\xi}-s$
@@ -732,9 +733,9 @@ We impose initial conditions $\mu(x,0) = f(x)$.
 Let $a(x,t,\mu) = 1$, $b(x,t,\mu) = \mu$, $c(x,t,\mu) = 0$.
 
 1. Parametrize the PDE
-   - We have $dt(s)/ds = a(x,t,\mu) = 1$,
-   - $dx(s)/ds = b(x,t,\mu) = \mu$, and
-   - $d\mu(s)/ds = c(x,t,\mu) = 0$.
+   - We have $\D t(s)/\D s = a(x,t,\mu) = 1$,
+   - $\D x(s)/\D s = b(x,t,\mu) = \mu$, and
+   - $\D\mu(s)/\D s = c(x,t,\mu) = 0$.
 2. Parametrize the initial conditions
    - $t(s_{0}) = 0$
    - $x(s_{0}) = \xi$
@@ -763,13 +764,13 @@ denominator vanishes $1 + tf' = 0$.
 To solve
 
 \begin{equation}
-\vec{a}(\vec{x}, \mu(\vec{x}))\cdot\vec{nabla}\mu = f(\vec{x})
+\vec{a}(\vec{x}, \mu(\vec{x}))\cdot\vec{\nabla}\mu = f(\vec{x})
 \end{equation}
 
 we enumerate the steps as follows:
 
-1. Parametrize the PDE: $dx^{i}(s)/ds = a^{i}(\vec{x}(s), \mu(s))$ for $i=1,\dots,n$, and
-   $d\mu(s)/ds = f(\vec{x}(s))$
+1. Parametrize the PDE: $\D x^{i}(s)/\D s = a^{i}(\vec{x}(s), \mu(s))$ for $i=1,\dots,n$, and
+   $\D\mu(s)/\D s = f(\vec{x}(s))$
 2. Parametrize the initial conditions
    - Introduce parameters $\xi$
    - Set $s=0$
@@ -788,17 +789,17 @@ $\partial_{t}\mu + \mu\partial_{x}\mu = xe^{t}$ with
 $\mu(x,0)=f(x)$.
 
 1. Parametrize the PDE
-   - $dt/ds = 1$
-   - $dx/ds = \mu$
-   - $d\mu/ds = xe^{t}$
+   - $\D t/\D s = 1$
+   - $\D x/\D s = \mu$
+   - $\D\mu/\D s = xe^{t}$
 2. Parametrize the initial conditions
    - Set $t(0)=0$
    - Introduce $x(0)=\xi$
    - $\mu(0) = f(\xi)$
 3. Find the characteristic curves
    - $t = s$ from the parametrized ODEs and initial condition.
-   - This renders our system a coupled system of ODEs $dx/ds = \mu$
-     and $d\mu/ds = xe^{s}$. This gives us $d^{2}x/ds^{2} = xe^{s}$.
+   - This renders our system a coupled system of ODEs $\D x/\D s = \mu$
+     and $\D\mu/\D s = xe^{s}$. This gives us $\D^{2}x/\D s^{2} = xe^{s}$.
      The solution to this involves a linear combination of modified
      Bessel functions of the second kind $K_{0}(2\sqrt{\exp(s)})$
      and modified Bessel functions of the first kind

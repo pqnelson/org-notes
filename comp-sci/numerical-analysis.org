@@ -6,8 +6,8 @@
 #+HTML_DOCTYPE: html5
 # Created Monday December  7, 2020 at  8:57PM
 #+include: ../org-macros.org
-#+HTML_LINK_UP: ./README.html
-#+HTML_LINK_HOME: ../README.html
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
 
 #+begin_quote
 Numerical analysis is the blackest of the black arts. (Gerald Sussman)
@@ -81,18 +81,29 @@ Let $x$ be a real number. Then the encoding of it to our number
 system corresponds to mapping it to the number $fl(x)$.
 #+end_definition
 
+We will continue working in our system of 7-digit scientific numbers,
+with 3-digit exponents.
+
+#+begin_remark
+The choice of 7 digits and 3-digit exponents is not arbitrary, this
+turns out to be one of the standard floating point representations for
+numbers, the single-precision decimal float. Working in base-10 is more
+familiar to the reader than working in base-2 (at least, for scientific
+computation), so we use it to clarify certain concepts.
+#+end_remark
+
 *** Relative, Absolute Error
 
 #+NAME: absolute-error
 #+begin_definition
 Let $x$ be a real number and $x_{\ast}$ an approximation to
-$x$. Then its *absolute error* is $|x - x_{\ast}|$.
+$x$. Then its {{{define(Absolute Error)}}} is $|x - x_{\ast}|$.
 #+end_definition
 
 #+NAME: relative-error
 #+begin_definition
 Let $x$ be a real number and $x_{\ast}$ an approximation to
-$x$. Then its *relative error* is $|x - x_{\ast}|/x$ if $x\neq0$.
+$x$. Then its {{{define(Relative Error)}}} is $|x - x_{\ast}|/x$ if $x\neq0$.
 #+end_definition
 
 #+begin_math-example
