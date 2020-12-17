@@ -10,6 +10,9 @@
 #+HTML_LINK_UP: ../lisp.html
 #+HTML_LINK_HOME: ../../README.html
 
+*Warning:* This is a work in progress, trying to work on some literate
+program to experiment with such a writing style.
+
 * Roadmap
 
 After Clojure sparked renewed interest in [[./lisp.org][Lisp]], someone started a
@@ -25,7 +28,7 @@ concrete syntax and reader macros.
 
 I'm also curious about correctness concerns. So I'll be thinking in
 terms of proving each function does what I intend. Towards this
-end, we will be using the [[./acsl.org][ANSI-C Specification Language]] to annotate
+end, we will be using the [[file:../acsl.org][ANSI-C Specification Language]] to annotate
 our C code.
 
 * Lisp Reader
@@ -72,7 +75,7 @@ presumably some other stuff.
 
 *** Header Definitions
 
-#+begin_src c :noweb no-export :tangle ../src/mal/tokenizer.h
+#+begin_src C :noweb no-export :tangle ../src/mal/tokenizer.h
 #ifndef LISP_TOKENIZER_H
 #define LISP_TOKENIZER_H
 
@@ -88,7 +91,7 @@ The tokenizer itself needs to track the start of the input string,
 the current position, and presumably a few other metadata
 fields. For now we have two pointers for it.
 
-#+begin_src c :noweb-ref Token header data structures
+#+begin_src C :noweb-ref Token header data structures
 typedef struct Tokenizer {
     char *start, *current;
     struct Token *token;
@@ -106,7 +109,7 @@ types. In practice, for a later second-pass, we wouldn't want it;
 we would want to hew closer to the algorithm outlined in
 {{{book-title(Common Lisp the Language)}}} (ch. 22).
 
-#+begin_src c :noweb-ref Token header data structures
+#+begin_src C :noweb-ref Token header data structures
 typedef enum {
     TOKEN_NIL,
     TOKEN_TRUE,
@@ -149,7 +152,7 @@ The types we will have to implement:
 8. Primitive Functions
 9. Lisp Functions (constructed by lambdas)
 
-#+begin_src c :tangle ../src/mal/types.h :noweb tangle
+#+begin_src C :tangle ../src/mal/types.h :noweb tangle
 #ifndef LISP_TYPES_H
 #define LISP_TYPES_H
 
@@ -182,7 +185,7 @@ typedef enum {
 
 The headers we need for =types.c= include the usual suspects.
 
-#+begin_src c :noweb-ref Include types headers
+#+begin_src C :noweb-ref Include types headers
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -192,7 +195,7 @@ The headers we need for =types.c= include the usual suspects.
 
 Which starts our source file off nicely:
 
-#+begin_src c :tangle ../src/mal/types.c :noweb tangle
+#+begin_src C :tangle ../src/mal/types.c :noweb tangle
 <<Include types headers>>
 #+end_src
 
@@ -204,7 +207,7 @@ stick a pin in the topic of garbage collection (it's rather
 tricky --- although [[https://nullprogram.com/blog/2015/02/17][reference counting in C]] is not too bad...thread
 safety's a pain, though).
 
-#+begin_src c :noweb no-export :noweb-ref Lisp value base type
+#+begin_src C :noweb no-export :noweb-ref Lisp value base type
 typedef struct LispValue {
     LispType type;
 } LispValue;
@@ -219,7 +222,7 @@ We have the generic machinery for creating a =Value= for a given
 =type=, without actually doing anything aside from allocating the
 space for the metadata. If we cannot allocate memory, we abort.
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 LispValue* value_new(LispType type) {
     LispValue* value = malloc(sizeof(*value));
     if (!value) abort();
@@ -235,7 +238,7 @@ refcounting, we would need to be a bit more careful. For future
 considerations, we also dispatch depending on the type of value
 being freed.
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 void value_free(LispValue *value) {
     if (!value) return;
     switch (value->type) {
@@ -274,7 +277,7 @@ We have integers and floating-point numbers. I'm glossing over the
 details, but really a double-precision number should be used (at
 the very least) for floating-point arithmetic.
 
-#+begin_src c :noweb no-export :noweb-ref Lisp Numbers declarations
+#+begin_src C :noweb no-export :noweb-ref Lisp Numbers declarations
 <<Lisp integer structure>>
 
 <<Lisp integer function declarations>>
@@ -287,7 +290,7 @@ the very least) for floating-point arithmetic.
 The data structure for the integer, I'll choose to use C's =long long=
 data type. Heuristically, it's a suitably large integer type.
 
-#+begin_src c :noweb no-export :noweb-ref Lisp integer structure
+#+begin_src C :noweb no-export :noweb-ref Lisp integer structure
 typedef struct LispInt {
     LispType type;
     long long value;
@@ -299,7 +302,7 @@ there's no support anywhere for 128-bit floating point arithmetic,
 I'm forced to use the next highest precision afforded by the IEEE 754
 standard (double precision).
 
-#+begin_src c :noweb no-export :noweb-ref Lisp floating-point structure
+#+begin_src C :noweb no-export :noweb-ref Lisp floating-point structure
 typedef struct LispFloat {
     LispType type;
     double value;
@@ -310,7 +313,7 @@ The function declarations for integer functions, although there
 could be many, will support at least a simple constructor,
 destructor, and a getter method.
 
-#+begin_src c :noweb no-export :noweb-ref Lisp integer function declarations
+#+begin_src C :noweb no-export :noweb-ref Lisp integer function declarations
 LispInt* int_new(long long value);
 void int_free(LispInt *integer);
 long long int_get(LispInt *integer);
@@ -318,7 +321,7 @@ long long int_get(LispInt *integer);
 
 Likewise, we implement the corresponding methods for =LispFloat=.
 
-#+begin_src c :noweb no-export :noweb-ref Lisp floating-point function declarations
+#+begin_src C :noweb no-export :noweb-ref Lisp floating-point function declarations
 LispFloat* float_new(double value);
 void float_free(LispFloat *real);
 double float_get(LispFloat *real);
@@ -328,7 +331,7 @@ double float_get(LispFloat *real);
 
 We have the standard =malloc= then initialize.
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 LispInt* int_new(long long value) {
     LispInt* integer = malloc(sizeof(*integer));
     if (!integer) abort();
@@ -342,7 +345,7 @@ LispInt* int_new(long long value) {
 
 We free the integer without much fanfare:
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 void int_free(LispInt *integer) {
     if (!integer) return;
     assert (LISP_INT == integer->type);
@@ -356,7 +359,7 @@ void int_free(LispInt *integer) {
 We want to hide the encapsulation...I guess we're doing that poorly
 if we stick the struct in the header. Anyways, as per tradition:
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 long long int_get(LispInt *integer) {
     assert (NULL != integer);
     assert (LISP_INT == integer->type);
@@ -369,7 +372,7 @@ long long int_get(LispInt *integer) {
 
 Another =malloc= then initialize constructor:
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 LispFloat* float_new(double value) {
     LispFloat* real = malloc(sizeof(*real));
     if (!real) abort();
@@ -383,7 +386,7 @@ LispFloat* float_new(double value) {
 
 We free what we can:
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 void float_free(LispFloat *real) {
     if (!real) return;
     assert (LISP_FLOAT == real->type);
@@ -396,7 +399,7 @@ void float_free(LispFloat *real) {
 For a non-null real, we return its value (or raise an assertion
 error if given a wrongly-typed term or null-pointer).
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 double float_get(LispFloat *real) {
     assert (NULL != real);
     assert (LISP_FLOAT == real->type);
@@ -411,7 +414,7 @@ double float_get(LispFloat *real) {
 We need to define the data structure and declare the function
 prototypes. This is the contribution to the types header.
 
-#+begin_src c :noweb no-export :noweb-ref Lisp Symbol declarations
+#+begin_src C :noweb no-export :noweb-ref Lisp Symbol declarations
 <<Symbol data structure>>
 
 <<Symbol function declarations>>
@@ -419,7 +422,7 @@ prototypes. This is the contribution to the types header.
 
 A symbol amounts to a glorified string, alas.
 
-#+begin_src c :noweb no-export :noweb-ref Symbol data structure
+#+begin_src C :noweb no-export :noweb-ref Symbol data structure
 typedef struct LispSymbol {
     LispType type;
     char *name;
@@ -429,7 +432,7 @@ typedef struct LispSymbol {
 There are three methods associated to a symbol. We have a
 constructor, a destructor, and an ability to get a symbol's name:
 
-#+begin_src c :noweb no-export :noweb-ref Symbol function declarations
+#+begin_src C :noweb no-export :noweb-ref Symbol function declarations
 LispSymbol* symbol_new(char *name);
 void symbol_free(LispSymbol *symbol);
 char* symbol_name(LispSymbol *symbol);
@@ -438,7 +441,7 @@ char* symbol_name(LispSymbol *symbol);
 *** Constant definitions
 
 We define primitive constants
-#+begin_src c :noweb no-export :noweb-ref Symbol data structure
+#+begin_src C :noweb no-export :noweb-ref Symbol data structure
 extern const LispSymbol lisp_nil;
 extern const LispSymbol lisp_true;
 extern const LispSymbol lisp_false;
@@ -447,7 +450,7 @@ extern const LispSymbol lisp_false;
 In the =reader.c= file, we just declare our initializers for the
 constants =nil=, =true=, =false=:
 
-#+begin_src c :noweb-ref String Token constants
+#+begin_src C :noweb-ref String Token constants
 /* String token constants = */
 static char FALSE_TOKEN[] = "false";
 static char NIL_TOKEN[] = "nil";
@@ -470,7 +473,7 @@ copy the string to the symbol? Or should we just reuse the string
 we're given? Since the reader will create a lexeme, we should reuse
 it here.
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 LispSymbol* symbol_new(char *name) {
     LispSymbol *symbol = malloc(sizeof(*symbol));
     symbol->type = LISP_SYMBOL;
@@ -486,7 +489,7 @@ constructor, our hand is forced with the destructor: we need to
 free the symbol name (or else we have a memory leak from the
 =Reader= allocating a lexeme which is never freed).
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 void symbol_free(LispSymbol *symbol) {
     if (!symbol) return;
     assert (LISP_SYMBOL == symbol->type);
@@ -505,7 +508,7 @@ At present, I do not know if I will mutate the string returned from
 =symbol_name=. I will assume not, and thus just return the pointer
 directly.
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 char* symbol_name(LispSymbol *symbol) {
     assert(NULL != symbol);
     assert(LISP_SYMBOL == symbol->type);
@@ -525,7 +528,7 @@ experience tells us we've done wrong.
 
 *** Header Declarations
 
-#+begin_src c :noweb no-export :noweb-ref Lisp String declarations
+#+begin_src C :noweb no-export :noweb-ref Lisp String declarations
 <<String data structure>>
 
 <<String function prototypes>>
@@ -533,7 +536,7 @@ experience tells us we've done wrong.
 
 The data structure lacks all the excitement of modern amenities.
 
-#+begin_src c :noweb no-export :noweb-ref String data structure
+#+begin_src C :noweb no-export :noweb-ref String data structure
 typedef struct LispString {
     LispType type;
     char *string;
@@ -551,7 +554,7 @@ have to consider how to design functions like:
 For now, the holy trinity of constructor/destructor/getter
 suffices.
 
-#+begin_src c :noweb no-export :noweb-ref String function prototypes
+#+begin_src C :noweb no-export :noweb-ref String function prototypes
 LispString* string_new(char *string);
 void string_free(LispString *string);
 char* string_get(LispString *string);
@@ -562,7 +565,7 @@ char* string_get(LispString *string);
 As with the symbol, we should dedicate some time to think about how
 to handle the =NULL= string parameter case. "Should", but won't.
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 LispString* string_new(char *string) {
     LispString *s = malloc(sizeof(*s));
     if (!s) abort();
@@ -578,7 +581,7 @@ Although we may accidentally try to destroy the same evidence
 twice, we should handle it gracefully. Any non-null argument,
 however, should be a =LispString= object.
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 void string_free(LispString *string) {
     if (!string) return;
     assert(LISP_STRING == string->type);
@@ -589,7 +592,7 @@ void string_free(LispString *string) {
 
 *** String getter
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 char* string_get(LispString *string) {
     assert (NULL != string);
     assert (LISP_STRING == string->type);
@@ -608,7 +611,7 @@ the intrepid reader.
 
 We have our data structure and function prototypes.
 
-#+begin_src c :noweb no-export :noweb-ref Lisp cons-cell declarations
+#+begin_src C :noweb no-export :noweb-ref Lisp cons-cell declarations
 <<List data structure>>
 
 <<List function prototypes>>
@@ -617,7 +620,7 @@ We have our data structure and function prototypes.
 Our data structure now takes advantage of the "struct polymorphism"
 we implicitly have been building all along.
 
-#+begin_src c :noweb no-export :noweb-ref List data structure
+#+begin_src C :noweb no-export :noweb-ref List data structure
 typedef struct LispList {
     LispType type;
     LispValue *value;  /* cons */
@@ -629,7 +632,7 @@ The function prototypes include /two/ getter methods, in addition
 to the constructor and destructor. There may be other helper
 functions worth considering.
 
-#+begin_src c :noweb no-export :noweb-ref List function prototypes
+#+begin_src C :noweb no-export :noweb-ref List function prototypes
 LispList* list_new(LispValue *value, LispValue *next);
 void list_free(LispList *list);
 LispValue* list_car(LispList *list);
@@ -646,7 +649,7 @@ We also just set the pointers of the newly allocated list object to
 the =value= and =next=. Immutability would require creating copies
 of them, but I like to live dangerously.
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 LispList* list_new(LispValue *value, LispValue *next) {
     LispList *list = malloc(sizeof(*list));
     if (!list) abort();
@@ -663,7 +666,7 @@ This is where reference counting would be really wonderful, since
 it would handle freeing memory if I've painted myself into an
 unreferenced corner. Instead, I'll defer that for now, and
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 void list_free(LispList *list) {
     if (!list) return;
     if ((LispValue *)list == (LispValue *)&lisp_nil) return;
@@ -677,7 +680,7 @@ void list_free(LispList *list) {
 The car accesses the value for a node. If we were given a =NULL=
 pointer, following Common Lisp, we should return =nil=.
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 LispValue* list_car(LispList *list) {
     if (!list) return (LispValue *)&lisp_nil;
     assert (NULL != list);
@@ -691,7 +694,7 @@ LispValue* list_car(LispList *list) {
 The cdr gives us the rest of the list. As with =car=, if given a
 =NULL= pointer, we return =nil=.
 
-#+begin_src c :tangle ../src/mal/types.c
+#+begin_src C :tangle ../src/mal/types.c
 LispValue* list_cdr(LispList *list) {
     if (!list) return (LispValue *)&lisp_nil;
     assert (NULL != list);
@@ -706,7 +709,7 @@ expressions of the language. Evaluating an expression depends on
 whether the expression's "syntax tree" is atomic (e.g., literal
 values or variables) or a list (for, e.g,, function calls).
 
-#+begin_src c :noweb no-export
+#+begin_src C :noweb no-export
 LispValue* eval_ast(LispValue *ast, Environment *env) {
     if (is_atom(ast)) {
         <<Evaluate atomic expressions>>
@@ -723,7 +726,7 @@ a variable. Its evaluation should produce the value associated with
 that identifier. The heavy lifting has been delegated to the
 environment parameter of =eval_ast=.
 
-#+begin_src c :noweb-ref Evaluate atomic expressions
+#+begin_src C :noweb-ref Evaluate atomic expressions
 switch (ast->type) {
     case LISP_SYMBOL:
         return env_lookup(env, ast->name);
@@ -753,7 +756,7 @@ statements trying to match on the first component of the list. In
 each branch, there will be a =return= statement. Thus the default
 branch amounts to invoking the function.
 
-#+begin_src c :noweb no-export :noweb-ref Evaluate list expressions
+#+begin_src C :noweb no-export :noweb-ref Evaluate list expressions
 <<Evaluate special forms>>
 <<Evaluate list as function>>
 #+end_src
