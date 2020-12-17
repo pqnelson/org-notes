@@ -25,15 +25,161 @@ care about syntax.
 
 ** Dialects
 
-The two major dialects of Lisp are Scheme and Common Lisp. They
-come from different philosophical schools of thought: Scheme is a
-minimal language which encourages the programmer to develop their
-own library; Common Lisp offers a lot of performant functions, and
-powerful macros which are used to extend the language.
+*Scheme* is probably the first dialect most people encounter,
+since it's used in the textbook
+{{{book-title(Structure and Interpretation of Computer Programs)}}}
+("SICP").
+The Scheme dialect has the hall-mark of minimalism. In fact,
+it's so minimal that the reader implements a scheme interpreter
+in chapter 4 of {{{book-title(SICP)}}}.
 
-Emacs Lisp shares a common ancestor with Common Lisp, the two are
-cousins in the Lisp family.
+*Common Lisp* emerged from the 1980s after Lisp 1 fractured in a
+Cambrian explosion of dialects. Common Lisp sought to unite them all
+into one common language. Unlike Scheme, Common Lisp compiles to machine
+code, has a comparatively large number of functions (Scheme fits on a
+cocktail napkin, Common Lisp requires a bit more space). This dialect
+also has macros, which Scheme did not until relatively recently.
 
-Clojure has sparked renewed interest in Lisp. It combines aspects
-of Scheme and Common Lisp, with a heavy dose of functional
-programming influenced by Haskell.
+*Emacs Lisp* is a cousin to Common Lisp, because both descend from
+Maclisp (a shared Cambrian ancestor). They share similar syntax, and are
+about as distinct as Latin to modern Italian, or Urdu and Farsi.
+
+*Clojure* is the newest dialect, which borrowed as heavily from Haskell
+as from other Lisps. It uses immutability, emphasizes functional style,
+and runs on the Java Virtual Machine or in the browser as Javascript.
+While it has marginally cleaner syntax (using not just parentheses but
+also square braces =[...]= for vectors, and braces ={...}= for hashmaps),
+its STM memory model leads to accidentally bloated software all too easily.
+
+** Basic Syntax and Semantics
+
+All Lisp dialects share the same basic syntax, namely S-expressions.
+An S-expression is either an {{{define(Atom)}}} or a {{{define(List)}}}.
+Lisp atoms are literal values, or symbols. Lists are finite sequences of
+S-expressions surrounded by parentheses =(S-1 S-2 ... S-n)=. Nested
+lists are permitted.
+
+We interpret function calls using Polish notation. So instead of
+writing, as we would in C, =1 + 2 + 3 + 4= we have in Lisp =(+ 1 2 3 4)=.
+This is evaluated by looking at the first element in the list, =+=,
+then check if it is a function or a macro. For functions, we evaluate
+the arguments passed to the function, then apply the function to the
+values (i.e., we "call by value"). Macros /do not/ evaluate the
+arguments passed. Instead, macros produce a syntax tree, which is then
+evaluated. This permits us to extend Lisp with new language features.
+
+The syntax for defining new functions or constants varies depending on
+dialect, but amount to another S-expression:
+
+- Scheme =(define (my-function param-1 ... param-n) ...)=
+- Common Lisp and Emacs Lisp =(defun my-function (param-1 ... param-n) ...)=
+- Clojure =(defn my-function [param-1 ... param-n] ...)=
+
+That's basically it. We have an eval/apply loop, S-expressions encode
+data and code, and little else. Consequently, [[file:lisp/mal.org][making a Lisp]] is one of
+the rites of passage in Computer Science.
+
+* Features
+
+You get a language-factory for the cost of Latinized grammar
+=(verb subject object)=. Once we accept this, we can /extend/ the
+language with whatever feature we want. But there are a few other
+features worth mentioning.
+
+Object-oriented programming in the C++/Java vein becomes
+=(method object additional-param...)=. This lets CLOS to shine,
+giving us a far more sophisticated class system than C++ could
+ever produce, thanks to our being not-bogged-down-by-syntax. Well,
+Scheme and Common Lisp enjoy this benefit, Clojure is coupled to Java's
+object-oriented sytem.
+
+Arguably any language you want to use could be transformed into this
+system, and any "killer feature" is either /already/ in Lisp or easily
+implemented using macros. /SICP/ shows this quite a few times over.
+
+** Multiple Dispatching
+
+Common Lisp and Clojure offer [[file:lisp/generic-dispatch.org][multiple dispatching]] (Scheme gives you the
+pleasure of implementing it on your own).
+This permits, e.g., [[file:lisp/generic-arithmetic.org][generic arithmetic]]: we can use =*= for matrix
+multiplication, scalar multiplication, and the underlying field's
+multiplication operator.
+
+* Flaws
+
+The biggest flaws that come to mind are figuring out which dialect to
+use. Each of them have their quirks and shortcomings.
+
+** Scheme
+
+*** No Canonical Implementation
+
+One of the features of Scheme's minimalism is that it's not hard to
+write your own Scheme interpreter. The problem: there are dozens of
+Scheme implementations.
+
+- MIT/GNU Scheme :: What /SICP/ and /SICM/ use
+- Guile :: GNU's official Scheme implementation for extensible usage
+- Racket :: Flashy new Scheme implementation
+- Chicken :: Compiles Scheme to C
+- Gambit :: Another Scheme-to-C compiler, plus an interpreter
+- Chez Scheme :: An older implementation, among the fastest
+
+And on and on and on. If starting from scratch, it's unclear which one
+to pick, they're all decent choices. But each one has language-dependent
+variations of expected features --- e.g., modules are either
+unimplemented or use different syntax.
+
+** Common Lisp
+
+Probably the biggest complaint is how baroque the language is (for
+example: =setf= and =setq= are both included, but only one is really
+needed). Equality testing also exemplifies this problem (we have ~=~ for
+numbers, ~eq~ for pointers, ~eql~ for pointers or numbers, ~equal~, and
+~equalp~, but we'll need to roll our own if we want equality of CLOS
+instances [objects]).
+
+*** Floating Point Arithmetic isn't part of the Standard
+
+The Language standard was written before IEEE 754 floating point was
+finalized (or written), so this is a serious shortcoming with Common
+Lisp for numerical analysts. Since it's not part of the standard, it's
+not /violating/ the standard to use IEEE floating point arithmetic. But
+it's just compiler dependent.
+
+- SBCL uses IEEE-754 on x86
+- ABCL uses IEEE-754 if the JVM running it uses the standard
+
+** Clojure
+
+Slow startup with repls and bloated software are two of the biggest
+issues facing Clojure.
+
+*** Memory Usage
+
+Clojure's memory usage can easily run out of control. The STM memory
+model requires greater diligence when programming, otherwise duplicate
+data can be created and not freed all-too-easily by accident. For
+example, holding onto the head of a cons will keep the rest of the list,
+even if the rest of the list is not needed or used. The JVM garbage
+collector doesn't seem to handle this memory model all too well, either.
+
+This frequently leads to rewriting the code in Java.
+
+*** There is no standard
+
+Unlike Scheme and Common Lisp, there is no standard. So, is =mapcat=
+doing what I expect? Erm...maybe?
+
+*** JVM Historically didn't have IEEE 754 floating point
+
+This may be a subtle source of bugs, but floating point support is
+comparatively modern. For old-timers using JVM 6 (or whatever), this is
+problematic.
+
+* References
+
+- [[http://wiki.c2.com/?LispRoadMap][Lisp Road Map]], C2 Wiki
+- Steve Losh, [[https://stevelosh.com/blog/2018/08/a-road-to-common-lisp/][A Road to Common Lisp]]. Blogpost August 27, 2018.
+- [[https://twobithistory.org/2018/10/14/lisp.html][How Lisp Became God's Own Programming Language]]. Two-Bit History,
+  published 14 October 2018
