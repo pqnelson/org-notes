@@ -1,0 +1,159 @@
+#+TITLE: Effective Temperature
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-05T19:31:00-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Saturday December  5, 2020 at  7:31PM
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ../climate-models.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+
+* Overview
+
+** Computing the Approximate Temperature of the Earth
+
+*Identify*. We use the Stefan--Boltzmann law for the Sun's luminosity,
+then considering the Irradiance of the Earth receiving this radiation,
+we assume the Earth is in a steady state...so its luminosity (from the
+Stefan--Boltzmann law) of radiation emitted equals its irradiance
+received from the Sun.
+
+*Setup and Execute.* We use the Stefan--Boltzmann law for black-body
+temperature, the Luminosity of the sun is then stipulated to be:
+
+\begin{equation}
+L_{\cdot} = 4\pi R_{\cdot}^{2}\sigma T_{\cdot}^{4}.
+\end{equation}
+
+The Earth is a distance $a_{0}$ from the Sun, the irradiance received by
+a single point at this distance would be
+
+\begin{equation}
+E_{\oplus} = \frac{L_{\cdot}}{4\pi a_{0}^{2}}.
+\end{equation}
+
+The radiance flux absorbed by the Earth would be given by treating the
+Earth as a disc ("broadside of a barn") which is hit by the Sun's rays.
+That is to say, integrating the irradiance by the cross-sectional area
+of the Earth, or
+
+\begin{equation}
+\Phi_{abs} = \pi R_{\oplus}^{2}E_{\oplus}.
+\end{equation}
+
+In a steady state, the Luminosity emitted by the Earth is equal to the irradiance
+received, giving us
+
+\begin{equation}
+4\pi R_{\oplus}^{2}\sigma T_{\oplus}^{4} = \pi R_{\oplus}^{2}E_{\oplus}.
+\end{equation}
+
+We substitute in the value of $E_{\oplus}$ to the right-hand side,
+giving us
+
+\begin{equation}
+4\pi R_{\oplus}^{2}\sigma T_{\oplus}^{4} = \pi R_{\oplus}^{2}\frac{L_{\cdot}}{4\pi a_{0}^{2}}.
+\end{equation}
+
+The luminosity of the Sun transforms the right-hand side into
+
+\begin{equation}
+4\pi R_{\oplus}^{2}\sigma T_{\oplus}^{4} = \pi R_{\oplus}^{2}\frac{4\pi R_{\cdot}^{2}\sigma T_{\cdot}^{4}}{4\pi a_{0}^{2}}.
+\end{equation}
+
+Now we solve for the temperature of the Earth $T_{\oplus}$
+
+\begin{equation}
+T_{\oplus}^{4} = \frac{R_{\odot}^{2}T_{\odot}^{4}}{4a_{0}^{2}}
+\end{equation}
+
+which simplifies to
+
+\begin{equation}
+T_{\oplus} = T_{\odot}\sqrt{\frac{R_{\odot}}{2a_{0}}}.
+\end{equation}
+
+We can plug in empirical values for these quantities to get an estimate
+for the temperature of the Earth.
+
+#+begin_src elisp :export both
+(let ((sun-temperature 5772.0) ;; K
+      (sun-radius 695700.0) ;; km
+      (earth-distance 149596000.0)) ;; km
+  (* sun-temperature (sqrt (/ sun-radius (* 2.0 earth-distance)))))
+#+end_src
+
+#+RESULTS:
+: 278.3314843147163
+
+Thus the temperature of the Earth $T_{\odot}\approx 278\mbox{ K}$ or
+about 5 degrees Celsius on the surface of the Earth, assuming the Earth
+absorbs all of the Sun's rays and the Earth has no atmosphere.
+
+*Evaluate.* Does this make sense? Well, as $a_{0}\to\infty$ we see $T_{\oplus}\to0$,
+as we would expect. Similarly, for $R_{\odot}\to0$, we see
+$T_{\oplus}\to0$, as we would expect.
+
+* Solar Constant
+
+We need to use the Stefan--Boltzmann constant:
+
+#+begin_src elisp :exports both
+(defun stefan-boltzman ()
+  (let ((kb 1.380649e-23)
+        (hbar (* 0.5 (/ 6.62607015e-34 pi)))
+        (c 299792458.0))
+    (/ (* pi pi (expt kb 4.0))
+       (* 60.0 (expt (* c hbar) 2.0) hbar))))
+(stefan-boltzman)
+#+end_src
+
+#+RESULTS:
+: 5.67037441918443e-008
+
+The luminosity of the Sun would be, theoretically:
+
+#+begin_src elisp :exports both
+(defconst 4pi 12.56637061435917295385057)
+
+(defun luminosity (r temperature)
+  (* 4pi
+     (expt r 2.0)
+     (stefan-boltzman)
+     (expt temperature 4.0)))
+
+(let ((sun-temperature     5772.0) ;; K
+      (sun-radius        695700.0) ;; km
+      (earth-distance 149596000.0) ;; km
+      (km                  1000.0)
+      (earth-radius        6378.1366)) ;; km
+  (luminosity (* sun-radius km) sun-temperature))
+#+end_src
+
+#+RESULTS:
+: 3.827990903277097e+026
+
+The irradiance on a point on the Earth would be
+
+#+begin_src elisp :exports both
+(defun irradiance (lumos distance)
+  (* (/ lumos pi) (expt (* 2 distance) -2)))
+
+(let ((sun-temperature     5772.0) ;; K
+      (sun-luminosity      3.828e26) ;; W
+      (sun-radius        695700.0) ;; km
+      (earth-distance 149596000.0) ;; km
+      (earth-radius        6378.1366) ;; km
+      (km                  1000.0)) ;; m/km
+  (irradiance sun-luminosity (* km earth-distance))
+  )
+#+end_src
+
+#+RESULTS:
+: 1361.200508431488
+
+Compare this to the [[https://en.wikipedia.org/wiki/Solar_constant][empirical value of the Solar constant]] which is about
+1.361 kilowatts per square meter.
