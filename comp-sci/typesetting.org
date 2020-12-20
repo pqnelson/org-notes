@@ -1,0 +1,55 @@
+#+TITLE: Typesetting
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-19T14:07:06-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+
+Random notes on TeX and Metapost (or Asymptote) which are useful for
+future work.
+
+* Bezier Curves
+
+The basic rules for how Metafont (and Metapost and Asymptote) constructs
+Bezier curves are discussed in chapter 14 of
+{{{book-title(The Metafont Book)}}}.
+It seems to follow John Hobby's algorithm published in
+/Discrete and Computational Geometry/ *1* (1986), 123–140]
+Basically, if we consider the curve ~z[k-1] .. z[k] .. z[k+1]~ in the
+plane, the length of line segment ~l[k]~ connecting ~z[k-1]~ to ~z[k]~
+(and ~l[k+1]~ does similar for ~z[k]~ and ~z[k+1]~), if ~t[k]~ is the
+tangent line going through ~z[k]~, and ~theta[k]~ is the angle between
+the tangent line ~t[k]~ and the line segment ~l[k+1]~ connecting ~z[k]~
+to ~z[k+1]~, and ~phi[k] + theta[k]~ is the angle formed between the
+~l[k+1]~ and the ray formed by extending ~l[k]~ through ~z[k]~ to
+infinity. These satisfy
+
+\begin{equation}
+\frac{\theta_{k-1} - 2\phi_{k}}{\ell_{k}}
+ = \frac{\phi_{k+1} - 2\theta_{k}}{\ell_{k+1}}
+\end{equation}
+
+These are solved, then we find the control points in terms of them
+
+\begin{equation}
+u = z_{0} + e^{i\theta}(z_{1} - z_{0})f(\theta,-\phi)
+\end{equation}
+\begin{equation}
+v = z_{1} - e^{i\phi}(z_{1} - z_{0})f(-\phi, \theta)
+\end{equation}
+
+where the relative distance function $f(\theta,\phi)$ is given by
+
+\begin{equation}
+f(\theta, \phi) = \frac{2 + \sqrt{2}(\sin\theta -
+\frac{1}{16}\sin\phi)(\sin\phi - \frac{1}{16}\sin\theta)(\cos\theta -
+\cos\phi)}{(3/2)(2 + (\sqrt{5}-1)\cos\theta + (3 - \sqrt{5})\cos\phi)}
+\end{equation}
+
+
+- [[https://www.math.ualberta.ca/~bowman/publications/asy3d.pdf][Asymptote 3d's algorithm]]

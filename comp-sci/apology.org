@@ -14,11 +14,15 @@
 * Programming Language
 
 I'm still debating the programming language I should use for this
-endeavor. I want to use some Lisp, because Lisp supports symbolic
-computation easily. Whenever possible, I'd prefer to use exact
-results, which Lisp can facilitate more easily. Plus, Lisp has no
-syntax, so there's no time wasted trying to figure out what's going
-on with code.
+endeavor. Among the choices, it seems that Lisp is best prepared for my
+task:
+
+- Lisp has no syntax, so language extensions are natural, and
+  everything has the same "sentence structure" (verb subject object)
+- Macros make language extensions on par with special forms
+- Symbolic computation can be handled easily and naturally
+- Lisp allows for Bignum computations, so integer and rational
+  arithmetic is precise
 
 At the same time, I wish to use IEEE floating point (which seems to
 rule out Common Lisp, except =sbcl= and possibly a few other
@@ -29,5 +33,7 @@ algorithms, or fall back to using the GNU Scientific Library, or
 something similar. I suppose I could write some unit tests to check
 if the system uses IEEE floating point, so we can be certain.
 
+#+begin_remark
 [[http://www.femlisp.org][FEMLISP]] look interesting, it's a Common Lisp library for solving
 partial differential equations via finite element methods.
+#+end_remark
