@@ -1,5 +1,7 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap'); */
 /* @import url('https://fonts.googleapis.com/css2?family=Spectral&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap');
 @import url("proof.css");
 html {
     /* background-color: wheat; */
@@ -8,19 +10,20 @@ html {
 }
 
 code, pre, kbd {
-    font-size: 0.8em;
+    font: normal 0.75em/20px "Source Code Pro", Menlo, Consolas, Monaco, monospace;
 }
 
 body {
     counter-reset: theorem puzzle;
     background-color: white;
-    font-family: "Spectral", Merriweather, Georgia, serif;
+    font-family: 'PT Serif', serif;
+    /* font-family: "Spectral", Merriweather, Georgia, serif; */
     font-size: 18px;
     line-height: 24px;
     margin: 0 auto;
     min-height: 100%;
     padding: 0 1em 1em 1em;
-    max-width: 34em;
+    max-width: 38em;
 }
 
 p {
@@ -115,6 +118,18 @@ div.math-example::before {
     font-weight: bold;
 }
 
+div.exercise::before {
+    counter-increment: theorem;
+    content: "Exercise " counter(theorem) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.exercise {
+    border: 1px solid black;
+    padding: 0.25em;
+    margin: 1em 0;
+}
 
 div.danger::before {
     content: "Danger:";
@@ -131,10 +146,10 @@ div.theorem, div.corollary, div.proposition, div.lemma {
     font-style: italic;
 }
 
-div.theorem > p, div.corollary > p, div.remark > p, div.definition > p, .puzzle > p, .lemma > p, .exercise > p, .math-example > p, .proposition > p {
+.proof > p, div.theorem > p, div.corollary > p, div.remark > p, div.definition > p, .puzzle > p, .lemma > p, .exercise > p, .math-example > p, .proposition > p {
     margin-top: 0;
 }
-div.definition > p:last-of-type, .puzzle > p:last-of-type {
+div.definition > p:last-of-type, .puzzle > p:last-of-type, .exercise > p:last-of-type {
     margin-bottom: 0;
 }
 
@@ -146,8 +161,11 @@ div.definition {
 
 div.remark {
     border-left: 3px solid black;
-    font-size: 95%;
+    font-size: 18px;
     padding-left: 1em;
+}
+div.remark p {
+    font-size: 18px;
 }
 
 dfn {

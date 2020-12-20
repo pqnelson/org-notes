@@ -46,6 +46,39 @@ code to a noweb label, we write
 It seems like it must be the last element in the "begin source"
 line.
 
+** Custom Environments ("Blocks")
+
+"<2020-11-02>--<2020-12-18>"
+
+I can add custom blocks and shortcuts to expand =<xxx= into blocks
+with the following elisp:
+
+#+begin_src elisp
+(require 'org-tempo)
+(setq org-structure-template-alist '(("a" . "export ascii")
+                                     ("c" . "center")
+                                     ("C" . "comment")
+                                     ("e" . "example")
+                                     ("E" . "export")
+                                     ("h" . "export html")
+                                     ("l" . "export latex")
+                                     ("q" . "quote")
+                                     ("s" . "src")
+                                     ("v" . "verse")
+                                     ("rmk" . "remark")
+                                     ("cor" . "corollary")
+                                     ("thm" . "theorem")
+                                     ("prop" . "proposition")
+                                     ("lem" . "lemma")
+                                     ("pz" . "puzzle")
+                                     ("xca" . "exercise")
+                                     ("ex" . "math-example")
+                                     ("eg" . "math-example")
+                                     ("d" . "definition")
+                                     ("dan" . "danger")
+                                     ("pf" . "proof")))
+#+end_src
+
 ** Publishing
 
 I'd need to add to my =~/.emacs= file
@@ -60,7 +93,8 @@ I'd need to add to my =~/.emacs= file
          :publishing-directory "~/org-notes/html/"
          :recursive t
          :publishing-function org-html-publish-to-html
-         :ignore "~/org-notes/ignore/*"))
+         :exclude "\\(html\\|ignore\\)/"
+         ))
 
 (add-to-list 'org-publish-project-alist
         '("org-static"
@@ -69,11 +103,27 @@ I'd need to add to my =~/.emacs= file
         :publishing-directory "~/org-notes/html/"
         :recursive t
         :publishing-function org-publish-attachment
+        :exclude "\\(html\\|ignore\\)/"
         ))
 
 (add-to-list 'org-publish-project-alist
              '("all" :components ("all-notes" "org-static")))
 #+end_src
+
+We avoid writing the postamble:
+
+#+begin_src elisp
+(eval-after-load "ox-html" (setq org-html-postamble nil))
+#+end_src
+
+And we can permit evaluating source blocks automatically:
+
+#+begin_src elisp
+(setq org-confirm-babel-evaluate nil) ; don't ask for confirmation before evaluating a code block
+(setq org-export-babel-evaluate t)
+(setq org-export-use-babel t)
+#+end_src
+
 
 * Subject Classification
 
