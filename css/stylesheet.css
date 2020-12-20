@@ -14,7 +14,7 @@ code, pre, kbd {
 }
 
 body {
-    counter-reset: theorem puzzle;
+    counter-reset: theorem puzzle exercise section subsection;
     background-color: white;
     font-family: 'PT Serif', serif;
     /* font-family: "Spectral", Merriweather, Georgia, serif; */
@@ -25,7 +25,9 @@ body {
     padding: 0 1em 1em 1em;
     max-width: 38em;
 }
-
+li, li p {
+    font-size: 18px;
+}
 p {
     font-size: 1.1em;
     line-height: 1.6;
@@ -35,11 +37,18 @@ h1 {
     font-size: 2em;
     line-height: 1.2;
 }
+h1:not(.title) {
+    counter-set: section 0;
+}
 h2 {
+    counter-increment: section;
+    counter-set: exercise 0 subsection 0;
     font-size: 1.8em;
     line-height: 1.2;
 }
 h3 {
+    counter-increment: subsection;
+    counter-set: exercise 0;
     font-size: 1.6em;
     line-height: 1.2;
 }
@@ -119,8 +128,8 @@ div.math-example::before {
 }
 
 div.exercise::before {
-    counter-increment: theorem;
-    content: "Exercise " counter(theorem) ".";
+    counter-increment: exercise;
+    content: "Exercise " counter(subsection) "." counter(exercise) ".";
     font-style: normal;
     font-weight: bold;
 }
