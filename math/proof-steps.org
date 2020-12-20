@@ -109,10 +109,10 @@ contradiction. We're forced to conclude that our stipulation must
 be wrong, and that $A$ must be false (i.e., $\neg A$ is true).
 
 #+begin_example
-<proof of $\neg A$> ::=
+<proof of ¬A> ::=
     <preliminary steps>
-    assume $A$;
-    <prove a contradiction from $A$>
+    assume A;
+    <prove a contradiction from A>
 #+end_example
 
 *** Reductio ad Absurdum
@@ -123,10 +123,10 @@ a contradiction implies $A$. This is the /reductio ad absurdum/
 rule. Usually I write in parentheses "=assume= $A$ (for contradiction)".
 
 #+begin_example
-<proof of $A$> ::=
+<proof of A> ::=
     <preliminary steps>
-    assume $\neg A$;
-    <prove a contradiction from $\neg A$>
+    assume ¬A;
+    <prove a contradiction from ¬A>
 #+end_example
 
 ** =thus= or and-introduction
@@ -146,10 +146,10 @@ justification for the step. The upper-right obligation is the new
 proof goal.
 
 #+begin_example
-<proof of $A\land B$> ::=
+<proof of A and B> ::=
     <preliminary steps>
-    thus $A$ by ...;
-    <proof of $B$>
+    thus A by ...;
+    <proof of B>
 #+end_example
 
 ** =per cases=, or-introduction
@@ -165,14 +165,14 @@ The natural deduction rule is of the form
 The upper-left proof obligation is used to justify the =per cases= step.
 
 #+begin_example
-<proof of $B$> ::=
+<proof of B> ::=
     <preliminary steps>
     per cases by ...;
-    suppose $A_{1}$;
-        <proof of $B$ from $A_{1}$>
+    suppose A_{1};
+        <proof of B from A_{1}>
     <...>
-    suppose $A_{n}$;
-        <proof of $B$ from $A_{n}$>
+    suppose A_{n};
+        <proof of B from A_{n}>
 #+end_example
 
 Each =suppose= block acts as if we temporarily "=assume= $A_{i}$"
@@ -192,10 +192,10 @@ The natural deduction inference rule corresponding to this step is
 The top-left subgoal is the justification for the proof step.
 
 #+begin_example
-<proof of $A$> ::=
+<proof of A> ::=
     <preliminary steps>
-    consider $t$ such that $P[t]$ (proof ... end | by ...);
-    <proof of $A$>
+    consider t such that P[t] (proof ... end | by ...);
+    <proof of A>
 #+end_example
 
 ** =take=, exists-intro
@@ -210,10 +210,10 @@ In natural deduction, this corresponds to $\exists$-intro:
 \end{equation}
 
 #+begin_example
-<proof of $\exists x, P[x]$> ::=
+<proof of exists x such that P[x]> ::=
     <preliminary steps>
-    take $a$;
-    <proof of $P[a]$>
+    take a;
+    <proof of P[a]>
 #+end_example
 
 * Syntactic Sugar
@@ -224,7 +224,7 @@ part of the justification, we can prefix the step with =then=. For
 example:
 #+begin_example
     <step>
-    then consider $t$ such that $P[t]$;
+    then consider t such that P[t];
 #+end_example
 The justification for the =consider= step consists of just one
 reference, namely, the previous step.
@@ -240,14 +240,14 @@ synonyms.
 We also routinely write steps of the form
 
 #+begin_example
-    assume $\exists x, P[x]$;
-    then consider $t$ such that $P[t]$;
+    assume exists x such that [x];
+    then consider t such that P[t];
 #+end_example
 
 This is rather wordy. We contract the two steps into one:
 
 #+begin_example
-    given $t$ such that $P[t]$;
+    given t such that P[t];
 #+end_example
 
 ** =set=
@@ -274,19 +274,19 @@ or =hence thesis=.
 One of the conventions I've adopted is to use the proof skeleton:
 
 #+begin_example
-<proof of $A\iff B$> ::=
+<proof of A iff B> ::=
     <preliminary steps>
-    thus $A\implies B$
+    thus A implies B
     proof
-        assume $A$;
-        <proof of $B$>
+        assume A;
+        <proof of B>
     end
-    thus $B\implies A$
+    thus B implies A
     proof
-        assume $B$;
-        <proof of $A$>
+        assume B;
+        <proof of A>
     end
-    hence $A\iff B$;
+    hence A iff B;
 #+end_example
 
 This is technically incorrect, it's certainly invalid Mizar. One
@@ -294,19 +294,19 @@ step towards writing correct Mizar would be to instead use
 something of the form:
 
 #+begin_example
-<proof of $A\iff B$> ::=
+<proof of A iff B> ::=
     <preliminary steps>
-    thus (1) $A\implies B$
+    thus (1) A implies B
     proof
-        assume $A$;
-        <proof of $B$>
-    end
-    thus (2) $B\implies A$
+        assume A;
+        <proof of B>
+    end;
+    thus (2) B implies A
     proof
-        assume $B$;
-        <proof of $A$>
-    end
-    thus $A\iff B$ by (1), (2);
+        assume B;
+        <proof of A>
+    end;
+    thus A iff B by (1), (2);
 #+end_example
 
 

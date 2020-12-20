@@ -148,6 +148,77 @@ The latter seems the most direct way to get cooking.
 Tarski provided another axiomatization in 1936 with four undefined
 notions. Again, we don't need it for our purposes.
 
+** Transcendental and Algebraic Numbers
+
+#+begin_definition
+We call a number $a$ {{{define(Algebraic)}}} if there exists some
+polynomial $p(x)$ for which $a$ is a root, $p(a) = 0$.
+#+end_definition
+
+Observe: any rational number is algebraic, since $p(x) = x - r$ for
+$r\in\QQ$ is such a polynomial.
+
+#+begin_theorem
+The set of algebraic numbers is countable.
+#+end_theorem
+
+#+begin_definition
+We call a number $t$ {{{define(Transcendental)}}} if it is not algebraic.
+#+end_definition
+
+#+begin_theorem
+(Gelfond--Schneider)
+If $a$ and $b$ are algebraic numbers, $a\neq 0$ and $a\neq 1$, with $b$
+irrational, then any value of $a^{b}$ is a transcendental number.
+#+end_theorem
+
+As a consequence, almost all real numbers are transcendental. Most of
+them are not really even "used" in practice.
+
+** Definable Real Numbers
+
+#+begin_definition
+We say a real number $a$ is {{{define(Definable in the Language of Arithmetic)}}}
+if its Dedekind cut can be defined as a predicate in that language;
+i.e., if there is a first-order formula $\varphi$ in the language of
+arithmetic, with three variables, such that
+
+\begin{equation}
+\forall m,\forall n,\forall p\left(\varphi(m,n,p)\iff\frac{(-1)^{p}m}{n}\lt a\right).
+\end{equation}
+#+end_definition
+
+Our intuition is that $m$, $n$, and $p$ range over all natural numbers.
+The only operations allowed in Peano arithmetic are addition and
+multiplication. (And, I suppose, the successor operation, which is just
+"addition with 1" intuitively.) The only constants allowed in Peano
+arithmetic are 0 and 1.
+
+An equivalent way to characterize arithmetically definable real numbers
+is by considering Dedekind cuts of the form
+
+\begin{equation}
+\{m/n \mid \forall x_{1}\exists x_{2}\dots \forall x_{k-1}\exists x_{k},p(m,n,\vec{x})=0\}
+\end{equation}
+
+for some fixed polynomial with integer coefficients $p$, and the \(x\)'s
+range over integers. Here both $\E$ and $\pi$ are definable, as are all
+our favorite real numbers. A standard reference for this line of
+thinking is:
+
+- Reference: Simpson's {{{book-title(Subsystems of Second-Order Arithmetic)}}}
+  discusses system $ACA_{0}$, which we've basically defined.
+
+It is invalid to reason, "Well, we can define $\pi$ as the area of the
+unit circle, and that's a formula, so it is definable." (Or worse, "We
+/define/ $\pi$ as..., therefore since it's /defined/ that way it must be
+/definable/.") Please don't do this.
+
+#+begin_puzzle
+We can consider [[https://en.wikipedia.org/wiki/Definable_real_number][definable real numbers]], is the intersection of
+transcendental numbers with definable real numbers interesting in some
+way?
+#+end_puzzle
 
 * Scientific Notation
 
