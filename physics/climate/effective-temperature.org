@@ -143,17 +143,16 @@ The irradiance on a point on the Earth would be
   (* (/ lumos pi) (expt (* 2 distance) -2)))
 
 (let ((sun-temperature     5772.0) ;; K
-      (sun-luminosity      3.828e26) ;; W
       (sun-radius        695700.0) ;; km
       (earth-distance 149596000.0) ;; km
       (earth-radius        6378.1366) ;; km
       (km                  1000.0)) ;; m/km
-  (irradiance sun-luminosity (* km earth-distance))
-  )
+  (irradiance (luminosity (* sun-radius km) sun-temperature)
+              (* km earth-distance)))
 #+end_src
 
 #+RESULTS:
-: 1361.200508431488
+: 1361.1972737230658
 
 Compare this to the [[https://en.wikipedia.org/wiki/Solar_constant][empirical value of the Solar constant]] which is about
 1.361 kilowatts per square meter.
