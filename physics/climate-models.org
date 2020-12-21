@@ -20,11 +20,46 @@ the energy budget changes with latitude and/or longitude.
 
 Using Stefan-Boltzmann's law, we would have something like
 \begin{equation}
-\frac{\D T(t)}{\D t} \sim R - \sigma T(t)^{4}
+C\frac{\D T(t)}{\D t} = R - \varepsilon\sigma T(t)^{4}
 \end{equation}
-where $R$ is net solar influx, $\sigma$ is the Stefan-Boltzmann
-constant, $T(t)$ is the temperature of the Earth at time $t$. This
-requires [[file:climate/effective-temperature.org][the Effective Temperature]] of the Earth.
+where:
+- $C$ is the effective heat capacity of the Earth (apparently
+  $C\approx2.08\times10^{8}J K^{-1}m^{-2}$)
+- $R\approx 231.4 W/m^{2}$ is net solar influx,
+- $\varepsilon$ is the emissivity of the Earth, a unitless number
+  between 0 (perfectly reflective) and 1 (blackbody), for the Earth it's
+  somewhere in between 0.6 and 1 ([[https://www.jpl.nasa.gov/spaceimages/details.php?id=PIA18833][NASA]])...we could use
+  $\sqrt{0.6}\approx 0.7745$ as an estimate.
+- $\sigma$ is the Stefan-Boltzmann constant,
+- $T(t)$ is the temperature of the Earth at time $t$.
+
+We can treat $T(t) = T_{0} + \Delta T(t)$ where $T_{0}$ is constant
+(using [[file:climate/effective-temperature.org][the Effective Temperature]] of the Earth for $T_{0}\approx 278 K$),
+then to first order we in $\Delta T$ we have
+
+\begin{equation}
+C\frac{\D\Delta T(t)}{\D t}
+= R - \varepsilon\sigma 4T_{0}^{3}\,\Delta T(t).
+\end{equation}
+
+(Note: $4\sigma T_{0}^{3}\approx 4.873$, which is about 47.5 times
+smaller than $R$.)
+This has the general solution
+
+\begin{equation}
+\Delta T(t) = \frac{R}{4\varepsilon\sigma CT_{0}^{3}} + c_{0}\exp(-4\varepsilon\sigma CT_{0}^{3}(t-t_{0}))
+\end{equation}
+
+where $c_{0}$ is some integration constant. If we had some initial
+condition, like $T(t_{0}) = T_{0}$, then we could determine $c_{0}$.
+Taking $T(t_{0}) = T_{0}$, we find
+
+\begin{equation}
+\Delta T(t) = \frac{R}{4\varepsilon\sigma CT_{0}^{3}}\left(1 - \exp(-4\varepsilon\sigma CT_{0}^{3}(t-t_{0}))\right)
+\end{equation}
+
+so $\Delta T(t_{0}) = 0$, and as $t\to\infty$ we see
+$\Delta T(t)\to R/4\varepsilon\sigma CT_{0}^{3}$ is strictly increasing.
 
 ** Stochastic Feedback
 
@@ -122,3 +157,4 @@ difficult numerical analysis, and that sucks.
 - [[https://www.e-education.psu.edu/meteo469/node/135][Modeling of the Climate System]], PSU Meteo 469, Lesson 4,
 - [[https://www.e-education.psu.edu/meteo469/node/137][Simple Climate Models]], PSU Meteo 469
 - [[https://ocw.mit.edu/courses/earth-atmospheric-and-planetary-sciences/12-810-dynamics-of-the-atmosphere-spring-2008/][Dynamics of the Atmosphere]], MIT OCW course 12.810
+- [[https://www.acs.org/content/acs/en/climatescience/atmosphericwarming/singlelayermodel.html][A Single-Layer Atmosphere Model]], ACS

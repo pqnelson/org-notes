@@ -8,7 +8,7 @@
 # Created Saturday December  5, 2020 at  7:31PM
 #+INCLUDE: ../../org-macros.org
 #+HTML_LINK_UP: ../climate-models.html
-#+HTML_LINK_HOME: ../index.html
+#+HTML_LINK_HOME: ../../index.html
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 
 * Overview
@@ -25,14 +25,14 @@ received from the Sun.
 temperature, the Luminosity of the sun is then stipulated to be:
 
 \begin{equation}
-L_{\cdot} = 4\pi R_{\cdot}^{2}\sigma T_{\cdot}^{4}.
+L_{\odot} = 4\pi R_{\odot}^{2}\sigma T_{\odot}^{4}.
 \end{equation}
 
 The Earth is a distance $a_{0}$ from the Sun, the irradiance received by
 a single point at this distance would be
 
 \begin{equation}
-E_{\oplus} = \frac{L_{\cdot}}{4\pi a_{0}^{2}}.
+E_{\oplus} = \frac{L_{\odot}}{4\pi a_{0}^{2}}.
 \end{equation}
 
 The radiance flux absorbed by the Earth would be given by treating the
@@ -55,13 +55,13 @@ We substitute in the value of $E_{\oplus}$ to the right-hand side,
 giving us
 
 \begin{equation}
-4\pi R_{\oplus}^{2}\sigma T_{\oplus}^{4} = \pi R_{\oplus}^{2}\frac{L_{\cdot}}{4\pi a_{0}^{2}}.
+4\pi R_{\oplus}^{2}\sigma T_{\oplus}^{4} = \pi R_{\oplus}^{2}\frac{L_{\odot}}{4\pi a_{0}^{2}}.
 \end{equation}
 
 The luminosity of the Sun transforms the right-hand side into
 
 \begin{equation}
-4\pi R_{\oplus}^{2}\sigma T_{\oplus}^{4} = \pi R_{\oplus}^{2}\frac{4\pi R_{\cdot}^{2}\sigma T_{\cdot}^{4}}{4\pi a_{0}^{2}}.
+4\pi R_{\oplus}^{2}\sigma T_{\oplus}^{4} = \pi R_{\oplus}^{2}\frac{4\pi R_{\odot}^{2}\sigma T_{\odot}^{4}}{4\pi a_{0}^{2}}.
 \end{equation}
 
 Now we solve for the temperature of the Earth $T_{\oplus}$
@@ -79,7 +79,7 @@ T_{\oplus} = T_{\odot}\sqrt{\frac{R_{\odot}}{2a_{0}}}.
 We can plug in empirical values for these quantities to get an estimate
 for the temperature of the Earth.
 
-#+begin_src elisp :export both
+#+begin_src emacs-lisp :exports both
 (let ((sun-temperature 5772.0) ;; K
       (sun-radius 695700.0) ;; km
       (earth-distance 149596000.0)) ;; km
@@ -101,7 +101,7 @@ $T_{\oplus}\to0$, as we would expect.
 
 We need to use the Stefan--Boltzmann constant:
 
-#+begin_src elisp :exports both
+#+begin_src emacs-lisp :exports both
 (defun stefan-boltzman ()
   (let ((kb 1.380649e-23)
         (hbar (* 0.5 (/ 6.62607015e-34 pi)))
@@ -116,7 +116,7 @@ We need to use the Stefan--Boltzmann constant:
 
 The luminosity of the Sun would be, theoretically:
 
-#+begin_src elisp :exports both
+#+begin_src emacs-lisp :exports both
 (defconst 4pi 12.56637061435917295385057)
 
 (defun luminosity (r temperature)
@@ -138,7 +138,7 @@ The luminosity of the Sun would be, theoretically:
 
 The irradiance on a point on the Earth would be
 
-#+begin_src elisp :exports both
+#+begin_src emacs-lisp :exports both
 (defun irradiance (lumos distance)
   (* (/ lumos pi) (expt (* 2 distance) -2)))
 
