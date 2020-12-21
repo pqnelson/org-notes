@@ -20,7 +20,9 @@ task:
 - Lisp has no syntax, so language extensions are natural, and
   everything has the same "sentence structure" (verb subject object)
 - Macros make language extensions on par with special forms
-- Symbolic computation can be handled easily and naturally
+- Symbolic computation can be handled easily and naturally (e.g., the
+  [[https://github.com/pqnelson/auto-pse/blob/3b2d168/src/match.lisp][pattern matching code]] and [[https://github.com/pqnelson/auto-pse/blob/3b2d168/src/simplify.lisp][algebraic simplifier]] couldn't be easily done
+  in non-Lisp)
 - Lisp allows for Bignum computations, so integer and rational
   arithmetic is precise
 
@@ -29,7 +31,7 @@ rule out Common Lisp, except =sbcl= and possibly a few other
 implementations).  The easiest solution is to use SBCL, and not
 worry about the details.  One way to resolve this problem is to
 implement my own floating point arithmetic with arbitrary precision
-algorithms, or fall back to using the GNU Scientific Library, or
+algorithms, or fall back to using the [[https://www.gnu.org/software/gsl/][GNU Scientific Library]], or
 something similar. I suppose I could write some unit tests to check
 if the system uses IEEE floating point, so we can be certain.
 
@@ -37,3 +39,17 @@ if the system uses IEEE floating point, so we can be certain.
 [[http://www.femlisp.org][FEMLISP]] look interesting, it's a Common Lisp library for solving
 partial differential equations via finite element methods.
 #+end_remark
+
+Scheme has the disadvantage of being interpreted (read: slow) and
+limited support for macros. [[https://www.gnu.org/software/guile/][Guile]] looks like it remedies these problems
+by having the programmer implement the critical parts in C, then embed a
+Scheme interpreter/VM in the C code. I like this approach better.
+
+- One problem with Guile is that complex numbers are necessarily inexact.
+- On the other hand, arithmetic operators can be extended as if they
+  were generic functions in Guile.
+
+** Further Reading
+
+- [[http://jakob.space/blog/thoughts-on-lisps.html][Thoughts on Lisps]] compares various implementations of Scheme and
+  Common Lisp for performance and clarity
