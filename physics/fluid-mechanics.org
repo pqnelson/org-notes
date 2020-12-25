@@ -50,6 +50,26 @@ defined as
 We can think of it as translating a time derivative in the frame of a
 given fluid packet to the lab frame.
 
+#+begin_exercise
+Prove that the material derivative is linear
+
+$$\frac{D}{Dt}(f + g) = \frac{Df}{Dt} + \frac{Dg}{Dt}$$
+#+end_exercise
+
+#+begin_exercise
+Prove that the material derivative obeys the Leibniz rule
+
+$$\frac{D}{Dt}(fg) = f\frac{Dg}{Dt}+\frac{Df}{Dt}g$$
+#+end_exercise
+
+#+begin_exercise
+Prove that the material derivative obeys the chain rule
+
+$$\frac{D}{Dt}(f\circ g) = (f'\circ g)\frac{Dg}{Dt}$$
+
+What is $f'\circ g$ in this case?
+#+end_exercise
+
 *** Continuity Equation
 
 The conservation of mass induces the {{{define(Continuity Equation)}}}:
@@ -141,7 +161,7 @@ The Euler equations of motion for an isentropic fluid may be
 rewritten as
 
 \begin{equation}
-\partial_{t}(\vec{\nabla}\times\vec{v}) = \vec{\nabla}\times(\vec{v}\times(\vec{\nabla}\times\vec{v})).
+\partial_{t}(\curl\vec{v}) = \curl(\vec{v}\times(\curl\vec{v})).
 \end{equation}
 
 which involves only the velocity.
@@ -389,7 +409,7 @@ $\vec{v}$ is a function of the coordinates only, so that $\partial_{t}\vec{v}=0$
 In a steady flow, the [[isentropy-euler-equations][isentropic Euler equations]] becomes
 
 \begin{equation}
-\frac{1}{2}\vec{\nabla}(v^{2}) - \vec{v}\times(\vec{\nabla}\times\vec{v}) = -\vec{\nabla}w.
+\frac{1}{2}\vec{\nabla}(v^{2}) - \vec{v}\times(\curl\vec{v}) = -\vec{\nabla}w.
 \end{equation}
 
 *** Streamlines
@@ -439,7 +459,7 @@ the directional derivative). So
 \vec{\ell}\cdot(\vec{\nabla}w) = \partial w/\partial\ell.
 \end{equation}
 
-The vector $\vec{v}\times(\vec{\nabla}\times\vec{v})$ is orthogonal
+The vector $\vec{v}\times(\curl\vec{v})$ is orthogonal
 to $\vec{v}$, hence its dot product with $\vec{\ell}$ vanishes.
 
 Thus we get the simplified equation
@@ -466,7 +486,7 @@ $\vec{g}$ due to gravity must be added to the right-hand side of
 the isentropic Euler equations for steady flows:
 
 \begin{equation}
-\frac{1}{2}\vec{\nabla}(v^{2}) - \vec{v}\times(\vec{\nabla}\times\vec{v}) = -\vec{\nabla}w + \vec{g}.
+\frac{1}{2}\vec{\nabla}(v^{2}) - \vec{v}\times(\curl\vec{v}) = -\vec{\nabla}w + \vec{g}.
 \end{equation}
 
 Let us take the direction of gravity as the \(z\)-axis, with $z$
@@ -547,8 +567,8 @@ In the last term, we replace
  = \frac{1}{2}\vec{v}\cdot(\vec{\nabla}(v^{2}))
 \end{equation}
 
-and in the middle term we (use the thermodynamic relation
-$\D w = T\,\D s + (1/\rho)\D p$ to) replace
+and in the middle term (using the thermodynamic relation
+$\D w = T\,\D s + (1/\rho)\D p$) we replace
 
 \begin{equation}
 \vec{\nabla}p = \rho\vec{\nabla}w - \rho T\vec{\nabla}s
@@ -809,7 +829,7 @@ Now we use Stoke's theorem
 
 \begin{equation}
 \oint(-\vec{\nabla}w)\cdot\D\vec{r}
- = \iint\vec{\nabla}\times(\vec{\nabla}w)\cdot\D\vec{A}.
+ = \iint\curl(\vec{\nabla}w)\cdot\D\vec{A}.
 \end{equation}
 
 But the right-hand side vanishes, so
@@ -831,7 +851,7 @@ We have from Kelvin's theorem,
 
 #+NAME: defn-vorticity
 #+begin_definition
-We refer to the quantity $\vec{\nabla}\times\vec{v}$ (the curl of the
+We refer to the quantity $\curl\vec{v}$ (the curl of the
 velocity vector field) as the {{{define(Vorticity)}}} of the field.
 #+end_definition
 
@@ -840,7 +860,7 @@ saying "The vorticity moves with the fluid".
 
 #+begin_exercise
 Show: in flows which are not isentropic, any moving particle carries
-with it a constant value of the product $\rho^{-1}\vec{\nabla}s\cdot\vec{\nabla}\times\vec{v}$.
+with it a constant value of the product $\rho^{-1}\vec{\nabla}s\cdot\curl\vec{v}$.
 (H. Ertel, 1942)
 #+end_exercise
 
@@ -848,7 +868,7 @@ with it a constant value of the product $\rho^{-1}\vec{\nabla}s\cdot\vec{\nabla}
 
 *Case 1: Steady Flow.* Consider a steady flowing fluid.
 Consider a point on a streamline where the vorticity vanishes
-$\vec{\nabla}\times\vec{v}=0$. We draw an infinitesimal circle around
+$\curl\vec{v}=0$. We draw an infinitesimal circle around
 that point, and move the circle with the point over time. The claim is
 the vorticity in the circle remains constant (by Kelvin's theorem) and
 moreover every point on the streamline has the same vorticity.
@@ -865,7 +885,7 @@ every point of a streamline. Is this a valid assumption to make?
 #+end_puzzle
 
 #+begin_definition
-A flow for which $\vec{\nabla}\times\vec{v}=0$ for every point in the
+A flow for which $\curl\vec{v}=0$ for every point in the
 flow is called a {{{define(Potential Flow)}}} or
 {{{define(Irrotational Flow)}}}; otherwise, it is called a
 {{{define(Rotational Flow)}}}.
@@ -878,8 +898,8 @@ non-steady flow result. For example...
 
 - Consider steady flow past some body. Let the incident flow be uniform
   at infinity. Its velocity $\vec{v}$ is a constant (so
-  $\vec{\nabla}\times\vec{v}=0$ on all streamlines). Hence we conclude
-  that $\vec{\nabla}\times\vec{v}=0$ along the whole of every streamline
+  $\curl\vec{v}=0$ on all streamlines). Hence we conclude
+  that $\curl\vec{v}=0$ along the whole of every streamline
   (i.e., all of space).
 - Suppose at some instant we have irrotational flow throughout the
   volume of the fluid. Then the velocity circulation around any closed
@@ -893,7 +913,7 @@ non-steady flow result. For example...
     then there is potential flow at all subsequent instants. (In
     particular, any flow for which the fluid is initially at rest must
     be a potential flow.)
-  + This is in accordance with the fact if $\vec{\nabla}\times\vec{v}=0$,
+  + This is in accordance with the fact if $\curl\vec{v}=0$,
     then the [[isentropy-euler-equations][isentropic Euler equations]] hold automatically.
 
 *** Limited Validity of these "Results"
