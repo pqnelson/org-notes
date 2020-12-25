@@ -1,0 +1,399 @@
+#+TITLE: Differential Fields
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-23T16:16:49-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Wednesday December 23, 2020 at  4:16PM
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+
+* Overview
+
+If we want to try to symbolically solve differential equations, it is
+tempting to think of analogous problems (like finding the roots of
+polynomials). We just work over a differential ring, like $\mathbb{k}=\RR[{[x]}]$
+the ring of formal power series with real coefficients (or rational
+coefficients, or whatever), we can define a formal derivative operator:
+
+\begin{equation}
+\D (bx^{m} + cx^{n}) = \D(bx^{m}) +\D(cx^{n}) = mbx^{m-1} + ncx^{n-1}.
+\end{equation}
+
+Then we just translate the differential equation we're trying to solve
+
+\begin{equation}
+y' = f(x,y)
+\end{equation}
+
+into finding an element $y\in\mathbb{k}$ such that
+
+\begin{equation}
+\D y = f(x,y).
+\end{equation}
+
+* Polynomial Methods
+
+Given some representation of polynomials in a single variable, we review
+a few helper functions that come in handy.
+
+#+begin_theorem
+If $R$ is a principal ideal domain,
+then $(x,y) = (\gcd(x,y))$ for any $x,y\in R$.
+#+end_theorem
+
+#+begin_definition
+A {{{define(Euclidean Domain)}}} consists of an integral domain $(R, +, \cdot)$
+equipped with a map $\nu\colon R\setminus\{0\}\to\mathbb{N}$ called the
+{{{define(Size function)}}} such that
+
+1. For all $a,b\in R\setminus\{0\}$, we have $\nu(ab)\leq\nu(a)$.
+2. (Euclidean division) For any $a,b\in R$ with $b\neq0$ nonzero, there
+   are $q,r\in R$ such that $a=bq+r$ and either $r=0$ or $\nu(r)\lt\nu(b)$.
+#+end_definition
+
+** Long Division
+
+We can use a naive long division algorithm.
+
+#+begin_src lisp
+(in-package :polynomial)
+(defun divide (a b &aux q r s)
+  "When A and B are polynomials over a field, division uses this method."
+  (declare (type polynomial a b))
+  (assert (not (zero? b)))
+  (setf q (zero-polynomial))
+  (setf r a)
+  (loop while (and (not (zero? r))
+                   (>= (degree r) (degree b)))
+        do (progn
+             (setf s (* (/ (leading-coef r)
+                           (leading-coef b))
+                        (expt 'x (- (degree r) (degree b)))))
+             (setf q (+ q s))
+             (setf r (- r (* b s)))))
+  ;; (assert (equal? a (+ (* q b) r)))
+  (values q r))
+#+end_src
+
+Arguably we could implement the quotient and remainder methods using
+this.
+
+#+begin_src lisp
+(in-package :polynomial)
+
+(defmethod quotient ((a polynomial) (b polynomial))
+  (multiple-values-bind (q r) (divide a b)
+                        q))
+
+(defmethod rem ((a polynomial) (b polynomial))
+  (multiple-values-bind (q r) (divide a b)
+                        r))
+#+end_src
+
+** Pseudo-Division
+
+When working over an integral domain $D$, we can't necessarily compute
+the quotient and remainder of polynomials. But we can compute the /pseudo-quotient/
+and /pseudo-remainder/ (really, they're more like /quasi-quotient/ and
+/quasi-remainder/, since "pseudo" implies fraudulent, whereas "quasi"
+implies "they share similar properties").
+
+The pseudo-quotient is denoted $\mathrm{pquo}(A,B)$ and pseudo-remainder
+denoted $\mathrm{prem}(A,B)$ by Bronstein.
+
+#+begin_src lisp
+(in-package :polynomial)
+(defun pseudo-divide (a b &aux c n q r s)
+  (declare (type polynomial a b))
+  (assert (not (zero? b)))
+  (setf c (leading-coef b))
+  (setf n (1+ (- (degree a) (degree b))))
+  (setf q 0)
+  (setf r a)
+  (loop while (and (not (zero? r))
+                   (>= (- (degree r) (degree b)) 0))
+        do (progn
+             (setf s (* (leading-coef r)
+                        (expt 'x (- (degree r) (degree b)))))
+             (decf n)
+             (setf q (+ s (* c q)))
+             (setf r (- (* c r) (* s b)))))
+  (let ((factor (expt c n)))
+    (values (* factor q) (* factor r))))
+#+end_src
+
+** Euclidean Algorithm
+
+There are several variations of Euclid's algorithm for GCD with polynomials.
+
+#+begin_src lisp
+(in-package :polynomial)
+(defun euclid (a b &key (divide #'poly-divide) &aux x y)
+  (declare (type polynomial a b))
+  (setf x a)
+  (setf y b)
+  (loop while (not (zero? y))
+        do (multiple-values-bind (q r)
+                                 (funcall #'divide x y)
+                                 (setf x y)
+                                 (setf y r)))
+  x)
+#+end_src
+
+*** Extended Euclidean Algorithm
+
+The "follow your nose" implementation of the extended Euclidean
+algorithm could be implemented quite quickly.
+
+#+begin_src lisp
+(in-package :polynomial)
+(defun naive-extended-euclid (a b &key (divide #'poly-divide) &aux r1 r2)
+  (declare (type polynomial a b))
+  (let ((a0 a)
+        (a1 1)
+        (a2 0)
+        (b0 b)
+        (b1 0)
+        (b2 1))
+    (loop while (not (zero? b0))
+          do (multiple-values-bind (q r) (funcall #'divide a0 b0)
+                                   ;; (= a0 (+ r (* b0 q)))
+                                   (setf a0 b0)
+                                   (setf b0 r)
+                                   (setf r1 (- a1 (* q b1)))
+                                   (setf r2 (- a2 (* q b2)))
+                                   (setf a1 b1)
+                                   (setf a2 b2)
+                                   (setf b1 r1)
+                                   (setf b2 r2)))
+    ;; (assert (equal? (+ (* a1 a) (* a2 b)) a0))
+    (values a1 a2 a)))
+#+end_src
+
+*** Half-Extended Euclidean
+
+Alas, if we need only one of the coefficients =s= or ~t~, we can use a
+variant of the Euclidean algorithm which Bronstein calls the
+"half-extended Euclidean algorithm" (over some Euclidean domain ~D~):
+
+#+begin_src lisp
+(in-package :polynomial)
+(defun half-extended-euclid (a b &key (divide #'poly-divide) &aux r1)
+  (let ((a0 a)
+        (a1 1)
+        (b0 b)
+        (b1 0))
+    (loop while (not (zero? b0))
+          do (multiple-values-bind (q r) (funcall #'divide a0 b0)
+                                   ;; (= a0 (+ r (* b0 q)))
+                                   (setf a0 b0)
+                                   (setf b0 r)
+                                   (setf r1 (- a1 (* q b1)))
+                                   (setf a1 b1)
+                                   (setf b1 r1)))
+    (values a1 a)))
+#+end_src
+
+*** Euclidean Algorithm
+
+We can use this half-extended Euclidean algorithm for a more efficient
+implementation of Euclid's algorithm.
+
+#+begin_src lisp
+(in-package :polynomial)
+(defun extended-euclid (a b &key (divide #'poly-divide) &aux u v)
+  (declare (type polynomial a b))
+  (multiple-values-bind (s g) (half-extended-euclid a b :divide #'divide)
+                        (values s (funcall #'divide (- g (* s a)) b) g)))
+#+end_src
+
+*** Diophantine version of Extended Euclidean
+
+We can use the extended Euclidean algorithm to solve Diophantine
+equations of the form $sa+tb=c$ where $a,b,c\in D$ are given and $s,t\in D$
+are the unknowns.
+
+
+#+begin_src lisp
+(defun diophantine-naive-extended-euclid (a b c)
+  (multiple-values-bind
+   (s u g) (extended-euclid a b)
+   (multiple-values-bind (q r) (poly-divide c g)
+                         (unless (zero? r)
+                           (error "~A is not generated in the ideal by ~A and ~A"
+                                  c a b))
+                         (setf s (* q s))
+                         (setf u (* q u)))
+   (when (and (not (zero? s))
+              (>= (degree s) (degree b)))
+     (multiple-values-bind
+      (q r) (poly-divide s b)
+      (setf s r)
+      (setf u (+ u (* q a)))))
+   (values s u))
+#+end_src
+
+*** Diophantine Half-Extended Euclidean
+
+When we only want the ~s~ in the Euclidean domain such that ~s*a = c~
+modulo ~b~ and either ~s = 0~ or ~nu(s) < nu(b)~. The other solution is
+obtained by
+
+\begin{equation}
+t = \frac{c - sa}{b}
+\end{equation}
+
+where the division is always exact.
+
+#+begin_src lisp
+(defun diophantine-half-extended-euclidean (a b c)
+  (multiple-values-bind
+   (s g) (half-extended-euclidean a b)
+   (multiple-values-bind
+    (q r) (poly-divide c g)
+    (unless (zero? r)
+      (error "~A is not the ideal generated by ~A and ~A"
+             c a b))
+    (setf s (* q s)))
+   (when (and (not (zero? s))
+              (>= (degree s) (degree b)))
+     (multiple-values-bind
+      (q r) (poly-divide s b)
+      ;; (assert (equal? s (+ r (* b q))))
+      (setf s r)))
+   s)
+#+end_src
+
+This gives us a more efficient diophantine extended Euclidean method
+
+#+begin_src lisp
+(defun diophantine-extended-euclidean (a b c)
+  (let ((s (diophantine-half-extended-euclidean a b c)))
+    (multiple-values-bind
+     (q r) (poly-divide (- c (* s a)) b))
+    (values s q)))
+#+end_src
+
+*** Partial Fraction Decomposition
+
+We can use Euclidean Algorithm to determine the partial fraction
+decomposition of a ratio of polynomials. For $a/d$ we consider the
+factorization $d = d_{1}\dots d_{n}$ into distinct coprime (not necessarily
+irreducible) factors $\gcd(d_{i},d_{j})=1$ for $i\neq j$.
+
+#+begin_src lisp
+(defun distinct-partial-fraction (a &rest denom-factors)
+  "Returns a list of a constant term followed by numerators for
+the corresponding denominator factors."
+  (if (null denom-factors)
+      a
+      (multiple-values-bind
+       (a0 r) (poly-divide a (apply #'* denom-factors))
+       (when (singleton? denom-factors) ; n = 1
+         (return-from distinct-partial-fraction (cons a0 r)))
+       (multiple-values-bind            ; n > 1
+        (a1 s) (extended-euclidean (apply #'* (cdr denom-factors)) r)
+        (assert (< (degree a1) (degree (car denom-factors))))
+        (let ((numerators (apply #'distinct-partial-fraction s (cdr denom-factors))))
+          (cons (+ a0 (car numerators))
+                (cons a1 (cdr numerators))))))))
+#+end_src
+
+*** Partial Fraction Decomposition with Multiplicity
+
+We explicitly assumed each factor $d_{i}$ was coprime with each other.
+But what happens if $d$ has a square factor $d_{i}^{2}$? Or more
+generally a factor $d_{j}^{e_{j}}$ with nonzero $e_{j}\in\mathbb{N}$?
+How do we do a partial fraction decomposition in this case?
+
+The idea is to use the so-called {{{define(d-adic expansion)}}} of $a/d^{m}$,
+writing $a=dq+a_{m}$ by Euclidean division (where either $a_{m}=0$ or $\nu(a_{m})\lt\nu(d)$).
+Then
+
+\begin{equation}
+\frac{a}{d^{m}}
+= \frac{dq + a_{m}}{d^{m}}
+= \frac{q}{d^{m-1}} + \frac{a_{m}}{d^{m}}.
+\end{equation}
+
+If $m=1$, we're done. Otherwise, we recursively find $a_{0}$, $a_{1}$,
+..., $a_{m-1}\in D$ such that either $a_{j}=0$ or $\nu(a_{j})\lt\nu(d)$
+for $j\geq1$, and
+
+\begin{equation}
+\frac{q}{d^{m-1}} = a_{0} + \sum^{m-1}_{j=1}\frac{a_{j}}{d^{j}}.
+\end{equation}
+
+Thus
+
+\begin{equation}
+\frac{a}{d^{m}} = \frac{q}{d^{m-1}} + \frac{a_{m}}{d^{m}} = a_{0} + \sum^{m}_{j=1}\frac{a_{j}}{d^{j}}.
+\end{equation}
+
+Now if we have a factorization of $d=d_{1}^{e_{1}}d_{2}^{e_{2}}\dots d_{n}^{e_{n}}$
+(not necessarily into irreducibles) where $\gcd(d_{i},d_{j})=1$ for any
+$i\neq j$ and the $e_{i}\in\mathbb{N}$. What to do? We take $b_{i} = d_{i}^{e_{i}}$ for
+each $i$, we use the partial fraction decomposition from the previous
+section
+
+\begin{equation}
+\frac{a}{d} = a_{0} + \sum^{n}_{j=1}\frac{a_{j}}{b_{j}}
+= a_{0} + \sum^{n}_{j=1}\frac{a_{j}}{d_{j}^{e_{j}}}.
+\end{equation}
+
+And we use the \(d_{j}\)-adic expansion of each summand to get
+
+\begin{equation}
+\frac{a}{d}
+= \widetilde{a} + \sum^{n}_{i=1}\sum^{e_{i}}_{j=1}\frac{a_{ij}}{d_{i}^{j}}.
+\end{equation}
+
+This is the complete partial fraction decomposition of $a/d$ with
+respect to the factorization $d = \prod_{i} d_{i}^{e_{i}}$.
+
+#+begin_src lisp
+(defun complete-partial-fraction (a &rest denom-expt-pairs)
+  (let* ((all-numerators (apply #'distinct-partial-fraction
+                                (cons a (mapcar #'(lambda (d-e)
+                                                    (expt (car d-e) (cadr d-e)))
+                                                denom-expt-pairs))))
+         (a0 (car all-numerators))
+         (numerators (cdr all-numerators)))
+    (do ((d-e-pairs denom-expt-pairs))
+        ()
+      (do ((
+    ))
+#+end_src
+
+# 34
+
+* Canonical Representation
+
+Usually we have a field of rational polynomial $\mathbb{k}=\mathbb{Q}(x)$
+with $D=\D/\D x$, and $t$ a monomial over $\mathbb{k}$ such that
+
+\begin{equation}
+Dt = -t^{2}-\frac{3}{2x}t + \frac{1}{2x}
+\end{equation}
+
+Then we'll want to split a given polynomial
+
+#+begin_src lisp
+(defun split-factor (p deriv)
+  "Given a derivation `deriv' on `k[t]' and `p' an element of `k[t]',
+return the pair (normal-polynomial . special-polynomial) such that
+(= p (* normal-polynomial special-polynomial))."
+  (let ((s (/ (gcd p (deriv p))
+              (gcd p (d p t)))))
+    (if (zerop (degree s))
+        (cons p 1)
+      (split-factor (/ p s) deriv))))
+#+end_src
+
+* References
+- Manuel Bronstein, {{{book-title(Symbolic Integration 1: Transcendental Functions)}}}.
+  Springer, second ed., 1996.
