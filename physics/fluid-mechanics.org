@@ -14,6 +14,13 @@
 These are my reading notes of Landau and Lifshitz's {{{book-title(Fluid Mechanics)}}}
 (vol.6 of their series on Theoretical Physics).
 
+*A note on L&L's style.* It seems that Landau and Lifshitz write in a
+manner that's the mirror opposite of abstract mathematics. Instead of
+"theorem" and then "proof", they provide a "proof" followed by a
+"theorem" (but do not announce it with a bold *Theorem* prefix).
+Consequently, reading L&L amounts to trying to figure out what claims
+are made in a section, then reconstructing the proof.
+
 * Quickstart, Ideal Fluids
 
 ** Basic Quantities
@@ -1435,6 +1442,216 @@ plane wall.
 ** Drag force in potential flow past a body
 # 38
 
+Consider the problem of irrotational flow of an incompressible ideal
+fluid past some solid body. (Of course, this is the same problem as the
+motion of a fluid when the same body moves through it...just change
+coordinates in which the fluid is at rest at infinity.)
+
+The potential flow for an incompressible fluid satisfies Laplace's
+equation
+
+\begin{equation}
+\nabla^{2}\phi=0.
+\end{equation}
+
+The boundary condition is that the solutions vanish at infinity (since
+the fluid is at rest). The origin is somewhere in the moving body: the
+coordinate system moves with the body.
+
+*** General Solution
+
+The general form of Laplace's equation is
+
+\begin{equation}
+\phi=\frac{-a}{r}+\vec{A}\cdot\vec{\nabla}\frac{1}{r}+\bigOh(r^{-3})
+\end{equation}
+
+where $a$, $\vec{A}$ are independent of coordinates.
+
+#+begin_proposition
+The constant $a$ must be zero.
+#+end_proposition
+
+#+begin_proof
+Suppose $\phi=-a/r$. Then the velocity is $\vec{v}=-\vec{\nabla}(a/r)=a\vec{r}/r^{3}$.
+What is the mass flux through some closed surface (say a sphere with
+radius $R$)? On this surface the velocity is constant and equal to
+$a/R^{2}$. The total flux though it is therefore$\rho(a/R^{2})4\pi R^{2}=4\pi\rho a$.
+But the flux of an incompressible fluid through any closed surface must
+be zero. Hence $a=0$.
+#+end_proof
+
+Since we are seeking the velocity at large distances, the terms of
+higher order than quadratic may be neglected, so we have
+
+\begin{equation}
+\phi = \vec{A}\cdot\vec{\nabla}(1/r)=-\vec{A}\cdot\widehat{r}/r^{2}
+\end{equation}
+
+and the velocity vector is
+
+\begin{equation}
+\vec{v}=(A\cdot\vec{\nabla})\vec{\nabla}\frac{1}{r}
+=\frac{3(\vec{A}\cdot\widehat{r})\widehat{r}-\vec{A}}{r^{3}}
+\end{equation}
+
+where $\widehat{r}$ is a unit vector in the direction of $\vec{r}$.
+At large distances the velocity diminishes as $r^{-3}$. The vector
+$\vec{A}$ depends on the shape and velocity of the body and can be
+determined only by solving the equation $\nabla^{2}\phi=0$ at all
+distances, taking into account the appropriate boundary conditions at
+the surface of the moving body.
+
+*** Total Energy
+# 39--40
+
+#+begin_lemma
+The internal energy of an incompressible fluid is constant.
+#+end_lemma
+
+#+begin_theorem
+The total energy of the fluid is
+
+\begin{equation*}
+E = \frac{\rho}{2}(4\pi\vec{A}\cdot\vec{u}-V_{0}u^{2}),
+\end{equation*}
+
+where $\vec{u}$ is the velocity of the body, $V_{0}$ is the volume of
+the body, $\vec{v}$ the velocity of the fluid, and $\vec{A}$ depends on
+the shape of the body.
+#+end_theorem
+
+#+begin_proof
+- The total kinetic energy for the fluid is $\frac{1}{2}\int\rho v^{2}\,\D V$
+  where we integrate over all space /outside/ the body.
+- Take a region of space /V/ bounded by a "large sphere" of radius $R$,
+  centered at the origin. (We'll first integrate over the sphere, then
+  take the $R\to\infty$ limit.)
+- We have
+  $$ \int v^{2}\,\D V = \int u^{2}\,\D V + \int(\vec{v}+\vec{u})\cdot(\vec{v}-\vec{u})\D V $$
+  where $\vec{u}$ is the velocity of the body.
+  + Since $\vec{u}$ is independent of the coordinates, the first
+    integral on the RHS is simply $u^{2}(V-V_{0})$ where $V_{0}$ is the
+    volume of the body.
+  + In the second integral, we rewrite the factor $\vec{v}+\vec{u} = \vec{\nabla}(\phi+\vec{u}\cdot\vec{r})$
+  + The equation of continuity tells us $\vec{\nabla}\cdot\vec{v}=0$
+  + We have $\vec{\nabla}\cdot\vec{u}=0$
+- We have
+  $$ \int v^{2}\,\D V = u^{2}(V-V_{0}) + \int\vec{\nabla}\cdot[(\phi+\vec{u}\cdot\vec{r})(\vec{v}-\vec{u})] \D{V} $$
+- The second integral can be transformed into a surface integral over
+  the sphere's surface $S$ and the body's surface $S_{0}$.
+  $$ \int\vec{\nabla}\cdot[(\phi+\vec{u}\cdot\vec{r})(\vec{v}-\vec{u})] \D{V} = \oint_{S_{0}}(\phi+\vec{u}\cdot\vec{r})(\vec{v}-\vec{u})\cdot\D\vec{A} + \oint_{S}(\phi+\vec{u}\cdot\vec{r})(\vec{v}-\vec{u})\cdot\D\vec{A} $$
+  + On the surface $S_{0}$, the normal components of $\vec{v}$ and
+    $\vec{u}$ are equal (due to boundary conditions).
+  + Since the integration would be along the normal to the surface, the
+    surface integral over $S_{0}$ vanishes.
+- We work over the surface integral over $S$, substituting the
+  expression $\vec{v} = (\vec{A}\cdot\vec{\nabla})\vec{\nabla}(1/r)$.
+  Ignoring terms which vanish as $R\to\infty$, integrating over the
+  sphere of radius $R$ with $\D\vec{A} = \widehat{n}R^{2}\D\Omega$ where
+  $\D\Omega$ is an element of the solid angle, this gives us
+
+\begin{equation}
+\oint_{S}(\phi+\vec{u}\cdot\vec{r})(\vec{v}-\vec{u})\cdot\D\vec{A}
+= \int[3(\vec{A}\cdot\widehat{n})(\vec{u}\cdot\widehat{n}) - (\vec{u}\cdot\widehat{n})^{2}R^{3}]\D\Omega
+\end{equation}
+
+- Performing this integral, multiplying by $\rho/2$, we obtain the
+  expression for the total energy of the fluid
+  $$ E = \frac{\rho}{2}(4\pi\vec{A}\cdot\vec{u} - V_{0}u^{2}). $$
+#+end_proof
+
+#+begin_remark
+The integral we must perform in the last step is taken over a sphere,
+and since the integrands are constant, it amounts to multiplying by
+$4\pi R^{3}/3$.
+#+end_remark
+
+#+NAME: defn-induced-mass-tensor
+#+begin_definition
+We can rewrite the energy $E$ just computed as a quadratic function of
+the components of $\vec{u}$ as
+
+\begin{equation}
+E = \frac{1}{2}m_{ik}u^{i}u^{k}
+\end{equation}
+
+where $m_{ik}$ is a constant, symmetric tensor, called the
+{{{define(Induced-Mass Tensor)}}}. Its components can be computed from
+those of $\vec{A}$.
+#+end_definition
+
+*** D'Alembert's Paradox
+
+We can compute the total momentum $\vec{P}$ for the fluid from the
+energy. How?
+
+#+begin_lemma
+Observe an infinitesimal change in $E$ and $\vec{P}$ are
+related by
+
+\begin{equation*}
+\D E = \vec{u}\cdot\D\vec{P}.
+\end{equation*}
+
+#+end_lemma
+
+#+begin_proof
+- Assume the body accelerated by some external force $\vec{F}$
+- Then the momentum of the fluid will be increased by $\D\vec{P}$ during
+  the period $\D t$
+- Then $\D\vec{P} = \vec{F}\,\D t$
+- Hence $\vec{u}\cdot\D\vec{P} = \vec{u}\cdot\vec{F}\,\D t$ by scalar
+  multiplication with $\vec{u}$ (i.e., the work done by force $\vec{F}$
+  acting through the distance $\vec{u}\,\D t$, which in turn must be
+  equal to the increase $\D E$ in the energy of the fluid)
+#+end_proof
+
+It follows from the definition of [[defn-induced-mass-tensor][induced mass tensor]] that
+
+\begin{equation}
+P_{i} = m_{ik}u^{k}.
+\end{equation}
+
+And by comparing results we find
+
+\begin{equation}
+\vec{P} = 4\pi\rho\vec{A} - \rho V_{0}\vec{u}.
+\end{equation}
+
+The momentum transmitted to the fluid by the body in unit time is
+$\D\vec{P}/\D t$. With the opposite sign it gives the reaction of the
+fluid (i.e., the force acting on the body):
+
+\begin{equation}
+\vec{F} = -\frac{\D\vec{P}}{\D t}
+\end{equation}
+
+The components of $\vec{F}$ parallel to the velocity of the body is
+called the {{{define(Drag Force)}}} and the perpendicular component is
+called the {{{define(Lift Force)}}}.
+
+#+begin_proposition
+(D'Alembert Paradox)
+If it were possible to have potential flow past a body moving uniformly
+in an ideal fluid, we should have $\vec{P}$ be constant, since $\vec{u}$
+is constant, and so $\vec{F} = 0$. That is to say, there would be no
+drag and no lift: the pressure forces exerted on the body by the fluid
+would balance out.
+#+end_proposition
+
+Now, everything that has been said, we stress, has assumed an infinite
+volume for the fluid. If the fluid has a free surface, then a body moving
+uniformly parallel to this surface will experience a drag
+({{{define(Wave Drag)}}}) due to the occurrence of a "system of waves"
+propagated on the free surface, which continually remove energy to
+infinity.
+
+
+
+# 41
+*** Converse Problem
+# 42
 ** Gravity waves
 # 43
 
@@ -1447,7 +1664,10 @@ plane wall.
 
 * References
 
-- Landau and Lifshits,
+- Alexandre Chorin, Jerrold Marsden,
+  {{{book-title(A Mathematical Introduction to Fluid Mechanics)}}}.
+  Third ed., Springer, 1993.
+- Landau and Lifshitz,
   {{{book-title(Fluid Mechanics)}}}.
   Second ed., Butterworth-Heinemann, 1987.
   This is my primary reference.
