@@ -66,12 +66,13 @@ leading 1 (i.e., we can pretend the ~c~ tuple describes the bits
 
 Given some number with decimal expansion
 =d[0]d[1]d[2]d[3]d[4]d[5]d[6]d[7]...=, how do we encode it in our
-toy number system? Do we simply throw away the digits =d[7]= and
-beyond? This is called "truncating".
+toy number system?
 
-Or we could examine =d[7]= and if it is 5 or greater, add 1 to
-=d[6]= (which, if ~d[6]=9~, would become 0 and force us to "carry
-the one" to ~d[5]~, and so on). This is "rounding to infinity".
+- *Solution 1.* Do we simply throw away the digits =d[7]= and
+  beyond? This is called "truncating".
+- *Solution 2.* Or we could examine =d[7]= and if it is 5 or greater,
+  add 1 to =d[6]= (which, if ~d[6]=9~, would become 0 and force us to
+  "carry the one" to ~d[5]~, and so on). This is "rounding to infinity".
 
 Either way, rounding/truncating is one source of error. But it's a
 price we always have to pay for using a computer.
@@ -95,6 +96,9 @@ computation), so we use it to clarify certain concepts.
 
 *** Relative, Absolute Error
 
+How do we measure how good (or bad) an approximation is to its true
+value? We have two possibilities.
+
 #+NAME: absolute-error
 #+begin_definition
 Let $x$ be a real number and $x_{\ast}$ an approximation to
@@ -109,10 +113,10 @@ $x$. Then its {{{define(Relative Error)}}} is $|x - x_{\ast}|/x$ if $x\neq0$.
 
 #+begin_math-example
 When we have two numbers close to each other $fl(x)\approx fl(y)$,
-say they agree to 4 digits, then $fl(x) - fl(y)$ has at most three
-digits of precision (we've lost more than half our precision).  The
-absolute error of $fl(x) - fl(y)$ compared to $x - y$ is small,
-though the relative error is large.
+say they agree to 4 digits, then $fl(x) - fl(y)$
+has at most three digits of precision (we've lost more than half our
+precision). The absolute error of $fl(x) - fl(y)$ compared to $x - y$
+is small, though the relative error is large.
 #+end_math-example
 
 * References
@@ -120,8 +124,17 @@ though the relative error is large.
 - Richard L. Burden and J. Douglas Faires,
   {{{book-title(Numerical Analysis)}}}.
   8th ed., Thomson, 2005.
+- David Goldberg,
+  "What Every Computer Scientist Should Know About Floating-Point Arithmetic".
+  March 1991, [[https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html][eprint]].
 - Peter Olver,
   [[https://www-users.math.umn.edu/~olver/num.html][Lecture notes on Numerical Analysis]].
+
+** Theorem Provers and Numerical Analysis
+
+- Sylvie Boldo, Claude Marché,
+  "Formal verification of numerical programs: from C annotated programs to mechanical proofs".
+  [[https://hal.inria.fr/hal-00777605/document][Eprint]], 2013, 18 pages.
 - Ruben Antonio Gamboa,
   "Mechanically Verifying Real-Valued Algorithms in ACL2".
   PhD thesis, U. Texas at Austin, [[https://www.cs.utexas.edu/ftp/boyer/diss/gamboa.pdf][PDF]]

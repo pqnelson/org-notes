@@ -1,0 +1,53 @@
+#+TITLE: Definitions in Lisp
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-27T10:12:28-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday December 27, 2020 at 10:12AM
+
+* Overview
+
+Common Lisp --- being a Lisp-2 --- has two namespaces for definitions:
+one for functions, the other for values. How does this work? And how
+does, say, =defgeneric= and ~defmethod~ work?
+
+* Defun
+
+Usually ~defun~ is a macro.
+
+** SBCL
+
+As I understand it, SBCL's implementation is a [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/code/macros.lisp#L151-L163][macro]] which calls [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/code/target-misc.lisp#L164-L183][%defun]].
+It amounts to =(setf (fdefinition name) def)= as one might expect.
+
+** ABCL
+
+Armed Bear CL has a primitive [[https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/Primitives.java#L1770-L1795][%defun]] Java class.
+
+* Defgeneric
+
+** SBCL
+
+SBCL uses a rather contrived [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/boot.lisp#L251-L342][macro]] roughly 90 lines long.
+It boils down to delegating the binding to [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/boot.lisp#L1944-L1955][ensure-generic-function]].
+If we call =defgeneric= on an existing function, it attempts to redefine
+that function as a generic by clearing the existing definition and
+continuing on as if there were no definition; otherwise, it just
+calls [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/boot.lisp#L2288-L2313][ensure-generic-function-using-class]] ([[http://clhs.lisp.se/Body/f_ensure.htm#ensure-generic-function][CLHS]] for =ensure-generic-function=). This then
+[[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/braid.lisp#L54-L79][amounts to]] =(setf (%funcallable-instance-fun name) ...)=.
+
+** ABCL
+
+Armed Bear uses a [[https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/clos.lisp#L1687-L1729][macro]]. It delegates to =%defgeneric= ([[https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/clos.lisp#L1786-L1802][L1786-L1802]]).
+which is a wrapper around =ensure-generic-function= ([[http://clhs.lisp.se/Body/f_ensure.htm#ensure-generic-function][CLHS]], [[https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/clos.lisp#L1807-L1864][implementation]]).
+
+** CCL
+
+CCL has a [[https://github.com/Clozure/ccl/blob/v1.12/lib/macros.lisp#L2152-L2167][macro]] defining =defgeneric=. Like ABCL, it delegates to
+[[https://github.com/Clozure/ccl/blob/v1.12/level-1/l1-clos-boot.lisp#L3782-L3801][%defgeneric]] which is a wrapper around [[https://github.com/Clozure/ccl/blob/v1.12/level-1/l1-clos-boot.lisp#L644-L651][ensure-generic-function]].

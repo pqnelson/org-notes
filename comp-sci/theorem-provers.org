@@ -1,0 +1,84 @@
+#+TITLE: On Theorem Provers
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-26T10:47:33-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Saturday December 26, 2020 at 10:47AM
+
+* Introduction
+
+There is much to say, too much. In the golden age of GOFAI, theorem
+provers were considered an integral component to an agent's reasoning
+capabilities. Needless to say, it didn't pan out, for AI. But in
+mathematics, there is much use for theorem provers as a way to formalize
+mathematics.
+
+
+** Components of a Theorem Prover
+
+Basically a theorem prover is an interpreter for a foundations of
+mathematics. Andrej Bauer [[https://mathoverflow.net/a/376973/22457][argues]] the basic structure could be described
+as several languages working together in concert:
+
+- Kernel :: Validates every inference step and makes sure that proofs
+  are correct, by implementing a formal system /F/ sufficiently
+  expressive allowing the formalization of a large body of math,
+  sufficiently simple for an efficient implementation.
+- Vernacular :: The input language the user writes a proof in, which is
+  typically complex and accomodates notational conventions.
+- Elaborator :: Translates the vernacular into the kernel's formal system.
+- Meta-Language :: Quite literally the programming language used to
+  implement the kernel and elaborator.
+
+** Vernacular
+
+The design of the vernacular is quite difficult and under-studied. One
+possible dichotomy is between a {{{define(Declarative)}}} style and a
+{{{define(Procedural)}}} style. The former resembles how mathematicians
+actually reason, the latter resembles how the kernel actually works.
+
+We can combine these two together, as evidenced by Wiedijk's work ([[https://arxiv.org/abs/1201.3601][arXiv:1201.3601]]).
+
+* Rapid Prototyping
+
+We can implement theorem provers quickly in functional languages.
+Indeed, ML was invented specifically to implement the LCF theorem
+prover. The use of algebraic data types was to implement the AST of
+formulas and logical languages, etc.
+
+We can use Lisp (e.g., [[https://github.com/latte-central/LaTTe][LaTTe]]).
+
+* References
+
+- John Harrison, Josef Urban and Freek Wiedijk,
+  "History of Interactive Theorem Proving".
+  [[https://www.cl.cam.ac.uk/~jrh13/papers/joerg.pdf][PDF]], 85 pages.
+
+** Vernacular
+
+- John Harrison,
+  "A Mizar Mode for HOL".
+  [[https://www.cl.cam.ac.uk/~jrh13/papers/mizar.html][Eprint]], 19 pages.
+- John Harrison,
+  "Proof Style".
+  [[https://www.cl.cam.ac.uk/~jrh13/papers/style.html][Eprint]], 19 pages.
+- Freek Wiedijk,
+  "A Synthesis of the Procedural and Declarative Styles of Interactive Theorem Proving".
+  Eprint: [[https://arxiv.org/abs/1201.3601][arXiv:1201.3601]], 26 pages.
+
+** Mathematical Analysis in Theorem Provers
+
+- Sylvie Boldo, Catherine Lelay, Guillaume Melquiond,
+  "Formalization of Real Analysis: A Survey of Proof Assistants and Libraries".
+  [[https://hal.inria.fr/hal-00806920v2/document][PDF]], 40 pages.
+- Micaela Mayero,
+  "Using theorem proving for numerical analysis: Correctness proof of an
+  automatic differentiation algorithm".
+  In {{{book-title(TPHOLs 2002: Theorem Proving in Higher Order Logics)}}},
+  pp 246--262.
