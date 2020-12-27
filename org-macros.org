@@ -3,6 +3,8 @@
 #+HTML_HEAD_EXTRA: <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 #+OPTIONS: html-postamble:nil tex:t
 
+#+MACRO: cat @@html:<span class="cat">@@@@latex:\cat{@@$1@@latex:}@@@@html:</span>@@
+
 #+MACRO: define  @@html:<dfn>@@@@latex:\define{@@$1@@latex:}@@@@html:</dfn>@@
 
 # Bibliography related macros
@@ -15,12 +17,16 @@ MathJax.Hub.Config({
   TeX: {
     Macros: {
       curl: '\\vec{\\nabla}\\times',
+      CC: '\\mathbb{C}',
+      NN: '\\mathbb{N}',
       QQ: '\\mathbb{Q}',
       RR: '\\mathbb{R}',
+      ZZ: '\\mathbb{Z}',
       D: '\\mathrm{d}',
       E: '\\mathrm{e}',
       I: '\\mathrm{i}',
-      bigOh: '\\mathcal{O}'
+      bigOh: '\\mathcal{O}',
+      cat: ["{\\bf #1}", 1]
     }
   }
 });

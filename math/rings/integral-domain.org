@@ -1,0 +1,170 @@
+#+TITLE: Integral Domains
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-27T08:53:51-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday December 27, 2020 at  8:53AM
+
+* Definition and Properties
+
+#+begin_definition
+An {{{define(Integral Domain)}}} is a unital ring with no nonzero
+divisors, i.e., if $ab = 0$ then either $a=0$ or $b=0$.
+#+end_definition
+
+#+begin_remark
+Constructive mathematicians would phrase this differently, as saying
+$ab\neq0$ whenever $a\neq0$ and $b\neq0$.
+#+end_remark
+
+#+begin_math-example
+The integers $\ZZ$, rationals $\QQ$, reals $\RR$, and complex numbers
+are integral domains.
+#+end_math-example
+
+#+begin_math-example
+Let $X$ be a non-empty set with at least 2 disjoint subsets $X_{1}$, $X_{2}$;
+and let $R$ be any ring. Then $\hom(X,R)$ is *not an integral domain.*
+To see this, consider
+
+\begin{equation}
+f(x) = \begin{cases}
+1 & x\in X_{0}\\
+0 & x\notin X_{0}
+\end{cases}
+\end{equation}
+
+and
+
+\begin{equation}
+g(x) = \begin{cases}
+1 & x\in X_{1}\\
+0 & x\notin X_{1}.
+\end{cases}
+\end{equation}
+
+Then we have
+
+\begin{equation}
+(fg)(x) = f(x)g(x) = 0
+\end{equation}
+
+since $X_{0}\cap X_{1}=\emptyset$. Although both $f\neq0$ and $g\neq0$,
+we have $fg=0$.
+#+end_math-example
+
+#+begin_math-example
+The ring $\ZZ[\sqrt{-5}]$ is an integral domain.
+#+end_math-example
+
+** Factors
+
+#+begin_definition
+Let $R$ be an integral domain, and $x,y\in R$. We say that $x$
+{{{define(Divides)}}} $y$, and write $x\mid y$, if $y=xt$ for some $t\in R$.
+#+end_definition
+
+#+begin_definition
+We call an element $x\in R$ a {{{define(Unit)}}} if $x\mid 1$. The set
+of units of $R$ is denoted $R^{*}$.
+#+end_definition
+
+Calling an element $x\in R$ a unit is a fancy-pants way of saying it has
+a multiplicative inverse. Every integral domain has at least one unit
+(indeed, all /unital/ rings have at least one unit): the multiplicative
+identity $1\in R$ is its own multiplicative inverse.
+
+#+NAME: defn-gcd
+#+begin_definition
+We say $z\in R$ is  a {{{define(Greatest Common Divisor)}}} of $x_{1}$,
+..., $x_{n}$ and write $z=\gcd(x_{1},\dots, x_{n})$ if
+
+1. $z\mid x_{j}$ for $1\leq j\leq n$
+2. for any $t\in R$, $t\mid x_{j}$ for $1\leq j\leq n$ implies $t\mid z$.
+
+Further, +stealing+ borrowing terminology from number theory, we say
+that $x$ and $y$ are {{{define(Coprime)}}} if there exists a unit $u\in R^{*}$
+which is a gcd of $x$ and $y$.
+#+end_definition
+
+
+#+begin_lemma
+Let $R$ be an integral domain, and $x,y\in R$.
+If  $z$ and $t$ are both GCDs of $x$ and $y$, then there exists a $u\in R$
+such that $z=ut$.
+#+end_lemma
+#+begin_proof
+- Assume $z = \gcd(x,y)$, $t=\gcd(x,y)$, and $t\neq z$.
+- Then $t\mid x$ and $t\mid y$ by [[defn-gcd][definition of gcd]].
+- Then $t\mid z$ by $z=\gcd(x,y)$.
+- Thus $z=ut$ for some $u\in R$.
+#+end_proof
+
+#+begin_theorem
+(Bronstein, 1.1.1)
+Let $R$ be an integral domain, and $x,y\in R$.
+If $z$ and $t$ are both GCDs of $x$ and $y$, then $z=ut$ and $t=vz$ for
+some units $u,v\in R^{*}$.
+#+end_theorem
+
+#+begin_proof
+- Assume $z = \gcd(x,y)$, $t=\gcd(x,y)$, and $t\neq z$.
+- Consider $u\in R$ such that $z=ut$ by the previous lemma.
+- Consider $v\in R$ such that $t=vz$ by the previous lemma.
+- Then $z=ut=u(vz)$.
+- If $z\neq0$, then $u,v\in R^{*}$.
+- If $z=0$, then $t=1z$ and $z=1t$.
+- Thus $u,v\in R^{*}$.
+#+end_proof
+
+#+begin_definition
+In an integral domain $R$, let $a,b\in R$. If $a$ divides $b$, and $b$
+divides $a$, then we call them {{{define(Associates)}}}. Equivalently,
+if there is some unit $u\in R^{*}$ such that $a=ub$.
+#+end_definition
+
+** Prime, Irreducible Elements
+
+#+begin_definition
+Let $R$ be an integral domain.
+A nonzero element $p\in R\setminus R^{*}$ is called {{{define(Prime)}}}
+if for any $a,b\in R$, $p\mid ab$ implies $p\mid a$ or $p\mid b$.
+#+end_definition
+
+#+begin_definition
+Let $R$ be an integral domain.
+A nonzero element $p\in R\setminus R^{\ast}$ is called {{{define(Irreducible)}}}
+if for any $a,b\in R$, $p = ab$ implies $a\in R^{\ast}$ or $b\in R^{\ast}$.
+#+end_definition
+
+#+begin_theorem
+Let $R$ be an integral domain.
+Then every prime $p\in R$ is irreducible.
+#+end_theorem
+
+#+begin_proof
+- Let $p\in R$ be prime.
+- Assume $a,b\in R$ satisfy $p=ab$.
+- Per cases $p\mid a$ or $p\mid b$ by definition of prime.
+- Suppose $p\mid a$;
+  - Then $a=q_{a}p$;
+  - Thus $1=q_{a}b$;
+  - Thus $b\mid 1$;
+  - Thus $b\in R^{\ast}$ is a unit.
+- Suppose $p\mid b$; then $a\in R^{\ast}$ is a unit (by the exact same reasoning).
+- Hence $p$ is irreducible.
+#+end_proof
+
+#+begin_remark
+In any integral domain, a prime is always irreducible. The converse is
+not always true.
+#+end_remark
+* References
+- Manuel Bronstein, {{{book-title(Symbolic Integration 1: Transcendental Functions)}}}.
+  Springer, second ed., 1996.

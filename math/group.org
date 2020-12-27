@@ -1,0 +1,100 @@
+#+TITLE: Group Theory
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-25T09:07:29-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Friday December 25, 2020 at  9:07AM
+
+* Symmetries of an Object
+
+Suppose we have an object (like a regular polygon in a plane). What is a
+"symmetry" of our object?
+
+** Necessary Qualities of a Symmetry
+
+Presumably it is some kind of transformation. For this to make sense, we
+extend the transformation to the plane. A symmetry should "leave the
+object invariant". What does that mean?
+
+It is necessary to say the transformation $f\colon\RR^{2}\to\RR^{2}$
+leaves our polygon $P\subset\RR^{2}$ invariant if $f(P)=P$. So this is
+equivalent to saying $f$ is surjective. But is this sufficient?
+
+Well, if $f$ is surjective, it has a right-inverse
+$h\colon\RR^{2}\to\RR^{2}$ (which satisfies $(f\circ h)(p)$ for every
+$p\in P$). We want this right-inverse to also be a symmetry. Which
+implies $h$ has a right-inverse, call it $g\colon\RR^{2}\to\RR^{2}$.
+Then what is $f\circ h\circ g$? Well, we find $(f\circ(h\circ g))(x)=f(x)$
+but also $((f\circ h)\circ g)(x) = g(x)$ imply $f=g$. Hence
+*every symmetry is an invertible function*.
+
+** A Collection of Symmetries
+
+Now, we have described what qualifies as a symmetry of an object,
+suppose we have collected all the symmetries for an object. What happens
+if we compose two symmetries together? I.e., if $f_{1},f_{2}\colon P\to P$
+are two symmetries, what about $f_{2}\circ f_{1}$? Is that also a
+symmetry or not?
+
+Well, its inverse is the composition of inverses in reverse order. If
+our collection of symmetries includes the inverse symmetries, then the
+set of symmetries is closed under function composition.
+
+This gives us grounds for generalizing these qualities into an abstract
+notion of a group.
+
+#+begin_definition
+A {{{define(Group)}}} consists of a set $G$ equipped with
+
+- a binary operator $\mu\colon G\times G\to G$,
+- an inverse operator $\iota\colon G\to G$, and
+- an identity element $e\in G$
+
+ such that
+
+- Multiplication is associative: $\mu\circ(\mathrm{id}\times\mu) = \mu\circ(\mu\times\mathrm{id})$
+  so $(\mu\circ(\mathrm{id}\times\mu))(x,y,z) = \mu(x, \mu(y,z))$ is
+  equal to $(\mu\circ(\mu\times\mathrm{id}))(x,y,z)=\mu(\mu(x,y),z)$
+- The identity element $\mu(e,x)=\mu(x,e)=x$
+- The inverse map: $\mu(\iota(x),x)=\mu(x,\iota(x))=x$.
+#+end_definition
+
+This mystifies the motivation of studying groups under the shroud of
+abstraction, but we can think about groups in general settings.
+** Example: Symmetries of Polynomials
+
+Thus far we have intuitively pictured symmetries of geometric objects.
+What about symmetries of nongeometric object? Like...polynomials.
+
+The first question we should ask ourselves is: what is a polynomial?
+Like, how do we represent a polynomial? Because our symmetries would act
+on this "encoding".
+
+We could use the fundamental theorem of algebra to write a polynomial as
+
+\begin{equation}
+p(x) = p_{n}x^{n} + \dots + p_{1}x + p_{0} = c(x - r_{1})(\dots)(x - r_{n})
+\end{equation}
+
+where $r_{k}\in\mathbb{C}$ are the roots of the polynomial. One obvious
+symmetry amounts to permuting the roots of the polynomial.
+
+* Notes to Self
+
+If we take our abstract definition of a group, we can define a "group
+object" internal to any sufficiently nice category. This gives us the
+various different sorts of groups (e.g., a group object internal to the
+category of topological spaces is a topological group, a group object
+internal to the category of manifolds is a [real] Lie group, etc.).
+
+#+begin_remark
+The group object internal to {{{cat(Grp)}}} the category of groups is
+itself an Abelian group. This is a corollary of the Eckmann--Hilton
+argument.
+#+end_remark

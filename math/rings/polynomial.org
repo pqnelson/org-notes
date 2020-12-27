@@ -1,39 +1,25 @@
-#+TITLE: Differential Fields
+#+TITLE: Ring of Formal Polynomials
 #+AUTHOR: Alex Nelson
 #+EMAIL: pqnelson@gmail.com
-#+DATE: <2020-12-23T16:16:49-08:00>
+#+DATE: <2020-12-27T08:50:49-08:00>
 #+LANGUAGE: en
 #+OPTIONS: H:5
 #+HTML_DOCTYPE: html5
-# Created Wednesday December 23, 2020 at  4:16PM
-#+INCLUDE: ../org-macros.org
+#+INCLUDE: ../../org-macros.org
 #+HTML_LINK_UP: ./index.html
-#+HTML_LINK_HOME: ../index.html
-#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday December 27, 2020 at  8:50AM
 
-* Overview
+* Introduction
 
-If we want to try to symbolically solve differential equations, it is
-tempting to think of analogous problems (like finding the roots of
-polynomials). We just work over a differential ring, like $\mathbb{k}=\RR[{[x]}]$
-the ring of formal power series with real coefficients (or rational
-coefficients, or whatever), we can define a formal derivative operator:
+This is just a review of the theory of formal polynomials over a
+(commutative) ring. These are written with symbolic computation in mind,
+so some code is given.
 
-\begin{equation}
-\D (bx^{m} + cx^{n}) = \D(bx^{m}) +\D(cx^{n}) = mbx^{m-1} + ncx^{n-1}.
-\end{equation}
-
-Then we just translate the differential equation we're trying to solve
-
-\begin{equation}
-y' = f(x,y)
-\end{equation}
-
-into finding an element $y\in\mathbb{k}$ such that
-
-\begin{equation}
-\D y = f(x,y).
-\end{equation}
+If I were more diligent, I would /prove/ the code implements the various
+things (e.g., the =gcd= function really does return the greatest common
+divisor of two polynomials).
 
 * Polynomial Methods
 
@@ -46,14 +32,20 @@ then $(x,y) = (\gcd(x,y))$ for any $x,y\in R$.
 #+end_theorem
 
 #+begin_definition
-A {{{define(Euclidean Domain)}}} consists of an [[file:rings.org::*Integral Domain][integral domain]] $(R, +, \cdot)$
+A {{{define(Euclidean Domain)}}} consists of an [[file:integral-domain.org][integral domain]] $(R, +, \cdot)$
 equipped with a map $\nu\colon R\setminus\{0\}\to\mathbb{N}$ called the
 {{{define(Size function)}}} such that
 
-1. For all $a,b\in R\setminus\{0\}$, we have $\nu(ab)\leq\nu(a)$.
+1. For all $a,b\in R\setminus\{0\}$, we have $\nu(ab)\geq\nu(a)$.
 2. (Euclidean division) For any $a,b\in R$ with $b\neq0$ nonzero, there
    are $q,r\in R$ such that $a=bq+r$ and either $r=0$ or $\nu(r)\lt\nu(b)$.
 #+end_definition
+
+#+begin_puzzle
+Is there anything lost by extending the size function to be over, say,
+the integers $\nu\colon R\setminus\{0\}\to\mathbb{Z}$? Or the reals
+$\nu\colon R\setminus\{0\}\to\mathbb{R}$?
+#+end_puzzle
 
 ** Long Division
 
@@ -371,35 +363,6 @@ respect to the factorization $d = \prod_{i} d_{i}^{e_{i}}$.
 
 # 34
 
-* Canonical Representation
-
-Usually we have a field of rational polynomial $\mathbb{k}=\mathbb{Q}(x)$
-with $D=\D/\D x$, and $t$ a monomial over $\mathbb{k}$ such that
-
-\begin{equation}
-Dt = -t^{2}-\frac{3}{2x}t + \frac{1}{2x}
-\end{equation}
-
-Then we'll want to split a given polynomial
-
-#+begin_src lisp
-(defun split-factor (p deriv)
-  "Given a derivation `deriv' on `k[t]' and `p' an element of `k[t]',
-return the pair (normal-polynomial . special-polynomial) such that
-(= p (* normal-polynomial special-polynomial))."
-  (let ((s (/ (gcd p (deriv p))
-              (gcd p (d p t)))))
-    (if (zerop (degree s))
-        (cons p 1)
-      (split-factor (/ p s) deriv))))
-#+end_src
-
 * References
 - Manuel Bronstein, {{{book-title(Symbolic Integration 1: Transcendental Functions)}}}.
   Springer, second ed., 1996.
-
-** Also See
-
-- Marius van Der Pu, Michael F. Singer,
-  {{{book-title(Galois Theory of Linear Differential Equations)}}}.
-  Springer, 2003.
