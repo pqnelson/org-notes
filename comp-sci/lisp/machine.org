@@ -21,13 +21,39 @@ enlighten.
 
 # https://handwiki.org/wiki/Lisp_machine
 
-** Origins
+* History of Lisp Machines
 
-Started at MIT's AI lab.
+** Origins (1973--1979)
+
+Started at MIT's AI lab around 1973. Originally motivated by the
+limitations of the PDP-10 when doing AI with Lisp (Macsyma and Woods's
+LUNAR program are explicitly cited in AIM 444), the hope was to make
+some high-level hardware designed for Lisp. It's unclear to me if the
+hope was to manufacture Lisp-oriented hardware like how
+[[https://en.wikipedia.org/wiki/Burroughs_large_systems][Burroughs large systems]] did for Algol 60, or if something else was the goal.
+
+The first Lisp Machine was called the "Cons Machine", or informally
+referred to as the "Knight machine" (named after Tom Knight who designed
+it), and its prototype first appeared in 1975 (pg 27 of AI Memo 444).
+It appears to be a [[https://en.wikipedia.org/wiki/Microcode][microcoded]] CPU --- i.e., a "vanilla CPU" with
+microcode specifically for Lisp --- according to MIT AI Memo 444.
+Knight's "CONS" (Working paper 80) explicitly suggests an amalgam of:
+
+1. [[https://en.wikipedia.org/wiki/Xerox_Alto][Xerox Parc ALTO microprocessor]]
+2. [[https://gunkies.org/wiki/PDP-11/40][the DEC PDP-11/40]]
+3. CMU extensions to the PDP-11/40
+
+Which is interesing. (See also [[https://people.cs.clemson.edu/~mark/uprog.html][the hisory of microprogramming]].) But this
+ended the experimental phase, and gave way to the marketing period where
+a number of different companies started producing and selling Lisp
+machines.
 
 - Richard Greenblatt,
   "The LISP Machine".
   MIT Working Paper 79, November 1974, [[https://dspace.mit.edu/handle/1721.1/41114][Eprint]].
+- Thomas F Knight,
+  "CONS".
+  MIT Working Paper 80, November 1974, [[https://dspace.mit.edu/handle/1721.1/41115][Eprint]].
 - Alan Bawden, Richard Greenblatt, Jack Holloway, Thomas Knight, David Moon, Daniel Weinreb,
   "LISP Machine Progress Report".
   [[https://dspace.mit.edu/handle/1721.1/5751][AI Memo 4444]], August 1977.
@@ -42,20 +68,60 @@ Started at MIT's AI lab.
   "LISP Machine Progress Report".
   [[https://dspace.mit.edu/handle/1721.1/5751][AI Memo 444]], August 1979.
 
+** Commercialization (1980--????)
+
+Greenblatt founded Lisp Machines, Inc., some time in 1979 --- according
+to Levy's /Hackers: Heroes of the Computer Revolution/.
+
+Russell Nofsker founded [[https://en.wikipedia.org/wiki/Symbolics][Symbolics, Inc.]], in April 1980 to build and sell
+Lisp machines. Most of the MIT AI Lab hackers (and financial backers)
+sided with Nofsker's Symbolics over Greenblatt's LMI.
+
+Symbolics's initial product was called the LM-2, released in 1981. It was
+a MIT Cadr machine repackaged.
+
+A couple years later, Symbolics released the 3600 in 1983. Like the Cadr
+machine, it uses a microcoded setup atop a Motorola 68k CPU (this CPU
+referred to as the "Front-End Processor" or FEP). The operating system
+was named a year later, dubbed "Genera". (Yeah, it's odd the OS had no
+name for a while, until 1984, but there it is.)
+
+Texas Instruments acquired the rights to produce the MIT-derived Lisp
+Machine from LMI in 1983 ([[http://www.unlambda.com/lispm/][unlambda]]). That year, TI also bought
+[[https://en.wikipedia.org/wiki/NuMachine][NuMachine]] and NuBus from Western Digital. As I understand it, the entire
+notion of a "computer bus" as we understand emerged from the NuBus.
+Around 1985, released its [[https://en.wikipedia.org/wiki/TI_Explorer][TI Explorer]] Lisp Machine. A 1987 [[https://web.archive.org/web/20030202212627/http://www.ti.com/corp/docs/company/history/artificial.shtml][press release]]
+noted the development of "the Explorer LISP microprocessor" and referred
+to its earlier 1985 CPU as the "MegaChip" processor.
+
+
+* Architecture
 
 ** CPU
 
-The [[https://en.wikipedia.org/wiki/Symbolics][Symbolics]] 3600 apparenly used a [[https://en.wikipedia.org/wiki/Motorola_68000_series][Motorola 68k]] CPU, but later with the
-introduction of the Ivory and Genera system they moved to the
-64-bit [[https://en.wikipedia.org/wiki/DEC_Alpha][Alpha]] architecture.
+I can't quite understand the CPU the CONS machines used, nor which ones
+the CADR machines used.
+
+The [[https://en.wikipedia.org/wiki/Symbolics][Symbolics]] 3600 apparenly used a [[https://en.wikipedia.org/wiki/Motorola_68000_series][Motorola 68k]] CPU. David Moon cites a
+number of benchmarks showing, given the choices at the time, the 68k CPU
+performed best with Lisp code. Later with the introduction of the Ivory
+and Genera system they moved to the 64-bit [[https://en.wikipedia.org/wiki/DEC_Alpha][Alpha]] architecture.
 
 Xerox Daybreak used the MESA CPU. Apparently this is an esoteric CPU.
-- Richard K. Johnsson, John D. Wick, [[http://www.bitsavers.org/pdf/xerox/mesa/princ_ops/An_Overview_Of_The_Mesa_Processor_Architecture_1982.pdf][An Overview of the Mesa Processor Architecture]], 1982
 
-Interlisp used a [[https://en.wikipedia.org/wiki/MOS_Technology_6502][MOS 6502]] CPU.
+Interlisp used a [[https://en.wikipedia.org/wiki/MOS_Technology_6502][MOS 6502]] CPU variant, dubbed "INTER-LISP/65".
 
+- Richard K. Johnsson, John D. Wick,
+  [[http://www.bitsavers.org/pdf/xerox/mesa/princ_ops/An_Overview_Of_The_Mesa_Processor_Architecture_1982.pdf][An Overview of the Mesa Processor Architecture]], 1982
+- David Moon,
+  "Symbolics Architecure".
+  1987
 
 ** Space Cadet Keyboard
+
+One relic which remains fabled among programmers today, the keyboard
+used for Lisp machines back at MIT's AI lab, the CONS/CADR machines used
+Space Cadet keyboards.
 
 - Mike McMahon wrote about [[https://web.archive.org/web/20150112030657/http://home.comcast.net/~mmcm/kbd/SpaceCadet.html][Space Cadets]]
 - https://www.reddit.com/r/lisp/comments/9s6hwf/modern_spacecadet_keyboards_and_other_lisp/
