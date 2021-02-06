@@ -1,0 +1,72 @@
+#+TITLE: Computing the Solar Constant
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-28T20:54:26-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Monday December 28, 2020 at  8:54PM
+
+* Solar Constant
+
+We need to use the Stefan--Boltzmann constant:
+
+#+begin_src emacs-lisp :exports both
+(defun stefan-boltzman ()
+  (let ((kb 1.380649e-23)
+        (hbar (* 0.5 (/ 6.62607015e-34 pi)))
+        (c 299792458.0))
+    (/ (* pi pi (expt kb 4.0))
+       (* 60.0 (expt (* c hbar) 2.0) hbar))))
+(stefan-boltzman)
+#+end_src
+
+#+RESULTS:
+: 5.67037441918443e-008
+
+The luminosity of the Sun would be, theoretically:
+
+#+begin_src emacs-lisp :exports both
+(defconst 4pi 12.56637061435917295385057)
+
+(defun luminosity (r temperature)
+  (* 4pi
+     (expt r 2.0)
+     (stefan-boltzman)
+     (expt temperature 4.0)))
+
+(let ((sun-temperature     5772.0) ;; K
+      (sun-radius        695700.0) ;; km
+      (earth-distance 149596000.0) ;; km
+      (km                  1000.0)
+      (earth-radius        6378.1366)) ;; km
+  (luminosity (* sun-radius km) sun-temperature))
+#+end_src
+
+#+RESULTS:
+: 3.827990903277097e+026
+
+The irradiance on a point on the Earth would be
+
+#+begin_src emacs-lisp :exports both
+(defun irradiance (lumos distance)
+  (* (/ lumos pi) (expt (* 2 distance) -2)))
+
+(let ((sun-temperature     5772.0) ;; K
+      (sun-radius        695700.0) ;; km
+      (earth-distance 149596000.0) ;; km
+      (earth-radius        6378.1366) ;; km
+      (km                  1000.0)) ;; m/km
+  (irradiance (luminosity (* sun-radius km) sun-temperature)
+              (* km earth-distance)))
+#+end_src
+
+#+RESULTS:
+: 1361.1972737230658
+
+Compare this to the [[https://en.wikipedia.org/wiki/Solar_constant][empirical value of the Solar constant]] which is about
+1.361 kilowatts per square meter.
