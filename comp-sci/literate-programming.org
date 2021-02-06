@@ -76,6 +76,37 @@ Sadly programmers do not view themselves as essayists while
 programming. It's probably for this reason that literate
 programming never caught on.
 
+** Style
+
+Chunk names seem to be frequently in the imperative mood ("See =foo=",
+"Initialize =bar=", "Fetch ~[data]~", etc.), at least in the TeXbook.
+
+Some numbers:
+- 1379 chunks in =tex.web=
+- 6115 lines in =tex.p= (the tangled code), for an average of 4.434
+  lines of Pascal code per chunk
+- 1216 =@d= definitions in ~tex.web~ in 214 chunks
+- 13 =@f= format specifiers in ~tex.web~
+- 125 chunks have no code segment
+- 45 chunks have no code segment and no definition/formats
+- 1254 chunks have code
+- 504 chunks have no commentary (all of them have code, none have
+  definitions or formats)
+- Among all chunks,
+  - average of 11.066 lines of code
+  - median 9 lines of code
+  - 25th quartile: 4 lines of code
+  - 75h quartiles: 16
+  - standard deviation: 9.14 lines of code
+  - maximum of 115 lines of code in a single chunk
+  - The quartiles among all chunks of code: 0 and 13 lines of code
+- Among the chunks with code,
+  - average of 12.16905 lines of code
+  - standard deviation of 8.858455 lines of code
+  - median of 10 lines of code
+  - minimum of 2 lines of code
+  - 25h quartile: 6 lines of code
+  - 75th quartile: 16 lines of code
 
 * Misinterpretations of Knuth
 
@@ -90,7 +121,6 @@ Jupyter (formerly Python Notebooks) tried to introduce something
 closer to Knuth's sense of literate programming, but it didn't
 really adhere to Knuth's intentions. Org-babel seems to work along
 similar lines as Jupyter.
-
 
 * My own experiences
 
@@ -191,8 +221,45 @@ mind). Consequently, I need some "literate proofs" of the Hoare
 tripled. I suppose I could just shrug and hand it off to Frama-C to
 check the annotations, but this doesn't seem friendly.
 
+* Notes on Noweb
+
+I've been tinkering with Noweb to write a literate program in C, ACSL,
+and Twelf. I think this may be a promising approach when working with
+multiple languages.
+
+Briefly commands:
+
+- Noweb files have a ~.nw~ suffix
+- Extract HTML: =noweave -filter l2h -index -html foo.nw > foo.html=
+- Extract TeX file: =noweave -x foo.nw > foo.tex=
+- Extract code: =notangle -L -Rfoo.c foo.nw > foo.c=
+
+Formatting:
+
+- =@= as the first character starts a documentation chunk
+- In LaTeX, =[[ ... ]]= for embedded code fragments
+- Use =noweave -delay= to avoid automatically wrapping a document class,
+  begin/end document environment
+- Start a code chunk with ~<<name of chunk>>=~
+- Insert a code chunk by reference with ~<<...>>~
+- Chunk naming conventions:
+  - Name chunks inside functions with verbs, usually in imperative mood
+    ("Do this", "Sort that", etc.)
+  - Name chunks holding declaration prototypes with nouns (e.g.,
+    "private function prototypes", "definitions of exported functions", etc.)
+  - Name top-level "root" chunks after the files they are to represent
+    (e.g., ~<<foo.c>>=~ or ~<<foo.h>>=~)
+
+T
+
 * References
 
 - Donald Knuth,
   {{{book-title(Literate Programming)}}}.
   CSLI Lecture Notes no 27, 1992.
+- Donald Knuth,
+  {{{book-title(TeX: The Program)}}}.
+  Specifically the forward on "Reading a Web".
+- John Cook,
+  [[https://www.johndcook.com/blog/2016/07/06/literate-programming-presenting-code-in-human-order/][Literate programming: presenting code in human order]],
+  6 July 2016 blogpost.
