@@ -1,0 +1,185 @@
+#+TITLE: Toy LispKit Compiler
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-02-11T14:22:55-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Thursday February 11, 2021 at  2:22PM
+
+* Introduction
+
+Following Peter Henderson's book, I'm going to investigate implementing
+a toy compiler for a simple Lisp targeting the [[file:../abstract-machines/secd.org][SECD machine]].
+For completeness, I will try to write down the language for the Lisp
+fragment, then I will write the compiler for the Lisp fragment.
+
+* Lisp Primitives
+
+The language will provide the following primitives:
+
+- =(ADD p q)= gives us ~p+q~
+- =(SUB p q)= gives us ~p-q~
+- =(MUL p q)= gives us ~p*q~
+- =(DIV p q)= gives us ~p/q~
+- =(EXP p q)= gives us ~p**q~ (or ~p^q~, depending on your notational
+  preferences)
+- =(rem p q)= is the remainder of =p= divided by =q=
+- =(leq p q)= is =T= if =p= is less than or equal to =q=, =F= otherwise
+- =(atom <exp>)= is ~T~ if the value of =<exp>= is an atom (number or
+  symbol) and =F= otherwise
+- =(if <test> <exp1> <exp2>)= evaluates =<test>= and if it evaluates to
+  =T=, then it returns =<exp1>=; otherwise, it returns =<exp2>=.
+- =(cons <exp1> <exp2>)= forms the list whose car is =<exp1>= and cdr is =<exp2>=
+- =(quote <exp>)=
+- =(eq <exp1> <exp2>)= returns =T= provided both are atoms and both are
+  the same number (or both are the same symbol)
+- =(head <exp>)= returns the car of a list
+- =(tail <exp>)= returns the cdr of a list
+- =(let <exp> . <declarations>)= is more commonly swapped, the
+  declarations are of the form =(<name> . <exp>)=
+- =(lambda <arg list> <exp>)= where =<arg list>= is a list of names
+- =(<exp> <exp1> <exp2> ...)= is function application
+- =(letrec <exp> . <declarations>)= permits declarations recursively
+- =(chr <exp>)= is the ASCII character with codepoint given by the
+  numeric value of =<exp>=
+
+* Compiling to SECD
+
+Let's now examine how to compile Lisp expressions to SECD code. This
+summarizes section 6.3 in Henderson's {{{book-title(Functional Programming)}}}.
+We basically want to examine how a function =compile(exp, namelist)=
+is inductively defined.
+
+** Helper Functions
+
+We need some helper functions first to make sense of the namelist data
+structure.
+
+#+begin_src c
+int position(Symbol *x, List *a) {
+    if (eq(x, car(a))) {
+        return 0;
+    } else {
+        1+position(x,cdr(a));
+    }
+}
+bool member(Symbol *x, List *l) {
+    if (eq(l, NIL)) {
+        return false;
+    } else if (eq(x, car(l))) {
+        return true;
+    } else {
+        return member(x, cdr(l));
+    }
+}
+#+end_src
+
+The location of a symbol in a namelist can now be given, which will
+return the pair =(p . q)= encoding its position.
+
+#+begin_src c
+List* location(Symbol *x, List *namelist) {
+    if (member(x, car(namelist))) {
+        return new_list(0, position(x, car(namelist)));
+    } else {
+        List *z = location(x, cdr(namelist));
+        z->car++;
+        return z;
+    }
+}
+#+end_src
+
+** Compile SExpression
+
+To compile an S-Expression to SECD code, we have:
+
+#+begin_src c
+SecdBytecode* compile(SExp *expr) {
+    return comp(e, NIL, cons(SECD_APPLY, cons(SECD_STOP, NIL)));
+}
+#+end_src
+
+Now we compile an expression =e= against a namelist =n= and list of SECD
+bytecode =c=
+
+#+begin_src c
+List* comp(SExp *e, SExp *n, SExp *c) {
+    if (is_atom(e)) {
+        return cons(SECD_LD, cons(location(e, n), c));
+    } else if (is_quote(car(e))) {
+        return cons(SECD_LDC, cons(cadr(e), c));
+    } else if (is_eq(car(e))) {
+        return comp(cadr(e), n, comp(caddr(e), n, cons(SECD_EQ, c)));
+    } else if (is_add(car(e))) {
+        return comp(cadr(e), n, comp(caddr(e), n, cons(SECD_ADD, c)));
+    } else if (is_sub(car(e))) {
+        return comp(cadr(e), n, comp(caddr(e), n, cons(SECD_SUB, c)));
+    } else if (is_mul(car(e))) {
+        return comp(cadr(e), n, comp(caddr(e), n, cons(SECD_MUL, c)));
+    } else if (is_div(car(e))) {
+        return comp(cadr(e), n, comp(caddr(e), n, cons(SECD_DIV, c)));
+    } else if (is_rem(car(e))) {
+        return comp(cadr(e), n, comp(caddr(e), n, cons(SECD_REM, c)));
+    } else if (is_leq(car(e))) {
+        return comp(cadr(e), n, comp(caddr(e), n, cons(SECD_LEQ, c)));
+    } else if (is_car(car(e))) {
+        return comp(cadr(e), n, cons(SECD_CAR, c));
+    } else if (is_cdr(car(e))) {
+        return comp(cadr(e), n, cons(SECD_CDR, c));
+    } else if (eq(car(e)), ATOM) {
+        return comp(cadr(e), n, cons(SECD_ATOM, c));
+    } else if (is_cons(car(e))) {
+        return comp(caddr(e), n, comp(cadr(e), n, cons(SECD_CONS, c)));
+    } else if (is_if(car(e))) {
+        SExp *then_clause = comp(caddr(e), n, cons(SECD_JOIN, NIL));
+        SExp *else_clause = comp(cadddr(e), n, cons(SECD_JOIN, NIL));
+        return comp(cadr(e), n, cons(SECD_SEL, cons(then_clause, cons(else_clause, c))));
+    } else if (is_lambda(car(e))) {
+        SExp *body = comp(caddr(e), cons(cadr(e), n), cons(SECD_RTN, NIL));
+        return cons(SECD_LDF, cons(body, c));
+    } else if (is_let(car(e))) {
+        // supposed to be: bindings = cddr(e);
+        // SExp *namelist = cons(vars(cadr(e)), n);
+        // SExp *ags = exprs(cadr(e));
+        // SExp *body = compile_list(cddr(e), namelist, cons(SECD_RTN, NIL));
+        return compile_let(e, n, c);
+    } else if (is_letrec(car(e))) {
+        return compile_letrec(e, n, c);
+    }
+}
+#+end_src
+
+*** Compiling Let-expressions
+
+We have the ancillary functions when compiling =(let ...)=.
+
+#+begin_src c
+SExp* vars(SExp *d) {
+    if (eq(d, NIL)) {
+        return NIL;
+    } else {
+        return cons(caar(d), vars(cdr(d)));
+    }
+}
+
+SExp* exprs(SExp *d) {
+    if (eq(d, NIL)) {
+        return NIL;
+    } else {
+        return cons(cdar(d), exprs(cdr(d)));
+    }
+}
+#+end_src
+
+* References
+
+- P. Henderson,
+  {{{book-title(Functional Programming: Application and Implementation)}}}.
+  Prentice-Hall, 1980.
+- [[http://www.lispme.de/lispme/index_en.html][LispMe]] is a simple Scheme-to-SECD compiler written in C, designed for
+  PalmPilot.

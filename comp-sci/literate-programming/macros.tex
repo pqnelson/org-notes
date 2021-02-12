@@ -1,0 +1,48 @@
+\newcount\eqcount
+\eqcount=0
+
+\def\eqn{{\global\advance\eqcount by1}\eqno{(\the\eqcount)}}
+
+%%%
+% Figures
+%%%
+\input graphicx.tex
+
+%%%
+% Label helpers
+%%%
+\def\callthis#1{\edef#1{\number\secno}}
+\def\labelEqn#1{\edef#1{\the\eqcount}}
+
+%%%
+% links
+%%%
+\font\eighttt=cmtt8
+\def\arXiv#1{\pdfURL{{\tt arXiv:#1}}{http://arXiv.org/abs/#1}}
+\def\homepage{\pdfURL{{\eighttt https://github.com/pqnelson/yukawa-dark-matter}}{https://github.com/pqnelson/yukawa-dark-matter}}
+%%%
+% Proofs
+%%%
+\def\proof{\medbreak\noindent{\it Proof.}\enspace\ignorespaces}
+\def\slug{\hbox{\kern1.5pt\vrule width2.5pt height6pt depth1.5pt\kern1.5pt}}
+\def\slugonright{\vrule width0pt\nobreak\hfill\slug}
+
+\def\rmk{\medbreak\noindent{\it Remark.}\enspace\ignorespaces}
+
+%%%
+% Notation
+%%%
+\def\frac#1#2{{{#1}\over{#2}}}
+\def\arcsinh{\mathop{\rm ArcSinh}\nolimits}
+\def\abs#1{|#1|}
+\def\evalAt{|}
+\def\vecNorm{\delimiter"26B30D}
+\def\norm#1{\left\vecNorm#1\right\vecNorm}
+\def\vec#1{{\bf #1}}
+\def\bigO#1{{\cal O}\left(#1\right)}
+
+\def\AiryAi{\mathop{\rm Ai}\nolimits}
+\def\AiryBi{\mathop{\rm Bi}\nolimits}
+
+\def\Fr{1}
+\def\WZ{2}

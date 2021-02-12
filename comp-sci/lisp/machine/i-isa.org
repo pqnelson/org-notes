@@ -1,0 +1,94 @@
+#+TITLE: I-Machine Instruction Set
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-02-06T18:49:15-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Saturday February  6, 2021 at  6:49PM
+
+* Introduction
+
+There are 211 instructions in 14 categories:
+
+- 10 list-function
+- 24 predicate
+- 29 numeric
+- 10 data-movement
+- 8 field-extraction
+- 10 array-operation
+- 19 branch-and-loop
+- 20 block
+- 12 function-calling
+- 4 binding
+- 2 catch
+- 24 lexical-variable-accessing
+- 11 instance-variable-accessing
+- 28 subprimitive.
+
+Also note there are about 2 or 3 dozen different types of an argument.
+(See, e.g., the [[https://tumbleweed.nu/r/lm-3/uv/chinual.html#Data-Types-1][manual]] of a lisp machine emulator).
+
+* List-Function Operations
+
+1. ~car~,
+2. ~cdr~,
+3. ~doc:set-to-car~,
+4. ~doc:set-to-cdr~,
+5. ~doc:set-to-cdr-push-car~,
+6. ~rplaca~,
+7. ~rplacd~,
+8. ~doc:rgetf~,
+9. ~zl:member~,
+10. ~zl:assoc~
+
+** car
+
+Argument(s): 1,
+- ~(car <dtp-list>)~ pushes the car onto the stack (a cons cell)
+- ~(car <dtp-locative>)~ (a locative pointer)
+- ~(car <dtp-list-instance>)~ (an object reference to a list instance)
+  pushes the car of the list instance onto the stack,
+- ~(car <dtp-nil>)~ (primitive data type, nil) pushes nil onto the top
+  of the stack
+
+If the argument is a dtp-list, then this will push the car of ~arg~ onto
+the stack.
+
+If the type is dtp-locative, this pushes the contents of the location
+~arg~ references onto the stack.
+
+If the type of arg is dtp-nil, this pushes ~nil~ onto the stack.
+
+** cdr
+
+- ~(cdr <dtp-list>)~ pushes the cdr of the arg onto the stack
+- ~(cdr <dtp-locative>)~ pushes the contents of the location arg
+  references onto the stack
+- ~(cdr nil)~ pushes nil onto the stack
+
+Post trap: Type of arg is ~dt-list-instance~
+
+Memory reference: cdr-read, then data-read
+
+TOS Register effects: valid afer
+
+** set-to-car
+
+Basically ~(set-to-car arg)~ is the same as ~(set! arg (car arg))~.
+
+- ~(set-to-car <dtp-list>)~ replaces the argument with the car of the
+  argument
+- ~(set-to-car <dtp-locative>)~ replaces the contents of the memory
+  cells at location with its car
+
+
+* References
+
+- I-Machine instruction set descriptions [[http://www.bitsavers.org/pdf/symbolics/I_Machine/Macroinstruction_Set.pdf][PDF]].
+- I-Machine [[http://www.bitsavers.org/pdf/symbolics/I_Machine/Lisp-Machine_Data_Types.pdf][Data types]]
+- [[https://hanshuebner.github.io/lmman/code.xml][Assembly Code]] and [[https://hanshuebner.github.io/lmman/fd-sub.xml][Subprimitives]]

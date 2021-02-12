@@ -19,7 +19,16 @@ virtual machine" target. This is morally right, but quite wrong
 historically. Correcting the errors, I think, will illuminate and
 enlighten.
 
+For more in-depth discussion on specific topics, I have relegated the
+discussion [[file:machine/index.org][to their own articles]].
+
 # https://handwiki.org/wiki/Lisp_machine
+
+** Open Questions
+
+How is a Lisp Machine (if we picture it as a virtual machine) different
+from, say, an [[file:../abstract-machines/secd.org][SECD machine]]? Presumably more features are needed, but
+what features are necessary?
 
 * History of Lisp Machines
 
@@ -67,6 +76,7 @@ machines.
   Daniel Weinreb,
   "LISP Machine Progress Report".
   [[https://dspace.mit.edu/handle/1721.1/5751][AI Memo 444]], August 1979.
+- https://tumbleweed.nu/lm-3/
 
 ** Commercialization (1980--????)
 
@@ -117,6 +127,25 @@ Interlisp used a [[https://en.wikipedia.org/wiki/MOS_Technology_6502][MOS 6502]]
   "Symbolics Architecure".
   1987
 
+** Instruction Set
+
+As I understand it, the insruction set for Lisp machines are referred to
+as "macro instructions". In fact, according to the manual for Genera,
+the ~disassemble~ command produces the "macro instructions" for the
+compiled function.
+
+At some level, we could think of a Lisp machine as an abstract machine
+operating on these "macro instructions" as its instruction set. At this
+level, a Lisp machine is a stack machine with some shortcuts and warts
+([[https://groups.google.com/g/comp.lang.lisp/c/cju5hBZ_kJ4/m/zHdEYf3PHs4J][Paul Fuqua]]).
+
+- Tom Knight,
+  [[http://www.bitsavers.org/pdf/mit/cadr/Knight-LISP_Machine_Macro_Instruction_Set-1979.pdf][The LISP Machine Macro-instruction Set]].
+  Manuscript, dated 1979.
+- Symbolics [[http://bitsavers.trailing-edge.com/pdf/symbolics/3600_series/3600_Microcode_Dec83.pdf][3600 Microcode]], dated 1983.
+- Symbolics I-Machine [[http://bitsavers.trailing-edge.com/pdf/symbolics/I_Machine/Macroinstruction_Set.pdf][Macroinstruction Set]]
+- [[http://funcall.blogspot.com/2009/04/some-lisp-machine-minutia.html][Some Lisp Machine minutia]]
+
 ** Space Cadet Keyboard
 
 One relic which remains fabled among programmers today, the keyboard
@@ -124,11 +153,14 @@ used for Lisp machines back at MIT's AI lab, the CONS/CADR machines used
 Space Cadet keyboards.
 
 - Mike McMahon wrote about [[https://web.archive.org/web/20150112030657/http://home.comcast.net/~mmcm/kbd/SpaceCadet.html][Space Cadets]]
-- https://www.reddit.com/r/lisp/comments/9s6hwf/modern_spacecadet_keyboards_and_other_lisp/
-- https://retrocomputing.stackexchange.com/questions/495/what-do-the-keys-on-this-symbolics-space-cadet-keyboard-do
-- https://stevelosh.com/blog/2012/10/a-modern-space-cadet/
-- https://handwiki.org/wiki/Space-cadet_keyboard
-- https://www.techfak.uni-bielefeld.de/~joern/jargon/space-cadetkeyboard.HTML
-- http://www.quadibloc.com/comp/kyb01.htm
-- https://alt.folklore.computers.narkive.com/JZbvfRTJ/help-with-original-lisp-machine-space-cadet-keyboard
-- https://yildiz.dev/2020/12/31/a-modern-space-cadet-but-for-linux-md/
+- [[https://www.reddit.com/r/lisp/comments/9s6hwf/modern_spacecadet_keyboards_and_other_lisp/][Modern Space-Cadet Keyboards and other Lisp Machine Tech]],
+  reddit thread
+- [[https://retrocomputing.stackexchange.com/questions/495/what-do-the-keys-on-this-symbolics-space-cadet-keyboard-do][What do the keys on this Symbolics Space Cadet keyboard do?]]
+  Retrocomputing Stackexchange thread
+- Steve Losh, [[https://stevelosh.com/blog/2012/10/a-modern-space-cadet/][A Modern Space Cadet]] Oct 3, 2012
+- [[https://handwiki.org/wiki/Space-cadet_keyboard][HandWiki entry on SpaceCadet]]
+- [[https://deskthority.net/wiki/Space-cadet_keyboard][Desk-thority Wiki Entry]] on Space Cadet Keyboards
+- [[https://www.techfak.uni-bielefeld.de/~joern/jargon/space-cadetkeyboard.HTML][Jargon File entry]]
+- [[http://www.quadibloc.com/comp/kyb01.htm][Quadibloc Entry on Keyboards]], including Space Cadets
+- "Help With Original LISP Machine ('Space Cadet') Keyboard" [[https://alt.folklore.computers.narkive.com/JZbvfRTJ/help-with-original-lisp-machine-space-cadet-keyboard][alt.folklore.computers]]
+- [[https://yildiz.dev/2020/12/31/a-modern-space-cadet-but-for-linux-md/][A Modern Space Cadet but for Linux]], 2020-12-31
