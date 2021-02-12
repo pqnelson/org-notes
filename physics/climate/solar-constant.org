@@ -3,7 +3,7 @@
 #+EMAIL: pqnelson@gmail.com
 #+DATE: <2020-12-28T20:54:26-08:00>
 #+LANGUAGE: en
-#+OPTIONS: H:5
+#+OPTIONS: H:5 toc:nil num:nil
 #+HTML_DOCTYPE: html5
 #+INCLUDE: ../../org-macros.org
 #+HTML_LINK_UP: ./index.html
@@ -13,6 +13,10 @@
 
 * Solar Constant
 
+*Identify:* We need to compute the irradiance of the Sun at the distance
+the Earth is from the Sun.
+
+*Setup and Execute:*
 We need to use the Stefan--Boltzmann constant:
 
 #+begin_src emacs-lisp :exports both
@@ -31,10 +35,8 @@ We need to use the Stefan--Boltzmann constant:
 The luminosity of the Sun would be, theoretically:
 
 #+begin_src emacs-lisp :exports both
-(defconst 4pi 12.56637061435917295385057)
-
 (defun luminosity (r temperature)
-  (* 4pi
+  (* 4 pi
      (expt r 2.0)
      (stefan-boltzman)
      (expt temperature 4.0)))
