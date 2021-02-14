@@ -1,0 +1,347 @@
+#+TITLE: Basic Ring Theory
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-02-14T12:22:51-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday February 14, 2021 at 12:22PM
+
+* Definition
+The study of rings generalizes the study of number systems. The
+archetypical number systems include our favorites: the integers, the
+rationals, the reals, and the complex numbers. But not the natural
+numbers (because we want to include subtraction).
+
+#+NAME: defn-ring
+#+begin_definition
+A {{{define(Ring)}}} consists of
+
+- a set $R$
+
+equipped with
+
+- addition $+\colon R\times R\to R$
+- negation $-\colon R\to R$
+- a zero-like object $0\in R$
+- multiplication $-\cdot-\colon R\times R\to R$
+- a one-like object $1\in R$
+
+such that
+
+- Addition is associative $(x + y) + z = x + (y + z)$
+- Addition is commutative $x + y = y + x$
+- Zero is the unit for addition: $x + 0 = 0 + x = x$
+- Negation gives the additive inverse: $x + (-x) = 0$
+- Multiplication is associative $x\cdot(y\cdot z) = (x\cdot y)\cdot z$
+- One is the unit for multiplication $x\cdot1=1\cdot x=x$
+- Multiplication distributes over addition $(x + y)z = xz + yz$
+
+If, in addition, multiplication is commutative, then we call the ring a
+{{{define(Commutative Ring)}}}.
+#+end_definition
+
+#+begin_remark
+If we abandon the existence of a multiplicative identity, then we have a
+non-unital ring.
+#+end_remark
+
+There are probably a few more properties I'm forgetting about.
+
+#+begin_remark
+(Internalization, category theoretic definition.)
+We could define a "ring object" as a monoid object in the category
+{{{cat(Ab)}}} of Abelian groups. (For this reason, we could have defined
+a ring as consisting of an Abelian group equipped with multiplication.)
+This gives us a sense of the important properties: we need to have an
+underlying Abelian group. We can give up, e.g., commutativity for
+multiplication (we could even give up associativity!), but we really
+want to have commutativity for addition.
+#+end_remark
+
+* Examples
+
+#+begin_math-example
+The integer $\ZZ$ is the epitome of a ring, as are the rationals $\QQ$,
+and the reals $\RR$.
+#+end_math-example
+
+#+begin_math-example
+Let $R$ be a commutative ring, then the collection of polynomials in a single
+indeterminate $z$ with coefficients in $R$ is a ring...called the
+{{{define(Polynomial Ring)}}} over $R$, denoted $R[z]$.
+
+We can generalize the polynomial ring in a number of ways: we could
+consider rational polynomials $R(z) = \{f(z)/g(z)\mid f,g\in R[z], g\neq0\}$;
+or formal power series $R[{[z]}]$; or the formal Laurent series $R((z))$
+which intuitively is $R[z^{-1}] + R[{[z]}]$.
+
+But not the formal
+distributions over $R$, i.e., $R[{[z,z^{-1}]}]$ because multiplication
+is not consistent (this pops up in vertex operator algebras).
+#+end_math-example
+
+#+begin_math-example
+Let $R$ be a ring, and $n\in\NN$ a natural number greater than zero.
+Then the set of \(n\)-by-\(n\) matrices with entries in $R$, denoted
+$M(n,R)$, forms another ring under matrix addition and matrix
+multiplication.
+
+This is an important example, because for $n\gt1$ the ring is
+noncommutative.
+#+end_math-example
+
+#+begin_math-example
+Let $X$ be some non-empty set, and $R$ a ring. Then the function space
+$\hom(X,R)$ of \(R\)-valued functions on $X$ forms a ring. Addition is
+defined pointwise $f+g$ is the function $(f+g)(x) = f(x)+g(x)$,
+as are multiplication $(f\times g)(x)=f(x)g(x)$. The additive identity is the
+constant function $Z(x) = 0$ for all $x\in X$, and the multiplicative
+identity is the function $e(x) = 1$ for all $x\in X$.
+#+end_math-example
+
+#+begin_math-example
+If $X$ is a topological space, then continuous real-valued functions
+form a ring. (Continuous complex-valued functions form another ring.)
+#+end_math-example
+
+#+begin_exercise
+Let $R$ be a noncommutative ring. Can we extend the notion of a
+polynomial ring to $R[x]$?
+#+end_exercise
+
+#+begin_exercise
+Let $n\in\NN$ be greater than 1, $R$ some fixed commutative ring.
+Is $M(n, R[z])$ the same ring as $(M(n, R))[z]$?
+What happens for noncommutative rings $R$?
+#+end_exercise
+
+* Special Elements in a Ring
+
+#+begin_definition
+Let $r\in R$ be an element in a ring. We call it {{{define(Nilpotent)}}}
+if there exists some $k\in\NN$ such that $r^{k}=0$.
+#+end_definition
+
+We could consider nilpotents as modeling "infinitesimals" of yore.
+
+#+begin_definition
+Let $r\in R$ be an element in a ring. We call it {{{define(Idempotent)}}}
+if $r^{2}=r$.
+#+end_definition
+
+* Ring Morphisms
+
+#+begin_definition
+Let $R$ and $S$ be rings. A {{{define(Ring Morphism)}}} is a function of
+the underlying sets $f\colon R\to S$ such that
+
+1. it preserves addition $f(a+b) = f(a) + f(b)$
+2. it preserves multiplication $f(ab) = f(a)f(b)$
+3. it preserves "one" $f(1_{R})=1_{S}$.
+#+end_definition
+
+As a consequence of preserving addition, we have $f(0+0)=f(0)+f(0)=f(0)$
+which implies $f(0)=0$. Further $f(0-a) = f(0) + f(-a) = f(-a)$ and
+$f(a-a) = f(a) + f(-a) = 0$ implies $f(-a)=-f(a)$.
+
+#+begin_math-example
+Let $R$ be a ring. Then we always have a morphism $f\colon\ZZ\to R$
+defined by $f(0)=0$, $f(1)=1$, $f(2)=f(1)+f(1)$, and more generally for
+$n\in\NN$ we have
+
+\begin{equation}
+f(n) = \sum^{n}_{j=1}f(1).
+\end{equation}
+
+Sometimes we abuse notation and write $f(n)=nf(1)$.
+#+end_math-example
+
+#+begin_math-example
+Let $R$ be a ring, $r\in R$ some fixed element. Then we have a natural
+morphism $e_{r}\colon R[z]\to R$ by evaluating a polynomial at $z=r$,
+i.e., $e_{r}(p(z)) = p(r)$.
+#+end_math-example
+
+#+begin_math-example
+For a ring $R$ and the polynomial ring $R[z]$, the inclusion mapping
+$R\to R[z]$ mapping $r\in R$ to $r\in R[z]$ is a ring morphism.
+
+*But* the function mapping a polynomial to its roots in $R$,
+$\rho\colon R[z]\to\mathcal{P}(R)$, is *not* a ring morphism. How can we
+see this? Well, the codomain isn't necessarily a ring (what's the
+additive inverse? What's addition?), but $\rho(p(z) + q(z))$ is not
+necessarily mapped to $\rho(p(z)) + \rho(q(z))$.
+#+end_math-example
+
+#+begin_definition
+Let $R$ and $S$ be rings, we call the ring morphism $f\colon R\to S$
+a {{{define(Ring Isomorphism)}}} (or just /isomorphism/) if there is a
+morphism $g\colon S\to R$ such that $g\circ f=\mathrm{id}_{R}$ and
+$f\circ g=\mathrm{id}_{S}$ (i.e., an inverse morphism exists).
+#+end_definition
+
+A ring isomorphism, like all isomorphisms, tells us when two rings are
+"the same".
+
+* Subrings, Adjoining Elements
+
+#+begin_definition
+Let $R$ be a ring, $S\subset R$ some subset of $R$. We call $S$ a
+{{{define(Subring)}}} of $R$ if
+
+1. $S$ is a subgroup of $R$ under addition,
+2. $S$ is closed under multiplication from $R$,
+3. $1\in S$.
+#+end_definition
+
+#+begin_math-example
+The integers $\ZZ$ are a subring of the rationals $\QQ$; the rationals
+are a subring of the reals $\RR$; the reals are again a subring of the
+complex numbers $\CC$.
+#+end_math-example
+
+#+begin_math-example
+A non-example: the modular ring $\ZZ/(24)$ of hours in a day, this is
+not a subring of $\ZZ$. The operators are distinct.
+#+end_math-example
+
+#+begin_definition
+Let $S$ be a subring of a commutative ring $R$.
+We can {{{define(Adjoin an Element)}}}
+$r\in R$ to $S$ --- denoted $S[r]$ ---
+by taking the subring of formal polynomials $S[z]\subset R[z]$
+and the evaluation morphism $e_{r}\colon R[z]\to R$ restricted to the
+subring $S[z]\subset R[z]$ gives us $S[r] = e_{r}(S[z])\subset e_{r}(R[z])$.
+#+end_definition
+
+#+begin_math-example
+We can consider $\ZZ\subset\CC$ as a subring, then adjoining
+$\I=\sqrt{-1}$ to $\ZZ$ gives us the {{{define(Gaussian Integers)}}}
+$\ZZ[\I]$. We basically treat $\I$ as a variable, then replace $\I^{2}$
+by $-1$ (and commutativity lets us factor $\I^{n+2}=\I^{2}\I^{n}$ to
+iterate this heuristic). An arbitrary Gaussian integer looks like $a+\I b$
+for arbitrary integers $a,b\in\ZZ$. Multiplication is defined as
+
+\begin{equation}
+(a + \I b)(x + \I y) = (ax - by) + \I(ay + bx).
+\end{equation}
+
+Addition is defined component-wise.
+#+end_math-example
+
+#+begin_remark
+We can generalize this example to any square-free number $d\in\NN$, then
+$\ZZ[\sqrt{-d}]$ is another ring adjoined with a new element. (The
+example of $\ZZ[\sqrt{-5}]$ is thrown around a lot because in that ring,
+$6=2\cdot3=(1-\sqrt{-5})(1+\sqrt{-5})$ has two distinct factorizations.)
+#+end_remark
+
+* Ideals
+
+#+begin_definition
+Let $f\colon R\to S$ be a ring morphism, $0_{S}\in S$ be the additive
+identity ("zero") of $S$. We define the {{{define(Kernel)}}} of $f$ to
+be the subset
+
+\begin{equation}
+\ker(f) = \{r\in R\mid f(r) = 0_{S}\}.
+\end{equation}
+#+end_definition
+
+Observe that the kernel of a ring morphism is closed under addition ---
+if $x,y\in\ker(f)$, then $f(x+y) = f(x) + f(y) = 0+0 = 0$ --- and
+multiplication. Moreover, for any $r\in R$ and for any $x\in\ker(f)$, we
+see that $f(xr)=f(x)f(r)=0$, and $f(rx)=f(r)f(x)=0$; i.e., that the kernel is closed under
+multiplication by elements of the domain on the right and left, respectively.
+
+This idea is captured by the following definition:
+
+#+NAME: defn-ideal
+#+begin_definition
+Let $R$ be a ring.
+
+1. A {{{define(Left Ideal)}}} in $R$ is a subset $I_{L}\subset R$
+   is such that (a) $0\in I_{L}$, (b) $x+y\in I_{L}$ whenever both $x\in I_{L}$
+   and $y\in I_{L}$, (c) $ry\in I_{L}$ whenever $y\in I_{L}$ for any
+   $r\in R$.
+2. A {{{define(Right Ideal)}}} in $R$ is a subset $I_{R}\subset R$
+   is such that (a) $0\in I_{R}$, (b) $x+y\in I_{R}$ whenever both $x\in I_{R}$
+   and $y\in I_{R}$, (c) $xr\in I_{R}$ whenever $x\in I_{R}$ for any
+   $r\in R$.
+3. A {{{define(Two-Sided Ideal)}}} in $R$ is a subset $I\subset R$
+   is such that (a) $0\in I$, (b) $x+y\in I$ whenever both $x\in I$
+   and $y\in I$, (c) $xy\in I_{L}$ whenever $x\in I$ /or/ $y\in I$.
+
+Further, we call the ideal {{{define(Proper)}}} if the ideal is a proper
+subse of the ring.
+#+end_definition
+
+For commutative rings, these three coincide, and we just speak of
+"Ideals". It's for noncommutative rings we need to distinguish them.
+Whenever results depend on the kind of ideal, we make note of it.
+Otherwise, we say "ideal" with the understanding it may mean any of the
+three kinds.
+
+#+begin_theorem
+Let $I$ be an ideal of $R$. Then $I$ is a subgroup of the underlying
+Abelian group of $R$ (equipped with addition).
+#+end_theorem
+
+#+begin_math-example
+Let $R\subset R'$ be a proper subring, and $q\in R'$ an element not in $R$.
+Then $R[q]$ is a ring obtained by taking $R[z]\subset R'[z]$,
+then applying the evaluation morphism $e_{q}\colon R'[z]\to R'$
+restricted to $R[z]$. That is to say, $e_{q}(R[z])\subseteq R'$.
+
+#+end_math-example
+
+It's not uncommon to see things like, if $r\in R$, then $rR = \{rx\mid x\in R\}$.
+
+#+NAME: defn-generated-ideal
+#+begin_definition
+Let $R$ be a ring, $S\subset R$ some nonempty subset.
+We describe the {{{define(Ideal Generated by \(S\))}}} to be the sums of
+elements of the form $xsy$ where $s\in S$ and $x,y\in R$.
+#+end_definition
+
+For commutative rings, we can use commutativity to rewrite $xsy=xys$ and
+thus $(S) = RS$.
+
+#+begin_remark
+Let $I$ and $J$ be ideals of $R$.
+Notation:
+
+1. Then we denote the ideal generated by $I\cup J$ as $I+J$.
+2. We also denote $IJ$ is the ideal generated by elements of the form
+   $ab$ for $a\in I$ and $b\in J$.
+#+end_remark
+
+#+begin_exercise
+(Jacobson) Let $I$, $J$, $K$ be ideals of $R$. Does distributivity hold
+for "ideal arithmetic"? I.e., is $(I+J)K$ equal to $IK + JK$?
+#+end_exercise
+
+#+begin_exercise
+Let $R$ be a ring, $I$ an ideal of $R$. Prove or find a counter-example:
+$IR\subseteq I$. Is this true for noncommutative rings?
+#+end_exercise
+
+* References
+
+- Manuel Bronstein, {{{book-title(Symbolic Integration 1: Transcendental Functions)}}}.
+  Springer, second ed., 1996.
+  Chapter 1 particularly reviews polynomial rings.
+- Nathan Jacobson,
+  {{{book-title(Basic Algebra I)}}}.
+  Chapter 2.
+- Serge Lang, {{{book-title(Algebra)}}}.
+  Springer, third ed., GTM., 2002.
+  Chapter 2.
+- James McIvor,
+  [[https://math.berkeley.edu/~gmelvin/math113su14/math113su14notes2.pdf][Lecture Notes on Ring Theory]].
+  UC Berkeley, Math 113, Summer 2014.
