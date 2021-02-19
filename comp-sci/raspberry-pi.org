@@ -1,0 +1,115 @@
+#+TITLE: Raspberry Pi
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-02-15T15:07:15-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Monday February 15, 2021 at  3:07PM
+
+* Overview
+
+I've got a Raspberry Pi 3 lying around, and I've been interested in
+[[file:lisp/machine.org][Lisp Machines]] for a bit. Daniel Szmulewicz wrote a [[https://danielsz.github.io/blog/blog_on_lisp.html][blog post]] on treating
+a Raspberry Pi as an /ersatz/ Lisp Machine. Since my machine is on the
+older side, and has been lying around for a while (it still runs Debian
+Jessie), I thought I'd document my attempt to update it and install
+Lisp tools on it.
+
+(Apparently I have a Raspberry Pi 4B.)
+
+* Ssh into the Pi
+
+We can ssh into Raspberry Pi by enabling ssh (the openssh-server seems
+to be installed but not yet enabled), then we can simply do
+~ssh <user>@raspberrypi.local~ to
+
+* Debian Infrastructure
+
+Running the update can be time-consuming. Basically I updated the
+~/etc/apt/sources.list~ and ~/etc/apt/sources.list.d/raspi.list~ to use
+the stretch repositories, uninstalled a few un-needed (or unused)
+packages (~scratch*~, minecraft-pi, ~libreoffice*~, sonic-pi),
+ran a ~sudo apt-get update && sudo apt-get upgrade -y && sudo apt clean~
+followed by a ~sudo apt-get dist-upgrade -y && sudo apt-get clean~.
+This took a few hours.
+
+Then I ran ~sudo rpi-update~ to update the firmware.
+
+** Optimizing for my local computer
+
+I noticed that, for GCC, the flag =-Os= optimizes for size. Since
+there's only so little room for things on the Pi, I decided to install
+apt-build and these go into ~/etc/apt/apt-build.conf~, then I can use
+=sudo apt-build install ...= instead of apt-get.
+
+* Installing Emacs
+
+I pulled down Emacs from the git repository:
+
+#+begin_example
+~/$ cd src
+~/src/$ git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git
+...
+~/src/$ cd emacs
+~/src/emacs/$ sudo apt-get build-dep emacs
+#+end_example
+
+We need to install the GNU-Autotools:
+
+#+begin_example
+~/src/emacs/$ sudo apt-get install autoconf automake
+#+end_example
+
+We can try installing the dependencies, but will also have to install
+the =dev= version of the libraries:
+
+#+begin_example
+~/src/emacs/$ sudo apt-get build-dep emacs
+...
+~/src/emacs/$ sudo apt-get install libm17n-dev libgif-dev libxpm-dev libtiff5-dev
+...
+~/src/emacs/$ sudo apt-get install libpng-dev gnutls-dev texinfo
+#+end_example
+
+Now for the configuration
+
+#+begin_example
+~/src/emacs/$ ./autogen.sh
+~/src/emacs/$ ./configure --with-x-toolkit=no --with-m17n-flt --with-modules CFLAGS="-mcpu=native -Os"
+#+end_example
+
+* Installing Common Lisp
+
+I'm not sure what happened, but somehow I had SBCL 1.4 installed on my
+Raspberry Pi already. I was suspicious of this, and remain so to date.
+
+** Clozure Common Lisp
+
+One Common Lisp compiler which emerged from the '80s was Clozure Common
+Lisp. Well, it was forked from Macintosh Common Lisp, which ran on a
+computer with only a few Megabytes of RAM at the time. We have similar
+constraints for the Raspberry Pi today (at least, I do).
+
+I followed Rainer's [[https://web.archive.org/web/20121010001720/http://lispm.dyndns.org/ccl][instructions]] .
+
+#+begin_example
+~/src/$ git clone https://github.com/Clozure/ccl/
+...
+~/src/$ cd ccl/
+~/src/ccl/$ cd lisp-kernel/linuxarm
+~/src/ccl/lisp-kernel/linuxarm/$ make clean; make
+...
+~/src/ccl/lisp-kernel/linuxarm/$ cd ../..
+~/src/ccl/$ ./scripts/get-binaries linuxarm
+...
+~/src/ccl/$ ./armcl
+
+? (ccl:rebuild-ccl :full t)
+...
+#+end_example
+I started compiling ccl about 19:46:38 (it took over 21 hours to finish).

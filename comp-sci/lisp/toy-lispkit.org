@@ -156,6 +156,9 @@ List* comp(SExp *e, SExp *n, SExp *c) {
 
 *** Compiling Let-expressions
 
+When compiling =(let ((x1 e1) ... (x-n e-n)) body)=, we rewrite this as
+=((lambda (x1 ... x-n) body) e1 ... e-n)=.
+
 We have the ancillary functions when compiling =(let ...)=.
 
 #+begin_src c

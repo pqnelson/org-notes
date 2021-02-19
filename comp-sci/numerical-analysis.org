@@ -22,102 +22,7 @@ computer to do it? Specifically when we approximate real numbers by
 floating-point arithmetic, and we do not perform any symbolic
 manipulation.
 
-The basic outline of the subject, as presented in most textbooks,
-first presents floating-point arithmetic, then root finding
-algorithms, polynomial interpolation, quadrature, numerical linear algebra,
-then using the numerical linear algebra to solve differential
-equations. Once all this has been established, various other ways
-to solve differential equations are discussed in graduate courses
-or their own texts.
-
-* Floating-Point Arithmetic
-
-** Representing numbers
-
-*** Motivational example
-
-The basic idea could be discussed by first considering a number
-system where a "number" is a triple =(s, c, f)= where
-- =s= is either +1 or -1
-- =c= is a 7-tuple of digits =(c[0], ..., c[6])= where =c[0]= is nonzero
-- =f= is a 4-tuple of =(f[0], f[1], ..., f[3])= where =f[0]= is
-  either +1 or -1, and the remaining components are digits
-
-We intuitively think of this as a sort of truncated scientific
-notation =s*(c[0].c[1]c[2]c[3]c[4]c[5]c[6])*pow(10, f[0]*(f[1]f[2]f[3]))=
-where the =c= is a decimal encoding of a real number, =f[1:3]= encodes a
-3-digit natural number.
-
-Observe, if =c[0]= were zero, we could shift all the =c= tuple
-entries down by one (i.e., set ~c'[0] = c[1]~, ~c'[1] = c[2]~, ...,
-~c'[5]=c[6]~, then set ~c'[6]=0~ and use ~c'~ instead of ~c~ at the
-cost of decreasing the ~f~ exponent by 1). Consequently, the only
-time =c[0]= were zero is if we had zero.
-
-There's no reason why we /must/ use base-10, we could use base
-/b/. We just require =c[0]= is a nonzero /b/-igit, and we interpret
-the order of magnitude is taken to base-/b/, i.e., that we multiply
-now by =pow(b, f[0]*(f[1]f[2]f[3]))=. For base-2, this forces
-~c[0]~ to be 1, and hence we can just assume there is an implicit
-leading 1 (i.e., we can pretend the ~c~ tuple describes the bits
-"after the decimal point").
-
-*** Rounding, Truncating
-
-Given some number with decimal expansion
-=d[0]d[1]d[2]d[3]d[4]d[5]d[6]d[7]...=, how do we encode it in our
-toy number system?
-
-- *Solution 1.* Do we simply throw away the digits =d[7]= and
-  beyond? This is called "truncating".
-- *Solution 2.* Or we could examine =d[7]= and if it is 5 or greater,
-  add 1 to =d[6]= (which, if ~d[6]=9~, would become 0 and force us to
-  "carry the one" to ~d[5]~, and so on). This is "rounding to infinity".
-
-Either way, rounding/truncating is one source of error. But it's a
-price we always have to pay for using a computer.
-
-#+NAME: fl-encoding-function
-#+begin_definition
-Let $x$ be a real number. Then the encoding of it to our number
-system corresponds to mapping it to the number $fl(x)$.
-#+end_definition
-
-We will continue working in our system of 7-digit scientific numbers,
-with 3-digit exponents.
-
-#+begin_remark
-The choice of 7 digits and 3-digit exponents is not arbitrary, this
-turns out to be one of the standard floating point representations for
-numbers, the single-precision decimal float. Working in base-10 is more
-familiar to the reader than working in base-2 (at least, for scientific
-computation), so we use it to clarify certain concepts.
-#+end_remark
-
-*** Relative, Absolute Error
-
-How do we measure how good (or bad) an approximation is to its true
-value? We have two possibilities.
-
-#+NAME: absolute-error
-#+begin_definition
-Let $x$ be a real number and $x_{\ast}$ an approximation to
-$x$. Then its {{{define(Absolute Error)}}} is $|x - x_{\ast}|$.
-#+end_definition
-
-#+NAME: relative-error
-#+begin_definition
-Let $x$ be a real number and $x_{\ast}$ an approximation to
-$x$. Then its {{{define(Relative Error)}}} is $|x - x_{\ast}|/x$ if $x\neq0$.
-#+end_definition
-
-#+begin_math-example
-When we have two numbers close to each other $fl(x)\approx fl(y)$,
-say they agree to 4 digits, then $fl(x) - fl(y)$
-has at most three digits of precision (we've lost more than half our
-precision). The absolute error of $fl(x) - fl(y)$ compared to $x - y$
-is small, though the relative error is large.
-#+end_math-example
+- [[file:numerical-analysis/index.org][Index of Topics]]
 
 * References
 
@@ -150,3 +55,9 @@ is small, though the relative error is large.
 - David M Russinoff,
   {{{book-title(Formal Verification of Floating-Point Hardware Design: A Mathematical Approach)}}}.
   Springer, 2018.
+
+** Numerical Linear Algebra
+
+- G.W. Stewart, {{{book-title(Matrix Algorithms)}}}. 2 volumes
+- James Demmel, {{{book-title(Applied Numerical Linear Algebra)}}}.
+- Trefethen and Bau, {{{book-title(Numerical linear algebra)}}}.

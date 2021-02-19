@@ -1,0 +1,109 @@
+#+TITLE: Floating Point Arithmetic
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-02-15T09:14:11-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Monday February 15, 2021 at  9:14AM
+
+
+* Representing numbers
+
+** Motivational example
+
+The basic idea could be discussed by first considering a number
+system where a "number" is a triple =(s, c, f)= where
+- =s= is either +1 or -1
+- =c= is a 7-tuple of digits =(c[0], ..., c[6])= where =c[0]= is nonzero
+- =f= is a 4-tuple of =(f[0], f[1], ..., f[3])= where =f[0]= is
+  either +1 or -1, and the remaining components are digits
+
+We intuitively think of this as a sort of truncated scientific
+notation =s*(c[0].c[1]c[2]c[3]c[4]c[5]c[6])*pow(10, f[0]*(f[1]f[2]f[3]))=
+where the =c= is a decimal encoding of a real number, =f[1:3]= encodes a
+3-digit natural number.
+
+Observe, if =c[0]= were zero, we could shift all the =c= tuple
+entries down by one (i.e., set ~c'[0] = c[1]~, ~c'[1] = c[2]~, ...,
+~c'[5]=c[6]~, then set ~c'[6]=0~ and use ~c'~ instead of ~c~ at the
+cost of decreasing the ~f~ exponent by 1). Consequently, the only
+time =c[0]= were zero is if we had zero.
+
+There's no reason why we /must/ use base-10, we could use base
+/b/. We just require =c[0]= is a nonzero /b/-igit, and we interpret
+the order of magnitude is taken to base-/b/, i.e., that we multiply
+now by =pow(b, f[0]*(f[1]f[2]f[3]))=. For base-2, this forces
+~c[0]~ to be 1, and hence we can just assume there is an implicit
+leading 1 (i.e., we can pretend the ~c~ tuple describes the bits
+"after the decimal point").
+
+** Rounding, Truncating
+
+Given some number with decimal expansion
+=d[0]d[1]d[2]d[3]d[4]d[5]d[6]d[7]...=, how do we encode it in our
+toy number system?
+
+- *Solution 1.* Do we simply throw away the digits =d[7]= and
+  beyond? This is called "truncating".
+- *Solution 2.* Or we could examine =d[7]= and if it is 5 or greater,
+  add 1 to =d[6]= (which, if ~d[6]=9~, would become 0 and force us to
+  "carry the one" to ~d[5]~, and so on). This is "rounding to infinity".
+
+Either way, rounding/truncating is one source of error. But it's a
+price we always have to pay for using a computer.
+
+#+NAME: fl-encoding-function
+#+begin_definition
+Let $x$ be a real number. Then the encoding of it to our number
+system corresponds to mapping it to the number $fl(x)$.
+#+end_definition
+
+We will continue working in our system of 7-digit scientific numbers,
+with 3-digit exponents.
+
+#+begin_remark
+The choice of 7 digits and 3-digit exponents is not arbitrary, this
+turns out to be one of the standard floating point representations for
+numbers, the single-precision decimal float. Working in base-10 is more
+familiar to the reader than working in base-2 (at least, for scientific
+computation), so we use it to clarify certain concepts.
+#+end_remark
+
+** Relative, Absolute Error
+
+How do we measure how good (or bad) an approximation is to its true
+value? We have two possibilities.
+
+#+NAME: absolute-error
+#+begin_definition
+Let $x$ be a real number and $x_{\ast}$ an approximation to
+$x$. Then its {{{define(Absolute Error)}}} is $|x - x_{\ast}|$.
+#+end_definition
+
+#+NAME: relative-error
+#+begin_definition
+Let $x$ be a real number and $x_{\ast}$ an approximation to
+$x$. Then its {{{define(Relative Error)}}} is $|x - x_{\ast}|/x$ if $x\neq0$.
+#+end_definition
+
+#+begin_math-example
+When we have two numbers close to each other $fl(x)\approx fl(y)$,
+say they agree to 4 digits, then $fl(x) - fl(y)$
+has at most three digits of precision (we've lost more than half our
+precision). The absolute error of $fl(x) - fl(y)$ compared to $x - y$
+is small, though the relative error is large.
+#+end_math-example
+
+
+* References
+- Richard L. Burden and J. Douglas Faires,
+  {{{book-title(Numerical Analysis)}}}.
+  8th ed., Thomson, 2005.
+- David Goldberg,
+  "What Every Computer Scientist Should Know About Floating-Point Arithmetic".
+  March 1991, [[https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html][eprint]].
