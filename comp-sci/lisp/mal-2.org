@@ -1,0 +1,962 @@
+#+TITLE: MAL - Preliminaries
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-02-20T08:52:10-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday February 20, 2021 at  8:52AM
+
+* Overview
+
+This contains a discussion of the implementation of data structures for
+a Lisp interpreter. The focus will be on the data structures used for
+the data types provided by the Lisp interpreter.
+
+* Object Model = Tagged Union + Metadata
+
+The basic data type for a simple Lisp implementation in C amounts to a
+tagged union. Well, we stick the tag plus other metadata in an *"Object header"*
+(borrowing the term from other languages, links below). The idea is we
+have a "base class" type implemented as a =struct=
+
+#+begin_src c
+/* types.h */
+typedef enum ObjectType {
+    // ...
+} ObjectType;
+
+typedef struct Object {
+    ObjectType type;
+    // gc metadata
+    // other metadata
+} Object;
+#+end_src
+
+Note: we could (should) use bitfields to make the ~Object~ 1 word (4
+bytes on 32-bit machines, 8 bytes on 64-bit machines). Otherwise, it
+could end up multiple words in size (i.e., too big).
+
+We then make the first field, in any type in our "object model", an
+=Object= instance:
+
+#+begin_example
+struct Example {
+    Object header;
+    // ...
+};
+#+end_example
+
+This takes advantage of C standards permitting casting a pointer to a
+struct to (and from) a pointer to its first field. In other words, we
+get a standards-compliant form of "polymorphism".
+
+** Helper Functions
+
+There are a number of functions we'll use for S-expressions generically,
+like computing the hash code for an S-expression. (We could, further,
+cache this as metadata in the ~struct Object~.)
+
+#+begin_src c
+/* types.h */
+typedef int hash_t;
+
+hash_t hashCode(Object *object);
+bool equals(Object *lhs, Object *rhs);
+#+end_src
+
+The contracts we demand of these functions:
+- Let ~Object *x, *y~ be non-null.
+  If ~equals(x, y)~ is true, then ~hashCode(x) == hashCode(y)~.
+  - We /do not/ require the [[https://en.wikipedia.org/wiki/Inverse_(logic)][inverse]] of this proposition --- i.e., we do
+    not require if ~equals(x, y)~ is false, then ~hashCode(x) != hashCode(y)~.
+- The ~equals()~ function is an equivalence relation, so
+  - Reflexivity: for any non-null ~Object *x~, we have ~equals(x, x)~
+  - Symmetry: for non-null ~Object *x, *y~, if ~equals(x, y)~, then
+    ~equals(y, x)~
+  - Transitivity: for non-null ~Object *x, *y, *z~, if ~equals(x, y)~ and
+    ~equals(y, z)~, then we have ~equals(x, z)~
+- Further, for any non-null =Object *x= and ~Object *null = NULL~,
+  we have ~equals(x, NULL)~ and ~Object(x, null)~ both return false
+- We have consistency:
+  - ~equals()~: for any non-null ~Object *x, *y~ we have
+    ~equals(x, y)~ return the same value if we compute it repeatedly
+    without any other computation in between
+  - ~hashCode()~: for any non-null ~Object *x~, we have ~hashCode(x)~
+    return the same value if called repeatedly and no other computation
+    occurs in between these calls
+** Object Model References
+
+- [[https://shipilev.net/jvm/objects-inside-out/][Java Objects Inside Out]]
+- [[https://www.rubyguides.com/2017/04/memory-layout-of-an-object/][Ruby Internals: Exploring the Memory Layout of Ruby Objects]]
+- [[https://devblogs.microsoft.com/premier-developer/managed-object-internals-part-4-fields-layout/][CLR (Managed object internals)]]
+- [[https://docs.python.org/3/c-api/structures.html][Python Common Object Structures]]
+
+* Atoms
+
+There are two types of atoms: symbols and primitive values. The
+primitive values are numbers, strings, booleans, or characters.
+Symbols are associated to some value.
+
+** Primitive Values
+
+Primitive values would naively be represented by structures like:
+
+#+begin_src c
+/* types.h */
+struct Int {
+    Object header;
+    int value;
+};
+
+struct Char {
+    Object header;
+    char codepoint;
+};
+
+struct Boolean {
+    Object header;
+    bool value;
+};
+#+end_src
+
+These will be two words in size. There are tricks to compactify their
+memory usage (NaN boxing, [[https://bernsteinbear.com/blog/small-objects/][tagged object pointers]] since x64 uses 48-bit
+addresses giving us 16 bits of metadata).
+
+** Strings
+
+There are several different ways to represent a string. C uses a
+null-terminated sequence of characters. Pascal uses length-prefixed
+strings --- by convention, the first /k/ bytes are interpreted as an
+integer, encoding the length of the string. C++ (and, I guess, Java)
+encodes a string as a record (well, Java uses classes). We'll follow the
+structure encoding:
+
+#+begin_src c
+/* types.h */
+typedef struct String String;
+
+String* string_new(char *str, int length);
+void string_free(String **string);
+bool string_isEqual(String *this, String *other);
+hash_t string_hashCode(String *this);
+#+end_src
+
+The constructor =string_new= takes an additional parameter, ~length~,
+which tells us how many characters to take from the source. The special
+value of ~length < 0~ will copy until a null character is encountered.
+
+The string API can be extended as necessary.
+
+The data structure for a string would be implemented as:
+
+#+begin_src c
+/* types.c */
+struct String {
+    Object header;
+    size_t length;
+    char *text;
+};
+#+end_src
+
+*** Constructor
+
+The constructor copies the data from the given pointer. There are
+basically three key moments to this constructor:
+1. Allocate the memory for the string data structure
+2. Initialize the length (which needs to be computed if the ~length~
+   parameter is negative)
+3. Allocate and initialize/copy the ~char[]~ array of text
+
+#+begin_src c
+/* types.c */
+
+String* string_new(char *str, int length) {
+    if (NULL == src) return NULL;
+
+    String *string = alloc(sizeof(*string));
+    string->header.type = TYPE_STRING;
+
+    /* initialize length */
+    if (length < 0) {
+        string->length = strlen(str);
+    } else {
+        string->length = (size_t)length;
+    }
+
+    /* allocate and initialize text */
+    string->text = alloc_array(string->length, sizeof(char));
+    if (0 == string->length) {
+        string->text = NULL;
+    } else {
+        memcpy(string->text, text, string->length);
+    }
+    return string;
+}
+#+end_src
+
+*** Destructor
+
+The destructor for a string needs to also free the underlying array of
+characters. Then we free the data and metadata for the string object.
+Finally we make sure to update the pointer to the string to point to NULL.
+
+#+begin_src c
+void string_free(String **this) {
+    if ((NULL == this) || (NULL == *this)) return;
+
+    if (NULL != (*this)->text) {
+        free((*this)->text);
+    }
+    free((*this));
+    *this = NULL;
+}
+#+end_src
+
+*** String Equality
+
+We can use a couple shortcuts to compute equality. First, if both
+arguments are NULL pointers, then return true. But if only one is NULL,
+return false.
+
+The default case then moves on to non-null pointers. In that case, we
+compare the lengths of the strings to rule out unequal strings quickly.
+Should the strings have the same length, we compare the contents of the
+underlying character array.
+
+#+begin_src c
+bool string_equals(String *lhs, String *rhs) {
+    if (lhs == rhs) return true;
+    if (NULL == lhs) return false;
+    if (NULL == rhs) return false;
+    if ((lhs->length) != (rhs->length)) return false;
+
+    return 0 == memcmp(lhs->text, rhs->text, lhs->length);
+}
+#+end_src
+
+*** Computing Hash Code
+
+There are a number of ways to compute the hash code for a string.
+Following the generic strategy of computing the hash code for a list
+(discussed below), treating the String as a list of characters.
+(If we wanted to borrow, e.g., Fowler--Noll--Vo hashing, we would
+replace =h*31= by =h*FNV_prime=, and the addition by an XOR. The initial
+value of the hash would be the =FNV_offset_basis=.)
+
+#+begin_src c
+hash_t string_hashCode(String *string) {
+    if (NULL == string) return 0;
+    if (0 == string->length) return 0;
+    if (NULL == string->text) return 0;
+    hash_t h = 0;
+    for (size_t i = 0; i < string->length; i++) {
+        h = h*31 + (hash_t)(string->text[i]);
+    }
+    return h;
+}
+#+end_src
+*** References
+
+- Java's ~String.java~ ([[https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/lang/String.java][jdk8-b120]], [[https://github.com/openjdk/jdk/blob/jdk7-b24/jdk/src/share/classes/java/lang/String.java][jdk7-b24]])
+
+** Symbols
+
+We intern symbols to make at most one object which corresponds with a
+symbol name. This could be done using a Hash Table, a binary tree, or
+some other data structure.
+
+#+begin_src c
+/* types.h */
+typedef struct Symbol Symbol;
+
+Symbol* intern(char *name);
+void symbol_free(Symbol **symbol);
+hash_t symbol_hashCode(Symbol *this);
+#+end_src
+
+Again, we are using opaque pointers (since it's good style):
+
+#+begin_src c
+/* types.c */
+
+struct Symbol {
+    Object header;
+    String *name;
+};
+#+end_src
+
+The contract is, for any non-empty strings =x= and =y= such that they
+are equal (in the sense that ~0 == strcmp(x, y)~),
+then we have ~intern(x) == intern(y)~
+and specifically
+~intern(x) != NULL~.
+
+*** Constructor
+
+The trick to this is we will use a Hash Table to lookup the symbol with
+a given name. If it exists, we return that; otherwise, we create a new
+Symbol object, save it in the Hash Table, and return the Symbol object.
+
+One word of warning: if we extend our interpreter to include
+multithreading, then we must make sure our HashMap is concurrent.
+Otherwise, we may end up with race conditions regarding the =symbol_table=.
+
+#+begin_src c
+static HashMap *symbol_table = NULL;
+
+static void init_symbol_table() {
+    if (NULL == symbol_table) {
+        symbol_table = hashmap_new();
+    }
+}
+
+static Symbol* symbol_new(String *name) {
+    Symbol *symbol = alloc(sizeof(*symbol));
+    symbol->header.type = TYPE_SYMBOL;
+    symbol->name = name;
+    return symbol;
+}
+
+Symbol* intern(char *name) {
+    init_symbol_table();
+    String *key = string_new(name, -1);
+    Symbol *symbol = hashmap_get(&symbol_table, key);
+
+    if (NULL == symbol) {
+        symbol = symbol_name(key);
+        hashmap_put(&symbol_table, key, symbol);
+    } else {
+        // cache hit
+        string_free(&key);
+    }
+    return symbol;
+}
+#+end_src
+
+*** Destructor
+
+I'm not sure I need this, exactly. But I'll vacate the symbol table, and
+delete the symbol and its underlying string.
+
+#+begin_src c
+void symbol_free(Symbol **symbol) {
+    if ((NULL == symbol) || (NULL == *symbol)) return;
+    hashmap_remove(symbol_table, (*symbol)->name);
+    string->free(&((*symbol)->name));
+    free(*symbol);
+    (*symbol) = NULL;
+}
+#+end_src
+
+*** Hash Code
+
+The hash code for a symbol amounts to computing the hash code for the
+associated string.
+
+#+begin_src c
+hash_t symbol_hashCode(Symbol *symbol) {
+    if (NULL == symbol) return 0;
+    return string_hashCode(symbol->name);
+}
+#+end_src
+
+*** Equality
+
+Since we're interning symbols, we could use pointer equality. But
+ostensibly we'll extend symbols to a multithreaded environment...so we
+could end up in a tricky situation where pointer comparison does not
+work.
+
+#+begin_src c
+bool symbol_equals(Symbol *lhs, Symbol *rhs) {
+    if (lhs == rhs) return true;
+    if (NULL == lhs) return false;
+    if (NULL == rhs) return true;
+
+#if defined(MULTITHREADED_PARANOID)
+#if MULTITHREADED_PARANOID
+    return string_equals(lhs->name, rhs->name);
+#endif /* MULTITHREADED_PARANOID */
+#else
+    return false;
+#endif /* defined(MULTITHREADED_PARANOID) */
+}
+#+end_src
+
+* Linked Lists
+
+Also called "cons cells", linked lists are what you'd expect. They're
+the only data type with pointers, so far.
+
+#+begin_src c
+/* types.h */
+typedef struct Cons Cons;
+
+Cons* cons_new(Object *car, Object *cdr);
+void cons_free(Cons **this);
+hash_t cons_hashCode(Cons *this);
+#+end_src
+
+The opaque pointer refers to:
+
+#+begin_src c
+/* types.c */
+struct Cons {
+    Object header;
+    Object **car;
+    Object **cdr;
+};
+#define safe_car(cell) (NULL == (cell)->car ? NULL : *((cell)->car))
+#define safe_cdr(cell) (NULL == (cell)->cdr ? NULL : *((cell)->cdr))
+#+end_src
+
+Why use double pointers? Well, really, we should think of
+=typedef struct Object* ObjectRef=, and a cons-cell consists of a
+pointer to an =ObjectRef=. When we free the memory for the object
+pointed by the =ObjectRef=, we update the =ObjectRef= to be null. This
+requires using double pointers for this update to persist.
+
+** Constructor
+
+The constructor works as we would expect: allocate the memory for the
+header and addresses. If one of the arguments is NULL, then its double
+pointer will point to NULL.
+
+#+begin_src c
+Cons* cons_new(Object *car, Object *cdr) {
+    Cons *cell = alloc(sizeof(*cell));
+    cell->header.type = TYPE_CONS;
+    cell->car = (NULL == car) ? NULL : &car;
+    cell->cdr = (NULL == cdr) ? NULL : &cdr;
+    return cell;
+}
+#+end_src
+
+** Destructor
+
+This requires a bit more care. We'll iterate through the list,
+recursively freeing the car and cdr, before finally freeing the wrapper
+and metadata for the Cons cell itself.
+
+#+begin_src c
+void cons_free(Cons **this) {
+    if ((NULL == this) || (NULL == *this)) return;
+    obj_free((*this)->car);
+    //@ assert (\null == \old(*this)->car) || (\null == *((*this)->car));
+    obj_free((*this)->cdr);
+    //@ assert (\null == \old(*this)->cdr) || (\null == *((*this)->cdr));
+    free(*this);
+    (*this) = NULL;
+}
+#+end_src
+** Hash Code
+
+The basic computation amounts to
+
+#+begin_example
+hash_t list_hashCode(List *this) {
+    hash_t hashCode = 1;
+    for (Elt e : this)
+        hashCode = 31*hashCode + ((NULL == e) ? 0 : hashCode(e));
+    return hashCode;
+}
+#+end_example
+
+The actual source  code implementation needs to handle the special case
+where ~cell == nil~, when it should be zero.
+
+#+begin_src c
+hash_t cons_hashCode(Cons *cell) {
+    if (NULL == cell) return 0;
+
+    hash_t h = 1;
+    Object *car = safe_car(cell);
+    Object *cdr = safe_cdr(cell);
+
+    if ((NULL == car) && (NULL == cdr)) {
+        h = 0;
+    } else {
+        h = 31*h + hashCode(car);
+        h = 31*h + hashCode(cdr);
+    }
+    return h;
+}
+#+end_src
+
+** Equality
+
+We test for equality by checking the car of the left-hand side equals
+the car of the right-hand side, and the cdr of both sides are equal.
+Component-wise equality, in other words.
+
+#+begin_src c
+bool cons_equals(Cons *lhs, Cons *rhs) {
+    if (lhs == rhs) return true;
+    if (NULL == lhs) return false;
+    if (NULL == rhs) return false;
+
+    if (equals(safe_car(lhs), safe_car(rhs))) {
+        return equals(safe_cdr(lhs), safe_cdr(rhs));
+    }
+    return false;
+}
+#+end_src
+
+* Hash Tables
+
+There are many different implementations. Basically the difference boils
+down to using "chaining" (the buckets are a linked list --- Java did
+this prior to version 8) or [[https://en.wikipedia.org/wiki/Open_addressing]["open addressing"]].
+
+Some implementations don't require hash tables, but there are two
+reasons I'm including them. The first, Common Lisp provides them. The
+second, we can use them as the data structure for the environment
+(dictionary binding symbols to their values).
+
+Arguably, we could implement hash tables using cons-cells and atomic
+types. In fact, that's what most Common Lisp implementations /do/.
+
+We will implement a Hash Table in C.
+
+#+begin_src c
+/* types.h */
+typedef struct HashMap HashMap;
+
+HashMap* hashmap_new();
+void hashmap_free(HashMap **this);
+hash_t hashmap_hashCode(HashMap *this);
+bool hashmap_equals(HashMap **lhs, HashMap **rhs);
+Object* hashmap_get(HashMap *this, Object *key);
+Object* hashmap_put(HashMap *this, Object *key, Object *value);
+void hashmap_remove(HashMap *this, Object *key);
+size_t hashmap_size(HashMap *this);
+#+end_src
+
+Arguably, there may be other functions to consider implementing.
+
+** Data Structures
+
+We will use simple chaining. The idea is to use an array of buckets (a
+bucket is a linked list of "Entries" --- key-value pairs plus some extra metadata),
+associating a key-value pair to exactly one bucket. When there are too
+many entries, we increase the number of buckets, then rebalance the
+entries.
+
+*** Entry
+
+An entry is a data structure with some extra metadata, namely the hash
+code for the key (so we compute it once).
+
+#+begin_src c
+/* types.c */
+
+typedef struct Entry {
+    Object *key;
+    Object *value;
+    hash_t hash;
+    struct Entry *next;
+} Entry;
+#+end_src
+
+**** Constructor
+
+We have the usual boiler plate code for it, namely a constructor and
+destructor.
+
+#+begin_src c
+/* types.c */
+
+Entry* entry_new(Object *key, Object *value, hash_t hash) {
+    Entry *entry = alloc(sizeof(*entry));
+    entry->key = key;
+    entry->value = value;
+    entry->next = NULL;
+    entry->hash = hash;
+    return entry;
+}
+#+end_src
+
+**** Destructor
+
+The only nuance to the Entry data structure is, unlike a Cons cell, its
+destructor will not recursively destroy its next Entry.
+
+#+begin_src c
+/* types.c */
+
+void entry_free(Entry **entry) {
+    if ((NULL == entry) || (NULL == *entry)) return;
+
+    free(*entry);
+    (*entry) = NULL;
+}
+#+end_src
+
+**** Sorted Insertion
+
+Given a pointer to (a pointer to) an entry, and an entry we wish to
+insert into the linked list, insert the new entry in a manner that the
+linked list is sorted by hash code.
+
+#+begin_src c
+void entry_insert(Entry **list, Entry *entry) {
+    assert(NULL != entry);
+    if (NULL == list) return;
+    if (NULL == *list) {
+        (*list) = entry;
+        entry->next = NULL;
+        return;
+    } else if ((entry->hash) <= ((*list)->hash)) {
+        entry->next = (*list);
+        (*list) = entry;
+        return;
+    } else {
+        assert((entry->hash) > ((*list)->hash));
+        Entry *prev = *item;
+        Entry *e = NULL;
+        for (e = prev->next; NULL != *e; e = e->next) {
+            // if (prev < entry <= e)
+            if (((prev->hash) < (entry->hash)) &&
+                ((entry->hash) <= (e->hash))) {
+                prev->next = entry;
+                entry->next = e;
+                return;
+            }
+            prev = e;
+        }
+        // append at the end of the linked list
+        assert(NULL == e);
+        assert(NULL != prev);
+        prev->next = entry;
+        entry->next = NULL;
+    }
+}
+#+end_src
+
+*** Hash Table
+
+The Hash Map consists of an array of Entry pointers. We track how many
+entries belong to the hash map in its =size= parameter; and when it
+exceeds the =capacity=, we grow the number of buckets and rebalance.
+
+#+begin_src c
+/* types.c */
+
+struct HashMap {
+    Object header;
+    Entry **table;
+    size_t capacity;
+    size_t size;
+};
+#+end_src
+
+** Constructor
+
+The constructor expects no parameters. The default capacity for a hash
+map would be 16, its initial size 0.
+
+#+begin_src c
+/* types.c */
+
+HashMap* hashmap_new() {
+    HashMap *map = alloc(sizeof(*map));
+    map->header.type = TYPE_HASH_MAP;
+    map->capacity = INITIAL_HASH_MAP_CAPACITY;
+    map->size = 0;
+    map->table = alloc_array(sizeof(struct Entry*), map->capacity);
+    return map;
+}
+#+end_src
+
+** Destructor
+
+When we destroy a HashMap object, we also have to iteratively destroy
+the table entries.
+
+#+begin_src c
+/* types.c */
+
+void hashmap_free(HashMap **this) {
+    if ((NULL == this) || (NULL == *this)) return;
+
+    for (size_t row = 0; row < (*this)->capacity; row++) {
+        Entry *iter = (*this)->table[row];
+        while (NULL != iter) {
+            Entry *next = iter->next;
+            entry_free(iter);
+            iter = next;
+        }
+    }
+
+    free(*this);
+    (*this) = NULL;
+}
+#+end_src
+
+** Getting a Value for a Key
+
+We then need to isolate a helper function to get the index for a given
+hash code. Since our code makes sure there are 2^n buckets in the table,
+we can use the fact ~hash % length == hash & (length - 1)~. Using
+bitwise-and is faster than the modulo operator.
+
+#+begin_src c
+/* types.c */
+
+static size_t indexFor(hash_t hash, size_t length) {
+    return hash & (length - 1);
+}
+#+end_src
+
+Now the process for obtaining the value for a given key is quite
+straightforward traversing the linked list ("bucket") selected by that
+index, and when finding that key, returning the associated value:
+
+#+begin_src c
+/* types.c */
+
+Object* hashmap_get(HashMap *this, Object *key) {
+    assert (NULL != this);
+
+    hash_t h = hashCode(key);
+    size_t index = indexFor(h, this->capacity);
+    for (Entry *e = this->table[index]; e != NULL; e = e->next) {
+        if (equals(key, e->key)) {
+            return e->value;
+        }
+    }
+    return NULL;
+}
+#+end_src
+
+** Associating a Value for a Key
+
+We associate a value to a key in a given hash map by finding the bucket
+associated for the hash code for that key. First, we try finding the key
+in that bucket of entries by simple traversal. If we're lucky, it's
+already associated with a value. In that case, we just update the entry
+to point to the new value, and return the old value.
+
+But if that bucket has not been started (so it's a null pointer) /or/ if
+the bucket does not contain the key, then we create a new entry, and
+prepend it to that row of the table. Since no value is associated to the
+key, we return a null pointer.
+
+#+begin_src c
+/* types.c */
+
+#define CAPACITY_FACTOR 0.75
+
+static void resize(HashMap *this, size_t new_capacity);
+
+Object* hashmap_put(HashMap *this, Object *key, Object *value) {
+    assert(NULL != this);
+
+    hash_t h = hashCode(key);
+    size_t index = indexFor(h, this->capacity);
+    Entry *entry = this->table[index];
+    if (NULL != entry) {
+        // try updating the value associated to key, if key is present
+        Entry *e = entry;
+        while (e != NULL) {
+            if ((e->hash == h) && equals(keys, e->key)) {
+                Object *old_val = e->value;
+                e->value = value;
+                return old_val;
+            }
+            e = e->next;
+        }
+        // fall-through: no key associated with that value, then prepend entry
+    }
+    // key is not present, so add entry
+    Entry *new_entry = entry_new(key, value, h);
+    // entry_insert(&(this->table[index]), new_entry);
+    new_entry->next = this->table[index];
+    this->table[index] = new_entry;
+    this->size++;
+
+    if ((this->size) >= (size_t)((this->capacity)*CAPACITY_FACTOR)) {
+        resize(this, 2*(this->capacity));
+    }
+    return NULL;
+}
+#+end_src
+
+*** Resizing the Entry Table
+
+The basic idea is to resize the hash map's underlying table by creating
+a new array of entry pointers, then transfer the contents of the array,
+free the old array of pointers (just the array). We'll also need to
+update the table pointer, and the hash map's capacity.
+
+#+begin_src c
+/* types.c */
+
+static void transfer(Entry **old_table, Entry **new_table,
+                     size_t length, size_t new_length);
+
+void resize(HashMap *this, size_t new_capacity) {
+    if ((this->capacity) >= new_capacity) return;
+
+    Entry **new_table = alloc_array(sizeof(struct Entry*), new_capacity);
+    transfer(this->table, new_table, this->capacity, new_capacity);
+    free(this->table);
+    this->table = new_table;
+    this->capacity = new_capacity;
+}
+#+end_src
+
+*** Transferring Table Contents
+
+Transferring the contents amounts to transferring rows in bucket ~i~,
+for ~i=0~ to the number of buckets.
+
+#+begin_src c
+/* types.c */
+
+static void transfer_rows(Entry *row, Entry **new_table, size_t new_length);
+
+void transfer(Entry **old_table, Entry **new_table,
+              size_t length, size_t new_length) {
+    for(size_t i = 0; i < length; i++) {
+        transfer_rows(old_table[i]; new_table, new_length);
+    }
+}
+
+void transfer_rows(Entry *row, Entry **new_table, size_t new_length) {
+    Entry *e = row;
+    while (NULL != e) {
+        Entry *next = e->next;
+        size_t index = indexFor(e->hash, new_length);
+        // entry_insert(&new_table[index], e);
+        if (NULL == new_table[index]) {
+            e->next = NULL;
+        } else {
+            e->next = new_table[index];
+        }
+        new_table[index] = e;
+        e = next;
+    }
+}
+#+end_src
+
+** Removing a key from the Hash Map
+
+If we want to disassociate a key from the hash map altogether (assuming
+the hash map contains it), then we simply update the bucket containing
+the associated hash.
+
+Yes, I know about Linus Torvalds's commentary about using a double
+pointer here, but I found it less clear after a second glance.
+
+#+begin_src c
+/* types.c */
+
+void hashmap_remove(HashMap *this, Object *key) {
+    if (NULL == this) return;
+    hash_t h = hashCode(key);
+    size_t index = indexFor(h, this->capacity);
+    Entry *entry = this->table[index];
+    Entry *prev = NULL;
+
+    while (NULL != entry) {
+        if ((entry->hash == h) && equals(entry->key, key)) {
+            if (NULL == prev) {
+                this->table[index] = entry->next;
+            } else {
+                prev->next = entry->next;
+            }
+            entry_free(&entry);
+            this->size--;
+            return;
+        }
+    }
+}
+#+end_src
+
+** Size of the Hash Map
+
+The size of the hash map has been abstracted away to a helper function.
+It just accesses the size field. For ~*this~ null pointers, it defaults
+to zero.
+
+#+begin_src c
+/* types.c */
+
+size_t hashmap_size(HashMap *this) {
+    if (NULL == this) return 0;
+
+    return this->size;
+}
+#+end_src
+
+** Hash Code
+
+We can implement the hashcode computation as treating it as a list of
+key-value entries.
+
+(N.B. Java computes the hash code of a HashMap by iterating over the
+entry set, and using their hash code computation for a generic list.
+See, e.g., [[https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/util/AbstractMap.java#L490-L496][AbstractMap::hashCode]] in JDK8).
+
+#+begin_src c
+static hash_t entry_hashCode(Entry *entry) {
+    if (NULL == entry) return 0;
+    else return hashCode(entry->key) ^ hashCode(entry->value);
+}
+
+hash_t hashmap_hashCode(HashMap *this) {
+    hash_t h = 0;
+    for (size_t row = 0; row < (this->capacity); row++) {
+        for (Entry *e = (this->table[row]); NULL != e; e = e->next) {
+            h += entry_hashCode(e);
+        }
+    }
+    return h;
+}
+#+end_src
+
+** Equality of Hash Maps
+
+This is trickier, but basically checks if every key in the ~lhs~ map
+appears in the ~rhs~ map, and if that key is associated to the same
+values. And if they have the same size, then the two hash maps are
+equal, and the method returns true. All other scenarios return false.
+
+#+begin_src c
+bool hashmap_equals(HashMap *lhs, HashMap *rhs) {
+    if (lhs == rhs) return true;
+    if (NULL == lhs) return false;
+    if (NULL == rhs) return false;
+    if ((lhs->size) != (rhs->size)) return false;
+
+    for (size_t row = 0; row < (lhs->capacity); row++) {
+        for (Entry *e = (lhs->table[row]); NULL != e; e = e->next) {
+            if (!equals(e->value, hashmap_get(rhs, e->key))) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+#+end_src
+
+** Hash Table References
+- [[http://coding-geek.com/how-does-a-hashmap-work-in-java/][How does a HashMap work in JAVA]]
+  - OpenJDK's implementation changed from a linked list ([[https://github.com/openjdk/jdk/blob/jdk8-b01/jdk/src/share/classes/java/util/HashMap.java][jdk8-b01]]) to
+    use a binary tree for buckets with 8 or more elements (by [[https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/util/HashMap.java][jdk8-b120]])
+- Intel's [[https://github.com/oneapi-src/oneTBB/blob/b15aabb39a12a4dcddb6ee886265f2bf2f972650/include/oneapi/tbb/concurrent_unordered_map.h][~concurrent_unordered_map~]]
+- Attractive Chaos's [[https://github.com/attractivechaos/klib/blob/master/khash.h][khash]]
+  - [[https://attractivechaos.wordpress.com/2008/09/02/implementing-generic-hash-library-in-c/][Implementation Notes]]
+  - [[https://attractivechaos.wordpress.com/2008/08/28/comparison-of-hash-table-libraries/][Comparison of Hash Table Libraries]]
+- [[https://rcoh.me/posts/hash-map-analysis/][An Analysis of Hash Map Implementations in Popular Languages]]
+- Common Lisp implementations all seem to use chaining
+  - [[https://github.com/sbcl/sbcl/blob/44125975b4d69d0ac3e289a4f8064f70a4164bfb/src/code/target-hash-table.lisp#L341-L533][SBCL]]
+  - [[https://github.com/Clozure/ccl/blob/c3b1e184539077d655b4b0cc1143ef6462f0d9b4/level-0/l0-hash.lisp#L426-L509][CCL]]
+  - [[https://github.com/armedbear/abcl/blob/321bac94a35f410af2a6b21847fed64b67c5e022/src/org/armedbear/lisp/HashTable.java#L39][ABCL]]

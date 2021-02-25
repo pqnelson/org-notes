@@ -80,8 +80,33 @@ Now for the configuration
 
 #+begin_example
 ~/src/emacs/$ ./autogen.sh
-~/src/emacs/$ ./configure --with-x-toolkit=no --with-m17n-flt --with-modules CFLAGS="-mcpu=native -Os"
+~/src/emacs/$ ./configure --with-x-toolkit=no --with-m17n-flt --with-modules CFLAGS="-mtune=native -mcpu=native -Os -marm"
 #+end_example
+
+If you configure with ~-Ofast~ you need to also include
+~-fno-finite-math-only~ too (or else when you run ~make~, you'll get an
+error saying Emacs won't compile with ~-ffinite-math-only~).
+
+** Improving Startup Time
+
+I noticed the startup time was rather slow. The =(emacs-init-time)=
+reports it took 10.46182 seconds without optimization for my default
+init file. (My laptop with two Intel Core2 duos, at 2.80GHz, reports a
+3.065432256 second init-time.)
+
+Setting =gc-cons-threshold= to 10000000 improved performance by about
+40%, =(emacs-init-time)= reduces to 6.671090814 seconds. Bumping it up
+to 10^8 barely improves performance, =(emacs-init-time)= reports 6.44
+seconds.
+
+I changed all the =(require 'foo)= calls to
+=(use-package foo :ensure t :defer t)=, which improved startup time by
+about a couple of second (4.426073247 seconds).
+
+This is all done with emacs compiled =-Os=; if I instead did =-O3=,
+redid the byte-compilation of ~init.el~, I get startup time in 3.67300
+seconds. If I further compiled with =-Ofast=, I get startup time in
+3.713 seconds.
 
 * Installing Common Lisp
 
@@ -101,6 +126,7 @@ I followed Rainer's [[https://web.archive.org/web/20121010001720/http://lispm.dy
 ~/src/$ git clone https://github.com/Clozure/ccl/
 ...
 ~/src/$ cd ccl/
+~/src/ccl/$ git checkout v1.12-dev.1
 ~/src/ccl/$ cd lisp-kernel/linuxarm
 ~/src/ccl/lisp-kernel/linuxarm/$ make clean; make
 ...
@@ -112,4 +138,66 @@ I followed Rainer's [[https://web.archive.org/web/20121010001720/http://lispm.dy
 ? (ccl:rebuild-ccl :full t)
 ...
 #+end_example
-I started compiling ccl about 19:46:38 (it took over 21 hours to finish).
+
+There is a bug with ~optimizers.lisp~ which hangs on master branch.
+It should take less than a minute to finish ~optimizers.lisp~, so if
+it's taking longer...it's probably a bug. (I have found the
+~v1.12-dev.1~, ~v1.12-dev.2~, ~v1.12-dev.3~, ~v1.12-dev.4~ tags are
+capable of rebuilding as expected.)
+
+The ~armcl~ binary is 633788 bytes initially, and the ~armcl.image~ is
+22347792 bytes big. After rebuilding ~v1.12-dev.1~, the binary is the
+same size, but the ~armcl.image~ is 17100816 bytes (and in ~v1.12-dev.4~,
+17158160 bytes).
+
+*** Making =armcl= global
+
+I also ran
+
+#+begin_example
+~/src/$ sudo ln -s /home/alex/src/ccl/armcl /usr/local/bin/armcl
+#+end_example
+
+This let me run armcl for any user.
+
+** Adding Quicklisp
+
+We get quicklisp:
+
+#+begin_example
+~/$ wget http://beta.quicklisp.org/quicklisp.lisp
+...
+~/$ armcl
+? (load "quicklisp.lisp")
+? (quicklisp-quickstart:install)
+#+end_example
+
+Then we append to (or create) the file =~/.ccl-init.lisp= with the
+following content:
+
+#+begin_src lisp
+(defun load-quicklisp ()
+  (let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
+                                         (user-homedir-pathname))))
+    (when (probe-file quicklisp-init)
+      (load quicklisp-init))))
+#+end_src
+
+*CAUTION:* this will /not/ load quicklisp by default, but require you to
+call =(load-quicklisp)= when you need/want it. If you want it loaded by
+default, you could just add a =(load-quicklisp)= line to the
+=~/.ccl-init.lisp= file.
+
+* Stumpwm
+** Dependencies
+
+Trying to run ~sudo apt-get build-dep stumpwm~ will install a number of
+common lisp dependencies, which quicklisp would automatically handle.
+
+* Other Links
+
+- [[http://informatimago.com/articles/raspberrypi/ccl-sur-qemu.html][CCL on RPi]] (French)
+- [[http://thisoldlisp.com/talks/els-2018/][This Old Lisp]]
+- [[http://lispm.de/ccl][CCL on Raspberry Pi]], Rainer's tutorial/notes
+- [[http://christophe.rhodes.io/notes/blog/feeds/lisp/][Christophe Rhodes on Lisp]]
+- [[http://jacek.zlydach.pl/blog/2015-03-07-lisp-on-raspberry-pi-2-part-1-setting-up.html][Lisp on Raspberry Pi, Part 2]]
