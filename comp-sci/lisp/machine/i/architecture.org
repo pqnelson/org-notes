@@ -1,0 +1,1284 @@
+#+TITLE: Architecture - I-Machine
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-02-24T17:06:08-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../../css/stylesheet.css" />
+# Created Wednesday February 24, 2021 at  5:06PM
+
+(These are annotations on the [[http://www.bitsavers.org/pdf/symbolics/I_Machine/I-Machine%20Architecture%20Specification.pdf][paper]] ([[file:../../../../../ignore/I-Machine%20Architecture%20Specification.pdf][local]]) describing the architecture of the
+Symbolics I-Machine.)
+
+* Lisp-Machine Data Types
+** Introduction to Lisp-Machine Objects
+*** Memory Words
+**** Length and Format
+
+A word was 40-bits and contained three fields:
+
+| Position  | Length  | Field Name                |
+|-----------+---------+---------------------------|
+| ~<39:38>~ | 2 bits  | Cdr Code                  |
+| ~<37:32>~ | 6 bits  | Data Type                 |
+| ~<31:0>~  | 32 bits | Address or Immediate Data |
+
+This is a minimum requirement. Possibly more bits could be alloted to a
+word, allowing for ECC, etc. ECC or parity bits are not /required/, but
+are a possible extension.
+
+In C, this would be a packed struct:
+
+#+begin_src c
+#pragma pack(1)
+struct Word {
+    uint32_t cdr  :  2;
+    uint32_t type :  6;
+    uint32_t data : 32;
+};
+#+end_src
+
+**** Fields
+
+The type field indicated what kind of information is stored in the
+word. (I think the types are ~dtp-~ prefixed identifiers in the
+documentation.)
+
+The address or immediate data field is interpreted according to the data
+type of the word.
+
+The cdr code is used for various different purposes depending on the type.
+
+*** Classes of Stored Object Representations
+# 1.1.2
+
+An object can be stored:
+1. as a list, which is built out of one or more conses (e.g., conses, compact lists, closures, big ratios,
+   double-precision floating point numbers, complex numbers, generic functions),
+2. as an immediate object, which does not require any additional memory
+   for its representation (e.g., numbers, physical addresses, primitive
+   types, instructions), or
+3. as a structure, represented as a block of memory words, the first
+   contains a header with a special data type code (e.g., compiled functions, instances, arrays, symbols,
+   bignums).
+
+Each word within the structure object may contain:
+- an object reference,
+- a header
+- a forwarding pointer, or
+- a special marker.
+
+*** Components of Stored Representations
+
+The components of stored representations found in Lisp Machine memory
+are:
+- object references,
+- headers,
+- forwarding (invisible) pointers, or
+- special markers.
+
+**** Object References
+
+Object references are the mechanism by which one refers to an object.
+There are three types of object references:
+1. object references /by address/ (implemented by a memory word whose
+   address field contains the virtual address of the stored
+   representation of the object; e.g., symbols, lists, arrays)
+2. /immediate/ object references (implemented by memory words that
+   directly contain the entire representation of the object; e.g., small
+   integers, single-precision floating point numbers)
+3. /pointers/ (contain the virtual addresses of locations that do not
+   contain objects: they point to locations /within/ objects; e.g.,
+   pointer to the value cell of a symbol).
+
+**** Headers
+
+Headers separate objects in memory. This contains information about the
+type of object. There are two types of headers:
+- ~dtp-header-i~ when the header is immediate data
+- ~dtp-header-p~ when the header is the address containing some
+  descriptive data
+
+Object references usually use the address of an object's header as the
+address of the object. "Usually". The only exceptions are
+1. the object reference to a compiled function, and
+2. the object reference to an array "with a leader"
+   (in which case the reference points to a specified location in the
+   structure)
+
+For ~dtp-header-p~, the following table describes the ~cdr-code~
+field's interpretation:
+
+| Header Type | Symbolic Name           | Object Type  |
+|-------------+-------------------------+--------------|
+|           0 | ~%header-type-symbol~   | Symbol       |
+|           1 | ~%header-type-instance~ | Instance     |
+|           2 | ~%header-type-leader~   | Array Leader |
+|           3 |                         | Reserved     |
+
+For ~dtp-header-i~, the following table describes the ~cdr-code~
+field's meaning:
+
+| Header Type | Symbolic Name                    | Object Type       |
+|-------------+----------------------------------+-------------------|
+|           0 | ~%header-type-compiled-function~ | Compiled Function |
+|           1 | ~%header-type-array~             | Array             |
+|           2 | ~%header-type-number~            | Number            |
+|           3 |                                  | Reserved          |
+
+- If we want to change the memory location of an object represented by a
+  structure, then
+  - the object's header is moved to a new location and the
+    object's old location is filled with a word of type
+    ~dtp-header-forward~, an invisible pointer that contains the address
+    of the new location of the reference.
+  - The object references in the locations of the old structure are all
+    replaced with pointers of the type ~dtp-element-forward~, which
+    contains the addresses of the new locations of the objects.
+
+**** Forwarding (Invisible) Pointers
+
+The metaphor for a "forwarding pointer" is postal forwarding, specifying
+a reference to the location containing it should be redirected to
+another memory location. They're used for internal bookkeeping by the
+storage management system.
+
+The data types of the forwarding pointers are:
+- ~dtp-external-value-cell-pointer~, used to link a symbol's value cell
+  to a closure or an instance value cell (it is not invisible to binding
+  and unbinding, see the section [[*Binding Stack][Binding Stack]])
+- ~dtp-one-q-forward~ forwards only the cell that contains it (i.e., it
+  indicates the cell is contained at the address specified in the
+  address field of the ~dtp-one-q-forward~ word and the cdr-code of the
+  required data is the cdr-code of the ~dtp-one-q-forward~ word). This
+  pointer is used to link a symbol value or function cell to a wired
+  cell or a compiled-function's function cell (as well as for many other
+  applications).
+- ~dtp-header-forward~
+- ~dtp-element-forward~
+
+A header-forward pointer is also used with list representation (which is
+explained fulling in another section, see [[*Representations of Lists][Representations of Lists]]).
+When a one-word cons must be expanded to a two-word cons by ~replacd~, a
+new two-word cons is allocated and the old one-word cons is replaced by
+a header-forward pointer containing the address of the new cons.
+
+**** Special Markers
+
+The data types of the special markers are:
+- ~dtp-null~ (placed in the value cell or function cell of a symbol or
+  in the instance-variable value cell in an instance, in those cases
+  when no value has been assigned). The address field of the null marker
+  contains the address of the name of the variable. This makes it
+  possible for an error handler to report the name of the offending
+  variable when an attempt to use the value of an unbound variable is
+  detected.
+
+  A null special marker is also used to initialize a freshly-created
+  virtual memory page in case it is accidentally accessed before an
+  object is created in it.
+
+  The encoding of the null-special-marker data type is zero. Memory that
+  is initialized to all bits zero thus contains all null words, which
+  will cause a trap if dereferenced.
+- ~dtp-monitor-forward~, intended for use with a debugging feature (see
+  the section/chapter [[*Exception Handling][Exception Handling]])
+- ~dtp-gc-forward~, used by the garbage collector and may only appear in
+  oldspace.
+
+
+*** Operand-Reference Classification
+# 1.1.4
+
+- Immediate Data (22 type codes): [[*Fixnum Representation][dtp-fixnum]], [[*Small-Ratio Representation][dtp-small-ratio]],
+  [[*Single-Precision Floating-Point Representation][dtp-single-float]], [[*Representation of Characters][dtp-character]], [[*Representation of Physical Addresses][dtp-physical-address]],
+  dtp-packed-instruction, dtp-spare-immediate-1
+- Pointer data (33 type codes): [[*Double-Precision Floating-Point Representation][dtp-double-float]], dtp-bignum, [[*Big-Ratio Representation][dtp-big-ratio]],
+  [[*Complex-Number Representation][dtp-complex]], [[*The Spare-Number Type][dtp-spare-number]], [[*Flavor Instances][dtp-instance]], [[*List Instance][dtp-list-instance]],
+  [[*Array Instance][dtp-array-instance]], [[*String Instance][dtp-string-instance]], [[*Representations of Symbols][dtp-nil]], [[*Representations of Lists][dtp-list]],
+  [[*Representations of Arrays and Strings][dtp-array, dtp-string]], [[*Representations of Symbols][dtp-symbol]], [[*Representation of Locatives][dtp-locative]], [[*Representation of Lexical Closures][dtp-lexical-closure]],
+  [[*Representation of Dynamic Closures][dtp-dynamic-closure]], [[*Representation of Compiled Functions][dtp-compiled-function]], [[*Generic Functions][dtp-generic-function]],
+  dtp-spare-pointer-1, dtp-spare-pointer-2, dtp-spare-pointer-3,
+  dtp-spare-pointer-4, [[*Program-Counter Representation][dtp-even-pc, dtp-odd-pc]], dtp-call-compiled-even,
+  dtp-call-compiled-odd, dtp-call-indirect, dtp-call-generic,
+  dtp-call-compiled-even-prefetch, dtp-call-compiled-odd-prefetch,
+  dtp-call-indirect-prefetch, dtp-call-generic-prefetch
+- Null: ~dtp-null~
+- Immediate header: ~dtp-header-i~
+- Pointer Header: ~dtp-header-p~
+- HFWD: ~dtp-header-forward~
+- EFWD: ~dtp-element-forward~
+- 1FWD: ~dtp-one-q-forward~
+- EVCP: ~dtp-external-value-cell-pointer~
+- GC: ~dtp-gc-forward~
+- Monitor: ~dtp-monitor-forward~
+- Data (55 type codes): The union of immediate data and pointer data
+- Header (2 type codes): The union of immediate header and pointer header
+- Immediate (23 codes): The union of immediate data and immediate header
+- Pointer (40 codes): The union of pointer data, null, pointer header,
+  HFWD, EFWD, 1FWD, EVCP, and monitor
+- Numeric (8 type codes): ~dtp-fixnum~,
+  ~dtp-small-ratio~,
+  ~dtp-single-float~,
+  dtp-double-float,
+  dtp-bignum,
+  dtp-big-ratio,
+  dtp-complex,
+  dtp-spare-number
+
+Observe there are 64 type codes altogether: 55 from data, then the
+following 9 additional codes
+- Null: ~dtp-null~
+- Immediate header: ~dtp-header-i~
+- Pointer Header: ~dtp-header-p~
+- HFWD: ~dtp-header-forward~
+- EFWD: ~dtp-element-forward~
+- 1FWD: ~dtp-one-q-forward~
+- EVCP: ~dtp-external-value-cell-pointer~
+- GC: ~dtp-gc-forward~
+- Monitor: ~dtp-monitor-forward~
+
+** Data-Type Descriptions
+# 1.2, pg 27
+
+*** Representations of Symbols
+# 1.2.1
+
+The object reference to a symbol is a word of data type ~dtp-symbol~
+or ~dtp-nil~. The address field of this word contains the address of a
+header of type ~dtp-header-p~. This is followed by 4 words. The header's
+header-type field equals ~%header-type-symbol~ and the address of the
+header contains the symbol's name, a string. The five words that
+constitute a symbol object are:
+
+| 0 | ~SYMBOL-NAME-CELL~     | address of the symbol's name         |
+| 1 | ~SYMBOL-VALUE-CELL~    | the value, or an unbound marker      |
+| 2 | ~SYMBOL-FUNCTION-CELL~ | the definition, or an unbound marker |
+| 3 | ~SYMBOL-PROPERTY-CELL~ | the property list                    |
+| 4 | ~SYMBOL-PACKAGE-CELL~  | the home package, or nil             |
+
+A straightforward implementation would be:
+
+#+begin_src c
+struct Symbol {
+    Word name;
+    Word value;
+    Word function;
+    Word property; /* property list */
+    Word package;
+};
+
+struct Word* make_symbol(name, value, ...) {
+    struct Symbol *symbol = malloc(sizeof(*symbol));
+    struct Word *symbol_ptr = malloc(sizeof(symbol_ptr));
+    symbol_ptr->type = DTP_SYMBOL;
+    symbol_ptr->data = (uint32_t)(symbol);
+    symbol->name = name;
+    symbol->name.type = DTP_HEADER_P;
+    symbol->name.cdr = HEADER_TYPE_SYMBOL; /* == %header-type-symbol */
+    symbol->value = value;
+    /* etc. */
+    return symbol_ptr;
+}
+#+end_src
+
+The I-Machine reserved locations for ~nil~ and ~t~ in fixed memory
+locations (vma=pma 1011000) and (vma=pma 1011005), respectively (see the
+section [[*Wired Addresses][Wired Addresses]]).
+
+*** Representation of Instances and Related Data Types
+# 1.2.2, pg 28
+
+Before we had CLOS, we had Flavors.
+
+**** Flavor Instances
+# 1.2.2.1
+
+The object reference to an instance is a word of data type ~dtp-instance~
+whose address field points to the instance structure.
+
+The stored representation of an instance consists of a header with type
+~dtp-header-p~ whose header-type field equals ~%header-type-instance~.
+The words following the header of the instance are the value cells of
+the instance variables. They constain either object references or an
+unbounded marker. The cdr codes are not used. The address field of the
+header contains the address of the hash-mask field of a flavor-description
+structure. This description is called a *"flavor"*.
+
+The fields of a flavor are:
+- the array header, part of the packaging of the structure
+- the named-structure symbol, part of the packaging of the structure
+- the size of an instance, used by the garbage collector and by the
+  instance referencing instructions (~%instance-ref~ and the like)
+- the hash mask, used by the hardware for method lookup
+- the handler hash table address, used by the hardware for method lookup
+- the name of the flavor, used by the ~type-of~ function
+- additional flavors known only to the flavor system
+
+#+begin_src c
+struct FlavorInstance {
+    Word header;
+    Word flavor_address;
+    Word instance_fields[];
+};
+/* instance->flavor_address.data == &flavor->hash_mask */
+
+struct Flavor {
+    Word header;
+    Word named_struct_symbol;
+    Word instance_size;
+    Word hash_mask;    /* hash_mask->type == DTP_FIXNUM */
+    Word hash_address; /* hash_address->type == DTP_LOCATIVE */
+    Word typename;     /* typename->type == DTP_SYMBOL */
+};
+/* flavor->hash_address.data = &handler_table */
+
+struct Handler {
+    Word key;       /* generic function, symbol, or nil */
+    Word method;    /* even-pc or odd-pc */
+    Word parameter; /* mapping table */
+};
+/* flavor->hash_address == &array(Handler) */
+#+end_src
+
+A handler table is a hash table which maps a generic function or message
+to the function to be invoked and a parameter to that function.
+Typically the function is a method, and the parameter is a mapping table
+used by that method to access instance variables.
+The mapping table is a simple, short-prefix ART-Q array
+("ART" = "ARray Type").
+
+For speed, the format of handler tables is architecturally defined and
+known by hardware. Handler hash tables are packaged inside arrays (but
+this is software dependent, not hardware or architecture dependent).
+
+A handler table consists of a sequence of three-word elements. The
+address of first word of the first element is in the flavor. Each
+element consists of:
+
+- The key: This is a generic function (~dtp-generic-function~), a
+  message name (~dtp-symbol~), or ~nil~, which is a default that matches
+  everything (~dtp-nil~)
+- The method: This is a program-counter value (~dtp-even-pc~ or
+  ~dtp-odd-pc~) addressing the instruction at which the compiled
+  function corresponding to the method is to be entered.
+- The parameter: This is a parameter that gets passed from the function
+  or message to the method as an extra argument. If the parameter in the
+  handler table is ~nil~, the generic function or message is used as the
+  parameter.
+
+#+begin_remark
+I honestly do not understand the idea of a mapping table so far.
+#+end_remark
+
+There's a "fence object" at the end of the handler hash table, which is
+filled with ~nil~ entries for its key, method, and parameter. Unused
+methods are likewise filled with ~nil~ entries.
+
+#+begin_remark
+We should note that it seems, thus far reading the fine manual, that
+~dtp-even-pc~ and ~dtp-odd-pc~ are pointers to functions --- compiled,
+or lexical closures (or dynamical closures?).
+#+end_remark
+
+**** List Instance
+# 1.2.2.2
+
+An object reference to a list instance is a word of data type
+~dtp-list-instance~ whose address field points to an instance structure.
+
+**** Array Instance
+# 1.2.2.3
+
+An object reference to an array instance is a word of data type
+~dtp-array-instance~ whose address field points to an instance field.
+
+**** String Instance
+
+An object reference to a string instance is a word of data type
+~dtp-string-instance~ whose address field points to an instance structure.\
+
+*** Representation of Characters
+# 1.2.3
+
+An object reference to a character is an immediate object of type ~dtp-character~.
+Characters seem to use the 32-bit data as follows:
+
+| Position            | Symbolic Name     | Description                     |
+|---------------------+-------------------+---------------------------------|
+| ~<31:28>~ (4 bits)  | ~%%CHAR-BITS~     | Control, Meta, Super, Hyper bit |
+| ~<27:16>~ (12 bits) | ~%%CHAR-STYLE~    | Italic, large, bold, ...        |
+| ~<15:8>~ (8 bits)   | ~%%CHAR-CHAR-SET~ | Character set                   |
+| ~<7:0>~ (8 bits)    | ~%%CHAR-SUBINDEX~ | Index within this character set |
+
+As I can glean from this: the ~%%CHAR-SUBINDEX~ corresponds to what we
+would call the code point for the character, or perhaps the 16-bits from
+the character set & index correspond to the code point. (Arguably, the
+control, meta, super, hyper bits should be added, as well, giving a
+20-bit character set.)
+
+*** Representation of Numbers
+# 1.2.4
+**** Fixnum Representation
+
+A 32-bit two's-complement integer. Its data type is ~dtp-fixnum~.
+
+**** Bignum Representation
+# 1.2.4.2
+**** Small-Ratio Representation
+# 1.2.4.3
+
+The 32-bit field is treated as an array of two 16-bit integers, the
+first is a signed two's-complement number treated as the numerator, the
+second is an unsigned number treated as the denominator.
+
+If the numerator is zero, or the denominator is 1 or 0, then the number
+is treated as an illegal value.
+
+**** Big-Ratio Representation
+# 1.2.4.4
+
+An object reference to a big-ratio is a word of data type
+~dtp-big-ratio~ whose address field points to a cons pair. The car of
+the cons contains the numerator, the dcr contains the denominator. As
+with the small-ratio, if the numerator is 0 or a denominator of 0 or 1,
+or a negative number, is treated as an illegal value.
+
+**** Single-Precision Floating-Point Representation
+# 1.2.4.5
+
+A single-precision floating-point number is an immediate object of data
+type ~dtp-single-float~ whose data field contains a 32-bit IEEE basic
+floating-point number. The following fields are defined:
+
+| Position  | Symbolic Name       | Description                                    |
+|-----------+---------------------+------------------------------------------------|
+| ~<31>~    | ~%%SINGLE-SIGN~     | 0 for positive numbers, 1 for negative numbers |
+| ~<30:23>~ | ~%%SINGLE-EXPONENT~ | excess-127 exponent                            |
+| ~<22:0>~  | ~%%SINGLE-FRACTION~ | positive fraction, with hidden 1 on the left   |
+
+
+**** Double-Precision Floating-Point Representation
+# 1.2.4.6
+
+The object reference to a double-precision floating point number is a
+word of data-type ~dtp-double-float~. The address field of the
+double-float word contains the address of a cons pair. The data fields
+in the words of the cons hold two fixnums, containing the sign,
+exponent, and fraction as packed fields. The first contains:
+
+| Position  | Symbolic Name            | Description                                    |
+|-----------+--------------------------+------------------------------------------------|
+| ~<31>~    | ~%%DOUBLE-SIGN~          | 0 for a positive number, 1 for negative number |
+| ~<30:20>~ | ~%%DOUBLE-EXPONENT~      | excess-1023 exponent                           |
+| ~<19:0>~  | ~%%DOUBLE-FRACTION-HIGH~ | top 20 bits of fraction (excluding hidden bit) |
+
+The second fixnum contains one field:
+
+| Position | Symbolic Name    | Description                |
+|----------+------------------+----------------------------|
+| ~<31:0>~ | ~%%FRACTION-LOW~ | bottom 32 bits of fraction |
+
+This conforms to the IEEE standard 64-bit representation of
+double-precision numbers.
+
+
+**** Complex-Number Representation
+# 1.2.4.7
+
+The object reference to a complex number is a word of data type
+~dtp-complex~ whose address points to a cons pair. The car of the cons
+contains the real part of the number, and the cdr contains the imaginary
+part.
+
+#+begin_remark
+Obviously, this is the Cartesian representation of the number. There are
+other representations (polar, etc.) which are also useful, but we
+realize this now, long after the fact. We didn't know any better back in
+the '80s.
+#+end_remark
+**** The Spare-Number Type
+# 1.2.4.8
+This is reserved for future use.
+*** Representations of Lists
+# 1.2.5
+An object reference to a list has its type be ~dtp-list~.
+The cdr-code tag of a memory word which constitutes an element of a list
+specifies how to get the cdr of its associated cons according to whether
+the list is stored in normal linked-list form or in compact
+("cdr-coding") form. The cdr-code tag works as follows:
+
+| Code | Symbolic Name | Description                                                        |
+|------+---------------+--------------------------------------------------------------------|
+|    0 | ~cdr-next~    | Increment the address to get a reference to the cdr, itself a cons |
+|    1 | ~cdr-nil~     | The cdr is ~nil~. This is used for both kinds of list.             |
+|    2 | ~cdr-normal~  | Fetch the next memory word; it contains a reference to the cdr.    |
+|    3 |               | (illegal)                                                          |
+
+Basically cdr-coding works by reserving cells sequentially.
+
+#+begin_src c
+/* representation of '(a b) using normal lists */
+struct Symbol *a, *b;
+/* initialize a, b */
+struct Word list;
+list.type = DTP_LIST;
+
+struct Word cons[2];
+cons[0].cdr_code = CDR_NORMAL;
+cons[0].type = DTP_SYMBOL;
+cons[0].value = (int32_t)a; /* address of 'a */
+cons[1].cdr = CDR_NIL;
+cons[1].type = DTP_LIST;
+
+struct Word next_cons[2];
+next_word[0].cdr_code = CDR_NORMAL;
+next_word[0].type = DTP_SYMBOL;
+next_word[0].data = (int32_t)b; /* address of 'b */
+next_word[1].cdr_code = CDR_NIL;
+next_word[1].type = DTP_NIL;
+next_word[1].data = NIL;
+
+cons[1].data = (int32_t)&next_word[0];
+list.data = &cons[0]; /* list's data is the address of first cons pair */
+
+/* the same list compactified */
+struct Word compact_list;
+compact_list.type = DTP_LIST;
+Word cells[2];
+cells[0].cdr_code = CDR_NEXT;
+cells[0].type = DTP_SYMBOL;
+cells[0].data = (int32_t)a; /* address of 'a */
+cells[1].cdr_code = CDR_NIL;
+cells[1].type = DTP_SYMBOL;
+cells[1].data = (int32_t)b; /* address of 'b */
+
+compact_list.data = &cells[0];
+#+end_src
+
+We see see that cdr-coding requires half as many cells as a naive
+linked-list structure.
+
+*** Representations of Arrays and Strings
+# 1.2.6
+
+Object references to an array or string is a word with data type
+~dtp-array~ or ~dtp-string~.
+
+Whether an array is refered to by ~dtp-array~ or ~dtp-string~ has no
+effect on its stored representation: the data type of the object
+reference simply serves to make the ~stringp~ predicate faster.
+
+An array is a structure consisting of a prefix followed by optional
+data. A prefix is defined to be a word whose data type is ~dtp-header-i~
+and whose header type is ~%header-type-array~ followed by zero or more
+additional words. The prefix defines the type and shape of the array.
+
+The byte fields in a prefix header's 32-bit immediate field are:
+
+| Position  |    | Symbolic Name               | Description                                                                                                    |
+|-----------+----+-----------------------------+----------------------------------------------------------------------------------------------------------------|
+| ~<31:26>~ |  6 | ~ARRAY-TYPE-FIELD~          | Combination of fields below                                                                                    |
+| ~<31:30>~ |  2 | ~ARRAY-ELEMENT-TYPE~        | Element type, one of: fixnum, character, boolean, object-reference                                             |
+| ~<29:27>~ |  3 | ~ARRAY-BYTE-PACKING~        | Byte packing. Base 2 logarithm (0 to 5) of the number of elements per word, 6 or 7 in this field is undefined. |
+| ~<26>~    |  1 | ~ARRAY-LIST-BIT~            | 1 in ~ART-Q-LIST~ arrays, 0 otherwise                                                                          |
+| ~<25>~    |  1 | ~ARRAY-NAMED-STRUCTURE-BIT~ | 1 in named-structures, 0 otherwise                                                                             |
+| ~<24>~    |  1 | ~ARRAY-SPARE-1~             | (spare for software uses)                                                                                      |
+| ~<23>~    |  1 | ~ARRAY-LONG-PREFIX-BIT~     | 1 if prefix is multiple words                                                                                  |
+| ~<22:15>~ |  8 | ~ARRAY-LEADER-LENGTH-FIELD~ | Number of elements in the leader                                                                               |
+| ~<14:0>~  | 15 | ~ARRAY-~                    | Use of these bits depends on the prefix type, as described below                                               |
+
+- Bits ~<31:27>~ corresponds to the same bits of the control word of an
+  array register. (Array registers are discussed in the [[*I-Machine Array Registers][next section]].)
+- Bits ~<26:24>~ are not used by the hardware.
+- Bits ~<31:27.23>~ enable various spceial pieces of hardware or
+  microcode dispatches.
+- Bits ~<22:0>~ are used by hardware under microcode control.
+- Bits ~<31:26>~ are sometimes grouped together as ~ARRAY-TYPE-FIELD~
+
+Some arrays include /packed data/ in their stored representations. For
+example, character strings store each character in a single 8-bit byte.
+This is more efficient than general arrays, which require an entire word
+for each element. Accessing the n-th character of a string fetches the
+~n/4~ word of the string, extracts the ~mod(n,4)~ byte of that word, and
+constructs an object reference to the character whose code is equal to
+the contents of the byte.
+
+(Machine instructions in compiled functions are stored in a similarly
+packed form.)
+
+For uniformity, the stored representation of an object containing the
+packed data remains a sequence of object references. Each word in an
+array of element-type fixnum, boolean, or character is an immediate
+reference, data type ~dtp-fixnum~, whose thirty-two bits are broken down
+into packed fields as required, such as four 8-bit bytes in the case of
+some character strings.
+
+*Array leader.* An array can optionally be preceded by a leader, a
+sequence of object references that implements the array-leader feature.
+If there is a leader, the leader is preceded by a header of its own,
+tagged ~dtp-header-p~ and ~%header-type-leader~; the address field of
+this header contains the address of the array's main header --- i.e.,
+the address of the header of the array prefix.
+
+Note if an array has a leader, the address field of an object reference
+designating that array contains the address of the main header, the one
+after the leader, /not/ the address of the header at the beginning of
+the array's store (before the leader). Schematically:
+
+#+begin_src c
+Word prefix; /* array prefix */
+prefix.cdr = CDR_ARRAY;
+prefix.type = DTP_HEADER_I;
+prefix.data = ...;
+
+Word *data = &prefix;
+data++; /* next word after prefix */
+data->type = DTP_FIXNUM;
+data->data = 42; /* some random data */
+
+data++; /* second array entry */
+data->type = DTP_FIXNUM;
+data->data = 31; /* some random data */
+
+
+Word leader[]; /* array leader */
+leader[0] = {cdr = CDR_LEADER, type = DTP_HEADER_P, data = &prefix};
+/* leader[1] is a named-structure symbol */
+leader[1] = {type = DTP_SYMBOL, data = &name};
+leader[2] = {type = DTP_FIXNUM, data = ... };
+
+
+Word array;
+array.type = DTP_ARRAY;
+array.data = (&prefix) + 1; /* start address of array data */
+#+end_src
+
+#+begin_remark
+The address of leader element ~i~ of an array whose address is ~a~,
+regardless of whether the prefix is long or short, is given by ~(- a i 1)~.
+#+end_remark
+
+The two array formats --- ~%array-prefix-short~ and ~%array-prefix-long~
+--- are provided to optimize speed and space for simple, small arays
+(which are the most common).
+
+~%array-prefix-short~ has the 15 bits in position ~<14:0>~, with the
+symbolic name ~ARRAY-SHORT-LENGTH-FIELD~, give the length of the array.
+
+The prefix is one word, the array is one-dimensional and not displaced,
+but may have a leader. Most common arrays include defstructs, editor
+lines, and most arrays with fill-pointers use this type.
+
+The address of data element ~i~ of a short-prefix array whose address is
+~a~ and whose ARRAY-BYTE-PACKING field is ~b~ is given by ~(+ a (ash i (- b)) 1)~.
+When ~b~ is greater than zero, packed array elements are stored
+right-to-left within words, thus the right shift to right-justify data
+element ~i~ is ~(ash (logand i (1- (ash 1 b))) (- 5 b))~.
+
+~%array-prefix-long~ has the following 15 bits in position ~<14:0>~:
+
+| Position | Bits | Symbolic Name                 | Description                               |
+|----------+------+-------------------------------+-------------------------------------------|
+| ~<14>~   |    1 | ~ARRAY-DISPLACED-BIT~         | 0 for normal array, 1 for displaced array |
+| ~<13>~   |    1 | ~ARRAY-DISCONTIGUOUS-BIT~     | 0 for normal aray, 1 for conformal array  |
+| ~<12:3>~ |   12 | ~ARRAY-LONG-SPARE~            | Spare                                     |
+| ~<2:0>~  |    3 | ~ARRAY-LONG-DIMENSIONS-FIELD~ | Number of dimensions.                     |
+
+The long prefix format is used for displaced arrays (including indirect
+arrays), arrays that are too large to fit in the short-prefix format,
+and multidimensional (including zero-dimensional) arrays. The first word
+in the prefix contains the number of dimensions in place of the length
+of the data. The total length of the prefix is ~(+ 4 (* d 2))~ where ~d~
+is the number of dimensions.
+
+The second word of the prefix is the length of the array. For
+conformally displaced arrays, this is the maximum legal linear
+subscript, not the number of elements (which may be smaller).
+
+The third word of the prefix is the index offset. This is always
+present, even for non-indirect arrays. Zero should be stored here in
+non-displaced arrays, since this word is always added to the subscript.
+
+The fourth word of the prefix is the address of the data. This is a
+locative to the first word after the prefix for normal arrays, except
+for arrays with no elements (in which case it is a locative to the array
+itself to avoid pointing to garbage). Fir displaced arrays, this is a
+locative or a fixnum. For indirect arrays, this is an array.
+
+The remaining wods of the prefix consist of two words for each
+dimension. The first word is the length of that dimension and the second
+word is the value to multiply that subscript by.
+
+#+begin_src c
+Word prefix[];
+Word array_data[];
+
+union { int32_t data,
+        struct {
+            int32_t element_type : 2;
+            int32_t byte_packing : 3;
+            int32_t list_bit     : 1;
+            int32_t named_structure_bit : 1;
+            int32_t spare_1      : 1;
+            int32_t long_prefix_bit : 1;
+            int32_t leader_length : 8;
+            int32_t displaced_bit : 1;
+            int32_t discontiguous_bit : 1;
+            int32_t long_spare : 12;
+            int32_t long_dimensions : 3;
+        } fields } prefix_data;
+prefix_data.fields = {element_type        = ELEMENT_FIXNUM,
+                      byte_packing        = 3,
+                      list_bit            = 0,
+                      named_structure_bit = 0,
+                      spare_1             = 0,
+                      long_prefix_bit     = 1,
+                      leader_length       = 0,
+                      displaced_bit       = 0,
+                      discontiguous_bit   = 0,
+                      long_spare          = 0
+                      long_dimensions     = 2};
+prefix[0] = {cdr = CDR_ARRAY, type = DTP_HEADER_I,
+             data = prefix_data.data};
+prefix[1] = {type = DTP_FIXNUM, data = 28}; /* array length */
+prefix[2] = {type = DTP_FIXNUM, data = 0};  /* index offset */
+prefix[3] = {type = DTP_LOCATIVE,
+             data = &array_data[0]};
+/* first dimension */
+prefix[4] = {type = DTP_FIXNUM, data = 7}; /* length */
+prefix[5] = {type = DTP_FIXNUM, data = 4}; /* multiplier */
+/* second dimension */
+prefix[6] = {type = DTP_FIXNUM, data = 4}; /* length */
+prefix[7] = {type = DTP_FIXNUM, data = 1}; /* multiplier */
+
+array_data[0] = {type = DTP_FIXNUM,
+                 data = ...};
+array_data[1] = {type = DTP_FIXNUM,
+                 data = ...};
+array_data[2] = {type = DTP_FIXNUM,
+                 data = ...};
+array_data[3] = {type = DTP_FIXNUM,
+                 data = ...};
+
+Word array_pointer = {type = DTP_ARRAY,
+                      data = &prefix[0]};
+#+end_src
+
+*** I-Machine Array Registers
+# 1.2.7, pg 52
+
+*** Representations of Functions and Closures
+**** Representation of Compiled Functions
+The object reference to a compiled function is a word of data type
+~dtp-compiled-function~ whose address field points to a word inside a
+compiled-function structure.
+- The prefix is two words long and has a fixed format.
+- The body is a sequence of one or more instructions.
+- The suffix is at least one word long and contains debugging
+  information and constant data.
+
+The cdr code for the instruction words have special meaning, see the
+section [[*Instruction Sequencing][Instruction Sequencing]] for details.
+
+The memory layout for this looks roughly as follows:
+
+#+CAPTION: The memory layout for a compiled function
+#+NAME:   fig:SED-HR4049
+[[../../../../img/lisp-machine-0.svg]]
+
+Now, for a ~(defun <function-name> (params...) body..)~ we have a symbol
+for ~<function-name>~ which points to a compiled function. Roughly, this
+corresponds to:
+
+#+begin_src c
+Symbol symbol;
+symbol.name = pointer_to(/* <function-name> string */);
+symbol.function = Word{type = DTP_ONE_Q_FORWARD,
+                       data = &fn_instr[0]};
+
+/* or really */
+make_symbol(pointer_to(/* <function-name> string */), /* name */
+            nil,                        /* value */
+            pointer_to(fn_instr[0]),    /* function */
+            nil,                        /* property */
+            nil)                        /* package */
+#+end_src
+
+**** Generic Functions
+An object reference to a generic function has data type
+~dtp-generic-function~. The address field points to a list-like
+structure whose content is not architecturally defined; it is used
+internally by the flavor system. See the section [[*Generic Functions and Message Passing][Generic Functions and Message Passing]].
+
+**** Representation of Lexical Closures
+An object reference to a lexical closure is a word of data type
+~dtp-lexical-closure~ which points to a cons pair. The car of the cons is
+the lexical environment, and the cdr is the function.
+
+The lexical environment is a cdr-coded list of value cells associated
+with the closure. In such an implementation, this list must be compact
+(i.e., cdr-coded using ~cdr-next~) since instructions that access the
+lexical variables compute addresses of the variables simply as an offset
+past the address of the environment.
+
+When a lexical closure is called as a function, the environment will be
+made an argument to the function. For more information, see the chapter
+on function calling, specifically the section [[*Starting a Function Call][Starting a Function Call]].
+
+**** Representation of Dynamic Closures
+The object reference to a dynamic closure is a word of data type
+~dtp-dynamic-closure~, which points to a list structure. The format of a
+dynamic closure is not architecturally defined, but is determined by
+software. (The hardware traps to Lisp to funcall dynamic closures.)
+
+The list representation allows closures to be stored in the stack (/a la/
+~with-stack-list~); certain special forms such as ~error-restart~
+exploit this.
+
+This list is always cdr-coded, but nothing actually depends on this.
+The first element of the list is the function succeeding elements are
+taken in pairs. The first element of each pair is a locative pointer to
+the value cell to be bound when the closure is called. The second
+element of each pair is a locative pointer to the closure value cell to
+which that cell is to be linked.
+
+*** Instruction Representation
+# 1.2.9
+The instructions ins a compiled function are a sequence of words whose
+data-type field selects among three types of words:
+1. *Packed instructions.* Data types with codes 60--77 are used for
+   words that contain two 18-bit instructions. These are the usual
+   stack-machine type instructions.
+2. *Full-word instructions.* Data types coded 50--57 are used for words
+   that contain a single intsruction with an address field. These are
+   used for starting function calls.
+
+   In addition, data type ~dtp-external-value-cell-pointer~ (type
+   code 4) is used to fetch the contents of the value cell of a special
+   variable or the function cell of a function an push it on the stack.
+   This is actually an optimization to save space and time; the value
+   cell address could be pushed as a constant locative and then a ~car~
+   instruction could be executed.
+
+   Besides these, there is one other full word instruction type, the
+   entry instructions, which do not contain addresses, but instead look
+   like pairs of half-word instructions. These are decoded by their
+   opcode field, not by the data-type field.
+3. *Constants.* All other data types encountered among the instructions
+   in a compiled function are constants. The word from the instruction
+   stream is pushed on the stack with the cdr code set to ~cdr-next~.
+   The hardware will signal an error if the word is a header or an
+   invisible pointer.
+
+The fields within various types of instructions are described in the
+chapter on the [[*Macroinstruction Set][Macroinstruction Set]].
+
+*** Program-Counter Representation
+# 1.2.10
+The program counter (pc) is a register in the I-machine that contains
+the virtual address of the currently executing instruction. Since
+instructions are packed 2 to a word, we need to specify which half-word
+instruction is executing.
+
+The information is included in the data-type code of the pc contents;
+thus there are two pc data types ~dtp-even-pc~ and ~dtp-odd-pc~.
+Word of these data types are not usually found in the stored
+representations of Lisp objects, but occur within stack frames or inside
+compiled functions for long branches. See
+[[*Function Calling, Message Passing, Stack-Group Switching][Function Calling, Message Passing, Stack-Group Switching]].
+
+*** Representation of Locatives
+# 1.2.11
+A locative is a pointer to virtual memory implemented as an object with
+data type ~dtp-locative~ and an address field that is the address of the
+virtual memory word to which it points.
+
+It is classified as a /pointer/ object reference.
+
+Locatives may point to locations /within/ objects, such as the value
+cell of a symbol. Other uses include the pointer to the start of data in
+long format arrays and the base address of array registers.
+
+*** Representation of Physical Addresses
+# 1.2.12
+
+The data type ~dtp-physical-address~ allows unmapped access to the full
+(up to 32 bits wide) physical address space. Since it is a separate data
+type it has restricted usage.
+
+** Data-Type Code Assignments
+# 1.3, pg 66
+*** Headers, Special Markers, and Forwarding Pointers
+
+| Type Code | Symbolic Name           | Description                                      |
+|-----------+-------------------------+--------------------------------------------------|
+|         0 | ~DTP-NULL~              | Unbound variable/function, uninitialized storage |
+|         1 | DTP-MONITOR-FORWARD     | This cell is being monitored                     |
+|         2 | DTP-HEADER-P            | Structure header, with pointer field             |
+|         3 | DTP-HEADER-I            | Structure header, with immediate bits            |
+|         4 | DTP-EXTERNAL-VALUE-CELL | Invisible except for binding                     |
+|         5 | DTP-ONE-Q-FORWARD       | Invisible pointer (forwards 1 cell)              |
+|         6 | DTP-HEADER-FORWARD      | Invisible pointer (forwards whole structure)     |
+|         7 | DTP-ELEMENT-FORWARD     | Invisible pointer in element of structure        |
+
+*** Number Data Types
+
+| Type Code | Symbolic Name    | Description                                |
+|-----------+------------------+--------------------------------------------|
+|        10 | DTP-FIXNUM       | Small integer                              |
+|        11 | DTP-SMALL-RATIO  | Ratio with small numerator and denominator |
+|        12 | DTP-SINGLE-FLOAT | Single-precision floating point            |
+|        13 | DTP-DOUBLE-FLOAT | Double-precision floating point            |
+|        14 | DTP-BIGNUM       | Big integer                                |
+|        15 | DTP-BIG-RATIO    | Ratio with big numerator or denominator    |
+|        16 | DTP-COMPLEX      | Complex number                             |
+|        17 | DTP-SPARE-NUMBER | A number to the hardware trap mechanism    |
+
+*** Instance Data Types
+
+| Type Code | Symbolic Name       | Description                           |
+|-----------+---------------------+---------------------------------------|
+|        20 | DTP-INSTANCE        | Ordinary instance                     |
+|        21 | DTP-LIST-INTSANCE   | Instance that masquerades as a cons   |
+|        22 | DTP-ARRAY-INSTANCE  | Instance that masquerades as an array |
+|        23 | DTP-STRING-INSTANCE | Instance that masquerades as a string |
+
+*** Primitive Data Types
+
+There are 11 primitive types:
+
+| Type Code | Symbolic Name         | Description                          |
+|-----------+-----------------------+--------------------------------------|
+|        24 | DTP-NIL               | The symbol ~NIL~                     |
+|        25 | DTP-LIST              | A cons                               |
+|        26 | DTP-ARRAY             | An array that is not a string        |
+|        27 | DTP-STRING            | A string                             |
+|        30 | DTP-SYMBOL            | A symbol other than ~NIL~            |
+|        31 | DTP-LOCATIVE          | Locative pointer                     |
+|        32 | DTP-LEXICAL-CLOSURE   | Lexical closure of a function        |
+|        33 | DTP-DYNAMIC-CLOSURE   | Dynamic closure of a function        |
+|        34 | DTP-COMPILED-FUNCTION | Compiled code                        |
+|        35 | DTP-GENERIC-FUNCTION  | Generic function (see later section) |
+|        36 | DTP-SPARE-POINTER-1   | Spare Pointer                        |
+|        37 | DTP-SPARE-POINTER-2   | Spare Pointer                        |
+|        40 | DTP-PHYSICAL-ADDRESS  | Physical address                     |
+|        41 | DTP-SPARE-IMMEDIATE-1 | Spare immediate                      |
+|        42 | DTP-SPARE-POINTER-3   | Spare pointer                        |
+|        43 | DTP-CHARACTER         | Common Lisp character object         |
+|        44 | DTP-SPARE-POINTER-4   | Spare pointer                        |
+
+Note codes 36, 37, 42, 44 are spare pointer data types and code 41 is a
+spare immediate data type.
+
+*** Special Marker for Garbage Collector
+
+| Type Code | Symbolic Name  | Description                             |
+|-----------+----------------+-----------------------------------------|
+|        45 | DTP-GC-FORWARD | Object-moved flag for garbage collector |
+
+*** Data Types for Program Counter Values
+
+
+| Type Code | Symbolic Name | Description                                                              |
+|-----------+---------------+--------------------------------------------------------------------------|
+|        46 | DTP-EVEN-PC   | PC at first packed word instruction in word, or of full-word instruction |
+|        47 | DTP-ODD-PC    | PC at second instruction in word                                         |
+
+*** Full Word Instruction Data Types
+
+| Type Code | Symbolic Name                   | Description                                              |
+|-----------+---------------------------------+----------------------------------------------------------|
+|        50 | DTP-CALL-COMPILED-EVEN          | Start call, address is compiled-function                 |
+|        51 | DTP-CALL-COMPILED-ODD           | Start call, address is compiled-function                 |
+|        52 | DTP-CALL-INDIRECT               | Start call, address is function cell                     |
+|        53 | DTP-CALL-GENERIC                | Start cell, address is generic-function                  |
+|        54 | DTP-CALL-COMPILED-EVEN-PREFETCH | Same as DTP-CALL-COMPILED-EVEN but prefetch is desirable |
+|        55 | DTP-CALL-COMPILED-ODD-PREFETCH  | Same as DTP-CALL-COMPILED-ODD but prefetch is desirable  |
+|        56 | DTP-CALL-INDIRECT-PREFETCH      | Same as DTP-CALL-INDIRECT but prefetch is desirable      |
+|        57 | DTP-CALL-GENERIC-PREFETCH       | Same as DTP-CALL-GENERIC but prefetch is desirable       |
+
+
+*** Half-Word Instruction Data Types
+
+| Type Code | Symbolic Name          | Description                             |
+|-----------+------------------------+-----------------------------------------|
+|    60--77 | DTP-PACKED-INSTRUCTION | Used for instructions in compiled code. |
+
+Each word of this type contains two 18-bit instructions, which is why 16
+types are used up. Bits ~<37:36>~ contain 3 to select the instruction
+data type. Bits ~<39:38>~, the cdr code, contain sequencing information
+described in the chapter on theinstruction set. The instruction in bits
+~<17:0>~ is executed before the instruction in bits ~<35:18>~.
+
+
+** Appendix: Comparison of 3600-Family and I-Machine Data Representations
+
+*** Array Differences
+
+*** Compiled Function Differences
+
+* Memory Layout and Addressing
+# pg 77
+
+** Address Space
+
+The address space is divided into thirty-two zones, each containing 128
+megabytes. The thirty-two zones are variously assigned to several
+sections as shown in the table below. Note that ephemeral space is a
+subset of the virtual address space:
+
+- ~#0o00000000000..0o00777777777~ Ephemeral address space (zone 0, the low
+  2^7 = 128 megawords)
+- ~#0o00000000000..0o36777777777~ Virtual address space (zones 0--30, the
+  low 3968 megawords)
+- ~#0o37000000000..0o37777777777~ Unmapped address space (zone 31, the high
+  128 megawords)
+- ~#0o00000000000..0o37777777777~ Total address space (4 gigawords)
+
+Note that ~0o37777777777~ is 2^{32}-1.
+
+*** Virtual Addresses
+
+A virtual address is divided into two fields for mapping purposes: the
+virtual page number and the offset within page fields.
+
+Virtual space occupies thirty-one zones. An internal processor register
+allows each zone to be specified as either old or new space.
+
+| Position  | Meaning                                                  |
+|-----------+----------------------------------------------------------|
+| ~<31:27>~ | Zone number (zones 0 through 30)                         |
+| ~<31:8>~  | Virtual Page Number (VPN -- 512K virtual pages per zone) |
+| ~<7:0>~   | Offset within Page (256 words per page)                  |
+
+The virtual address space is partitioned by software into regions,
+areas, and quanta. These have no direct hardware impact. Note, however,
+that the hardware hash function for the Page Hash Table is optimized for
+a quantum of size 65536 words (see [[*Page Hash Table][Page Hash Table]]).
+
+*** Ephemeral Addresses
+
+The lowest zone of the virtual address is reserved for the storage of
+ephemeral objects. This space is provided to support a garbage
+collection strategy that takes advantage of recently created objects
+usually having a short lifetime.
+
+Ephemeral space is divided into thirty-two levels. Data within an
+ephemeral level is the same age. The relative ages of different levels
+is up to decide and would normally change dynamically. Each level is
+further divided into two halves (old and new space). An internal
+processor register specifies which half is old and which is new.
+
+The thirty-two ephemeral levels are grouped into four groups of eight
+levels each. The ephemeral level groups referenced by a page are
+maintained in the PHT.
+
+
+| Position  | Meaning                                     |
+|-----------+---------------------------------------------|
+| ~<31:27>~ | 00000 => ephemeral, otherwise non-ephemeral |
+| ~<26>~    | which half of the ephemeral level           |
+| ~<25:21>~ | ephemeral level number                      |
+| ~<25:24>~ | ephemeral level group number                |
+| ~<20:0>~  | word address within an ephemeral level      |
+
+
+*** Unmapped Addresses
+# pg 78
+*** Wired Addresses
+
+*** Pages
+
+**** Page Hash Table
+**** PHT Lookup Algorithm
+**** Translation Algorithm
+
+** GC Support
+
+** Address Translation
+
+*** Page Hash Table
+
+*** PHT Lookup Algorithm
+
+*** Translation Algorithm
+
+** Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing
+
+
+* Macroinstruction Set
+# 3. pg 95 of pdf
+** Introduction
+# 3.1.
+*** Instruction Sequencing
+# 3.1.1.
+The cdr-code of instruction words specify the sequencing of instructions
+for execution.
+
+| Cdr Code | PC Increment          | Comment                                  |
+|----------+-----------------------+------------------------------------------|
+|        0 | +1                    | Normal instruction sequencing            |
+|        1 | illegal               | Fence; marks end of compiled function    |
+|        2 | -1                    | On some constants                        |
+|        3 | +2 PC even, +3 PC odd | Before some constants, on some constants |
+
+
+
+*** Internal Registers
+# 3.1.2.
+
+The I-machine internal registers may be summarized in the following
+table. An asterisk by an address entry means the register may be defined
+by an implementation, and "reserved" means the register may be
+architecturally defined in the future. The information in this table is
+specific to Revision 0 of the Ivory chip.
+
+|  Address | Read/Write | Data Type | Register Name                                 |
+|----------+------------+-----------+-----------------------------------------------|
+|     ~0*~ |            |           | For use by microcode only                     |
+|        1 | RW         | loc       | Frame Pointer (FP)                            |
+|        2 | RW         | loc       | Local Pointer (LP)                            |
+|        3 | RW         | loc       | Stack Pointer (SP)                            |
+|     ~4*~ |            |           | For use by microcode only                     |
+|        5 | RW         | loc       | Stack Cache Lower Bound                       |
+|        6 | RW         | loc/pa    | BAR0 Contents                                 |
+|      206 | RW         | loc/pa    | BAR1 Contents                                 |
+|      406 | RW         | loc/pa    | BAR2 Contents                                 |
+|      606 | RW         | loc/pa    | BAR3 Contents                                 |
+|        7 | R          | fix       | BAR0 Hashed                                   |
+|      207 | R          | fix       | BAR1 Hashed                                   |
+|      407 | R          | fix       | BAR2 Hashed                                   |
+|      607 | R          | fix       | BAR3 Hashed                                   |
+|    ~10*~ |            |           | For use by microcode only                     |
+|    ~11*~ |            |           |                                               |
+|       12 | RW         | pc        | Continuation                                  |
+|       13 | RW         | fix       | DP Op                                         |
+|       14 | RW         | fix       | Control Register                              |
+|    ~15*~ |            |           |                                               |
+|       16 | RW         | fix       | Ephemeral Oldspace Register                   |
+|       17 | RW         | fix       | Zone Oldspace Register                        |
+|       20 | R          | fix       | Implementation Revision                       |
+|    ~21*~ | RW         | fix       | FP coprocessor present                        |
+|    ~22*~ |            |           |                                               |
+|       23 | RW         | fix       | Preempt Register                              |
+|    ~24*~ | RW         | fix       | Icache Control                                |
+|    ~25*~ | RW         | fix       | Prefetcher Control                            |
+|    ~26*~ | RW         | fix       | Map Cache Control                             |
+|    ~27*~ | RW         | fix       | Memory Control                                |
+|    ~30*~ | R          | fix       | ECC Log                                       |
+|    ~31*~ | R          | fix       | ECC Log Address                               |
+|    ~32*~ | W          | -         | Invalidate Matching Map Entry for VMA in BAR0 |
+|   ~232*~ | W          | -         | Invalidate Matching Map Entry for VMA in BAR1 |
+|   ~432*~ | W          | -         | Invalidate Matching Map Entry for VMA in BAR2 |
+|   ~632*~ | W          | -         | Invalidate Matching Map Entry for VMA in BAR3 |
+|    ~33*~ |            |           |                                               |
+|       34 | RW         | fix       | Stack Cache overflow limit                    |
+|    ~35*~ |            |           |                                               |
+|    ~36*~ |            |           |                                               |
+|       37 | reserved   |           |                                               |
+| ~40-47*~ |            |           |                                               |
+|    ~50*~ |            |           |                                               |
+|    ~51*~ |            |           |                                               |
+|    ~52*~ | W          | -         | Load Matching Map Word 1 forVMA in BAR0       |
+|   ~252*~ | W          | -         | Load Matching Map Word 1 forVMA in BAR1       |
+|   ~452*~ | W          | -         | Load Matching Map Word 1 forVMA in BAR2       |
+|   ~652*~ | W          | -         | Load Matching Map Word 1 forVMA in BAR3       |
+|  53--777 | reserved   |           |                                               |
+|     1000 | RW         | --        | Top of Stack (TOS)                            |
+|     1001 | RW         | --        | Array Event Count                             |
+|     1002 | RW         | --        | Binding Stack Pointer                         |
+|     1003 | RW         | --        | Catch Block Pointer                           |
+|     1004 | RW         | --        | Control Stack Limit                           |
+|     1005 | RW         | --        | Control Stack Extra Limit                     |
+|     1006 | RW         | --        | Binding Stack Limit                           |
+|     1007 | RW         | --        | PHT Base                                      |
+|     1010 | RW         | --        | PHT Mask                                      |
+|     1011 | RW         | --        | Count Map Reloads                             |
+|     1012 | RW         | --        | List Cache Area                               |
+|     1013 | RW         | --        | List Cache Address                            |
+|     1014 | RW         | --        | List Cache Length                             |
+|     1015 | RW         | --        | Structure Cache Area                          |
+|     1016 | RW         | --        | Structure Cache Address                       |
+|     1017 | RW         | --        | Structure Cache Length                        |
+|     1030 | RW         | --        | Maximum Frame Size                            |
+|     1031 | RW         | --        | Stack Cache Dump Quantum                      |
+
+
+*** Memory Side Effects
+# 3.1.3.
+Reading memory may not cause side effects. The architecture permits an
+implementation to start a memory read that it will not use, perhaps
+because of instruction prefetching, perhaps while starting an array
+reference before an out of bounds check is peformed, perhaps because of
+instruction pipelining, or perhaps for something else.
+
+Writing memory using a ~dtp-physical-address~ is allowed to cause side
+effects; ~dtp-physical-address~ is guaranteed not to be cached, and the
+write is guaranteed to happen exactly once. Also both
+~%coprocessor-read~ and ~%coprocessor-write~ instructions may cause side
+effects; they are guaranteed to be performed exactly once.
+
+*** Explanation of Instruction Definitions
+# 3.1.3
+**** Instruction Formats
+# 3.1.3.1.
+# **** Internal Registers
+# # 3.1.3.2.
+# **** Explanation of Instruction Definitions
+# # 3.1.3.3.
+**** Arguments: the Data Types Accepted
+# 3,1,3,2, Arguments: the Data Types Accepted
+# pg 108
+**** Types of Instruction Exceptions
+**** Types of Memory References
+**** Top-of-Stack Register Effects
+# 3.1.3.5
+**** Cdr Codes of Values Returned
+# 3.1.3.6
+** The Instructions
+*** List-Function Operations
+*** Predicate Intsructions
+*** Numeric Operations
+*** Data-Movement Instructions
+*** Field-Extraction Instructions
+*** Array Operations
+*** Block Instructions
+*** Function-Calling Instructions
+*** Binding Instructions
+*** Catch Instructions
+*** Lexical Variable Accessors
+*** Instance Variable Accessors
+*** Subprimitive Instructions
+* Function Calling, Message Passing, Stack-Group Switching
+** Stacks
+*** Control Stack
+*** Binding Stack
+*** Data Stack
+** Registers Important to Function Calling and Returning
+** Function Calling
+*** Starting a Function Call
+*** Pushing the Arguments
+*** Finishing the Call
+** Function Entry
+*** Push-apply-args
+*** Pull-apply-args
+*** Trapping Out of Entry and Restarting
+** Function Returning
+*** Function Return Instructions
+*** Frame Cleanup
+*** Value Matchup
+** Catch, Throw and Unwind-Protect
+** Generic Functions and Message Passing
+*** Flavor
+*** Handler Table
+*** Calling a Generic Function
+*** Sending a Message
+*** Accessing Instance Variables
+** Stack-Group Switching
+** Appendix: Comparison of 3600-Family and I-Machine Function Calling
+* Exception Handling

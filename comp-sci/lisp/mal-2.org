@@ -280,6 +280,10 @@ void symbol_free(Symbol **symbol);
 hash_t symbol_hashCode(Symbol *this);
 #+end_src
 
+We make public the =symbol_free()= function, though we may want to hide
+it, and make some method to register it with the garbage collector
+hidden from the user.
+
 Again, we are using opaque pointers (since it's good style):
 
 #+begin_src c
@@ -429,6 +433,7 @@ header and addresses. If one of the arguments is NULL, then its double
 pointer will point to NULL.
 
 #+begin_src c
+/* types.c */
 Cons* cons_new(Object *car, Object *cdr) {
     Cons *cell = alloc(sizeof(*cell));
     cell->header.type = TYPE_CONS;
@@ -445,6 +450,7 @@ recursively freeing the car and cdr, before finally freeing the wrapper
 and metadata for the Cons cell itself.
 
 #+begin_src c
+/* types.c */
 void cons_free(Cons **this) {
     if ((NULL == this) || (NULL == *this)) return;
     obj_free((*this)->car);
@@ -472,6 +478,7 @@ The actual source  code implementation needs to handle the special case
 where ~cell == nil~, when it should be zero.
 
 #+begin_src c
+/* types.c */
 hash_t cons_hashCode(Cons *cell) {
     if (NULL == cell) return 0;
 
@@ -496,6 +503,7 @@ the car of the right-hand side, and the cdr of both sides are equal.
 Component-wise equality, in other words.
 
 #+begin_src c
+/* types.c */
 bool cons_equals(Cons *lhs, Cons *rhs) {
     if (lhs == rhs) return true;
     if (NULL == lhs) return false;
@@ -605,6 +613,7 @@ insert into the linked list, insert the new entry in a manner that the
 linked list is sorted by hash code.
 
 #+begin_src c
+/* types.c */
 void entry_insert(Entry **list, Entry *entry) {
     assert(NULL != entry);
     if (NULL == list) return;
@@ -663,6 +672,8 @@ map would be 16, its initial size 0.
 
 #+begin_src c
 /* types.c */
+
+#define INITIAL_HASH_MAP_CAPACITY 16 /* must be power of 2 */
 
 HashMap* hashmap_new() {
     HashMap *map = alloc(sizeof(*map));
@@ -906,6 +917,8 @@ entry set, and using their hash code computation for a generic list.
 See, e.g., [[https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/util/AbstractMap.java#L490-L496][AbstractMap::hashCode]] in JDK8).
 
 #+begin_src c
+/* types.c */
+
 static hash_t entry_hashCode(Entry *entry) {
     if (NULL == entry) return 0;
     else return hashCode(entry->key) ^ hashCode(entry->value);
@@ -930,6 +943,8 @@ values. And if they have the same size, then the two hash maps are
 equal, and the method returns true. All other scenarios return false.
 
 #+begin_src c
+/* types.c */
+
 bool hashmap_equals(HashMap *lhs, HashMap *rhs) {
     if (lhs == rhs) return true;
     if (NULL == lhs) return false;

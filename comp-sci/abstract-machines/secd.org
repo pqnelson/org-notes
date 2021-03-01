@@ -26,6 +26,16 @@ Why Lisp? Well, we don't need to consider a parser or grammar for a
 simple input language. It's nothing more than wishing to avoid
 difficulties.
 
+* Basic Data Structures
+
+The five key data structures SECD machines will build, manipulate, and
+keep in memory:
+1. Arbitrary S-expressions for computed data
+2. Lists representing programs to be executed
+3. Stacks used by the program's instructions
+4. "Value lists" containing the arguments for uncompleted function applications
+5. Closures to represent unprocessed function applications
+
 * Machine Description
 
 Like any abstract machine, we have some instruction set which
@@ -174,7 +184,8 @@ pair of instructions plus an environment for it.
 
 The recursive aspect of =RAP= is due to ~rplaca~ which amounts to
 be a =(setf (car e') v)= (thus replacing the =PENDING= dummy
-metasymbol introduced by =DUM=).
+metasymbol introduced by =DUM=). The mnemonic really is ~rplaca(x,y)~
+"replace car of ~x~ by ~y~ and return pointer to ~x~".
 
 Remember when we noted =e= is basically a stack of lists, and data
 stored in the =e= environment is given a unique identifier =(x, y)= ?
@@ -211,6 +222,12 @@ consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
 - John D. Ramsdell, "The Tail-Recursive SECD Machine". Manuscript
   dated 1999.
 - [[https://netzhansa.blogspot.com/2008/09/revisiting-secd-and-power-of-lisp-while.html][Revisiting SECD and the Power of Lisp]]
+- P.M. Kogge,
+  {{{book-title(The Architecture of Symbolic Computers)}}}.
+  McGraw--Hill, 1991, ch. 7.
+- W.H. Burge,
+  {{{book-title(Recursive Programming Techniques)}}}.
+  Addison-Wesley, 1975.
 
 ** Lisp to SECD Compiler
 
