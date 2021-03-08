@@ -1,0 +1,119 @@
+#+TITLE: Landau Notation
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-03-07T10:31:44-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday March  7, 2021 at 10:31AM
+
+* Squiggle
+
+We write $f(x)\sim g(x)$ as $x\to x_{0}$ --- usually with $f$ being some
+complicated mess, and $g$ something simple like a monomial --- if
+
+\begin{equation}
+\lim_{x\to x_{0}}\frac{f(x)}{g(x)} = 1.
+\end{equation}
+
+We say $f(x)$ and $g(x)$ are {{{define(Asymptotically Equivalent)}}} as
+$x\to x_{0}$ if $f(x)\sim g(x)$.
+
+#+begin_math-example
+We could use a truncated Taylor polynomial about $x_{0}$ of $f(x)$ to
+get a $g(x)$ such that $f(x)\sim g(x)$ as $x\to x_{0}$, since
+$g(x)\to f(x_{0})$ in that limit by construction.
+#+end_math-example
+
+* Big Oh
+
+We write
+
+\begin{equation}
+f(x) = \mathcal{O}(g(x))\quad\mbox{as}\quad x\to x_{0}
+\end{equation}
+
+if the ratio $f(x)/g(x)$ is bounded as $x\to x_{0}$; i.e.,
+there is some positive numbers $\delta\gt0$ and $M\gt0$ such that for
+any $x$
+
+\begin{equation}
+|x-x_{0}|\lt\delta\implies |f(x)|\leq Mg(x).
+\end{equation}
+
+Alternatively, we could consider the condition
+
+\begin{equation}
+\limsup_{x\to a} \frac{\left|f(x)\right|}{g(x)}\lt\infty.
+\end{equation}
+
+** Arithmetic
+
+#+begin_theorem
+If $f_{1}=\mathcal{O}(g_{1})$ and $f_{2}=\mathcal{O}(g_{2})$, then
+$f_{1}f_{2}=\mathcal{O}(g_{1}g_{2})$.
+#+end_theorem
+
+#+begin_theorem
+If $k$ is a nonzero constant, and if $f=\mathcal{O}(g)$, then
+$kf=\mathcal{O}(g)$. Further, $\mathcal{O}(|k|g)=\mathcal{O}(g)$.
+#+end_theorem
+
+#+begin_theorem
+If $f_{1}=\mathcal{O}(g_{1})$ and $f_{2}=\mathcal{O}(g_{2})$, then
+$f_{1}+f_{2}=\mathcal{O}(\max(g_{1},g_{2}))$.
+#+end_theorem
+
+#+begin_corollary
+The set of $\mathcal{O}(g)$ functions form a convex cone.
+#+end_corollary
+
+** Notation
+
+We often write things like
+
+\begin{equation}
+f(x) = g(x) + \mathcal{O}(h(x))
+\end{equation}
+
+to mean the same thing as
+
+\begin{equation}
+f(x)-g(x) = \mathcal{O}(h(x)).
+\end{equation}
+
+It's not uncommon to do mathematics with big-O terms when doing
+asymptotic analysis.
+
+* Little Oh
+
+The intuition for $f(x) = \mathcal{o}(g(x))$ as $x\to x_{0}$ is "$g(x)$
+grows much faster than $f(x)$". Formally, it is
+
+\begin{equation}
+\lim_{x\to x_{0}}\frac{f(x)}{g(x)} = 0.
+\end{equation}
+
+We also write $f(x)\ll g(x)$ as $x\to x_{0}$ to indicate the same thing.
+
+#+begin_math-example
+We see $\sin(x)\ll 1$ and $\sin(x)\sim x$ as $x\to 0$.
+#+end_math-example
+
+** Arithmetic
+
+#+begin_theorem
+If $k$ is a nonzero constant, and if $f=\mathcal{o}(g)$, then $cf = \mathcal{o}(g)$.
+#+end_theorem
+
+#+begin_theorem
+If $f=\mathcal{o}(F)$ and if $g=\mathcal{o}(G)$, then $fg=\mathcal{o}(FG)$.
+#+end_theorem
+
+#+begin_theorem
+If $f=\mathcal{o}(g)$ and if $g=\mathcal{o}(h)$, then $f=\mathcal{o}(h)$.
+#+end_theorem

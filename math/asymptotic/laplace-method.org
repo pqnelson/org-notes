@@ -1,0 +1,100 @@
+#+TITLE: Laplace's Method
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-03-07T15:44:08-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday March  7, 2021 at  3:44PM
+
+For "sharply peaked" integrands, we can approximate the integral since
+the dominant contribution comes from the neighborhood of a single point
+(the peak). Laplace-type integrals are of the form
+
+\begin{equation}
+I(x) = \int^{b}_{a} f(t)\E^{x\phi(t)}\,\D t
+\end{equation}
+
+as $x\to\infty$ and are prime candidates for using Laplace's method.
+
+* Examples
+
+#+begin_math-example
+Consider, as $x\to\infty$,
+
+\begin{equation}
+I(x) = \int^{10}_{-10}\E^{-xt^{2}}\,\D t.
+\end{equation}
+
+This is a Laplace-type integral, with $f(t)=1$ and $\phi(t)=-t^{2}$. But
+we can't apply integration-by-parts since $\phi'(0)=0$.
+
+A crude estimate: draw the curve then determine its width when
+\begin{equation}
+\E^{-xt^{2}}\sim 1
+\end{equation}
+which happens when $t=1/\sqrt{x}$. If we pretend the integrand is a
+rectangle, we get $I(x)\sim\mathcal{O}(1/\sqrt{x})$. And it's correct!
+
+Let's examine the tail. The tail region where $|t|\gg 1/\sqrt{x}$
+contribute exponentially small terms. We don't need to examine the
+tails: they're transcendentally small terms, they do not affect the
+asymptotic expansion. They're "subdominant".
+
+Now, we take
+\begin{equation}
+\begin{split}
+I(x) &= \int^{10}_{-10}\E^{-xt^{2}}\,\D t=\left(\int^{\infty}_{-\infty}\E^{-xt^{2}}\,\D t\right) + \mbox{(TST)}\\
+&= \sqrt{\frac{\pi}{x}} + \mbox{(TST)}
+\end{split}
+\end{equation}
+where "TST" stand for "transcendentally small terms".
+
+*Question:* How do we know the remainder terms really are
+"transcendentally small terms"?
+
+*Solution.* We observe the remainder term is
+\begin{equation}
+R(x) = -2\int^{\infty}_{10}\E^{-xt^{2}}\,\D t.
+\end{equation}
+We need to come up with a bound to reflect the remainder term really is
+a transcendentally small term. For $t\gt 10$ we see $t^{2}\gt 10t$,
+hence
+\begin{equation}
+\begin{split}
+|R(x)| &\leq 2\int^{\infty}_{10}\E^{-x10t}\,\D t = \left.\frac{\E^{-10xt}}{-10x}\right|^{t=\infty}_{t=10}\\
+&\leq\frac{\E^{-100x}}{100x}.
+\end{split}
+\end{equation}
+Hence we have our hard bound
+\begin{equation}
+R(x)\lt \frac{\E^{-100x}}{100x}
+\end{equation}
+which is clearly as transcendentally small term.
+#+end_math-example
+
+#+begin_math-example
+Now consider
+\begin{equation}
+I(x) = \int^{\infty}_{-\infty}\E^{-x\cosh(t)}\,\D t.
+\end{equation}
+To leading order,
+\begin{equation}
+\cosh(t)\approx 1 + \frac{t^{2}}{2} + \mathcal{O}(t^{4})
+\end{equation}
+as $t\to 0$. When $t$ is large, we're out in the tails, and it does not
+matter that this approximation is no good! Then we have
+\begin{equation}
+\begin{split}
+I(x) &\sim\int^{\infty}_{-\infty}\exp\left[-x\left(1 + \frac{t^{2}}{2}\right)\right]\D t\\
+&\sim\E^{-x}\int^{\infty}_{-\infty}\E^{-xt^{2}/2}\,\D t=\sqrt{\frac{2\pi}{x}}\E^{-x}.
+\end{split}
+\end{equation}
+Again, the remainder is a transcendentally small term.
+#+end_math-example
+
+* Higher-Order Terms

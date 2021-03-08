@@ -30,26 +30,26 @@ solutions [22–24].
 
 ** Classical Symmetries
 
-- Ovsiannikov, L.V.
-  {{{book-title(Group Analysis of Differential Equations)}}}.
+- Ovsiannikov, L.V. \\
+  {{{book-title(Group Analysis of Differential Equations)}}}. \\
   Academic Press, 1982.
-- GW Bluman, JW Cole,
-  {{{book-title(Similarity Methods for Differential Equations)}}}.
+- GW Bluman, JW Cole, \\
+  {{{book-title(Similarity Methods for Differential Equations)}}}. \\
   Springer, 1974.
-- PJ Olver,
-  {{{book-title(Applications of Lie Groups to Differential Equations)}}}.
+- PJ Olver, \\
+  {{{book-title(Applications of Lie Groups to Differential Equations)}}}. \\
   2nd ed., Springer, 2000
-- VK Andreev, OV Kaptsov, VV Pukhnachov, AA Rodionov,
-  {{{book-title(Applications of Group-Theoretical Methods in Hydrodynamics)}}}.
+- VK Andreev, OV Kaptsov, VV Pukhnachov, AA Rodionov, \\
+  {{{book-title(Applications of Group-Theoretical Methods in Hydrodynamics)}}}. \\
   Kluwer, 1998.
 
 ** Nonclassical Symmetry Reduction
 
-- Peter A. Clarkson, Elizabeth L. Mansfield,
-  "Algorithms for the Nonclassical Method of Symmetry Reductions".
+- Peter A. Clarkson, Elizabeth L. Mansfield, \\
+  "Algorithms for the Nonclassical Method of Symmetry Reductions". \\
   [[https://arxiv.org/abs/solv-int/9401002][arXiv:solv-int/9401002]], 27 pages
-- Peter J Olver and Evgenii M Vorob'ev,
-  "Nonclassical and Conditional Symmetries".
+- Peter J Olver and Evgenii M Vorob'ev, \\
+  "Nonclassical and Conditional Symmetries". \\
   In: /CRC Handbook of Lie Group Analysis of Differential Equations/, vol.
   3, N.H. Ibragimov, ed., CRC Press, Boca Raton, Fl., 1996, pp.291--328.
   [[http://www-users.math.umn.edu/~olver/s_/v.pdf][PDF]].
@@ -63,12 +63,12 @@ find the symmetries of the simpler equation, then use it as the basis
 for a /perturbed/ symmetry group (approximate symmetry group) of our
 original differential equation.
 
-- Baikov, Gazizov, and Ibragimov,
-  "Approximate symmetries".
+- Baikov, Gazizov, and Ibragimov, \\
+  "Approximate symmetries". \\
   /Math. USSR Sbomik/ *46* (1989) pp.427--441.
   - First publication inventing the technique
-- V. A. Baikov, R. K. Gazizov, N. Kh. Ibragimov,
-  "Approximate symmetries".
+- V. A. Baikov, R. K. Gazizov, N. Kh. Ibragimov, \\
+  "Approximate symmetries". \\
   /Mat. Sb./ (N.S.), *136(178)*:4(8) (1988), 435–450;
   /Math. USSR-Sb./, *64*:2 (1989), 427–441.
   [[http://www.mathnet.ru/php/archive.phtml?wshow=paper&jrnid=sm&paperid=1752&option_lang=eng][Eprint]]
@@ -80,27 +80,77 @@ of the method is that exact solutions to a complex (nonintegrable)
 equation are sought by jointly analyzing this equation and an auxiliary
 simpler (integrable) equation, called a /differential constraint/."
 
-- Peter Olver,
-  [[http://www-users.math.umn.edu/~olver/s_/dc.pdf][Direct Reduction and Differential Constraints]].
+- Peter Olver, \\
+  [[http://www-users.math.umn.edu/~olver/s_/dc.pdf][Direct Reduction and Differential Constraints]]. \\
   /Proc. Roy. Soc. London/ *A 444* (1994), 509--523.
 
 * Clarkson-Kruskal method
 
-- P A Clarkson and M D Kruskal,
-  "New similarity solutions of the Boussinesq equation".
+- P A Clarkson and M D Kruskal, \\
+  "New similarity solutions of the Boussinesq equation". \\
   /Journal of Mathematical Physics/ *30* (1989) pp 2201-2213.
   - First paper introducing the technique.
-- SHEN Shou-Feng,
+- SHEN Shou-Feng, \\
   "Clarkson–Kruskal Direct Similarity Approach for
-  Differential-Difference Equations".
+  Differential-Difference Equations". \\
   /Commun. Theor. Phys./ (Beijing, China) *44* (2005) pp. 964–966
-- AD Polyanin,
-  "Comparison of the effectiveness of different methods for constructing exact solutions to nonlinear PDEs".
+- AD Polyanin, \\
+  "Comparison of the effectiveness of different methods for constructing
+  exact solutions to nonlinear PDEs". \\
   /Mathematics/ *7*, no. 5 (2019)
   [[https://doi.org/10.3390/math7050386][doi:10.3390/math7050386]]
 
 * Functional Separation of Variables
 
-- Andrei D. Polyanin,
-  "Functional separation of variables in nonlinear PDEs: General approach, new solutions of diffusion-type equations".
+The basic idea is to solve the problem
+
+\begin{equation}
+F(x, u_{x}, u_{t}, u_{xx}, u_{xt}, u_{tt}, \dots) = 0
+\end{equation}
+
+The separation of variables usually takes the form $u(x,t) = X(x)T(t)$,
+but the /functional separation of variables/ uses the implicit form
+
+\begin{equation}
+\int h(u)\,\D u = \xi(x)\omega(t) + \eta(x).
+\end{equation}
+
+Where in Heaven's name does this come from? And what on Earth is $h(u)$,
+$\xi(x)$, $\omega(t)$, and $\eta(x)$?
+
+Well, this is a generalization of the nonlinear heat equation
+
+\begin{equation}
+u_{t} = \partial_{x}[f(u)u_{x}]
+\end{equation}
+
+where $f(u)$ is an arbitrary function. This admits a traveling-wave
+solution $u=u(z)$ for $z=\lambda t + \kappa x$, which can be represented
+in the implicit form
+
+\begin{equation}
+\kappa^{2}\int\frac{f(u)}{\lambda u + C_{1}}\D u = \lambda t + \kappa x +
+C_{2}
+\end{equation}
+
+The generalization is carried out as follows:
+
+$$ \kappa^{2}\frac{f(u)}{\lambda u + C_{1}} \to h(u) $$
+
+$$ \lambda\to \xi(x) $$
+
+$$ t \to \omega(t) $$
+
+$$ \kappa x + C_{2}\to \eta(x).$$
+
+- Andrei D. Polyanin, \\
+  "Construction of exact solutions in implicit form for PDEs: New
+  functional separable solutions of non-linear reaction-diffusion
+  equations with variable coefficients". \\
+  May 2019 /International Journal of Non-Linear Mechanics/ *111*:95-105
+  DOI: [[http://dx.doi.org/10.1016/j.ijnonlinmec.2019.02.005][10.1016/j.ijnonlinmec.2019.02.005]],
+  [[http://eqworld.ipmnet.ru/Arts_Polyanin/NLM_2019_Polyanin.pdf][Eprint]]
+- Andrei D. Polyanin, \\
+  "Functional separation of variables in nonlinear PDEs: General
+  approach, new solutions of diffusion-type equations". \\
   [[https://arxiv.org/abs/2001.01645][arXiv:2001.01645]], 56 pages

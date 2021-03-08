@@ -1,0 +1,274 @@
+#+TITLE: Asymptotic Expansions
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-03-07T11:06:21-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday March  7, 2021 at 11:06AM
+
+* Asymptotic Sequences and Expansions
+
+#+begin_definition
+An {{{define(Asymptotic Sequence)}}} (or "asymptotic scale")
+as $x\to x_{0}$ consists of a
+sequence of functions $\{\phi_{j}(x)\}_{j\in\NN}$ such that for all $j$,
+$\phi_{j}(x)\gg\phi_{j+1}(x)$.
+#+end_definition
+
+#+begin_remark
+1. Some definitions of an asymptotic sequence reverses the ordering, i.e.,
+   defines it as such that $\phi_{j+1}(x)\gg\phi_{j}(x)$ as $x\to x_{0}$,
+   for any $j$. This is useful for $x_{0}=\infty$, for example.
+2. The indexing set may be extended to be something like
+   $\{k\in\ZZ|k\geq n\}$. I'm not sure if we can extend it to the entire
+   set of integers, we may run into difficulties.
+#+end_remark
+
+#+begin_math-example
+An asymptotic sequence as $x\to\infty$ which is frequently used are the
+inverse monomials $\phi_{k}(x) = x^{-k}$. We see $\phi_{k+1}(x)\ll\phi_{k}(x)$
+as $x\to\infty$.
+#+end_math-example
+
+#+begin_definition
+Let $f(x)$ be a function and $\{\phi_{j}(x)\}_{j\in\NN}$ an asymptotic
+sequence as $x\to x_{0}$.
+The {{{define(Asymptotic Expansion)}}} of $f(x)$ as $x\to x_{0}$ is a
+function
+\begin{equation}
+f(x)\sim a_{1}\phi_{1}(x) + \dots + a_{n}\phi_{n}(x) + \dots
+\end{equation}
+such that for each $n\in\NN$, as $x\to x_{0}$ we have the partial sums
+\begin{equation}
+f(x) - \sum^{n}_{j=1}a_{j}\phi_{j}(x)\ll\phi_{n}(x).
+\end{equation}
+(Equivalently, the remainder from the n-th partial sum is dominated by
+the n-th element in the asymptotic sequence.)
+#+end_definition
+
+Just take a note to compare an asymptotic series to a convergent series
+for a sequence of partial sums
+\begin{equation}
+S_{n}(x) = \sum^{n}_{j=1}a_{j}\phi_{j}(x)
+\end{equation}
+
+- Convergence :: $S_{n}(x)\to f(x)$ as $n\to\infty$ for each fixed $x$
+- Asymptotic :: $S_{n}(x)\sim f(x)$ as $x\to x_{0}$, for each fixed $n$.
+
+* Uniqueness of Asymptotic Expansions
+
+Relative to an asymptotic sequence $\{\phi_{j}(x)\}$ as $x\to x_{0}$,
+the asymptotic expansion of $f(x)$ is unique. But if we change
+asymptotic sequences, we get different coefficients, and so this
+uniqueness is with the asterisk "For a fixed asymptotic sequence".
+
+More precisely, if we expand a given function as
+
+\begin{equation}
+f(x)\sim a_{1}\phi_{1}(x) + \dots
+\end{equation}
+
+then the claim is the coefficients $a_{1}$, \dots, are uniquely
+determined for that sequence. Why?
+
+Well, we determine the coefficients as
+
+\begin{equation}
+a_{1} = \lim_{x\to x_{0}}\frac{f(x)}{\phi_{1}(x)}
+\end{equation}
+
+since
+
+\begin{equation}
+\lim_{x\to x_{0}}\frac{f(x)}{a_{1}\phi_{1}(x)} = 1.
+\end{equation}
+
+(Otherwise we could not have $f(x)\sim a_{1}\phi_{1}(x)$, contradicting
+the fact we are using an asymptotic expansion.)
+
+Now, the next coefficient in the expansion is given by
+
+\begin{equation}
+f(x)\sim a_{1}\phi_{1}(x) + a_{2}\phi_{2}(x)
+\end{equation}
+
+which we find the coefficient by
+
+\begin{equation}
+a_{2} = \lim_{x\to x_{0}}\frac{f(x) - a_{1}\phi_{1}(x)}{\phi_{2}(x)}.
+\end{equation}
+
+#+begin_exercise
+Prove if $f(x)\sim g_{1}(x) + g_{2}(x)$ as $x\to x_{0}$, then
+$f(x)-g_{1}(x)\sim g_{2}(x)$ as $x\to x_{0}$. Do we need the additional
+hypothesis that $g_{1}(x)\ll g_{2}(x)$ as $x\to x_{0}$?
+#+end_exercise
+
+The uniqueness of the coefficient depends on the uniqueness of these
+limits
+
+\begin{equation}
+a_{n+1} = \lim_{x\to x_{0}}\frac{f(x) - S_{n}(x)}{\phi_{n+1}(x)}.
+\end{equation}
+
+** Non-Uniqueness
+
+If we have two different asymptotic sequences $\{\phi_{j}(x)\}$ and
+$\{\psi_{j}(x)\}$, then the asymptotic expansions of $f(x)$ as
+\begin{equation}
+f(x)\sim\sum_{j=1}a_{j}\phi_{j}(x)
+\end{equation}
+and
+\begin{equation}
+f(x)\sim\sum_{j=1}b_{j}\psi_{j}(x)
+\end{equation}
+does not necessarily imply $a_{j}=b_{j}$ for all $j$.
+
+For a simple intuitive example, consider $\phi_{j}(x) = x^{j}$ and
+$\psi_{j}(x) = \exp(jx)$. We'd clearly get different asymptotic
+expansions as $x\to\infty$.
+
+* Transcendentally Small Terms
+
+#+begin_definition
+We call $f(x)$ a {{{define(Transcendentally Small Term)}}} if $f(x)\ll x^{-n}$
+as $x\to\infty$ for any (fixed) $n\geq0$.
+#+end_definition
+
+#+begin_remark
+Bender and Orszog calls such a term {{{define(Subdominant)}}} to $x^{-n}$.
+#+end_remark
+
+#+begin_math-example
+The function $\exp(-x)$ is a transcendentally small term as $x\to\infty$.
+We'll need to show that $\exp(-x)\ll x^{-n}$ as $x\to\infty$ for any
+$n\geq 0$. Check:
+
+\begin{equation}
+\lim_{x\to\infty}\frac{\E^{-x}}{x^{-n}} = \lim_{x\to\infty}x^{n}\E^{-x} = 0.
+\end{equation}
+
+This is true from basic calculus, so we have the desired result.
+
+But while on the subject, note the asymptotic expansion
+
+\begin{equation}
+\exp(-x)\sim a_{0} + \frac{a_{1}}{x} + \frac{a_{2}}{x^{2}} + \dots
+\end{equation}
+
+has all zero coefficients $a_{j}=0$ for $j\geq0$. Hence $f(x)$ and
+$g(x)=f(x)+C\E^{-x}$ have the same asymptotic expansion, so
+transcendentally small terms are /invisible/ to asymptotic power series
+and can cause numerical difficulties.
+#+end_math-example
+
+#+begin_remark
+1. "Hyper-asymptotics" attempts to deal with transcendentally small
+   terms (also called "asymptotics beyond all orders" or a
+   [[https://en.wikipedia.org/wiki/Perturbation_problem_beyond_all_orders][perturbation problem beyond all orders]]). There's a note
+   by Boyd, "The Devil's Invention" (2000) reviewing the field.
+2. Trouble is because $\exp(-z)$ is not analytic in $\CC$, and has an
+   essential singularity at $\infty$.
+#+end_remark
+
+* Arithmetic of Asymptotic Series
+
+We can add, subtract, multiply, divide, and integrate asymptotic series
+term-by-term.
+If, as $x\to x_{0}$, we have
+\begin{equation}
+\begin{split}
+f(x) &\sim f_{1}\phi_{1}(x) + f_{2}\phi_{2}(x) + \dots \\
+g(x) &\sim g_{1}\phi_{1}(x) + g_{2}\phi_{2}(x) + \dots
+\end{split}
+\end{equation}
+then we have
+\begin{equation}
+f(x)g(x) \sim \left(f_{1}\phi_{1}(x) + f_{2}\phi_{2}(x) + \dots\right)\left(g_{1}\phi_{1}(x) + g_{2}\phi_{2}(x) + \dots\right)
+\end{equation}
+and so on.
+
+*BUT* we must be careful with the operations of substitution and
+differentiation.
+
+#+begin_math-example
+Consider
+\begin{equation}
+f(x) = \exp(x^{2})
+\end{equation}
+and
+\begin{equation}
+x(\varepsilon) = \frac{1}{\varepsilon} + \varepsilon
+\end{equation}
+as $\varepsilon\to 0$ (so $x\to\infty$).
+
+*Correct way:* we have exactly
+\begin{align}
+f(x(\varepsilon)) &= \exp(x(\varepsilon)^{2}) \\
+&= \E^{\varepsilon^{2} + 2 + (1/\varepsilon)^{2}} \\
+&= \E^{2}\E^{\varepsilon^{2}}\E^{(1/\varepsilon)^{2}}
+\end{align}
+But the Taylor expansion of the exponential function for small
+$\varepsilon$ gives us
+\begin{equation}
+\E^{\varepsilon^{2}} = 1 + \varepsilon^{2} + \frac{1}{2!}\varepsilon^{4}+\dots
+\end{equation}
+which means
+\begin{equation}
+\begin{split}
+f(x(\varepsilon)) &= \E^{\varepsilon^{2}}\E^{(1/\varepsilon)^{2}}\left(1 + \varepsilon^{2} + \frac{1}{2!}\varepsilon^{4}+\dots\right)\\
+&\sim \E^{2}\E^{1/\varepsilon^{2}}
+\end{split}
+\end{equation}
+as $\varepsilon\to0$. We only used the asymptotic expansion of the
+"small part" /after/ doing the substitution.
+
+*Wrong way:* if we tried asymptotically expanding first, then
+substitution, we get the wrong results. We'd have $x(\varepsilon)\sim1/\varepsilon$,
+and substitution gives us
+\begin{equation}
+f(x(\varepsilon))\sim\E^{1/\varepsilon^{2}}\quad\mbox{(WRONG!)}
+\end{equation}
+which is off numerically by a factor of $\E^{2}$.
+#+end_math-example
+
+#+begin_math-example
+Differentiation also causes problems if done without care. Observe
+\begin{equation}
+f(x) = \sin(x)+x\sim x
+\end{equation}
+as $x\to\infty$, since
+\begin{equation}
+\lim_{x\to\infty}\frac{\sin(x)}{x}=0.
+\end{equation}
+But naively differentiating /after/ taking asymptotics predicts
+\begin{equation}
+f'(x)\sim 1 \quad\mbox{(WRONG)}.
+\end{equation}
+But
+\begin{equation}
+f'(x) = 1 + \cos(x)\not\sim 1
+\end{equation}
+as $x\to\infty$. The trouble is $\sin(z)$ has an essential singularity
+at $\infty$.
+#+end_math-example
+
+#+begin_remark
+Tauberian theorems tell us when it is okay to differentiate an
+asymptotic expansion. For example, if $f(x)$ and $f'(x)$ have asymptotic
+expansions in $\{\phi_{j}(x)\}$ as $x\to x_{0}$, then it's OK to
+differentiate term-by-term the asymptotic expansion.
+#+end_remark
+
+* References
+
+- John P. Boyd, \\
+  "The Devil's Invention: Asymptotic, Superasymptotic and
+  Hyperasymptotic Series". \\
+  /Acta Applicandae Mathematicae/ *56*, no.1 (2000)
+  [[https://www.researchgate.net/publication/2816730_The_Devil%27s_Invention_Asymptotic_Superasymptotic_and_Hyperasymptotic_Series][ResearchGate]], [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.38.5936][CiteSeerX]]
