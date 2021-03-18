@@ -1,6 +1,7 @@
 #+TITLE: Infinities
 #+AUTHOR: Alex Nelson
 #+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-05T11:53:00-08:00>
 #+LANGUAGE: en
 #+OPTIONS: H:5
 #+HTML_DOCTYPE: html5
@@ -24,6 +25,29 @@ GSLL:+NEGATIVE-INFINITY+
 The exact nature of infinity is debatable (e.g., is it a number or
 a label for nonconvergent series?). As far as computation is
 concerned, it acts like a number.
+
+** IEEE Floating Point
+
+There are two infinities in IEEE-754 floating point, a positive and a
+negative infinity. For any finite positive $x$, we have
+
+- Addition/Subtraction rules
+  - $\pm x+\infty = \infty$
+  - $\pm x-\infty = -\infty$
+  - $\infty + \infty = \infty - (-\infty) = \infty$
+  - $-\infty - \infty = -\infty + (-\infty) = -\infty$
+- Multiplication rules
+  - $x\infty = (-x)(-\infty) = \infty$
+  - $(-x)\infty = x(-\infty) = -\infty$
+  - $(-\infty)\infty = \infty(-\infty) = -\infty$
+  - $\infty\infty = (-\infty)(-\infty) = \infty$
+- Division rules
+  - $\pm x/\infty = \pm x/(-\infty) = 0$
+  - $\pm x/0 = \pm\infty$
+  - $\pm x/(-0) = \mp\infty$
+  - $0/\infty = 0$
+
+All other operations produce a ~NaN~ ("Not-a-Number") special value.
 
 ** Extended Real Numbers
 
@@ -97,10 +121,15 @@ juice is worth the squeeze.
   /De sectionibus conicis/ (1655)
 - Isaac Newton wrote about them in his work
   /De analysi per aequationes numero terminorum infinitas/ (1699).
-
+- Wolfram claims Weierstrass was the first to treat infinity as a
+  quantity in 1876, though I cannot verify this; if true, it would either
+  be in his /Lecture courses on analytic functions/ or
+  /Lecture courses on elliptic functions/ (it seems like those were the
+  only things Weierstrass published in 1876).
 
 * References
 
 - Michael Beeson and Freek Wiedijk
   [[http://www.cs.ru.nl/~freek/pubs/limits.pdf][The meaning of infinity in calculus and computer algebra systems]]
 - Fredrik Johansson, [[https://fredrikj.net/blog/2021/01/infinity-in-calcium-and-fungrim/][Infinity in Calcium and Fungrim]] (2021-01-25)
+- Mathematica Documentation about [[https://functions.wolfram.com/Constants/ComplexInfinity/introductions/Symbols/ShowAll.html][~ComplexInfinity~]]

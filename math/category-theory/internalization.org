@@ -1,0 +1,158 @@
+#+TITLE: Internalization
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-03-13T11:52:22-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday March 13, 2021 at 11:52AM
+
+* Overview
+
+The intuition is, just as we define a "mathematical gadget" to consist
+of "stuff" equipped with "structure" such that a bunch of "properties"
+hold, we can model this by using /objects/ instead of "stuff",
+/morphisms/ for "structure", and commutative diagrams for "properties".
+This gives us an "internal gadget" relative to a category.
+
+* Example: Internal Category
+
+#+begin_definition
+Let $A$ be a category with pullbacks.
+An {{{define(Category Object)}}} internal to $A$ consists of
+- an object of /objects/ $C_{0}\in A$
+- an object of /morphisms/ $C_{1}\in A$
+
+equipped with
+- source and target morphisms $s,t\colon C_{1}\to C_{0}$
+- an identity-assigning morphism $e\colon C_{0}\to C_{1}$
+- a composition morphism $c\colon C_{1}\times_{C_{0}}C_{1}\to C_{1}
+
+such that the following diagrams expressing category laws hold,
+specifying the source of identity morphisms:
+\begin{equation}
+\require{AMScd}
+\begin{CD}
+C_{0} @>e>> C_{1}\\
+@VeVV       @VVsV \\
+C_{0} @=    C_{0}
+\end{CD}
+\end{equation}
+For the target of identity morphisms
+\begin{equation}
+\begin{CD}
+C_{0} @>e>> C_{1}\\
+@VeVV       @VVtV \\
+C_{0} @=    C_{0}
+\end{CD}
+\end{equation}
+The source of a composite morphism:
+\begin{equation}
+\begin{CD}
+C_{1}\times_{C_{0}}C_{1} @>c>> C_{1}\\
+@Vp_{1}VV       @VVsV \\
+C_{1} @>s>>    C_{0}
+\end{CD}
+\end{equation}
+The target of a composite morphism:
+\begin{equation}
+\begin{CD}
+C_{1}\times_{C_{0}}C_{1} @>c>> C_{1}\\
+@Vp_{2}VV       @VVsV \\
+C_{1} @>t>>    C_{0}
+\end{CD}
+\end{equation}
+Associativity for composition of morphisms:
+\begin{equation}
+\begin{CD}
+C_{1}\times_{C_{0}}C_{1}\times_{C_{0}}C_{1} @>c\times_{C_{0}}1>> C_{1}\times_{C_{0}}C_{1}\\
+@V1\times_{C_{0}}cVV       @VVcV \\
+C_{1}\times_{C_{0}}C_{1} @>c>>    C_{0}
+\end{CD}
+\end{equation}
+The left and right unit laws for composition:
+\begin{equation}
+\begin{CD}
+C_{1}\times_{C_{0}}C_{1} @>e\times_{C_{0}}1>> C_{1}\times_{C_{0}}C_{1} @<1\times_{C_{0}}e<< C_{1}\times_{C_{0}}C_{1}\\
+@Vp_{2}VV           @VVcV                        @VVp_{2}V \\
+C_{1} @=    C_{1}             @= C_{1}
+\end{CD}
+\end{equation}
+Note, here the pullback $C_{1}\times_{C_{0}}C_{1}$ is defined by the
+square
+\begin{equation}
+\begin{CD}
+C_{1}\times_{C_{0}}C_{1} @>p_{2}>> C_{1}\\
+@Vp_{1}VV       @VVsV \\
+C_{1} @>t>>    C_{0}
+\end{CD}
+\end{equation}
+
+#+end_definition
+
+** Internal Functors
+
+When the ambient category $A$ does not satisfy the [[file:axiom-of-choice.org][axiom of choice]], it
+is often better to use anafunctors instead of "vanilla functors".
+
+#+begin_definition
+Let $C$, $D$ be internal categories in some ambient category $A$, then
+an {{{define(Internal Functor)}}} $F\colon C\to D$ is
+- a morphism of objects $F_{0}\colon C_{0}\to D_{0}$ in $A$
+- a morphism of morphisms $F_{1}\colon C_{1}\to D_{1}$ in $A$
+
+such that it respects the source map
+\begin{equation}
+\begin{CD}
+C_{1} @>f_{1}>> D_{1}\\
+@VsVV       @VVsV \\
+C_{0} @>f_{0}>>    D_{0}
+\end{CD}
+\end{equation}
+Functors respect the target map:
+\begin{equation}
+\begin{CD}
+C_{1} @>f_{1}>> D_{1}\\
+@VtVV       @VVtV \\
+C_{0} @>f_{0}>>    D_{0}
+\end{CD}
+\end{equation}
+It respects identity morphisms:
+\begin{equation}
+\begin{CD}
+C_{0} @>f_{0}>> D_{0}\\
+@VeVV       @VVeV \\
+C_{1} @>f_{1}>>    D_{1}
+\end{CD}
+\end{equation}
+Functors preserve composing "internal morphisms":
+\begin{equation}
+\begin{CD}
+C_{1}\times_{C_{0}}C_{1} @>f_{1}\times_{C_{0}}f_{1}>> D_{1}\times_{D_{0}}D_{1}\\
+@VcVV       @VVcV \\
+C_{1} @>f_{1}>>    D_{1}
+\end{CD}
+\end{equation}
+where $f_{1}\times_{C_{0}}f_{1}$ is the unique morphisms defined by the
+universal property of pullbacks.
+#+end_definition
+
+* References
+
+- John C. Baez, Alissa S. Crans, \\
+  "Higher-Dimensional Algebra VI: Lie 2-Algebras". \\
+  [[https://arxiv.org/abs/math/0307263][arXiv:math/0307263]], 50 pages. \S2 defines internal categories,
+  internal functors, internal natural transformations
+- Bryce Clarke, \\
+  "Internal split opfibrations and cofunctors". \\
+  [[https://arxiv.org/abs/2004.00187][arXiv:2004.00187]], 25 pages.
+  Definitions 2.1 and 2.2 for internal categories and internal functors
+- nLab [[https://ncatlab.org/nlab/show/functor#InternalDefinition][Functor, internal definition]] entry
+- Saunders MacLane, Ieke Moerdijk, \\
+  {{{book-title(Sheaves in Geometry and Logic)}}}. \\
+  Section V.5--7 (V.5 is about internal vs external, V.6 for internal
+  groups, V.7 for internal categories)

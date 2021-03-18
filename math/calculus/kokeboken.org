@@ -37,21 +37,109 @@ to compute the same integral. Consider
 I = \int^{2}_{1}\frac{4x}{x^{2}-1}\D x
 \end{equation}
 
+#+begin_math-example
+Consider the integral
+\begin{equation}
+I = \int^{\infty}_{1}\frac{1}{x(1+x^{2})}\D x
+\end{equation}
+We can use partial fraction expansion
+\begin{equation}
+\frac{1}{x(1 + x^{2})} = \frac{1 + x^{2} - x^{2}}{x(1 + x^{2})}
+  =  \frac{1}{x} - \frac{x}{1 + x^{2}}.
+\end{equation}
+Integration becomes
+\begin{equation}
+\begin{split}
+I &= \int\frac{\D x}{x} - \int\frac{x\,\D x}{1 + x^{2}} \\
+&= \log(x) - \frac{1}{2}\int\frac{2x\,\D x}{1 + x^{2}}
+ = \log(x) - \frac{1}{2}\log(1+x^{2}) + C
+\end{split}
+\end{equation}
+for some constant of integration $C$. This is a correct result, but we
+invoke the law of logarithms $\log(a) + \log(b) = \log(ab)$ to handle
+the bounds of integration
+\begin{equation}
+I = \frac{1}{2}\log\left(\frac{x^{2}}{1 + x^{2}}\right) + C
+\end{equation}
+Then we have
+\begin{equation}
+\lim_{x\to\infty}\frac{1}{2}\log\left(\frac{x^{2}}{1 + x^{2}}\right)
+= \lim_{x\to\infty}\frac{1}{2}\log\left(\frac{1}{x^{-2} + 1}\right) = 0.
+\end{equation}
+Hence we find the integral
+\begin{equation}
+\begin{split}
+I &= \lim_{x\to\infty}\frac{1}{2}\log\left(\frac{1}{x^{-2} + 1}\right)
+- \frac{1}{2}\log\left(\frac{1}{1 + 1}\right)\\
+&= \frac{1}{2}\log(2).
+\end{split}
+\end{equation}
+And we're done. Is there an easier method? Yes, luckily. But it requires
+greater foresight to recognize. We sart instead with the somewhat
+unintuitive substitution $x=1/y$ with the differential $\D x=-\D y/y^{2}$. Then $x\to\infty$ is the same limit as
+$y\to0$ since $y=1/x$. And since $x\to 1$ we have $y\to 1$. Then the
+integral becomes
+\begin{equation}
+\begin{split}
+I &= -\int^{0}_{1}\frac{1}{(1/y)(1 + (1/y)^{2})}\frac{\D y}{y^{2}}\\
+&= \frac{1}{2}\int^{1}_{0}\frac{2y}{1 + y^{2}}\D y.
+\end{split}
+\end{equation}
+And this can be solved easily with a substitution $u=y^{2}$. This trick
+of replacing $x=1/y$ is called an /inverse substitution/ or /bijective substitution/.
+It's really useful for integrals with domain of integration from 1 to $\infty$.
+#+end_math-example
+
 ** Trigonometric Functions
 
 #+begin_proposition
 We have that
 \begin{equation}
-\frac{\D}{\D x}\operatorname{ArcTan}(x) = \frac{1}{1+x^{2}}
+\frac{\D}{\D x}\arctan(x) = \frac{1}{1+x^{2}}
 \end{equation}
 so
 \begin{equation}
-\int^{t}_{0}\frac{1}{1+x^{2}}\D x = \operatorname{ArcTan}(t)
+\int^{t}_{0}\frac{1}{1+x^{2}}\D x = \arctan(t)
 \end{equation}
 for all $t\gt 0$. Further, we find
 \begin{equation}
 \int^{t}_{0}\frac{1}{1+x^{2}}\D x
 = \int^{\infty}_{1/t}\frac{1}{1+x^{2}}\D x
-= \operatorname{ArcTan}(t).
+= \arctan(t).
 \end{equation}
 #+end_proposition
+
+The proof involves recalling the derivative of inverse functions. Let
+$y=\tan(x)$. Then $\arctan(y) = x$ and the chain rule gives us the
+left-hand side differentiates as
+\begin{equation}
+\frac{\D}{\D x}\arctan(y) = \frac{\D\arctan(y)}{\D y}\frac{\D y}{\D x}
+\end{equation}
+whereas the right-hand side differentiates as
+\begin{equation}
+\frac{\D}{\D x}x = 1.
+\end{equation}
+Hence we have
+\begin{equation}
+\frac{\D\arctan(y)}{\D y} = \frac{1}{\D y/\D x}.
+\end{equation}
+Now recalling
+\begin{equation}
+\frac{\D}{\D x}\tan(x) = \sec^{2}(x) = 1 - \tan^{2}(x)
+\end{equation}
+we have
+\begin{equation}
+\frac{\D\arctan(y)}{\D y} = \frac{1}{\D y/\D x} = \frac{1}{1 - \tan^{2}(x)}=\frac{1}{1-y^{2}}.
+\end{equation}
+The inverse function theorem gives us the result
+\begin{equation}
+\int^{t}_{0}\frac{\D x}{1 + x^{2}} = \arctan(t).
+\end{equation}
+The substitution $u=1/x$ gives us the second result, since $-\D u/u^{2}=\D x$
+and the bounds of integration become $x\to 0$ is $u\to\infty$, while
+$x\to t$ is $u\to 1/t$, so
+\begin{equation}
+\int^{t}_{0}\frac{\D x}{1 + x^{2}}
+ = -\int^{1/t}_{\infty}\frac{1}{1 + (1/u)^{2}}\frac{\D u}{u^2}.
+\end{equation}
+Massaging the right-hand side produces the desired result.
