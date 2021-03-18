@@ -1,11 +1,14 @@
 #+TITLE: Meta-Notes
 #+AUTHOR: Alex Nelson
 #+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-05T17:41:00-08:00>
 #+LANGUAGE: en
 #+OPTIONS: H:5
 #+HTML_DOCTYPE: html5
-# Created Saturday December  5, 2020 at  5:41PM
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ./index.html
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" />
+# Created Saturday December  5, 2020 at  5:41PM
 
 * Introduction
 
@@ -47,8 +50,6 @@ It seems like it must be the last element in the "begin source"
 line.
 
 ** Custom Environments ("Blocks")
-
-"<2020-11-02>--<2020-12-18>"
 
 I can add custom blocks and shortcuts to expand =<xxx= into blocks
 with the following elisp:
@@ -126,12 +127,36 @@ And we can permit evaluating source blocks automatically:
 
 ** Color Choices
 
+I've used syntax highlighting based off of Github's style. In my
+=~/.emacs.d/init.el= file, I've got:
+
+#+begin_src elisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((scheme . t)
+   (emacs-lisp . t)
+   (lisp . t)
+   (C . t)))
+
+(setq org-html-htmlize-output-type 'css) ; export HTML classes & css syling
+(setq org-html-htmlize-font-prefix "org-")
+(setq org-src-preserve-indentation t)
+(setq org-src-fontify-natively t) ; export syntax highlighting
+#+end_src
+
+This setup permits overriding the style using a CSS file, prefixing all
+the element classes with ~org-*~.
+
 Sarah Rovner-Frydman uses the following color schema:
 
 #+begin_quote
 set recolor-darkcolor ~"#B0C6D7"~
 set recolor-lightcolor ~"#141D26"~
 #+end_quote
+
+I am using PT serif for my main font, Sans Serif Code for the teletype
+font,
+
 
 * Subject Classification
 
