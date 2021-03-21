@@ -1,0 +1,82 @@
+#+TITLE: 2-Groups
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-03-21T09:15:02-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday March 21, 2021 at  9:15AM
+
+* Group Objects
+
+#+begin_definition
+For a brief review of {{{define(Group Object)}}} internal to a category $C$ with
+binary products and terminal object $1\in C$ consists of an object
+$G\in C$ equipped with
+- a unit $e\colon 1\to G$
+- an inverse mapping $(-)^{-1}\colon G\to G$
+- a multiplication map $m\colon G\times G\to G$
+
+such that:
+
+- multiplication is associative
+\begin{equation}
+\require{AMScd}
+\begin{CD}
+G\times G\times G @>e\times m>> G\times G\\
+@Vm\times eVV                   @VVmV \\
+G\times G         @>m>>          G
+\end{CD}
+\end{equation}
+
+- the unit map picks out an element which is a left and right identity:
+\begin{equation}
+\begin{CD}
+G\times 1 @<{!}<< G @>{!}>> 1\times G\\
+@V{\mathrm{id}\times e}VV            @V\mathrm{id}VV       @VV{e\times\mathrm{id}}V \\
+G\times G         @>{m}>>          G   @<{m}<<   G\times G
+\end{CD}
+\end{equation}
+
+- the inverse map is an honest-to-goodness inverse
+\begin{equation}
+\begin{CD}
+G\times G @<{\Delta}<< G @>{\Delta}>> 1\times G\\
+@V{\mathrm{id}\times(-)^{-1}}VV            @V{e\circ!}VV       @VV{(-)^{-1}\times\mathrm{id}}V \\
+G\times G         @>{m}>>          G   @<{m}<<   G\times G
+\end{CD}
+\end{equation}
+where we recall ${e\circ!}\colon G\to G$ is the composition of
+$!\colon G\to 1$ with $e\colon 1\to G$.
+#+end_definition
+
+#+begin_math-example
+When we work with group objects in the category [[file:set.org][*Set*]] of sets, we
+recover groups as we know (and love) them.
+#+end_math-example
+
+#+begin_math-example
+When we work with group objects in the category [[file:mfld.org][*Mfld*]]
+of differentiable manifolds, we find them to be Lie groups.
+#+end_math-example
+
+* Strict 2-Groups
+
+A group object internal to [[file:cat.org][*Cat*]] is a {{{define(Strict 2-Group)}}}.
+
+* References
+
+** Group Objects
+
+- "Groups and Categories", \\
+  Lecture Notes, [[https://www.andrew.cmu.edu/course/80-413-713/notes/chap04.pdf][PDF]]
+- Magnus Forrester-Barker, \\
+  "Group Objects and Internal Categories". \\
+  [[https://arxiv.org/abs/math/0212065][arXiv:math/0212065]], 12 pages
+- Saunders MacLane, \\
+  {{{book-title(Categories for the Working Mathematician)}}}. \\
+  Springer, 1971. See chapter III, \S6.
