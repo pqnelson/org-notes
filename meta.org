@@ -18,6 +18,33 @@ Notes about these notes.
 
 Regarding org-mode commands and quirks.
 
+** LaTeX Macros
+
+I follow this general scheme when adding more LaTeX macros to my
+~org-macros.org~ file: add them to a ~latex-macros~ source code
+environment, add the following lines to my =~/.emacs.d/init.el= file:
+
+#+begin_src elisp
+(add-to-list 'org-src-lang-modes '("latex-macros" . latex))
+
+(defvar org-babel-default-header-args:latex-macros
+  '((:results . "raw")
+    (:exports . "results")))
+
+(defun prefix-all-lines (pre body)
+  (with-temp-buffer
+    (insert body)
+    (string-insert-rectangle (point-min) (point-max) pre)
+    (buffer-string)))
+
+(defun org-babel-execute:latex-macros (body _params)
+  (concat
+   (prefix-all-lines "#+LATEX_HEADER: " body)
+   "\n#+HTML_HEAD_EXTRA: <div style=\"display: none\"> \\(\n"
+   (prefix-all-lines "#+HTML_HEAD_EXTRA: " body)
+   "\n#+HTML_HEAD_EXTRA: \\)</div>\n"))
+#+end_src
+
 ** Exporting Source code
 
 If I add to the header of an org file:
