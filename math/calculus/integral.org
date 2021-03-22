@@ -32,6 +32,8 @@ for any $x\in[a,b]$, we have
 \end{equation}
 #+end_corollary
 
+Now the two main methods of computing integrals may be deduced immediately.
+
 ** Method of Substitution
 
 Let $\varphi$ be differentiable, $f$ some function. Then
@@ -47,6 +49,44 @@ Definite integration similarly is defined
 
 The heuristic is $\D u = \varphi'(t)\,\D t$, and the boundary of
 integration is determined by $\varphi([a,b])$.
+
+** Integration by Parts
+
+#+begin_theorem
+Let $f,g\colon[a,b]\to\RR$ be such that $g$ is differentiable on $[a,b]$
+whose first derivative is integrable, and $f$ differentiable on $[a,b]$
+(possibly with at most countably many discontinuities), then
+\begin{equation}
+\int^{b}_{a}f(x)g'(x)\,\D x = f(b)g(b)-f(a)g(a)-\int^{b}_{a}f'(x)g(x)\,\D x.
+\end{equation}
+#+end_theorem
+
+#+begin_proof
+This may be obtained by the fundamental theorem of calculus applied to
+the product rule:
+\begin{equation}
+\int^{b}_{a}\frac{\D}{\D x}\bigl(f(x)g(x)\bigr)\D x = f(b)g(b)-f(a)g(a)
+\end{equation}
+and expanding the left-hand side using the product rule
+\begin{equation}
+\int^{b}_{a}\frac{\D}{\D x}\bigl(f(x)g(x)\bigr)\D x
+ = \int^{b}_{a}f'(x)g(x)\,\D x + \int^{b}_{a}f(x)g'(x)\,\D x.
+\end{equation}
+Setting these two equal give us
+\begin{equation}
+\int^{b}_{a}f'(x)g(x)\,\D x + \int^{b}_{a}f(x)g'(x)\,\D x
+ = f(b)g(b)-f(a)g(a).
+\end{equation}
+The result follows immediately.
+#+end_proof
+
+#+begin_theorem
+Let $f,g\colon\RR\to\RR$ be "sufficiently nice" functions. Then
+for indefinite integrals, we have
+\begin{equation}
+\int f(x)g'(x)\,\D x = f(x)g(x) - \int f'(x)g(x)\,\D x.
+\end{equation}
+#+end_theorem
 
 * Tricks
 
