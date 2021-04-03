@@ -1,0 +1,1760 @@
+#+TITLE: Fluid Dynamics
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2020-12-13T20:08:49-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+# Created Sunday December 13, 2020 at  8:08PM
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+
+These are my reading notes of Landau and Lifshitz's {{{book-title(Fluid Mechanics)}}}
+(vol.6 of their series on Theoretical Physics).
+
+*A note on L&L's style.* It seems that Landau and Lifshitz write in a
+manner that's the mirror opposite of abstract mathematics. Instead of
+"theorem" and then "proof", they provide a "proof" followed by a
+"theorem" (but do not announce it with a bold *Theorem* prefix).
+Consequently, reading L&L amounts to trying to figure out what claims
+are made in a section, then reconstructing the proof.
+
+* Quickstart, Ideal Fluids
+
+** Basic Quantities
+
+Basically, the idea is to model "infinitesimal parcels" of a fluid,
+so we think in terms of densities(?). Like, if we took out an
+"infinitesimal microscope" in particle physics, a particle is a point.
+But in fluid mechanics, it's a "Kool Aide man": a "container" of
+infinitesimal volume of fluid. There are 5 quantities which
+determine the state of a fluid:
+
+- $\vec{v}$ the 3 components of the velocity vector for a fluid parcel
+- $p$ fluid pressure
+- $\rho$ mass density
+
+We think of the velocity vector as a vector field parametrized by
+time.
+
+#+begin_remark
+Landau and Lifshitz note the pressure and density, plus the
+equations of state, determine the thermodynamics properties of the
+fluid (L&L, vol.6, \sect1).
+#+end_remark
+
+*** Material Derivative
+
+A recurring operator we'll use is the {{{define(Material Derivative)}}}
+defined as
+
+\begin{equation}
+\frac{D}{D t} = \vec{v}\cdot\vec{\nabla} + \frac{\partial}{\partial t}.
+\end{equation}
+
+We can think of it as translating a time derivative in the frame of a
+given fluid packet to the lab frame.
+
+#+begin_exercise
+Prove that the material derivative is linear
+
+$$\frac{D}{Dt}(f + g) = \frac{Df}{Dt} + \frac{Dg}{Dt}$$
+#+end_exercise
+
+#+begin_exercise
+Prove that the material derivative obeys the Leibniz rule
+
+$$\frac{D}{Dt}(fg) = f\frac{Dg}{Dt}+\frac{Df}{Dt}g$$
+#+end_exercise
+
+#+begin_exercise
+Prove that the material derivative obeys the chain rule
+
+$$\frac{D}{Dt}(f\circ g) = (f'\circ g)\frac{Dg}{Dt}$$
+
+What is $f'\circ g$ in this case?
+#+end_exercise
+
+*** Continuity Equation
+
+The conservation of mass induces the {{{define(Continuity Equation)}}}:
+
+\begin{equation}
+\partial_{t}\rho + \vec{\nabla}\cdot(\rho\vec{v}) = 0.
+\end{equation}
+
+** Euler's equations
+
+From Newton's second law, we have $\rho \,\D\vec{v}/\D t = -\vec\nabla p$.
+The derivative of the velocity vector, in this case, becomes the
+material derivative since $\vec{v}=\vec{v}(\vec{x}(t), t)$ so the
+total derivative is just $\partial_{t}\vec{v} + (\vec{v}\cdot\vec\nabla)\vec{v}$.
+We also add the force of gravity $\rho \vec{g}$ to get
+{{{define(Euler's equations)}}}, if we divide through by $\rho$
+
+\begin{equation}
+\partial_{t}\vec{v} + (\vec{v}\cdot\vec\nabla)\vec{v}
+ = \frac{-1}{\rho}\vec\nabla p + \vec{g}.
+\end{equation}
+
+#+NAME: euler-equations-with-w
+#+begin_remark
+We often we will write Euler's equations as
+
+\begin{equation}
+\partial_{t}\vec{v} + (\vec{v}\cdot\vec\nabla)\vec{v}
+ = -\vec{\nabla}w.
+\end{equation}
+
+#+end_remark
+
+*** Adiabatic Fluids
+
+Note we didn't consider viscosity in deriving this equation, we
+just used Newton's second law modified for fluid packets (to give
+us the material derivative of velocity as the
+"acceleration"). Since we didn't consider viscosity, there is no
+heat exchange between different parts of the fluid, nor between the
+fluid and its environment.
+
+#+begin_corollary
+This absence of heat exchange between components of the fluid (and
+between the fluid and its environment) implies the motion is
+adiabatic throughout the fluid. As a consequence, the motion of an
+ideal fluid must necessarily be supposed adabiatic.
+#+end_corollary
+
+L&L note in adiabatic motion, the entropy of any particle of fluid
+remains constant as that particle moves around in space. So if $s$
+denotes the entropy per unit mass, we can express the adabiatic
+condition as
+
+\begin{equation}
+\frac{\D s}{\D t} = \partial_{t}s + (\vec{v}\cdot\vec\nabla)s = 0.
+\end{equation}
+
+L&L refer to the quantity $\rho s\vec{v}$ as the
+{{{define(Entropy Flux Density)}}} because we have the "equation of
+continuity" for entropy in terms of it:
+
+\begin{equation}
+\partial_{t}(\rho s) + \vec{\nabla}\cdot(\rho s\vec{v}) = 0.
+\end{equation}
+
+#+begin_remark
+Edwige Godlewski and Pierre-Arnaud Raviart's {{{book-title(Numerical Approximation of Hyperbolic Systems of Conservation Laws)}}}
+(first ed) note (either \S2 or \S3 of the introductory chapter) that we
+use entropy conditions to pick out the physically relevant "weak
+solutions" to the differential equations describing the fluid's motion.
+#+end_remark
+
+*** Isentropic Fluids
+
+If, "as usually happens", the entropy is constant throughout the
+volume of the fluid at some initial instant, it retains everywhere
+the same constant value at all times and for any subsequent motion
+of the fluid. In this case we can write the adiabatic condition as
+
+\begin{equation}
+s = \mbox{constant}
+\end{equation}
+
+and L&L usually does so. In this case, such a motion is said to be
+{{{define(Isentropic)}}}.
+
+#+begin_puzzle
+When will entropy *not* be constant throughout the fluid at some moment
+in time?
+#+end_puzzle
+
+#+NAME: isentropy-euler-equations
+#+begin_theorem
+The Euler equations of motion for an isentropic fluid may be
+rewritten as
+
+\begin{equation}
+\partial_{t}(\curl\vec{v}) = \curl(\vec{v}\times(\curl\vec{v})).
+\end{equation}
+
+which involves only the velocity.
+#+end_theorem
+
+#+begin_remark
+This derivation of Euler's equations, and isentropic stuff,
+comes from L&L, vol.6, \sect2.
+#+end_remark
+
+#+begin_remark
+Isentropic flow occurs when the change in flow variables is small and
+gradual. The ideal fluid is an example of this. (C.f., [[https://www.grc.nasa.gov/www/BGH/isentrop.html][NASA]])
+#+end_remark
+
+*** Boundary Conditions for Euler's Equation
+
+This requires some boundary condition. For an ideal fluid, this
+boundary condition is simply "the fluid cannot penetrate a surface
+solid". I.e., the component of the fluid velocity normal to the
+bounding surface must vanish if that surface is at rest:
+
+\begin{equation}
+v_{\vec{n}} = 0.
+\end{equation}
+
+In general, for the case when the surface is moving, $v_{n}$ must
+be equal to the corrsponding component of the velocity of the surface.
+
+The next steps are to study this equation when the fluid is at rest
+$\vec{v}=0$ (hydrostatics)
+and when $\partial_{t}\vec{v}=0$ is constant (Bernoulli's law).
+
+#+begin_remark
+See also later discussions of boundary conditions [[*Back to the Equations of motion][(\sect10)]].
+#+end_remark
+
+** Hydrostatics
+
+Consider a fluid at rest in a uniform gravitational field. Then
+Euler's equation takes the form
+
+\begin{equation}
+\vec{\nabla}p = \rho \vec{g}.
+\end{equation}
+
+This equation describes the mechanical equilibrium of the fluid.
+
+#+NAME: mechanical-equilibrium
+#+begin_definition
+We say a fluid is in {{{define(Mechanical Equilibrium)}}} if it
+exhibits no macroscopic motion. (L&L, vol.6, \sect4 --- note: L&L never
+actually define this term throughout their 10-volume series)
+#+end_definition
+
+#+begin_remark
+If there are no external forces, then this equation becomes
+$\vec{\nabla}p=0$ or equivalently $p = \mbox{constant}$. The
+pressure is the same everywhere in the fluid.
+#+end_remark
+
+*** Case: Constant Density
+
+When we have $\rho$ be constant throughout the fluid, we can solve
+the simplified Euler's equation. Taking $z$ as the vertical axis,
+so $\vec{g} = -g\widehat{z}$, then we have
+
+\begin{equation}
+\partial_{x}p = \partial_{y}p = 0
+\end{equation}
+
+and
+
+\begin{equation}
+\partial_{z} = -\rho g.
+\end{equation}
+
+Hence the general solution for this system of equations is
+
+\begin{equation}
+p = -\rho g z + \mbox{constant}.
+\end{equation}
+
+If further the fluid is at rest has a free surface at height $h$,
+to which an external pressure $p_{0}$ (the same at every point) is
+applied, this surface must be the horizontal plane $z = h$. From
+the condition $p = p_{0}$ for $z = h$, we find the constant is
+$p_{0} + \rho gh$, so in this case
+
+\begin{equation}
+p = p_{0} + \rho g(h - z).
+\end{equation}
+
+But again, this is the special case of a special case: when density
+is constant.
+
+*** Nonconstant Densities in Thermal Equilibrium
+
+When our fluid is a gas, or we have large amounts of our liquid,
+then we cannot approximate density as constant. This is especially
+true for gases like the atmosphere.
+
+But we may suppose the fluid is in mechanical and thermal
+equilibrium. So the temperature is the same at every point. We use
+the thermal relation
+
+\begin{equation}
+\D\Phi = -s\,\D T + V\,\D p
+\end{equation}
+
+where $\Phi$ is the thermodynamic potential (Gibbs free energy) per
+unit mass. For constant temperature, this becomes
+
+\begin{equation}
+\D\Phi = V\,\D p = \frac{\D p}{\rho}.
+\end{equation}
+
+This let's us write
+
+\begin{equation}
+\frac{\vec{\nabla}p}{\rho} = \vec{\nabla}\Phi.
+\end{equation}
+
+Euler's equation then becomes
+
+\begin{equation}
+\vec{\nabla}\Phi = \vec{g}.
+\end{equation}
+
+For a constant vector $\vec{g}$ directed along the negative
+\(z\)-axis, we have
+
+\begin{equation}
+\vec{g}:=-\vec{\nabla}(gz)
+\end{equation}
+
+hence
+
+\begin{equation}
+\vec{\nabla}(\Phi + gz) = 0,
+\end{equation}
+
+or equivalently
+
+\begin{equation}
+\Phi + gz = \mbox{constant}.
+\end{equation}
+
+#+begin_remark
+Does this make sense? Well, $\Phi + gz = \mbox{constant}$ is known
+to be the condition for thermodynamic equilirium of a system in an
+external field. Good, recovering well-known results tell us we're
+on the right track...or, we've been on the wrong track for such a
+long time that we can't tell. At any rate, we're consistent, and
+that's good.
+#+end_remark
+
+*** Consequence of Hydrostatic Condition: Mechanical Equilibrium Criteria
+
+Particularly useful for me, when considering a fluid like the
+atmosphere, which is in mechanical equilibrium in a gravitational
+field, the pressure in it can be a function only of the
+altitude/"height" $z$ (otherwise, if the pressure were different at
+different points with the same altitude, motion would follow).
+
+It follows then that the density
+
+\begin{equation}
+\rho = \frac{-1}{g}\frac{\D p}{\D z}
+\end{equation}
+
+is also a function of $z$ only. The pressure and density determine
+the temperature, which is therefore again a function of $z$
+only. So in mechanical equilibrium in a gravitational field,
+the pressure, density, and temperature distributions depend only on
+the altitude.
+
+Conversely, if, say, the temperature is different at different
+points with the same altitude, then mechanical equilibrium is
+impossible. (Thus this fact is useful in contrapositive form, too.)
+
+*** For a large mass of self-gravitating Fluid
+
+When we have a large mass of fluid, say a star, whose separate
+parts are held together by gravitational attraction. Let $\phi$
+be the Newtonian gravitational potential of the field due to the
+fluid. It satisfies the differential equation
+
+\begin{equation}
+\nabla^{2}\phi = 4\pi G\rho
+\end{equation}
+
+where $G$ is the Newtonian gravitational constant. The
+gravitational acceleration is $-\vec{\nabla}\phi$, and the force on
+a mass $\rho$ is $-\rho\vec{\nabla}\phi$. The condition of
+equilibrium is therefore
+
+\begin{equation}
+\vec{\nabla}p = -\rho\vec{\nabla}\phi.
+\end{equation}
+
+Dividing both sides by $\rho$ then taking the divergence of both
+sides gives us
+
+\begin{equation}
+\nabla\cdot\left(\frac{1}{\rho}\vec{\nabla}p\right) = -4\pi G\rho.
+\end{equation}
+
+This seems like a great deal more difficult. But we did not assume
+thermodynamic equilibrium, and in exchange we have a condition for
+mechanical equilibrium.
+
+If we further assume the body is not rotating, then it will enjoy a
+spherical symmetry when in equilibrium, and the density & pressure
+distributions will be spherically symmetric. We have in spherical
+coordinates our condition become
+
+\begin{equation}
+\frac{1}{r^{2}}\frac{\D}{\D r}\left(\frac{r^{2}}{\rho}\frac{\D p}{\D r}\right) = -4\pi G\rho.
+\end{equation}
+
+Again, this fails to hold for a rotating body (like the Earth).
+
+** On the "Absence of Convection" Condition
+
+We've concluded from our discussion of hydrostatics that a fluid
+can be in [[mechanical-equilibrium][mechanical equilibrium]] (i.e., exhibit no macroscopic motion)
+without being in thermodynamic equilibrium. The hydrostatic
+equation can be satisfied even if the temperature is not constant
+throughout the fluid.
+
+The question arises concerning the stability of such an
+equilibrium. Unsurprisingly, the equilibrium is stable if
+a condition is fulfilled. Otherwise, the equilibrium is /unstable/,
+and this leads to the appearance in the fluid of currents which
+tend to mix the fluid in such a way as to equalize the
+temperature. This motion is called {{{define(Convection)}}}.
+
+The condition for "mechanical equilibrium being stable" is "absence
+of convection".
+
+** Bernoulli's Equation
+
+*** Steady Flows
+
+#+begin_definition
+By {{{define(Steady Flow)}}}, we mean one in which the velocity is
+constant in time at any point occupied in the fluid. I.e.,
+$\vec{v}$ is a function of the coordinates only, so that $\partial_{t}\vec{v}=0$.
+#+end_definition
+
+In a steady flow, the [[isentropy-euler-equations][isentropic Euler equations]] becomes
+
+\begin{equation}
+\frac{1}{2}\vec{\nabla}(v^{2}) - \vec{v}\times(\curl\vec{v}) = -\vec{\nabla}w.
+\end{equation}
+
+*** Streamlines
+
+Streamlines are lines such that the tangent to a streamline at any
+point gives the direction of the velocity of that point. They are
+determined by the system of differential equations
+
+\begin{equation}
+\frac{\D x}{v_{x}} = \frac{\D y}{v_{y}} = \frac{\D z}{v_{z}}.
+\end{equation}
+
+#+begin_remark
+This can be phrased differently, as the integral curve of the velocity
+vector fields, i.e., as
+
+\begin{equation}
+\frac{\D}{\D s}\varphi(s) = \vec{v}(\vec{x}(s), t)
+\end{equation}
+
+with initial condition $\varphi'(0) = \vec{v}(\vec{x}(0), t)$. The
+$\varphi\colon[0,1]\to\RR^{3}$ is a streamline.
+#+end_remark
+
+In steady flow, the streamlines do not vary with time (i.e., the choice
+of $t$ does not vary the solution of $\varphi$), and coincide
+with the paths of the fluid particles.
+
+*BUT* for non-steady flows, this coincidence no longer occurs: the
+tangents to the streamlines give the directions of the velocities
+of fluid particles at various points in space at a given instant,
+where the tangents to the paths give the directions of the
+velocities of given fluid particles at various times.
+
+*Question:* for non-steady flows, are streamlines still a valuable
+concept?
+
+*** Bernoulli's Equation Derivation
+
+Taking the equation for steady flows, then forming the scalar
+product with the unit vector tangent to the streamline at each
+point (call this unit vector $\vec{\ell}$). The projection of the
+gradient on any direction is the derivative in that direction (duh,
+the directional derivative). So
+
+\begin{equation}
+\vec{\ell}\cdot(\vec{\nabla}w) = \partial w/\partial\ell.
+\end{equation}
+
+The vector $\vec{v}\times(\curl\vec{v})$ is orthogonal
+to $\vec{v}$, hence its dot product with $\vec{\ell}$ vanishes.
+
+Thus we get the simplified equation
+
+\begin{equation}
+\frac{\partial}{\partial\ell}\left(\frac{v^{2}}{2} + w\right) = 0.
+\end{equation}
+
+It follows that $w + v^{2}/2$ is constant along the streamline, i.e.,
+
+\begin{equation}
+\frac{1}{2}v^{2} + w = \mbox{constant}.
+\end{equation}
+
+This is precisely {{{define(Bernoulli's Equation)}}}.
+
+In general, the constant $w + v^{2}/2$ takes different values for
+different streamlines.
+
+*** In a Gravitational Field
+
+So, if our fluid flows in a gravitational field, the acceleration
+$\vec{g}$ due to gravity must be added to the right-hand side of
+the isentropic Euler equations for steady flows:
+
+\begin{equation}
+\frac{1}{2}\vec{\nabla}(v^{2}) - \vec{v}\times(\curl\vec{v}) = -\vec{\nabla}w + \vec{g}.
+\end{equation}
+
+Let us take the direction of gravity as the \(z\)-axis, with $z$
+increasing upwards. This choice let's us relate the cosine of the
+angle between $\vec{g}$ and $\vec{\ell}$ to be equal to the derivative
+$-\D z/\D\ell$, so the projection of $\vec{g}$ on $\vec{\ell}$ is
+$-g\,\D z/\D\ell$.
+
+Then we have our projected equation become
+
+\begin{equation}
+\frac{\partial}{\partial\ell}\left(\frac{v^{2}}{2} + w + gz\right) = 0.
+\end{equation}
+
+Hence Bernoulli's equation states that along a streamline we have
+
+\begin{equation}
+\left(\frac{v^{2}}{2} + w\right) = \mbox{constant}.
+\end{equation}
+
+** Energy Flux
+
+*** Energy per unit volume
+
+For our fluid, the energy per unit volume of fluid is
+$\rho v^{2}/2 + \rho\varepsilon$ the sum of its kinetic energy and
+internal energy, where $\varepsilon$ is internel energy per unit mass.
+
+The change in this energy is given by its partial derivative with
+respect to time.
+
+*** Conservation Equation
+
+#+begin_theorem
+Assuming an adiabatic fluid, the conservation of energy implies
+
+\begin{equation}
+\partial_{t}(\rho v^{2}/2 + \rho\varepsilon)
+ = -\nabla\cdot[\rho\vec{v}(v^{2}/2 + w)].
+\end{equation}
+#+end_theorem
+
+This follows by computing $\partial_{t}(\rho v^{2}/2 + \rho\varepsilon)$,
+the change in energy with respect to time. The first and second
+terms are rather involved, and delegated to "lemmas" below. But the
+lemmas then give us
+
+\begin{equation}
+\partial_{t}\left(\frac{\rho v^{2}}{2} + \rho\varepsilon\right)
+= -\left(\frac{v^{2}}{2} + w\right)\vec{\nabla}\cdot(\rho\vec{v})
+  -\rho\vec{v}\cdot\vec{\nabla}(w + v^{2}/2)
+\end{equation}
+
+The right-hand side can be rewritten to give the final result.
+
+**** Change of Kinetic Energy with respect to Time
+
+To compute this quantity, we begin by considering the kinetic energy term
+
+\begin{equation}
+\partial_{t}(\rho v^{2}/2)
+= \frac{v^{2}}{2}\frac{\partial\rho}{\partial t}
+  + \rho\vec{v}\cdot\frac{\partial\vec{v}}{\partial t}
+\end{equation}
+
+Now we use the [[*Continuity Equation][continuity equation]] and equation of motion
+
+\begin{equation}
+\partial_{t}(\rho v^{2}/2) =
+  \frac{-v^{2}}{2}\nabla\cdot(\rho\vec{v}) - \vec{v}\cdot(\vec{\nabla}p)
+  - \rho\vec{v}\cdot\bigl((\vec{v}\cdot\vec{\nabla})\vec{v}\bigr).
+\end{equation}
+
+In the last term, we replace
+
+\begin{equation}
+\vec{v}\cdot\bigl((\vec{v}\cdot\vec{\nabla})\vec{v}\bigr)
+ = \frac{1}{2}\vec{v}\cdot(\vec{\nabla}(v^{2}))
+\end{equation}
+
+and in the middle term (using the thermodynamic relation
+$\D w = T\,\D s + (1/\rho)\D p$) we replace
+
+\begin{equation}
+\vec{\nabla}p = \rho\vec{\nabla}w - \rho T\vec{\nabla}s
+\end{equation}
+
+thus obtaining
+
+\begin{equation}
+\partial_{t}(\rho v^{2}/2)
+= \frac{-v^{2}}{2}\nabla\cdot(\rho\vec{v})
+  - \rho\vec{v}\cdot\vec{\nabla}(w + v^{2}/2)
+  + \rho T\vec{v}\cdot(\vec{\nabla}s).
+\end{equation}
+
+**** Change of Internal Energy with respect to Time
+
+Now we compute $\partial_{t}(\rho\varepsilon)$, we use the
+thermodynamic relation
+
+\begin{equation}
+\D\varepsilon = T\,\D s - p\,\D V
+ = T\,\D s + \frac{p}{\rho^{2}}\D\rho.
+\end{equation}
+
+Since $\varepsilon + p/\rho = \varepsilon + pV$ is the heat
+function $w$ per unit mass, we find
+
+\begin{equation}
+\D(\rho\varepsilon) = \varepsilon\,\D \rho + \rho\,\D \varepsilon
+= w\,\D \rho + \rho T\,\D s.
+\end{equation}
+
+Thus (using the general adiabatic equation of motion)
+
+\begin{equation}
+\partial_{t}(\rho\varepsilon) = w\partial_{t}\rho + \rho T\partial_{t}s
+ = -w\vec{\nabla}\cdot(\rho\vec{v}) - \rho T\vec{v}\cdot(\vec{\nabla}s).
+\end{equation}
+
+*** Meaning of the Conservation Equation
+
+We have an abstract equation we assert is correct through a long
+string of equations. Believe me? Well, let's see what it
+/means/. We need to integrate it over some volume $V$:
+
+\begin{equation}
+\partial_{t}\int\left(\frac{\rho v^{2}}{2} + \rho\varepsilon\right)\,\D V
+ = -\int\vec{\nabla}\cdot\left[\rho\vec{v}\left(\frac{v^{2}}{2}+w\right)\right]\,\D V
+\end{equation}
+
+We convert the integral on the right to a surface integral
+
+\begin{equation}
+\partial_{t}\int\left(\frac{\rho v^{2}}{2} + \rho\varepsilon\right)\D V
+= -\oint\left[\rho\vec{v}\left(\frac{v^{2}}{2}+w\right)\right]\cdot \D\vec{f}.
+\end{equation}
+
+- The LHS is the rate of change of the energy of the fluid in some volume.
+- The RHS is the amount of energy flowing out of this volume in
+  unit time.
+- We may call $\rho\vec{v}(w + v^{2}/2)$ the {{{define(Energy Flux Density)}}}.
+  Its magnitude is the amount of energy passing in unit time
+  through unit area perpendicular to the direction of the
+  velocity. Nifty.
+
+#+begin_remark
+The expression $\rho\vec{v}(w + v^{2}/2)$ shows any unit mass of
+fluid carries with it during its motion an amount of energy $w+v^{2}/2$.
+The fact that the heat function $w$ appears here, and not the
+internal energy $\varepsilon$, has physical significance. Putting
+$w=\varepsilon + p/\rho$, we can write the flux of energy through a
+closed surface in the form
+
+\begin{equation}
+-\oint\rho\vec{v}\left(\frac{v^{2}}{2}+\varepsilon\right)\cdot\D\vec{f}
+-\oint p\vec{v}\cdot\D\vec{f}
+\end{equation}
+
+The first term is the energy (kinetic and internal) transported
+through the surface in unit time by the mass of fluid. The second
+term is the work done by pressure forces on the fluid within the
+surface.
+#+end_remark
+
+** Momentum Flux
+
+(*Note:* the "correct" indices would be $\Pi^{ik}$. And this is the
+stress-energy tensor's spatial components, for a perfect fluid.)
+
+*** Derivation of Momentum Flux Density Tensor
+
+The momentum of unit volume is $\rho\vec{v}$. What is its rate of
+change with respect to time $\partial_{t}(\rho\vec{v})$? We will
+switch to index notation for ease of computation.
+
+We can use the product rule to find
+
+\begin{equation}
+\frac{\partial}{\partial t}(\rho v_{i})
+= \rho\frac{\partial v_{i}}{\partial t} + \frac{\partial\rho}{\partial t}v_{i}
+\end{equation}
+
+We can use the [[*Continuity Equation][continuity equation]] in the form of
+
+\begin{equation}
+\partial_{t}\rho = -\sum_{k}\frac{\partial(\rho v_{k})}{\partial x_{k}}
+\end{equation}
+
+and Euler's equations in the form of
+
+\begin{equation}
+\partial_{t}v_{i} = -\frac{1}{\rho}\frac{\partial p}{\partial x_{i}}
+ - \sum_{k}v_{k}\frac{\partial v_{i}}{\partial x_{k}}
+\end{equation}
+
+to obtain
+
+\begin{equation}
+\partial_{t}(\rho v_{i})
+ = \rho\left(-\frac{1}{\rho}\frac{\partial p}{\partial x_{i}} - \sum_{k}v_{k}\frac{\partial v_{i}}{\partial x_{k}}\right)
+ + \left(-\sum_{k}\frac{\partial(\rho v_{k})}{\partial x_{k}}\right) v_{i}
+\end{equation}
+
+which simplifies to
+
+\begin{equation}
+\partial_{t}(\rho v_{i})
+ = -\frac{\partial p}{\partial x_{i}} - \sum_{k}\frac{\partial}{\partial x_{k}}(\rho v_{i}v_{k}).
+\end{equation}
+
+The first term on the right hand side can be rewritten using index
+gymnastics as
+
+\begin{equation}
+\frac{\partial p}{\partial x_{i}}
+ = \sum_{k}\delta_{ik}\frac{\partial p}{\partial x_{k}}.
+\end{equation}
+
+Then we have
+
+\begin{equation}
+\partial_{t}(\rho v_{i})
+ = -\sum_{k}\frac{\partial\Pi_{ik}}{\partial x_{k}}
+\end{equation}
+
+where the tensor $\Pi_{ik}$ is defined as
+
+\begin{equation}
+\Pi_{ik} = p\delta_{ik} + \rho v_{i}v_{k}.
+\end{equation}
+
+Since $\Pi_{ik}$ is the sum of two symmetric tensors, it is thus a
+symmetric tensor.
+
+**** Momentum Flux Density Tensor
+
+We define the tensor $\Pi_{ik}$ as the {{{define(Momentum Flux Density Tensor)}}}:
+
+\begin{equation}
+\Pi_{ik} = p\delta_{ik} + \rho v_{i}v_{k}.
+\end{equation}
+
+*** Its interpretation
+
+We grasp the meaning of the momentum flux density tensor by looking
+at its integral over some volume
+
+\begin{equation}
+\partial_{t}\int \rho v_{i}\,\D V
+ = -\int\sum_{k}\frac{\partial\Pi_{ik}}{\partial x_{k}}\,\D V.
+\end{equation}
+
+We can apply Green's theorem to the right hand side, obtaining
+
+\begin{equation}
+\partial_{t}\int \rho v_{i}\,\D V
+= -\sum_{k}\oint\Pi_{ik}\,\D f_{k}.
+\end{equation}
+
+- The left-hand side is the rate of change of the \(i\)-th component of
+  momentum contained in the volume (i.e., the domain of integration).
+- The RHS is thus the amount of momentum flowing out through the
+  bounding surface in unit time.
+
+So $\Pi_{ik}\,\D f^{k}$ is the \(i\)-th component of momentum flowing
+through the surface element $\D f$. If we write $\D f_{k}$ in the form
+of $n_{k}\,\D f$, where $\D f$ is the area of the surface element and
+$\vec{n}$ is a unit vector along the outward normal, we find that
+$\Pi_{ik}n^{k}$ is the flux of the \(i\)-th component of momentum
+through unit surface area. Note that
+
+\begin{equation}
+\Pi_{ik}n^{k} = p n_{i} + \rho v_{i}v_{k}n^{k}.
+\end{equation}
+
+or in vector form
+
+\begin{equation}
+\Pi\vec{n} = p\vec{n} + \rho\vec{v}(\vec{v}\cdot\vec{n}).
+\end{equation}
+
+** Conservation of Circulation
+
+#+NAME: velocity-circulation
+#+begin_definition
+The integral
+
+\begin{equation}
+\Gamma = \oint \vec{v}\cdot \D\vec{\ell}
+\end{equation}
+
+along some closed contour is called the {{{define(Velocity Circulation)}}}
+around that contour.
+#+end_definition
+
+#+NAME: kelvin-thm
+#+begin_theorem
+In an ideal fluid, the velocity circulation round a closed "fluid"
+contour is constant in time.
+#+end_theorem
+
+#+begin_proof
+We compute the time-derivative of the velocity circulation
+
+\begin{equation}
+\frac{D}{D t}\oint \vec{v}\cdot\D r
+= \oint\frac{D\vec{v}}{D t}\cdot\D r + \oint\vec{V}\cdot\frac{D}{D t}\D r
+\end{equation}
+
+We use the identity
+
+\begin{equation}
+\vec{v}\cdot\frac{D}{D t}\D\vec{r} = \vec{v}\cdot\D\frac{D r}{D t}=\D(v^{2}/2)
+\end{equation}
+
+And the fact that the contour integral of a total differential along a
+closed curve vanishes (i.e., is zero). This leaves us
+
+\begin{equation}
+\frac{D}{D t}\oint\vec{v}\cdot\D{\vec{r}}
+= \oint\frac{D\vec{v}}{D t}\cdot\D\vec{r}.
+\end{equation}
+
+Using [[euler-equations-with-w][Euler's equations]]
+
+\begin{equation}
+\frac{D}{D t}\vec{v} = -\vec{\nabla}w,
+\end{equation}
+
+we obtain
+
+\begin{equation}
+\frac{D}{D t}\oint\vec{v}\cdot\D{\vec{r}}
+ = \oint(-\vec{\nabla}w)\cdot\D\vec{r}.
+\end{equation}
+
+Now we use Stoke's theorem
+
+\begin{equation}
+\oint(-\vec{\nabla}w)\cdot\D\vec{r}
+ = \iint\curl(\vec{\nabla}w)\cdot\D\vec{A}.
+\end{equation}
+
+But the right-hand side vanishes, so
+
+\begin{equation}
+\frac{D}{D t}\oint\vec{v}\cdot\D{\vec{r}} = 0.
+\end{equation}
+
+Thus we have Kelvin's theorem.
+#+end_proof
+
+#+begin_corollary
+We have from Kelvin's theorem,
+
+\begin{equation}
+\oint \vec{v}\cdot\D\vec{l} = \mbox{constant}.
+\end{equation}
+#+end_corollary
+
+#+NAME: defn-vorticity
+#+begin_definition
+We refer to the quantity $\curl\vec{v}$ (the curl of the
+velocity vector field) as the {{{define(Vorticity)}}} of the field.
+#+end_definition
+
+Our intuition should think of the corollary to Kelvin's theorem as
+saying "The vorticity moves with the fluid".
+
+#+begin_exercise
+Show: in flows which are not isentropic, any moving particle carries
+with it a constant value of the product $\rho^{-1}\vec{\nabla}s\cdot\curl\vec{v}$.
+(H. Ertel, 1942)
+#+end_exercise
+
+** Potential Flow
+
+*Case 1: Steady Flow.* Consider a steady flowing fluid.
+Consider a point on a streamline where the vorticity vanishes
+$\curl\vec{v}=0$. We draw an infinitesimal circle around
+that point, and move the circle with the point over time. The claim is
+the vorticity in the circle remains constant (by Kelvin's theorem) and
+moreover every point on the streamline has the same vorticity.
+
+*Case 2: Non-steady Flow.*
+Now consider a fluid which is not steady. The same argument holds,
+except we work with the infinitesimal contour moving around the
+trajectory of a fluid parcel. (This is because streamlines do not
+coincide with trajectories in non-steady flowing fluids.)
+
+#+begin_puzzle
+Observe we are assuming we can always draw a closed contour around
+every point of a streamline. Is this a valid assumption to make?
+#+end_puzzle
+
+#+begin_definition
+A flow for which $\curl\vec{v}=0$ for every point in the
+flow is called a {{{define(Potential Flow)}}} or
+{{{define(Irrotational Flow)}}}; otherwise, it is called a
+{{{define(Rotational Flow)}}}.
+#+end_definition
+
+*** Tenative Results for Non-Steady Flows
+
+We may be excited and hope to base several arguments upon this
+non-steady flow result. For example...
+
+- Consider steady flow past some body. Let the incident flow be uniform
+  at infinity. Its velocity $\vec{v}$ is a constant (so
+  $\curl\vec{v}=0$ on all streamlines). Hence we conclude
+  that $\curl\vec{v}=0$ along the whole of every streamline
+  (i.e., all of space).
+- Suppose at some instant we have irrotational flow throughout the
+  volume of the fluid. Then the velocity circulation around any closed
+  contour in the fluid is zero.
+  + *Simplifying Assumption.* (For simplicity, we assume the fluid
+    occupies a simply-connected region of space; for a
+    multiply-connected region, we need restrictions on the choice of
+    contours for this derivation to work.)
+  + *Thus* we then conclude this will hold at any future instant, i.e.,
+    we should find that --- if there is potential flow at some instant,
+    then there is potential flow at all subsequent instants. (In
+    particular, any flow for which the fluid is initially at rest must
+    be a potential flow.)
+  + This is in accordance with the fact if $\curl\vec{v}=0$,
+    then the [[isentropy-euler-equations][isentropic Euler equations]] hold automatically.
+
+*** Limited Validity of these "Results"
+
+Alas, these conclusions are of limited validity. Why? The proof given
+above that $\curl\vec{v} = 0$ all along a streamline is, strictly
+speaking, invalid for a line which lies in the surface of a solid body
+past which the flow takes place, since the present of this surface makes
+it impossible to draw a closed contour in the fluid encircling such a
+streamline.
+
+The equations of motion for an ideal fluid admit solutions for which
+{{{define(separation)}}} occurs at the surface of the boundary: the
+streamlines follow the surface, until the surface ends, and the
+streamlines become separated and continue into the fluid. The resulting
+flow pattern is characterized by the presence of a {{{define(Surface of Discontinuity)}}}
+proceeding from the body. On this surface, the fluid velocity --- which
+is everywhere tangential to the surface --- has a discontinuity. In
+other words, at this surface one layer of fluid "slides" on another.
+(Mathematically speaking, the discontinuity in the tangential velocity
+components corresponds to a surface on which the curl of the velocity is
+nonzero.)
+
+#+CAPTION: An example of surfaces of discontinuity.
+[[../../img/fluid-0.png]]
+
+When we include discontinuous flows, there are infinitely many solutions
+to the equations of motion for an ideal fluid. The tangential
+discontinuities are absolutely unstable and become turbulent and, well,
+all hell breaks loose.
+
+But when we, e.g., spray an object with water, there /is/ some flow,
+i.e., empirically there /is/ a solution. What's going on here? Well,
+water isn't an ideal fluid, there's some viscosity. Even if we had some
+hypothetical ideal fluid, we would expect similar results. Why? Because
+the properties of the flow in the {{{define(boundary layer)}}}
+determines the choice of solution.
+
+In the general case of flow past bodies of arbitrary form, solutions
+with separation must be taken, which in turn results in turbulence.
+
+For certain special shapes, the flow differs little from irrotational
+flow. Well, it will be irrotational flow except in a thin layer of fluid
+at the surface of the body and in a relatively narrow "wake" behind the
+body. Nifty.
+
+*** Another Case of Potential Flow
+
+Another important case of potential flow occurs for small oscillations
+of a body immersed in fluid. (Isn't the Earth immersed in its
+atmosphere?) We can show that, if the amplitude $a$ of the oscillations
+is small in comparison with the linear dimension $\ell$ of the body ($a\ll
+\ell$), then the flow past the body will be potential flow. How to prove
+it?
+
+We estimate the order of magntidue of the various terms in Euler's
+equation
+
+\begin{equation}
+\partial_{t}\vec{v} + (\vec{v}\cdot\vec{\nabla})\vec{v} = -\vec{\nabla}w.
+\end{equation}
+
+The velocity $\vec{v}$ changes markedly over a distance of the order of
+dimension $\ell$ of the body by an amount of the same order as the
+velocity $\vec{u}_{\text{osc}}$ of the oscillating body. Hence:
+
+- the derivatives of $\vec{v}$ with respect to the coordinates $\nabla\vec{v}\sim\bigOh(u/\ell)$;
+- the order of $\vec{v}$ at fairly small distances from the body is $\vec{v}\sim\bigOh(\vec{u})$
+- hence $(\vec{v}\cdot\vec{\nabla})\vec{v}\sim\bigOh(u^{2}/\ell)$
+- the derivative $\partial_{t}\vec{v}\sim\omega u$ where $\omega$ is the
+  frequency of oscillations
+  + since $\omega\sim u/a$ we have $\partial_{t}\vec{v} = u^{2}/a$
+- since $a\ll\ell$, the term $(\vec{v}\cdot\vec{\nabla})\vec{v}$ is
+  small compared to $\partial_{t}\vec{v}$
+  + hence we may neglect $(\vec{v}\cdot\vec{\nabla})\vec{v}$
+- the equation of motion becomes
+  \begin{equation}
+  \partial_{t}\vec{v} = -\vec{\nabla}w
+  \end{equation}
+- taking the curl of both sides, we obtain $\partial_{t}(\curl\vec{v})=0$
+  + hence $\curl\vec{v} = \mbox{constant}$.
+  + In oscillatory motion, the time average of the velocity vanishes;
+    hence $\curl\vec{v} = 0$.
+- Thus the motion of a fluid executing small oscillations is potential
+  flow, to first approximation.
+
+*** General Properties of Potential Flow
+
+- Only isentropic flow can be potential flow (otherwise, for
+  non-isentropic flow, if we have potential flow at some instant, the
+  vorticity will be nonzero at subsequent instants, leading to
+  non-potential ["rotational"] flow)
+- In potential flow, the velocity circulation along /any/ closed contour
+  vanishes $\oint \vec{v}\cdot\D\ell = \iint\curl\vec{v}\cdot\D\vec{f}=0$
+  + Hence closed streamlines cannot exist in potential flow.
+- In rotational flow, the velocity circulation is not zero in general.
+  + There may be closed streamlines in rotational flow, but the presence
+    of closed streamlines is not necessary for rotational flow.
+- We could write the velocity as the gradient of a {{{define(Velocity Potential)}}}
+  and denote it $\phi$,
+  \begin{equation}
+  \vec{v} = \vec{\nabla}\phi
+  \end{equation}
+  + The isentropic Euler equations become
+    \begin{equation}
+    \vec{\nabla}(\partial_{t}\phi + \frac{v^{2}}{2} + w) = 0.
+    \end{equation}
+  + The first integral of this equation looks like
+    \begin{equation}
+    \partial_{t}\phi + \frac{v^{2}}{2} + w = f(t)
+    \end{equation}
+    where $f(t)$ is "an arbitrary function of time". We may set it equal
+    to zero without loss of generality (because the velocity potential
+    is not uniquely defined: it's defined such that $\vec{v}$ is a
+    spatial derivative of $\phi$, so adding any function of time to
+    $\phi$ will produce the same results)
+  + For steady flows, $\partial_{t}\phi = 0$, $f(t)$ is constant, and
+    the first integral becomes Bernoulli's equation
+    \begin{equation*}
+    0 + \frac{v^{2}}{2} + w = \mbox{constant}.
+    \end{equation*}
+  + In general, the "constant" on the right hand side is a constant
+    /along any given streamline/, but varies for different streamlines.
+  + In a potential flow, it is constant throughout the fluid. This
+    enhances the importance of Bernoulli's equation in the study of
+    potential flow.
+
+#+begin_remark
+The velocity potential $\phi$ was first introduced by Euler. Thank God
+Laplace invented his equation, or else we'd have yet another Euler's
+equation.
+#+end_remark
+
+** Incompressible Fluids
+# 29
+
+#+begin_definition
+Many cases, for the flow of liquids (and sometimes for gases), their
+density may be supposed invariable (i.e., constant throughout the volume
+of the fluid and throughout its motion). That is to say, there is no
+noticeable compression or expansion of the fluid in such cases. We call
+such situations {{{define(Incompressible Flow)}}}.
+#+end_definition
+
+Euler's equations greatly simplify for an incompressible fluid. Believe
+me? (No...) OK, if we take $\rho$ constant, then...uh...well, we can
+take it under the gradient:
+
+\begin{equation}
+\partial_{t}\vec{v} + (\vec{v}\cdot\vec{\nabla})\vec{v}
+ = -\vec{\nabla}(p/\rho) + \vec{g}.
+\end{equation}
+
+See? Completely different! OK, maybe not, so...well, the equation of
+continuity, aha, /that/ simplifies greatly to:
+
+\begin{equation}
+\vec{\nabla}\cdot\vec{v} = 0.
+\end{equation}
+
+Now /that/ is simple.
+
+*** Equations of Motion
+
+The equations of motion take advantage of the identity
+
+\begin{equation}
+\frac{1}{2}\vec{\nabla}v^{2} = \vec{v}\times(\curl\vec{v}) + (\vec{v}\cdot\vec{\nabla})\vec{v}
+\end{equation}
+
+and we can rewrite the equations of motion using this, and the
+continuity equation, to be
+
+\begin{equation}
+\partial_{t}(\curl\vec{v}) = \curl(\vec{v}\times(\curl\vec{v})).
+\end{equation}
+
+We don't need isentropy, we have the same equations of motion though.
+
+*** Bernoulli's Equation
+
+Bernoulli's equation simplifies for an incompressible fluid. We simply
+replace the heat function $w$ by $p/\rho$:
+
+\begin{equation}
+\frac{1}{2}v^{2} + \frac{p}{\rho} + gz = \mbox{constant}.
+\end{equation}
+
+*** Energy Flux
+
+For an incompressible fluid, we also write $p/\rho$ in place of $w$ for
+the energy flux as
+
+\begin{equation}
+\rho\vec{v}\left(\frac{1}{2}v^{2} + \frac{p}{\rho}\right).
+\end{equation}
+
+*** Back to the Equations of motion
+
+Did you notice that the equations of motion are satisfied if
+
+\begin{equation}
+\curl\vec{v} = 0.
+\end{equation}
+
+Indeed, $\vec{v} = \vec{\nabla}\phi$ substituted into the continuity
+equation gives us
+
+\begin{equation}
+\nabla^{2}\phi = 0.
+\end{equation}
+
+We need boundary conditions at the surfaces where the fluid meets solid
+bodies. At fixed surfaces, the fluid velocity component $v_{n}$ normal
+to the surface must be zero, whereas for moving surfaces it must be
+equal to the normal components of the velocity of the surface (i.e., a
+given function of time). The velocity $v_{n}$ is equal to the normal
+derivative of the potential $\phi$:
+
+\begin{equation}
+v_{n} = \frac{\partial\phi}{\partial n}.
+\end{equation}
+
+Thus the general boudnary conditions are that $\partial\phi/\partial n$
+is a given function of coordinates and time at the boundaries.
+
+*** Irrotational ("Potential") Flow
+
+For potential flow, the velocity is related to the pressure by results
+from the previous section [[*General Properties of Potential Flow][(\sect9)]]. In an incompressible fluid, we can
+replace $w$ in this equation by $p/\rho$
+
+\begin{equation}
+\partial_{t}\phi + \frac{v^{2}}{2} + \frac{p}{\rho} = f(t).
+\end{equation}
+
+We may notice here the following important property of potential flow of
+an incompressible flow:
+
+Suppose some solid body is moving through the fluid. If the result is
+potential flow, it depends at any instant only on the velocity of the
+moving body at that instant, and not (e.g.) on its acceleration. Since
+$\nabla^{2}\phi=0$ does not explicitly contain time, which enter the
+solution only through the boundary conditions, and these contain only
+the velocity of the moving body.
+
+*** Stagnation Point
+
+Consider a fluid flowing past a body, as diagrammed in the next figure.
+For Bernoulli's equation $v^{2}/2 + p/\rho$ equal to some constant, we
+see in steady flow of an incompressible fluid (not in a gravitational
+field), the greatest pressure occurs where velocity is zero. Such a
+point usually occurs on the surface of a body past which the fluid is
+flowing and is called a {{{define(Stagnation Point)}}}. If $\vec{u}$ is
+the velocity of the incident current (= the fluid velocity at infinity),
+and $p_{0}$ is the pressure at infinity, then the pressure at the
+stagnation point is
+
+\begin{equation}
+p_{\text{max}} = p_{0} + \frac{\rho u^{2}}{2}.
+\end{equation}
+
+#+CAPTION: An example of a stagnation point $S$.
+[[../../img/fluid-1.png]]
+
+*** Planar Flow for Incompressible Fluids of Constant Density
+
+#+begin_definition
+If the velocity distribution in a moving fluid depends on only two
+coordinates (say, $x$ and $y$), and if the velocity is everywhere
+parallel to the \(xy\)-plane, then the flow is said to be {{{define(Two-Dimensional)}}}
+or {{{define(Plane Flow)}}}.
+#+end_definition
+
+To solve problems of two-dimensional flow of an incompressible fluid, it
+is sometimes convenient to express the velocity in terms of what is
+called the {{{define(Stream Function)}}}. From the equation of
+continuity
+
+$$ \vec{\nabla}\cdot\vec{v}=\partial_{x}v_{x} +\partial_{y}v_{y}=0 $$
+
+we see the velocity components can be written as derivatives
+
+\begin{equation}
+v_{x} = \partial_{y}\psi,\quad\mbox{and}\quad
+v_{y} = -\partial_{x}\psi
+\end{equation}
+
+of some function $\psi(x,y)$ called the {{{define(Stream Function)}}}.
+The equation of continuity is satisfied automatically, if we write the
+velocity in this manner (prove this to yourself).
+
+#+begin_remark
+The critical property for the existence of stream functions is that we
+are working with 2-dimensional problems, *not* that we're working in a
+potential flow.
+#+end_remark
+
+The equation that must be satisfied now: the equation of motion. Simply
+plug in the definition of velocity as the derivative of the
+streamfunction into the equations of motion to find:
+
+\begin{equation}
+\frac{\partial}{\partial t}\nabla^{2}\psi
+ - \frac{\partial\psi}{\partial x}\frac{\partial}{\partial y}\nabla^{2}\psi
+ + \frac{\partial\psi}{\partial y}\frac{\partial}{\partial x}\nabla^{2}\psi
+= 0.
+\end{equation}
+
+Now, if we know the stream function, we can immediately determine the
+streamlines of steady flow. The differential equation for stream lines
+are
+
+\begin{equation}
+\frac{\D x}{v_{x}}=\frac{\D y}{v_{y}}\implies v_{y}\,\D x - v_{x}\,\D y=0.
+\end{equation}
+
+This expresses the fact that the direction of the tangent to a
+streamline is the direction of the velocity. Substituting the definition
+of velocity components as the derivative of the stream function
+
+\begin{equation}
+\frac{\partial\psi}{\partial x}\D x + \frac{\partial\psi}{\partial y}\D y=\D\psi=0,
+\end{equation}
+
+hence $\psi$ is constant. Thus the streamlines are the family of curves
+obtained by putting the stream function $\psi(x,y)$ equal to an
+arbitrary constant (aren't these the "level curves" we learned about
+back in calculus?).
+
+*** Mass Flux Across a curve
+
+If we draw a curve between two points $A$ and $B$ in the \(xy\)-plane,
+the mass flux $Q$ across this curve is given by the differencein the
+values of the stream function at these two points regardless of the
+curve. If $v_{n}$ is the component of the velocity normal to the curve
+at any point, we have
+
+\begin{equation}
+Q = \rho \oint_{A}^{B}v_{n}\,\D\ell = \rho \oint^{B}_{A}(-v_{y}\,\D x +
+v_{x}\,\D y) = \rho\int^{B}_{A}\D\psi
+\end{equation}
+
+or
+
+\begin{equation}
+Q = \rho(\psi_{B} - \psi_{A}).
+\end{equation}
+
+*** Methods of Solving Two-Dimensional Irrotational Flow
+
+We can use complex analysis to solve a lot of problems of
+two-dimensional potential flow of incompressible fluids past bodies of
+various shapes. Look at the relation between the components of velocity
+and the stream function:
+
+\begin{equation*}
+v_{x}=\partial_{x}\phi = \partial_{y}\psi,
+\end{equation*}
+
+and
+
+\begin{equation*}
+v_{y}=\partial_{y}\phi = -\partial_{x}\psi.
+\end{equation*}
+
+These are the Cauchy--Riemann equations for the complex expression
+
+\begin{equation}
+w = \phi + \I\psi
+\end{equation}
+
+to be an analytic function of the complex argument $z = x + \I y$. The
+function $w$ is called the {{{define(Complex Potential)}}} and $\D w/\D z$
+the {{{define(Complex Velocity)}}}. The modulus of this complex velocity
+give the magnitude $v$ of the velocity and the angle $\theta$ between
+the direction of the velocity and the \(x\)-axis:
+
+\begin{equation}
+\frac{\D w}{\D z} = v\E^{-\I\theta}.
+\end{equation}
+
+At a solid surface past which the flow takes place, the velocity must be
+along the tangent; i.e., the profile contour of the surface must be a
+streamline (i.e., $\psi$ is constant along it). The constant may be
+taken to be zero, then the problem of flow past a given contour reduces
+to determining an analytic function $w(z)$ which takes real values on
+the contour.
+
+The integral of an analytic function around any closed contour $C$ is
+known to be $2\pi\I$ times the sum of residues of the function at its
+simple poles inside $C$. Hence
+
+\begin{equation}
+\oint w'\,\D z = 2\pi\I\sum_{k}\mathrm{Res}(w', z_{k})
+\end{equation}
+
+where $\mathrm{Res}(w', z_{k})$ are the residues of the complex velocity.
+We also have
+
+\begin{align*}
+\oint w'\,\D z
+&= \oint(v_{x} - \I v_{y})(\D x + \I\,\D y)\\
+&= \oint(v_{x}\,\D x + v_{y}\,\D y) + \I\oint(v_{x}\,\D y - v_{y}\,\D x).
+\end{align*}
+
+The real part of this is just the velocity circulation $\Gamma$ around
+the contour $C$. The imaginary part, multipled by $\rho$, is the mass
+flux across $C$. If there are no sources of fluid within the contour,
+this flux is zero and we then have
+
+\begin{equation}
+\Gamma = 2\pi\I\sum_{k}\mathrm{Res}(w', z_{k})
+\end{equation}
+
+all the residues are in this case purely imaginary.
+
+*** ...and when /is/ the Fluid Incompressible?
+
+Let us consider the conditions which the fluid may be regarded as
+incompressible. When the pressure changes adiabatically by $\Delta p$,
+the density changes by $\Delta\rho = (\partial\rho/\partial p)\Delta p$.
+
+According to Bernoulli's equation, however, the order of $\Delta p\sim\rho v^{2}$
+in steady flow. (L&L promises to show in \sect 64 that the derivative
+$(\partial p/\partial\rho)$ is the square of the velocity of sound $c$
+in the fluid, so $\Delta p\sim\rho v^{2}/c^{2}$.)
+
+The fluid may be regarded as incompressible if
+
+\begin{equation}
+\frac{\Delta\rho}{\rho}\ll 1.
+\end{equation}
+
+We see a necessary condition for this is the fluid velocity may be
+regarded as small compared to that of sound:
+
+\begin{equation}
+v\ll c.
+\end{equation}
+
+But this is for a steady flow. What do we do for a non-steady flow? We
+need an additional condition.
+
+- Let $\tau$ and $\ell$ be a time and length of the order of the times and
+  distances over which the fluid velocity undergoes significant changes.
+- If $\partial_{t}\vec{v}$ and $(1/\rho)\vec{\nabla}p$ in Euler's
+  equation are comparable, then we find the orders of magnitude
+  $v/\tau\sim\Delta p/\ell\rho$ or $\Delta p\sim \ell\rho v/\tau$
+- The corresponding change in $\rho$ is $\Delta\rho\sim\ell\rho v/\tau c^{2}$.
+- In the equation of continuity, compare the terms $\partial_{t}\rho$
+  and $\rho\vec{\nabla}\cdot\vec{v}$, we find that $\partial_{t}\rho$
+  may be neglected if $\Delta\rho/\tau\ll\rho v/\ell$, or
+  \begin{equation}
+  \tau\gg\ell/c.
+  \end{equation}
+- This has the meaning: the time $\ell/c$ taken by a sound signal to
+  traverse the distance $\ell$ must be small compared to the time $\tau$
+  during which the flow changes appreciably, so the propagation of
+  interactions in the fluid may be regarded as instantaneous.
+- If *both* this condition $\tau\gg\ell/c$ and our previous condition $v\ll c$
+  are fulfilled, the fluid may be regarded as incompressible.
+
+#+begin_exercise
+Determine the shape of the surface of an incompressible fluid subject to
+a gravitational field, contained in a cylindrical vessel which rotates
+about its (vertical) axis with a constant angular velocity $\Omega$.
+#+end_exercise
+
+#+begin_exercise
+A sphere, with radius $R$, moves with velocity $\vec{u}$ in an
+incompressible ideal fluid. Determine the potential flow of the fluid
+past the sphere.
+#+end_exercise
+
+#+begin_exercise
+The same as the previous problem, but for an infinite cylinder moving
+perpendicular to its axis. (The solution for more general problems may
+be found in N.E. Kochin, I.A. Kibel, and N.V. Roze
+{{{book-title(Theoretical Hydromechanics)}}} (1963), English translation
+published by John Wiley & Sons (1964)  ISBN-13 : 978-0470497050; H. Lamb,
+{{{book-title(Hydrodynamics)}}} (1932) \sect\sect103--116, Dover has
+republished its sixth edition.)
+#+end_exercise
+
+#+begin_exercise
+Determine the potential flow of an incompressible ideal fluid in an
+ellipsoidal vessel rotating about a principal axis with angular velocity
+$\Omega$ and determine the total angular momentum of the fluid.
+#+end_exercise
+
+#+begin_exercise
+Determine the flow near a stagnation point.
+#+end_exercise
+
+#+begin_exercise
+Determine the potential flow near an angle formed by two intersecting planes.
+#+end_exercise
+
+#+begin_exercise
+A spherical hole with radius $a$ suddenly forms in an incompressible
+fluid filling all space. Determine the time taken for the hole to be
+filled with fluid.
+(W.H.Besant {{{book-title(A Treatise on Hydrostatics and Hydrodynamics)}}} 1859;
+L. Rayleigh, "On the pressure developed in a liquid during the collapse of a spherical cavity".
+/Philosophical Magazine/ *34* no.200 (1917) pp.94--98.)
+#+end_exercise
+
+#+begin_exercise
+A sphere immersed in an incompressible fluid expands according to a
+given law $R=R(t)$. Determine the fluid pressure at the surface of the sphere.
+#+end_exercise
+
+#+begin_exercise
+Determine the form of a jet emerging from an infinitely long slit in a
+plane wall.
+#+end_exercise
+
+** Drag force in potential flow past a body
+# 38
+
+Consider the problem of irrotational flow of an incompressible ideal
+fluid past some solid body. (Of course, this is the same problem as the
+motion of a fluid when the same body moves through it...just change
+coordinates in which the fluid is at rest at infinity.)
+
+The potential flow for an incompressible fluid satisfies Laplace's
+equation
+
+\begin{equation}
+\nabla^{2}\phi=0.
+\end{equation}
+
+The boundary condition is that the solutions vanish at infinity (since
+the fluid is at rest). The origin is somewhere in the moving body: the
+coordinate system moves with the body.
+
+*** General Solution
+
+The general form of Laplace's equation is
+
+\begin{equation}
+\phi=\frac{-a}{r}+\vec{A}\cdot\vec{\nabla}\frac{1}{r}+\bigOh(r^{-3})
+\end{equation}
+
+where $a$, $\vec{A}$ are independent of coordinates.
+
+#+begin_proposition
+The constant $a$ must be zero.
+#+end_proposition
+
+#+begin_proof
+Suppose $\phi=-a/r$. Then the velocity is $\vec{v}=-\vec{\nabla}(a/r)=a\vec{r}/r^{3}$.
+What is the mass flux through some closed surface (say a sphere with
+radius $R$)? On this surface the velocity is constant and equal to
+$a/R^{2}$. The total flux though it is therefore$\rho(a/R^{2})4\pi R^{2}=4\pi\rho a$.
+But the flux of an incompressible fluid through any closed surface must
+be zero. Hence $a=0$.
+#+end_proof
+
+Since we are seeking the velocity at large distances, the terms of
+higher order than quadratic may be neglected, so we have
+
+\begin{equation}
+\phi = \vec{A}\cdot\vec{\nabla}(1/r)=-\vec{A}\cdot\widehat{r}/r^{2}
+\end{equation}
+
+and the velocity vector is
+
+\begin{equation}
+\vec{v}=(A\cdot\vec{\nabla})\vec{\nabla}\frac{1}{r}
+=\frac{3(\vec{A}\cdot\widehat{r})\widehat{r}-\vec{A}}{r^{3}}
+\end{equation}
+
+where $\widehat{r}$ is a unit vector in the direction of $\vec{r}$.
+At large distances the velocity diminishes as $r^{-3}$. The vector
+$\vec{A}$ depends on the shape and velocity of the body and can be
+determined only by solving the equation $\nabla^{2}\phi=0$ at all
+distances, taking into account the appropriate boundary conditions at
+the surface of the moving body.
+
+*** Total Energy
+# 39--40
+
+#+begin_lemma
+The internal energy of an incompressible fluid is constant.
+#+end_lemma
+
+#+begin_theorem
+The total energy of the fluid is
+
+\begin{equation*}
+E = \frac{\rho}{2}(4\pi\vec{A}\cdot\vec{u}-V_{0}u^{2}),
+\end{equation*}
+
+where $\vec{u}$ is the velocity of the body, $V_{0}$ is the volume of
+the body, $\vec{v}$ the velocity of the fluid, and $\vec{A}$ depends on
+the shape of the body.
+#+end_theorem
+
+#+begin_proof
+- The total kinetic energy for the fluid is $\frac{1}{2}\int\rho v^{2}\,\D V$
+  where we integrate over all space /outside/ the body.
+- Take a region of space /V/ bounded by a "large sphere" of radius $R$,
+  centered at the origin. (We'll first integrate over the sphere, then
+  take the $R\to\infty$ limit.)
+- We have
+  $$ \int v^{2}\,\D V = \int u^{2}\,\D V + \int(\vec{v}+\vec{u})\cdot(\vec{v}-\vec{u})\D V $$
+  where $\vec{u}$ is the velocity of the body.
+  + Since $\vec{u}$ is independent of the coordinates, the first
+    integral on the RHS is simply $u^{2}(V-V_{0})$ where $V_{0}$ is the
+    volume of the body.
+  + In the second integral, we rewrite the factor $\vec{v}+\vec{u} = \vec{\nabla}(\phi+\vec{u}\cdot\vec{r})$
+  + The equation of continuity tells us $\vec{\nabla}\cdot\vec{v}=0$
+  + We have $\vec{\nabla}\cdot\vec{u}=0$
+- We have
+  $$ \int v^{2}\,\D V = u^{2}(V-V_{0}) + \int\vec{\nabla}\cdot[(\phi+\vec{u}\cdot\vec{r})(\vec{v}-\vec{u})] \D{V} $$
+- The second integral can be transformed into a surface integral over
+  the sphere's surface $S$ and the body's surface $S_{0}$.
+  $$ \int\vec{\nabla}\cdot[(\phi+\vec{u}\cdot\vec{r})(\vec{v}-\vec{u})] \D{V} = \oint_{S_{0}}(\phi+\vec{u}\cdot\vec{r})(\vec{v}-\vec{u})\cdot\D\vec{A} + \oint_{S}(\phi+\vec{u}\cdot\vec{r})(\vec{v}-\vec{u})\cdot\D\vec{A} $$
+  + On the surface $S_{0}$, the normal components of $\vec{v}$ and
+    $\vec{u}$ are equal (due to boundary conditions).
+  + Since the integration would be along the normal to the surface, the
+    surface integral over $S_{0}$ vanishes.
+- We work over the surface integral over $S$, substituting the
+  expression $\vec{v} = (\vec{A}\cdot\vec{\nabla})\vec{\nabla}(1/r)$.
+  Ignoring terms which vanish as $R\to\infty$, integrating over the
+  sphere of radius $R$ with $\D\vec{A} = \widehat{n}R^{2}\D\Omega$ where
+  $\D\Omega$ is an element of the solid angle, this gives us
+
+\begin{equation}
+\oint_{S}(\phi+\vec{u}\cdot\vec{r})(\vec{v}-\vec{u})\cdot\D\vec{A}
+= \int[3(\vec{A}\cdot\widehat{n})(\vec{u}\cdot\widehat{n}) - (\vec{u}\cdot\widehat{n})^{2}R^{3}]\D\Omega
+\end{equation}
+
+- Performing this integral, multiplying by $\rho/2$, we obtain the
+  expression for the total energy of the fluid
+  $$ E = \frac{\rho}{2}(4\pi\vec{A}\cdot\vec{u} - V_{0}u^{2}). $$
+#+end_proof
+
+#+begin_remark
+The integral we must perform in the last step is taken over a sphere,
+and since the integrands are constant, it amounts to multiplying by
+$4\pi R^{3}/3$.
+#+end_remark
+
+#+NAME: defn-induced-mass-tensor
+#+begin_definition
+We can rewrite the energy $E$ just computed as a quadratic function of
+the components of $\vec{u}$ as
+
+\begin{equation}
+E = \frac{1}{2}m_{ik}u^{i}u^{k}
+\end{equation}
+
+where $m_{ik}$ is a constant, symmetric tensor, called the
+{{{define(Induced-Mass Tensor)}}}. Its components can be computed from
+those of $\vec{A}$.
+#+end_definition
+
+*** D'Alembert's Paradox
+
+We can compute the total momentum $\vec{P}$ for the fluid from the
+energy. How?
+
+#+begin_lemma
+Observe an infinitesimal change in $E$ and $\vec{P}$ are
+related by
+
+\begin{equation*}
+\D E = \vec{u}\cdot\D\vec{P}.
+\end{equation*}
+
+#+end_lemma
+
+#+begin_proof
+- Assume the body accelerated by some external force $\vec{F}$
+- Then the momentum of the fluid will be increased by $\D\vec{P}$ during
+  the period $\D t$
+- Then $\D\vec{P} = \vec{F}\,\D t$
+- Hence $\vec{u}\cdot\D\vec{P} = \vec{u}\cdot\vec{F}\,\D t$ by scalar
+  multiplication with $\vec{u}$ (i.e., the work done by force $\vec{F}$
+  acting through the distance $\vec{u}\,\D t$, which in turn must be
+  equal to the increase $\D E$ in the energy of the fluid)
+#+end_proof
+
+It follows from the definition of [[defn-induced-mass-tensor][induced mass tensor]] that
+
+\begin{equation}
+P_{i} = m_{ik}u^{k}.
+\end{equation}
+
+And by comparing results we find
+
+\begin{equation}
+\vec{P} = 4\pi\rho\vec{A} - \rho V_{0}\vec{u}.
+\end{equation}
+
+The momentum transmitted to the fluid by the body in unit time is
+$\D\vec{P}/\D t$. With the opposite sign it gives the reaction of the
+fluid (i.e., the force acting on the body):
+
+\begin{equation}
+\vec{F} = -\frac{\D\vec{P}}{\D t}
+\end{equation}
+
+The components of $\vec{F}$ parallel to the velocity of the body is
+called the {{{define(Drag Force)}}} and the perpendicular component is
+called the {{{define(Lift Force)}}}.
+
+#+begin_proposition
+(D'Alembert Paradox)
+If it were possible to have potential flow past a body moving uniformly
+in an ideal fluid, we should have $\vec{P}$ be constant, since $\vec{u}$
+is constant, and so $\vec{F} = 0$. That is to say, there would be no
+drag and no lift: the pressure forces exerted on the body by the fluid
+would balance out.
+#+end_proposition
+
+Now, everything that has been said, we stress, has assumed an infinite
+volume for the fluid. If the fluid has a free surface, then a body moving
+uniformly parallel to this surface will experience a drag
+({{{define(Wave Drag)}}}) due to the occurrence of a "system of waves"
+propagated on the free surface, which continually remove energy to
+infinity.
+
+
+
+# 41
+*** Converse Problem
+# 42
+** Gravity waves
+# 43
+
+** Internal waves in an incompressible fluid
+# 49
+
+** Waves in a rotating fluid
+# 52
+# ends 55
+
+* References
+
+- Alexandre Chorin, Jerrold Marsden,
+  {{{book-title(A Mathematical Introduction to Fluid Mechanics)}}}.
+  Third ed., Springer, 1993.
+- Landau and Lifshitz,
+  {{{book-title(Fluid Mechanics)}}}.
+  Second ed., Butterworth-Heinemann, 1987.
+  This is my primary reference.
+
+** Syllabi
+
+- MIT
+  + 1.63 "Advanced Fluid Dynamics of the Environment" [[https://ocw.mit.edu/courses/civil-and-environmental-engineering/1-63-advanced-fluid-dynamics-of-the-environment-fall-2002/syllabus/][syllabus]]
+  + 2.06 "Fluid Dynamics" [[https://ocw.mit.edu/courses/mechanical-engineering/2-06-fluid-dynamics-spring-2013/syllabus/][syllabus]] (studies the first three chapters
+    of Frank White's {{{book-title(Fluid Mechanics)}}}, 7th ed.)
+  + 2.25 "Advanced fluid mechanics" [[https://ocw.mit.edu/courses/mechanical-engineering/2-25-advanced-fluid-mechanics-fall-2013/syllabus/][syllabus]]
+  + 2.26 "Compressible Fluid Dynamics" [[https://ocw.mit.edu/courses/mechanical-engineering/2-26-compressible-fluid-dynamics-spring-2004/syllabus/][syllabus]]
+  + 2.29 "Numerical Fluid Mechanics" [[https://ocw.mit.edu/courses/mechanical-engineering/2-29-numerical-fluid-mechanics-spring-2015/syllabus/][syllabus]]
+  + 12.003 "Atmosphere, Ocean and Climate Dynamics" [[https://ocw.mit.edu/courses/earth-atmospheric-and-planetary-sciences/12-003-atmosphere-ocean-and-climate-dynamics-fall-2008/syllabus/][syllabus]]
+  + 12.800 "Fluid Dynamics of the Atmosphere and Ocean" [[https://ocw.mit.edu/courses/earth-atmospheric-and-planetary-sciences/12-800-fluid-dynamics-of-the-atmosphere-and-ocean-fall-2004/syllabus/][syllabus]]
+  + 13.024 "Numerical Marine Hydrodynamics" [[https://ocw.mit.edu/courses/mechanical-engineering/2-29-numerical-marine-hydrodynamics-13-024-spring-2003/syllabus/][syllabus]]
+- Caltech
+  + [[https://shepherd.caltech.edu/T5/resources/AE101_Guide.pdf][Fluid Mechanics 101: A Skeleton Guide]] (pdf)
+  + Ae/APh/CE/ME 101c: Fluid Mechanics [[https://www.mckeon.caltech.edu/teaching/101/AeAPhCEME101c_Syllabus_2019.pdf][syllabus]]
+  + Hermann Schlichting, {{{book-title(Boundary Layer Theory)}}}.
+- Georgia Tech
+  + ME3340 [[https://lorraine.gatech.edu/sites/default/files/academic-info/syllabus/fa20/2_me3340_fluids_zhang_brief_syllabus.pdf][Syllabus]]
+    + Munson, Young, and Okiishi’s {{{book-title(Fundamentals of Fluid Mechanics)}}}
+  + ME6601 [[http://me.gatech.edu/graduate/courses/me6601][syllabus]] Introduction to Fluid Mechanics
+    + Ronald Panton, {{{book-title(Incompressible Flow)}}}, Panton; 2nd Edition, John Wiley; 1995.
+    + G. M. Homsy, et al, {{{book-title(Multi-Media Fluid Mechanics)}}} (w/CD), Cambridge University Press, 2000.
+  + ME7751 [[http://me.gatech.edu/graduate/courses/me7751][Syllabus]] Computational Fluid Mechanics
+    + Pieter Wesseling,
+      {{{book-title(Principles of Computational Fluid Dynamics)}}};
+      Springer-Verlag, 2000.
+    + Joel H. Ferziger and Milovan Peric,
+      {{{book-title(Computational Methods of Fluid Dynamics)}}},
+      3rd Edition, Springer-Verlag, 2001
+    + C. Hirsch,
+      {{{book-title(Numerical Computation of Internal and External Flows)}}},
+      Vol. 1 and 2, John Wiley & Sons, Ltd., 1988.
+    + G. F. Carey and Oden, J. T.,
+      {{{book-title(Finite Elements: Fluid Mechanics)}}},
+      Vol. VI, Prentice-Hall, 1986.
+    + C. Canuto, M. Y. Hussaini, A. Quarteroni, and T. A. Zang,
+      {{{book-title(Spectral Methods in Fluid Mechanics)}}},
+      Springer-Verlag, 1988.
+-
+
+** Citations from L&L
+
+- W. H. Besant,
+  {{{book-title(A Treatise on Hydrostatics and Hydrodynamics)}}}.
+  Cambridge, 1859.
+- Hans Ertel,
+  "Ein neuer hydrodynamischer Erhaltungssatz".
+  /Naturwiss./ *30* (1942) 543–544.
+- Hans Ertel,
+  "Ein neuer hydrodynamischer Wirbelsatz".
+  /Meteorol. Z./ *59*, no.9 (1942) pp.277--281.
+- Hans Ertel,
+  "Über das Verhältnis des neuen hydrodynamischen Wirbelsatzes zum Zirkulationssatz von V. Bjerknes".
+  /Meteor. Z./ *59* (1942) pp.385--387.
+- N.E. Kochin, I.A. Kibel, and N.V. Roze
+  {{{book-title(Theoretical Hydromechanics)}}} (1963), English translation
+  John Wiley & Sons (1964) ISBN-13 : 978-0470497050;
+- H. Lamb, {{{book-title(Hydrodynamics)}}} (1932)
+- L. Rayleigh,
+  "On the pressure developed in a liquid during the collapse of a spherical cavity".
+  /Philosophical Magazine/ *34* no.200 (1917) pp.94--98.
+
+** Recommendations/Lookup
+
+- George Batchelor,
+  {{{book-title(An Introduction to Fluid Dynamics)}}}.
+  Cambridge University Press, 2000.
+- Laurent Schoeffel, "Lectures on Fluid Dynamics".
+  Eprint [[https://arxiv.org/abs/1407.3162][arXiv:1407.3162]].
+- [ CFD Python: 12 steps to Navier-Stokes :: Lorena A. Barba Group ]
+- Tai-Peng Tsai, {{{book-title(Lectures on Navier-Stokes Equations)}}}.
+  AMS Publishers.
