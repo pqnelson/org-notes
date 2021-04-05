@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raspberry Pi</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Raspberry Pi</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org849a5e1">1. Overview</a></li>
+<li><a href="#orgf8b8875">2. Ssh into the Pi</a></li>
+<li><a href="#orgd9039c4">3. Debian Infrastructure</a>
+<ul>
+<li><a href="#org53b84f2">3.1. Optimizing for my local computer</a></li>
+</ul>
+</li>
+<li><a href="#orgfff2a37">4. Installing Emacs</a>
+<ul>
+<li><a href="#org44f5349">4.1. Improving Startup Time</a></li>
+</ul>
+</li>
+<li><a href="#orgc0322ef">5. Installing Common Lisp</a>
+<ul>
+<li><a href="#org081e24a">5.1. Clozure Common Lisp</a>
+<ul>
+<li><a href="#org8e654e5">5.1.1. Making <code>armcl</code> global</a></li>
+</ul>
+</li>
+<li><a href="#orgb761e9e">5.2. Adding Quicklisp</a></li>
+</ul>
+</li>
+<li><a href="#org24ba1ae">6. Stumpwm</a>
+<ul>
+<li><a href="#org7e7df3a">6.1. Dependencies</a></li>
+</ul>
+</li>
+<li><a href="#orgd0bc87d">7. Other Links</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org849a5e1" class="outline-2">
+<h2 id="org849a5e1"><span class="section-number-2">1</span> Overview</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+I've got a Raspberry Pi 3 lying around, and I've been interested in
+<a href="lisp/machine.html">Lisp Machines</a> for a bit. Daniel Szmulewicz wrote a <a href="https://danielsz.github.io/blog/blog_on_lisp.html">blog post</a> on treating
+a Raspberry Pi as an <i>ersatz</i> Lisp Machine. Since my machine is on the
+older side, and has been lying around for a while (it still runs Debian
+Jessie), I thought I'd document my attempt to update it and install
+Lisp tools on it.
+</p>
+
+<p>
+(Apparently I have a Raspberry Pi 4B.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf8b8875" class="outline-2">
+<h2 id="orgf8b8875"><span class="section-number-2">2</span> Ssh into the Pi</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We can ssh into Raspberry Pi by enabling ssh (the openssh-server seems
+to be installed but not yet enabled), then we can simply do
+<code>ssh &lt;user&gt;@raspberrypi.local</code> to
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd9039c4" class="outline-2">
+<h2 id="orgd9039c4"><span class="section-number-2">3</span> Debian Infrastructure</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Running the update can be time-consuming. Basically I updated the
+<code>/etc/apt/sources.list</code> and <code>/etc/apt/sources.list.d/raspi.list</code> to use
+the stretch repositories, uninstalled a few un-needed (or unused)
+packages (<code>scratch*</code>, minecraft-pi, <code>libreoffice*</code>, sonic-pi),
+ran a <code>sudo apt-get update &amp;&amp; sudo apt-get upgrade -y &amp;&amp; sudo apt clean</code>
+followed by a <code>sudo apt-get dist-upgrade -y &amp;&amp; sudo apt-get clean</code>.
+This took a few hours.
+</p>
+
+<p>
+Then I ran <code>sudo rpi-update</code> to update the firmware.
+</p>
+</div>
+
+<div id="outline-container-org53b84f2" class="outline-3">
+<h3 id="org53b84f2"><span class="section-number-3">3.1</span> Optimizing for my local computer</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+I noticed that, for GCC, the flag <code>-Os</code> optimizes for size. Since
+there's only so little room for things on the Pi, I decided to install
+apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
+<code>sudo apt-build install ...</code> instead of apt-get.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfff2a37" class="outline-2">
+<h2 id="orgfff2a37"><span class="section-number-2">4</span> Installing Emacs</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+I pulled down Emacs from the git repository:
+</p>
+
+<pre class="example" id="orge0b8e69">
+~/$ cd src
+~/src/$ git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git
+...
+~/src/$ cd emacs
+~/src/emacs/$ sudo apt-get build-dep emacs
+</pre>
+
+<p>
+We need to install the GNU-Autotools:
+</p>
+
+<pre class="example" id="org48a5f97">
+~/src/emacs/$ sudo apt-get install autoconf automake
+</pre>
+
+<p>
+We can try installing the dependencies, but will also have to install
+the <code>dev</code> version of the libraries:
+</p>
+
+<pre class="example" id="org196ba58">
+~/src/emacs/$ sudo apt-get build-dep emacs
+...
+~/src/emacs/$ sudo apt-get install libm17n-dev libgif-dev libxpm-dev libtiff5-dev
+...
+~/src/emacs/$ sudo apt-get install libpng-dev gnutls-dev texinfo
+</pre>
+
+<p>
+Now for the configuration
+</p>
+
+<pre class="example" id="org3e9d34a">
+~/src/emacs/$ ./autogen.sh
+~/src/emacs/$ ./configure --with-x-toolkit=no --with-m17n-flt --with-modules CFLAGS="-mtune=native -mcpu=native -Os -marm"
+</pre>
+
+<p>
+If you configure with <code>-Ofast</code> you need to also include
+<code>-fno-finite-math-only</code> too (or else when you run <code>make</code>, you'll get an
+error saying Emacs won't compile with <code>-ffinite-math-only</code>).
+</p>
+</div>
+
+<div id="outline-container-org44f5349" class="outline-3">
+<h3 id="org44f5349"><span class="section-number-3">4.1</span> Improving Startup Time</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+I noticed the startup time was rather slow. The <code>(emacs-init-time)</code>
+reports it took 10.46182 seconds without optimization for my default
+init file. (My laptop with two Intel Core2 duos, at 2.80GHz, reports a
+3.065432256 second init-time.)
+</p>
+
+<p>
+Setting <code>gc-cons-threshold</code> to 10000000 improved performance by about
+40%, <code>(emacs-init-time)</code> reduces to 6.671090814 seconds. Bumping it up
+to 10<sup>8</sup> barely improves performance, <code>(emacs-init-time)</code> reports 6.44
+seconds.
+</p>
+
+<p>
+I changed all the <code>(require 'foo)</code> calls to
+<code>(use-package foo :ensure t :defer t)</code>, which improved startup time by
+about a couple of second (4.426073247 seconds).
+</p>
+
+<p>
+This is all done with emacs compiled <code>-Os</code>; if I instead did <code>-O3</code>,
+redid the byte-compilation of <code>init.el</code>, I get startup time in 3.67300
+seconds. If I further compiled with <code>-Ofast</code>, I get startup time in
+3.713 seconds.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc0322ef" class="outline-2">
+<h2 id="orgc0322ef"><span class="section-number-2">5</span> Installing Common Lisp</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+I'm not sure what happened, but somehow I had SBCL 1.4 installed on my
+Raspberry Pi already. I was suspicious of this, and remain so to date.
+</p>
+</div>
+
+<div id="outline-container-org081e24a" class="outline-3">
+<h3 id="org081e24a"><span class="section-number-3">5.1</span> Clozure Common Lisp</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+One Common Lisp compiler which emerged from the '80s was Clozure Common
+Lisp. Well, it was forked from Macintosh Common Lisp, which ran on a
+computer with only a few Megabytes of RAM at the time. We have similar
+constraints for the Raspberry Pi today (at least, I do).
+</p>
+
+<p>
+I followed Rainer's <a href="https://web.archive.org/web/20121010001720/http://lispm.dyndns.org/ccl">instructions</a> .
+</p>
+
+<pre class="example" id="org6c8fb17">
+~/src/$ git clone https://github.com/Clozure/ccl/
+...
+~/src/$ cd ccl/
+~/src/ccl/$ git checkout v1.12-dev.1
+~/src/ccl/$ cd lisp-kernel/linuxarm
+~/src/ccl/lisp-kernel/linuxarm/$ make clean; make
+...
+~/src/ccl/lisp-kernel/linuxarm/$ cd ../..
+~/src/ccl/$ ./scripts/get-binaries linuxarm
+...
+~/src/ccl/$ ./armcl
+
+? (ccl:rebuild-ccl :full t)
+...
+</pre>
+
+<p>
+There is a bug with <code>optimizers.lisp</code> which hangs on master branch.
+It should take less than a minute to finish <code>optimizers.lisp</code>, so if
+it's taking longer&#x2026;it's probably a bug. (I have found the
+<code>v1.12-dev.1</code>, <code>v1.12-dev.2</code>, <code>v1.12-dev.3</code>, <code>v1.12-dev.4</code> tags are
+capable of rebuilding as expected.)
+</p>
+
+<p>
+The <code>armcl</code> binary is 633788 bytes initially, and the <code>armcl.image</code> is
+22347792 bytes big. After rebuilding <code>v1.12-dev.1</code>, the binary is the
+same size, but the <code>armcl.image</code> is 17100816 bytes (and in <code>v1.12-dev.4</code>,
+17158160 bytes).
+</p>
+</div>
+
+<div id="outline-container-org8e654e5" class="outline-4">
+<h4 id="org8e654e5"><span class="section-number-4">5.1.1</span> Making <code>armcl</code> global</h4>
+<div class="outline-text-4" id="text-5-1-1">
+<p>
+I also ran
+</p>
+
+<pre class="example" id="orge1f90ae">
+~/src/$ sudo ln -s /home/alex/src/ccl/armcl /usr/local/bin/armcl
+</pre>
+
+<p>
+This let me run armcl for any user.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb761e9e" class="outline-3">
+<h3 id="orgb761e9e"><span class="section-number-3">5.2</span> Adding Quicklisp</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+We get quicklisp:
+</p>
+
+<pre class="example" id="orga3d89f9">
+~/$ wget http://beta.quicklisp.org/quicklisp.lisp
+...
+~/$ armcl
+? (load "quicklisp.lisp")
+? (quicklisp-quickstart:install)
+</pre>
+
+<p>
+Then we append to (or create) the file <code>~/.ccl-init.lisp</code> with the
+following content:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">load-quicklisp</span> ()
+  (<span class="org-keyword">let</span> ((quicklisp-init (merge-pathnames <span class="org-string">"quicklisp/setup.lisp"</span>
+                                         (user-homedir-pathname))))
+    (<span class="org-keyword">when</span> (probe-file quicklisp-init)
+      (load quicklisp-init))))
+</pre>
+</div>
+
+<p>
+<b>CAUTION:</b> this will <i>not</i> load quicklisp by default, but require you to
+call <code>(load-quicklisp)</code> when you need/want it. If you want it loaded by
+default, you could just add a <code>(load-quicklisp)</code> line to the
+<code>~/.ccl-init.lisp</code> file.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org24ba1ae" class="outline-2">
+<h2 id="org24ba1ae"><span class="section-number-2">6</span> Stumpwm</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org7e7df3a" class="outline-3">
+<h3 id="org7e7df3a"><span class="section-number-3">6.1</span> Dependencies</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+Trying to run <code>sudo apt-get build-dep stumpwm</code> will install a number of
+common lisp dependencies, which quicklisp would automatically handle.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd0bc87d" class="outline-2">
+<h2 id="orgd0bc87d"><span class="section-number-2">7</span> Other Links</h2>
+<div class="outline-text-2" id="text-7">
+<ul class="org-ul">
+<li><a href="http://informatimago.com/articles/raspberrypi/ccl-sur-qemu.html">CCL on RPi</a> (French)</li>
+<li><a href="http://thisoldlisp.com/talks/els-2018/">This Old Lisp</a></li>
+<li><a href="http://lispm.de/ccl">CCL on Raspberry Pi</a>, Rainer's tutorial/notes</li>
+<li><a href="http://christophe.rhodes.io/notes/blog/feeds/lisp/">Christophe Rhodes on Lisp</a></li>
+<li><a href="http://jacek.zlydach.pl/blog/2015-03-07-lisp-on-raspberry-pi-2-part-1-setting-up.html">Lisp on Raspberry Pi, Part 2</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-02-24 Wed 16:50.</p>
+</div>
+</body>
+</html>

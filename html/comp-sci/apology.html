@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:10 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apologia</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Apologia</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org191b2f6">1. Programming Language</a>
+<ul>
+<li><a href="#orge606b2d">1.1. Dialects</a></li>
+<li><a href="#orgb4276e0">1.2. Flaws</a>
+<ul>
+<li><a href="#orgb37acf3">1.2.1. Scheme</a>
+<ul>
+<li><a href="#orge863bdb">1.2.1.1. No Canonical Implementation</a></li>
+</ul>
+</li>
+<li><a href="#org7dd133c">1.2.2. Common Lisp</a>
+<ul>
+<li><a href="#orga9c6765">1.2.2.1. Floating Point Arithmetic isn't part of the Standard</a></li>
+</ul>
+</li>
+<li><a href="#org66161cc">1.2.3. Clojure</a>
+<ul>
+<li><a href="#orgd600345">1.2.3.1. Memory Usage</a></li>
+<li><a href="#orgdf357b9">1.2.3.2. There is no standard</a></li>
+<li><a href="#orga1e96b2">1.2.3.3. JVM Historically didn't have IEEE 754 floating point</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgc1acb74">1.3. Further Reading</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org191b2f6" class="outline-2">
+<h2 id="org191b2f6"><span class="section-number-2">1</span> Programming Language</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+I'm still debating the programming language I should use for this
+endeavor. Among the choices, it seems that <a href="lisp.html">Lisp</a> is best prepared for my
+task:
+</p>
+
+<ul class="org-ul">
+<li>Lisp has no syntax, so language extensions are natural, and
+everything has the same "sentence structure" (verb subject object)</li>
+<li>Macros make language extensions on par with special forms</li>
+<li>Symbolic computation can be handled easily and naturally (e.g., the
+<a href="https://github.com/pqnelson/auto-pse/blob/3b2d168/src/match.lisp">pattern matching code</a> and <a href="https://github.com/pqnelson/auto-pse/blob/3b2d168/src/simplify.lisp">algebraic simplifier</a> couldn't be easily done
+in non-Lisp)</li>
+<li>Lisp allows for Bignum computations, so integer and rational
+arithmetic is precise</li>
+</ul>
+
+<p>
+At the same time, I wish to use IEEE floating point (which seems to
+rule out Common Lisp, except <code>sbcl</code> and possibly a few other
+implementations).  The easiest solution is to use SBCL, and not
+worry about the details.  One way to resolve this problem is to
+implement my own floating point arithmetic with arbitrary precision
+algorithms, or fall back to using the <a href="https://www.gnu.org/software/gsl/">GNU Scientific Library</a>, or
+something similar. I suppose I could write some unit tests to check
+if the system uses IEEE floating point, so we can be certain.
+</p>
+
+<div class="remark" id="org5b64477">
+<p>
+<a href="http://www.femlisp.org">FEMLISP</a> look interesting, it's a Common Lisp library for solving
+partial differential equations via finite element methods.
+</p>
+
+</div>
+
+<p>
+Scheme has the disadvantage of being interpreted (read: slow) and
+limited support for macros. <a href="https://www.gnu.org/software/guile/">Guile</a> looks like it remedies these problems
+by having the programmer implement the critical parts in C, then embed a
+Scheme interpreter/VM in the C code. I like this approach better.
+</p>
+
+<ul class="org-ul">
+<li>One problem with Guile is that complex numbers are necessarily inexact.</li>
+<li>On the other hand, arithmetic operators can be extended as if they
+were generic functions in Guile.</li>
+</ul>
+</div>
+
+<div id="outline-container-orge606b2d" class="outline-3">
+<h3 id="orge606b2d"><span class="section-number-3">1.1</span> Dialects</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+<b>Scheme</b> is probably the first dialect most people encounter,
+since it's used in the textbook
+<cite class="book-title">Structure and Interpretation of Computer Programs</cite>
+("SICP").
+The Scheme dialect has the hall-mark of minimalism. In fact,
+it's so minimal that the reader implements a scheme interpreter
+in chapter 4 of <cite class="book-title">SICP</cite>.
+</p>
+
+<p>
+<b>Common Lisp</b> emerged from the 1980s after Lisp 1 fractured in a
+Cambrian explosion of dialects. Common Lisp sought to unite them all
+into one common language. Unlike Scheme, Common Lisp compiles to machine
+code, has a comparatively large number of functions (Scheme fits on a
+cocktail napkin, Common Lisp requires a bit more space). This dialect
+also has macros, which Scheme did not until relatively recently.
+</p>
+
+<p>
+<b>Emacs Lisp</b> is a cousin to Common Lisp, because both descend from
+Maclisp (a shared Cambrian ancestor). They share similar syntax, and are
+about as distinct as Latin to modern Italian, or Urdu and Farsi.
+</p>
+
+<p>
+<b>Clojure</b> is the newest dialect, which borrowed as heavily from Haskell
+as from other Lisps. It uses immutability, emphasizes functional style,
+and runs on the Java Virtual Machine or in the browser as Javascript.
+While it has marginally cleaner syntax (using not just parentheses but
+also square braces <code>[...]</code> for vectors, and braces <code>{...}</code> for hashmaps),
+its STM memory model leads to accidentally bloated software all too easily.
+</p>
+</div>
+</div>
+<div id="outline-container-orgb4276e0" class="outline-3">
+<h3 id="orgb4276e0"><span class="section-number-3">1.2</span> Flaws</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+The biggest flaws that come to mind are figuring out which dialect to
+use. Each of them have their quirks and shortcomings.
+</p>
+</div>
+
+<div id="outline-container-orgb37acf3" class="outline-4">
+<h4 id="orgb37acf3"><span class="section-number-4">1.2.1</span> Scheme</h4>
+<div class="outline-text-4" id="text-1-2-1">
+</div>
+<div id="outline-container-orge863bdb" class="outline-5">
+<h5 id="orge863bdb"><span class="section-number-5">1.2.1.1</span> No Canonical Implementation</h5>
+<div class="outline-text-5" id="text-1-2-1-1">
+<p>
+One of the features of Scheme's minimalism is that it's not hard to
+write your own Scheme interpreter. The problem: there are dozens of
+Scheme implementations.
+</p>
+
+<dl class="org-dl">
+<dt>MIT/GNU Scheme</dt><dd>What <i>SICP</i> and <i>SICM</i> use</dd>
+<dt>Guile</dt><dd>GNU's official Scheme implementation for extensible usage</dd>
+<dt>Racket</dt><dd>Flashy new Scheme implementation</dd>
+<dt>Chicken</dt><dd>Compiles Scheme to C</dd>
+<dt>Gambit</dt><dd>Another Scheme-to-C compiler, plus an interpreter</dd>
+<dt>Chez Scheme</dt><dd>An older implementation, among the fastest</dd>
+</dl>
+
+<p>
+And on and on and on. If starting from scratch, it's unclear which one
+to pick, they're all decent choices. But each one has language-dependent
+variations of expected features &#x2014; e.g., modules are either
+unimplemented or use different syntax.
+</p>
+
+<p>
+Although I <i>really</i> like Guile, I'm afraid it may be unstable and remove
+functionality I'd use.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7dd133c" class="outline-4">
+<h4 id="org7dd133c"><span class="section-number-4">1.2.2</span> Common Lisp</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<p>
+Probably the biggest complaint is how baroque the language is (for
+example: <code>setf</code> and <code>setq</code> are both included, but only one is really
+needed). Equality testing also exemplifies this problem (we have <code>=</code> for
+numbers, <code>eq</code> for pointers, <code>eql</code> for pointers or numbers, <code>equal</code>, and
+<code>equalp</code>, but we'll need to roll our own if we want equality of CLOS
+instances [objects]).
+</p>
+</div>
+
+<div id="outline-container-orga9c6765" class="outline-5">
+<h5 id="orga9c6765"><span class="section-number-5">1.2.2.1</span> Floating Point Arithmetic isn't part of the Standard</h5>
+<div class="outline-text-5" id="text-1-2-2-1">
+<p>
+The Language standard was written before IEEE 754 floating point was
+finalized (or written), so this is a serious shortcoming with Common
+Lisp for numerical analysts. Since it's not part of the standard, it's
+not <i>violating</i> the standard to use IEEE floating point arithmetic. But
+it's just compiler dependent.
+</p>
+
+<ul class="org-ul">
+<li>SBCL uses IEEE-754 on x86</li>
+<li>ABCL uses IEEE-754 if the JVM running it uses the standard</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org66161cc" class="outline-4">
+<h4 id="org66161cc"><span class="section-number-4">1.2.3</span> Clojure</h4>
+<div class="outline-text-4" id="text-1-2-3">
+<p>
+Slow startup with repls and bloated software are two of the biggest
+issues facing Clojure.
+</p>
+</div>
+
+<div id="outline-container-orgd600345" class="outline-5">
+<h5 id="orgd600345"><span class="section-number-5">1.2.3.1</span> Memory Usage</h5>
+<div class="outline-text-5" id="text-1-2-3-1">
+<p>
+Clojure's memory usage can easily run out of control. The STM memory
+model requires greater diligence when programming, otherwise duplicate
+data can be created and not freed all-too-easily by accident. For
+example, holding onto the head of a cons will keep the rest of the list,
+even if the rest of the list is not needed or used. The JVM garbage
+collector doesn't seem to handle this memory model all too well, either.
+</p>
+
+<p>
+This frequently leads to rewriting the code in Java.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdf357b9" class="outline-5">
+<h5 id="orgdf357b9"><span class="section-number-5">1.2.3.2</span> There is no standard</h5>
+<div class="outline-text-5" id="text-1-2-3-2">
+<p>
+Unlike Scheme and Common Lisp, there is no standard. So, is <code>mapcat</code>
+doing what I expect? Erm&#x2026;maybe?
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga1e96b2" class="outline-5">
+<h5 id="orga1e96b2"><span class="section-number-5">1.2.3.3</span> JVM Historically didn't have IEEE 754 floating point</h5>
+<div class="outline-text-5" id="text-1-2-3-3">
+<p>
+This may be a subtle source of bugs, but floating point support is
+comparatively modern. For old-timers using JVM 6 (or whatever), this is
+problematic.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc1acb74" class="outline-3">
+<h3 id="orgc1acb74"><span class="section-number-3">1.3</span> Further Reading</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>Antoine Kalmbach, <a href="https://ane.github.io/2020/10/05/between-two-lisps.html">Between two Lisps</a>. Posted Oct 5, 2020.</li>
+<li>Antoine Kalmbach, <a href="https://ane.github.io/programming/lisp/goops-virtual-slots-and-ffi.html">Recutils, GOOPS and virtual slots</a>. Posted Dec 6, 2020.</li>
+<li><a href="http://jakob.space/blog/thoughts-on-lisps.html">Thoughts on Lisps</a> compares various implementations of Scheme and
+Common Lisp for performance and clarity</li>
+<li><a href="http://www.p-cos.net/lisp/guide.html">Pascal Costanza's Highly Opinionated Guide to Lisp</a></li>
+<li><a href="https://www-fourier.ujf-grenoble.fr/~sergerar/Papers/Packaging.pdf">Packages in Common Lisp, a tutorial</a> (PDF)</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2020-12-25 Fri 20:08.</p>
+</div>
+</body>
+</html>

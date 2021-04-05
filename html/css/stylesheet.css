@@ -1,0 +1,220 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Spectral&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap');
+@import url("proof.css");
+@import url("notation.css");
+html {
+    /* background-color: wheat; */
+    background-color: #252525;
+    height: 100%;
+}
+
+code, pre, kbd, tt {
+    font: normal 0.75em/20px "Source Code Pro", Menlo, Consolas, Monaco, monospace;
+}
+
+body {
+    counter-reset: theorem puzzle exercise section subsection;
+    background-color: white;
+    font-family: 'PT Serif', serif;
+    /* font-family: "Spectral", Merriweather, Georgia, serif; */
+    font-size: 18px;
+    line-height: 24px;
+    margin: 0 auto;
+    min-height: 100%;
+    padding: 0 1em 1em 1em;
+    max-width: 38em;
+}
+li, li p {
+    font-size: 18px;
+}
+p {
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+h1 {
+    font-size: 2em;
+    line-height: 1.2;
+}
+h1:not(.title) {
+    counter-set: section 0;
+}
+h2 {
+    counter-increment: section;
+    counter-set: exercise 0 subsection 0;
+    font-size: 1.8em;
+    line-height: 1.2;
+}
+h3 {
+    counter-increment: subsection;
+    counter-set: exercise 0;
+    font-size: 1.6em;
+    line-height: 1.2;
+}
+h4 {
+    font-size: 1.4em;
+    line-height: 1.4;
+}
+
+h5 {
+    font-size: 1.2em;
+}
+h6 {
+    font-size: 1.1em;
+}
+
+div.theorem::before {
+    counter-increment: theorem;
+    content: "Theorem " counter(theorem) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.remark::before {
+    counter-increment: theorem;
+    content: "Remark " counter(theorem) ".";
+    font-style: italic;
+}
+
+div.definition::before {
+    counter-increment: theorem;
+    content: "Definition " counter(theorem) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.puzzle::before {
+    counter-increment: puzzle;
+    content: "Puzzle " counter(puzzle) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.puzzle {
+    background-color: #ffebcd;
+    padding: 0px 0px 0em 10px;
+    border-left-style: solid;
+    border-width: 5px;
+    border-color: orange;
+}
+
+div.corollary::before {
+    counter-increment: theorem;
+    content: "Corollary " counter(theorem) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.lemma::before {
+    counter-increment: theorem;
+    content: "Lemma " counter(theorem) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.proposition::before {
+    counter-increment: theorem;
+    content: "Proposition " counter(theorem) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.math-example::before {
+    counter-increment: theorem;
+    content: "Example " counter(theorem) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.exercise::before {
+    counter-increment: exercise;
+    content: "Exercise " counter(subsection) "." counter(exercise) ".";
+    font-style: normal;
+    font-weight: bold;
+}
+
+div.exercise {
+    border: 1px solid black;
+    padding: 0.25em;
+    margin: 1em 0;
+}
+
+div.danger::before {
+    content: "Danger:";
+}
+div.danger {
+    background-color: #ffebcd;
+    padding: 0px 0px 0em 10px;
+    border-left-style: solid;
+    border-width: 5px;
+    border-color: red;
+}
+
+div.theorem, div.corollary, div.proposition, div.lemma {
+    font-style: italic;
+}
+
+.proof > p, div.theorem > p, div.corollary > p, div.remark > p, div.definition > p, .puzzle > p, .lemma > p, .exercise > p, .math-example > p, .proposition > p {
+    margin-top: 0;
+}
+div.definition > p:last-of-type, .puzzle > p:last-of-type, .exercise > p:last-of-type {
+    margin-bottom: 0;
+}
+
+div.definition {
+    border: 1px solid black;
+    padding: 0.25em;
+    margin: 1em 0;
+}
+
+div.remark {
+    border-left: 3px solid black;
+    font-size: 18px;
+    padding-left: 1em;
+}
+div.remark p {
+    font-size: 18px;
+}
+
+dfn {
+    color: green;
+    font-style: italic;
+}
+dfn::before, dfn::after {
+    content: '"';
+}
+
+pre.src:hover:before {
+    display: inline;
+    margin-top: 14px;
+}
+/* Based off of github syntax */
+.org-keyword, .org-type, .org-preprocessor, .org-negation-char {
+    color: #d73a49;
+}
+.org-string {
+    color: #032f62;
+}
+.org-constant {
+    color: #005cc5;
+}
+.org-function-name {
+    color: #6f42c1;
+}
+
+.org-comment, .org-comment-delimiter {
+    color: #6a737d;
+}
+
+/* tables */
+tr {
+    border-top: 1px solid;
+}
+td {
+    padding: 1px 4px;
+}
+td + td {
+    border-left: 1px solid;
+}

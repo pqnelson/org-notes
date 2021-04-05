@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>On Lisp</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">On Lisp</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgfd2789e">1. Overview</a>
+<ul>
+<li><a href="#org8e68cd2">1.1. Basic Syntax and Semantics</a></li>
+</ul>
+</li>
+<li><a href="#orgd840035">2. Features</a>
+<ul>
+<li><a href="#orgf0906dc">2.1. Multiple Dispatching</a></li>
+</ul>
+</li>
+<li><a href="#orge9651c9">3. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgfd2789e" class="outline-2">
+<h2 id="orgfd2789e"><span class="section-number-2">1</span> Overview</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Lisp is the second-oldest high level language still used in
+production (Fortran is the oldest). Unlike other languages, we
+should think of Lisp at the level of abstract syntax trees, not
+statements or expressions. This allows us to transcend petty
+differences among languages.
+</p>
+
+<p>
+Basically, if you want to create your own language but do not want
+to be dragged down by writing a parser, then you really want a
+Lisp. This is my own personal interest in Lisp: I want to have a
+language which permits me to do symbolic computation, and I don't
+care about syntax.
+</p>
+
+<p>
+(See also <a href="lisp/index.html">further topics on Lisp</a>.)
+</p>
+</div>
+
+<div id="outline-container-org8e68cd2" class="outline-3">
+<h3 id="org8e68cd2"><span class="section-number-3">1.1</span> Basic Syntax and Semantics</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+All Lisp dialects share the same basic syntax, namely S-expressions.
+An S-expression is either an <dfn>Atom</dfn> or a <dfn>List</dfn>.
+Lisp atoms are literal values, or symbols. Lists are finite sequences of
+S-expressions surrounded by parentheses <code>(S-1 S-2 ... S-n)</code>. Nested
+lists are permitted.
+</p>
+
+<p>
+We interpret function calls using Polish notation. So instead of
+writing, as we would in C, <code>1 + 2 + 3 + 4</code> we have in Lisp <code>(+ 1 2 3 4)</code>.
+This is evaluated by looking at the first element in the list, <code>+</code>,
+then check if it is a function or a macro. For functions, we evaluate
+the arguments passed to the function, then apply the function to the
+values (i.e., we "call by value"). Macros <i>do not</i> evaluate the
+arguments passed. Instead, macros produce a syntax tree, which is then
+evaluated. This permits us to extend Lisp with new language features.
+</p>
+
+<p>
+The syntax for defining new functions or constants varies depending on
+dialect, but amount to another S-expression:
+</p>
+
+<ul class="org-ul">
+<li>Scheme <code>(define (my-function param-1 ... param-n) ...)</code></li>
+<li>Common Lisp and Emacs Lisp <code>(defun my-function (param-1 ... param-n) ...)</code></li>
+<li>Clojure <code>(defn my-function [param-1 ... param-n] ...)</code></li>
+</ul>
+
+<p>
+That's basically it. We have an eval/apply loop, S-expressions encode
+data and code, and little else. Consequently, <a href="lisp/mal-2.html">making a Lisp</a> is one of
+the rites of passage in Computer Science.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgd840035" class="outline-2">
+<h2 id="orgd840035"><span class="section-number-2">2</span> Features</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+You get a language-factory for the cost of Latinized grammar
+<code>(verb subject object)</code>. Once we accept this, we can <i>extend</i> the
+language with whatever feature we want. But there are a few other
+features worth mentioning.
+</p>
+
+<p>
+Object-oriented programming in the C++/Java vein becomes
+<code>(method object additional-param...)</code>. This lets CLOS to shine,
+giving us a far more sophisticated class system than C++ could
+ever produce, thanks to our being not-bogged-down-by-syntax. Well,
+Scheme and Common Lisp enjoy this benefit, Clojure is coupled to Java's
+object-oriented sytem.
+</p>
+
+<p>
+Arguably any language you want to use could be transformed into this
+system, and any "killer feature" is either <i>already</i> in Lisp or easily
+implemented using macros. <i>SICP</i> shows this quite a few times over.
+</p>
+</div>
+
+<div id="outline-container-orgf0906dc" class="outline-3">
+<h3 id="orgf0906dc"><span class="section-number-3">2.1</span> Multiple Dispatching</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Common Lisp and Clojure offer <a href="lisp/multiple-dispatch.html">multiple dispatching</a> (Scheme gives you the
+pleasure of implementing it on your own).
+This permits, e.g., <a href="lisp/generic-arithmetic.html">generic arithmetic</a>: we can use <code>*</code> for matrix
+multiplication, scalar multiplication, and the underlying field's
+multiplication operator.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge9651c9" class="outline-2">
+<h2 id="orge9651c9"><span class="section-number-2">3</span> References</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li><a href="http://wiki.c2.com/?LispRoadMap">Lisp Road Map</a>, C2 Wiki</li>
+<li>Steve Losh, <a href="https://stevelosh.com/blog/2018/08/a-road-to-common-lisp/">A Road to Common Lisp</a>. Blogpost August 27, 2018.</li>
+<li><a href="https://twobithistory.org/2018/10/14/lisp.html">How Lisp Became God's Own Programming Language</a>. Two-Bit History,
+published 14 October 2018</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-03-27 Sat 08:42.</p>
+</div>
+</body>
+</html>

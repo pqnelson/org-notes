@@ -1,0 +1,3628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture - I-Machine</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Architecture - I-Machine</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org683809c">1. Lisp-Machine Data Types</a>
+<ul>
+<li><a href="#org8b3af71">1.1. Introduction to Lisp-Machine Objects</a>
+<ul>
+<li><a href="#org6dba4f1">1.1.1. Memory Words</a>
+<ul>
+<li><a href="#orgf9212af">1.1.1.1. Length and Format</a></li>
+<li><a href="#org7ea3622">1.1.1.2. Fields</a></li>
+</ul>
+</li>
+<li><a href="#org0b33870">1.1.2. Classes of Stored Object Representations</a></li>
+<li><a href="#orgfd79a30">1.1.3. Components of Stored Representations</a>
+<ul>
+<li><a href="#orgb357169">1.1.3.1. Object References</a></li>
+<li><a href="#orgae1fe5f">1.1.3.2. Headers</a></li>
+<li><a href="#org44b3550">1.1.3.3. Forwarding (Invisible) Pointers</a></li>
+<li><a href="#org8e9608e">1.1.3.4. Special Markers</a></li>
+</ul>
+</li>
+<li><a href="#orgb4ba083">1.1.4. Operand-Reference Classification</a></li>
+</ul>
+</li>
+<li><a href="#org15ad86d">1.2. Data-Type Descriptions</a>
+<ul>
+<li><a href="#orgc7c8ec7">1.2.1. Representations of Symbols</a></li>
+<li><a href="#org844121e">1.2.2. Representation of Instances and Related Data Types</a>
+<ul>
+<li><a href="#org1f8ac4b">1.2.2.1. Flavor Instances</a></li>
+<li><a href="#org44fa5f4">1.2.2.2. List Instance</a></li>
+<li><a href="#org3629ca6">1.2.2.3. Array Instance</a></li>
+<li><a href="#orgbcf1961">1.2.2.4. String Instance</a></li>
+</ul>
+</li>
+<li><a href="#orgab9343a">1.2.3. Representation of Characters</a></li>
+<li><a href="#orgc59df25">1.2.4. Representation of Numbers</a>
+<ul>
+<li><a href="#org92f8461">1.2.4.1. Fixnum Representation</a></li>
+<li><a href="#orgbd1df94">1.2.4.2. Bignum Representation</a></li>
+<li><a href="#org66733e7">1.2.4.3. Small-Ratio Representation</a></li>
+<li><a href="#org25f3163">1.2.4.4. Big-Ratio Representation</a></li>
+<li><a href="#org54c25cf">1.2.4.5. Single-Precision Floating-Point Representation</a></li>
+<li><a href="#org4e97fc0">1.2.4.6. Double-Precision Floating-Point Representation</a></li>
+<li><a href="#org2de15f3">1.2.4.7. Complex-Number Representation</a></li>
+<li><a href="#org234e578">1.2.4.8. The Spare-Number Type</a></li>
+</ul>
+</li>
+<li><a href="#org6f2d9da">1.2.5. Representations of Lists</a></li>
+<li><a href="#org220cf13">1.2.6. Representations of Arrays and Strings</a></li>
+<li><a href="#org1b4a117">1.2.7. I-Machine Array Registers</a></li>
+<li><a href="#org0d6914f">1.2.8. Representations of Functions and Closures</a>
+<ul>
+<li><a href="#org9b912fd">1.2.8.1. Representation of Compiled Functions</a></li>
+<li><a href="#org4d425cc">1.2.8.2. Generic Functions</a></li>
+<li><a href="#orgd7f4fc0">1.2.8.3. Representation of Lexical Closures</a></li>
+<li><a href="#orgfcf5450">1.2.8.4. Representation of Dynamic Closures</a></li>
+</ul>
+</li>
+<li><a href="#orgc46850d">1.2.9. Instruction Representation</a></li>
+<li><a href="#org30e97a0">1.2.10. Program-Counter Representation</a></li>
+<li><a href="#org3018f3b">1.2.11. Representation of Locatives</a></li>
+<li><a href="#org30a61ae">1.2.12. Representation of Physical Addresses</a></li>
+</ul>
+</li>
+<li><a href="#org5c816af">1.3. Data-Type Code Assignments</a>
+<ul>
+<li><a href="#org92a82e5">1.3.1. Headers, Special Markers, and Forwarding Pointers</a></li>
+<li><a href="#org27aa195">1.3.2. Number Data Types</a></li>
+<li><a href="#orgddc7c5e">1.3.3. Instance Data Types</a></li>
+<li><a href="#org7b36180">1.3.4. Primitive Data Types</a></li>
+<li><a href="#org1ce53f5">1.3.5. Special Marker for Garbage Collector</a></li>
+<li><a href="#orgfaf3cf3">1.3.6. Data Types for Program Counter Values</a></li>
+<li><a href="#orgc4e8c62">1.3.7. Full Word Instruction Data Types</a></li>
+<li><a href="#orgb0d8caa">1.3.8. Half-Word Instruction Data Types</a></li>
+</ul>
+</li>
+<li><a href="#org0dd8a1e">1.4. Appendix: Comparison of 3600-Family and I-Machine Data Representations</a>
+<ul>
+<li><a href="#orgf151050">1.4.1. Array Differences</a></li>
+<li><a href="#org1fb7f6c">1.4.2. Compiled Function Differences</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orga901273">2. Memory Layout and Addressing</a>
+<ul>
+<li><a href="#orgea22ca2">2.1. Address Space</a>
+<ul>
+<li><a href="#orgc4a2286">2.1.1. Virtual Addresses</a></li>
+<li><a href="#org594d189">2.1.2. Ephemeral Addresses</a></li>
+<li><a href="#org0930292">2.1.3. Unmapped Addresses</a></li>
+<li><a href="#orgfa004d9">2.1.4. Wired Addresses</a></li>
+<li><a href="#org414083d">2.1.5. Pages</a>
+<ul>
+<li><a href="#org78fb3c7">2.1.5.1. Page Hash Table</a></li>
+<li><a href="#orge1293f4">2.1.5.2. PHT Lookup Algorithm</a></li>
+<li><a href="#org402f374">2.1.5.3. Translation Algorithm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org51a9463">2.2. GC Support</a></li>
+<li><a href="#orga85284a">2.3. Address Translation</a>
+<ul>
+<li><a href="#org2d5a57c">2.3.1. Page Hash Table</a></li>
+<li><a href="#org67ff87b">2.3.2. PHT Lookup Algorithm</a></li>
+<li><a href="#org9ef6c45">2.3.3. Translation Algorithm</a></li>
+</ul>
+</li>
+<li><a href="#org7a42d91">2.4. Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</a></li>
+</ul>
+</li>
+<li><a href="#orgbfb33fd">3. Macroinstruction Set</a>
+<ul>
+<li><a href="#org7cbe255">3.1. Introduction</a>
+<ul>
+<li><a href="#org2ec87ec">3.1.1. Instruction Sequencing</a></li>
+<li><a href="#orge56c3a4">3.1.2. Internal Registers</a></li>
+<li><a href="#org20c67ce">3.1.3. Memory Side Effects</a></li>
+<li><a href="#orgbad846a">3.1.4. Explanation of Instruction Definitions</a>
+<ul>
+<li><a href="#orgfb65a15">3.1.4.1. Instruction Formats</a></li>
+<li><a href="#org815756b">3.1.4.2. Arguments: the Data Types Accepted</a></li>
+<li><a href="#org39abebc">3.1.4.3. Types of Instruction Exceptions</a></li>
+<li><a href="#orgac6e079">3.1.4.4. Types of Memory References</a></li>
+<li><a href="#orgd183bd3">3.1.4.5. Top-of-Stack Register Effects</a></li>
+<li><a href="#org17d8a0c">3.1.4.6. Cdr Codes of Values Returned</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org9710d8e">3.2. The Instructions</a>
+<ul>
+<li><a href="#orgdebd2d8">3.2.1. List-Function Operations</a></li>
+<li><a href="#org1019a5e">3.2.2. Predicate Intsructions</a></li>
+<li><a href="#org04f41f2">3.2.3. Numeric Operations</a></li>
+<li><a href="#org5d22be7">3.2.4. Data-Movement Instructions</a></li>
+<li><a href="#orgb11906a">3.2.5. Field-Extraction Instructions</a></li>
+<li><a href="#orge1f0a27">3.2.6. Array Operations</a></li>
+<li><a href="#orgccc6799">3.2.7. Block Instructions</a></li>
+<li><a href="#orgef94509">3.2.8. Function-Calling Instructions</a></li>
+<li><a href="#org009e8d0">3.2.9. Binding Instructions</a></li>
+<li><a href="#org37335d4">3.2.10. Catch Instructions</a></li>
+<li><a href="#org77d8f33">3.2.11. Lexical Variable Accessors</a></li>
+<li><a href="#orgde2068f">3.2.12. Instance Variable Accessors</a></li>
+<li><a href="#org6473cc1">3.2.13. Subprimitive Instructions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org56e5026">4. Function Calling, Message Passing, Stack-Group Switching</a>
+<ul>
+<li><a href="#org20869d5">4.1. Stacks</a>
+<ul>
+<li><a href="#orgf2b4d8e">4.1.1. Control Stack</a></li>
+<li><a href="#org3f5dc4b">4.1.2. Binding Stack</a></li>
+<li><a href="#org20942e7">4.1.3. Data Stack</a></li>
+</ul>
+</li>
+<li><a href="#org28dc842">4.2. Registers Important to Function Calling and Returning</a></li>
+<li><a href="#org1aaec05">4.3. Function Calling</a>
+<ul>
+<li><a href="#org6bbb9e9">4.3.1. Starting a Function Call</a></li>
+<li><a href="#org813735d">4.3.2. Pushing the Arguments</a></li>
+<li><a href="#org3fb5ae2">4.3.3. Finishing the Call</a></li>
+</ul>
+</li>
+<li><a href="#org2bb22a2">4.4. Function Entry</a>
+<ul>
+<li><a href="#org44f1379">4.4.1. Push-apply-args</a></li>
+<li><a href="#org9e0dc78">4.4.2. Pull-apply-args</a></li>
+<li><a href="#org9e08d35">4.4.3. Trapping Out of Entry and Restarting</a></li>
+</ul>
+</li>
+<li><a href="#org97eb6d8">4.5. Function Returning</a>
+<ul>
+<li><a href="#org50bc38d">4.5.1. Function Return Instructions</a></li>
+<li><a href="#org5195ffe">4.5.2. Frame Cleanup</a></li>
+<li><a href="#orgf190813">4.5.3. Value Matchup</a></li>
+</ul>
+</li>
+<li><a href="#orgb1ed395">4.6. Catch, Throw and Unwind-Protect</a></li>
+<li><a href="#orgd0bf8f7">4.7. Generic Functions and Message Passing</a>
+<ul>
+<li><a href="#org451290f">4.7.1. Flavor</a></li>
+<li><a href="#org4742cff">4.7.2. Handler Table</a></li>
+<li><a href="#orgf2f6f26">4.7.3. Calling a Generic Function</a></li>
+<li><a href="#org4bf28e7">4.7.4. Sending a Message</a></li>
+<li><a href="#org4ef51d0">4.7.5. Accessing Instance Variables</a></li>
+</ul>
+</li>
+<li><a href="#org4485923">4.8. Stack-Group Switching</a></li>
+<li><a href="#orgc100181">4.9. Appendix: Comparison of 3600-Family and I-Machine Function Calling</a></li>
+</ul>
+</li>
+<li><a href="#org0433148">5. Exception Handling</a></li>
+</ul>
+</div>
+</div>
+<p>
+(These are annotations on the <a href="http://www.bitsavers.org/pdf/symbolics/I_Machine/I-Machine%20Architecture%20Specification.pdf">paper</a> (<a href="../../../../../ignore/I-Machine%20Architecture%20Specification.pdf">local</a>) describing the architecture of the
+Symbolics I-Machine.)
+</p>
+
+<div id="outline-container-org683809c" class="outline-2">
+<h2 id="org683809c"><span class="section-number-2">1</span> Lisp-Machine Data Types</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org8b3af71" class="outline-3">
+<h3 id="org8b3af71"><span class="section-number-3">1.1</span> Introduction to Lisp-Machine Objects</h3>
+<div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-org6dba4f1" class="outline-4">
+<h4 id="org6dba4f1"><span class="section-number-4">1.1.1</span> Memory Words</h4>
+<div class="outline-text-4" id="text-1-1-1">
+</div>
+<div id="outline-container-orgf9212af" class="outline-5">
+<h5 id="orgf9212af"><span class="section-number-5">1.1.1.1</span> Length and Format</h5>
+<div class="outline-text-5" id="text-1-1-1-1">
+<p>
+A word was 40-bits and contained three fields:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Position</th>
+<th scope="col" class="org-left">Length</th>
+<th scope="col" class="org-left">Field Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>&lt;39:38&gt;</code></td>
+<td class="org-left">2 bits</td>
+<td class="org-left">Cdr Code</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;37:32&gt;</code></td>
+<td class="org-left">6 bits</td>
+<td class="org-left">Data Type</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;31:0&gt;</code></td>
+<td class="org-left">32 bits</td>
+<td class="org-left">Address or Immediate Data</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This is a minimum requirement. Possibly more bits could be alloted to a
+word, allowing for ECC, etc. ECC or parity bits are not <i>required</i>, but
+are a possible extension.
+</p>
+
+<p>
+In C, this would be a packed struct:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-preprocessor">#pragma</span> pack(1)
+<span class="org-keyword">struct</span> <span class="org-type">Word</span> {
+    <span class="org-type">uint32_t</span> <span class="org-variable-name">cdr</span>  :  2;
+    <span class="org-type">uint32_t</span> <span class="org-variable-name">type</span> :  6;
+    <span class="org-type">uint32_t</span> <span class="org-variable-name">data</span> : 32;
+};
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7ea3622" class="outline-5">
+<h5 id="org7ea3622"><span class="section-number-5">1.1.1.2</span> Fields</h5>
+<div class="outline-text-5" id="text-1-1-1-2">
+<p>
+The type field indicated what kind of information is stored in the
+word. (I think the types are <code>dtp-</code> prefixed identifiers in the
+documentation.)
+</p>
+
+<p>
+The address or immediate data field is interpreted according to the data
+type of the word.
+</p>
+
+<p>
+The cdr code is used for various different purposes depending on the type.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0b33870" class="outline-4">
+<h4 id="org0b33870"><span class="section-number-4">1.1.2</span> Classes of Stored Object Representations</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+An object can be stored:
+</p>
+<ol class="org-ol">
+<li>as a list, which is built out of one or more conses (e.g., conses, compact lists, closures, big ratios,
+double-precision floating point numbers, complex numbers, generic functions),</li>
+<li>as an immediate object, which does not require any additional memory
+for its representation (e.g., numbers, physical addresses, primitive
+types, instructions), or</li>
+<li>as a structure, represented as a block of memory words, the first
+contains a header with a special data type code (e.g., compiled functions, instances, arrays, symbols,
+bignums).</li>
+</ol>
+
+<p>
+Each word within the structure object may contain:
+</p>
+<ul class="org-ul">
+<li>an object reference,</li>
+<li>a header</li>
+<li>a forwarding pointer, or</li>
+<li>a special marker.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgfd79a30" class="outline-4">
+<h4 id="orgfd79a30"><span class="section-number-4">1.1.3</span> Components of Stored Representations</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+The components of stored representations found in Lisp Machine memory
+are:
+</p>
+<ul class="org-ul">
+<li>object references,</li>
+<li>headers,</li>
+<li>forwarding (invisible) pointers, or</li>
+<li>special markers.</li>
+</ul>
+</div>
+
+<div id="outline-container-orgb357169" class="outline-5">
+<h5 id="orgb357169"><span class="section-number-5">1.1.3.1</span> Object References</h5>
+<div class="outline-text-5" id="text-1-1-3-1">
+<p>
+Object references are the mechanism by which one refers to an object.
+There are three types of object references:
+</p>
+<ol class="org-ol">
+<li>object references <i>by address</i> (implemented by a memory word whose
+address field contains the virtual address of the stored
+representation of the object; e.g., symbols, lists, arrays)</li>
+<li><i>immediate</i> object references (implemented by memory words that
+directly contain the entire representation of the object; e.g., small
+integers, single-precision floating point numbers)</li>
+<li><i>pointers</i> (contain the virtual addresses of locations that do not
+contain objects: they point to locations <i>within</i> objects; e.g.,
+pointer to the value cell of a symbol).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgae1fe5f" class="outline-5">
+<h5 id="orgae1fe5f"><span class="section-number-5">1.1.3.2</span> Headers</h5>
+<div class="outline-text-5" id="text-1-1-3-2">
+<p>
+Headers separate objects in memory. This contains information about the
+type of object. There are two types of headers:
+</p>
+<ul class="org-ul">
+<li><code>dtp-header-i</code> when the header is immediate data</li>
+<li><code>dtp-header-p</code> when the header is the address containing some
+descriptive data</li>
+</ul>
+
+<p>
+Object references usually use the address of an object's header as the
+address of the object. "Usually". The only exceptions are
+</p>
+<ol class="org-ol">
+<li>the object reference to a compiled function, and</li>
+<li>the object reference to an array "with a leader"
+(in which case the reference points to a specified location in the
+structure)</li>
+</ol>
+
+<p>
+For <code>dtp-header-p</code>, the following table describes the <code>cdr-code</code>
+field's interpretation:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Header Type</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Object Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left"><code>%header-type-symbol</code></td>
+<td class="org-left">Symbol</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left"><code>%header-type-instance</code></td>
+<td class="org-left">Instance</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left"><code>%header-type-leader</code></td>
+<td class="org-left">Array Leader</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">Reserved</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+For <code>dtp-header-i</code>, the following table describes the <code>cdr-code</code>
+field's meaning:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Header Type</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Object Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left"><code>%header-type-compiled-function</code></td>
+<td class="org-left">Compiled Function</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left"><code>%header-type-array</code></td>
+<td class="org-left">Array</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left"><code>%header-type-number</code></td>
+<td class="org-left">Number</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">Reserved</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>If we want to change the memory location of an object represented by a
+structure, then
+<ul class="org-ul">
+<li>the object's header is moved to a new location and the
+object's old location is filled with a word of type
+<code>dtp-header-forward</code>, an invisible pointer that contains the address
+of the new location of the reference.</li>
+<li>The object references in the locations of the old structure are all
+replaced with pointers of the type <code>dtp-element-forward</code>, which
+contains the addresses of the new locations of the objects.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org44b3550" class="outline-5">
+<h5 id="org44b3550"><span class="section-number-5">1.1.3.3</span> Forwarding (Invisible) Pointers</h5>
+<div class="outline-text-5" id="text-1-1-3-3">
+<p>
+The metaphor for a "forwarding pointer" is postal forwarding, specifying
+a reference to the location containing it should be redirected to
+another memory location. They're used for internal bookkeeping by the
+storage management system.
+</p>
+
+<p>
+The data types of the forwarding pointers are:
+</p>
+<ul class="org-ul">
+<li><code>dtp-external-value-cell-pointer</code>, used to link a symbol's value cell
+to a closure or an instance value cell (it is not invisible to binding
+and unbinding, see the section <a href="#org3f5dc4b">Binding Stack</a>)</li>
+<li><code>dtp-one-q-forward</code> forwards only the cell that contains it (i.e., it
+indicates the cell is contained at the address specified in the
+address field of the <code>dtp-one-q-forward</code> word and the cdr-code of the
+required data is the cdr-code of the <code>dtp-one-q-forward</code> word). This
+pointer is used to link a symbol value or function cell to a wired
+cell or a compiled-function's function cell (as well as for many other
+applications).</li>
+<li><code>dtp-header-forward</code></li>
+<li><code>dtp-element-forward</code></li>
+</ul>
+
+<p>
+A header-forward pointer is also used with list representation (which is
+explained fulling in another section, see <a href="#org6f2d9da">Representations of Lists</a>).
+When a one-word cons must be expanded to a two-word cons by <code>replacd</code>, a
+new two-word cons is allocated and the old one-word cons is replaced by
+a header-forward pointer containing the address of the new cons.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8e9608e" class="outline-5">
+<h5 id="org8e9608e"><span class="section-number-5">1.1.3.4</span> Special Markers</h5>
+<div class="outline-text-5" id="text-1-1-3-4">
+<p>
+The data types of the special markers are:
+</p>
+<ul class="org-ul">
+<li><p>
+<code>dtp-null</code> (placed in the value cell or function cell of a symbol or
+in the instance-variable value cell in an instance, in those cases
+when no value has been assigned). The address field of the null marker
+contains the address of the name of the variable. This makes it
+possible for an error handler to report the name of the offending
+variable when an attempt to use the value of an unbound variable is
+detected.
+</p>
+
+<p>
+A null special marker is also used to initialize a freshly-created
+virtual memory page in case it is accidentally accessed before an
+object is created in it.
+</p>
+
+<p>
+The encoding of the null-special-marker data type is zero. Memory that
+is initialized to all bits zero thus contains all null words, which
+will cause a trap if dereferenced.
+</p></li>
+<li><code>dtp-monitor-forward</code>, intended for use with a debugging feature (see
+the section/chapter <a href="#org0433148">Exception Handling</a>)</li>
+<li><code>dtp-gc-forward</code>, used by the garbage collector and may only appear in
+oldspace.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgb4ba083" class="outline-4">
+<h4 id="orgb4ba083"><span class="section-number-4">1.1.4</span> Operand-Reference Classification</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<ul class="org-ul">
+<li>Immediate Data (22 type codes): <a href="#org92f8461">dtp-fixnum</a>, <a href="#org66733e7">dtp-small-ratio</a>,
+<a href="#org54c25cf">dtp-single-float</a>, <a href="#orgab9343a">dtp-character</a>, <a href="#org30a61ae">dtp-physical-address</a>,
+dtp-packed-instruction, dtp-spare-immediate-1</li>
+<li>Pointer data (33 type codes): <a href="#org4e97fc0">dtp-double-float</a>, dtp-bignum, <a href="#org25f3163">dtp-big-ratio</a>,
+<a href="#org2de15f3">dtp-complex</a>, <a href="#org234e578">dtp-spare-number</a>, <a href="#org1f8ac4b">dtp-instance</a>, <a href="#org44fa5f4">dtp-list-instance</a>,
+<a href="#org3629ca6">dtp-array-instance</a>, <a href="#orgbcf1961">dtp-string-instance</a>, <a href="#orgc7c8ec7">dtp-nil</a>, <a href="#org6f2d9da">dtp-list</a>,
+<a href="#org220cf13">dtp-array, dtp-string</a>, <a href="#orgc7c8ec7">dtp-symbol</a>, <a href="#org3018f3b">dtp-locative</a>, <a href="#orgd7f4fc0">dtp-lexical-closure</a>,
+<a href="#orgfcf5450">dtp-dynamic-closure</a>, <a href="#org9b912fd">dtp-compiled-function</a>, <a href="#org4d425cc">dtp-generic-function</a>,
+dtp-spare-pointer-1, dtp-spare-pointer-2, dtp-spare-pointer-3,
+dtp-spare-pointer-4, <a href="#org30e97a0">dtp-even-pc, dtp-odd-pc</a>, dtp-call-compiled-even,
+dtp-call-compiled-odd, dtp-call-indirect, dtp-call-generic,
+dtp-call-compiled-even-prefetch, dtp-call-compiled-odd-prefetch,
+dtp-call-indirect-prefetch, dtp-call-generic-prefetch</li>
+<li>Null: <code>dtp-null</code></li>
+<li>Immediate header: <code>dtp-header-i</code></li>
+<li>Pointer Header: <code>dtp-header-p</code></li>
+<li>HFWD: <code>dtp-header-forward</code></li>
+<li>EFWD: <code>dtp-element-forward</code></li>
+<li>1FWD: <code>dtp-one-q-forward</code></li>
+<li>EVCP: <code>dtp-external-value-cell-pointer</code></li>
+<li>GC: <code>dtp-gc-forward</code></li>
+<li>Monitor: <code>dtp-monitor-forward</code></li>
+<li>Data (55 type codes): The union of immediate data and pointer data</li>
+<li>Header (2 type codes): The union of immediate header and pointer header</li>
+<li>Immediate (23 codes): The union of immediate data and immediate header</li>
+<li>Pointer (40 codes): The union of pointer data, null, pointer header,
+HFWD, EFWD, 1FWD, EVCP, and monitor</li>
+<li>Numeric (8 type codes): <code>dtp-fixnum</code>,
+<code>dtp-small-ratio</code>,
+<code>dtp-single-float</code>,
+dtp-double-float,
+dtp-bignum,
+dtp-big-ratio,
+dtp-complex,
+dtp-spare-number</li>
+</ul>
+
+<p>
+Observe there are 64 type codes altogether: 55 from data, then the
+following 9 additional codes
+</p>
+<ul class="org-ul">
+<li>Null: <code>dtp-null</code></li>
+<li>Immediate header: <code>dtp-header-i</code></li>
+<li>Pointer Header: <code>dtp-header-p</code></li>
+<li>HFWD: <code>dtp-header-forward</code></li>
+<li>EFWD: <code>dtp-element-forward</code></li>
+<li>1FWD: <code>dtp-one-q-forward</code></li>
+<li>EVCP: <code>dtp-external-value-cell-pointer</code></li>
+<li>GC: <code>dtp-gc-forward</code></li>
+<li>Monitor: <code>dtp-monitor-forward</code></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org15ad86d" class="outline-3">
+<h3 id="org15ad86d"><span class="section-number-3">1.2</span> Data-Type Descriptions</h3>
+<div class="outline-text-3" id="text-1-2">
+</div>
+
+<div id="outline-container-orgc7c8ec7" class="outline-4">
+<h4 id="orgc7c8ec7"><span class="section-number-4">1.2.1</span> Representations of Symbols</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+The object reference to a symbol is a word of data type <code>dtp-symbol</code>
+or <code>dtp-nil</code>. The address field of this word contains the address of a
+header of type <code>dtp-header-p</code>. This is followed by 4 words. The header's
+header-type field equals <code>%header-type-symbol</code> and the address of the
+header contains the symbol's name, a string. The five words that
+constitute a symbol object are:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left"><code>SYMBOL-NAME-CELL</code></td>
+<td class="org-left">address of the symbol's name</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left"><code>SYMBOL-VALUE-CELL</code></td>
+<td class="org-left">the value, or an unbound marker</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left"><code>SYMBOL-FUNCTION-CELL</code></td>
+<td class="org-left">the definition, or an unbound marker</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left"><code>SYMBOL-PROPERTY-CELL</code></td>
+<td class="org-left">the property list</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left"><code>SYMBOL-PACKAGE-CELL</code></td>
+<td class="org-left">the home package, or nil</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+A straightforward implementation would be:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-keyword">struct</span> <span class="org-type">Symbol</span> {
+    <span class="org-type">Word</span> <span class="org-variable-name">name</span>;
+    <span class="org-type">Word</span> <span class="org-variable-name">value</span>;
+    <span class="org-type">Word</span> <span class="org-variable-name">function</span>;
+    <span class="org-type">Word</span> <span class="org-variable-name">property</span>; <span class="org-comment-delimiter">/* </span><span class="org-comment">property list </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-type">Word</span> <span class="org-variable-name">package</span>;
+};
+
+<span class="org-keyword">struct</span> <span class="org-type">Word</span>* <span class="org-function-name">make_symbol</span>(name, value, ...) {
+    <span class="org-keyword">struct</span> <span class="org-type">Symbol</span> *<span class="org-variable-name">symbol</span> = malloc(<span class="org-keyword">sizeof</span>(*symbol));
+    <span class="org-keyword">struct</span> <span class="org-type">Word</span> *<span class="org-variable-name">symbol_ptr</span> = malloc(<span class="org-keyword">sizeof</span>(symbol_ptr));
+    symbol_ptr-&gt;type = DTP_SYMBOL;
+    symbol_ptr-&gt;data = (<span class="org-type">uint32_t</span>)(symbol);
+    symbol-&gt;name = name;
+    symbol-&gt;name.type = DTP_HEADER_P;
+    symbol-&gt;name.cdr = HEADER_TYPE_SYMBOL; <span class="org-comment-delimiter">/* </span><span class="org-comment">== %header-type-symbol </span><span class="org-comment-delimiter">*/</span>
+    symbol-&gt;value = value;
+    <span class="org-comment-delimiter">/* </span><span class="org-comment">etc. </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-keyword">return</span> symbol_ptr;
+}
+</pre>
+</div>
+
+<p>
+The I-Machine reserved locations for <code>nil</code> and <code>t</code> in fixed memory
+locations (vma=pma 1011000) and (vma=pma 1011005), respectively (see the
+section <a href="#orgfa004d9">Wired Addresses</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org844121e" class="outline-4">
+<h4 id="org844121e"><span class="section-number-4">1.2.2</span> Representation of Instances and Related Data Types</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<p>
+Before we had CLOS, we had Flavors.
+</p>
+</div>
+
+<div id="outline-container-org1f8ac4b" class="outline-5">
+<h5 id="org1f8ac4b"><span class="section-number-5">1.2.2.1</span> Flavor Instances</h5>
+<div class="outline-text-5" id="text-1-2-2-1">
+<p>
+The object reference to an instance is a word of data type <code>dtp-instance</code>
+whose address field points to the instance structure.
+</p>
+
+<p>
+The stored representation of an instance consists of a header with type
+<code>dtp-header-p</code> whose header-type field equals <code>%header-type-instance</code>.
+The words following the header of the instance are the value cells of
+the instance variables. They constain either object references or an
+unbounded marker. The cdr codes are not used. The address field of the
+header contains the address of the hash-mask field of a flavor-description
+structure. This description is called a <b>"flavor"</b>.
+</p>
+
+<p>
+The fields of a flavor are:
+</p>
+<ul class="org-ul">
+<li>the array header, part of the packaging of the structure</li>
+<li>the named-structure symbol, part of the packaging of the structure</li>
+<li>the size of an instance, used by the garbage collector and by the
+instance referencing instructions (<code>%instance-ref</code> and the like)</li>
+<li>the hash mask, used by the hardware for method lookup</li>
+<li>the handler hash table address, used by the hardware for method lookup</li>
+<li>the name of the flavor, used by the <code>type-of</code> function</li>
+<li>additional flavors known only to the flavor system</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-keyword">struct</span> <span class="org-type">FlavorInstance</span> {
+    <span class="org-type">Word</span> <span class="org-variable-name">header</span>;
+    <span class="org-type">Word</span> <span class="org-variable-name">flavor_address</span>;
+    <span class="org-type">Word</span> <span class="org-variable-name">instance_fields</span>[];
+};
+<span class="org-comment-delimiter">/* </span><span class="org-comment">instance-&gt;flavor_address.data == &amp;flavor-&gt;hash_mask </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-keyword">struct</span> <span class="org-type">Flavor</span> {
+    <span class="org-type">Word</span> <span class="org-variable-name">header</span>;
+    <span class="org-type">Word</span> <span class="org-variable-name">named_struct_symbol</span>;
+    <span class="org-type">Word</span> <span class="org-variable-name">instance_size</span>;
+    <span class="org-type">Word</span> <span class="org-variable-name">hash_mask</span>;    <span class="org-comment-delimiter">/* </span><span class="org-comment">hash_mask-&gt;type == DTP_FIXNUM </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-type">Word</span> <span class="org-variable-name">hash_address</span>; <span class="org-comment-delimiter">/* </span><span class="org-comment">hash_address-&gt;type == DTP_LOCATIVE </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-type">Word</span> <span class="org-variable-name">typename</span>;     <span class="org-comment-delimiter">/* </span><span class="org-comment">typename-&gt;type == DTP_SYMBOL </span><span class="org-comment-delimiter">*/</span>
+};
+<span class="org-comment-delimiter">/* </span><span class="org-comment">flavor-&gt;hash_address.data = &amp;handler_table </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-keyword">struct</span> <span class="org-type">Handler</span> {
+    <span class="org-type">Word</span> <span class="org-variable-name">key</span>;       <span class="org-comment-delimiter">/* </span><span class="org-comment">generic function, symbol, or nil </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-type">Word</span> <span class="org-variable-name">method</span>;    <span class="org-comment-delimiter">/* </span><span class="org-comment">even-pc or odd-pc </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-type">Word</span> <span class="org-variable-name">parameter</span>; <span class="org-comment-delimiter">/* </span><span class="org-comment">mapping table </span><span class="org-comment-delimiter">*/</span>
+};
+<span class="org-comment-delimiter">/* </span><span class="org-comment">flavor-&gt;hash_address == &amp;array(Handler) </span><span class="org-comment-delimiter">*/</span>
+</pre>
+</div>
+
+<p>
+A handler table is a hash table which maps a generic function or message
+to the function to be invoked and a parameter to that function.
+Typically the function is a method, and the parameter is a mapping table
+used by that method to access instance variables.
+The mapping table is a simple, short-prefix ART-Q array
+("ART" = "ARray Type").
+</p>
+
+<p>
+For speed, the format of handler tables is architecturally defined and
+known by hardware. Handler hash tables are packaged inside arrays (but
+this is software dependent, not hardware or architecture dependent).
+</p>
+
+<p>
+A handler table consists of a sequence of three-word elements. The
+address of first word of the first element is in the flavor. Each
+element consists of:
+</p>
+
+<ul class="org-ul">
+<li>The key: This is a generic function (<code>dtp-generic-function</code>), a
+message name (<code>dtp-symbol</code>), or <code>nil</code>, which is a default that matches
+everything (<code>dtp-nil</code>)</li>
+<li>The method: This is a program-counter value (<code>dtp-even-pc</code> or
+<code>dtp-odd-pc</code>) addressing the instruction at which the compiled
+function corresponding to the method is to be entered.</li>
+<li>The parameter: This is a parameter that gets passed from the function
+or message to the method as an extra argument. If the parameter in the
+handler table is <code>nil</code>, the generic function or message is used as the
+parameter.</li>
+</ul>
+
+<div class="remark" id="org06783f8">
+<p>
+I honestly do not understand the idea of a mapping table so far.
+</p>
+
+</div>
+
+<p>
+There's a "fence object" at the end of the handler hash table, which is
+filled with <code>nil</code> entries for its key, method, and parameter. Unused
+methods are likewise filled with <code>nil</code> entries.
+</p>
+
+<div class="remark" id="org8d0ed2e">
+<p>
+We should note that it seems, thus far reading the fine manual, that
+<code>dtp-even-pc</code> and <code>dtp-odd-pc</code> are pointers to functions &#x2014; compiled,
+or lexical closures (or dynamical closures?).
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-org44fa5f4" class="outline-5">
+<h5 id="org44fa5f4"><span class="section-number-5">1.2.2.2</span> List Instance</h5>
+<div class="outline-text-5" id="text-1-2-2-2">
+<p>
+An object reference to a list instance is a word of data type
+<code>dtp-list-instance</code> whose address field points to an instance structure.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3629ca6" class="outline-5">
+<h5 id="org3629ca6"><span class="section-number-5">1.2.2.3</span> Array Instance</h5>
+<div class="outline-text-5" id="text-1-2-2-3">
+<p>
+An object reference to an array instance is a word of data type
+<code>dtp-array-instance</code> whose address field points to an instance field.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbcf1961" class="outline-5">
+<h5 id="orgbcf1961"><span class="section-number-5">1.2.2.4</span> String Instance</h5>
+<div class="outline-text-5" id="text-1-2-2-4">
+<p>
+An object reference to a string instance is a word of data type
+<code>dtp-string-instance</code> whose address field points to an instance structure.\
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgab9343a" class="outline-4">
+<h4 id="orgab9343a"><span class="section-number-4">1.2.3</span> Representation of Characters</h4>
+<div class="outline-text-4" id="text-1-2-3">
+<p>
+An object reference to a character is an immediate object of type <code>dtp-character</code>.
+Characters seem to use the 32-bit data as follows:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Position</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>&lt;31:28&gt;</code> (4 bits)</td>
+<td class="org-left"><code>%%CHAR-BITS</code></td>
+<td class="org-left">Control, Meta, Super, Hyper bit</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;27:16&gt;</code> (12 bits)</td>
+<td class="org-left"><code>%%CHAR-STYLE</code></td>
+<td class="org-left">Italic, large, bold, &#x2026;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;15:8&gt;</code> (8 bits)</td>
+<td class="org-left"><code>%%CHAR-CHAR-SET</code></td>
+<td class="org-left">Character set</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;7:0&gt;</code> (8 bits)</td>
+<td class="org-left"><code>%%CHAR-SUBINDEX</code></td>
+<td class="org-left">Index within this character set</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+As I can glean from this: the <code>%%CHAR-SUBINDEX</code> corresponds to what we
+would call the code point for the character, or perhaps the 16-bits from
+the character set &amp; index correspond to the code point. (Arguably, the
+control, meta, super, hyper bits should be added, as well, giving a
+20-bit character set.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc59df25" class="outline-4">
+<h4 id="orgc59df25"><span class="section-number-4">1.2.4</span> Representation of Numbers</h4>
+<div class="outline-text-4" id="text-1-2-4">
+</div>
+<div id="outline-container-org92f8461" class="outline-5">
+<h5 id="org92f8461"><span class="section-number-5">1.2.4.1</span> Fixnum Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-1">
+<p>
+A 32-bit two's-complement integer. Its data type is <code>dtp-fixnum</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbd1df94" class="outline-5">
+<h5 id="orgbd1df94"><span class="section-number-5">1.2.4.2</span> Bignum Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-2">
+</div>
+</div>
+<div id="outline-container-org66733e7" class="outline-5">
+<h5 id="org66733e7"><span class="section-number-5">1.2.4.3</span> Small-Ratio Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-3">
+<p>
+The 32-bit field is treated as an array of two 16-bit integers, the
+first is a signed two's-complement number treated as the numerator, the
+second is an unsigned number treated as the denominator.
+</p>
+
+<p>
+If the numerator is zero, or the denominator is 1 or 0, then the number
+is treated as an illegal value.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org25f3163" class="outline-5">
+<h5 id="org25f3163"><span class="section-number-5">1.2.4.4</span> Big-Ratio Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-4">
+<p>
+An object reference to a big-ratio is a word of data type
+<code>dtp-big-ratio</code> whose address field points to a cons pair. The car of
+the cons contains the numerator, the dcr contains the denominator. As
+with the small-ratio, if the numerator is 0 or a denominator of 0 or 1,
+or a negative number, is treated as an illegal value.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org54c25cf" class="outline-5">
+<h5 id="org54c25cf"><span class="section-number-5">1.2.4.5</span> Single-Precision Floating-Point Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-5">
+<p>
+A single-precision floating-point number is an immediate object of data
+type <code>dtp-single-float</code> whose data field contains a 32-bit IEEE basic
+floating-point number. The following fields are defined:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Position</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>&lt;31&gt;</code></td>
+<td class="org-left"><code>%%SINGLE-SIGN</code></td>
+<td class="org-left">0 for positive numbers, 1 for negative numbers</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;30:23&gt;</code></td>
+<td class="org-left"><code>%%SINGLE-EXPONENT</code></td>
+<td class="org-left">excess-127 exponent</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;22:0&gt;</code></td>
+<td class="org-left"><code>%%SINGLE-FRACTION</code></td>
+<td class="org-left">positive fraction, with hidden 1 on the left</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-org4e97fc0" class="outline-5">
+<h5 id="org4e97fc0"><span class="section-number-5">1.2.4.6</span> Double-Precision Floating-Point Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-6">
+<p>
+The object reference to a double-precision floating point number is a
+word of data-type <code>dtp-double-float</code>. The address field of the
+double-float word contains the address of a cons pair. The data fields
+in the words of the cons hold two fixnums, containing the sign,
+exponent, and fraction as packed fields. The first contains:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Position</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>&lt;31&gt;</code></td>
+<td class="org-left"><code>%%DOUBLE-SIGN</code></td>
+<td class="org-left">0 for a positive number, 1 for negative number</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;30:20&gt;</code></td>
+<td class="org-left"><code>%%DOUBLE-EXPONENT</code></td>
+<td class="org-left">excess-1023 exponent</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;19:0&gt;</code></td>
+<td class="org-left"><code>%%DOUBLE-FRACTION-HIGH</code></td>
+<td class="org-left">top 20 bits of fraction (excluding hidden bit)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The second fixnum contains one field:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Position</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>&lt;31:0&gt;</code></td>
+<td class="org-left"><code>%%FRACTION-LOW</code></td>
+<td class="org-left">bottom 32 bits of fraction</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This conforms to the IEEE standard 64-bit representation of
+double-precision numbers.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org2de15f3" class="outline-5">
+<h5 id="org2de15f3"><span class="section-number-5">1.2.4.7</span> Complex-Number Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-7">
+<p>
+The object reference to a complex number is a word of data type
+<code>dtp-complex</code> whose address points to a cons pair. The car of the cons
+contains the real part of the number, and the cdr contains the imaginary
+part.
+</p>
+
+<div class="remark" id="orgf64186a">
+<p>
+Obviously, this is the Cartesian representation of the number. There are
+other representations (polar, etc.) which are also useful, but we
+realize this now, long after the fact. We didn't know any better back in
+the '80s.
+</p>
+
+</div>
+</div>
+</div>
+<div id="outline-container-org234e578" class="outline-5">
+<h5 id="org234e578"><span class="section-number-5">1.2.4.8</span> The Spare-Number Type</h5>
+<div class="outline-text-5" id="text-1-2-4-8">
+<p>
+This is reserved for future use.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org6f2d9da" class="outline-4">
+<h4 id="org6f2d9da"><span class="section-number-4">1.2.5</span> Representations of Lists</h4>
+<div class="outline-text-4" id="text-1-2-5">
+<p>
+An object reference to a list has its type be <code>dtp-list</code>.
+The cdr-code tag of a memory word which constitutes an element of a list
+specifies how to get the cdr of its associated cons according to whether
+the list is stored in normal linked-list form or in compact
+("cdr-coding") form. The cdr-code tag works as follows:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Code</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left"><code>cdr-next</code></td>
+<td class="org-left">Increment the address to get a reference to the cdr, itself a cons</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left"><code>cdr-nil</code></td>
+<td class="org-left">The cdr is <code>nil</code>. This is used for both kinds of list.</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left"><code>cdr-normal</code></td>
+<td class="org-left">Fetch the next memory word; it contains a reference to the cdr.</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(illegal)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Basically cdr-coding works by reserving cells sequentially.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">representation of '(a b) using normal lists </span><span class="org-comment-delimiter">*/</span>
+<span class="org-keyword">struct</span> <span class="org-type">Symbol</span> *<span class="org-variable-name">a</span>, *<span class="org-variable-name">b</span>;
+<span class="org-comment-delimiter">/* </span><span class="org-comment">initialize a, b </span><span class="org-comment-delimiter">*/</span>
+<span class="org-keyword">struct</span> <span class="org-type">Word</span> <span class="org-variable-name">list</span>;
+list.type = DTP_LIST;
+
+<span class="org-keyword">struct</span> <span class="org-type">Word</span> <span class="org-variable-name">cons</span>[2];
+<span class="org-type">cons</span>[0].cdr_code = CDR_NORMAL;
+<span class="org-type">cons</span>[0].type = DTP_SYMBOL;
+<span class="org-type">cons</span>[0].value = (<span class="org-type">int32_t</span>)a; <span class="org-comment-delimiter">/* </span><span class="org-comment">address of 'a </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">cons</span>[1].cdr = CDR_NIL;
+<span class="org-type">cons</span>[1].type = DTP_LIST;
+
+<span class="org-keyword">struct</span> <span class="org-type">Word</span> <span class="org-variable-name">next_cons</span>[2];
+<span class="org-type">next_word</span>[0].cdr_code = CDR_NORMAL;
+<span class="org-type">next_word</span>[0].type = DTP_SYMBOL;
+<span class="org-type">next_word</span>[0].data = (<span class="org-type">int32_t</span>)b; <span class="org-comment-delimiter">/* </span><span class="org-comment">address of 'b </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">next_word</span>[1].cdr_code = CDR_NIL;
+<span class="org-type">next_word</span>[1].type = DTP_NIL;
+<span class="org-type">next_word</span>[1].data = NIL;
+
+<span class="org-type">cons</span>[1].data = (<span class="org-type">int32_t</span>)&amp;next_word[0];
+list.data = &amp;cons[0]; <span class="org-comment-delimiter">/* </span><span class="org-comment">list's data is the address of first cons pair </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-comment-delimiter">/* </span><span class="org-comment">the same list compactified </span><span class="org-comment-delimiter">*/</span>
+<span class="org-keyword">struct</span> <span class="org-type">Word</span> <span class="org-variable-name">compact_list</span>;
+compact_list.type = DTP_LIST;
+<span class="org-type">Word</span> <span class="org-variable-name">cells</span>[2];
+<span class="org-type">cells</span>[0].cdr_code = CDR_NEXT;
+<span class="org-type">cells</span>[0].type = DTP_SYMBOL;
+<span class="org-type">cells</span>[0].data = (<span class="org-type">int32_t</span>)a; <span class="org-comment-delimiter">/* </span><span class="org-comment">address of 'a </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">cells</span>[1].cdr_code = CDR_NIL;
+<span class="org-type">cells</span>[1].type = DTP_SYMBOL;
+<span class="org-type">cells</span>[1].data = (<span class="org-type">int32_t</span>)b; <span class="org-comment-delimiter">/* </span><span class="org-comment">address of 'b </span><span class="org-comment-delimiter">*/</span>
+
+compact_list.data = &amp;cells[0];
+</pre>
+</div>
+
+<p>
+We see see that cdr-coding requires half as many cells as a naive
+linked-list structure.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org220cf13" class="outline-4">
+<h4 id="org220cf13"><span class="section-number-4">1.2.6</span> Representations of Arrays and Strings</h4>
+<div class="outline-text-4" id="text-1-2-6">
+<p>
+Object references to an array or string is a word with data type
+<code>dtp-array</code> or <code>dtp-string</code>.
+</p>
+
+<p>
+Whether an array is refered to by <code>dtp-array</code> or <code>dtp-string</code> has no
+effect on its stored representation: the data type of the object
+reference simply serves to make the <code>stringp</code> predicate faster.
+</p>
+
+<p>
+An array is a structure consisting of a prefix followed by optional
+data. A prefix is defined to be a word whose data type is <code>dtp-header-i</code>
+and whose header type is <code>%header-type-array</code> followed by zero or more
+additional words. The prefix defines the type and shape of the array.
+</p>
+
+<p>
+The byte fields in a prefix header's 32-bit immediate field are:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Position</th>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>&lt;31:26&gt;</code></td>
+<td class="org-right">6</td>
+<td class="org-left"><code>ARRAY-TYPE-FIELD</code></td>
+<td class="org-left">Combination of fields below</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;31:30&gt;</code></td>
+<td class="org-right">2</td>
+<td class="org-left"><code>ARRAY-ELEMENT-TYPE</code></td>
+<td class="org-left">Element type, one of: fixnum, character, boolean, object-reference</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;29:27&gt;</code></td>
+<td class="org-right">3</td>
+<td class="org-left"><code>ARRAY-BYTE-PACKING</code></td>
+<td class="org-left">Byte packing. Base 2 logarithm (0 to 5) of the number of elements per word, 6 or 7 in this field is undefined.</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;26&gt;</code></td>
+<td class="org-right">1</td>
+<td class="org-left"><code>ARRAY-LIST-BIT</code></td>
+<td class="org-left">1 in <code>ART-Q-LIST</code> arrays, 0 otherwise</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;25&gt;</code></td>
+<td class="org-right">1</td>
+<td class="org-left"><code>ARRAY-NAMED-STRUCTURE-BIT</code></td>
+<td class="org-left">1 in named-structures, 0 otherwise</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;24&gt;</code></td>
+<td class="org-right">1</td>
+<td class="org-left"><code>ARRAY-SPARE-1</code></td>
+<td class="org-left">(spare for software uses)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;23&gt;</code></td>
+<td class="org-right">1</td>
+<td class="org-left"><code>ARRAY-LONG-PREFIX-BIT</code></td>
+<td class="org-left">1 if prefix is multiple words</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;22:15&gt;</code></td>
+<td class="org-right">8</td>
+<td class="org-left"><code>ARRAY-LEADER-LENGTH-FIELD</code></td>
+<td class="org-left">Number of elements in the leader</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;14:0&gt;</code></td>
+<td class="org-right">15</td>
+<td class="org-left"><code>ARRAY-</code></td>
+<td class="org-left">Use of these bits depends on the prefix type, as described below</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>Bits <code>&lt;31:27&gt;</code> corresponds to the same bits of the control word of an
+array register. (Array registers are discussed in the <a href="#org1b4a117">next section</a>.)</li>
+<li>Bits <code>&lt;26:24&gt;</code> are not used by the hardware.</li>
+<li>Bits <code>&lt;31:27.23&gt;</code> enable various spceial pieces of hardware or
+microcode dispatches.</li>
+<li>Bits <code>&lt;22:0&gt;</code> are used by hardware under microcode control.</li>
+<li>Bits <code>&lt;31:26&gt;</code> are sometimes grouped together as <code>ARRAY-TYPE-FIELD</code></li>
+</ul>
+
+<p>
+Some arrays include <i>packed data</i> in their stored representations. For
+example, character strings store each character in a single 8-bit byte.
+This is more efficient than general arrays, which require an entire word
+for each element. Accessing the n-th character of a string fetches the
+<code>n/4</code> word of the string, extracts the <code>mod(n,4)</code> byte of that word, and
+constructs an object reference to the character whose code is equal to
+the contents of the byte.
+</p>
+
+<p>
+(Machine instructions in compiled functions are stored in a similarly
+packed form.)
+</p>
+
+<p>
+For uniformity, the stored representation of an object containing the
+packed data remains a sequence of object references. Each word in an
+array of element-type fixnum, boolean, or character is an immediate
+reference, data type <code>dtp-fixnum</code>, whose thirty-two bits are broken down
+into packed fields as required, such as four 8-bit bytes in the case of
+some character strings.
+</p>
+
+<p>
+<b>Array leader.</b> An array can optionally be preceded by a leader, a
+sequence of object references that implements the array-leader feature.
+If there is a leader, the leader is preceded by a header of its own,
+tagged <code>dtp-header-p</code> and <code>%header-type-leader</code>; the address field of
+this header contains the address of the array's main header &#x2014; i.e.,
+the address of the header of the array prefix.
+</p>
+
+<p>
+Note if an array has a leader, the address field of an object reference
+designating that array contains the address of the main header, the one
+after the leader, <i>not</i> the address of the header at the beginning of
+the array's store (before the leader). Schematically:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-type">Word</span> <span class="org-variable-name">prefix</span>; <span class="org-comment-delimiter">/* </span><span class="org-comment">array prefix </span><span class="org-comment-delimiter">*/</span>
+prefix.cdr = CDR_ARRAY;
+prefix.type = DTP_HEADER_I;
+prefix.data = ...;
+
+<span class="org-type">Word</span> *<span class="org-variable-name">data</span> = &amp;prefix;
+data++; <span class="org-comment-delimiter">/* </span><span class="org-comment">next word after prefix </span><span class="org-comment-delimiter">*/</span>
+data-&gt;type = DTP_FIXNUM;
+data-&gt;data = 42; <span class="org-comment-delimiter">/* </span><span class="org-comment">some random data </span><span class="org-comment-delimiter">*/</span>
+
+data++; <span class="org-comment-delimiter">/* </span><span class="org-comment">second array entry </span><span class="org-comment-delimiter">*/</span>
+data-&gt;type = DTP_FIXNUM;
+data-&gt;data = 31; <span class="org-comment-delimiter">/* </span><span class="org-comment">some random data </span><span class="org-comment-delimiter">*/</span>
+
+
+<span class="org-type">Word</span> <span class="org-variable-name">leader</span>[]; <span class="org-comment-delimiter">/* </span><span class="org-comment">array leader </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">leader</span>[0] = {cdr = CDR_LEADER, type = DTP_HEADER_P, data = &amp;prefix};
+<span class="org-comment-delimiter">/* </span><span class="org-comment">leader[1] is a named-structure symbol </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">leader</span>[1] = {type = DTP_SYMBOL, data = &amp;name};
+<span class="org-type">leader</span>[2] = {type = DTP_FIXNUM, data = ... };
+
+
+<span class="org-type">Word</span> <span class="org-variable-name">array</span>;
+array.type = DTP_ARRAY;
+array.data = (&amp;prefix) + 1; <span class="org-comment-delimiter">/* </span><span class="org-comment">start address of array data </span><span class="org-comment-delimiter">*/</span>
+</pre>
+</div>
+
+<div class="remark" id="orgc963ebd">
+<p>
+The address of leader element <code>i</code> of an array whose address is <code>a</code>,
+regardless of whether the prefix is long or short, is given by <code>(- a i 1)</code>.
+</p>
+
+</div>
+
+<p>
+The two array formats &#x2014; <code>%array-prefix-short</code> and <code>%array-prefix-long</code>
+&#x2014; are provided to optimize speed and space for simple, small arays
+(which are the most common).
+</p>
+
+<p>
+<code>%array-prefix-short</code> has the 15 bits in position <code>&lt;14:0&gt;</code>, with the
+symbolic name <code>ARRAY-SHORT-LENGTH-FIELD</code>, give the length of the array.
+</p>
+
+<p>
+The prefix is one word, the array is one-dimensional and not displaced,
+but may have a leader. Most common arrays include defstructs, editor
+lines, and most arrays with fill-pointers use this type.
+</p>
+
+<p>
+The address of data element <code>i</code> of a short-prefix array whose address is
+<code>a</code> and whose ARRAY-BYTE-PACKING field is <code>b</code> is given by <code>(+ a (ash i (- b)) 1)</code>.
+When <code>b</code> is greater than zero, packed array elements are stored
+right-to-left within words, thus the right shift to right-justify data
+element <code>i</code> is <code>(ash (logand i (1- (ash 1 b))) (- 5 b))</code>.
+</p>
+
+<p>
+<code>%array-prefix-long</code> has the following 15 bits in position <code>&lt;14:0&gt;</code>:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Position</th>
+<th scope="col" class="org-right">Bits</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>&lt;14&gt;</code></td>
+<td class="org-right">1</td>
+<td class="org-left"><code>ARRAY-DISPLACED-BIT</code></td>
+<td class="org-left">0 for normal array, 1 for displaced array</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;13&gt;</code></td>
+<td class="org-right">1</td>
+<td class="org-left"><code>ARRAY-DISCONTIGUOUS-BIT</code></td>
+<td class="org-left">0 for normal aray, 1 for conformal array</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;12:3&gt;</code></td>
+<td class="org-right">12</td>
+<td class="org-left"><code>ARRAY-LONG-SPARE</code></td>
+<td class="org-left">Spare</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;2:0&gt;</code></td>
+<td class="org-right">3</td>
+<td class="org-left"><code>ARRAY-LONG-DIMENSIONS-FIELD</code></td>
+<td class="org-left">Number of dimensions.</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The long prefix format is used for displaced arrays (including indirect
+arrays), arrays that are too large to fit in the short-prefix format,
+and multidimensional (including zero-dimensional) arrays. The first word
+in the prefix contains the number of dimensions in place of the length
+of the data. The total length of the prefix is <code>(+ 4 (* d 2))</code> where <code>d</code>
+is the number of dimensions.
+</p>
+
+<p>
+The second word of the prefix is the length of the array. For
+conformally displaced arrays, this is the maximum legal linear
+subscript, not the number of elements (which may be smaller).
+</p>
+
+<p>
+The third word of the prefix is the index offset. This is always
+present, even for non-indirect arrays. Zero should be stored here in
+non-displaced arrays, since this word is always added to the subscript.
+</p>
+
+<p>
+The fourth word of the prefix is the address of the data. This is a
+locative to the first word after the prefix for normal arrays, except
+for arrays with no elements (in which case it is a locative to the array
+itself to avoid pointing to garbage). Fir displaced arrays, this is a
+locative or a fixnum. For indirect arrays, this is an array.
+</p>
+
+<p>
+The remaining wods of the prefix consist of two words for each
+dimension. The first word is the length of that dimension and the second
+word is the value to multiply that subscript by.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-type">Word</span> <span class="org-variable-name">prefix</span>[];
+<span class="org-type">Word</span> <span class="org-variable-name">array_data</span>[];
+
+<span class="org-keyword">union</span> { <span class="org-type">int32_t</span> <span class="org-variable-name">data</span>,
+        <span class="org-keyword">struct</span> {
+            <span class="org-type">int32_t</span> <span class="org-variable-name">element_type</span> : 2;
+            <span class="org-type">int32_t</span> <span class="org-variable-name">byte_packing</span> : 3;
+            <span class="org-type">int32_t</span> <span class="org-variable-name">list_bit</span>     : 1;
+            <span class="org-type">int32_t</span> <span class="org-variable-name">named_structure_bit</span> : 1;
+            <span class="org-type">int32_t</span> <span class="org-variable-name">spare_1</span>      : 1;
+            <span class="org-type">int32_t</span> <span class="org-variable-name">long_prefix_bit</span> : 1;
+            <span class="org-type">int32_t</span> <span class="org-variable-name">leader_length</span> : 8;
+            <span class="org-type">int32_t</span> <span class="org-variable-name">displaced_bit</span> : 1;
+            <span class="org-type">int32_t</span> <span class="org-variable-name">discontiguous_bit</span> : 1;
+            <span class="org-type">int32_t</span> <span class="org-variable-name">long_spare</span> : 12;
+            <span class="org-type">int32_t</span> <span class="org-variable-name">long_dimensions</span> : 3;
+        } <span class="org-variable-name">fields</span> } <span class="org-variable-name">prefix_data</span>;
+prefix_data.fields = {element_type        = ELEMENT_FIXNUM,
+                      byte_packing        = 3,
+                      list_bit            = 0,
+                      named_structure_bit = 0,
+                      spare_1             = 0,
+                      long_prefix_bit     = 1,
+                      leader_length       = 0,
+                      displaced_bit       = 0,
+                      discontiguous_bit   = 0,
+                      long_spare          = 0
+                      long_dimensions     = 2};
+<span class="org-type">prefix</span>[0] = {cdr = CDR_ARRAY, type = DTP_HEADER_I,
+             data = prefix_data.data};
+<span class="org-type">prefix</span>[1] = {type = DTP_FIXNUM, data = 28}; <span class="org-comment-delimiter">/* </span><span class="org-comment">array length </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">prefix</span>[2] = {type = DTP_FIXNUM, data = 0};  <span class="org-comment-delimiter">/* </span><span class="org-comment">index offset </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">prefix</span>[3] = {type = DTP_LOCATIVE,
+             data = &amp;array_data[0]};
+<span class="org-comment-delimiter">/* </span><span class="org-comment">first dimension </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">prefix</span>[4] = {type = DTP_FIXNUM, data = 7}; <span class="org-comment-delimiter">/* </span><span class="org-comment">length </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">prefix</span>[5] = {type = DTP_FIXNUM, data = 4}; <span class="org-comment-delimiter">/* </span><span class="org-comment">multiplier </span><span class="org-comment-delimiter">*/</span>
+<span class="org-comment-delimiter">/* </span><span class="org-comment">second dimension </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">prefix</span>[6] = {type = DTP_FIXNUM, data = 4}; <span class="org-comment-delimiter">/* </span><span class="org-comment">length </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">prefix</span>[7] = {type = DTP_FIXNUM, data = 1}; <span class="org-comment-delimiter">/* </span><span class="org-comment">multiplier </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-type">array_data</span>[0] = {type = DTP_FIXNUM,
+                 data = ...};
+<span class="org-type">array_data</span>[1] = {type = DTP_FIXNUM,
+                 data = ...};
+<span class="org-type">array_data</span>[2] = {type = DTP_FIXNUM,
+                 data = ...};
+<span class="org-type">array_data</span>[3] = {type = DTP_FIXNUM,
+                 data = ...};
+
+<span class="org-type">Word</span> <span class="org-variable-name">array_pointer</span> = {type = DTP_ARRAY,
+                      data = &amp;prefix[0]};
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1b4a117" class="outline-4">
+<h4 id="org1b4a117"><span class="section-number-4">1.2.7</span> I-Machine Array Registers</h4>
+<div class="outline-text-4" id="text-1-2-7">
+</div>
+</div>
+
+<div id="outline-container-org0d6914f" class="outline-4">
+<h4 id="org0d6914f"><span class="section-number-4">1.2.8</span> Representations of Functions and Closures</h4>
+<div class="outline-text-4" id="text-1-2-8">
+</div>
+<div id="outline-container-org9b912fd" class="outline-5">
+<h5 id="org9b912fd"><span class="section-number-5">1.2.8.1</span> Representation of Compiled Functions</h5>
+<div class="outline-text-5" id="text-1-2-8-1">
+<p>
+The object reference to a compiled function is a word of data type
+<code>dtp-compiled-function</code> whose address field points to a word inside a
+compiled-function structure.
+</p>
+<ul class="org-ul">
+<li>The prefix is two words long and has a fixed format.</li>
+<li>The body is a sequence of one or more instructions.</li>
+<li>The suffix is at least one word long and contains debugging
+information and constant data.</li>
+</ul>
+
+<p>
+The cdr code for the instruction words have special meaning, see the
+section <a href="#org2ec87ec">Instruction Sequencing</a> for details.
+</p>
+
+<p>
+The memory layout for this looks roughly as follows:
+</p>
+
+
+<div id="org343dc6a" class="figure">
+<p><object type="image/svg+xml" data="../../../../img/lisp-machine-0.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+<p><span class="figure-number">Figure 1: </span>The memory layout for a compiled function</p>
+</div>
+
+<p>
+Now, for a <code>(defun &lt;function-name&gt; (params...) body..)</code> we have a symbol
+for <code>&lt;function-name&gt;</code> which points to a compiled function. Roughly, this
+corresponds to:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-type">Symbol</span> <span class="org-variable-name">symbol</span>;
+symbol.name = pointer_to(<span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;function-name&gt; string </span><span class="org-comment-delimiter">*/</span>);
+symbol.function = Word{type = DTP_ONE_Q_FORWARD,
+                       data = &amp;fn_instr[0]};
+
+<span class="org-comment-delimiter">/* </span><span class="org-comment">or really </span><span class="org-comment-delimiter">*/</span>
+<span class="org-function-name">make_symbol</span>(<span class="org-type">pointer_to</span>(<span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;function-name&gt; string </span><span class="org-comment-delimiter">*/</span>), <span class="org-comment-delimiter">/* </span><span class="org-comment">name </span><span class="org-comment-delimiter">*/</span>
+            nil,                        <span class="org-comment-delimiter">/* </span><span class="org-comment">value </span><span class="org-comment-delimiter">*/</span>
+            <span class="org-type">pointer_to</span>(<span class="org-variable-name">fn_instr</span>[0]),    <span class="org-comment-delimiter">/* </span><span class="org-comment">function </span><span class="org-comment-delimiter">*/</span>
+            nil,                        <span class="org-comment-delimiter">/* </span><span class="org-comment">property </span><span class="org-comment-delimiter">*/</span>
+            nil)                        <span class="org-comment-delimiter">/* </span><span class="org-comment">package </span><span class="org-comment-delimiter">*/</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4d425cc" class="outline-5">
+<h5 id="org4d425cc"><span class="section-number-5">1.2.8.2</span> Generic Functions</h5>
+<div class="outline-text-5" id="text-1-2-8-2">
+<p>
+An object reference to a generic function has data type
+<code>dtp-generic-function</code>. The address field points to a list-like
+structure whose content is not architecturally defined; it is used
+internally by the flavor system. See the section <a href="#orgd0bf8f7">Generic Functions and Message Passing</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd7f4fc0" class="outline-5">
+<h5 id="orgd7f4fc0"><span class="section-number-5">1.2.8.3</span> Representation of Lexical Closures</h5>
+<div class="outline-text-5" id="text-1-2-8-3">
+<p>
+An object reference to a lexical closure is a word of data type
+<code>dtp-lexical-closure</code> which points to a cons pair. The car of the cons is
+the lexical environment, and the cdr is the function.
+</p>
+
+<p>
+The lexical environment is a cdr-coded list of value cells associated
+with the closure. In such an implementation, this list must be compact
+(i.e., cdr-coded using <code>cdr-next</code>) since instructions that access the
+lexical variables compute addresses of the variables simply as an offset
+past the address of the environment.
+</p>
+
+<p>
+When a lexical closure is called as a function, the environment will be
+made an argument to the function. For more information, see the chapter
+on function calling, specifically the section <a href="#org6bbb9e9">Starting a Function Call</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfcf5450" class="outline-5">
+<h5 id="orgfcf5450"><span class="section-number-5">1.2.8.4</span> Representation of Dynamic Closures</h5>
+<div class="outline-text-5" id="text-1-2-8-4">
+<p>
+The object reference to a dynamic closure is a word of data type
+<code>dtp-dynamic-closure</code>, which points to a list structure. The format of a
+dynamic closure is not architecturally defined, but is determined by
+software. (The hardware traps to Lisp to funcall dynamic closures.)
+</p>
+
+<p>
+The list representation allows closures to be stored in the stack (<i>a la</i>
+<code>with-stack-list</code>); certain special forms such as <code>error-restart</code>
+exploit this.
+</p>
+
+<p>
+This list is always cdr-coded, but nothing actually depends on this.
+The first element of the list is the function succeeding elements are
+taken in pairs. The first element of each pair is a locative pointer to
+the value cell to be bound when the closure is called. The second
+element of each pair is a locative pointer to the closure value cell to
+which that cell is to be linked.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc46850d" class="outline-4">
+<h4 id="orgc46850d"><span class="section-number-4">1.2.9</span> Instruction Representation</h4>
+<div class="outline-text-4" id="text-1-2-9">
+<p>
+The instructions ins a compiled function are a sequence of words whose
+data-type field selects among three types of words:
+</p>
+<ol class="org-ol">
+<li><b>Packed instructions.</b> Data types with codes 60&#x2013;77 are used for
+words that contain two 18-bit instructions. These are the usual
+stack-machine type instructions.</li>
+<li><p>
+<b>Full-word instructions.</b> Data types coded 50&#x2013;57 are used for words
+that contain a single intsruction with an address field. These are
+used for starting function calls.
+</p>
+
+<p>
+In addition, data type <code>dtp-external-value-cell-pointer</code> (type
+code 4) is used to fetch the contents of the value cell of a special
+variable or the function cell of a function an push it on the stack.
+This is actually an optimization to save space and time; the value
+cell address could be pushed as a constant locative and then a <code>car</code>
+instruction could be executed.
+</p>
+
+<p>
+Besides these, there is one other full word instruction type, the
+entry instructions, which do not contain addresses, but instead look
+like pairs of half-word instructions. These are decoded by their
+opcode field, not by the data-type field.
+</p></li>
+<li><b>Constants.</b> All other data types encountered among the instructions
+in a compiled function are constants. The word from the instruction
+stream is pushed on the stack with the cdr code set to <code>cdr-next</code>.
+The hardware will signal an error if the word is a header or an
+invisible pointer.</li>
+</ol>
+
+<p>
+The fields within various types of instructions are described in the
+chapter on the <a href="#orgbfb33fd">Macroinstruction Set</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org30e97a0" class="outline-4">
+<h4 id="org30e97a0"><span class="section-number-4">1.2.10</span> Program-Counter Representation</h4>
+<div class="outline-text-4" id="text-1-2-10">
+<p>
+The program counter (pc) is a register in the I-machine that contains
+the virtual address of the currently executing instruction. Since
+instructions are packed 2 to a word, we need to specify which half-word
+instruction is executing.
+</p>
+
+<p>
+The information is included in the data-type code of the pc contents;
+thus there are two pc data types <code>dtp-even-pc</code> and <code>dtp-odd-pc</code>.
+Word of these data types are not usually found in the stored
+representations of Lisp objects, but occur within stack frames or inside
+compiled functions for long branches. See
+<a href="#org56e5026">Function Calling, Message Passing, Stack-Group Switching</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3018f3b" class="outline-4">
+<h4 id="org3018f3b"><span class="section-number-4">1.2.11</span> Representation of Locatives</h4>
+<div class="outline-text-4" id="text-1-2-11">
+<p>
+A locative is a pointer to virtual memory implemented as an object with
+data type <code>dtp-locative</code> and an address field that is the address of the
+virtual memory word to which it points.
+</p>
+
+<p>
+It is classified as a <i>pointer</i> object reference.
+</p>
+
+<p>
+Locatives may point to locations <i>within</i> objects, such as the value
+cell of a symbol. Other uses include the pointer to the start of data in
+long format arrays and the base address of array registers.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org30a61ae" class="outline-4">
+<h4 id="org30a61ae"><span class="section-number-4">1.2.12</span> Representation of Physical Addresses</h4>
+<div class="outline-text-4" id="text-1-2-12">
+<p>
+The data type <code>dtp-physical-address</code> allows unmapped access to the full
+(up to 32 bits wide) physical address space. Since it is a separate data
+type it has restricted usage.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5c816af" class="outline-3">
+<h3 id="org5c816af"><span class="section-number-3">1.3</span> Data-Type Code Assignments</h3>
+<div class="outline-text-3" id="text-1-3">
+</div>
+<div id="outline-container-org92a82e5" class="outline-4">
+<h4 id="org92a82e5"><span class="section-number-4">1.3.1</span> Headers, Special Markers, and Forwarding Pointers</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Type Code</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left"><code>DTP-NULL</code></td>
+<td class="org-left">Unbound variable/function, uninitialized storage</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">DTP-MONITOR-FORWARD</td>
+<td class="org-left">This cell is being monitored</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">DTP-HEADER-P</td>
+<td class="org-left">Structure header, with pointer field</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">DTP-HEADER-I</td>
+<td class="org-left">Structure header, with immediate bits</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">DTP-EXTERNAL-VALUE-CELL</td>
+<td class="org-left">Invisible except for binding</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-left">DTP-ONE-Q-FORWARD</td>
+<td class="org-left">Invisible pointer (forwards 1 cell)</td>
+</tr>
+
+<tr>
+<td class="org-right">6</td>
+<td class="org-left">DTP-HEADER-FORWARD</td>
+<td class="org-left">Invisible pointer (forwards whole structure)</td>
+</tr>
+
+<tr>
+<td class="org-right">7</td>
+<td class="org-left">DTP-ELEMENT-FORWARD</td>
+<td class="org-left">Invisible pointer in element of structure</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org27aa195" class="outline-4">
+<h4 id="org27aa195"><span class="section-number-4">1.3.2</span> Number Data Types</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Type Code</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">10</td>
+<td class="org-left">DTP-FIXNUM</td>
+<td class="org-left">Small integer</td>
+</tr>
+
+<tr>
+<td class="org-right">11</td>
+<td class="org-left">DTP-SMALL-RATIO</td>
+<td class="org-left">Ratio with small numerator and denominator</td>
+</tr>
+
+<tr>
+<td class="org-right">12</td>
+<td class="org-left">DTP-SINGLE-FLOAT</td>
+<td class="org-left">Single-precision floating point</td>
+</tr>
+
+<tr>
+<td class="org-right">13</td>
+<td class="org-left">DTP-DOUBLE-FLOAT</td>
+<td class="org-left">Double-precision floating point</td>
+</tr>
+
+<tr>
+<td class="org-right">14</td>
+<td class="org-left">DTP-BIGNUM</td>
+<td class="org-left">Big integer</td>
+</tr>
+
+<tr>
+<td class="org-right">15</td>
+<td class="org-left">DTP-BIG-RATIO</td>
+<td class="org-left">Ratio with big numerator or denominator</td>
+</tr>
+
+<tr>
+<td class="org-right">16</td>
+<td class="org-left">DTP-COMPLEX</td>
+<td class="org-left">Complex number</td>
+</tr>
+
+<tr>
+<td class="org-right">17</td>
+<td class="org-left">DTP-SPARE-NUMBER</td>
+<td class="org-left">A number to the hardware trap mechanism</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgddc7c5e" class="outline-4">
+<h4 id="orgddc7c5e"><span class="section-number-4">1.3.3</span> Instance Data Types</h4>
+<div class="outline-text-4" id="text-1-3-3">
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Type Code</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">20</td>
+<td class="org-left">DTP-INSTANCE</td>
+<td class="org-left">Ordinary instance</td>
+</tr>
+
+<tr>
+<td class="org-right">21</td>
+<td class="org-left">DTP-LIST-INTSANCE</td>
+<td class="org-left">Instance that masquerades as a cons</td>
+</tr>
+
+<tr>
+<td class="org-right">22</td>
+<td class="org-left">DTP-ARRAY-INSTANCE</td>
+<td class="org-left">Instance that masquerades as an array</td>
+</tr>
+
+<tr>
+<td class="org-right">23</td>
+<td class="org-left">DTP-STRING-INSTANCE</td>
+<td class="org-left">Instance that masquerades as a string</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org7b36180" class="outline-4">
+<h4 id="org7b36180"><span class="section-number-4">1.3.4</span> Primitive Data Types</h4>
+<div class="outline-text-4" id="text-1-3-4">
+<p>
+There are 11 primitive types:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Type Code</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">24</td>
+<td class="org-left">DTP-NIL</td>
+<td class="org-left">The symbol <code>NIL</code></td>
+</tr>
+
+<tr>
+<td class="org-right">25</td>
+<td class="org-left">DTP-LIST</td>
+<td class="org-left">A cons</td>
+</tr>
+
+<tr>
+<td class="org-right">26</td>
+<td class="org-left">DTP-ARRAY</td>
+<td class="org-left">An array that is not a string</td>
+</tr>
+
+<tr>
+<td class="org-right">27</td>
+<td class="org-left">DTP-STRING</td>
+<td class="org-left">A string</td>
+</tr>
+
+<tr>
+<td class="org-right">30</td>
+<td class="org-left">DTP-SYMBOL</td>
+<td class="org-left">A symbol other than <code>NIL</code></td>
+</tr>
+
+<tr>
+<td class="org-right">31</td>
+<td class="org-left">DTP-LOCATIVE</td>
+<td class="org-left">Locative pointer</td>
+</tr>
+
+<tr>
+<td class="org-right">32</td>
+<td class="org-left">DTP-LEXICAL-CLOSURE</td>
+<td class="org-left">Lexical closure of a function</td>
+</tr>
+
+<tr>
+<td class="org-right">33</td>
+<td class="org-left">DTP-DYNAMIC-CLOSURE</td>
+<td class="org-left">Dynamic closure of a function</td>
+</tr>
+
+<tr>
+<td class="org-right">34</td>
+<td class="org-left">DTP-COMPILED-FUNCTION</td>
+<td class="org-left">Compiled code</td>
+</tr>
+
+<tr>
+<td class="org-right">35</td>
+<td class="org-left">DTP-GENERIC-FUNCTION</td>
+<td class="org-left">Generic function (see later section)</td>
+</tr>
+
+<tr>
+<td class="org-right">36</td>
+<td class="org-left">DTP-SPARE-POINTER-1</td>
+<td class="org-left">Spare Pointer</td>
+</tr>
+
+<tr>
+<td class="org-right">37</td>
+<td class="org-left">DTP-SPARE-POINTER-2</td>
+<td class="org-left">Spare Pointer</td>
+</tr>
+
+<tr>
+<td class="org-right">40</td>
+<td class="org-left">DTP-PHYSICAL-ADDRESS</td>
+<td class="org-left">Physical address</td>
+</tr>
+
+<tr>
+<td class="org-right">41</td>
+<td class="org-left">DTP-SPARE-IMMEDIATE-1</td>
+<td class="org-left">Spare immediate</td>
+</tr>
+
+<tr>
+<td class="org-right">42</td>
+<td class="org-left">DTP-SPARE-POINTER-3</td>
+<td class="org-left">Spare pointer</td>
+</tr>
+
+<tr>
+<td class="org-right">43</td>
+<td class="org-left">DTP-CHARACTER</td>
+<td class="org-left">Common Lisp character object</td>
+</tr>
+
+<tr>
+<td class="org-right">44</td>
+<td class="org-left">DTP-SPARE-POINTER-4</td>
+<td class="org-left">Spare pointer</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Note codes 36, 37, 42, 44 are spare pointer data types and code 41 is a
+spare immediate data type.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1ce53f5" class="outline-4">
+<h4 id="org1ce53f5"><span class="section-number-4">1.3.5</span> Special Marker for Garbage Collector</h4>
+<div class="outline-text-4" id="text-1-3-5">
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Type Code</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">45</td>
+<td class="org-left">DTP-GC-FORWARD</td>
+<td class="org-left">Object-moved flag for garbage collector</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgfaf3cf3" class="outline-4">
+<h4 id="orgfaf3cf3"><span class="section-number-4">1.3.6</span> Data Types for Program Counter Values</h4>
+<div class="outline-text-4" id="text-1-3-6">
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Type Code</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">46</td>
+<td class="org-left">DTP-EVEN-PC</td>
+<td class="org-left">PC at first packed word instruction in word, or of full-word instruction</td>
+</tr>
+
+<tr>
+<td class="org-right">47</td>
+<td class="org-left">DTP-ODD-PC</td>
+<td class="org-left">PC at second instruction in word</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgc4e8c62" class="outline-4">
+<h4 id="orgc4e8c62"><span class="section-number-4">1.3.7</span> Full Word Instruction Data Types</h4>
+<div class="outline-text-4" id="text-1-3-7">
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Type Code</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">50</td>
+<td class="org-left">DTP-CALL-COMPILED-EVEN</td>
+<td class="org-left">Start call, address is compiled-function</td>
+</tr>
+
+<tr>
+<td class="org-right">51</td>
+<td class="org-left">DTP-CALL-COMPILED-ODD</td>
+<td class="org-left">Start call, address is compiled-function</td>
+</tr>
+
+<tr>
+<td class="org-right">52</td>
+<td class="org-left">DTP-CALL-INDIRECT</td>
+<td class="org-left">Start call, address is function cell</td>
+</tr>
+
+<tr>
+<td class="org-right">53</td>
+<td class="org-left">DTP-CALL-GENERIC</td>
+<td class="org-left">Start cell, address is generic-function</td>
+</tr>
+
+<tr>
+<td class="org-right">54</td>
+<td class="org-left">DTP-CALL-COMPILED-EVEN-PREFETCH</td>
+<td class="org-left">Same as DTP-CALL-COMPILED-EVEN but prefetch is desirable</td>
+</tr>
+
+<tr>
+<td class="org-right">55</td>
+<td class="org-left">DTP-CALL-COMPILED-ODD-PREFETCH</td>
+<td class="org-left">Same as DTP-CALL-COMPILED-ODD but prefetch is desirable</td>
+</tr>
+
+<tr>
+<td class="org-right">56</td>
+<td class="org-left">DTP-CALL-INDIRECT-PREFETCH</td>
+<td class="org-left">Same as DTP-CALL-INDIRECT but prefetch is desirable</td>
+</tr>
+
+<tr>
+<td class="org-right">57</td>
+<td class="org-left">DTP-CALL-GENERIC-PREFETCH</td>
+<td class="org-left">Same as DTP-CALL-GENERIC but prefetch is desirable</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-orgb0d8caa" class="outline-4">
+<h4 id="orgb0d8caa"><span class="section-number-4">1.3.8</span> Half-Word Instruction Data Types</h4>
+<div class="outline-text-4" id="text-1-3-8">
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Type Code</th>
+<th scope="col" class="org-left">Symbolic Name</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">60&#x2013;77</td>
+<td class="org-left">DTP-PACKED-INSTRUCTION</td>
+<td class="org-left">Used for instructions in compiled code.</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Each word of this type contains two 18-bit instructions, which is why 16
+types are used up. Bits <code>&lt;37:36&gt;</code> contain 3 to select the instruction
+data type. Bits <code>&lt;39:38&gt;</code>, the cdr code, contain sequencing information
+described in the chapter on theinstruction set. The instruction in bits
+<code>&lt;17:0&gt;</code> is executed before the instruction in bits <code>&lt;35:18&gt;</code>.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org0dd8a1e" class="outline-3">
+<h3 id="org0dd8a1e"><span class="section-number-3">1.4</span> Appendix: Comparison of 3600-Family and I-Machine Data Representations</h3>
+<div class="outline-text-3" id="text-1-4">
+</div>
+<div id="outline-container-orgf151050" class="outline-4">
+<h4 id="orgf151050"><span class="section-number-4">1.4.1</span> Array Differences</h4>
+</div>
+
+<div id="outline-container-org1fb7f6c" class="outline-4">
+<h4 id="org1fb7f6c"><span class="section-number-4">1.4.2</span> Compiled Function Differences</h4>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga901273" class="outline-2">
+<h2 id="orga901273"><span class="section-number-2">2</span> Memory Layout and Addressing</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+
+<div id="outline-container-orgea22ca2" class="outline-3">
+<h3 id="orgea22ca2"><span class="section-number-3">2.1</span> Address Space</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+The address space is divided into thirty-two zones, each containing 128
+megabytes. The thirty-two zones are variously assigned to several
+sections as shown in the table below. Note that ephemeral space is a
+subset of the virtual address space:
+</p>
+
+<ul class="org-ul">
+<li><code>#0o00000000000..0o00777777777</code> Ephemeral address space (zone 0, the low
+2<sup>7</sup> = 128 megawords)</li>
+<li><code>#0o00000000000..0o36777777777</code> Virtual address space (zones 0&#x2013;30, the
+low 3968 megawords)</li>
+<li><code>#0o37000000000..0o37777777777</code> Unmapped address space (zone 31, the high
+128 megawords)</li>
+<li><code>#0o00000000000..0o37777777777</code> Total address space (4 gigawords)</li>
+</ul>
+
+<p>
+Note that <code>0o37777777777</code> is 2<sup>32</sup>-1.
+</p>
+</div>
+
+<div id="outline-container-orgc4a2286" class="outline-4">
+<h4 id="orgc4a2286"><span class="section-number-4">2.1.1</span> Virtual Addresses</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+A virtual address is divided into two fields for mapping purposes: the
+virtual page number and the offset within page fields.
+</p>
+
+<p>
+Virtual space occupies thirty-one zones. An internal processor register
+allows each zone to be specified as either old or new space.
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Position</th>
+<th scope="col" class="org-left">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>&lt;31:27&gt;</code></td>
+<td class="org-left">Zone number (zones 0 through 30)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;31:8&gt;</code></td>
+<td class="org-left">Virtual Page Number (VPN &#x2013; 512K virtual pages per zone)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;7:0&gt;</code></td>
+<td class="org-left">Offset within Page (256 words per page)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The virtual address space is partitioned by software into regions,
+areas, and quanta. These have no direct hardware impact. Note, however,
+that the hardware hash function for the Page Hash Table is optimized for
+a quantum of size 65536 words (see <a href="#org78fb3c7">Page Hash Table</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org594d189" class="outline-4">
+<h4 id="org594d189"><span class="section-number-4">2.1.2</span> Ephemeral Addresses</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+The lowest zone of the virtual address is reserved for the storage of
+ephemeral objects. This space is provided to support a garbage
+collection strategy that takes advantage of recently created objects
+usually having a short lifetime.
+</p>
+
+<p>
+Ephemeral space is divided into thirty-two levels. Data within an
+ephemeral level is the same age. The relative ages of different levels
+is up to decide and would normally change dynamically. Each level is
+further divided into two halves (old and new space). An internal
+processor register specifies which half is old and which is new.
+</p>
+
+<p>
+The thirty-two ephemeral levels are grouped into four groups of eight
+levels each. The ephemeral level groups referenced by a page are
+maintained in the PHT.
+</p>
+
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Position</th>
+<th scope="col" class="org-left">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>&lt;31:27&gt;</code></td>
+<td class="org-left">00000 =&gt; ephemeral, otherwise non-ephemeral</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;26&gt;</code></td>
+<td class="org-left">which half of the ephemeral level</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;25:21&gt;</code></td>
+<td class="org-left">ephemeral level number</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;25:24&gt;</code></td>
+<td class="org-left">ephemeral level group number</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;20:0&gt;</code></td>
+<td class="org-left">word address within an ephemeral level</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-org0930292" class="outline-4">
+<h4 id="org0930292"><span class="section-number-4">2.1.3</span> Unmapped Addresses</h4>
+<div class="outline-text-4" id="text-2-1-3">
+</div>
+</div>
+<div id="outline-container-orgfa004d9" class="outline-4">
+<h4 id="orgfa004d9"><span class="section-number-4">2.1.4</span> Wired Addresses</h4>
+</div>
+
+<div id="outline-container-org414083d" class="outline-4">
+<h4 id="org414083d"><span class="section-number-4">2.1.5</span> Pages</h4>
+<div class="outline-text-4" id="text-2-1-5">
+</div>
+<div id="outline-container-org78fb3c7" class="outline-5">
+<h5 id="org78fb3c7"><span class="section-number-5">2.1.5.1</span> Page Hash Table</h5>
+</div>
+<div id="outline-container-orge1293f4" class="outline-5">
+<h5 id="orge1293f4"><span class="section-number-5">2.1.5.2</span> PHT Lookup Algorithm</h5>
+</div>
+<div id="outline-container-org402f374" class="outline-5">
+<h5 id="org402f374"><span class="section-number-5">2.1.5.3</span> Translation Algorithm</h5>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org51a9463" class="outline-3">
+<h3 id="org51a9463"><span class="section-number-3">2.2</span> GC Support</h3>
+</div>
+
+<div id="outline-container-orga85284a" class="outline-3">
+<h3 id="orga85284a"><span class="section-number-3">2.3</span> Address Translation</h3>
+<div class="outline-text-3" id="text-2-3">
+</div>
+<div id="outline-container-org2d5a57c" class="outline-4">
+<h4 id="org2d5a57c"><span class="section-number-4">2.3.1</span> Page Hash Table</h4>
+</div>
+
+<div id="outline-container-org67ff87b" class="outline-4">
+<h4 id="org67ff87b"><span class="section-number-4">2.3.2</span> PHT Lookup Algorithm</h4>
+</div>
+
+<div id="outline-container-org9ef6c45" class="outline-4">
+<h4 id="org9ef6c45"><span class="section-number-4">2.3.3</span> Translation Algorithm</h4>
+</div>
+</div>
+
+<div id="outline-container-org7a42d91" class="outline-3">
+<h3 id="org7a42d91"><span class="section-number-3">2.4</span> Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</h3>
+</div>
+</div>
+
+
+<div id="outline-container-orgbfb33fd" class="outline-2">
+<h2 id="orgbfb33fd"><span class="section-number-2">3</span> Macroinstruction Set</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org7cbe255" class="outline-3">
+<h3 id="org7cbe255"><span class="section-number-3">3.1</span> Introduction</h3>
+<div class="outline-text-3" id="text-3-1">
+</div>
+<div id="outline-container-org2ec87ec" class="outline-4">
+<h4 id="org2ec87ec"><span class="section-number-4">3.1.1</span> Instruction Sequencing</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<p>
+The cdr-code of instruction words specify the sequencing of instructions
+for execution.
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Cdr Code</th>
+<th scope="col" class="org-left">PC Increment</th>
+<th scope="col" class="org-left">Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left">+1</td>
+<td class="org-left">Normal instruction sequencing</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">illegal</td>
+<td class="org-left">Fence; marks end of compiled function</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">-1</td>
+<td class="org-left">On some constants</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">+2 PC even, +3 PC odd</td>
+<td class="org-left">Before some constants, on some constants</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+<div id="outline-container-orge56c3a4" class="outline-4">
+<h4 id="orge56c3a4"><span class="section-number-4">3.1.2</span> Internal Registers</h4>
+<div class="outline-text-4" id="text-3-1-2">
+<p>
+The I-machine internal registers may be summarized in the following
+table. An asterisk by an address entry means the register may be defined
+by an implementation, and "reserved" means the register may be
+architecturally defined in the future. The information in this table is
+specific to Revision 0 of the Ivory chip.
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Address</th>
+<th scope="col" class="org-left">Read/Write</th>
+<th scope="col" class="org-left">Data Type</th>
+<th scope="col" class="org-left">Register Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right"><code>0*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">For use by microcode only</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">RW</td>
+<td class="org-left">loc</td>
+<td class="org-left">Frame Pointer (FP)</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">RW</td>
+<td class="org-left">loc</td>
+<td class="org-left">Local Pointer (LP)</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">RW</td>
+<td class="org-left">loc</td>
+<td class="org-left">Stack Pointer (SP)</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>4*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">For use by microcode only</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-left">RW</td>
+<td class="org-left">loc</td>
+<td class="org-left">Stack Cache Lower Bound</td>
+</tr>
+
+<tr>
+<td class="org-right">6</td>
+<td class="org-left">RW</td>
+<td class="org-left">loc/pa</td>
+<td class="org-left">BAR0 Contents</td>
+</tr>
+
+<tr>
+<td class="org-right">206</td>
+<td class="org-left">RW</td>
+<td class="org-left">loc/pa</td>
+<td class="org-left">BAR1 Contents</td>
+</tr>
+
+<tr>
+<td class="org-right">406</td>
+<td class="org-left">RW</td>
+<td class="org-left">loc/pa</td>
+<td class="org-left">BAR2 Contents</td>
+</tr>
+
+<tr>
+<td class="org-right">606</td>
+<td class="org-left">RW</td>
+<td class="org-left">loc/pa</td>
+<td class="org-left">BAR3 Contents</td>
+</tr>
+
+<tr>
+<td class="org-right">7</td>
+<td class="org-left">R</td>
+<td class="org-left">fix</td>
+<td class="org-left">BAR0 Hashed</td>
+</tr>
+
+<tr>
+<td class="org-right">207</td>
+<td class="org-left">R</td>
+<td class="org-left">fix</td>
+<td class="org-left">BAR1 Hashed</td>
+</tr>
+
+<tr>
+<td class="org-right">407</td>
+<td class="org-left">R</td>
+<td class="org-left">fix</td>
+<td class="org-left">BAR2 Hashed</td>
+</tr>
+
+<tr>
+<td class="org-right">607</td>
+<td class="org-left">R</td>
+<td class="org-left">fix</td>
+<td class="org-left">BAR3 Hashed</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>10*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">For use by microcode only</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>11*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right">12</td>
+<td class="org-left">RW</td>
+<td class="org-left">pc</td>
+<td class="org-left">Continuation</td>
+</tr>
+
+<tr>
+<td class="org-right">13</td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">DP Op</td>
+</tr>
+
+<tr>
+<td class="org-right">14</td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">Control Register</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>15*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right">16</td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">Ephemeral Oldspace Register</td>
+</tr>
+
+<tr>
+<td class="org-right">17</td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">Zone Oldspace Register</td>
+</tr>
+
+<tr>
+<td class="org-right">20</td>
+<td class="org-left">R</td>
+<td class="org-left">fix</td>
+<td class="org-left">Implementation Revision</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>21*</code></td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">FP coprocessor present</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>22*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right">23</td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">Preempt Register</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>24*</code></td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">Icache Control</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>25*</code></td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">Prefetcher Control</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>26*</code></td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">Map Cache Control</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>27*</code></td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">Memory Control</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>30*</code></td>
+<td class="org-left">R</td>
+<td class="org-left">fix</td>
+<td class="org-left">ECC Log</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>31*</code></td>
+<td class="org-left">R</td>
+<td class="org-left">fix</td>
+<td class="org-left">ECC Log Address</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>32*</code></td>
+<td class="org-left">W</td>
+<td class="org-left">-</td>
+<td class="org-left">Invalidate Matching Map Entry for VMA in BAR0</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>232*</code></td>
+<td class="org-left">W</td>
+<td class="org-left">-</td>
+<td class="org-left">Invalidate Matching Map Entry for VMA in BAR1</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>432*</code></td>
+<td class="org-left">W</td>
+<td class="org-left">-</td>
+<td class="org-left">Invalidate Matching Map Entry for VMA in BAR2</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>632*</code></td>
+<td class="org-left">W</td>
+<td class="org-left">-</td>
+<td class="org-left">Invalidate Matching Map Entry for VMA in BAR3</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>33*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right">34</td>
+<td class="org-left">RW</td>
+<td class="org-left">fix</td>
+<td class="org-left">Stack Cache overflow limit</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>35*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>36*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right">37</td>
+<td class="org-left">reserved</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>40-47*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>50*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>51*</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>52*</code></td>
+<td class="org-left">W</td>
+<td class="org-left">-</td>
+<td class="org-left">Load Matching Map Word 1 forVMA in BAR0</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>252*</code></td>
+<td class="org-left">W</td>
+<td class="org-left">-</td>
+<td class="org-left">Load Matching Map Word 1 forVMA in BAR1</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>452*</code></td>
+<td class="org-left">W</td>
+<td class="org-left">-</td>
+<td class="org-left">Load Matching Map Word 1 forVMA in BAR2</td>
+</tr>
+
+<tr>
+<td class="org-right"><code>652*</code></td>
+<td class="org-left">W</td>
+<td class="org-left">-</td>
+<td class="org-left">Load Matching Map Word 1 forVMA in BAR3</td>
+</tr>
+
+<tr>
+<td class="org-right">53&#x2013;777</td>
+<td class="org-left">reserved</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right">1000</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Top of Stack (TOS)</td>
+</tr>
+
+<tr>
+<td class="org-right">1001</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Array Event Count</td>
+</tr>
+
+<tr>
+<td class="org-right">1002</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Binding Stack Pointer</td>
+</tr>
+
+<tr>
+<td class="org-right">1003</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Catch Block Pointer</td>
+</tr>
+
+<tr>
+<td class="org-right">1004</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Control Stack Limit</td>
+</tr>
+
+<tr>
+<td class="org-right">1005</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Control Stack Extra Limit</td>
+</tr>
+
+<tr>
+<td class="org-right">1006</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Binding Stack Limit</td>
+</tr>
+
+<tr>
+<td class="org-right">1007</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">PHT Base</td>
+</tr>
+
+<tr>
+<td class="org-right">1010</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">PHT Mask</td>
+</tr>
+
+<tr>
+<td class="org-right">1011</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Count Map Reloads</td>
+</tr>
+
+<tr>
+<td class="org-right">1012</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">List Cache Area</td>
+</tr>
+
+<tr>
+<td class="org-right">1013</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">List Cache Address</td>
+</tr>
+
+<tr>
+<td class="org-right">1014</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">List Cache Length</td>
+</tr>
+
+<tr>
+<td class="org-right">1015</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Structure Cache Area</td>
+</tr>
+
+<tr>
+<td class="org-right">1016</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Structure Cache Address</td>
+</tr>
+
+<tr>
+<td class="org-right">1017</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Structure Cache Length</td>
+</tr>
+
+<tr>
+<td class="org-right">1030</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Maximum Frame Size</td>
+</tr>
+
+<tr>
+<td class="org-right">1031</td>
+<td class="org-left">RW</td>
+<td class="org-left">--</td>
+<td class="org-left">Stack Cache Dump Quantum</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-org20c67ce" class="outline-4">
+<h4 id="org20c67ce"><span class="section-number-4">3.1.3</span> Memory Side Effects</h4>
+<div class="outline-text-4" id="text-3-1-3">
+<p>
+Reading memory may not cause side effects. The architecture permits an
+implementation to start a memory read that it will not use, perhaps
+because of instruction prefetching, perhaps while starting an array
+reference before an out of bounds check is peformed, perhaps because of
+instruction pipelining, or perhaps for something else.
+</p>
+
+<p>
+Writing memory using a <code>dtp-physical-address</code> is allowed to cause side
+effects; <code>dtp-physical-address</code> is guaranteed not to be cached, and the
+write is guaranteed to happen exactly once. Also both
+<code>%coprocessor-read</code> and <code>%coprocessor-write</code> instructions may cause side
+effects; they are guaranteed to be performed exactly once.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbad846a" class="outline-4">
+<h4 id="orgbad846a"><span class="section-number-4">3.1.4</span> Explanation of Instruction Definitions</h4>
+<div class="outline-text-4" id="text-3-1-4">
+</div>
+<div id="outline-container-orgfb65a15" class="outline-5">
+<h5 id="orgfb65a15"><span class="section-number-5">3.1.4.1</span> Instruction Formats</h5>
+<div class="outline-text-5" id="text-3-1-4-1">
+</div>
+</div>
+<div id="outline-container-org815756b" class="outline-5">
+<h5 id="org815756b"><span class="section-number-5">3.1.4.2</span> Arguments: the Data Types Accepted</h5>
+<div class="outline-text-5" id="text-3-1-4-2">
+</div>
+</div>
+<div id="outline-container-org39abebc" class="outline-5">
+<h5 id="org39abebc"><span class="section-number-5">3.1.4.3</span> Types of Instruction Exceptions</h5>
+</div>
+<div id="outline-container-orgac6e079" class="outline-5">
+<h5 id="orgac6e079"><span class="section-number-5">3.1.4.4</span> Types of Memory References</h5>
+</div>
+<div id="outline-container-orgd183bd3" class="outline-5">
+<h5 id="orgd183bd3"><span class="section-number-5">3.1.4.5</span> Top-of-Stack Register Effects</h5>
+<div class="outline-text-5" id="text-3-1-4-5">
+</div>
+</div>
+<div id="outline-container-org17d8a0c" class="outline-5">
+<h5 id="org17d8a0c"><span class="section-number-5">3.1.4.6</span> Cdr Codes of Values Returned</h5>
+<div class="outline-text-5" id="text-3-1-4-6">
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org9710d8e" class="outline-3">
+<h3 id="org9710d8e"><span class="section-number-3">3.2</span> The Instructions</h3>
+<div class="outline-text-3" id="text-3-2">
+</div>
+<div id="outline-container-orgdebd2d8" class="outline-4">
+<h4 id="orgdebd2d8"><span class="section-number-4">3.2.1</span> List-Function Operations</h4>
+</div>
+<div id="outline-container-org1019a5e" class="outline-4">
+<h4 id="org1019a5e"><span class="section-number-4">3.2.2</span> Predicate Intsructions</h4>
+</div>
+<div id="outline-container-org04f41f2" class="outline-4">
+<h4 id="org04f41f2"><span class="section-number-4">3.2.3</span> Numeric Operations</h4>
+</div>
+<div id="outline-container-org5d22be7" class="outline-4">
+<h4 id="org5d22be7"><span class="section-number-4">3.2.4</span> Data-Movement Instructions</h4>
+</div>
+<div id="outline-container-orgb11906a" class="outline-4">
+<h4 id="orgb11906a"><span class="section-number-4">3.2.5</span> Field-Extraction Instructions</h4>
+</div>
+<div id="outline-container-orge1f0a27" class="outline-4">
+<h4 id="orge1f0a27"><span class="section-number-4">3.2.6</span> Array Operations</h4>
+</div>
+<div id="outline-container-orgccc6799" class="outline-4">
+<h4 id="orgccc6799"><span class="section-number-4">3.2.7</span> Block Instructions</h4>
+</div>
+<div id="outline-container-orgef94509" class="outline-4">
+<h4 id="orgef94509"><span class="section-number-4">3.2.8</span> Function-Calling Instructions</h4>
+</div>
+<div id="outline-container-org009e8d0" class="outline-4">
+<h4 id="org009e8d0"><span class="section-number-4">3.2.9</span> Binding Instructions</h4>
+</div>
+<div id="outline-container-org37335d4" class="outline-4">
+<h4 id="org37335d4"><span class="section-number-4">3.2.10</span> Catch Instructions</h4>
+</div>
+<div id="outline-container-org77d8f33" class="outline-4">
+<h4 id="org77d8f33"><span class="section-number-4">3.2.11</span> Lexical Variable Accessors</h4>
+</div>
+<div id="outline-container-orgde2068f" class="outline-4">
+<h4 id="orgde2068f"><span class="section-number-4">3.2.12</span> Instance Variable Accessors</h4>
+</div>
+<div id="outline-container-org6473cc1" class="outline-4">
+<h4 id="org6473cc1"><span class="section-number-4">3.2.13</span> Subprimitive Instructions</h4>
+</div>
+</div>
+</div>
+<div id="outline-container-org56e5026" class="outline-2">
+<h2 id="org56e5026"><span class="section-number-2">4</span> Function Calling, Message Passing, Stack-Group Switching</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org20869d5" class="outline-3">
+<h3 id="org20869d5"><span class="section-number-3">4.1</span> Stacks</h3>
+<div class="outline-text-3" id="text-4-1">
+</div>
+<div id="outline-container-orgf2b4d8e" class="outline-4">
+<h4 id="orgf2b4d8e"><span class="section-number-4">4.1.1</span> Control Stack</h4>
+</div>
+<div id="outline-container-org3f5dc4b" class="outline-4">
+<h4 id="org3f5dc4b"><span class="section-number-4">4.1.2</span> Binding Stack</h4>
+</div>
+<div id="outline-container-org20942e7" class="outline-4">
+<h4 id="org20942e7"><span class="section-number-4">4.1.3</span> Data Stack</h4>
+</div>
+</div>
+<div id="outline-container-org28dc842" class="outline-3">
+<h3 id="org28dc842"><span class="section-number-3">4.2</span> Registers Important to Function Calling and Returning</h3>
+</div>
+<div id="outline-container-org1aaec05" class="outline-3">
+<h3 id="org1aaec05"><span class="section-number-3">4.3</span> Function Calling</h3>
+<div class="outline-text-3" id="text-4-3">
+</div>
+<div id="outline-container-org6bbb9e9" class="outline-4">
+<h4 id="org6bbb9e9"><span class="section-number-4">4.3.1</span> Starting a Function Call</h4>
+</div>
+<div id="outline-container-org813735d" class="outline-4">
+<h4 id="org813735d"><span class="section-number-4">4.3.2</span> Pushing the Arguments</h4>
+</div>
+<div id="outline-container-org3fb5ae2" class="outline-4">
+<h4 id="org3fb5ae2"><span class="section-number-4">4.3.3</span> Finishing the Call</h4>
+</div>
+</div>
+<div id="outline-container-org2bb22a2" class="outline-3">
+<h3 id="org2bb22a2"><span class="section-number-3">4.4</span> Function Entry</h3>
+<div class="outline-text-3" id="text-4-4">
+</div>
+<div id="outline-container-org44f1379" class="outline-4">
+<h4 id="org44f1379"><span class="section-number-4">4.4.1</span> Push-apply-args</h4>
+</div>
+<div id="outline-container-org9e0dc78" class="outline-4">
+<h4 id="org9e0dc78"><span class="section-number-4">4.4.2</span> Pull-apply-args</h4>
+</div>
+<div id="outline-container-org9e08d35" class="outline-4">
+<h4 id="org9e08d35"><span class="section-number-4">4.4.3</span> Trapping Out of Entry and Restarting</h4>
+</div>
+</div>
+<div id="outline-container-org97eb6d8" class="outline-3">
+<h3 id="org97eb6d8"><span class="section-number-3">4.5</span> Function Returning</h3>
+<div class="outline-text-3" id="text-4-5">
+</div>
+<div id="outline-container-org50bc38d" class="outline-4">
+<h4 id="org50bc38d"><span class="section-number-4">4.5.1</span> Function Return Instructions</h4>
+</div>
+<div id="outline-container-org5195ffe" class="outline-4">
+<h4 id="org5195ffe"><span class="section-number-4">4.5.2</span> Frame Cleanup</h4>
+</div>
+<div id="outline-container-orgf190813" class="outline-4">
+<h4 id="orgf190813"><span class="section-number-4">4.5.3</span> Value Matchup</h4>
+</div>
+</div>
+<div id="outline-container-orgb1ed395" class="outline-3">
+<h3 id="orgb1ed395"><span class="section-number-3">4.6</span> Catch, Throw and Unwind-Protect</h3>
+</div>
+<div id="outline-container-orgd0bf8f7" class="outline-3">
+<h3 id="orgd0bf8f7"><span class="section-number-3">4.7</span> Generic Functions and Message Passing</h3>
+<div class="outline-text-3" id="text-4-7">
+</div>
+<div id="outline-container-org451290f" class="outline-4">
+<h4 id="org451290f"><span class="section-number-4">4.7.1</span> Flavor</h4>
+</div>
+<div id="outline-container-org4742cff" class="outline-4">
+<h4 id="org4742cff"><span class="section-number-4">4.7.2</span> Handler Table</h4>
+</div>
+<div id="outline-container-orgf2f6f26" class="outline-4">
+<h4 id="orgf2f6f26"><span class="section-number-4">4.7.3</span> Calling a Generic Function</h4>
+</div>
+<div id="outline-container-org4bf28e7" class="outline-4">
+<h4 id="org4bf28e7"><span class="section-number-4">4.7.4</span> Sending a Message</h4>
+</div>
+<div id="outline-container-org4ef51d0" class="outline-4">
+<h4 id="org4ef51d0"><span class="section-number-4">4.7.5</span> Accessing Instance Variables</h4>
+</div>
+</div>
+<div id="outline-container-org4485923" class="outline-3">
+<h3 id="org4485923"><span class="section-number-3">4.8</span> Stack-Group Switching</h3>
+</div>
+<div id="outline-container-orgc100181" class="outline-3">
+<h3 id="orgc100181"><span class="section-number-3">4.9</span> Appendix: Comparison of 3600-Family and I-Machine Function Calling</h3>
+</div>
+</div>
+<div id="outline-container-org0433148" class="outline-2">
+<h2 id="org0433148"><span class="section-number-2">5</span> Exception Handling</h2>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-02-28 Sun 13:49.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proof Steps</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Proof Steps</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org23a665f">1. Definition</a>
+<ul>
+<li><a href="#org4a5e055">1.1. Formal Grammar</a></li>
+</ul>
+</li>
+<li><a href="#org754739e">2. Steps</a>
+<ul>
+<li><a href="#org1758a5a">2.1. <code>let</code> or forall-introduction</a></li>
+<li><a href="#orgcbcd183">2.2. <code>assume</code></a>
+<ul>
+<li><a href="#org5c58f38">2.2.1. implies-intro</a></li>
+<li><a href="#org543afb2">2.2.2. not-introduction</a></li>
+<li><a href="#org1c42e0a">2.2.3. Reductio ad Absurdum</a></li>
+</ul>
+</li>
+<li><a href="#orga904e9a">2.3. <code>thus</code> or and-introduction</a></li>
+<li><a href="#org338b828">2.4. <code>per cases</code>, or-introduction</a></li>
+<li><a href="#org4e819b4">2.5. <code>consider</code>, exists-elimination</a></li>
+<li><a href="#org78c9e50">2.6. <code>take</code>, exists-intro</a></li>
+</ul>
+</li>
+<li><a href="#org2394ae6">3. Syntactic Sugar</a>
+<ul>
+<li><a href="#org14b996d">3.1. <code>then</code> prefixes</a></li>
+<li><a href="#orgb6affd1">3.2. <code>hence</code> = <code>then thus</code></a></li>
+<li><a href="#org01ececa">3.3. <code>given = assume + then consider</code></a></li>
+<li><a href="#org67233bc">3.4. <code>set</code></a></li>
+<li><a href="#org1452a2f">3.5. <code>thesis</code> keyword</a></li>
+</ul>
+</li>
+<li><a href="#org0fbe3c5">4. Conventions</a>
+<ul>
+<li><a href="#orgf2261be">4.1. Proving \(A \iff B\)</a></li>
+</ul>
+</li>
+<li><a href="#org006e029">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org23a665f" class="outline-2">
+<h2 id="org23a665f"><span class="section-number-2">1</span> Definition</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+In formal proof sketches, we can limit our "logical vocabulary" to
+about a half-dozen "proof steps". These correspond to certain
+specific inference rules in natural deduction. A few are "syntactic
+sugar" combining multiple steps into one.
+</p>
+
+<p>
+We define the semantics of proof steps by means of "proof
+skeletons", which are equivalent to relating the step to a rule of
+inference. The proof skeleton transforms a goal until the theorem
+is proven.
+</p>
+</div>
+
+<div id="outline-container-org4a5e055" class="outline-3">
+<h3 id="org4a5e055"><span class="section-number-3">1.1</span> Formal Grammar</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Let's consider the formal grammar for formal proof
+sketches. Following Freek Wiedijk's "Mathematical Vernacular", we
+leave informal the following syntactic categories:
+</p>
+
+<dl class="org-dl">
+<dt>label</dt><dd>Equation numbers, theorem numbers, definition numbers,
+etc., are all left informally understood. LaTeX usually takes
+care of this for us automatically.</dd>
+<dt>variable</dt><dd>A first-order variable term. Indeed, all variables in first-order
+logic are terms.</dd>
+<dt>term</dt><dd>A logical term or a logical function (i.e., a term
+parametrized by other terms or variables). Intuitively, terms
+correspond to "mathematical objects" like numbers or vectors or
+whatever.</dd>
+<dt>formula</dt><dd>A first-order logical formula, which is either true or
+false. We ultimately are trying to prove a formula with our proof
+sketches. These are intuitively "propositions".</dd>
+</dl>
+
+<p>
+Using Wirth syntax notation:
+</p>
+
+<pre class="example" id="org7d509c4">
+statement = proposition justification ";"
+          | term "=" term justification
+                {"=" term justification} .
+
+proposition = [ label ":" ] formula .
+
+justification = empty
+              | simple-justification
+              | "proof" { step } [ cases ] "end" .
+
+simple-justification = "by" label { "," label } .
+
+step = statement
+     | "thus" statement
+     | "let" variable { "," variable } ";"
+     | "assume" proposition ";"
+     | "consider" variable {"," variable} "such that" proposition justification ";"
+     | "take" term {"," term} ";"
+
+cases = "per cases" simple-justification ";" {"suppose" proposition ";" {step}}
+</pre>
+
+<p>
+Note that justifications allow for nested proofs.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org754739e" class="outline-2">
+<h2 id="org754739e"><span class="section-number-2">2</span> Steps</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org1758a5a" class="outline-3">
+<h3 id="org1758a5a"><span class="section-number-3">2.1</span> <code>let</code> or forall-introduction</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+The proof skeleton for this step looks like:
+</p>
+
+<pre class="example" id="org6d8694b">
+&lt;proof of 'forall x, P(x)'&gt; ::=
+    &lt;preliminary steps&gt;
+    let y;
+    &lt;proof of P(y)&gt;
+</pre>
+
+<p>
+This corresponds to the inference rule in natural deduction
+$&forall;$-introduction:
+</p>
+\begin{equation}
+\frac{\Gamma, y\vdash P(y)}{\Gamma\vdash\forall x, P(x)}\mbox{{\tt let}\ $y$}
+\end{equation}
+</div>
+</div>
+
+<div id="outline-container-orgcbcd183" class="outline-3">
+<h3 id="orgcbcd183"><span class="section-number-3">2.2</span> <code>assume</code></h3>
+<div class="outline-text-3" id="text-2-2">
+</div>
+<div id="outline-container-org5c58f38" class="outline-4">
+<h4 id="org5c58f38"><span class="section-number-4">2.2.1</span> implies-intro</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<p>
+When we want to prove a goal of the form \(A\implies B\), we begin by
+stipulating the hypothesis \(A\) holds. That is to say, we <code>assume</code>
+\(A\).
+</p>
+
+<pre class="example" id="org2a03c2f">
+&lt;proof of $A\implies B$&gt; ::=
+    &lt;preliminary steps&gt;
+    assume $A$;
+    &lt;proof of $B$&gt;
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org543afb2" class="outline-4">
+<h4 id="org543afb2"><span class="section-number-4">2.2.2</span> not-introduction</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+We can take advantage of the logical equivalence of \(\neg A\) with
+\(A\implies\bot\). That is, if we want to prove \(\neg A\), we
+stipulate \(A\) is true, then demonstrate this leads to a
+contradiction. We're forced to conclude that our stipulation must
+be wrong, and that \(A\) must be false (i.e., \(\neg A\) is true).
+</p>
+
+<pre class="example" id="org6ead771">
+&lt;proof of ¬A&gt; ::=
+    &lt;preliminary steps&gt;
+    assume A;
+    &lt;prove a contradiction from A&gt;
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org1c42e0a" class="outline-4">
+<h4 id="org1c42e0a"><span class="section-number-4">2.2.3</span> Reductio ad Absurdum</h4>
+<div class="outline-text-4" id="text-2-2-3">
+<p>
+The other way to look at this is, if assuming \(A\) and deriving a
+contradiction implies \(\neg A\), then assuming \(\neg A\) and deriving
+a contradiction implies \(A\). This is the <i>reductio ad absurdum</i>
+rule. Usually I write in parentheses "<code>assume</code> \(A\) (for contradiction)".
+</p>
+
+<pre class="example" id="org970e3ac">
+&lt;proof of A&gt; ::=
+    &lt;preliminary steps&gt;
+    assume ¬A;
+    &lt;prove a contradiction from ¬A&gt;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga904e9a" class="outline-3">
+<h3 id="orga904e9a"><span class="section-number-3">2.3</span> <code>thus</code> or and-introduction</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+When we have multiple goals we want to prove conjoined together
+(i.e., our goal looks like \(A\land B\)), and we have proven \(A\), we
+can update our goal to reflect this by writing "<code>thus</code> \(A\)".
+</p>
+
+<p>
+This is the first proof step which requires justification. Why?
+Well, in natural deduction, this corresponds to the inference rule
+</p>
+\begin{equation}
+\frac{\Gamma\vdash A,\qquad \Gamma\vdash B}{\Gamma\vdash A\land B}.
+\end{equation}
+<p>
+There are two proof obligations above the inference line, the
+upper-left obligation \(\Gamma\vdash A\) is referenced as the
+justification for the step. The upper-right obligation is the new
+proof goal.
+</p>
+
+<pre class="example" id="org5b091a0">
+&lt;proof of A and B&gt; ::=
+    &lt;preliminary steps&gt;
+    thus A by ...;
+    &lt;proof of B&gt;
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org338b828" class="outline-3">
+<h3 id="org338b828"><span class="section-number-3">2.4</span> <code>per cases</code>, or-introduction</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+When we want to prove a claim by cases. That is, we have
+established that \(A_{1}\lor\dots\lor A_{n}\), but we want to prove
+\(B\). If we can prove \(A_{i}\) implies \(B\) for each \(i\), then we are golden.
+</p>
+
+<p>
+The natural deduction rule is of the form
+</p>
+\begin{equation}
+\frac{\Gamma\vdash A_{1}\lor\dots\lor A_{n},\qquad \Gamma,A_{1}\vdash B,\quad\dots\quad, \Gamma,A_{n}\vdash B}{\Gamma\vdash B}
+\end{equation}
+<p>
+The upper-left proof obligation is used to justify the <code>per cases</code> step.
+</p>
+
+<pre class="example" id="org67c5ce3">
+&lt;proof of B&gt; ::=
+    &lt;preliminary steps&gt;
+    per cases by ...;
+    suppose A_{1};
+        &lt;proof of B from A_{1}&gt;
+    &lt;...&gt;
+    suppose A_{n};
+        &lt;proof of B from A_{n}&gt;
+</pre>
+
+<p>
+Each <code>suppose</code> block acts as if we temporarily "<code>assume</code> \(A_{i}\)"
+for the duration of the block.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4e819b4" class="outline-3">
+<h3 id="org4e819b4"><span class="section-number-3">2.5</span> <code>consider</code>, exists-elimination</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+If we have proven "\(\exists x, P[x]\)", then we may take a "witness"
+or term \(t\) which satisfies the predicate. In other words, we may
+say we may <code>consider</code> \(t\) <code>such that</code> \(P[t]\) <code>by</code> the proven claim
+we're using.
+</p>
+
+<p>
+The natural deduction inference rule corresponding to this step is
+</p>
+\begin{equation}
+\frac{\Gamma\vdash\exists x.P[x],\qquad\Gamma,x,P[x]\vdash A}{\Gamma\vdash A}
+\end{equation}
+<p>
+The top-left subgoal is the justification for the proof step.
+</p>
+
+<pre class="example" id="orgcae96c9">
+&lt;proof of A&gt; ::=
+    &lt;preliminary steps&gt;
+    consider t such that P[t] (proof ... end | by ...);
+    &lt;proof of A&gt;
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org78c9e50" class="outline-3">
+<h3 id="org78c9e50"><span class="section-number-3">2.6</span> <code>take</code>, exists-intro</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+When we want to prove a claim of the form "\(\exists x, P[x]\)", the
+first thing we do is take a term \(t\) then prove it satisfies
+\(P[t]\).
+</p>
+
+<p>
+In natural deduction, this corresponds to $&exist;$-intro:
+</p>
+\begin{equation}
+\frac{\Gamma\vdash P[a]}{\Gamma\vdash \exists x, P[x]}
+\end{equation}
+
+<pre class="example" id="orged755db">
+&lt;proof of exists x such that P[x]&gt; ::=
+    &lt;preliminary steps&gt;
+    take a;
+    &lt;proof of P[a]&gt;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2394ae6" class="outline-2">
+<h2 id="org2394ae6"><span class="section-number-2">3</span> Syntactic Sugar</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org14b996d" class="outline-3">
+<h3 id="org14b996d"><span class="section-number-3">3.1</span> <code>then</code> prefixes</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+For steps requiring justification, if we use the previous step as
+part of the justification, we can prefix the step with <code>then</code>. For
+example:
+</p>
+<pre class="example" id="org9d0d495">
+    &lt;step&gt;
+    then consider t such that P[t];
+</pre>
+<p>
+The justification for the <code>consider</code> step consists of just one
+reference, namely, the previous step.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb6affd1" class="outline-3">
+<h3 id="orgb6affd1"><span class="section-number-3">3.2</span> <code>hence</code> = <code>then thus</code></h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+There is some awkwardness to writing "Then thus". Instead, we write
+"hence". It is an abbreviation for "then thus". They are literal
+synonyms.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org01ececa" class="outline-3">
+<h3 id="org01ececa"><span class="section-number-3">3.3</span> <code>given = assume + then consider</code></h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+We also routinely write steps of the form
+</p>
+
+<pre class="example" id="org6af5b7e">
+    assume exists x such that [x];
+    then consider t such that P[t];
+</pre>
+
+<p>
+This is rather wordy. We contract the two steps into one:
+</p>
+
+<pre class="example" id="orgb6b7c62">
+    given t such that P[t];
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org67233bc" class="outline-3">
+<h3 id="org67233bc"><span class="section-number-3">3.4</span> <code>set</code></h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+When we've already introduced an identifier (a symbol used for a
+term or variable) in a proof, but we want to re-use somewhere later
+in the proof, we can flag this to the reader by writing:
+</p>
+
+<pre class="example" id="org3d152e6">
+"set" variable "=" term ";"
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org1452a2f" class="outline-3">
+<h3 id="org1452a2f"><span class="section-number-3">3.5</span> <code>thesis</code> keyword</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+When we start a <code>proof</code> environment, the initial goal we're trying
+to prove is stored in the <code>thesis</code> reserved keyword. In Mizar, it
+has become idiomatic to conclude a proof by writing <code>thus thesis</code>
+or <code>hence thesis</code>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0fbe3c5" class="outline-2">
+<h2 id="org0fbe3c5"><span class="section-number-2">4</span> Conventions</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgf2261be" class="outline-3">
+<h3 id="orgf2261be"><span class="section-number-3">4.1</span> Proving \(A \iff B\)</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+One of the conventions I've adopted is to use the proof skeleton:
+</p>
+
+<pre class="example" id="orgb0df70e">
+&lt;proof of A iff B&gt; ::=
+    &lt;preliminary steps&gt;
+    thus A implies B
+    proof
+        assume A;
+        &lt;proof of B&gt;
+    end
+    thus B implies A
+    proof
+        assume B;
+        &lt;proof of A&gt;
+    end
+    hence A iff B;
+</pre>
+
+<p>
+This is technically incorrect, it's certainly invalid Mizar. One
+step towards writing correct Mizar would be to instead use
+something of the form:
+</p>
+
+<pre class="example" id="org8a6e61b">
+&lt;proof of A iff B&gt; ::=
+    &lt;preliminary steps&gt;
+    thus (1) A implies B
+    proof
+        assume A;
+        &lt;proof of B&gt;
+    end;
+    thus (2) B implies A
+    proof
+        assume B;
+        &lt;proof of A&gt;
+    end;
+    thus A iff B by (1), (2);
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org006e029" class="outline-2">
+<h2 id="org006e029"><span class="section-number-2">5</span> References</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Most of this comes from Freek Wiedijk's work and Mizar.
+</p>
+
+<ul class="org-ul">
+<li>Freek Wiedijk,
+"Mathematical Vernacular".
+Unpublished manuscript, undated, <a href="https://www.cs.ru.nl/~freek/notes/mv.pdf">PDF</a></li>
+<li>Freek Wiedijk,
+"Formal Proof Sketches".
+In S. Berardi, M. Coppo, F. Damiani (eds),
+<cite class="book-title">Types for Proofs and Programs: Third International Workshop</cite>
+Torino, Italy, Springer LNCS 3085, 378&#x2013;393, 2004.
+See especially section 3. <a href="https://www.cs.ru.nl/F.Wiedijk/pubs/sketches2.pdf">PDF</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-03-18 Thu 16:21.</p>
+</div>
+</body>
+</html>

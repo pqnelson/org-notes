@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Landau Notation</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Landau Notation</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org41148e8">1. Squiggle</a></li>
+<li><a href="#org839a944">2. Big Oh</a>
+<ul>
+<li><a href="#org8616f5a">2.1. Arithmetic</a></li>
+<li><a href="#orge97e7a4">2.2. Notation</a></li>
+</ul>
+</li>
+<li><a href="#orgf09d6bf">3. Little Oh</a>
+<ul>
+<li><a href="#org278ea67">3.1. Arithmetic</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org41148e8" class="outline-2">
+<h2 id="org41148e8"><span class="section-number-2">1</span> Squiggle</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+We write \(f(x)\sim g(x)\) as \(x\to x_{0}\) &#x2014; usually with \(f\) being some
+complicated mess, and \(g\) something simple like a monomial &#x2014; if
+</p>
+
+\begin{equation}
+\lim_{x\to x_{0}}\frac{f(x)}{g(x)} = 1.
+\end{equation}
+
+<p>
+We say \(f(x)\) and \(g(x)\) are <dfn>Asymptotically Equivalent</dfn> as
+\(x\to x_{0}\) if \(f(x)\sim g(x)\).
+</p>
+
+<div class="math-example" id="orgda9cdd3">
+<p>
+We could use a truncated Taylor polynomial about \(x_{0}\) of \(f(x)\) to
+get a \(g(x)\) such that \(f(x)\sim g(x)\) as \(x\to x_{0}\), since
+\(g(x)\to f(x_{0})\) in that limit by construction.
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-org839a944" class="outline-2">
+<h2 id="org839a944"><span class="section-number-2">2</span> Big Oh</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We write
+</p>
+
+\begin{equation}
+f(x) = \mathcal{O}(g(x))\quad\mbox{as}\quad x\to x_{0}
+\end{equation}
+
+<p>
+if the ratio \(f(x)/g(x)\) is bounded as \(x\to x_{0}\); i.e.,
+there is some positive numbers \(\delta\gt0\) and \(M\gt0\) such that for
+any \(x\)
+</p>
+
+\begin{equation}
+|x-x_{0}|\lt\delta\implies |f(x)|\leq Mg(x).
+\end{equation}
+
+<p>
+Alternatively, we could consider the condition
+</p>
+
+\begin{equation}
+\limsup_{x\to a} \frac{\left|f(x)\right|}{g(x)}\lt\infty.
+\end{equation}
+</div>
+
+<div id="outline-container-org8616f5a" class="outline-3">
+<h3 id="org8616f5a"><span class="section-number-3">2.1</span> Arithmetic</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="theorem" id="orgefb3a72">
+<p>
+If \(f_{1}=\mathcal{O}(g_{1})\) and \(f_{2}=\mathcal{O}(g_{2})\), then
+\(f_{1}f_{2}=\mathcal{O}(g_{1}g_{2})\).
+</p>
+
+</div>
+
+<div class="theorem" id="org059751f">
+<p>
+If \(k\) is a nonzero constant, and if \(f=\mathcal{O}(g)\), then
+\(kf=\mathcal{O}(g)\). Further, \(\mathcal{O}(|k|g)=\mathcal{O}(g)\).
+</p>
+
+</div>
+
+<div class="theorem" id="org36474bd">
+<p>
+If \(f_{1}=\mathcal{O}(g_{1})\) and \(f_{2}=\mathcal{O}(g_{2})\), then
+\(f_{1}+f_{2}=\mathcal{O}(\max(g_{1},g_{2}))\).
+</p>
+
+</div>
+
+<div class="corollary" id="org155e74a">
+<p>
+The set of \(\mathcal{O}(g)\) functions form a convex cone.
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge97e7a4" class="outline-3">
+<h3 id="orge97e7a4"><span class="section-number-3">2.2</span> Notation</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+We often write things like
+</p>
+
+\begin{equation}
+f(x) = g(x) + \mathcal{O}(h(x))
+\end{equation}
+
+<p>
+to mean the same thing as
+</p>
+
+\begin{equation}
+f(x)-g(x) = \mathcal{O}(h(x)).
+\end{equation}
+
+<p>
+It's not uncommon to do mathematics with big-O terms when doing
+asymptotic analysis.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf09d6bf" class="outline-2">
+<h2 id="orgf09d6bf"><span class="section-number-2">3</span> Little Oh</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+The intuition for \(f(x) = \mathcal{o}(g(x))\) as \(x\to x_{0}\) is "\(g(x)\)
+grows much faster than \(f(x)\)". Formally, it is
+</p>
+
+\begin{equation}
+\lim_{x\to x_{0}}\frac{f(x)}{g(x)} = 0.
+\end{equation}
+
+<p>
+We also write \(f(x)\ll g(x)\) as \(x\to x_{0}\) to indicate the same thing.
+</p>
+
+<div class="math-example" id="orgf8df39f">
+<p>
+We see \(\sin(x)\ll 1\) and \(\sin(x)\sim x\) as \(x\to 0\).
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-org278ea67" class="outline-3">
+<h3 id="org278ea67"><span class="section-number-3">3.1</span> Arithmetic</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="theorem" id="org0c32ffa">
+<p>
+If \(k\) is a nonzero constant, and if \(f=\mathcal{o}(g)\), then \(cf = \mathcal{o}(g)\).
+</p>
+
+</div>
+
+<div class="theorem" id="orgadbb8e2">
+<p>
+If \(f=\mathcal{o}(F)\) and if \(g=\mathcal{o}(G)\), then \(fg=\mathcal{o}(FG)\).
+</p>
+
+</div>
+
+<div class="theorem" id="org2416393">
+<p>
+If \(f=\mathcal{o}(g)\) and if \(g=\mathcal{o}(h)\), then \(f=\mathcal{o}(h)\).
+</p>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-03-07 Sun 12:03.</p>
+</div>
+</body>
+</html>

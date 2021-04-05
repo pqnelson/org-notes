@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toy LispKit Compiler</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Toy LispKit Compiler</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org234a062">1. Introduction</a></li>
+<li><a href="#orgaa7e39d">2. Lisp Primitives</a></li>
+<li><a href="#org8eb9b16">3. Compiling to SECD</a>
+<ul>
+<li><a href="#orge7a5bba">3.1. Helper Functions</a></li>
+<li><a href="#org0c99eb0">3.2. Compile SExpression</a>
+<ul>
+<li><a href="#orgd6dd82c">3.2.1. Compiling Let-expressions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org0a7a703">4. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org234a062" class="outline-2">
+<h2 id="org234a062"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Following Peter Henderson's book, I'm going to investigate implementing
+a toy compiler for a simple Lisp targeting the <a href="../abstract-machines/secd.html">SECD machine</a>.
+For completeness, I will try to write down the language for the Lisp
+fragment, then I will write the compiler for the Lisp fragment.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaa7e39d" class="outline-2">
+<h2 id="orgaa7e39d"><span class="section-number-2">2</span> Lisp Primitives</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+The language will provide the following primitives:
+</p>
+
+<ul class="org-ul">
+<li><code>(ADD p q)</code> gives us <code>p+q</code></li>
+<li><code>(SUB p q)</code> gives us <code>p-q</code></li>
+<li><code>(MUL p q)</code> gives us <code>p*q</code></li>
+<li><code>(DIV p q)</code> gives us <code>p/q</code></li>
+<li><code>(EXP p q)</code> gives us <code>p**q</code> (or <code>p^q</code>, depending on your notational
+preferences)</li>
+<li><code>(rem p q)</code> is the remainder of <code>p</code> divided by <code>q</code></li>
+<li><code>(leq p q)</code> is <code>T</code> if <code>p</code> is less than or equal to <code>q</code>, <code>F</code> otherwise</li>
+<li><code>(atom &lt;exp&gt;)</code> is <code>T</code> if the value of <code>&lt;exp&gt;</code> is an atom (number or
+symbol) and <code>F</code> otherwise</li>
+<li><code>(if &lt;test&gt; &lt;exp1&gt; &lt;exp2&gt;)</code> evaluates <code>&lt;test&gt;</code> and if it evaluates to
+<code>T</code>, then it returns <code>&lt;exp1&gt;</code>; otherwise, it returns <code>&lt;exp2&gt;</code>.</li>
+<li><code>(cons &lt;exp1&gt; &lt;exp2&gt;)</code> forms the list whose car is <code>&lt;exp1&gt;</code> and cdr is <code>&lt;exp2&gt;</code></li>
+<li><code>(quote &lt;exp&gt;)</code></li>
+<li><code>(eq &lt;exp1&gt; &lt;exp2&gt;)</code> returns <code>T</code> provided both are atoms and both are
+the same number (or both are the same symbol)</li>
+<li><code>(head &lt;exp&gt;)</code> returns the car of a list</li>
+<li><code>(tail &lt;exp&gt;)</code> returns the cdr of a list</li>
+<li><code>(let &lt;exp&gt; . &lt;declarations&gt;)</code> is more commonly swapped, the
+declarations are of the form <code>(&lt;name&gt; . &lt;exp&gt;)</code></li>
+<li><code>(lambda &lt;arg list&gt; &lt;exp&gt;)</code> where <code>&lt;arg list&gt;</code> is a list of names</li>
+<li><code>(&lt;exp&gt; &lt;exp1&gt; &lt;exp2&gt; ...)</code> is function application</li>
+<li><code>(letrec &lt;exp&gt; . &lt;declarations&gt;)</code> permits declarations recursively</li>
+<li><code>(chr &lt;exp&gt;)</code> is the ASCII character with codepoint given by the
+numeric value of <code>&lt;exp&gt;</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org8eb9b16" class="outline-2">
+<h2 id="org8eb9b16"><span class="section-number-2">3</span> Compiling to SECD</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Let's now examine how to compile Lisp expressions to SECD code. This
+summarizes section 6.3 in Henderson's <cite class="book-title">Functional Programming</cite>.
+We basically want to examine how a function <code>compile(exp, namelist)</code>
+is inductively defined.
+</p>
+</div>
+
+<div id="outline-container-orge7a5bba" class="outline-3">
+<h3 id="orge7a5bba"><span class="section-number-3">3.1</span> Helper Functions</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+We need some helper functions first to make sense of the namelist data
+structure.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-type">int</span> <span class="org-function-name">position</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">x</span>, <span class="org-type">List</span> *<span class="org-variable-name">a</span>) {
+    <span class="org-keyword">if</span> (eq(x, car(a))) {
+        <span class="org-keyword">return</span> 0;
+    } <span class="org-keyword">else</span> {
+        1+position(x,cdr(a));
+    }
+}
+<span class="org-type">bool</span> <span class="org-function-name">member</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">x</span>, <span class="org-type">List</span> *<span class="org-variable-name">l</span>) {
+    <span class="org-keyword">if</span> (eq(l, NIL)) {
+        <span class="org-keyword">return</span> <span class="org-constant">false</span>;
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (eq(x, car(l))) {
+        <span class="org-keyword">return</span> <span class="org-constant">true</span>;
+    } <span class="org-keyword">else</span> {
+        <span class="org-keyword">return</span> member(x, cdr(l));
+    }
+}
+</pre>
+</div>
+
+<p>
+The location of a symbol in a namelist can now be given, which will
+return the pair <code>(p . q)</code> encoding its position.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-type">List</span>* <span class="org-function-name">location</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">x</span>, <span class="org-type">List</span> *<span class="org-variable-name">namelist</span>) {
+    <span class="org-keyword">if</span> (member(x, car(namelist))) {
+        <span class="org-keyword">return</span> new_list(0, position(x, car(namelist)));
+    } <span class="org-keyword">else</span> {
+        <span class="org-type">List</span> *<span class="org-variable-name">z</span> = location(x, cdr(namelist));
+        z-&gt;car++;
+        <span class="org-keyword">return</span> z;
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0c99eb0" class="outline-3">
+<h3 id="org0c99eb0"><span class="section-number-3">3.2</span> Compile SExpression</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+To compile an S-Expression to SECD code, we have:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-type">SecdBytecode</span>* <span class="org-function-name">compile</span>(<span class="org-type">SExp</span> *<span class="org-variable-name">expr</span>) {
+    <span class="org-keyword">return</span> comp(e, NIL, cons(SECD_APPLY, cons(SECD_STOP, NIL)));
+}
+</pre>
+</div>
+
+<p>
+Now we compile an expression <code>e</code> against a namelist <code>n</code> and list of SECD
+bytecode <code>c</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-type">List</span>* <span class="org-function-name">comp</span>(<span class="org-type">SExp</span> *<span class="org-variable-name">e</span>, <span class="org-type">SExp</span> *<span class="org-variable-name">n</span>, <span class="org-type">SExp</span> *<span class="org-variable-name">c</span>) {
+    <span class="org-keyword">if</span> (is_atom(e)) {
+        <span class="org-keyword">return</span> cons(SECD_LD, cons(location(e, n), c));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_quote(car(e))) {
+        <span class="org-keyword">return</span> cons(SECD_LDC, cons(cadr(e), c));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_eq(car(e))) {
+        <span class="org-keyword">return</span> comp(cadr(e), n, comp(caddr(e), n, cons(SECD_EQ, c)));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_add(car(e))) {
+        <span class="org-keyword">return</span> comp(cadr(e), n, comp(caddr(e), n, cons(SECD_ADD, c)));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_sub(car(e))) {
+        <span class="org-keyword">return</span> comp(cadr(e), n, comp(caddr(e), n, cons(SECD_SUB, c)));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_mul(car(e))) {
+        <span class="org-keyword">return</span> comp(cadr(e), n, comp(caddr(e), n, cons(SECD_MUL, c)));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_div(car(e))) {
+        <span class="org-keyword">return</span> comp(cadr(e), n, comp(caddr(e), n, cons(SECD_DIV, c)));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_rem(car(e))) {
+        <span class="org-keyword">return</span> comp(cadr(e), n, comp(caddr(e), n, cons(SECD_REM, c)));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_leq(car(e))) {
+        <span class="org-keyword">return</span> comp(cadr(e), n, comp(caddr(e), n, cons(SECD_LEQ, c)));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_car(car(e))) {
+        <span class="org-keyword">return</span> comp(cadr(e), n, cons(SECD_CAR, c));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_cdr(car(e))) {
+        <span class="org-keyword">return</span> comp(cadr(e), n, cons(SECD_CDR, c));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (eq(car(e)), ATOM) {
+        <span class="org-keyword">return</span> comp(cadr(e), n, cons(SECD_ATOM, c));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_cons(car(e))) {
+        <span class="org-keyword">return</span> comp(caddr(e), n, comp(cadr(e), n, cons(SECD_CONS, c)));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_if(car(e))) {
+        <span class="org-type">SExp</span> *<span class="org-variable-name">then_clause</span> = comp(caddr(e), n, cons(SECD_JOIN, NIL));
+        <span class="org-type">SExp</span> *<span class="org-variable-name">else_clause</span> = comp(cadddr(e), n, cons(SECD_JOIN, NIL));
+        <span class="org-keyword">return</span> comp(cadr(e), n, cons(SECD_SEL, cons(then_clause, cons(else_clause, c))));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_lambda(car(e))) {
+        <span class="org-type">SExp</span> *<span class="org-variable-name">body</span> = comp(caddr(e), cons(cadr(e), n), cons(SECD_RTN, NIL));
+        <span class="org-keyword">return</span> cons(SECD_LDF, cons(body, c));
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_let(car(e))) {
+        <span class="org-comment-delimiter">// </span><span class="org-comment">supposed to be: bindings = cddr(e);</span>
+        <span class="org-comment-delimiter">// </span><span class="org-comment">SExp *namelist = cons(vars(cadr(e)), n);</span>
+        <span class="org-comment-delimiter">// </span><span class="org-comment">SExp *ags = exprs(cadr(e));</span>
+        <span class="org-comment-delimiter">// </span><span class="org-comment">SExp *body = compile_list(cddr(e), namelist, cons(SECD_RTN, NIL));</span>
+        <span class="org-keyword">return</span> compile_let(e, n, c);
+    } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_letrec(car(e))) {
+        <span class="org-keyword">return</span> compile_letrec(e, n, c);
+    }
+}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgd6dd82c" class="outline-4">
+<h4 id="orgd6dd82c"><span class="section-number-4">3.2.1</span> Compiling Let-expressions</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+When compiling <code>(let ((x1 e1) ... (x-n e-n)) body)</code>, we rewrite this as
+<code>((lambda (x1 ... x-n) body) e1 ... e-n)</code>.
+</p>
+
+<p>
+We have the ancillary functions when compiling <code>(let ...)</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-type">SExp</span>* <span class="org-function-name">vars</span>(<span class="org-type">SExp</span> *<span class="org-variable-name">d</span>) {
+    <span class="org-keyword">if</span> (eq(d, NIL)) {
+        <span class="org-keyword">return</span> NIL;
+    } <span class="org-keyword">else</span> {
+        <span class="org-keyword">return</span> cons(caar(d), vars(cdr(d)));
+    }
+}
+
+<span class="org-type">SExp</span>* <span class="org-function-name">exprs</span>(<span class="org-type">SExp</span> *<span class="org-variable-name">d</span>) {
+    <span class="org-keyword">if</span> (eq(d, NIL)) {
+        <span class="org-keyword">return</span> NIL;
+    } <span class="org-keyword">else</span> {
+        <span class="org-keyword">return</span> cons(cdar(d), exprs(cdr(d)));
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0a7a703" class="outline-2">
+<h2 id="org0a7a703"><span class="section-number-2">4</span> References</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>P. Henderson,
+<cite class="book-title">Functional Programming: Application and Implementation</cite>.
+Prentice-Hall, 1980.</li>
+<li><a href="http://www.lispme.de/lispme/index_en.html">LispMe</a> is a simple Scheme-to-SECD compiler written in C, designed for
+PalmPilot.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-02-14 Sun 12:38.</p>
+</div>
+</body>
+</html>

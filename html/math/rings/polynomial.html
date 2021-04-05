@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:12 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ring of Formal Polynomials</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Ring of Formal Polynomials</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org51b4909">1. Introduction</a></li>
+<li><a href="#orge843720">2. Polynomial Methods</a>
+<ul>
+<li><a href="#org10aed12">2.1. Long Division</a></li>
+<li><a href="#orgdd998aa">2.2. Pseudo-Division</a></li>
+<li><a href="#org31c0f72">2.3. Euclidean Algorithm</a>
+<ul>
+<li><a href="#org83c716f">2.3.1. Extended Euclidean Algorithm</a></li>
+<li><a href="#org3a21ffb">2.3.2. Half-Extended Euclidean</a></li>
+<li><a href="#org296da51">2.3.3. Euclidean Algorithm</a></li>
+<li><a href="#orgf2429e3">2.3.4. Diophantine version of Extended Euclidean</a></li>
+<li><a href="#orgc31a352">2.3.5. Diophantine Half-Extended Euclidean</a></li>
+<li><a href="#org7ba0e72">2.3.6. Partial Fraction Decomposition</a></li>
+<li><a href="#orgd9873ee">2.3.7. Partial Fraction Decomposition with Multiplicity</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgaa2c445">3. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org51b4909" class="outline-2">
+<h2 id="org51b4909"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This is just a review of the theory of formal polynomials over a
+(commutative) ring. These are written with symbolic computation in mind,
+so some code is given.
+</p>
+
+<p>
+If I were more diligent, I would <i>prove</i> the code implements the various
+things (e.g., the <code>gcd</code> function really does return the greatest common
+divisor of two polynomials).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge843720" class="outline-2">
+<h2 id="orge843720"><span class="section-number-2">2</span> Polynomial Methods</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Given some representation of polynomials in a single variable, we review
+a few helper functions that come in handy.
+</p>
+
+<div class="theorem" id="org310df7d">
+<p>
+If \(R\) is a principal ideal domain,
+then \((x,y) = (\gcd(x,y))\) for any \(x,y\in R\).
+</p>
+
+</div>
+
+<div class="definition" id="org2b812ca">
+<p>
+A <dfn>Euclidean Domain</dfn> consists of an <a href="integral-domain.html">integral domain</a> \((R, +, \cdot)\)
+equipped with a map \(\nu\colon R\setminus\{0\}\to\mathbb{N}\) called the
+<dfn>Size function</dfn> such that
+</p>
+
+<ol class="org-ol">
+<li>For all \(a,b\in R\setminus\{0\}\), we have \(\nu(ab)\geq\nu(a)\).</li>
+<li>(Euclidean division) For any \(a,b\in R\) with \(b\neq0\) nonzero, there
+are \(q,r\in R\) such that \(a=bq+r\) and either \(r=0\) or \(\nu(r)\lt\nu(b)\).</li>
+</ol>
+
+</div>
+
+<div class="puzzle" id="org5f4887a">
+<p>
+Is there anything lost by extending the size function to be over, say,
+the integers \(\nu\colon R\setminus\{0\}\to\mathbb{Z}\)? Or the reals
+\(\nu\colon R\setminus\{0\}\to\mathbb{R}\)?
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-org10aed12" class="outline-3">
+<h3 id="org10aed12"><span class="section-number-3">2.1</span> Long Division</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+We can use a naive long division algorithm.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+(<span class="org-keyword">defun</span> <span class="org-function-name">divide</span> (a b <span class="org-type">&amp;aux</span> q r s)
+  <span class="org-doc">"When A and B are polynomials over a field, division uses this method."</span>
+  (<span class="org-keyword">declare</span> (type polynomial a b))
+  (<span class="org-warning">assert</span> (not (zero? b)))
+  (setf q (zero-polynomial))
+  (setf r a)
+  (<span class="org-keyword">loop</span> while (and (not (zero? r))
+                   (&gt;= (degree r) (degree b)))
+        do (<span class="org-keyword">progn</span>
+             (setf s (* (/ (leading-coef r)
+                           (leading-coef b))
+                        (expt 'x (- (degree r) (degree b)))))
+             (setf q (+ q s))
+             (setf r (- r (* b s)))))
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(assert (equal? a (+ (* q b) r)))</span>
+  (values q r))
+</pre>
+</div>
+
+<p>
+Arguably we could implement the quotient and remainder methods using
+this.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+
+(<span class="org-keyword">defmethod</span> <span class="org-function-name">quotient</span> ((a polynomial) (b polynomial))
+  (multiple-values-bind (q r) (divide a b)
+                        q))
+
+(<span class="org-keyword">defmethod</span> <span class="org-function-name">rem</span> ((a polynomial) (b polynomial))
+  (multiple-values-bind (q r) (divide a b)
+                        r))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdd998aa" class="outline-3">
+<h3 id="orgdd998aa"><span class="section-number-3">2.2</span> Pseudo-Division</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+When working over an integral domain \(D\), we can't necessarily compute
+the quotient and remainder of polynomials. But we can compute the <i>pseudo-quotient</i>
+and <i>pseudo-remainder</i> (really, they're more like <i>quasi-quotient</i> and
+<i>quasi-remainder</i>, since "pseudo" implies fraudulent, whereas "quasi"
+implies "they share similar properties").
+</p>
+
+<p>
+The pseudo-quotient is denoted \(\mathrm{pquo}(A,B)\) and pseudo-remainder
+denoted \(\mathrm{prem}(A,B)\) by Bronstein.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+(<span class="org-keyword">defun</span> <span class="org-function-name">pseudo-divide</span> (a b <span class="org-type">&amp;aux</span> c n q r s)
+  (<span class="org-keyword">declare</span> (type polynomial a b))
+  (<span class="org-warning">assert</span> (not (zero? b)))
+  (setf c (leading-coef b))
+  (setf n (1+ (- (degree a) (degree b))))
+  (setf q 0)
+  (setf r a)
+  (<span class="org-keyword">loop</span> while (and (not (zero? r))
+                   (&gt;= (- (degree r) (degree b)) 0))
+        do (<span class="org-keyword">progn</span>
+             (setf s (* (leading-coef r)
+                        (expt 'x (- (degree r) (degree b)))))
+             (decf n)
+             (setf q (+ s (* c q)))
+             (setf r (- (* c r) (* s b)))))
+  (<span class="org-keyword">let</span> ((factor (expt c n)))
+    (values (* factor q) (* factor r))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org31c0f72" class="outline-3">
+<h3 id="org31c0f72"><span class="section-number-3">2.3</span> Euclidean Algorithm</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+There are several variations of Euclid's algorithm for GCD with polynomials.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+(<span class="org-keyword">defun</span> <span class="org-function-name">euclid</span> (a b <span class="org-type">&amp;key</span> (divide #'poly-divide) <span class="org-type">&amp;aux</span> x y)
+  (<span class="org-keyword">declare</span> (type polynomial a b))
+  (setf x a)
+  (setf y b)
+  (<span class="org-keyword">loop</span> while (not (zero? y))
+        do (multiple-values-bind (q r)
+                                 (funcall #'divide x y)
+                                 (setf x y)
+                                 (setf y r)))
+  x)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org83c716f" class="outline-4">
+<h4 id="org83c716f"><span class="section-number-4">2.3.1</span> Extended Euclidean Algorithm</h4>
+<div class="outline-text-4" id="text-2-3-1">
+<p>
+The "follow your nose" implementation of the extended Euclidean
+algorithm could be implemented quite quickly.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+(<span class="org-keyword">defun</span> <span class="org-function-name">naive-extended-euclid</span> (a b <span class="org-type">&amp;key</span> (divide #'poly-divide) <span class="org-type">&amp;aux</span> r1 r2)
+  (<span class="org-keyword">declare</span> (type polynomial a b))
+  (<span class="org-keyword">let</span> ((a0 a)
+        (a1 1)
+        (a2 0)
+        (b0 b)
+        (b1 0)
+        (b2 1))
+    (<span class="org-keyword">loop</span> while (not (zero? b0))
+          do (multiple-values-bind (q r) (funcall #'divide a0 b0)
+                                   <span class="org-comment-delimiter">;; </span><span class="org-comment">(= a0 (+ r (* b0 q)))</span>
+                                   (setf a0 b0)
+                                   (setf b0 r)
+                                   (setf r1 (- a1 (* q b1)))
+                                   (setf r2 (- a2 (* q b2)))
+                                   (setf a1 b1)
+                                   (setf a2 b2)
+                                   (setf b1 r1)
+                                   (setf b2 r2)))
+    <span class="org-comment-delimiter">;; </span><span class="org-comment">(assert (equal? (+ (* a1 a) (* a2 b)) a0))</span>
+    (values a1 a2 a)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3a21ffb" class="outline-4">
+<h4 id="org3a21ffb"><span class="section-number-4">2.3.2</span> Half-Extended Euclidean</h4>
+<div class="outline-text-4" id="text-2-3-2">
+<p>
+Alas, if we need only one of the coefficients <code>s</code> or <code>t</code>, we can use a
+variant of the Euclidean algorithm which Bronstein calls the
+"half-extended Euclidean algorithm" (over some Euclidean domain <code>D</code>):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+(<span class="org-keyword">defun</span> <span class="org-function-name">half-extended-euclid</span> (a b <span class="org-type">&amp;key</span> (divide #'poly-divide) <span class="org-type">&amp;aux</span> r1)
+  (<span class="org-keyword">let</span> ((a0 a)
+        (a1 1)
+        (b0 b)
+        (b1 0))
+    (<span class="org-keyword">loop</span> while (not (zero? b0))
+          do (multiple-values-bind (q r) (funcall #'divide a0 b0)
+                                   <span class="org-comment-delimiter">;; </span><span class="org-comment">(= a0 (+ r (* b0 q)))</span>
+                                   (setf a0 b0)
+                                   (setf b0 r)
+                                   (setf r1 (- a1 (* q b1)))
+                                   (setf a1 b1)
+                                   (setf b1 r1)))
+    (values a1 a)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org296da51" class="outline-4">
+<h4 id="org296da51"><span class="section-number-4">2.3.3</span> Euclidean Algorithm</h4>
+<div class="outline-text-4" id="text-2-3-3">
+<p>
+We can use this half-extended Euclidean algorithm for a more efficient
+implementation of Euclid's algorithm.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+(<span class="org-keyword">defun</span> <span class="org-function-name">extended-euclid</span> (a b <span class="org-type">&amp;key</span> (divide #'poly-divide) <span class="org-type">&amp;aux</span> u v)
+  (<span class="org-keyword">declare</span> (type polynomial a b))
+  (multiple-values-bind (s g) (half-extended-euclid a b <span class="org-builtin">:divide</span> #'divide)
+                        (values s (funcall #'divide (- g (* s a)) b) g)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf2429e3" class="outline-4">
+<h4 id="orgf2429e3"><span class="section-number-4">2.3.4</span> Diophantine version of Extended Euclidean</h4>
+<div class="outline-text-4" id="text-2-3-4">
+<p>
+We can use the extended Euclidean algorithm to solve Diophantine
+equations of the form \(sa+tb=c\) where \(a,b,c\in D\) are given and \(s,t\in D\)
+are the unknowns.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">diophantine-naive-extended-euclid</span> (a b c)
+  (multiple-values-bind
+   (s u g) (extended-euclid a b)
+   (multiple-values-bind (q r) (poly-divide c g)
+                         (<span class="org-keyword">unless</span> (zero? r)
+                           (<span class="org-warning">error</span> <span class="org-string">"~A is not generated in the ideal by ~A and ~A"</span>
+                                  c a b))
+                         (setf s (* q s))
+                         (setf u (* q u)))
+   (<span class="org-keyword">when</span> (and (not (zero? s))
+              (&gt;= (degree s) (degree b)))
+     (multiple-values-bind
+      (q r) (poly-divide s b)
+      (setf s r)
+      (setf u (+ u (* q a)))))
+   (values s u))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc31a352" class="outline-4">
+<h4 id="orgc31a352"><span class="section-number-4">2.3.5</span> Diophantine Half-Extended Euclidean</h4>
+<div class="outline-text-4" id="text-2-3-5">
+<p>
+When we only want the <code>s</code> in the Euclidean domain such that <code>s*a = c</code>
+modulo <code>b</code> and either <code>s = 0</code> or <code>nu(s) &lt; nu(b)</code>. The other solution is
+obtained by
+</p>
+
+\begin{equation}
+t = \frac{c - sa}{b}
+\end{equation}
+
+<p>
+where the division is always exact.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">diophantine-half-extended-euclidean</span> (a b c)
+  (multiple-values-bind
+   (s g) (half-extended-euclidean a b)
+   (multiple-values-bind
+    (q r) (poly-divide c g)
+    (<span class="org-keyword">unless</span> (zero? r)
+      (<span class="org-warning">error</span> <span class="org-string">"~A is not the ideal generated by ~A and ~A"</span>
+             c a b))
+    (setf s (* q s)))
+   (<span class="org-keyword">when</span> (and (not (zero? s))
+              (&gt;= (degree s) (degree b)))
+     (multiple-values-bind
+      (q r) (poly-divide s b)
+      <span class="org-comment-delimiter">;; </span><span class="org-comment">(assert (equal? s (+ r (* b q))))</span>
+      (setf s r)))
+   s)
+</pre>
+</div>
+
+<p>
+This gives us a more efficient diophantine extended Euclidean method
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">diophantine-extended-euclidean</span> (a b c)
+  (<span class="org-keyword">let</span> ((s (diophantine-half-extended-euclidean a b c)))
+    (multiple-values-bind
+     (q r) (poly-divide (- c (* s a)) b))
+    (values s q)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7ba0e72" class="outline-4">
+<h4 id="org7ba0e72"><span class="section-number-4">2.3.6</span> Partial Fraction Decomposition</h4>
+<div class="outline-text-4" id="text-2-3-6">
+<p>
+We can use Euclidean Algorithm to determine the partial fraction
+decomposition of a ratio of polynomials. For \(a/d\) we consider the
+factorization \(d = d_{1}\dots d_{n}\) into distinct coprime (not necessarily
+irreducible) factors \(\gcd(d_{i},d_{j})=1\) for \(i\neq j\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">distinct-partial-fraction</span> (a <span class="org-type">&amp;rest</span> denom-factors)
+  <span class="org-doc">"Returns a list of a constant term followed by numerators for</span>
+<span class="org-doc">the corresponding denominator factors."</span>
+  (<span class="org-keyword">if</span> (null denom-factors)
+      a
+      (multiple-values-bind
+       (a0 r) (poly-divide a (apply #'* denom-factors))
+       (<span class="org-keyword">when</span> (singleton? denom-factors) <span class="org-comment">; n = 1</span>
+         (<span class="org-keyword">return-from</span> distinct-partial-fraction (cons a0 r)))
+       (multiple-values-bind            <span class="org-comment">; n &gt; 1</span>
+        (a1 s) (extended-euclidean (apply #'* (cdr denom-factors)) r)
+        (<span class="org-warning">assert</span> (&lt; (degree a1) (degree (car denom-factors))))
+        (<span class="org-keyword">let</span> ((numerators (apply #'distinct-partial-fraction s (cdr denom-factors))))
+          (cons (+ a0 (car numerators))
+                (cons a1 (cdr numerators))))))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd9873ee" class="outline-4">
+<h4 id="orgd9873ee"><span class="section-number-4">2.3.7</span> Partial Fraction Decomposition with Multiplicity</h4>
+<div class="outline-text-4" id="text-2-3-7">
+<p>
+We explicitly assumed each factor \(d_{i}\) was coprime with each other.
+But what happens if \(d\) has a square factor \(d_{i}^{2}\)? Or more
+generally a factor \(d_{j}^{e_{j}}\) with nonzero \(e_{j}\in\mathbb{N}\)?
+How do we do a partial fraction decomposition in this case?
+</p>
+
+<p>
+The idea is to use the so-called <dfn>d-adic expansion</dfn> of \(a/d^{m}\),
+writing \(a=dq+a_{m}\) by Euclidean division (where either \(a_{m}=0\) or \(\nu(a_{m})\lt\nu(d)\)).
+Then
+</p>
+
+\begin{equation}
+\frac{a}{d^{m}}
+= \frac{dq + a_{m}}{d^{m}}
+= \frac{q}{d^{m-1}} + \frac{a_{m}}{d^{m}}.
+\end{equation}
+
+<p>
+If \(m=1\), we're done. Otherwise, we recursively find \(a_{0}\), \(a_{1}\),
+&#x2026;, \(a_{m-1}\in D\) such that either \(a_{j}=0\) or \(\nu(a_{j})\lt\nu(d)\)
+for \(j\geq1\), and
+</p>
+
+\begin{equation}
+\frac{q}{d^{m-1}} = a_{0} + \sum^{m-1}_{j=1}\frac{a_{j}}{d^{j}}.
+\end{equation}
+
+<p>
+Thus
+</p>
+
+\begin{equation}
+\frac{a}{d^{m}} = \frac{q}{d^{m-1}} + \frac{a_{m}}{d^{m}} = a_{0} + \sum^{m}_{j=1}\frac{a_{j}}{d^{j}}.
+\end{equation}
+
+<p>
+Now if we have a factorization of \(d=d_{1}^{e_{1}}d_{2}^{e_{2}}\dots d_{n}^{e_{n}}\)
+(not necessarily into irreducibles) where \(\gcd(d_{i},d_{j})=1\) for any
+\(i\neq j\) and the \(e_{i}\in\mathbb{N}\). What to do? We take \(b_{i} = d_{i}^{e_{i}}\) for
+each \(i\), we use the partial fraction decomposition from the previous
+section
+</p>
+
+\begin{equation}
+\frac{a}{d} = a_{0} + \sum^{n}_{j=1}\frac{a_{j}}{b_{j}}
+= a_{0} + \sum^{n}_{j=1}\frac{a_{j}}{d_{j}^{e_{j}}}.
+\end{equation}
+
+<p>
+And we use the \(d_{j}\)-adic expansion of each summand to get
+</p>
+
+\begin{equation}
+\frac{a}{d}
+= \widetilde{a} + \sum^{n}_{i=1}\sum^{e_{i}}_{j=1}\frac{a_{ij}}{d_{i}^{j}}.
+\end{equation}
+
+<p>
+This is the complete partial fraction decomposition of \(a/d\) with
+respect to the factorization \(d = \prod_{i} d_{i}^{e_{i}}\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">complete-partial-fraction</span> (a <span class="org-type">&amp;rest</span> denom-expt-pairs)
+  (<span class="org-keyword">let*</span> ((all-numerators (apply #'distinct-partial-fraction
+                                (cons a (mapcar #'(<span class="org-keyword">lambda</span> (d-e)
+                                                    (expt (car d-e) (cadr d-e)))
+                                                denom-expt-pairs))))
+         (a0 (car all-numerators))
+         (numerators (cdr all-numerators)))
+    (<span class="org-keyword">do</span> ((d-e-pairs denom-expt-pairs))
+        ()
+      (<span class="org-keyword">do</span> ((
+    ))
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgaa2c445" class="outline-2">
+<h2 id="orgaa2c445"><span class="section-number-2">3</span> References</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>Manuel Bronstein, <cite class="book-title">Symbolic Integration 1: Transcendental Functions</cite>.
+Springer, second ed., 1996.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2020-12-27 Sun 09:09.</p>
+</div>
+</body>
+</html>

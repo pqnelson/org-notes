@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real Numbers</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Real Numbers</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org957a2dd">1. Number Systems</a>
+<ul>
+<li><a href="#org1a65a78">1.1. Natural Numbers</a>
+<ul>
+<li><a href="#orged02df5">1.1.1. Peano Arithmetic</a></li>
+<li><a href="#orgf4e5f4e">1.1.2. Axioms</a></li>
+</ul>
+</li>
+<li><a href="#orgd9f7e39">1.2. Integers</a></li>
+<li><a href="#orgc377cab">1.3. Rational Numbers</a></li>
+<li><a href="#orgc881ecb">1.4. Real Numbers</a>
+<ul>
+<li><a href="#org76696e1">1.4.1. Axioms</a></li>
+</ul>
+</li>
+<li><a href="#orgdf12fb3">1.5. Transcendental and Algebraic Numbers</a></li>
+<li><a href="#orga20bf3b">1.6. Definable Real Numbers</a></li>
+</ul>
+</li>
+<li><a href="#orgc60e25f">2. Scientific Notation</a>
+<ul>
+<li><a href="#org3ef5112">2.1. Binary</a></li>
+</ul>
+</li>
+<li><a href="#org6578b3d">3. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org957a2dd" class="outline-2">
+<h2 id="org957a2dd"><span class="section-number-2">1</span> Number Systems</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The real numbers are typically taught as the final "target" in a
+sequence of number systems.
+</p>
+</div>
+
+<div id="outline-container-org1a65a78" class="outline-3">
+<h3 id="org1a65a78"><span class="section-number-3">1.1</span> Natural Numbers</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+We can begin with the natural numbers.
+</p>
+</div>
+
+<div id="outline-container-orged02df5" class="outline-4">
+<h4 id="orged02df5"><span class="section-number-4">1.1.1</span> Peano Arithmetic</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+An axiomatic way to do so is assert there is some constant <code>Z</code>
+that's a natural number, and if <code>x</code> is a natural number then we can
+apply a function/constructor of a single argument <code>S</code> to it to get
+<code>S x</code> another distinct natural number. By iteratively applying <code>S</code>
+to <code>Z</code>, we get all the natural numbers.
+</p>
+
+<p>
+We identify <code>Z</code> with zero, <code>S Z</code> with one, <code>S (S Z)</code> with two, and
+so on. Further, <code>S</code> is injective as a mapping of the natural
+numbers to itself&#x2026;so for any <code>m</code> and <code>n</code>, we have <code>m=n</code> if and
+only if <code>S m = S n</code>.
+</p>
+
+<p>
+These are the Peano Axioms. We could define the familiar binary
+operators like addition, which satisfies the properties:
+</p>
+
+<ul class="org-ul">
+<li><code>a + Z = a</code></li>
+<li><code>a + (S b) = (S a) + b</code></li>
+</ul>
+
+<p>
+Multiplication could similarly be defined inductively:
+</p>
+
+<ul class="org-ul">
+<li><code>a * Z = Z</code></li>
+<li><code>a * (S b) = a + a*b</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgf4e5f4e" class="outline-4">
+<h4 id="orgf4e5f4e"><span class="section-number-4">1.1.2</span> Axioms</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+We "know" arithmetic, but what axioms do we "need"? The ones we
+should hope for include, but are not limited to:
+</p>
+
+<ul class="org-ul">
+<li>Closure under addition and multiplication, i.e., \(a\times b\) is a
+natural number, and \(a + b\) is another natural number.</li>
+<li>Addition
+<dl class="org-dl">
+<dt>Associativity</dt><dd>\(a + (b + c) = (a + b) + c\)</dd>
+<dt>Commutativity</dt><dd>\(a + b = b + a\)</dd>
+<dt>Identity Element</dt><dd>\(0 + a = a\)</dd>
+</dl></li>
+<li>Multiplication
+<dl class="org-dl">
+<dt>Associativity</dt><dd>\(a\times(b\times c)=(a\times b)\times c\)</dd>
+<dt>Commutativity</dt><dd>\(a\times b = b\times a\)</dd>
+<dt>Identity Element</dt><dd>\(a\times 1 = a\)</dd>
+<dt>Distributivity</dt><dd>\(a\times(b + c) = a\times b + a\times c\)</dd>
+<dt>No nonzero zero divisors</dt><dd>if \(a\times b = 0\), then either \(a = 0\)
+or \(b = 0\)</dd>
+</dl></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd9f7e39" class="outline-3">
+<h3 id="orgd9f7e39"><span class="section-number-3">1.2</span> Integers</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+We allow subtraction to natural numbers. Subtraction is a binary
+operation, written \(a - b\) for integers \(a\) and \(b\), which is such
+that \((a - b) + b = a\). We generically write \(0 - a\) as \(-a\), and
+refer to it as the <dfn>negation</dfn> of \(a\).
+</p>
+
+<p>
+If we wanted to be rigorous, we could use the Grothendieck
+construction: work with pairs of natural numbers \((a,b)\) and
+instead of equality, we use an equalivalence relation
+</p>
+
+\begin{equation}
+(a,b) \sim (x, y)\iff a+y = b+x.
+\end{equation}
+
+<p>
+If \(a > b\), then \((a,b)\) is intuitively the equivalence class
+corresponding to the number \(a - b > 0\). On the other hand, for \(a
+< b\), the pair corresponds to the equivalence class of the negative
+number \(a - b\). We should think of the first component as a
+surplus, the second as a deficit.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc377cab" class="outline-3">
+<h3 id="orgc377cab"><span class="section-number-3">1.3</span> Rational Numbers</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+The intuitive construction of the rational numbers is any pair of
+integers \(a/b\) where \(b\neq0\) is nonzero. Addition is defined as
+</p>
+
+\begin{equation}
+\frac{a}{b} + \frac{x}{y} = \frac{ay + bx}{by}
+\end{equation}
+
+<p>
+Multiplication is defined as
+</p>
+
+\begin{equation}
+\frac{a}{b}\times\frac{x}{y} = \frac{a\times x}{b\times y}.
+\end{equation}
+
+<p>
+We could go through another Grothendieck construction to derive the
+rational numbers formally from the integers, but that's tedious.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc881ecb" class="outline-3">
+<h3 id="orgc881ecb"><span class="section-number-3">1.4</span> Real Numbers</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+There are a variety of ways to construct the real numbers, at least
+three I'm aware of:
+</p>
+
+<ol class="org-ol">
+<li>using Dedekind cuts,</li>
+<li>Bourbaki's topological closure of the rationals</li>
+<li>as the smallest ordered field containing the rationals</li>
+</ol>
+
+<p>
+The latter seems the most direct way to get cooking.
+</p>
+</div>
+
+<div id="outline-container-org76696e1" class="outline-4">
+<h4 id="org76696e1"><span class="section-number-4">1.4.1</span> Axioms</h4>
+<div class="outline-text-4" id="text-1-4-1">
+<ol class="org-ol">
+<li>\((\mathbb{R}, +, \times)\) form a field
+<ul class="org-ul">
+<li>Associativity of multiplication and addition: for any
+\(x,y,z\in\mathbb{R}\) we have \((x + y) + z = x + (y + z)\) and
+\((x\times y)\times z = x\times(y\times z)\)</li>
+<li>Commutativity of addition and multiplication: for any
+\(x,y\in\mathbb{R}\) we have \(x + y = y + x\) and
+\(x\times y=y\times x\)</li>
+<li>Distributivity: for any \(x,y,z\in\mathbb{R}\) we have
+\(x\times(y + z) = (x\times y) + (x\times z)\)</li>
+<li>For any \(x\in\mathbb{R}\), \(x + 0 = x\)</li>
+<li>0 is not equal to 1, and for any \(x\in\mathbb{R}\) we have \(x\times1=x\)</li>
+<li>For any \(x\in\mathbb{R}\) there exists a unique
+\(-x\in\mathbb{R}\) such that \(x+(-x)=0\)</li>
+<li>For any nonzero \(x\in\mathbb{R}\) there exists a unique
+\(x^{-1}\in\mathbb{R}\) such that \(x\times x^{-1}=1\)</li>
+</ul></li>
+<li>\((\mathbb{R}, \leq)\) form a totally ordered set
+<dl class="org-dl">
+<dt>Reflexivity</dt><dd>For any \(x\in\mathbb{R}\), we have \(x\leq x\)</dd>
+<dt>Antisymmetry</dt><dd>For any \(x,y\in\mathbb{R}\), if \(x\leq y\) and \(y\leq x\), then
+\(x = y\)</dd>
+<dt>Transitivity</dt><dd>For any \(x,y,z\in\mathbb{R}\), if \(x\leq y\) and \(y\leq z\), then
+\(x\leq z\)</dd>
+<dt>Totality</dt><dd>For all \(x,y\in\mathbb{R}\), either \(x\leq y\) or \(y\leq x\).</dd>
+</dl></li>
+<li>The field operations \(+\) and \(\times\) are compatible with the
+order \(\leq\) on \(\mathbb{R}\), in particular
+<ul class="org-ul">
+<li>If \(x,y\in\mathbb{R}\) are such that \(x\leq y\), then for any
+\(z\in\mathbb{R}\) we have \(x+z\leq y+z\).</li>
+<li>For any \(x,y\in\mathbb{R}\), if \(0\leq x\) and \(0\leq y\), then
+\(0\leq x\times y\)</li>
+</ul></li>
+<li>The order \(\leq\) is complete (i.e., every non-empty subset of
+\(\mathbb{R}\) bounded above has a least upper bound)</li>
+</ol>
+
+<p>
+Tarski provided another axiomatization in 1936 with four undefined
+notions. Again, we don't need it for our purposes.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdf12fb3" class="outline-3">
+<h3 id="orgdf12fb3"><span class="section-number-3">1.5</span> Transcendental and Algebraic Numbers</h3>
+<div class="outline-text-3" id="text-1-5">
+<div class="definition" id="org7760a71">
+<p>
+We call a number \(a\) <dfn>Algebraic</dfn> if there exists some
+polynomial \(p(x)\) for which \(a\) is a root, \(p(a) = 0\).
+</p>
+
+</div>
+
+<p>
+Observe: any rational number is algebraic, since \(p(x) = x - r\) for
+\(r\in\QQ\) is such a polynomial.
+</p>
+
+<div class="theorem" id="org165032d">
+<p>
+The set of algebraic numbers is countable.
+</p>
+
+</div>
+
+<div class="definition" id="org8c64dc6">
+<p>
+We call a number \(t\) <dfn>Transcendental</dfn> if it is not algebraic.
+</p>
+
+</div>
+
+<div class="theorem" id="org3830206">
+<p>
+(Gelfond&#x2013;Schneider)
+If \(a\) and \(b\) are algebraic numbers, \(a\neq 0\) and \(a\neq 1\), with \(b\)
+irrational, then any value of \(a^{b}\) is a transcendental number.
+</p>
+
+</div>
+
+<p>
+As a consequence, almost all real numbers are transcendental. Most of
+them are not really even "used" in practice.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga20bf3b" class="outline-3">
+<h3 id="orga20bf3b"><span class="section-number-3">1.6</span> Definable Real Numbers</h3>
+<div class="outline-text-3" id="text-1-6">
+<div class="definition" id="org975100a">
+<p>
+We say a real number \(a\) is <dfn>Definable in the Language of Arithmetic</dfn>
+if its Dedekind cut can be defined as a predicate in that language;
+i.e., if there is a first-order formula \(\varphi\) in the language of
+arithmetic, with three variables, such that
+</p>
+
+\begin{equation}
+\forall m,\forall n,\forall p\left(\varphi(m,n,p)\iff\frac{(-1)^{p}m}{n}\lt a\right).
+\end{equation}
+
+</div>
+
+<p>
+Our intuition is that \(m\), \(n\), and \(p\) range over all natural numbers.
+The only operations allowed in Peano arithmetic are addition and
+multiplication. (And, I suppose, the successor operation, which is just
+"addition with 1" intuitively.) The only constants allowed in Peano
+arithmetic are 0 and 1.
+</p>
+
+<p>
+An equivalent way to characterize arithmetically definable real numbers
+is by considering Dedekind cuts of the form
+</p>
+
+\begin{equation}
+\{m/n \mid \forall x_{1}\exists x_{2}\dots \forall x_{k-1}\exists x_{k},p(m,n,\vec{x})=0\}
+\end{equation}
+
+<p>
+for some fixed polynomial with integer coefficients \(p\), and the \(x\)'s
+range over integers. Here both \(\E\) and \(\pi\) are definable, as are all
+our favorite real numbers. A standard reference for this line of
+thinking is:
+</p>
+
+<ul class="org-ul">
+<li>Reference: Simpson's <cite class="book-title">Subsystems of Second-Order Arithmetic</cite>
+discusses system \(ACA_{0}\), which we've basically defined.</li>
+</ul>
+
+<p>
+It is invalid to reason, "Well, we can define \(\pi\) as the area of the
+unit circle, and that's a formula, so it is definable." (Or worse, "We
+<i>define</i> \(\pi\) as&#x2026;, therefore since it's <i>defined</i> that way it must be
+<i>definable</i>.") Please don't do this.
+</p>
+
+<div class="puzzle" id="org6852e26">
+<p>
+We can consider <a href="https://en.wikipedia.org/wiki/Definable_real_number">definable real numbers</a>, is the intersection of
+transcendental numbers with definable real numbers interesting in some
+way?
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc60e25f" class="outline-2">
+<h2 id="orgc60e25f"><span class="section-number-2">2</span> Scientific Notation</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We can represent any real number using three components:
+</p>
+
+<ol class="org-ol">
+<li>Its sign (+1 or -1)</li>
+<li>Its magnitude (an integer)</li>
+<li>Its mantissa (a real number less than the base)</li>
+</ol>
+
+<p>
+In base 10, we would write \(x = s\times m\times 10^{p}\) where
+\(s\in\{+1,-1\}\), \(0\lt m\lt 10\), and \(p\in\mathbb{Z}\). Every real
+number may be written in this manner, and it is called "scientific
+notation".
+</p>
+
+<p>
+The difficulty is, not every real number may be represented with
+finitely many digits. For example \(\pi\) requires infinitely many,
+as does \(\sqrt{2}\). We then form <i>approximations</i> to these
+numbers. Since this is an approximation, we are left with errors,
+which propagate in our calculations. The entire field of
+<a href="../comp-sci/numerical-analysis.html">Numerical Analysis</a> studies this matter.
+</p>
+</div>
+
+<div id="outline-container-org3ef5112" class="outline-3">
+<h3 id="org3ef5112"><span class="section-number-3">2.1</span> Binary</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+When we work in base 2, the mantissa is a sequence of bits with
+leading bit being 1 (otherwise we could shift the mantissa down
+until it is 1, and the exponent decreases by the number of
+shifts). This has the advantage that \(1\lt m\lt 2\), which can speed
+up Taylor series computations.
+</p>
+
+<p>
+For example, the logarithm of \(x\) in this notation is given by
+</p>
+
+\begin{equation}
+\log(x) = \log(s) + \log(m) + p\log(2)
+\end{equation}
+
+<p>
+which consists of looking up stored values for \(\log(2)\), and
+computing a series approximation for \(\log(m)\).
+</p>
+
+<p>
+We can extract the components for a float in Common Lisp by
+</p>
+
+<pre class="example" id="org8b86749">
+USER =&gt; (multiple-value-bind (mantissa expon sign)
+(decode-float f)
+  (scale-float mantissa expon))
+;; equivalent to (abs f)
+
+USER&gt; (multiple-value-bind (mantissa expon sign)
+          (decode-float pi)
+        (list :sign sign :mantissa mantissa :exponent expon))
+;; (:SIGN 1.0d0 :MANTISSA 0.7853981633974483d0 :EXPONENT 2)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6578b3d" class="outline-2">
+<h2 id="org6578b3d"><span class="section-number-2">3</span> References</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+-Every real analysis textbook</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-03-18 Thu 16:19.</p>
+</div>
+</body>
+</html>

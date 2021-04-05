@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asymptotic Expansions</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Asymptotic Expansions</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgd6774e0">1. Asymptotic Sequences and Expansions</a></li>
+<li><a href="#org52aa1b5">2. Uniqueness of Asymptotic Expansions</a>
+<ul>
+<li><a href="#orgf8ca9e1">2.1. Non-Uniqueness</a></li>
+</ul>
+</li>
+<li><a href="#org602fd64">3. Transcendentally Small Terms</a></li>
+<li><a href="#orge394575">4. Arithmetic of Asymptotic Series</a></li>
+<li><a href="#org2655330">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd6774e0" class="outline-2">
+<h2 id="orgd6774e0"><span class="section-number-2">1</span> Asymptotic Sequences and Expansions</h2>
+<div class="outline-text-2" id="text-1">
+<div class="definition" id="orgd06d20e">
+<p>
+An <dfn>Asymptotic Sequence</dfn> (or "asymptotic scale")
+as \(x\to x_{0}\) consists of a
+sequence of functions \(\{\phi_{j}(x)\}_{j\in\NN}\) such that for all \(j\),
+\(\phi_{j}(x)\gg\phi_{j+1}(x)\).
+</p>
+
+</div>
+
+<div class="remark" id="org2b1bb59">
+<ol class="org-ol">
+<li>Some definitions of an asymptotic sequence reverses the ordering, i.e.,
+defines it as such that \(\phi_{j+1}(x)\gg\phi_{j}(x)\) as \(x\to x_{0}\),
+for any \(j\). This is useful for \(x_{0}=\infty\), for example.</li>
+<li>The indexing set may be extended to be something like
+\(\{k\in\ZZ|k\geq n\}\). I'm not sure if we can extend it to the entire
+set of integers, we may run into difficulties.</li>
+</ol>
+
+</div>
+
+<div class="math-example" id="org6d31588">
+<p>
+An asymptotic sequence as \(x\to\infty\) which is frequently used are the
+inverse monomials \(\phi_{k}(x) = x^{-k}\). We see \(\phi_{k+1}(x)\ll\phi_{k}(x)\)
+as \(x\to\infty\).
+</p>
+
+</div>
+
+<div class="definition" id="orga91a451">
+<p>
+Let \(f(x)\) be a function and \(\{\phi_{j}(x)\}_{j\in\NN}\) an asymptotic
+sequence as \(x\to x_{0}\).
+The <dfn>Asymptotic Expansion</dfn> of \(f(x)\) as \(x\to x_{0}\) is a
+function
+</p>
+\begin{equation}
+f(x)\sim a_{1}\phi_{1}(x) + \dots + a_{n}\phi_{n}(x) + \dots
+\end{equation}
+<p>
+such that for each \(n\in\NN\), as \(x\to x_{0}\) we have the partial sums
+</p>
+\begin{equation}
+f(x) - \sum^{n}_{j=1}a_{j}\phi_{j}(x)\ll\phi_{n}(x).
+\end{equation}
+<p>
+(Equivalently, the remainder from the n-th partial sum is dominated by
+the n-th element in the asymptotic sequence.)
+</p>
+
+</div>
+
+<p>
+Just take a note to compare an asymptotic series to a convergent series
+for a sequence of partial sums
+</p>
+\begin{equation}
+S_{n}(x) = \sum^{n}_{j=1}a_{j}\phi_{j}(x)
+\end{equation}
+
+<dl class="org-dl">
+<dt>Convergence</dt><dd>\(S_{n}(x)\to f(x)\) as \(n\to\infty\) for each fixed \(x\)</dd>
+<dt>Asymptotic</dt><dd>\(S_{n}(x)\sim f(x)\) as \(x\to x_{0}\), for each fixed \(n\).</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org52aa1b5" class="outline-2">
+<h2 id="org52aa1b5"><span class="section-number-2">2</span> Uniqueness of Asymptotic Expansions</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Relative to an asymptotic sequence \(\{\phi_{j}(x)\}\) as \(x\to x_{0}\),
+the asymptotic expansion of \(f(x)\) is unique. But if we change
+asymptotic sequences, we get different coefficients, and so this
+uniqueness is with the asterisk "For a fixed asymptotic sequence".
+</p>
+
+<p>
+More precisely, if we expand a given function as
+</p>
+
+\begin{equation}
+f(x)\sim a_{1}\phi_{1}(x) + \dots
+\end{equation}
+
+<p>
+then the claim is the coefficients \(a_{1}\), &hellip;, are uniquely
+determined for that sequence. Why?
+</p>
+
+<p>
+Well, we determine the coefficients as
+</p>
+
+\begin{equation}
+a_{1} = \lim_{x\to x_{0}}\frac{f(x)}{\phi_{1}(x)}
+\end{equation}
+
+<p>
+since
+</p>
+
+\begin{equation}
+\lim_{x\to x_{0}}\frac{f(x)}{a_{1}\phi_{1}(x)} = 1.
+\end{equation}
+
+<p>
+(Otherwise we could not have \(f(x)\sim a_{1}\phi_{1}(x)\), contradicting
+the fact we are using an asymptotic expansion.)
+</p>
+
+<p>
+Now, the next coefficient in the expansion is given by
+</p>
+
+\begin{equation}
+f(x)\sim a_{1}\phi_{1}(x) + a_{2}\phi_{2}(x)
+\end{equation}
+
+<p>
+which we find the coefficient by
+</p>
+
+\begin{equation}
+a_{2} = \lim_{x\to x_{0}}\frac{f(x) - a_{1}\phi_{1}(x)}{\phi_{2}(x)}.
+\end{equation}
+
+<div class="exercise" id="orge4723a8">
+<p>
+Prove if \(f(x)\sim g_{1}(x) + g_{2}(x)\) as \(x\to x_{0}\), then
+\(f(x)-g_{1}(x)\sim g_{2}(x)\) as \(x\to x_{0}\). Do we need the additional
+hypothesis that \(g_{1}(x)\ll g_{2}(x)\) as \(x\to x_{0}\)?
+</p>
+
+</div>
+
+<p>
+The uniqueness of the coefficient depends on the uniqueness of these
+limits
+</p>
+
+\begin{equation}
+a_{n+1} = \lim_{x\to x_{0}}\frac{f(x) - S_{n}(x)}{\phi_{n+1}(x)}.
+\end{equation}
+</div>
+
+<div id="outline-container-orgf8ca9e1" class="outline-3">
+<h3 id="orgf8ca9e1"><span class="section-number-3">2.1</span> Non-Uniqueness</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+If we have two different asymptotic sequences \(\{\phi_{j}(x)\}\) and
+\(\{\psi_{j}(x)\}\), then the asymptotic expansions of \(f(x)\) as
+</p>
+\begin{equation}
+f(x)\sim\sum_{j=1}a_{j}\phi_{j}(x)
+\end{equation}
+<p>
+and
+</p>
+\begin{equation}
+f(x)\sim\sum_{j=1}b_{j}\psi_{j}(x)
+\end{equation}
+<p>
+does not necessarily imply \(a_{j}=b_{j}\) for all \(j\).
+</p>
+
+<p>
+For a simple intuitive example, consider \(\phi_{j}(x) = x^{j}\) and
+\(\psi_{j}(x) = \exp(jx)\). We'd clearly get different asymptotic
+expansions as \(x\to\infty\).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org602fd64" class="outline-2">
+<h2 id="org602fd64"><span class="section-number-2">3</span> Transcendentally Small Terms</h2>
+<div class="outline-text-2" id="text-3">
+<div class="definition" id="org6828558">
+<p>
+We call \(f(x)\) a <dfn>Transcendentally Small Term</dfn> if \(f(x)\ll x^{-n}\)
+as \(x\to\infty\) for any (fixed) \(n\geq0\).
+</p>
+
+</div>
+
+<div class="remark" id="org4c3f0dc">
+<p>
+Bender and Orszog calls such a term <dfn>Subdominant</dfn> to \(x^{-n}\).
+</p>
+
+</div>
+
+<div class="math-example" id="orgf74adb2">
+<p>
+The function \(\exp(-x)\) is a transcendentally small term as \(x\to\infty\).
+We'll need to show that \(\exp(-x)\ll x^{-n}\) as \(x\to\infty\) for any
+\(n\geq 0\). Check:
+</p>
+
+\begin{equation}
+\lim_{x\to\infty}\frac{\E^{-x}}{x^{-n}} = \lim_{x\to\infty}x^{n}\E^{-x} = 0.
+\end{equation}
+
+<p>
+This is true from basic calculus, so we have the desired result.
+</p>
+
+<p>
+But while on the subject, note the asymptotic expansion
+</p>
+
+\begin{equation}
+\exp(-x)\sim a_{0} + \frac{a_{1}}{x} + \frac{a_{2}}{x^{2}} + \dots
+\end{equation}
+
+<p>
+has all zero coefficients \(a_{j}=0\) for \(j\geq0\). Hence \(f(x)\) and
+\(g(x)=f(x)+C\E^{-x}\) have the same asymptotic expansion, so
+transcendentally small terms are <i>invisible</i> to asymptotic power series
+and can cause numerical difficulties.
+</p>
+
+</div>
+
+<div class="remark" id="org977ffde">
+<ol class="org-ol">
+<li>"Hyper-asymptotics" attempts to deal with transcendentally small
+terms (also called "asymptotics beyond all orders" or a
+<a href="https://en.wikipedia.org/wiki/Perturbation_problem_beyond_all_orders">perturbation problem beyond all orders</a>). There's a note
+by Boyd, "The Devil's Invention" (2000) reviewing the field.</li>
+<li>Trouble is because \(\exp(-z)\) is not analytic in \(\CC\), and has an
+essential singularity at \(\infty\).</li>
+</ol>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge394575" class="outline-2">
+<h2 id="orge394575"><span class="section-number-2">4</span> Arithmetic of Asymptotic Series</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+We can add, subtract, multiply, divide, and integrate asymptotic series
+term-by-term.
+If, as \(x\to x_{0}\), we have
+</p>
+\begin{equation}
+\begin{split}
+f(x) &\sim f_{1}\phi_{1}(x) + f_{2}\phi_{2}(x) + \dots \\
+g(x) &\sim g_{1}\phi_{1}(x) + g_{2}\phi_{2}(x) + \dots
+\end{split}
+\end{equation}
+<p>
+then we have
+</p>
+\begin{equation}
+f(x)g(x) \sim \left(f_{1}\phi_{1}(x) + f_{2}\phi_{2}(x) + \dots\right)\left(g_{1}\phi_{1}(x) + g_{2}\phi_{2}(x) + \dots\right)
+\end{equation}
+<p>
+and so on.
+</p>
+
+<p>
+<b>BUT</b> we must be careful with the operations of substitution and
+differentiation.
+</p>
+
+<div class="math-example" id="org38f0804">
+<p>
+Consider
+</p>
+\begin{equation}
+f(x) = \exp(x^{2})
+\end{equation}
+<p>
+and
+</p>
+\begin{equation}
+x(\varepsilon) = \frac{1}{\varepsilon} + \varepsilon
+\end{equation}
+<p>
+as \(\varepsilon\to 0\) (so \(x\to\infty\)).
+</p>
+
+<p>
+<b>Correct way:</b> we have exactly
+</p>
+\begin{align}
+f(x(\varepsilon)) &= \exp(x(\varepsilon)^{2}) \\
+&= \E^{\varepsilon^{2} + 2 + (1/\varepsilon)^{2}} \\
+&= \E^{2}\E^{\varepsilon^{2}}\E^{(1/\varepsilon)^{2}}
+\end{align}
+<p>
+But the Taylor expansion of the exponential function for small
+\(\varepsilon\) gives us
+</p>
+\begin{equation}
+\E^{\varepsilon^{2}} = 1 + \varepsilon^{2} + \frac{1}{2!}\varepsilon^{4}+\dots
+\end{equation}
+<p>
+which means
+</p>
+\begin{equation}
+\begin{split}
+f(x(\varepsilon)) &= \E^{\varepsilon^{2}}\E^{(1/\varepsilon)^{2}}\left(1 + \varepsilon^{2} + \frac{1}{2!}\varepsilon^{4}+\dots\right)\\
+&\sim \E^{2}\E^{1/\varepsilon^{2}}
+\end{split}
+\end{equation}
+<p>
+as \(\varepsilon\to0\). We only used the asymptotic expansion of the
+"small part" <i>after</i> doing the substitution.
+</p>
+
+<p>
+<b>Wrong way:</b> if we tried asymptotically expanding first, then
+substitution, we get the wrong results. We'd have \(x(\varepsilon)\sim1/\varepsilon\),
+and substitution gives us
+</p>
+\begin{equation}
+f(x(\varepsilon))\sim\E^{1/\varepsilon^{2}}\quad\mbox{(WRONG!)}
+\end{equation}
+<p>
+which is off numerically by a factor of \(\E^{2}\).
+</p>
+
+</div>
+
+<div class="math-example" id="orgc13c012">
+<p>
+Differentiation also causes problems if done without care. Observe
+</p>
+\begin{equation}
+f(x) = \sin(x)+x\sim x
+\end{equation}
+<p>
+as \(x\to\infty\), since
+</p>
+\begin{equation}
+\lim_{x\to\infty}\frac{\sin(x)}{x}=0.
+\end{equation}
+<p>
+But naively differentiating <i>after</i> taking asymptotics predicts
+</p>
+\begin{equation}
+f'(x)\sim 1 \quad\mbox{(WRONG)}.
+\end{equation}
+<p>
+But
+</p>
+\begin{equation}
+f'(x) = 1 + \cos(x)\not\sim 1
+\end{equation}
+<p>
+as \(x\to\infty\). The trouble is \(\sin(z)\) has an essential singularity
+at \(\infty\).
+</p>
+
+</div>
+
+<div class="remark" id="org722159c">
+<p>
+Tauberian theorems tell us when it is okay to differentiate an
+asymptotic expansion. For example, if \(f(x)\) and \(f'(x)\) have asymptotic
+expansions in \(\{\phi_{j}(x)\}\) as \(x\to x_{0}\), then it's OK to
+differentiate term-by-term the asymptotic expansion.
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2655330" class="outline-2">
+<h2 id="org2655330"><span class="section-number-2">5</span> References</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li>John P. Boyd, <br>
+"The Devil's Invention: Asymptotic, Superasymptotic and
+Hyperasymptotic Series". <br>
+<i>Acta Applicandae Mathematicae</i> <b>56</b>, no.1 (2000)
+<a href="https://www.researchgate.net/publication/2816730_The_Devil%27s_Invention_Asymptotic_Superasymptotic_and_Hyperasymptotic_Series">ResearchGate</a>, <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.38.5936">CiteSeerX</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-03-07 Sun 13:17.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:15 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Climate Models</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Climate Models</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgbf076cd">1. Energy Balance Model</a>
+<ul>
+<li><a href="#org1855a55">1.1. Stochastic Feedback</a>
+<ul>
+<li><a href="#org3361106">1.1.1. Integration factor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org9145466">2. Earth System Models of Intermediate Complexity (EMICs)</a></li>
+<li><a href="#org568e8ab">3. General Circulation Model</a></li>
+<li><a href="#orge0543e6">4. References</a>
+<ul>
+<li><a href="#org43b7ce5">4.1. Energy Balance Models</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbf076cd" class="outline-2">
+<h2 id="orgbf076cd"><span class="section-number-2">1</span> Energy Balance Model</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Typically using a zero-dimensional model via Stefan-Boltzmann
+equation and empirical parameters. This can be made more
+complicated with 1-dimensional or 2-dimensional models, assuming
+the energy budget changes with latitude and/or longitude.
+</p>
+
+<p>
+Using Stefan-Boltzmann's law, we would have something like
+</p>
+\begin{equation}
+C\frac{\D T(t)}{\D t} = R - \varepsilon\sigma T(t)^{4}
+\end{equation}
+<p>
+where:
+</p>
+<ul class="org-ul">
+<li>\(C\) is the effective heat capacity of the Earth (apparently
+\(C\approx2.08\times10^{8}J K^{-1}m^{-2}\))</li>
+<li>\(R\approx 231.4 W/m^{2}\) is net solar influx,</li>
+<li>\(\varepsilon\) is the emissivity of the Earth, a unitless number
+between 0 (perfectly reflective) and 1 (blackbody), for the Earth it's
+somewhere in between 0.6 and 1 (<a href="https://www.jpl.nasa.gov/spaceimages/details.php?id=PIA18833">NASA</a>)&#x2026;we could use
+\(\sqrt{0.6}\approx 0.7745\) as an estimate.</li>
+<li>\(\sigma\) is the Stefan-Boltzmann constant,</li>
+<li>\(T(t)\) is the temperature of the Earth at time \(t\).</li>
+</ul>
+
+<p>
+We can treat \(T(t) = T_{0} + \Delta T(t)\) where \(T_{0}\) is constant
+(using <a href="climate/effective-temperature.html">the Effective Temperature</a> of the Earth for \(T_{0}\approx 278 K\)),
+then to first order we in \(\Delta T\) we have
+</p>
+
+\begin{equation}
+C\frac{\D\Delta T(t)}{\D t}
+= R - \varepsilon\sigma 4T_{0}^{3}\,\Delta T(t).
+\end{equation}
+
+<p>
+(Note: \(4\sigma T_{0}^{3}\approx 4.873\), which is about 47.5 times
+smaller than \(R\).)
+This has the general solution
+</p>
+
+\begin{equation}
+\Delta T(t) = \frac{R}{4\varepsilon\sigma CT_{0}^{3}} + c_{0}\exp(-4\varepsilon\sigma CT_{0}^{3}(t-t_{0}))
+\end{equation}
+
+<p>
+where \(c_{0}\) is some integration constant. If we had some initial
+condition, like \(T(t_{0}) = T_{0}\), then we could determine \(c_{0}\).
+Taking \(T(t_{0}) = T_{0}\), we find
+</p>
+
+\begin{equation}
+\Delta T(t) = \frac{R}{4\varepsilon\sigma CT_{0}^{3}}\left(1 - \exp(-4\varepsilon\sigma CT_{0}^{3}(t-t_{0}))\right)
+\end{equation}
+
+<p>
+so \(\Delta T(t_{0}) = 0\), and as \(t\to\infty\) we see
+\(\Delta T(t)\to R/4\varepsilon\sigma CT_{0}^{3}\) is strictly increasing.
+</p>
+</div>
+
+<div id="outline-container-org1855a55" class="outline-3">
+<h3 id="org1855a55"><span class="section-number-3">1.1</span> Stochastic Feedback</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+The first modification to Stefan-Boltzmann's law is to consider a
+system of coupled stochastic differential equations accounting for
+the concentration of greenhouse gases \(c(t)\):
+</p>
+\begin{equation}
+\rho C_{P}H \frac{\D T(t)}{\D t} \sim R(c) - \sigma(1 - g(c)) T(t)^{4} + \widehat{f}_{T}(t)
+\end{equation}
+<p>
+where now:
+</p>
+<ul class="org-ul">
+<li>\(\rho\) is the density of atmosphere</li>
+<li>\(C_{P}\) is specific heat</li>
+<li>\(H\) is the depth of the atmosphere</li>
+<li>\(g(c)\) is the feedback parameter (modifying the Stefan-Boltzmann
+law)</li>
+<li>\(\widehat{f}_{T}(t)\) is a Gaussian forcing term, representing
+fast uncorrelated changes in temperature</li>
+</ul>
+
+<p>
+We also have
+</p>
+\begin{equation}
+\tau_{c}\frac{\D c(t)}{\D t} = -c(t)+\widehat{q}(t) + \widehat{f}_{c}(t)
+\end{equation}
+<p>
+where
+</p>
+<ul class="org-ul">
+<li>\(q\) is the addition of greenhouse gases per unit volume to the atmosphere</li>
+<li>\(f_{c}(t)\)</li>
+<li>\(\tau_{c}\) is some appropriate scaling constant</li>
+</ul>
+
+<p>
+These equations crop up repeatedly in climate science. See, for
+example:
+</p>
+
+<ul class="org-ul">
+<li>L. Mahadevan and J.M. Deutch, "Influence of feedback on the
+stochastic evolution of simple climate systems".
+<i>Proc. of Royal Soc. A</i> (2009) <a href="http://web.mit.edu/chemistry/deutch/technical/pdf15/151ProcRSocA-online%282009%29.pdf">Eprint</a></li>
+</ul>
+
+<p>
+The argument is that the probability distributions of important
+climate variables have fat tails, such that the their expected
+values do not exist.
+</p>
+
+<div class="puzzle" id="orgbdeaf15">
+<p>
+Can full-fledged general circulation models reproduce this result?
+(It remains an open problem.)
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-org3361106" class="outline-4">
+<h4 id="org3361106"><span class="section-number-4">1.1.1</span> Integration factor</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+For the second equation, we may write
+</p>
+\begin{equation}
+\frac{\D c(t)}{\D t} + \frac{1}{\tau_{c}}c(t)
+= \frac{\widehat{q}(t) + \widehat{f}_{c}(t)}{\tau_{c}}
+\end{equation}
+<p>
+Multiplying through by a multiplication factor \(\mu(t)\)
+</p>
+\begin{equation}
+\mu(t)\frac{\D c(t)}{\D t} + \frac{\mu(t)}{\tau_{c}}c(t)
+= \mu(t)\frac{\widehat{q}(t) + \widehat{f}_{c}(t)}{\tau_{c}}
+\end{equation}
+<p>
+If we then let
+</p>
+\begin{equation}
+\mu(t) = \exp(t/\tau_{c})
+\end{equation}
+<p>
+we necessarily would have
+</p>
+\begin{equation}
+e^{-t/\tau_{c}}\frac{\D}{\D t}(e^{t/\tau_{c}}c(t))
+= \frac{\widehat{q}(t) + \widehat{f}_{c}(t)}{\tau_{c}}.
+\end{equation}
+<p>
+This doesn't get us very far, however. We would have
+</p>
+\begin{equation}
+e^{t/\tau_{c}}c(t) - e^{t_{0}/\tau_{c}}c(t_{0})
+\sim\frac{1}{\tau_{c}}\int e^{t/\tau_{c}}\widehat{q}(t)\,\D t
+\end{equation}
+<p>
+ignoring the gaussian noise term.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9145466" class="outline-2">
+<h2 id="org9145466"><span class="section-number-2">2</span> Earth System Models of Intermediate Complexity (EMICs)</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Basically, everything in between the simplest "Energy Balance"
+model and the most complicated "General Circulation" model.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org568e8ab" class="outline-2">
+<h2 id="org568e8ab"><span class="section-number-2">3</span> General Circulation Model</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+The most complicated sort of model, the Cadillac of climate models.
+It models climate using the Navier-Stokes equation. As we do not
+have a solution to the NS equation, we are forced to do a lot of
+difficult numerical analysis, and that sucks.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orge0543e6" class="outline-2">
+<h2 id="orge0543e6"><span class="section-number-2">4</span> References</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>L. Mahadevan and J.M. Deutch, "Influence of feedback on the
+stochastic evolution of simple climate systems".
+<i>Proc. of Royal Soc. A</i> (2009) <a href="http://web.mit.edu/chemistry/deutch/technical/pdf15/151ProcRSocA-online%282009%29.pdf">Eprint</a></li>
+<li>J. David Neelin,
+<cite class="book-title">Climate Change and Climate Modeling</cite>.
+Cambridge University Press, 2011.</li>
+</ul>
+</div>
+
+<div id="outline-container-org43b7ce5" class="outline-3">
+<h3 id="org43b7ce5"><span class="section-number-3">4.1</span> Energy Balance Models</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li><a href="https://www.e-education.psu.edu/meteo469/node/135">Modeling of the Climate System</a>, PSU Meteo 469, Lesson 4,</li>
+<li><a href="https://www.e-education.psu.edu/meteo469/node/137">Simple Climate Models</a>, PSU Meteo 469</li>
+<li><a href="https://ocw.mit.edu/courses/earth-atmospheric-and-planetary-sciences/12-810-dynamics-of-the-atmosphere-spring-2008/">Dynamics of the Atmosphere</a>, MIT OCW course 12.810</li>
+<li><a href="https://www.acs.org/content/acs/en/climatescience/atmosphericwarming/singlelayermodel.html">A Single-Layer Atmosphere Model</a>, ACS</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2020-12-20 Sun 20:37.</p>
+</div>
+</body>
+</html>

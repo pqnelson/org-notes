@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methods of Solving PDEs</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Methods of Solving PDEs</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgf1df0eb">1. Group Symmetry Methods</a>
+<ul>
+<li><a href="#org40ffbd9">1.1. Classical Symmetries</a></li>
+<li><a href="#org4fcc60e">1.2. Nonclassical Symmetry Reduction</a></li>
+<li><a href="#orgeca3f30">1.3. Approximate Symmetries</a></li>
+</ul>
+</li>
+<li><a href="#org41fc7e3">2. Differential Constraints</a></li>
+<li><a href="#org4224614">3. Clarkson-Kruskal method</a></li>
+<li><a href="#orgfc903e7">4. Functional Separation of Variables</a></li>
+</ul>
+</div>
+</div>
+<p>
+A recent review (<a href="https://arxiv.org/abs/2102.04815">arXiv:2102.04815</a>) noted:
+</p>
+
+<blockquote>
+<p>
+There are several basic methods for finding exact solutions and
+constructing reductions of nonlinear partial differential equations:
+the method of group analysis of differential equations (the method of
+searching for classical symmetries) [1–6], methods for finding for
+non-classical symmetries [7–10], the direct Clarkson–Kruskal method
+[11–14], methods for generalized separation of variables [13–15], methods
+for functional separation of variables [14,16–18], the method of
+differential constraints [13,14,19], the method of truncated Painleve
+expansions [13,20,21], and use of conservation laws to obtain exact
+solutions [22–24].
+</p>
+</blockquote>
+
+<div id="outline-container-orgf1df0eb" class="outline-2">
+<h2 id="orgf1df0eb"><span class="section-number-2">1</span> Group Symmetry Methods</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org40ffbd9" class="outline-3">
+<h3 id="org40ffbd9"><span class="section-number-3">1.1</span> Classical Symmetries</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Ovsiannikov, L.V. <br>
+<cite class="book-title">Group Analysis of Differential Equations</cite>. <br>
+Academic Press, 1982.</li>
+<li>GW Bluman, JW Cole, <br>
+<cite class="book-title">Similarity Methods for Differential Equations</cite>. <br>
+Springer, 1974.</li>
+<li>PJ Olver, <br>
+<cite class="book-title">Applications of Lie Groups to Differential Equations</cite>. <br>
+2nd ed., Springer, 2000</li>
+<li>VK Andreev, OV Kaptsov, VV Pukhnachov, AA Rodionov, <br>
+<cite class="book-title">Applications of Group-Theoretical Methods in Hydrodynamics</cite>. <br>
+Kluwer, 1998.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4fcc60e" class="outline-3">
+<h3 id="org4fcc60e"><span class="section-number-3">1.2</span> Nonclassical Symmetry Reduction</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>Peter A. Clarkson, Elizabeth L. Mansfield, <br>
+"Algorithms for the Nonclassical Method of Symmetry Reductions". <br>
+<a href="https://arxiv.org/abs/solv-int/9401002">arXiv:solv-int/9401002</a>, 27 pages</li>
+<li>Peter J Olver and Evgenii M Vorob'ev, <br>
+"Nonclassical and Conditional Symmetries". <br>
+In: <i>CRC Handbook of Lie Group Analysis of Differential Equations</i>, vol.
+3, N.H. Ibragimov, ed., CRC Press, Boca Raton, Fl., 1996, pp.291&#x2013;328.
+<a href="http://www-users.math.umn.edu/~olver/s_/v.pdf">PDF</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgeca3f30" class="outline-3">
+<h3 id="orgeca3f30"><span class="section-number-3">1.3</span> Approximate Symmetries</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Also note there is another technique using "approximate symmetries",
+where the differential equation <i>we</i> are interested in solving may be
+viewed as a <i>perturbation</i> of a simpler differential equation. We may
+find the symmetries of the simpler equation, then use it as the basis
+for a <i>perturbed</i> symmetry group (approximate symmetry group) of our
+original differential equation.
+</p>
+
+<ul class="org-ul">
+<li>Baikov, Gazizov, and Ibragimov, <br>
+"Approximate symmetries". <br>
+<i>Math. USSR Sbomik</i> <b>46</b> (1989) pp.427&#x2013;441.
+<ul class="org-ul">
+<li>First publication inventing the technique</li>
+</ul></li>
+<li>V. A. Baikov, R. K. Gazizov, N. Kh. Ibragimov, <br>
+"Approximate symmetries". <br>
+<i>Mat. Sb.</i> (N.S.), <b>136(178)</b>:4(8) (1988), 435–450;
+<i>Math. USSR-Sb.</i>, <b>64</b>:2 (1989), 427–441.
+<a href="http://www.mathnet.ru/php/archive.phtml?wshow=paper&amp;jrnid=sm&amp;paperid=1752&amp;option_lang=eng">Eprint</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org41fc7e3" class="outline-2">
+<h2 id="org41fc7e3"><span class="section-number-2">2</span> Differential Constraints</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+CRC Handbook of Nonlinear PDEs describe this method as: "The main idea
+of the method is that exact solutions to a complex (nonintegrable)
+equation are sought by jointly analyzing this equation and an auxiliary
+simpler (integrable) equation, called a <i>differential constraint</i>."
+</p>
+
+<ul class="org-ul">
+<li>Peter Olver, <br>
+<a href="http://www-users.math.umn.edu/~olver/s_/dc.pdf">Direct Reduction and Differential Constraints</a>. <br>
+<i>Proc. Roy. Soc. London</i> <b>A 444</b> (1994), 509&#x2013;523.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4224614" class="outline-2">
+<h2 id="org4224614"><span class="section-number-2">3</span> Clarkson-Kruskal method</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>P A Clarkson and M D Kruskal, <br>
+"New similarity solutions of the Boussinesq equation". <br>
+<i>Journal of Mathematical Physics</i> <b>30</b> (1989) pp 2201-2213.
+<ul class="org-ul">
+<li>First paper introducing the technique.</li>
+</ul></li>
+<li>SHEN Shou-Feng, <br>
+"Clarkson–Kruskal Direct Similarity Approach for
+Differential-Difference Equations". <br>
+<i>Commun. Theor. Phys.</i> (Beijing, China) <b>44</b> (2005) pp. 964–966</li>
+<li>AD Polyanin, <br>
+"Comparison of the effectiveness of different methods for constructing
+exact solutions to nonlinear PDEs". <br>
+<i>Mathematics</i> <b>7</b>, no. 5 (2019)
+<a href="https://doi.org/10.3390/math7050386">doi:10.3390/math7050386</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgfc903e7" class="outline-2">
+<h2 id="orgfc903e7"><span class="section-number-2">4</span> Functional Separation of Variables</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+The basic idea is to solve the problem
+</p>
+
+\begin{equation}
+F(x, u_{x}, u_{t}, u_{xx}, u_{xt}, u_{tt}, \dots) = 0
+\end{equation}
+
+<p>
+The separation of variables usually takes the form \(u(x,t) = X(x)T(t)\),
+but the <i>functional separation of variables</i> uses the implicit form
+</p>
+
+\begin{equation}
+\int h(u)\,\D u = \xi(x)\omega(t) + \eta(x).
+\end{equation}
+
+<p>
+Where in Heaven's name does this come from? And what on Earth is \(h(u)\),
+\(\xi(x)\), \(\omega(t)\), and \(\eta(x)\)?
+</p>
+
+<p>
+Well, this is a generalization of the nonlinear heat equation
+</p>
+
+\begin{equation}
+u_{t} = \partial_{x}[f(u)u_{x}]
+\end{equation}
+
+<p>
+where \(f(u)\) is an arbitrary function. This admits a traveling-wave
+solution \(u=u(z)\) for \(z=\lambda t + \kappa x\), which can be represented
+in the implicit form
+</p>
+
+\begin{equation}
+\kappa^{2}\int\frac{f(u)}{\lambda u + C_{1}}\D u = \lambda t + \kappa x +
+C_{2}
+\end{equation}
+
+<p>
+The generalization is carried out as follows:
+</p>
+
+<p>
+\[ \kappa^{2}\frac{f(u)}{\lambda u + C_{1}} \to h(u) \]
+</p>
+
+<p>
+\[ \lambda\to \xi(x) \]
+</p>
+
+<p>
+\[ t \to \omega(t) \]
+</p>
+
+<p>
+\[ \kappa x + C_{2}\to \eta(x).\]
+</p>
+
+<ul class="org-ul">
+<li>Andrei D. Polyanin, <br>
+"Construction of exact solutions in implicit form for PDEs: New
+functional separable solutions of non-linear reaction-diffusion
+equations with variable coefficients". <br>
+May 2019 <i>International Journal of Non-Linear Mechanics</i> <b>111</b>:95-105
+DOI: <a href="http://dx.doi.org/10.1016/j.ijnonlinmec.2019.02.005">10.1016/j.ijnonlinmec.2019.02.005</a>,
+<a href="http://eqworld.ipmnet.ru/Arts_Polyanin/NLM_2019_Polyanin.pdf">Eprint</a></li>
+<li>Andrei D. Polyanin, <br>
+"Functional separation of variables in nonlinear PDEs: General
+approach, new solutions of diffusion-type equations". <br>
+<a href="https://arxiv.org/abs/2001.01645">arXiv:2001.01645</a>, 56 pages</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-03-02 Tue 17:05.</p>
+</div>
+</body>
+</html>

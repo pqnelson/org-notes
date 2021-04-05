@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Types - I-Machine</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Data Types - I-Machine</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org0550617">1. Lisp-Machine Data Types</a>
+<ul>
+<li><a href="#org0b6a644">1.1. Introduction to Lisp-Machine Objects</a>
+<ul>
+<li><a href="#org0aeb607">1.1.1. Memory Words</a>
+<ul>
+<li><a href="#orgbd32f76">1.1.1.1. Length and Format</a></li>
+<li><a href="#org131690e">1.1.1.2. Fields</a></li>
+</ul>
+</li>
+<li><a href="#orgedcbba4">1.1.2. Classes of Stored Object Representations</a></li>
+<li><a href="#org4fdb514">1.1.3. Components of Stored Representations (1.1.3)</a>
+<ul>
+<li><a href="#org01cc4b2">1.1.3.1. Object References (1.1.3.1)</a></li>
+<li><a href="#orgdf57265">1.1.3.2. Headers</a></li>
+</ul>
+</li>
+<li><a href="#org854d793">1.1.4. Operand-Reference Classification</a></li>
+</ul>
+</li>
+<li><a href="#orgef264cd">1.2. Data-Type Descriptions</a>
+<ul>
+<li><a href="#orga450c4d">1.2.1. Representations of Symbols</a></li>
+<li><a href="#org04ab78e">1.2.2. Representation of Instances and Related Data Types</a>
+<ul>
+<li><a href="#org772f7ac">1.2.2.1. Flavor Instances</a></li>
+<li><a href="#orgdcc4729">1.2.2.2. List Instance</a></li>
+<li><a href="#org60b3fe2">1.2.2.3. Array Instance</a></li>
+<li><a href="#orgfacd529">1.2.2.4. String Instance</a></li>
+</ul>
+</li>
+<li><a href="#org748435e">1.2.3. Representation of Characters</a></li>
+<li><a href="#org038f384">1.2.4. Representation of Numbers</a>
+<ul>
+<li><a href="#org25eb044">1.2.4.1. Fixnum Representation</a></li>
+<li><a href="#org2af27a3">1.2.4.2. Bignum Representation</a></li>
+<li><a href="#org2aa7f74">1.2.4.3. Small-Ratio Representation</a></li>
+<li><a href="#orgc6f9873">1.2.4.4. Big-Ratio Representation</a></li>
+<li><a href="#orgb3e01b9">1.2.4.5. Single-Precision Floating-Point Representation</a></li>
+<li><a href="#org8dfb0a1">1.2.4.6. Double-Precision Floating-Point Representation</a></li>
+<li><a href="#orgf08148e">1.2.4.7. Complex-Number Representation</a></li>
+<li><a href="#org35106e6">1.2.4.8. The Spare-Number Type</a></li>
+</ul>
+</li>
+<li><a href="#org9cb7bab">1.2.5. Representations of Lists</a></li>
+<li><a href="#org9ca7c9f">1.2.6. Representations of Arrays and Strings</a></li>
+<li><a href="#org84f1db2">1.2.7. I-Machine Array Registers</a></li>
+<li><a href="#orge2ed7ce">1.2.8. Representations of Functions and Closures</a>
+<ul>
+<li><a href="#org6180afd">1.2.8.1. Representation of Compiled Functions</a></li>
+<li><a href="#org1b972e1">1.2.8.2. Generic Functions</a></li>
+<li><a href="#org1efea64">1.2.8.3. Representation of Lexical Closures</a></li>
+<li><a href="#org6ff2b67">1.2.8.4. Representation of Dynamic Closures</a></li>
+</ul>
+</li>
+<li><a href="#org264b97d">1.2.9. Instruction Representation</a></li>
+<li><a href="#org17b5ede">1.2.10. Program-Counter Representation</a></li>
+<li><a href="#orgf9816b7">1.2.11. Representation of Locatives</a></li>
+</ul>
+</li>
+<li><a href="#org99fe39f">1.3. Data-Type Code Assignments</a>
+<ul>
+<li><a href="#org2e64921">1.3.1. Headers, Special Markers, and Forwarding Pointers</a></li>
+<li><a href="#org558bb6d">1.3.2. Number Data Types</a></li>
+<li><a href="#orgc7fee4e">1.3.3. Instance Data Types</a></li>
+<li><a href="#orge646faa">1.3.4. Primitive Data Types</a></li>
+<li><a href="#org5d1fe6d">1.3.5. Special Marker for Garbage Collector</a></li>
+<li><a href="#org9248b33">1.3.6. Data Types for Program Counter Values</a></li>
+<li><a href="#orga0c4063">1.3.7. Full Word Instruction Data Types</a></li>
+<li><a href="#org9bd086b">1.3.8. Half-Word Instruction Data Types</a></li>
+</ul>
+</li>
+<li><a href="#orgf37f8ec">1.4. Appendix: Comparison of 3600-Family and I-Machine Data Representations</a>
+<ul>
+<li><a href="#org0bb0850">1.4.1. Array Differences</a></li>
+<li><a href="#orga0ea1e7">1.4.2. Compiled Function Differences</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgccff18a">2. Memory Layout and Addressing</a>
+<ul>
+<li><a href="#org26fbc14">2.1. Address Space</a>
+<ul>
+<li><a href="#org75b2854">2.1.1. Virtual Addresses</a></li>
+<li><a href="#org431ed50">2.1.2. Ephemeral Addresses</a></li>
+<li><a href="#orge6fc5d7">2.1.3. Unmapped Addresses</a></li>
+<li><a href="#org9b88fc1">2.1.4. Wired Addresses</a></li>
+<li><a href="#orgb7b4bd9">2.1.5. Pages</a></li>
+</ul>
+</li>
+<li><a href="#orgfbbb7ea">2.2. GC Support</a></li>
+<li><a href="#orgf8dce50">2.3. Address Translation</a>
+<ul>
+<li><a href="#org52028a4">2.3.1. Page Hash Table</a></li>
+<li><a href="#orgad0c540">2.3.2. PHT Lookup Algorithm</a></li>
+<li><a href="#org0135fde">2.3.3. Translation Algorithm</a></li>
+</ul>
+</li>
+<li><a href="#orga7b14d8">2.4. Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org0550617" class="outline-2">
+<h2 id="org0550617"><span class="section-number-2">1</span> Lisp-Machine Data Types</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org0b6a644" class="outline-3">
+<h3 id="org0b6a644"><span class="section-number-3">1.1</span> Introduction to Lisp-Machine Objects</h3>
+<div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-org0aeb607" class="outline-4">
+<h4 id="org0aeb607"><span class="section-number-4">1.1.1</span> Memory Words</h4>
+<div class="outline-text-4" id="text-1-1-1">
+</div>
+<div id="outline-container-orgbd32f76" class="outline-5">
+<h5 id="orgbd32f76"><span class="section-number-5">1.1.1.1</span> Length and Format</h5>
+</div>
+<div id="outline-container-org131690e" class="outline-5">
+<h5 id="org131690e"><span class="section-number-5">1.1.1.2</span> Fields</h5>
+</div>
+</div>
+
+<div id="outline-container-orgedcbba4" class="outline-4">
+<h4 id="orgedcbba4"><span class="section-number-4">1.1.2</span> Classes of Stored Object Representations</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+An object can be stored:
+</p>
+<ol class="org-ol">
+<li>as a list, which is built out of one or more conses (e.g., conses, compact lists, closures, big ratios,
+double-precision floating point numbers, complex numbers, generic functions),</li>
+<li>as an immediate object, which does not require any additional memory
+for its representation (e.g., numbers, physical addresses, primitive
+types, instructions), or</li>
+<li>as a structure, represented as a block of memory words, the first
+contains a header with a special data type code (e.g., compiled functions, instances, arrays, symbols,
+bignums).</li>
+</ol>
+
+<p>
+Each word within the structure object may contain:
+</p>
+<ul class="org-ul">
+<li>an object reference,</li>
+<li>a header</li>
+<li>a forwarding pointer, or</li>
+<li>a special marker.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4fdb514" class="outline-4">
+<h4 id="org4fdb514"><span class="section-number-4">1.1.3</span> Components of Stored Representations (1.1.3)</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+The components of stored representations found in Lisp Machine memory
+are:
+</p>
+<ul class="org-ul">
+<li>object references,</li>
+<li>headers,</li>
+<li>forwarding (invisible) pointers, or</li>
+<li>special markers.</li>
+</ul>
+</div>
+
+<div id="outline-container-org01cc4b2" class="outline-5">
+<h5 id="org01cc4b2"><span class="section-number-5">1.1.3.1</span> Object References (1.1.3.1)</h5>
+<div class="outline-text-5" id="text-1-1-3-1">
+<p>
+Object references are the mechanism by which one refers to an object.
+There are three types of object references:
+</p>
+<ol class="org-ol">
+<li>object references <i>by address</i> (implemented by a memory word whose
+address field contains the virtual address of the stored
+representation of the object; e.g., symbols, lists, arrays)</li>
+<li><i>immediate</i> object references (implemented by memory words that
+directly contain the entire representation of the object; e.g., small
+integers, single-precision floating point numbers)</li>
+<li><i>pointers</i> (contain the virtual addresses of locations that do not
+contain objects: they point to locations <i>within</i> objects; e.g.,
+pointer to the value cell of a symbol).</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-orgdf57265" class="outline-5">
+<h5 id="orgdf57265"><span class="section-number-5">1.1.3.2</span> Headers</h5>
+<div class="outline-text-5" id="text-1-1-3-2">
+<p>
+Headers separate objects in memory. This contains information about the
+type of object. There are two types of headers:
+</p>
+<ul class="org-ul">
+<li><code>dtp-header-i</code> when the header is immediate data</li>
+<li><code>dtp-header-p</code> when the header is the address containing some
+descriptive data</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org854d793" class="outline-4">
+<h4 id="org854d793"><span class="section-number-4">1.1.4</span> Operand-Reference Classification</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<p>
+Page 26 of the PDF
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgef264cd" class="outline-3">
+<h3 id="orgef264cd"><span class="section-number-3">1.2</span> Data-Type Descriptions</h3>
+<div class="outline-text-3" id="text-1-2">
+</div>
+
+<div id="outline-container-orga450c4d" class="outline-4">
+<h4 id="orga450c4d"><span class="section-number-4">1.2.1</span> Representations of Symbols</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+The object reference to a symbol is a word of data type <code>dtp-symbol</code>
+or <code>dtp-nil</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org04ab78e" class="outline-4">
+<h4 id="org04ab78e"><span class="section-number-4">1.2.2</span> Representation of Instances and Related Data Types</h4>
+<div class="outline-text-4" id="text-1-2-2">
+</div>
+
+<div id="outline-container-org772f7ac" class="outline-5">
+<h5 id="org772f7ac"><span class="section-number-5">1.2.2.1</span> Flavor Instances</h5>
+<div class="outline-text-5" id="text-1-2-2-1">
+<p>
+The object reference to an instance is a word of data type <code>dtp-instance</code>
+whose address field points to the instance structure.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdcc4729" class="outline-5">
+<h5 id="orgdcc4729"><span class="section-number-5">1.2.2.2</span> List Instance</h5>
+<div class="outline-text-5" id="text-1-2-2-2">
+</div>
+</div>
+<div id="outline-container-org60b3fe2" class="outline-5">
+<h5 id="org60b3fe2"><span class="section-number-5">1.2.2.3</span> Array Instance</h5>
+<div class="outline-text-5" id="text-1-2-2-3">
+</div>
+</div>
+<div id="outline-container-orgfacd529" class="outline-5">
+<h5 id="orgfacd529"><span class="section-number-5">1.2.2.4</span> String Instance</h5>
+</div>
+</div>
+<div id="outline-container-org748435e" class="outline-4">
+<h4 id="org748435e"><span class="section-number-4">1.2.3</span> Representation of Characters</h4>
+<div class="outline-text-4" id="text-1-2-3">
+</div>
+</div>
+<div id="outline-container-org038f384" class="outline-4">
+<h4 id="org038f384"><span class="section-number-4">1.2.4</span> Representation of Numbers</h4>
+<div class="outline-text-4" id="text-1-2-4">
+</div>
+<div id="outline-container-org25eb044" class="outline-5">
+<h5 id="org25eb044"><span class="section-number-5">1.2.4.1</span> Fixnum Representation</h5>
+</div>
+<div id="outline-container-org2af27a3" class="outline-5">
+<h5 id="org2af27a3"><span class="section-number-5">1.2.4.2</span> Bignum Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-2">
+</div>
+</div>
+<div id="outline-container-org2aa7f74" class="outline-5">
+<h5 id="org2aa7f74"><span class="section-number-5">1.2.4.3</span> Small-Ratio Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-3">
+</div>
+</div>
+<div id="outline-container-orgc6f9873" class="outline-5">
+<h5 id="orgc6f9873"><span class="section-number-5">1.2.4.4</span> Big-Ratio Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-4">
+</div>
+</div>
+<div id="outline-container-orgb3e01b9" class="outline-5">
+<h5 id="orgb3e01b9"><span class="section-number-5">1.2.4.5</span> Single-Precision Floating-Point Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-5">
+</div>
+</div>
+<div id="outline-container-org8dfb0a1" class="outline-5">
+<h5 id="org8dfb0a1"><span class="section-number-5">1.2.4.6</span> Double-Precision Floating-Point Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-6">
+</div>
+</div>
+<div id="outline-container-orgf08148e" class="outline-5">
+<h5 id="orgf08148e"><span class="section-number-5">1.2.4.7</span> Complex-Number Representation</h5>
+<div class="outline-text-5" id="text-1-2-4-7">
+</div>
+</div>
+<div id="outline-container-org35106e6" class="outline-5">
+<h5 id="org35106e6"><span class="section-number-5">1.2.4.8</span> The Spare-Number Type</h5>
+<div class="outline-text-5" id="text-1-2-4-8">
+</div>
+</div>
+</div>
+<div id="outline-container-org9cb7bab" class="outline-4">
+<h4 id="org9cb7bab"><span class="section-number-4">1.2.5</span> Representations of Lists</h4>
+<div class="outline-text-4" id="text-1-2-5">
+</div>
+</div>
+<div id="outline-container-org9ca7c9f" class="outline-4">
+<h4 id="org9ca7c9f"><span class="section-number-4">1.2.6</span> Representations of Arrays and Strings</h4>
+<div class="outline-text-4" id="text-1-2-6">
+</div>
+</div>
+<div id="outline-container-org84f1db2" class="outline-4">
+<h4 id="org84f1db2"><span class="section-number-4">1.2.7</span> I-Machine Array Registers</h4>
+</div>
+<div id="outline-container-orge2ed7ce" class="outline-4">
+<h4 id="orge2ed7ce"><span class="section-number-4">1.2.8</span> Representations of Functions and Closures</h4>
+<div class="outline-text-4" id="text-1-2-8">
+</div>
+<div id="outline-container-org6180afd" class="outline-5">
+<h5 id="org6180afd"><span class="section-number-5">1.2.8.1</span> Representation of Compiled Functions</h5>
+</div>
+<div id="outline-container-org1b972e1" class="outline-5">
+<h5 id="org1b972e1"><span class="section-number-5">1.2.8.2</span> Generic Functions</h5>
+</div>
+<div id="outline-container-org1efea64" class="outline-5">
+<h5 id="org1efea64"><span class="section-number-5">1.2.8.3</span> Representation of Lexical Closures</h5>
+</div>
+<div id="outline-container-org6ff2b67" class="outline-5">
+<h5 id="org6ff2b67"><span class="section-number-5">1.2.8.4</span> Representation of Dynamic Closures</h5>
+</div>
+</div>
+<div id="outline-container-org264b97d" class="outline-4">
+<h4 id="org264b97d"><span class="section-number-4">1.2.9</span> Instruction Representation</h4>
+<div class="outline-text-4" id="text-1-2-9">
+</div>
+</div>
+<div id="outline-container-org17b5ede" class="outline-4">
+<h4 id="org17b5ede"><span class="section-number-4">1.2.10</span> Program-Counter Representation</h4>
+<div class="outline-text-4" id="text-1-2-10">
+<p>
+The program counter (pc) is a register in the I-machine that contains
+the virtual address of the currently executing instruction.
+</p>
+</div>
+</div>
+<div id="outline-container-orgf9816b7" class="outline-4">
+<h4 id="orgf9816b7"><span class="section-number-4">1.2.11</span> Representation of Locatives</h4>
+<div class="outline-text-4" id="text-1-2-11">
+<p>
+A locative is a pointer to virtual memory implemented as an object with
+data type <code>dtp-locative</code> and an address field that is the address of the
+virtual memory word to which it points.
+</p>
+
+<p>
+It is classified as a <i>pointer</i> object reference.
+</p>
+
+<p>
+Locatives may point to locations <i>within</i> objects, such as the value
+cell of a symbol. Other uses include the pointer to the start of data in
+long format arrays and the base address of array registers.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org99fe39f" class="outline-3">
+<h3 id="org99fe39f"><span class="section-number-3">1.3</span> Data-Type Code Assignments</h3>
+<div class="outline-text-3" id="text-1-3">
+</div>
+<div id="outline-container-org2e64921" class="outline-4">
+<h4 id="org2e64921"><span class="section-number-4">1.3.1</span> Headers, Special Markers, and Forwarding Pointers</h4>
+</div>
+<div id="outline-container-org558bb6d" class="outline-4">
+<h4 id="org558bb6d"><span class="section-number-4">1.3.2</span> Number Data Types</h4>
+</div>
+<div id="outline-container-orgc7fee4e" class="outline-4">
+<h4 id="orgc7fee4e"><span class="section-number-4">1.3.3</span> Instance Data Types</h4>
+</div>
+<div id="outline-container-orge646faa" class="outline-4">
+<h4 id="orge646faa"><span class="section-number-4">1.3.4</span> Primitive Data Types</h4>
+<div class="outline-text-4" id="text-1-3-4">
+<p>
+There are 11 primitive types:
+</p>
+
+<ol class="org-ol">
+<li><code>dtp-nil</code> the symbol <code>NIL</code></li>
+<li><code>dtp-list</code> a cons</li>
+<li><code>dtp-array</code> an array that is not a string</li>
+<li><code>dtp-symbol</code> a symbol other than <code>NIL</code></li>
+<li><code>dtp-locative</code> locative pointer</li>
+<li><code>dtp-lexical-closure</code> a lexical closure of a function</li>
+<li><code>dtp-dynamic-closure</code> a dynamic closure of a function</li>
+<li><code>dtp-generic-function</code> a generic function</li>
+<li><code>dtp-spare-pointer-1</code></li>
+<li><code>dtp-spare-pointer-2</code></li>
+<li><code>dtp-physical-address</code> a physical address</li>
+<li><code>dtp-spare-immediate-1</code> a spare immediate</li>
+<li><code>dtp-spare-pointer-3</code></li>
+<li><code>dtp-character</code> a common list character object</li>
+<li><code>dtp-spare-pointer-4</code></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org5d1fe6d" class="outline-4">
+<h4 id="org5d1fe6d"><span class="section-number-4">1.3.5</span> Special Marker for Garbage Collector</h4>
+</div>
+
+<div id="outline-container-org9248b33" class="outline-4">
+<h4 id="org9248b33"><span class="section-number-4">1.3.6</span> Data Types for Program Counter Values</h4>
+</div>
+
+<div id="outline-container-orga0c4063" class="outline-4">
+<h4 id="orga0c4063"><span class="section-number-4">1.3.7</span> Full Word Instruction Data Types</h4>
+</div>
+
+<div id="outline-container-org9bd086b" class="outline-4">
+<h4 id="org9bd086b"><span class="section-number-4">1.3.8</span> Half-Word Instruction Data Types</h4>
+</div>
+</div>
+
+<div id="outline-container-orgf37f8ec" class="outline-3">
+<h3 id="orgf37f8ec"><span class="section-number-3">1.4</span> Appendix: Comparison of 3600-Family and I-Machine Data Representations</h3>
+<div class="outline-text-3" id="text-1-4">
+</div>
+<div id="outline-container-org0bb0850" class="outline-4">
+<h4 id="org0bb0850"><span class="section-number-4">1.4.1</span> Array Differences</h4>
+</div>
+
+<div id="outline-container-orga0ea1e7" class="outline-4">
+<h4 id="orga0ea1e7"><span class="section-number-4">1.4.2</span> Compiled Function Differences</h4>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgccff18a" class="outline-2">
+<h2 id="orgccff18a"><span class="section-number-2">2</span> Memory Layout and Addressing</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+
+<div id="outline-container-org26fbc14" class="outline-3">
+<h3 id="org26fbc14"><span class="section-number-3">2.1</span> Address Space</h3>
+<div class="outline-text-3" id="text-2-1">
+</div>
+<div id="outline-container-org75b2854" class="outline-4">
+<h4 id="org75b2854"><span class="section-number-4">2.1.1</span> Virtual Addresses</h4>
+</div>
+
+<div id="outline-container-org431ed50" class="outline-4">
+<h4 id="org431ed50"><span class="section-number-4">2.1.2</span> Ephemeral Addresses</h4>
+</div>
+
+<div id="outline-container-orge6fc5d7" class="outline-4">
+<h4 id="orge6fc5d7"><span class="section-number-4">2.1.3</span> Unmapped Addresses</h4>
+</div>
+
+<div id="outline-container-org9b88fc1" class="outline-4">
+<h4 id="org9b88fc1"><span class="section-number-4">2.1.4</span> Wired Addresses</h4>
+</div>
+
+<div id="outline-container-orgb7b4bd9" class="outline-4">
+<h4 id="orgb7b4bd9"><span class="section-number-4">2.1.5</span> Pages</h4>
+</div>
+</div>
+
+<div id="outline-container-orgfbbb7ea" class="outline-3">
+<h3 id="orgfbbb7ea"><span class="section-number-3">2.2</span> GC Support</h3>
+</div>
+
+<div id="outline-container-orgf8dce50" class="outline-3">
+<h3 id="orgf8dce50"><span class="section-number-3">2.3</span> Address Translation</h3>
+<div class="outline-text-3" id="text-2-3">
+</div>
+<div id="outline-container-org52028a4" class="outline-4">
+<h4 id="org52028a4"><span class="section-number-4">2.3.1</span> Page Hash Table</h4>
+</div>
+
+<div id="outline-container-orgad0c540" class="outline-4">
+<h4 id="orgad0c540"><span class="section-number-4">2.3.2</span> PHT Lookup Algorithm</h4>
+</div>
+
+<div id="outline-container-org0135fde" class="outline-4">
+<h4 id="org0135fde"><span class="section-number-4">2.3.3</span> Translation Algorithm</h4>
+</div>
+</div>
+
+<div id="outline-container-orga7b14d8" class="outline-3">
+<h3 id="orga7b14d8"><span class="section-number-3">2.4</span> Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</h3>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-02-24 Wed 20:52.</p>
+</div>
+</body>
+</html>

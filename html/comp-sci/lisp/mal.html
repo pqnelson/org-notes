@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-03-27 Sat 08:21 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make a Lisp</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Make a Lisp</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org544bca9">1. Roadmap</a>
+<ul>
+<li><a href="#org585c275">1.1. Conventions</a></li>
+</ul>
+</li>
+<li><a href="#org2d7b2de">2. Lisp Reader</a>
+<ul>
+<li><a href="#org6fe26aa">2.1. Tokenizer</a>
+<ul>
+<li><a href="#orgfd4ee60">2.1.1. Header Definitions</a>
+<ul>
+<li><a href="#org8c0e671">2.1.1.1. Tokenizer Data Structure</a></li>
+<li><a href="#orgf23f05f">2.1.1.2. Token Data Structure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org6cbf82e">3. Lisp Values</a>
+<ul>
+<li><a href="#org6d6bfa2">3.1. Base Type</a>
+<ul>
+<li><a href="#org3e39c85">3.1.1. Creating a new Value</a></li>
+<li><a href="#orgc989b03">3.1.2. Freeing a value</a></li>
+</ul>
+</li>
+<li><a href="#org3193c49">3.2. Numbers</a>
+<ul>
+<li><a href="#org9e9f7c3">3.2.1. Header contributions</a></li>
+<li><a href="#org786428a">3.2.2. Integer Constructor</a></li>
+<li><a href="#orgb64f34d">3.2.3. Integer Destructor</a></li>
+<li><a href="#orga3f420b">3.2.4. Integer Getter</a></li>
+<li><a href="#org10039be">3.2.5. Float Constructor</a></li>
+<li><a href="#org2c9c861">3.2.6. Float Destructor</a></li>
+<li><a href="#org7e50e7d">3.2.7. Float Getter</a></li>
+</ul>
+</li>
+<li><a href="#orgec41640">3.3. Symbols</a>
+<ul>
+<li><a href="#org4f0eabe">3.3.1. Header contributions</a></li>
+<li><a href="#orgb3cfe23">3.3.2. Constant definitions</a></li>
+<li><a href="#orgbecd57a">3.3.3. Symbol Constructor</a></li>
+<li><a href="#org65864de">3.3.4. Symbol Destructor</a></li>
+<li><a href="#org18417ce">3.3.5. Symbol Name Getter</a></li>
+</ul>
+</li>
+<li><a href="#org3763588">3.4. Strings</a>
+<ul>
+<li><a href="#orge57a8f6">3.4.1. Header Declarations</a></li>
+<li><a href="#org9f60db5">3.4.2. String Constructor</a></li>
+<li><a href="#orgbf57207">3.4.3. String Destructor</a></li>
+<li><a href="#org887c6ac">3.4.4. String getter</a></li>
+</ul>
+</li>
+<li><a href="#org0ce77dc">3.5. Lists</a>
+<ul>
+<li><a href="#org199ac02">3.5.1. List Header Declarations</a></li>
+<li><a href="#orgb64503e">3.5.2. List Constructor</a></li>
+<li><a href="#orgd448877">3.5.3. List Destructor</a></li>
+<li><a href="#org2616b5c">3.5.4. Car</a></li>
+<li><a href="#orgffeb60d">3.5.5. Cdr</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org3427c83">4. Evaluation</a>
+<ul>
+<li><a href="#orgb632069">4.1. Evaluating Atomic Expressions</a></li>
+<li><a href="#orga88d369">4.2. Evaluating List Expressions</a></li>
+<li><a href="#org826bd90">4.3. Special Forms</a>
+<ul>
+<li><a href="#org9716427">4.3.1. Macros</a></li>
+<li><a href="#orge10ce52">4.3.2. Exception handling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org568eb2e">5. Printing</a></li>
+<li><a href="#org642b402">6. References</a>
+<ul>
+<li><a href="#org42fa9f5">6.1. Exploratory Implementations</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+<b>Warning:</b> This is a work in progress, trying to work on some literate
+program to experiment with such a writing style.
+</p>
+
+<div id="outline-container-org544bca9" class="outline-2">
+<h2 id="org544bca9"><span class="section-number-2">1</span> Roadmap</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+After Clojure sparked renewed interest in <a href="./lisp.html">Lisp</a>, someone started a
+<a href="https://github.com/kanaka/mal">"Make a Lisp"</a> project on Github. It was a guided tutorial on how to
+implement a Clojure-like language from scratch. The scope was
+smaller than Henderson's <i>Functional Programming</i> (1980) which
+compiled a Lisp to <a href="./abstract-machines/secd.html">SECD</a> machine instructions.
+</p>
+
+<p>
+We will be making a Lisp. Although our Lisp will be modeled after
+some blend of Common Lisp and Scheme (favoring the Common Lisp
+syntax but the Lisp-1 flavor of Scheme), in the sense of both
+concrete syntax and reader macros.
+</p>
+
+<p>
+I'm also curious about correctness concerns. So I'll be thinking in
+terms of proving each function does what I intend. Towards this
+end, we will be using the <a href="../acsl.html">ANSI-C Specification Language</a> to annotate
+our C code.
+</p>
+</div>
+
+<div id="outline-container-org585c275" class="outline-3">
+<h3 id="org585c275"><span class="section-number-3">1.1</span> Conventions</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Following <a href="https://www.gnu.org/software/guile/manual/html_node/API-Overview.html#API-Overview">Guile's C conventions</a> (see also Clojure's <a href="https://github.com/clojure/clojure/blob/clojure-1.10.1/src/jvm/clojure/lang/Compiler.java#L2851-L2876">munge</a> translation
+table for characters) I'm going to try to "mangle" Lisp
+identifiers into C code as follows:
+</p>
+
+<ul class="org-ul">
+<li>Replace <code>-</code> (hypen) with <code>_</code> (underscore)</li>
+<li>Replace <code>?</code> (question mark) with <code>_p</code></li>
+<li>Replace <code>!</code> (exclamation point) with <code>_x</code></li>
+<li>Replace <code>-&gt;</code> with <code>_to_</code></li>
+<li>Replace <code>&lt;=</code> with <code>_leq</code></li>
+<li>Replace <code>&gt;=</code> with <code>_geq</code></li>
+<li>Replace <code>&lt;</code> with <code>_less</code></li>
+<li>Replace <code>&gt;</code> with <code>_gr</code></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2d7b2de" class="outline-2">
+<h2 id="org2d7b2de"><span class="section-number-2">2</span> Lisp Reader</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We need to get started reading and printing. Although the readline
+library is suited for this job, it causes quite great difficulties
+for valgrind (making debugging impossible, or harder than I can
+tolerate).
+</p>
+
+<p>
+Once we get input from the REPL, we need to tokenize the string,
+which is then fed to the reader. The tokenizer discerns each
+character fed to it, and accumulates them into tokens <i>or</i> invokes
+reader macros.
+</p>
+
+<p>
+In pseudocode, the <code>read_form()</code> looks like:
+</p>
+
+<pre class="example" id="orgfbfe4a5">
+LispValue* read_form(char *input) {
+    Tokenizer *tokenizer = tokenizer_new(input);
+    LispValue *value = read_from_tokenizer(tokenizer);
+    tokenizer_free(tokenizer);
+    return value;
+}
+
+LispValue* read_from_tokenizer(Tokenizer *tokenizer) {
+    Token *current = peek(tokenizer);
+    if (L_PAREN == current-&gt;type) {
+        return read_list(tokenizer);
+    } else {
+        return read_atom(tokenizer);
+    }
+}
+</pre>
+
+<p>
+The tokenizer owns the input string, and is responsible for freeing
+it. When creating a symbol or string, we must create new strings
+and then the corresponding Lisp object owns them.
+</p>
+</div>
+
+<div id="outline-container-org6fe26aa" class="outline-3">
+<h3 id="org6fe26aa"><span class="section-number-3">2.1</span> Tokenizer</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+The tokenizer needs to track which character is being tokenized,
+the start of the input string (for later use when freeing it), and
+presumably some other stuff.
+</p>
+</div>
+
+<div id="outline-container-orgfd4ee60" class="outline-4">
+<h4 id="orgfd4ee60"><span class="section-number-4">2.1.1</span> Header Definitions</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-preprocessor">#if</span><span class="org-negation-char"><span class="org-preprocessor">n</span></span><span class="org-preprocessor">def</span> LISP_TOKENIZER_H
+<span class="org-preprocessor">#define</span> <span class="org-variable-name">LISP_TOKENIZER_H</span>
+
+&lt;&lt;Token header data structures&gt;&gt;
+
+&lt;&lt;Token function prototypes&gt;&gt;
+<span class="org-preprocessor">#endif</span> <span class="org-comment-delimiter">/* </span><span class="org-comment">LISP_TOKENIZER_H </span><span class="org-comment-delimiter">*/</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org8c0e671" class="outline-5">
+<h5 id="org8c0e671"><span class="section-number-5">2.1.1.1</span> Tokenizer Data Structure</h5>
+<div class="outline-text-5" id="text-2-1-1-1">
+<p>
+The tokenizer itself needs to track the start of the input string,
+the current position, and presumably a few other metadata
+fields. For now we have two pointers for it.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">Tokenizer</span> {
+    <span class="org-type">char</span> *<span class="org-variable-name">start</span>, *<span class="org-variable-name">current</span>;
+    <span class="org-keyword">struct</span> <span class="org-type">Token</span> *<span class="org-variable-name">token</span>;
+} <span class="org-type">Tokenizer</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf23f05f" class="outline-5">
+<h5 id="orgf23f05f"><span class="section-number-5">2.1.1.2</span> Token Data Structure</h5>
+<div class="outline-text-5" id="text-2-1-1-2">
+<p>
+The <code>Token</code> data structure has the string segment as an array of
+bytes. We want to avoid allocating memory needlessly, so instead it
+has a pointer to the string buffer owned by the <code>Tokenizer</code> <i>and</i> a
+length field. We'll also track what type of token we're working
+with. For convenience, we will also have an enumeration of token
+types. In practice, for a later second-pass, we wouldn't want it;
+we would want to hew closer to the algorithm outlined in
+<cite class="book-title">Common Lisp the Language</cite> (ch. 22).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-keyword">typedef</span> <span class="org-keyword">enum</span> {
+    <span class="org-variable-name">TOKEN_NIL</span>,
+    <span class="org-variable-name">TOKEN_TRUE</span>,
+    <span class="org-variable-name">TOKEN_FALSE</span>,
+    <span class="org-variable-name">TOKEN_SYMBOL</span>,
+    <span class="org-variable-name">TOKEN_INT</span>,
+    <span class="org-variable-name">TOKEN_FLOAT</span>,
+    <span class="org-variable-name">TOKEN_STRING</span>,
+    <span class="org-variable-name">TOKEN_CONS</span>,
+    <span class="org-variable-name">TOKEN_LPAREN</span>,
+    <span class="org-variable-name">TOKEN_RPAREN</span>
+} <span class="org-type">TokenType</span>;
+
+<span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">Token</span> {
+    <span class="org-type">TokenType</span> <span class="org-variable-name">type</span>;
+    <span class="org-type">char</span> *<span class="org-variable-name">lexeme</span>;
+    <span class="org-type">uint8_t</span> <span class="org-variable-name">size</span>;
+} <span class="org-type">Token</span>;
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org6cbf82e" class="outline-2">
+<h2 id="org6cbf82e"><span class="section-number-2">3</span> Lisp Values</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+We are going to start reading an input stream to produce Lisp
+Values. As per tradition, we stick all the possible values in the
+<code>types.h</code> header file. C has two ways to imitate subtyping, one
+uses a <code>struct { enum LispType type; union {...}; };</code> tagged-union
+design, the other uses struct inheritance. I'll opt for the
+latter.
+</p>
+
+<p>
+The types we will have to implement:
+</p>
+
+<ol class="org-ol">
+<li>The base "class" Lisp Value</li>
+<li>Lisp Constants (for <code>nil</code>, <code>true</code>, and <code>false</code>)</li>
+<li>Integer</li>
+<li>Float</li>
+<li>String</li>
+<li>List</li>
+<li>Symbol</li>
+<li>Primitive Functions</li>
+<li>Lisp Functions (constructed by lambdas)</li>
+</ol>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-preprocessor">#if</span><span class="org-negation-char"><span class="org-preprocessor">n</span></span><span class="org-preprocessor">def</span> LISP_TYPES_H
+<span class="org-preprocessor">#define</span> <span class="org-variable-name">LISP_TYPES_H</span>
+
+<span class="org-keyword">typedef</span> <span class="org-keyword">enum</span> {
+    <span class="org-variable-name">LISP_NIL</span>    = 0,  <span class="org-comment-delimiter">/* </span><span class="org-comment">0b00000000 </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-variable-name">LISP_TRUE</span>   = 1,  <span class="org-comment-delimiter">/* </span><span class="org-comment">0b00000001 </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-variable-name">LISP_FALSE</span>  = 2,  <span class="org-comment-delimiter">/* </span><span class="org-comment">0b00000010 </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-variable-name">Lisp_BOOL</span>   = 3,  <span class="org-comment-delimiter">/* </span><span class="org-comment">0b00000011 </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-variable-name">LISP_SYMBOL</span> = 4,  <span class="org-comment-delimiter">/* </span><span class="org-comment">0b00000100 </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-variable-name">LISP_INT</span>    = 8,  <span class="org-comment-delimiter">/* </span><span class="org-comment">0b00001000 </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-variable-name">LISP_FLOAT</span>  = 16, <span class="org-comment-delimiter">/* </span><span class="org-comment">0b00010000 </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-variable-name">LISP_STRING</span> = 32, <span class="org-comment-delimiter">/* </span><span class="org-comment">0b00100000 </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-variable-name">LISP_CONS</span>   = 64, <span class="org-comment-delimiter">/* </span><span class="org-comment">0b01000000 </span><span class="org-comment-delimiter">*/</span>
+    &lt;&lt;Lisp type_enum constants&gt;&gt;
+} <span class="org-type">LispType</span>;
+
+&lt;&lt;Lisp value base type&gt;&gt;
+
+&lt;&lt;Lisp Numbers declarations&gt;&gt;
+
+&lt;&lt;Lisp Symbol declarations&gt;&gt;
+
+&lt;&lt;Lisp String declarations&gt;&gt;
+
+&lt;&lt;Lisp cons-cell declarations&gt;&gt;
+
+&lt;&lt;Other lisp types&gt;&gt;
+
+<span class="org-preprocessor">#endif</span> <span class="org-comment-delimiter">/* </span><span class="org-comment">LISP_TYPES_H </span><span class="org-comment-delimiter">*/</span>
+</pre>
+</div>
+
+<p>
+The headers we need for <code>types.c</code> include the usual suspects.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c starts </span><span class="org-comment-delimiter">*/</span>
+&lt;&lt;Include types headers&gt;&gt;
+</pre>
+</div>
+
+<p>
+Which starts our source file off nicely:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Include types headers&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+<span class="org-preprocessor">#include</span> <span class="org-string">&lt;stdlib.h&gt;</span>
+<span class="org-preprocessor">#include</span> <span class="org-string">&lt;string.h&gt;</span>
+<span class="org-preprocessor">#include</span> <span class="org-string">&lt;assert.h&gt;</span>
+<span class="org-preprocessor">#include</span> <span class="org-string">&lt;stdbool.h&gt;</span>
+<span class="org-preprocessor">#include</span> <span class="org-string">"types.h"</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org6d6bfa2" class="outline-3">
+<h3 id="org6d6bfa2"><span class="section-number-3">3.1</span> Base Type</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+The base type of Lisp Values tracks metadata, like the
+<code>LispType type</code> constant, or reference counting. For now, I will
+stick a pin in the topic of garbage collection (it's rather
+tricky &#x2014; although <a href="https://nullprogram.com/blog/2015/02/17">reference counting in C</a> is not too bad&#x2026;thread
+safety's a pain, though).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h </span><span class="org-comment-delimiter">*/</span>
+<span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Lisp value base type&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+<span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">LispValue</span> {
+    <span class="org-type">LispType</span> <span class="org-variable-name">type</span>;
+} <span class="org-type">LispValue</span>;
+
+<span class="org-type">LispValue</span>* <span class="org-function-name">value_new</span>(<span class="org-type">LispType</span> <span class="org-variable-name">type</span>);
+<span class="org-type">void</span> <span class="org-function-name">value_free</span>(<span class="org-type">LispValue</span> *<span class="org-variable-name">value</span>);
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org3e39c85" class="outline-4">
+<h4 id="org3e39c85"><span class="section-number-4">3.1.1</span> Creating a new Value</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<p>
+We have the generic machinery for creating a <code>Value</code> for a given
+<code>type</code>, without actually doing anything aside from allocating the
+space for the metadata. If we cannot allocate memory, we abort.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispValue</span>* <span class="org-function-name">value_new</span>(<span class="org-type">LispType</span> <span class="org-variable-name">type</span>) {
+    <span class="org-type">LispValue</span>* <span class="org-variable-name">value</span> = malloc(<span class="org-keyword">sizeof</span>(*value));
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>value) abort();
+    value-&gt;type = type;
+    <span class="org-keyword">return</span> value;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc989b03" class="outline-4">
+<h4 id="orgc989b03"><span class="section-number-4">3.1.2</span> Freeing a value</h4>
+<div class="outline-text-4" id="text-3-1-2">
+<p>
+Freeing objects in memory is rather straightforward. If we had
+refcounting, we would need to be a bit more careful. For future
+considerations, we also dispatch depending on the type of value
+being freed.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">void</span> <span class="org-function-name">value_free</span>(<span class="org-type">LispValue</span> *<span class="org-variable-name">value</span>) {
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>value) <span class="org-keyword">return</span>;
+    <span class="org-keyword">switch</span> (value-&gt;type) {
+        <span class="org-keyword">case</span> LISP_NIL:    <span class="org-comment-delimiter">/* </span><span class="org-comment">fall through </span><span class="org-comment-delimiter">*/</span>
+        <span class="org-keyword">case</span> LISP_TRUE:   <span class="org-comment-delimiter">/* </span><span class="org-comment">fall through </span><span class="org-comment-delimiter">*/</span>
+        <span class="org-keyword">case</span> LISP_FALSE:
+            <span class="org-keyword">return</span>;       <span class="org-comment-delimiter">/* </span><span class="org-comment">do not free constants </span><span class="org-comment-delimiter">*/</span>
+        <span class="org-keyword">case</span> LISP_SYMBOL:
+            symbol_free((<span class="org-type">LispSymbol</span> *)value);
+            <span class="org-keyword">break</span>;
+        <span class="org-keyword">case</span> LISP_INT:
+            int_free((<span class="org-type">LispInt</span> *)value);
+            <span class="org-keyword">break</span>;
+        <span class="org-keyword">case</span> LISP_FLOAT:
+            float_free((<span class="org-type">LispFloat</span> *)value);
+            <span class="org-keyword">break</span>;
+        <span class="org-keyword">case</span> LISP_STRING:
+            string_free((<span class="org-type">LispString</span> *)value);
+            <span class="org-keyword">break</span>;
+        <span class="org-keyword">case</span> LISP_CONS:
+            list_free((<span class="org-type">LispList</span> *)value);
+            <span class="org-keyword">break</span>;
+        <span class="org-keyword">default</span>:
+            free(value);
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org3193c49" class="outline-3">
+<h3 id="org3193c49"><span class="section-number-3">3.2</span> Numbers</h3>
+<div class="outline-text-3" id="text-3-2">
+</div>
+<div id="outline-container-org9e9f7c3" class="outline-4">
+<h4 id="org9e9f7c3"><span class="section-number-4">3.2.1</span> Header contributions</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+We have integers and floating-point numbers. I'm glossing over the
+details, but really a double-precision number should be used (at
+the very least) for floating-point arithmetic.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h </span><span class="org-comment-delimiter">*/</span>
+<span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Lisp Numbers declarations&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+&lt;&lt;Lisp integer structure&gt;&gt;
+
+&lt;&lt;Lisp integer function declarations&gt;&gt;
+
+&lt;&lt;Lisp floating-point structure&gt;&gt;
+
+&lt;&lt;Lisp floating-point function declarations&gt;&gt;
+</pre>
+</div>
+
+<p>
+The data structure for the integer, I'll choose to use C's <code>long long</code>
+data type. Heuristically, it's a suitably large integer type.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h </span><span class="org-comment-delimiter">*/</span>
+<span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Lisp integer structure&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">LispInt</span> {
+    <span class="org-keyword">struct</span> <span class="org-type">LispValue</span>;
+    <span class="org-type">long</span> <span class="org-type">long</span> <span class="org-variable-name">value</span>;
+} <span class="org-type">LispInt</span>;
+</pre>
+</div>
+
+<p>
+The floating point could be either double or a <code>long double</code>. Since
+there's no support anywhere for 128-bit floating point arithmetic,
+I'm forced to use the next highest precision afforded by the IEEE 754
+standard (double precision).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h </span><span class="org-comment-delimiter">*/</span>
+<span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Lisp floating-point structure&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+<span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">LispFloat</span> {
+    <span class="org-keyword">struct</span> <span class="org-type">LispValue</span>;
+    <span class="org-type">double</span> <span class="org-variable-name">value</span>;
+} <span class="org-type">LispFloat</span>;
+</pre>
+</div>
+
+<p>
+The function declarations for integer functions, although there
+could be many, will support at least a simple constructor,
+destructor, and a getter method.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h </span><span class="org-comment-delimiter">*/</span>
+<span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Lisp integer function declarations&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispInt</span>* <span class="org-function-name">int_new</span>(<span class="org-type">long</span> <span class="org-type">long</span> <span class="org-variable-name">value</span>);
+<span class="org-type">void</span> <span class="org-function-name">int_free</span>(<span class="org-type">LispInt</span> *<span class="org-variable-name">integer</span>);
+<span class="org-type">long</span> <span class="org-type">long</span> <span class="org-function-name">int_get</span>(<span class="org-type">LispInt</span> *<span class="org-variable-name">integer</span>);
+</pre>
+</div>
+
+<p>
+Likewise, we implement the corresponding methods for <code>LispFloat</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h </span><span class="org-comment-delimiter">*/</span>
+<span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Lisp floating-point function declarations&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispFloat</span>* <span class="org-function-name">float_new</span>(<span class="org-type">double</span> <span class="org-variable-name">value</span>);
+<span class="org-type">void</span> <span class="org-function-name">float_free</span>(<span class="org-type">LispFloat</span> *<span class="org-variable-name">real</span>);
+<span class="org-type">double</span> <span class="org-function-name">float_get</span>(<span class="org-type">LispFloat</span> *<span class="org-variable-name">real</span>);
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org786428a" class="outline-4">
+<h4 id="org786428a"><span class="section-number-4">3.2.2</span> Integer Constructor</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>
+We have the standard <code>malloc</code> then initialize.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispInt</span>* <span class="org-function-name">int_new</span>(<span class="org-type">long</span> <span class="org-type">long</span> <span class="org-variable-name">value</span>) {
+    <span class="org-type">LispInt</span>* <span class="org-variable-name">integer</span> = malloc(<span class="org-keyword">sizeof</span>(*integer));
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>integer) abort();
+    integer-&gt;type = LISP_INT;
+    integer-&gt;value = value;
+    <span class="org-keyword">return</span> integer;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb64f34d" class="outline-4">
+<h4 id="orgb64f34d"><span class="section-number-4">3.2.3</span> Integer Destructor</h4>
+<div class="outline-text-4" id="text-3-2-3">
+<p>
+We free the integer without much fanfare:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">void</span> <span class="org-function-name">int_free</span>(<span class="org-type">LispInt</span> *<span class="org-variable-name">integer</span>) {
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>integer) <span class="org-keyword">return</span>;
+    assert (LISP_INT == integer-&gt;type);
+
+    free(integer);
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga3f420b" class="outline-4">
+<h4 id="orga3f420b"><span class="section-number-4">3.2.4</span> Integer Getter</h4>
+<div class="outline-text-4" id="text-3-2-4">
+<p>
+We want to hide the encapsulation&#x2026;I guess we're doing that poorly
+if we stick the struct in the header. Anyways, as per tradition:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">long</span> <span class="org-type">long</span> <span class="org-function-name">int_get</span>(<span class="org-type">LispInt</span> *<span class="org-variable-name">integer</span>) {
+    assert (<span class="org-constant">NULL</span> != integer);
+    assert (LISP_INT == integer-&gt;type);
+    <span class="org-keyword">return</span> integer-&gt;value;
+}
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org10039be" class="outline-4">
+<h4 id="org10039be"><span class="section-number-4">3.2.5</span> Float Constructor</h4>
+<div class="outline-text-4" id="text-3-2-5">
+<p>
+Another <code>malloc</code> then initialize constructor:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispFloat</span>* <span class="org-function-name">float_new</span>(<span class="org-type">double</span> <span class="org-variable-name">value</span>) {
+    <span class="org-type">LispFloat</span>* <span class="org-variable-name">real</span> = malloc(<span class="org-keyword">sizeof</span>(*real));
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>real) abort();
+    real-&gt;type = LISP_FLOAT;
+    real-&gt;value = value;
+    <span class="org-keyword">return</span> real;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2c9c861" class="outline-4">
+<h4 id="org2c9c861"><span class="section-number-4">3.2.6</span> Float Destructor</h4>
+<div class="outline-text-4" id="text-3-2-6">
+<p>
+We free what we can:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">void</span> <span class="org-function-name">float_free</span>(<span class="org-type">LispFloat</span> *<span class="org-variable-name">real</span>) {
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>real) <span class="org-keyword">return</span>;
+    assert (LISP_FLOAT == real-&gt;type);
+    free(real);
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7e50e7d" class="outline-4">
+<h4 id="org7e50e7d"><span class="section-number-4">3.2.7</span> Float Getter</h4>
+<div class="outline-text-4" id="text-3-2-7">
+<p>
+For a non-null real, we return its value (or raise an assertion
+error if given a wrongly-typed term or null-pointer).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">double</span> <span class="org-function-name">float_get</span>(<span class="org-type">LispFloat</span> *<span class="org-variable-name">real</span>) {
+    assert (<span class="org-constant">NULL</span> != real);
+    assert (LISP_FLOAT == real-&gt;type);
+    <span class="org-keyword">return</span> real-&gt;value;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgec41640" class="outline-3">
+<h3 id="orgec41640"><span class="section-number-3">3.3</span> Symbols</h3>
+<div class="outline-text-3" id="text-3-3">
+</div>
+<div id="outline-container-org4f0eabe" class="outline-4">
+<h4 id="org4f0eabe"><span class="section-number-4">3.3.1</span> Header contributions</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<p>
+We need to define the data structure and declare the function
+prototypes. This is the contribution to the types header.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Lisp Symbol declarations&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+&lt;&lt;Symbol data structure&gt;&gt;
+
+&lt;&lt;Symbol function declarations&gt;&gt;
+</pre>
+</div>
+
+<p>
+A symbol amounts to a glorified string, alas.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Symbol data structure&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">LispSymbol</span> {
+    <span class="org-keyword">struct</span> <span class="org-type">LispValue</span>;
+    <span class="org-type">char</span> *<span class="org-variable-name">name</span>;
+} <span class="org-type">LispSymbol</span>;
+</pre>
+</div>
+
+<p>
+There are three methods associated to a symbol. We have a
+constructor, a destructor, and an ability to get a symbol's name:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Symbol function declarations&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-type">LispSymbol</span>* <span class="org-function-name">symbol_new</span>(<span class="org-type">char</span> *<span class="org-variable-name">name</span>);
+<span class="org-type">void</span> <span class="org-function-name">symbol_free</span>(<span class="org-type">LispSymbol</span> *<span class="org-variable-name">symbol</span>);
+<span class="org-type">char</span>* <span class="org-function-name">symbol_name</span>(<span class="org-type">LispSymbol</span> *<span class="org-variable-name">symbol</span>);
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb3cfe23" class="outline-4">
+<h4 id="orgb3cfe23"><span class="section-number-4">3.3.2</span> Constant definitions</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<p>
+We define primitive constants
+</p>
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Symbol data structure&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-keyword">extern</span> <span class="org-keyword">const</span> <span class="org-type">LispSymbol</span> <span class="org-variable-name">lisp_nil</span>;
+<span class="org-keyword">extern</span> <span class="org-keyword">const</span> <span class="org-type">LispSymbol</span> <span class="org-variable-name">lisp_true</span>;
+<span class="org-keyword">extern</span> <span class="org-keyword">const</span> <span class="org-type">LispSymbol</span> <span class="org-variable-name">lisp_false</span>;
+</pre>
+</div>
+
+<p>
+In the <code>reader.c</code> file, we just declare our initializers for the
+constants <code>nil</code>, <code>true</code>, <code>false</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;String token constants&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-keyword">static</span> <span class="org-type">char</span> <span class="org-variable-name">FALSE_TOKEN</span>[] = <span class="org-string">"false"</span>;
+<span class="org-keyword">static</span> <span class="org-type">char</span> <span class="org-variable-name">NIL_TOKEN</span>[] = <span class="org-string">"nil"</span>;
+<span class="org-keyword">static</span> <span class="org-type">char</span> <span class="org-variable-name">TRUE_TOKEN</span>[] = <span class="org-string">"true"</span>;
+
+<span class="org-keyword">const</span> <span class="org-type">LispSymbol</span> <span class="org-variable-name">lisp_nil</span>   = {.type = LISP_NIL, .name = NIL_TOKEN};
+<span class="org-keyword">const</span> <span class="org-type">LispSymbol</span> <span class="org-variable-name">lisp_true</span>  = {.type = LISP_TRUE, .name = TRUE_TOKEN};
+<span class="org-keyword">const</span> <span class="org-type">LispSymbol</span> <span class="org-variable-name">lisp_false</span> = {.type = LISP_FALSE, .name = FALSE_TOKEN};
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbecd57a" class="outline-4">
+<h4 id="orgbecd57a"><span class="section-number-4">3.3.3</span> Symbol Constructor</h4>
+<div class="outline-text-4" id="text-3-3-3">
+<p>
+One corner-case to consider: what should happen if we try to
+construct a symbol with a <code>NULL</code> name? I honestly do not know. It
+seems reasonable to return <code>lisp_nil</code>, though this would be a
+typing error. For now, I just create a new symbol.
+</p>
+
+<p>
+The other consideration worth spending time pondering, should we
+copy the string to the symbol? Or should we just reuse the string
+we're given? Since the reader will create a lexeme, we should reuse
+it here.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispSymbol</span>* <span class="org-function-name">symbol_new</span>(<span class="org-type">char</span> *<span class="org-variable-name">name</span>) {
+    <span class="org-type">LispSymbol</span> *<span class="org-variable-name">symbol</span> = malloc(<span class="org-keyword">sizeof</span>(*symbol));
+    symbol-&gt;type = LISP_SYMBOL;
+    symbol-&gt;name = name;
+    <span class="org-keyword">return</span> symbol;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org65864de" class="outline-4">
+<h4 id="org65864de"><span class="section-number-4">3.3.4</span> Symbol Destructor</h4>
+<div class="outline-text-4" id="text-3-3-4">
+<p>
+Given the considerations weighed during the design of the
+constructor, our hand is forced with the destructor: we need to
+free the symbol name (or else we have a memory leak from the
+<code>Reader</code> allocating a lexeme which is never freed).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">void</span> <span class="org-function-name">symbol_free</span>(<span class="org-type">LispSymbol</span> *<span class="org-variable-name">symbol</span>) {
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>symbol) <span class="org-keyword">return</span>;
+    assert (LISP_SYMBOL == symbol-&gt;type);
+    <span class="org-keyword">if</span> (symbol == lisp_nil || symbol == lisp_true || symbol == lisp_false) {
+        <span class="org-comment-delimiter">// </span><span class="org-comment">printf("WARNING: trying to free a constant\n");</span>
+        <span class="org-keyword">return</span>;
+    }
+    <span class="org-keyword">if</span> (symbol-&gt;name) free(symbol-&gt;name);
+    free(symbol);
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org18417ce" class="outline-4">
+<h4 id="org18417ce"><span class="section-number-4">3.3.5</span> Symbol Name Getter</h4>
+<div class="outline-text-4" id="text-3-3-5">
+<p>
+At present, I do not know if I will mutate the string returned from
+<code>symbol_name</code>. I will assume not, and thus just return the pointer
+directly.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">char</span>* <span class="org-function-name">symbol_name</span>(<span class="org-type">LispSymbol</span> *<span class="org-variable-name">symbol</span>) {
+    assert(<span class="org-constant">NULL</span> != symbol);
+    assert(LISP_SYMBOL == symbol-&gt;type);
+    <span class="org-keyword">return</span> symbol-&gt;name;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3763588" class="outline-3">
+<h3 id="org3763588"><span class="section-number-3">3.4</span> Strings</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+Strings require greater consideration. Should we use "UCSD Pascal
+Strings" (a struct tracking the size and the start of the character
+string) or should we try to adopt something like Java's string
+pool? The possibilities are endless.
+</p>
+
+<p>
+The first attempt will make things as simple as possible, until
+experience tells us we've done wrong.
+</p>
+</div>
+
+<div id="outline-container-orge57a8f6" class="outline-4">
+<h4 id="orge57a8f6"><span class="section-number-4">3.4.1</span> Header Declarations</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Lisp String declarations&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+&lt;&lt;String data structure&gt;&gt;
+
+&lt;&lt;String function prototypes&gt;&gt;
+</pre>
+</div>
+
+<p>
+The data structure lacks all the excitement of modern amenities.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;String data structure&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">LispString</span> {
+    <span class="org-keyword">struct</span> <span class="org-type">LispValue</span>;
+    <span class="org-type">char</span> *<span class="org-variable-name">string</span>;
+} <span class="org-type">LispString</span>;
+</pre>
+</div>
+
+<p>
+And our function prototypes leave much to be desired. Later we will
+have to consider how to design functions like:
+</p>
+<ul class="org-ul">
+<li>Substring</li>
+<li>Concatenation</li>
+<li>Case changes</li>
+<li>Whitespace stripping</li>
+<li>And much, much more!</li>
+</ul>
+
+<p>
+For now, the holy trinity of constructor/destructor/getter
+suffices.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;String function prototypes&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-type">LispString</span>* <span class="org-function-name">string_new</span>(<span class="org-type">char</span> *<span class="org-variable-name">string</span>);
+<span class="org-type">void</span> <span class="org-function-name">string_free</span>(<span class="org-type">LispString</span> *<span class="org-variable-name">string</span>);
+<span class="org-type">char</span>* <span class="org-function-name">string_get</span>(<span class="org-type">LispString</span> *<span class="org-variable-name">string</span>);
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9f60db5" class="outline-4">
+<h4 id="org9f60db5"><span class="section-number-4">3.4.2</span> String Constructor</h4>
+<div class="outline-text-4" id="text-3-4-2">
+<p>
+As with the symbol, we should dedicate some time to think about how
+to handle the <code>NULL</code> string parameter case. "Should", but won't.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispString</span>* <span class="org-function-name">string_new</span>(<span class="org-type">char</span> *<span class="org-variable-name">string</span>) {
+    <span class="org-type">LispString</span> *<span class="org-variable-name">s</span> = malloc(<span class="org-keyword">sizeof</span>(*s));
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>s) abort();
+    s-&gt;type = LISP_STRING;
+    s-&gt;string = string;
+    <span class="org-keyword">return</span> s;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbf57207" class="outline-4">
+<h4 id="orgbf57207"><span class="section-number-4">3.4.3</span> String Destructor</h4>
+<div class="outline-text-4" id="text-3-4-3">
+<p>
+Although we may accidentally try to destroy the same evidence
+twice, we should handle it gracefully. Any non-null argument,
+however, should be a <code>LispString</code> object.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">void</span> <span class="org-function-name">string_free</span>(<span class="org-type">LispString</span> *<span class="org-variable-name">string</span>) {
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>string) <span class="org-keyword">return</span>;
+    assert(LISP_STRING == string-&gt;type);
+    <span class="org-keyword">if</span> (string-&gt;string) free(string-&gt;string);
+    free(string);
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org887c6ac" class="outline-4">
+<h4 id="org887c6ac"><span class="section-number-4">3.4.4</span> String getter</h4>
+<div class="outline-text-4" id="text-3-4-4">
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">char</span>* <span class="org-function-name">string_get</span>(<span class="org-type">LispString</span> *<span class="org-variable-name">string</span>) {
+    assert (<span class="org-constant">NULL</span> != string);
+    assert (LISP_STRING == string-&gt;type);
+    <span class="org-keyword">return</span> string-&gt;string;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org0ce77dc" class="outline-3">
+<h3 id="org0ce77dc"><span class="section-number-3">3.5</span> Lists</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+Lists in Lisp are linked-lists whose nodes are called
+"cons-cells". They are mutatable in Common Lisp &amp; Scheme, but
+immutable in Clojure. We follow the great historic tradition of the
+former, and leave considerations of the latter as an exercise for
+the intrepid reader.
+</p>
+</div>
+
+<div id="outline-container-org199ac02" class="outline-4">
+<h4 id="org199ac02"><span class="section-number-4">3.5.1</span> List Header Declarations</h4>
+<div class="outline-text-4" id="text-3-5-1">
+<p>
+We have our data structure and function prototypes.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Lisp cons-cell declarations&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+&lt;&lt;List data structure&gt;&gt;
+
+&lt;&lt;List function prototypes&gt;&gt;
+</pre>
+</div>
+
+<p>
+Our data structure now takes advantage of the "struct polymorphism"
+we implicitly have been building all along.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;List data structure&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">LispList</span> {
+    <span class="org-keyword">struct</span> <span class="org-type">LispValue</span>;
+    <span class="org-type">LispValue</span> *<span class="org-variable-name">value</span>;  <span class="org-comment-delimiter">/* </span><span class="org-comment">cons </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-type">LispValue</span> *<span class="org-variable-name">next</span>;   <span class="org-comment-delimiter">/* </span><span class="org-comment">cdr </span><span class="org-comment-delimiter">*/</span>
+} <span class="org-type">LispList</span>;
+</pre>
+</div>
+
+<p>
+The function prototypes include <i>two</i> getter methods, in addition
+to the constructor and destructor. There may be other helper
+functions worth considering.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;List function prototypes&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+<span class="org-type">LispList</span>* <span class="org-function-name">list_new</span>(<span class="org-type">LispValue</span> *<span class="org-variable-name">value</span>, <span class="org-type">LispValue</span> *<span class="org-variable-name">next</span>);
+<span class="org-type">void</span> <span class="org-function-name">list_free</span>(<span class="org-type">LispList</span> *<span class="org-variable-name">list</span>);
+<span class="org-type">LispValue</span>* <span class="org-function-name">list_car</span>(<span class="org-type">LispList</span> *<span class="org-variable-name">list</span>);
+<span class="org-type">LispValue</span>* <span class="org-function-name">list_cdr</span>(<span class="org-type">LispList</span> *<span class="org-variable-name">list</span>);
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb64503e" class="outline-4">
+<h4 id="orgb64503e"><span class="section-number-4">3.5.2</span> List Constructor</h4>
+<div class="outline-text-4" id="text-3-5-2">
+<p>
+There are two cases worth considering: when <code>next</code> is <code>NULL</code> and
+when it is not. When it is <code>NULL</code>, we should treat it as synonymous
+with <code>lisp_nil</code>.
+</p>
+
+<p>
+We also just set the pointers of the newly allocated list object to
+the <code>value</code> and <code>next</code>. Immutability would require creating copies
+of them, but I like to live dangerously.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispList</span>* <span class="org-function-name">list_new</span>(<span class="org-type">LispValue</span> *<span class="org-variable-name">value</span>, <span class="org-type">LispValue</span> *<span class="org-variable-name">next</span>) {
+    <span class="org-type">LispList</span> *<span class="org-variable-name">list</span> = malloc(<span class="org-keyword">sizeof</span>(*list));
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>list) abort();
+    list-&gt;type = LISP_CONS;
+    list-&gt;value = (<span class="org-constant">NULL</span> != value ? value : (<span class="org-type">LispValue</span> *)&amp;lisp_nil);
+    list-&gt;next = (<span class="org-constant">NULL</span> != next ? next : (<span class="org-type">LispValue</span> *)&amp;lisp_nil);
+    <span class="org-keyword">return</span> list;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd448877" class="outline-4">
+<h4 id="orgd448877"><span class="section-number-4">3.5.3</span> List Destructor</h4>
+<div class="outline-text-4" id="text-3-5-3">
+<p>
+This is where reference counting would be really wonderful, since
+it would handle freeing memory if I've painted myself into an
+unreferenced corner. Instead, I'll defer that for now, and
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">void</span> <span class="org-function-name">list_free</span>(<span class="org-type">LispList</span> *<span class="org-variable-name">list</span>) {
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>list) <span class="org-keyword">return</span>;
+    <span class="org-keyword">if</span> ((<span class="org-type">LispValue</span> *)list == (<span class="org-type">LispValue</span> *)&amp;lisp_nil) <span class="org-keyword">return</span>;
+    assert(LISP_CONS == list-&gt;type);
+    free(list);
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2616b5c" class="outline-4">
+<h4 id="org2616b5c"><span class="section-number-4">3.5.4</span> Car</h4>
+<div class="outline-text-4" id="text-3-5-4">
+<p>
+The car accesses the value for a node. If we were given a <code>NULL</code>
+pointer, following Common Lisp, we should return <code>nil</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispValue</span>* <span class="org-function-name">list_car</span>(<span class="org-type">LispList</span> *<span class="org-variable-name">list</span>) {
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>list) <span class="org-keyword">return</span> (<span class="org-type">LispValue</span> *)&amp;lisp_nil;
+    assert (<span class="org-constant">NULL</span> != list);
+    assert (LISP_CONS == list-&gt;type);
+    <span class="org-keyword">return</span> list-&gt;value;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgffeb60d" class="outline-4">
+<h4 id="orgffeb60d"><span class="section-number-4">3.5.5</span> Cdr</h4>
+<div class="outline-text-4" id="text-3-5-5">
+<p>
+The cdr gives us the rest of the list. As with <code>car</code>, if given a
+<code>NULL</code> pointer, we return <code>nil</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispValue</span>* <span class="org-function-name">list_cdr</span>(<span class="org-type">LispList</span> *<span class="org-variable-name">list</span>) {
+    <span class="org-keyword">if</span> (<span class="org-negation-char">!</span>list) <span class="org-keyword">return</span> (<span class="org-type">LispValue</span> *)&amp;lisp_nil;
+    assert (<span class="org-constant">NULL</span> != list);
+    assert (LISP_CONS == list-&gt;type);
+    <span class="org-keyword">return</span> list-&gt;next;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org3427c83" class="outline-2">
+<h2 id="org3427c83"><span class="section-number-2">4</span> Evaluation</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Lisp has the unique property that its programs are represented by
+expressions of the language. Evaluating an expression depends on
+whether the expression's "syntax tree" is atomic (e.g., literal
+values or variables) or a list (for, e.g,, function calls).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">just to see if </span><span class="org-comment-delimiter">*/</span>
+<span class="org-type">LispValue</span>* <span class="org-function-name">eval_ast</span>(<span class="org-type">LispValue</span> *<span class="org-variable-name">ast</span>, <span class="org-type">Environment</span> *<span class="org-variable-name">env</span>) {
+    <span class="org-keyword">if</span> (is_atom(ast)) {
+        &lt;&lt;Evaluate atomic expressions&gt;&gt;
+    } <span class="org-keyword">else</span> {
+        &lt;&lt;Evaluate list expressions&gt;&gt;
+    }
+}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgb632069" class="outline-3">
+<h3 id="orgb632069"><span class="section-number-3">4.1</span> Evaluating Atomic Expressions</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+When we are evaluating a symbol, we treat it as the identifier for
+a variable. Its evaluation should produce the value associated with
+that identifier. The heavy lifting has been delegated to the
+environment parameter of <code>eval_ast</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Evaluate atomic expressions&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+<span class="org-keyword">switch</span> (ast-&gt;type) {
+    <span class="org-keyword">case</span> LISP_SYMBOL:
+        <span class="org-keyword">return</span> env_lookup(env, ast-&gt;name);
+    <span class="org-keyword">case</span> LISP_NIL:    <span class="org-comment-delimiter">/* </span><span class="org-comment">fall through </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-keyword">case</span> LISP_TRUE:   <span class="org-comment-delimiter">/* </span><span class="org-comment">fall through </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-keyword">case</span> LISP_FALSE:  <span class="org-comment-delimiter">/* </span><span class="org-comment">fall through </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-keyword">case</span> LISP_STRING: <span class="org-comment-delimiter">/* </span><span class="org-comment">fall through </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-keyword">case</span> LISP_INT:    <span class="org-comment-delimiter">/* </span><span class="org-comment">fall through </span><span class="org-comment-delimiter">*/</span>
+    <span class="org-keyword">case</span> LISP_FLOAT:
+        <span class="org-keyword">return</span> ast;
+    <span class="org-keyword">default</span>:
+        <span class="org-type">char</span> *<span class="org-variable-name">msg</span> = print_str(ast);
+        fprintf(stderr, <span class="org-string">"ERROR: cannot evaluate %s\n"</span>, msg);
+        free(msg);
+        free(ast);
+        abort();
+}
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga88d369" class="outline-3">
+<h3 id="orga88d369"><span class="section-number-3">4.2</span> Evaluating List Expressions</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+Here things get interesting, because we have to take care of
+special forms before trying to invoke the <code>car</code> as a function. We
+take the convention that this is a sequence of <code>if ... else if ...</code>
+statements trying to match on the first component of the list. In
+each branch, there will be a <code>return</code> statement. Thus the default
+branch amounts to invoking the function.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span class="org-comment-delimiter">/* </span><span class="org-comment">&lt;&lt;Evaluate list expressions&gt;&gt; = </span><span class="org-comment-delimiter">*/</span>
+
+&lt;&lt;Macroexpand the |ast|&gt;&gt;
+&lt;&lt;Evaluate special forms&gt;&gt;
+&lt;&lt;Evaluate list as function&gt;&gt;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org826bd90" class="outline-3">
+<h3 id="org826bd90"><span class="section-number-3">4.3</span> Special Forms</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+The special forms we'll implement are:
+</p>
+<ul class="org-ul">
+<li><code>let*</code></li>
+<li><code>def!</code></li>
+<li><code>if</code></li>
+<li><code>fn*</code></li>
+<li><code>do</code></li>
+<li><code>quote</code></li>
+<li><code>quasiquote</code></li>
+<li><code>quasiquoteexpand</code></li>
+</ul>
+</div>
+
+<div id="outline-container-org9716427" class="outline-4">
+<h4 id="org9716427"><span class="section-number-4">4.3.1</span> Macros</h4>
+<div class="outline-text-4" id="text-4-3-1">
+<p>
+These alone give us a good base to experiment with, but what Lisp would
+we have without macros? The first implementation could be as simple as:
+</p>
+
+<ul class="org-ul">
+<li><code>defmacro!</code></li>
+<li><code>macroexpand</code></li>
+</ul>
+
+<p>
+We could also experiment with first-class macros, analogous to <code>fn*</code>
+we'd have something like <code>macro*</code>. The <code>defmacro! x [params] body</code> is just
+<code>(def! defmacro! [macro-name params &amp; body] `(def! ~macro-name (macro* ~params ~@body)))</code>.
+But given <code>defmacro!</code>, it's difficult to obtain something like <code>macro*</code>
+out of it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge10ce52" class="outline-4">
+<h4 id="orge10ce52"><span class="section-number-4">4.3.2</span> Exception handling</h4>
+<div class="outline-text-4" id="text-4-3-2">
+<p>
+An optional special form, for people familiar with Java-esque exception
+handling:
+</p>
+
+<ul class="org-ul">
+<li><code>try*</code></li>
+<li><code>catch*</code></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org568eb2e" class="outline-2">
+<h2 id="org568eb2e"><span class="section-number-2">5</span> Printing</h2>
+</div>
+<div id="outline-container-org642b402" class="outline-2">
+<h2 id="org642b402"><span class="section-number-2">6</span> References</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li>Peter Henderson,
+<cite class="book-title">Functional Programming: Application and Implementation</cite>.
+Prentice-Hall International series in CS, 1980.</li>
+<li>Christian Queinnec,
+<a href="https://pages.lip6.fr/Christian.Queinnec/PDF/rl.pdf">Reasonable Lisp</a> (1989)</li>
+<li>Christian Queinnec,
+<cite class="book-title">Lisp in Small Pieces</cite>.
+Cambridge University Press, 1996.</li>
+<li>Guy Steele, Jr.,
+<cite class="book-title">Common Lisp: The Language</cite>.
+Second ed.</li>
+<li>R. Brooks, R. Gabriel, G. Steele,
+"Lisp-in-Lisp: High Performance and Portability".
+<a href="https://www.dreamsongs.com/Files/ijs1.pdf">PDF</a>.</li>
+<li>R. Brooks, R. Gabriel, G. Steele,
+"S-1 Common Lisp Implementation".
+<a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.572.8410&amp;rep=rep1&amp;type=pdf">PDF</a>.</li>
+</ul>
+</div>
+
+<div id="outline-container-org42fa9f5" class="outline-3">
+<h3 id="org42fa9f5"><span class="section-number-3">6.1</span> Exploratory Implementations</h3>
+<div class="outline-text-3" id="text-6-1">
+<ul class="org-ul">
+<li><a href="https://github.com/JeffBezanson/femtolisp">Femtolisp</a></li>
+<li><a href="https://taoofmac.com/space/dev/lisp">Obscure implementations</a></li>
+<li><a href="https://notes.eatonphil.com/compiler-basics-lisp-to-assembly.html">Writing a lisp compiler from scratch in JavaScript: 1. lisp to assembly</a></li>
+<li></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-02-26 Fri 15:15.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:15 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fluid Dynamics</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Fluid Dynamics</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org6061c78">1. Overview</a></li>
+<li><a href="#org1a37d73">2. References</a>
+<ul>
+<li><a href="#orgda8a851">2.1. Syllabi</a></li>
+<li><a href="#orgc422e34">2.2. Citations from L&amp;L</a></li>
+<li><a href="#org4bf47c9">2.3. Recommendations/Lookup</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+These are my reading notes of Landau and Lifshitz's <cite class="book-title">Fluid Mechanics</cite>
+(vol.6 of their series on Theoretical Physics).
+</p>
+
+<p>
+<b>A note on L&amp;L's style.</b> It seems that Landau and Lifshitz write in a
+manner that's the mirror opposite of abstract mathematics. Instead of
+"theorem" and then "proof", they provide a "proof" followed by a
+"theorem" (but do not announce it with a bold <b>Theorem</b> prefix).
+Consequently, reading L&amp;L amounts to trying to figure out what claims
+are made in a section, then reconstructing the proof.
+</p>
+
+<div id="outline-container-org6061c78" class="outline-2">
+<h2 id="org6061c78"><span class="section-number-2">1</span> Overview</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The Reynolds number measures how unimportant viscosity is, by taking the
+ratio of non-viscous forces to viscosity. For the atmosphere, around
+100km altitude and below, the Reynolds number is usually huge, so
+viscosity is unimportant. What's more important is the terbulence.
+(<a href="https://www.cgd.ucar.edu/staff/islas/teaching/2_Equations.pdf">source</a>; ch 8 "The Planetary Boundary Layer" of John Holton's <cite class="book-title">Introduction to Dynamic Meteorology</cite>)
+</p>
+
+<p>
+Liquids are (usually) incompressible fluids.
+</p>
+
+<p>
+Gases are (usually) compressible fluids.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1a37d73" class="outline-2">
+<h2 id="org1a37d73"><span class="section-number-2">2</span> References</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>Alexandre Chorin, Jerrold Marsden,
+<cite class="book-title">A Mathematical Introduction to Fluid Mechanics</cite>.
+Third ed., Springer, 1993.</li>
+<li>Landau and Lifshitz,
+<cite class="book-title">Fluid Mechanics</cite>.
+Second ed., Butterworth-Heinemann, 1987.
+This is my primary reference.</li>
+</ul>
+</div>
+
+<div id="outline-container-orgda8a851" class="outline-3">
+<h3 id="orgda8a851"><span class="section-number-3">2.1</span> Syllabi</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li>MIT
+<ul class="org-ul">
+<li>1.63 "Advanced Fluid Dynamics of the Environment" <a href="https://ocw.mit.edu/courses/civil-and-environmental-engineering/1-63-advanced-fluid-dynamics-of-the-environment-fall-2002/syllabus/">syllabus</a></li>
+<li>2.06 "Fluid Dynamics" <a href="https://ocw.mit.edu/courses/mechanical-engineering/2-06-fluid-dynamics-spring-2013/syllabus/">syllabus</a> (studies the first three chapters
+of Frank White's <cite class="book-title">Fluid Mechanics</cite>, 7th ed.)</li>
+<li>2.25 "Advanced fluid mechanics" <a href="https://ocw.mit.edu/courses/mechanical-engineering/2-25-advanced-fluid-mechanics-fall-2013/syllabus/">syllabus</a></li>
+<li>2.26 "Compressible Fluid Dynamics" <a href="https://ocw.mit.edu/courses/mechanical-engineering/2-26-compressible-fluid-dynamics-spring-2004/syllabus/">syllabus</a></li>
+<li>2.29 "Numerical Fluid Mechanics" <a href="https://ocw.mit.edu/courses/mechanical-engineering/2-29-numerical-fluid-mechanics-spring-2015/syllabus/">syllabus</a></li>
+<li>12.003 "Atmosphere, Ocean and Climate Dynamics" <a href="https://ocw.mit.edu/courses/earth-atmospheric-and-planetary-sciences/12-003-atmosphere-ocean-and-climate-dynamics-fall-2008/syllabus/">syllabus</a></li>
+<li>12.800 "Fluid Dynamics of the Atmosphere and Ocean" <a href="https://ocw.mit.edu/courses/earth-atmospheric-and-planetary-sciences/12-800-fluid-dynamics-of-the-atmosphere-and-ocean-fall-2004/syllabus/">syllabus</a></li>
+<li>13.024 "Numerical Marine Hydrodynamics" <a href="https://ocw.mit.edu/courses/mechanical-engineering/2-29-numerical-marine-hydrodynamics-13-024-spring-2003/syllabus/">syllabus</a></li>
+</ul></li>
+<li>Caltech
+<ul class="org-ul">
+<li><a href="https://shepherd.caltech.edu/T5/resources/AE101_Guide.pdf">Fluid Mechanics 101: A Skeleton Guide</a> (pdf)</li>
+<li>Ae/APh/CE/ME 101c: Fluid Mechanics <a href="https://www.mckeon.caltech.edu/teaching/101/AeAPhCEME101c_Syllabus_2019.pdf">syllabus</a></li>
+<li>Hermann Schlichting, <cite class="book-title">Boundary Layer Theory</cite>.</li>
+</ul></li>
+<li>Georgia Tech
+<ul class="org-ul">
+<li>ME3340 <a href="https://lorraine.gatech.edu/sites/default/files/academic-info/syllabus/fa20/2_me3340_fluids_zhang_brief_syllabus.pdf">Syllabus</a>
+<ul class="org-ul">
+<li>Munson, Young, and Okiishi’s <cite class="book-title">Fundamentals of Fluid Mechanics</cite></li>
+</ul></li>
+<li>ME6601 <a href="http://me.gatech.edu/graduate/courses/me6601">syllabus</a> Introduction to Fluid Mechanics
+<ul class="org-ul">
+<li>Ronald Panton, <cite class="book-title">Incompressible Flow</cite>, Panton; 2nd Edition, John Wiley; 1995.</li>
+<li>G. M. Homsy, et al, <cite class="book-title">Multi-Media Fluid Mechanics</cite> (w/CD), Cambridge University Press, 2000.</li>
+</ul></li>
+<li>ME7751 <a href="http://me.gatech.edu/graduate/courses/me7751">Syllabus</a> Computational Fluid Mechanics
+<ul class="org-ul">
+<li>Pieter Wesseling,
+<cite class="book-title">Principles of Computational Fluid Dynamics</cite>;
+Springer-Verlag, 2000.</li>
+<li>Joel H. Ferziger and Milovan Peric,
+<cite class="book-title">Computational Methods of Fluid Dynamics</cite>,
+3rd Edition, Springer-Verlag, 2001</li>
+<li>C. Hirsch,
+<cite class="book-title">Numerical Computation of Internal and External Flows</cite>,
+Vol. 1 and 2, John Wiley &amp; Sons, Ltd., 1988.</li>
+<li>G. F. Carey and Oden, J. T.,
+<cite class="book-title">Finite Elements: Fluid Mechanics</cite>,
+Vol. VI, Prentice-Hall, 1986.</li>
+<li>C. Canuto, M. Y. Hussaini, A. Quarteroni, and T. A. Zang,
+<cite class="book-title">Spectral Methods in Fluid Mechanics</cite>,
+Springer-Verlag, 1988.</li>
+</ul></li>
+</ul></li>
+<li></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgc422e34" class="outline-3">
+<h3 id="orgc422e34"><span class="section-number-3">2.2</span> Citations from L&amp;L</h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li>W. H. Besant,
+<cite class="book-title">A Treatise on Hydrostatics and Hydrodynamics</cite>.
+Cambridge, 1859.</li>
+<li>Hans Ertel,
+"Ein neuer hydrodynamischer Erhaltungssatz".
+<i>Naturwiss.</i> <b>30</b> (1942) 543–544.</li>
+<li>Hans Ertel,
+"Ein neuer hydrodynamischer Wirbelsatz".
+<i>Meteorol. Z.</i> <b>59</b>, no.9 (1942) pp.277&#x2013;281.</li>
+<li>Hans Ertel,
+"Über das Verhältnis des neuen hydrodynamischen Wirbelsatzes zum Zirkulationssatz von V. Bjerknes".
+<i>Meteor. Z.</i> <b>59</b> (1942) pp.385&#x2013;387.</li>
+<li>N.E. Kochin, I.A. Kibel, and N.V. Roze
+<cite class="book-title">Theoretical Hydromechanics</cite> (1963), English translation
+John Wiley &amp; Sons (1964) ISBN-13 : 978-0470497050;</li>
+<li>H. Lamb, <cite class="book-title">Hydrodynamics</cite> (1932)</li>
+<li>L. Rayleigh,
+"On the pressure developed in a liquid during the collapse of a spherical cavity".
+<i>Philosophical Magazine</i> <b>34</b> no.200 (1917) pp.94&#x2013;98.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4bf47c9" class="outline-3">
+<h3 id="org4bf47c9"><span class="section-number-3">2.3</span> Recommendations/Lookup</h3>
+<div class="outline-text-3" id="text-2-3">
+<ul class="org-ul">
+<li>George Batchelor,
+<cite class="book-title">An Introduction to Fluid Dynamics</cite>.
+Cambridge University Press, 2000.</li>
+<li>Laurent Schoeffel, "Lectures on Fluid Dynamics".
+Eprint <a href="https://arxiv.org/abs/1407.3162">arXiv:1407.3162</a>.</li>
+<li id="[ CFD Python: 12 steps to Navier-Stokes">Lorena A. Barba Group ]</li>
+<li>Tai-Peng Tsai, <cite class="book-title">Lectures on Navier-Stokes Equations</cite>.
+AMS Publishers.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-04-02 Fri 15:49.</p>
+</div>
+</body>
+</html>

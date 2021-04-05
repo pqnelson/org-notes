@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Group Theory</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Group Theory</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org2a8b835">1. Symmetries of an Object</a>
+<ul>
+<li><a href="#org76756e9">1.1. Necessary Qualities of a Symmetry</a></li>
+<li><a href="#orge0c3bd4">1.2. A Collection of Symmetries</a></li>
+<li><a href="#orgd2e627b">1.3. Example: Symmetries of Polynomials</a></li>
+</ul>
+</li>
+<li><a href="#org6758072">2. Notes to Self</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2a8b835" class="outline-2">
+<h2 id="org2a8b835"><span class="section-number-2">1</span> Symmetries of an Object</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Suppose we have an object (like a regular polygon in a plane). What is a
+"symmetry" of our object?
+</p>
+</div>
+
+<div id="outline-container-org76756e9" class="outline-3">
+<h3 id="org76756e9"><span class="section-number-3">1.1</span> Necessary Qualities of a Symmetry</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Presumably it is some kind of transformation. For this to make sense, we
+extend the transformation to the plane. A symmetry should "leave the
+object invariant". What does that mean?
+</p>
+
+<p>
+It is necessary to say the transformation \(f\colon\RR^{2}\to\RR^{2}\)
+leaves our polygon \(P\subset\RR^{2}\) invariant if \(f(P)=P\). So this is
+equivalent to saying \(f\) is surjective. But is this sufficient?
+</p>
+
+<p>
+Well, if \(f\) is surjective, it has a right-inverse
+\(h\colon\RR^{2}\to\RR^{2}\) (which satisfies \((f\circ h)(p)\) for every
+\(p\in P\)). We want this right-inverse to also be a symmetry. Which
+implies \(h\) has a right-inverse, call it \(g\colon\RR^{2}\to\RR^{2}\).
+Then what is \(f\circ h\circ g\)? Well, we find \((f\circ(h\circ g))(x)=f(x)\)
+but also \(((f\circ h)\circ g)(x) = g(x)\) imply \(f=g\). Hence
+<b>every symmetry is an invertible function</b>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge0c3bd4" class="outline-3">
+<h3 id="orge0c3bd4"><span class="section-number-3">1.2</span> A Collection of Symmetries</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Now, we have described what qualifies as a symmetry of an object,
+suppose we have collected all the symmetries for an object. What happens
+if we compose two symmetries together? I.e., if \(f_{1},f_{2}\colon P\to P\)
+are two symmetries, what about \(f_{2}\circ f_{1}\)? Is that also a
+symmetry or not?
+</p>
+
+<p>
+Well, its inverse is the composition of inverses in reverse order. If
+our collection of symmetries includes the inverse symmetries, then the
+set of symmetries is closed under function composition.
+</p>
+
+<p>
+This gives us grounds for generalizing these qualities into an abstract
+notion of a group.
+</p>
+
+<div class="definition" id="org2ca71c0">
+<p>
+A <dfn>Group</dfn> consists of a set \(G\) equipped with
+</p>
+
+<ul class="org-ul">
+<li>a binary operator \(\mu\colon G\times G\to G\),</li>
+<li>an inverse operator \(\iota\colon G\to G\), and</li>
+<li><p>
+an identity element \(e\in G\)
+</p>
+
+<p>
+such that
+</p></li>
+
+<li>Multiplication is associative: \(\mu\circ(\mathrm{id}\times\mu) = \mu\circ(\mu\times\mathrm{id})\)
+so \((\mu\circ(\mathrm{id}\times\mu))(x,y,z) = \mu(x, \mu(y,z))\) is
+equal to \((\mu\circ(\mu\times\mathrm{id}))(x,y,z)=\mu(\mu(x,y),z)\)</li>
+<li>The identity element \(\mu(e,x)=\mu(x,e)=x\)</li>
+<li>The inverse map: \(\mu(\iota(x),x)=\mu(x,\iota(x))=x\).</li>
+</ul>
+
+</div>
+
+<p>
+This mystifies the motivation of studying groups under the shroud of
+abstraction, but we can think about groups in general settings.
+</p>
+</div>
+</div>
+<div id="outline-container-orgd2e627b" class="outline-3">
+<h3 id="orgd2e627b"><span class="section-number-3">1.3</span> Example: Symmetries of Polynomials</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Thus far we have intuitively pictured symmetries of geometric objects.
+What about symmetries of nongeometric object? Like&#x2026;polynomials.
+</p>
+
+<p>
+The first question we should ask ourselves is: what is a polynomial?
+Like, how do we represent a polynomial? Because our symmetries would act
+on this "encoding".
+</p>
+
+<p>
+We could use the fundamental theorem of algebra to write a polynomial as
+</p>
+
+\begin{equation}
+p(x) = p_{n}x^{n} + \dots + p_{1}x + p_{0} = c(x - r_{1})(\dots)(x - r_{n})
+\end{equation}
+
+<p>
+where \(r_{k}\in\mathbb{C}\) are the roots of the polynomial. One obvious
+symmetry amounts to permuting the roots of the polynomial.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6758072" class="outline-2">
+<h2 id="org6758072"><span class="section-number-2">2</span> Notes to Self</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+If we take our abstract definition of a group, we can define a "group
+object" internal to any sufficiently nice category. This gives us the
+various different sorts of groups (e.g., a group object internal to the
+category of topological spaces is a topological group, a group object
+internal to the category of manifolds is a [real] Lie group, etc.).
+</p>
+
+<div class="remark" id="orgeac9e75">
+<p>
+The group object internal to <span class="cat">Grp</span> the category of groups is
+itself an Abelian group. This is a corollary of the Eckmann&#x2013;Hilton
+argument.
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2020-12-25 Fri 10:29.</p>
+</div>
+</body>
+</html>

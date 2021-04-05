@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:10 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generic Arithmetic</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Generic Arithmetic</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org35b2b5b">1. Introduction</a></li>
+<li><a href="#org1c770a1">2. Generic Arithmetic</a>
+<ul>
+<li><a href="#org494b03a">2.1. Acting on two operands alone</a>
+<ul>
+<li><a href="#org9088014">2.1.1. Addition</a></li>
+<li><a href="#org16800cc">2.1.2. Subtraction</a></li>
+<li><a href="#org9e0f885">2.1.3. Multiplication</a></li>
+<li><a href="#org10b0e82">2.1.4. Division</a></li>
+</ul>
+</li>
+<li><a href="#orgf0ecb8f">2.2. Generic Unary Operations</a>
+<ul>
+<li><a href="#org61da949">2.2.1. Negation</a></li>
+<li><a href="#org6a9194d">2.2.2. Invert</a></li>
+</ul>
+</li>
+<li><a href="#org04635d5">2.3. Generic n-ary Operations</a>
+<ul>
+<li><a href="#orgaec5876">2.3.1. Addition</a></li>
+<li><a href="#org4f35a88">2.3.2. Subtraction</a></li>
+<li><a href="#org608747d">2.3.3. Multiplication</a></li>
+<li><a href="#org3aabd16">2.3.4. Division</a></li>
+</ul>
+</li>
+<li><a href="#orge971091">2.4. Derived Operations</a></li>
+</ul>
+</li>
+<li><a href="#org562b137">3. SCMUTILS</a></li>
+<li><a href="#org8775f88">4. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org35b2b5b" class="outline-2">
+<h2 id="org35b2b5b"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+We have a notion of generic arithmetic where we can add symbols
+("variables") to numbers. For example \((3+x)^{2}\) is completely
+sensible in modern mathematics. We would like to similarly perform
+generic arithmetic in Lisp.
+</p>
+
+<p>
+Examples to bear in mind: operating on polynomials (taking their
+quotient results in a rational function), operating on matrices,
+and operating on numbers.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1c770a1" class="outline-2">
+<h2 id="org1c770a1"><span class="section-number-2">2</span> Generic Arithmetic</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org494b03a" class="outline-3">
+<h3 id="org494b03a"><span class="section-number-3">2.1</span> Acting on two operands alone</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+We begin with making generic operations which act on two
+operands. Extending to an arbitrary number of operands is
+straightforward afterwards. We define generic functions on two
+operands, with default for numbers.
+</p>
+</div>
+
+<div id="outline-container-org9088014" class="outline-4">
+<h4 id="org9088014"><span class="section-number-4">2.1.1</span> Addition</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">add</span> (x y))
+
+(<span class="org-keyword">defmethod</span> <span class="org-function-name">add</span> ((x number) (y number))
+  (cl:+ x y))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org16800cc" class="outline-4">
+<h4 id="org16800cc"><span class="section-number-4">2.1.2</span> Subtraction</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">sub</span> (x y)
+  (<span class="org-builtin">:documentation</span> <span class="org-doc">"Computes X - Y."</span>))
+
+(<span class="org-keyword">defmethod</span> <span class="org-function-name">sub</span> ((x number) (y number))
+  (cl:- x y))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9e0f885" class="outline-4">
+<h4 id="org9e0f885"><span class="section-number-4">2.1.3</span> Multiplication</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">times</span> (x y))
+
+(<span class="org-keyword">defmethod</span> <span class="org-function-name">times</span> ((x number) (y number))
+  (cl:* x y))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org10b0e82" class="outline-4">
+<h4 id="org10b0e82"><span class="section-number-4">2.1.4</span> Division</h4>
+<div class="outline-text-4" id="text-2-1-4">
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">div</span> (x y))
+
+(<span class="org-keyword">defmethod</span> <span class="org-function-name">div</span> ((x number) (y number))
+  (cl:/ x y))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgf0ecb8f" class="outline-3">
+<h3 id="orgf0ecb8f"><span class="section-number-3">2.2</span> Generic Unary Operations</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+There are two special cases we need to consider when dealing with
+generic arithmetic, namely: negation and inversion. These are for
+the case when subtraction and division are given a single argument
+(respectively).
+</p>
+</div>
+
+<div id="outline-container-org61da949" class="outline-4">
+<h4 id="org61da949"><span class="section-number-4">2.2.1</span> Negation</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">negate</span> (x))
+
+(<span class="org-keyword">defmethod</span> <span class="org-function-name">negate</span> ((x number))
+  (cl:- x))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6a9194d" class="outline-4">
+<h4 id="org6a9194d"><span class="section-number-4">2.2.2</span> Invert</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+Of particular concern, in the future, will be having an <code>invert</code>
+for matrix classes.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">invert</span> (x))
+
+(<span class="org-keyword">defmethod</span> <span class="org-function-name">invert</span> ((x number))
+  (cl:/ x))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org04635d5" class="outline-3">
+<h3 id="org04635d5"><span class="section-number-3">2.3</span> Generic n-ary Operations</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+We adhere to the signatures of arithmetic operators specified in
+<i>Common Lisp: The Language</i>, chapter 12, section 2.
+</p>
+</div>
+
+<div id="outline-container-orgaec5876" class="outline-4">
+<h4 id="orgaec5876"><span class="section-number-4">2.3.1</span> Addition</h4>
+<div class="outline-text-4" id="text-2-3-1">
+<p>
+Our first attempt at adding quantities should adhere to the
+function signature for <code>+</code> in <i>Common Lisp the Language</i> (section
+12.2). We may naively expect:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">+</span> (<span class="org-type">&amp;rest</span> quantities)
+  (reduce add quantities))
+</pre>
+</div>
+
+<p>
+But this will throw errors on <code>(+)</code> or <code>(+ 3)</code>. We revise our
+definition to be:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">+</span> (<span class="org-type">&amp;rest</span> quantities)
+  (<span class="org-keyword">cond</span>
+    ((null quantities) 0)
+    ((singleton? quantities) (car quantities))
+    (t (reduce add quantities))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4f35a88" class="outline-4">
+<h4 id="org4f35a88"><span class="section-number-4">2.3.2</span> Subtraction</h4>
+<div class="outline-text-4" id="text-2-3-2">
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">-</span> (minuend &amp; subtrahends)
+  (<span class="org-keyword">if</span> (null subtrahends)
+      (negate minuend)
+      (reduce sub subtrahends <span class="org-builtin">:initial-value</span> minuend)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org608747d" class="outline-4">
+<h4 id="org608747d"><span class="section-number-4">2.3.3</span> Multiplication</h4>
+<div class="outline-text-4" id="text-2-3-3">
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">*</span> (<span class="org-type">&amp;rest</span> quantities)
+  (<span class="org-keyword">cond</span>
+    ((null quantities) 1)
+    ((singleton? quantities) (car quantities))
+    (t (reduce times quantities))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3aabd16" class="outline-4">
+<h4 id="org3aabd16"><span class="section-number-4">2.3.4</span> Division</h4>
+<div class="outline-text-4" id="text-2-3-4">
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">/</span> (numerator <span class="org-type">&amp;rest</span> denominators)
+  (<span class="org-keyword">if</span> (null denominators)
+      (invert numerator)
+      (reduce div denominators <span class="org-builtin">:initial-value</span> numerator)))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge971091" class="outline-3">
+<h3 id="orge971091"><span class="section-number-3">2.4</span> Derived Operations</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+We have operations derived from these basic ones. For example,
+exponentiation.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">expt</span> (x m))
+
+(<span class="org-keyword">defmethod</span> <span class="org-function-name">expt</span> ((x number) (m number))
+  (cl:expt x m))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org562b137" class="outline-2">
+<h2 id="org562b137"><span class="section-number-2">3</span> SCMUTILS</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+It seems SCMUTILS has a <code>make-generic-operator &lt;arity&gt; &lt;name&gt; &lt;default-operation&gt;</code>
+method to declare a generic operator.
+</p>
+
+<p>
+Then <code>assign-operation</code> will take a generic-operator, the
+appropriate handler, and some number of argument predicates. As
+SCMUTILS uses <a href="multiple-dispatch.html#org9df990e">Predicate Dispatching</a> the predicates control method
+selection.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8775f88" class="outline-2">
+<h2 id="org8775f88"><span class="section-number-2">4</span> References</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>SCMUTILS is a library with daunting generic arithmetic
+<ul class="org-ul">
+<li><code>SCMUTILS/kernel/generic.scm</code></li>
+<li><code>SCMUTILS/kernel/ghelper.scm</code> for generic-operator dispatching
+and infrastructure</li>
+</ul></li>
+<li>Richard Fateman,
+<a href="https://people.eecs.berkeley.edu/~fateman/generic/overload-small.pdf">Building Algebra Systems by Overloading Lisp</a>. January 13, 2006.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-03-18 Thu 16:15.</p>
+</div>
+</body>
+</html>

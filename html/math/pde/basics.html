@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partial Differential Equations</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Partial Differential Equations</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgd8ff5db">1. Introduction</a>
+<ul>
+<li><a href="#orga296f2e">1.1. Grocery List of Examples</a></li>
+</ul>
+</li>
+<li><a href="#org24fd276">2. ODEs and PDEs revisited</a>
+<ul>
+<li><a href="#org98666ef">2.1. Solving an ODE</a></li>
+<li><a href="#org66e6703">2.2. For PDEs</a></li>
+<li><a href="#orga5baf5f">2.3. Example with mixed derivatives</a></li>
+</ul>
+</li>
+<li><a href="#org1c01787">3. Geometric and Coordinate Perspectives</a>
+<ul>
+<li><a href="#orgc9241e2">3.1. Example: First-Order PDE with Constant Coefficients</a></li>
+<li><a href="#orgdd0857f">3.2. Coordinate Perspective</a></li>
+</ul>
+</li>
+<li><a href="#org270cb2b">4. Variable Coefficient First-Order PDEs</a>
+<ul>
+<li><a href="#org451b901">4.1. Motivating Example</a>
+<ul>
+<li><a href="#orgb9c89e8">4.1.1. More generally</a></li>
+</ul>
+</li>
+<li><a href="#orgc6510a5">4.2. Steps involved in solving Homogeneous PDEs</a></li>
+<li><a href="#orge8bb802">4.3. Steps involved in solving Inhomogeneous PDES</a></li>
+</ul>
+</li>
+<li><a href="#org4b65e2f">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd8ff5db" class="outline-2">
+<h2 id="orgd8ff5db"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<div class="remark" id="orgca28942">
+<p>
+The fundamental difference between partial differential equations
+and ordinary differential equations is the number of variables
+we're working with. For ODEs, we're usually working with functions
+of time (or some other single parameter). Partial differential
+equations use multiple independent variables (e.g., functions of
+space and time).
+</p>
+
+<p>
+One strategy to solve problems like
+</p>
+
+\begin{equation}
+\sum^{n}_{\mu=0}a^{\mu}\partial_{\mu}f = 0
+\end{equation}
+
+<p>
+is to rewrite this using a "linear operator"
+</p>
+
+\begin{equation}
+\sum^{n}_{\mu=0}a^{\mu}\partial_{\mu} = L
+\end{equation}
+
+<p>
+then our problem becomes
+</p>
+
+\begin{equation}
+L(f) = 0.
+\end{equation}
+
+<p>
+This amounts to finding the kernel of \(L\).
+</p>
+
+</div>
+
+<div class="proposition" id="org4876b3d">
+<p>
+Recall an operator \(L\) is linear if, for arbitrary constants
+\(c_{1}\) and \(c_{2}\), we have
+</p>
+
+\begin{equation}
+L(c_{1}\mu_{1} + c_{2}\mu_{2}) = c_{1}L(\mu_{1}) + c_{2}L(\mu_{2}).
+\end{equation}
+
+</div>
+
+<div class="math-example" id="orga36bef6">
+<p>
+The <dfn>transport equation</dfn> in 2-dimensions looks like
+</p>
+
+\begin{equation}
+(\partial_{x} + \partial_{y})\mu(x,y) = 0.
+\end{equation}
+
+<p>
+This is indeed a linear operator.
+</p>
+
+</div>
+
+<div class="math-example" id="orgcc7dbc7">
+<p>
+One example of a nonlinear PDE is something like the \(\phi^{4}\)
+model in quantum field theory
+</p>
+
+\begin{equation}
+(\partial_{t}^{2}-\partial_{x}^{2})\phi + \phi^{3} = 0.
+\end{equation}
+
+<p>
+This isn't linear, but how can we see this? Suppose we had two
+solutions \(\phi\) and \(\psi\), then their sum equals
+</p>
+
+\begin{equation}
+(\partial_{t}^{2}-\partial_{x}^{2})(\phi + \psi) + (\phi + \psi)^{3} = (\psi + \phi)^{3} - \phi^{3} - \psi^{3}.
+\end{equation}
+
+<p>
+This is because only the cross terms in the cubic term remain after
+plugging in the RHS of the PDE.
+</p>
+
+</div>
+
+<div class="remark" id="orgb0d21c8">
+<p>
+We belabor this point of linearity because, if we have a linear PDE
+described by a linear differential operator \(L(-)\), and we have any
+two solutions \(\mu_{1}\) and \(\mu_{2}\), then we can construct
+infinitely many solutions as a linear combination of these two
+\(c_{1}\mu_{1}+c_{2}\mu_{2}\) for any real number \(c_{1}\), \(c_{2}\).
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-orga296f2e" class="outline-3">
+<h3 id="orga296f2e"><span class="section-number-3">1.1</span> Grocery List of Examples</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+We've seen the transport equation and the \(\phi^{4}\) field
+theory. Let's just enumerate some that we'd encounter in physics.
+</p>
+
+<div class="math-example" id="org4d34da3">
+<p>
+The shock wave
+</p>
+
+\begin{equation}
+\partial_{t}\mu + \mu\partial_{x}\mu = 0.
+\end{equation}
+
+</div>
+
+<div class="math-example" id="orgbb38d31">
+<p>
+Laplace's equation
+</p>
+
+\begin{equation}
+\partial_{x}^{2}\mu + \partial_{y}^{2}\mu = 0.
+\end{equation}
+
+</div>
+
+<div class="math-example" id="org8c563d7">
+<p>
+The wave equation
+</p>
+
+\begin{equation}
+\partial_{t}^{2}\mu - \partial_{x}^{2}\mu = 0.
+\end{equation}
+
+<p>
+We could add some self-interaction contribution, for example
+including a cubic self-interaction gives us:
+</p>
+
+\begin{equation}
+(\partial_{t}^{2} - \partial_{x}^{2})\mu + \mu^{3} = 0.
+\end{equation}
+
+</div>
+
+<div class="math-example" id="org3e86fd4">
+<p>
+The dispersive Wave equation
+</p>
+
+\begin{equation}
+\partial_{t}\mu + \mu\partial_{x}\mu + \partial_{x}^{3}\mu = 0.
+\end{equation}
+
+</div>
+
+<div class="math-example" id="orgd20aa6a">
+<p>
+The Schrodinger equation
+</p>
+
+\begin{equation}
+\partial_{t}\mu -i\partial_{x}^{2}\mu = 0.
+\end{equation}
+
+</div>
+
+<div class="definition" id="orgd2513d3">
+<p>
+The <dfn>order</dfn> of a partial differential equation is the
+highest derivative's order. For mixed derivatives like
+\(\partial_{x}^{m}\partial_{y}^{n}\), we sum their order to get \(m+n\).
+</p>
+
+</div>
+
+<div class="theorem" id="orgbfaab14">
+<p>
+If \(L_{1}(-)\) is a differential operator of order \(m\), and
+\(L_{2}(-)\) a differential operator of order \(n\), then \(L_{1}L_{2}\)
+is a differential operator of order \(m+n\).
+</p>
+
+</div>
+
+<div class="definition" id="orgd5ec974">
+<p>
+We call a partial differential equation <dfn>Linear</dfn> if any
+linear combination of its solutions is again a solution.
+</p>
+
+</div>
+
+<div class="definition" id="orgaafc3e0">
+<p>
+Let \(L(f)=g(x,y,\dots,t)\) be a partial differential equation. Then
+we call it <dfn>Homogeneous</dfn> if \(g=0\). Otherwise we call it
+<dfn>Inhomogeneous</dfn>.
+</p>
+
+</div>
+
+<div class="math-example" id="orgd69f6e9">
+<p>
+Consider the partial differential equation
+</p>
+
+\begin{equation}
+\partial_{t}^{2}\mu - \partial_{x}^{2}\mu + x^{4} = 0.
+\end{equation}
+
+<p>
+It is linear and inhomogeneous.
+</p>
+
+</div>
+
+<div class="math-example" id="org3a75671">
+<p>
+Consider the shockwave equation. We see we can rewrite it using the
+chain rule as
+</p>
+
+\begin{equation}
+\partial_{t}\mu + \frac{1}{2}\partial_{x}(\mu^{2}) = 0.
+\end{equation}
+
+<p>
+If we introduce
+</p>
+
+\begin{equation}
+\vartheta(\mu) = \mu^{2}
+\end{equation}
+
+<p>
+then we can write
+</p>
+
+\begin{equation}
+L = \partial_{t} + \frac{1}{2}\partial_{x}\circ\vartheta
+\end{equation}
+
+<p>
+to render our equation
+</p>
+
+\begin{equation}
+L(\mu) = 0.
+\end{equation}
+
+<p>
+But that \(\vartheta\) makes it a <i>nonlinear</i> PDE.
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org24fd276" class="outline-2">
+<h2 id="org24fd276"><span class="section-number-2">2</span> ODEs and PDEs revisited</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org98666ef" class="outline-3">
+<h3 id="org98666ef"><span class="section-number-3">2.1</span> Solving an ODE</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Suppose we had the ODE
+</p>
+
+\begin{equation}
+\frac{\D^{2}\mu(x)}{\D x^{2}} = 0.
+\end{equation}
+
+<p>
+We can integrate it once. The left-hand side becomes
+</p>
+
+\begin{equation}
+\int LHS\,\D x = \int\frac{\D}{\D x}\left(\frac{\D\mu(x)}{\D x}\right)\D x =
+\frac{\D\mu(x)}{\D x} + c_{1}.
+\end{equation}
+
+<p>
+The right-hand side
+</p>
+
+\begin{equation}
+\int RHS\,\D x = \int 0\,\D x = 0.
+\end{equation}
+
+<p>
+Setting the two equal gives us
+</p>
+
+\begin{equation}
+\frac{\D\mu(x)}{\D x} + c_{1} = 0.
+\end{equation}
+
+<p>
+Integrating again with respect to \(x\) gives us
+</p>
+
+\begin{equation}
+\int LHS\,\D x = \int \frac{\D}{\D x}(\mu(x))\,\D x + \int c_{1}\,\D x =
+\mu(x) + c_{0} + c_{1}x
+\end{equation}
+
+<p>
+The right-hand side again vanishes. The constants of integration
+\(c_{0}\) and \(c_{1}\) encode the initial conditions:
+</p>
+
+\begin{equation}
+\mu(0) = -c_{0}
+\end{equation}
+
+<p>
+and
+</p>
+
+\begin{equation}
+\mu'(0) = -c_{1}.
+\end{equation}
+</div>
+</div>
+
+<div id="outline-container-org66e6703" class="outline-3">
+<h3 id="org66e6703"><span class="section-number-3">2.2</span> For PDEs</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+If we try to solve a partial differential equation in this manner,
+well, let's just make \(\mu\) a function of two variables. So solving
+</p>
+
+\begin{equation}
+\partial_{x}^{2}\mu(x,y) = 0
+\end{equation}
+
+<p>
+using the same strategy. The first integral with respect to \(x\)
+gives us
+</p>
+
+\begin{equation}
+\partial_{x}\mu(x,y) + c_{1}(y) = 0
+\end{equation}
+
+<p>
+and the second integral gives us
+</p>
+
+\begin{equation}
+\mu(x,y) + c_{0}(y) + c_{1}(y)\cdot x = 0.
+\end{equation}
+
+<p>
+Then we have
+</p>
+
+\begin{equation}
+\mu(x,y) = -c_{0}(y) - c_{1}(y)\cdot x
+\end{equation}
+
+<p>
+where \(\mu(0,y) = \mu_{0}(y) = -c_{0}(y)\) is one initial condition,
+so
+</p>
+
+\begin{equation}
+\mu(x,y) = \mu_{0}(y) - c_{1}(y)\cdot x.
+\end{equation}
+
+<p>
+Compare this to the general solution to the second-order ODE.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga5baf5f" class="outline-3">
+<h3 id="orga5baf5f"><span class="section-number-3">2.3</span> Example with mixed derivatives</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Consider the PDE
+</p>
+
+\begin{equation}
+\partial_{x}\partial_{y}\mu(x,y) = 0.
+\end{equation}
+
+<p>
+We assume the function \(\partial_{x}\partial_{y}\mu(x,y)\) is
+continuous, so we could ostensibly swap the order of
+differentiation. We integrate the left-hand side of our PDE with
+respect to \(x\) to get
+</p>
+
+\begin{equation}
+\int\partial_{x}\bigl(\partial_{y}\mu(x,y)\bigr)\D x =
+\partial_{y}\mu(x,y) + f(y).
+\end{equation}
+
+<p>
+Integrating the right-hand side of our PDE gives us zero, so we
+have the first-integral yield:
+</p>
+
+\begin{equation}
+\partial_{y}\mu(x,y) + f(y) = 0.
+\end{equation}
+
+<p>
+We can integrate with respect to \(y\), rearranging terms, to find
+</p>
+
+\begin{equation}
+\mu(x,y) = g(x) - \int f(y)\,\D y.
+\end{equation}
+
+<p>
+Here \(g(x)\) is the "integration constant" with respect to \(y\).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1c01787" class="outline-2">
+<h2 id="org1c01787"><span class="section-number-2">3</span> Geometric and Coordinate Perspectives</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+We will start solving simple partial differential equations
+geometrically. Starting with simple first-order PDEs to demonstrate
+the method, it generalizes to more complicated first-order PDEs.
+</p>
+
+<p>
+Remember how we write vectors in calculus using the unit-vectors
+</p>
+
+\begin{equation}
+\vec{v} = v_{1}\mathbf{i} + v_{2}\mathbf{j} + v_{3}\mathbf{k}.
+\end{equation}
+
+<p>
+We can pretend that partial derivatives are unit vectors, writing
+instead
+</p>
+
+\begin{equation}
+\vec{v} = v_{1}\partial_{x} + v_{2}\partial_{y} +
+v_{3}\partial_{z}.
+\end{equation}
+
+<p>
+This is justified by appealing to differential geometry, where this
+is in fact a tangent vector.
+</p>
+
+<div class="remark" id="org1fb2537">
+<p>
+In vector calculus, we have directional derivatives of scalar
+functions given by \(\vec{v}\cdot\vec{\nabla} f\). This is also
+written as \(\partial_{\vec{v}}f\) and is coordinate independent.
+</p>
+
+</div>
+
+<div class="remark" id="org7a8127d">
+<p>
+We frequently use Einstein notation to track sums for us. Instead
+of using subscripts, we could write
+</p>
+
+\begin{equation}
+\vec{v} = v^{1}\partial_{1} + v^{2}\partial_{2} +
+v^{3}\partial_{3}.
+\end{equation}
+
+<p>
+Then permitting us to contract upper indices with any matching
+lower indices
+</p>
+
+\begin{equation}
+v^{\mu}\partial_{\mu} := \sum_{\mu=1}^{3}v^{\mu}\partial_{\mu}.
+\end{equation}
+
+<p>
+This comes in handy. But be careful: we sum over contracted
+indices, when there's an index "upstairs" matching an index
+"downstairs". If both indices are "downstairs", there's no
+summation in Einstein convention.
+</p>
+
+<p>
+One quirk of Einstein convention, when we sum over a contracted
+index, we refer to that variable as a "dummy index". We can relabel
+it to any fresh variable
+</p>
+
+\begin{equation}
+v^{\mu}\partial_{\mu} = v^{\alpha}\partial_{\alpha}
+\end{equation}
+
+<p>
+because both sides are the same sums. We just have to be careful to
+relabel <i>all</i> instances of the dummy variable.
+</p>
+
+<p>
+The other quirk is, if \(x^{\mu}\) is a coordinate vector, then the
+partial derivative with respect to it (i.e., the gradient) is a
+lower-indexed quantity
+</p>
+
+\begin{equation}
+\frac{\partial}{\partial x^{\mu}} = \partial_{\mu}.
+\end{equation}
+
+<p>
+When we change coordinates to \(y^{\nu}=y^{\nu}(x^{1},\dots,
+x^{n})\), we see the chain rule requires us
+</p>
+
+\begin{equation}
+\frac{\partial}{\partial y^{\nu}}
+ = \frac{\partial x^{\mu}}{\partial y^{\nu}}\frac{\partial}{\partial x^{\mu}}
+\end{equation}
+
+<p>
+multiply by the Jacobian matrix. On the other hand, the
+coefficients to a vector transforms as
+</p>
+
+\begin{equation}
+v^{\mu}\to v^{\mu}\frac{\partial y^{\nu}}{\partial x^{\mu}},
+\end{equation}
+
+<p>
+i.e., by multiplying by the inverse matrix of the Jacobian.
+</p>
+
+<p>
+Very rarely in the literature there's a "Euclidean summation
+convention" discussed where we sum over <i>any</i> repeated index,
+regardless whether they both live upstairs, downstairs, or mixed.
+We use Einstein convention.
+</p>
+
+</div>
+
+<div class="theorem" id="org17c8ca6">
+<p>
+The quantity
+</p>
+
+\begin{equation}
+\vec{v} = v^{\mu}\partial_{\mu}
+\end{equation}
+
+<p>
+is coordinate independent.
+</p>
+
+</div>
+<div class="proof" id="org67ebf87">
+<p>
+We can see this by changing coordinates \(x^{\mu}\to y^{\nu}\),
+the coefficients \(v^{\mu}\) transform as
+</p>
+
+\begin{equation}
+v^{\mu}\to\widetilde{v}^{\nu} = \frac{\partial y^{\nu}}{\partial x^{\mu}}v^{\mu}.
+\end{equation}
+
+<p>
+The partial derivatives transform as
+</p>
+
+\begin{equation}
+\partial_{\mu}\to\widetilde{\partial}_{\nu}=\frac{\partial x^{\mu}}{\partial y^{\nu}}\frac{\partial}{\partial x^{\mu}}.
+\end{equation}
+
+<p>
+Changing the dummy variables of the tilde quantities, we find
+</p>
+
+\begin{equation}
+v^{\mu}\partial_{\mu} \to \widetilde{v}^{\nu}\widetilde{\partial}_{\nu}=\left(\frac{\partial y^{\nu}}{\partial x^{\alpha}}v^{\alpha}\right)\left(\frac{\partial x^{\beta}}{\partial y^{\nu}}\frac{\partial}{\partial x^{\beta}}\right).
+\end{equation}
+
+<p>
+Contracting the \(\nu\) indices on the Jacobian and its inverse gives
+us the identity matrix (Kronecker delta)
+</p>
+
+\begin{equation}
+\left(\frac{\partial y^{\nu}}{\partial x^{\alpha}}v^{\alpha}\right)\left(\frac{\partial x^{\beta}}{\partial y^{\nu}}\frac{\partial}{\partial x^{\beta}}\right).
+={\delta_{\alpha}}^{\beta}v^{\alpha}\partial_{\beta}.
+\end{equation}
+
+<p>
+This is precisely the same as summing over both \(\alpha\) and
+\(\beta\), but the Kronecker delta vanishes when \(\alpha\neq\beta\),
+so
+</p>
+
+\begin{equation}
+{\delta_{\alpha}}^{\beta}v^{\alpha}\partial_{\beta} = \sum_{\gamma}v^{\gamma}\partial_{\gamma}
+\end{equation}
+
+<p>
+precisely as desired.
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-orgc9241e2" class="outline-3">
+<h3 id="orgc9241e2"><span class="section-number-3">3.1</span> Example: First-Order PDE with Constant Coefficients</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Consider the partial differential equations
+</p>
+
+\begin{equation}
+a\partial_{x}\mu(x,y) + b\partial_{y}\mu(x,y) = 0
+\end{equation}
+
+<p>
+where \(a\) and \(b\) are real constants. We could introduce
+</p>
+
+\begin{equation}
+v^{\alpha}\partial_{\alpha} = a\partial_{x} + b\partial_{y}
+\end{equation}
+
+<p>
+so our PDE is
+</p>
+
+\begin{equation}
+v^{\alpha}\partial_{\alpha}\mu = (\vec{v}\cdot\vec{\nabla})\mu.
+\end{equation}
+
+<p>
+So far, so good, right?
+</p>
+
+<p>
+Our first step is to consider a vector <i>orthogonal</i> to
+\(v^{\alpha}\), i.e., a \(\vec{w}\) such that \(\vec{v}\cdot\vec{w}=0\).
+One obvious candidate is
+</p>
+
+\begin{equation}
+\vec{w} = -b\mathbf{i} + a\mathbf{j}.
+\end{equation}
+
+<p>
+So what do we do now? If we write
+</p>
+
+\begin{equation}
+\mu(x,y) = f(-v^{2}x + v^{1}y)
+\end{equation}
+
+<p>
+for some \(f(-)\), then we see this satisfies our partial
+differential equation. The reader can verify
+</p>
+
+\begin{equation}
+(v^{1}\partial_{1} + v^{2}\partial_{2})f(-v^{2}x + v^{1}y) = 0.
+\end{equation}
+
+<p>
+More generally, we find for some \(\vec{w}\) orthogonal to \(\vec{v}\)
+that the general solution to the PDE may be constructed as
+</p>
+
+\begin{equation}
+\mu(x^{1},\dots,x^{n}) = f(\vec{w}\cdot\vec{x}) = f(w^{1}x^{1} + \dots + w^{n}x^{n})
+\end{equation}
+
+<p>
+for arbitrary \(f\), whenever we have
+\(\mu\colon\mathbb{R}^{n}\to\mathbb{R}\).
+</p>
+
+<div class="definition" id="org35b35af">
+<p>
+The lines described by
+</p>
+\begin{equation}
+\vec{w}\cdot\vec{x} = \mbox{constant}
+\end{equation}
+<p>
+are called <dfn>Characteristic Lines</dfn>.
+</p>
+
+</div>
+
+<p>
+So \(c = \vec{w}\cdot\vec{x}\) is a constant.
+And, ta-duh, remember from geometry that \(f(c) = \mu(\vec{x})\)
+describes a surface. This is where geometry comes up.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdd0857f" class="outline-3">
+<h3 id="orgdd0857f"><span class="section-number-3">3.2</span> Coordinate Perspective</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+When we write
+</p>
+
+\begin{equation}
+a\partial_{x}\mu(x,y) + b\partial_{y}\mu(x,y) =
+\vec{v}\cdot\vec{\nabla}\mu(x,y) = 0
+\end{equation}
+
+<p>
+then we just need to rotate to make \(\vec{v}=(v,0)\). This rotation
+corresponds to the transformation of coordinates
+</p>
+
+\begin{equation}
+x' = ax + by
+\end{equation}
+
+<p>
+and
+</p>
+
+\begin{equation}
+y' = -bx + ay.
+\end{equation}
+
+<p>
+Then our differential operator becomes
+</p>
+
+\begin{equation}
+a\partial_{x} + b\partial_{y} = a(a\partial_{x'} + b\partial_{y'})
+  + b a(b\partial_{x'} - a\partial_{y'})
+\end{equation}
+
+<p>
+which simplifies to
+</p>
+
+\begin{equation}
+a\partial_{x} + b\partial_{y} = (a^{2} + b^{2})\partial_{x'}.
+\end{equation}
+
+<p>
+Hence we obtain the PDE
+</p>
+
+\begin{equation}
+(a^{2} + b^{2})\partial_{x'}\mu(x',y') = 0
+\end{equation}
+
+<p>
+which has its general solution be independent of \(x'\)
+</p>
+
+\begin{equation}
+\mu(x',y') = f(y') = f(-bx + ay).
+\end{equation}
+
+<p>
+This coincides completely with the geometric approach.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org270cb2b" class="outline-2">
+<h2 id="org270cb2b"><span class="section-number-2">4</span> Variable Coefficient First-Order PDEs</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org451b901" class="outline-3">
+<h3 id="org451b901"><span class="section-number-3">4.1</span> Motivating Example</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+Consider the PDE
+</p>
+
+\begin{equation}
+\partial_{x}\mu(x,y) + y\partial_{y}\mu(x,y) = 0.
+\end{equation}
+
+<p>
+This corresponds to the directional derivative in the direction of the vector field given by
+</p>
+
+\begin{equation}
+\vec{v} = (1, y).
+\end{equation}
+
+<p>
+The integral curves associated to this look like
+</p>
+
+\begin{equation}
+\frac{\D y}{\D x} = y \implies y(x) = y_{0}e^{x}.
+\end{equation}
+
+<p>
+We recover our original PDE from the total derivative
+</p>
+
+\begin{equation}
+\frac{\D}{\D x}\mu(x, y(x)) = (\partial_{x} + \frac{\D y}{\D x}\partial_{y})\mu(x,y(x)) = 0.
+\end{equation}
+
+<p>
+We find when we set \(x=0\) that \(\mu(0, y_{0})\) is independent of
+\(x\). So we write from \(y = y_{0}e^{x}\) that \(ye^{-x} = y_{0}\) which
+is constant with respect to \(x\). Hence
+</p>
+
+\begin{equation}
+\frac{\D}{\D x}f(y_{0}) = 0,
+\end{equation}
+
+<p>
+and we just insist \(\mu(x,y) = f(y_{0}) = f(ye^{-x})\).
+</p>
+</div>
+
+<div id="outline-container-orgb9c89e8" class="outline-4">
+<h4 id="orgb9c89e8"><span class="section-number-4">4.1.1</span> More generally</h4>
+<div class="outline-text-4" id="text-4-1-1">
+<p>
+If we have
+</p>
+
+\begin{equation}
+a(x,y)\partial_{x}\mu(x,y) + b(x,y)\partial_{y}\mu(x,y) = c(x,y)
+\end{equation}
+
+<p>
+then we could look at the graph of the function \(\mu(x,y)\)
+</p>
+
+\begin{equation}
+S := \{(x,y,\mu(x,y))\}
+\end{equation}
+
+<p>
+as defining a surface. We really want to construct this surface,
+because it's the solution to our PDE.
+</p>
+
+<p>
+Its normal vector is given by
+</p>
+
+\begin{equation}
+\vec{n} = (\partial_{x}\mu(x,y), \partial_{y}\mu(x,y), -1).
+\end{equation}
+
+<p>
+Hence our PDE is equivalent to asserting the vector \((a(x,y),
+b(x,y), c(x,y))\) is orthogonal to the normal vector. Geometry tells
+us that this vector lies in the tangent plane to a point on the
+surface.
+</p>
+
+<p>
+We start by looking for a curve \(\gamma\colon[0,1]\to S\) which fits
+the PDE's initial conditions. This is secretly the same as looking
+for a particular solution of the PDE. The tangent vector for
+\(\gamma(s)\) is tangent to the surface. So it satisfies the system
+of equations
+</p>
+
+\begin{align}
+\frac{\D x(s)}{\D s} &= a(x(s), y(s))\\
+\frac{\D y(s)}{\D s} &= b(x(s), y(s))\\
+\frac{\D z(s)}{\D s} &= c(x(s), y(s))
+\end{align}
+
+<p>
+Once we have a solution, we reconstruct the surface \(S\) as a union
+of these curves. The resulting surface is called the
+<dfn>Integral Surface</dfn> for the vector field.
+</p>
+
+<div class="definition" id="org2608e79">
+<p>
+Integral curves for the vector field \((a(x,y), b(x,y), c(x,y))\) are
+called <dfn>Characteristic Curves</dfn>.
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc6510a5" class="outline-3">
+<h3 id="orgc6510a5"><span class="section-number-3">4.2</span> Steps involved in solving Homogeneous PDEs</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+To solve
+</p>
+
+\begin{equation}
+\vec{a}(\vec{x})\cdot\vec{\nabla}\mu = 0
+\end{equation}
+
+<p>
+we enumerate the steps as follows:
+</p>
+
+<ol class="org-ol">
+<li>Parametrize the PDE: \(\D x^{i}(s)/\D s = a^{i}(\vec{x}(s))\) for \(i=1,\dots,n\), and
+\(\D\mu(s)/\D s = 0\)</li>
+<li>Parametrize the initial conditions
+<ul class="org-ul">
+<li>Introduce parameters \(\xi\)</li>
+<li>Set \(s=0\)</li>
+<li>This gives us initial conditions for \(\vec{x}(0) = \vec{\xi}\) and \(\mu(0)=\mu_{0}(\vec{\xi})\).</li>
+</ul></li>
+<li>Find the characteristic curves
+<ul class="org-ul">
+<li>Solve the system of equations from step 1 to find \(\vec{x}(s)\)</li>
+<li>Substitute in \(\vec\xi\) for \(\vec{x}(0)\), and \(\mu_{0}(\vec\xi)\) for \(u(0)\)</li>
+</ul></li>
+<li>Eliminate the parameters
+<ul class="org-ul">
+<li>We write the parameters \(\vec\xi\) introduced in step 2 in terms of the
+independent variables \(\vec{x}\) and dependent variable \(\mu\)</li>
+</ul></li>
+<li>Then we have the solution</li>
+</ol>
+
+<div class="math-example" id="orgd9b10c5">
+<p>
+For the PDE
+</p>
+
+\begin{equation}
+\partial_{t}\mu + e^{x}\partial_{x}\mu = 0
+\end{equation}
+
+<p>
+subject to initial conditions \(\mu(x, 0) = \cosh(x)\).
+</p>
+
+<ol class="org-ol">
+<li>Parametrize PDE: We have \(\D t/\D s = 1\), \(\D x/\D s = e^{x(s)}\),
+\(\D\mu/\D s = 0\)</li>
+<li>Parametrize initial conditions: at \(s=0\) we have \(t=0\), \(x=\xi\),
+and \(u=\cosh(\xi)\).</li>
+<li>Find the characteristic curves:
+<ul class="org-ul">
+<li>we find \(\D t/\D s=1\) integrate both sides from \(s'=0\) to \(s'=s\)
+gives us \(t=s\)</li>
+<li>\(\D x/\D s = e^{x(s)}\) becomes \(e^{-x}\D x/\D s = 1\) hence integrating
+both sides gives us \(-e^{-x(s)}+e^{-x(0)}=s\). Substituting in
+the initial condition \(x(0) = \xi\) and rearranging terms gives
+us \(e^{-x} = e^{-\xi}-s\)</li>
+<li>\(d\mu/ds = 0\) gives us the constant value \(\mu = \cosh(\xi)\).</li>
+</ul></li>
+<li>Eliminate the parameters, i.e., solve for \(s\) and \(\xi\) in
+terms of \(x\) and \(t\):
+<ul class="org-ul">
+<li>\(s = t\)</li>
+<li>From \(e^{-x} = e^{-\xi}-s\) and \(s=t\) we have \(e^{-\xi} = e^{-x}+s = e^{-x} + t\).
+Then the log of both sides \(-\xi = -\xi(x,t) = \log(e^{-x} + t)\).</li>
+<li>NB: the solutions to \(\xi = \mbox{constant}\) give us the characteristics</li>
+</ul></li>
+<li>Then we have the solution:
+<ul class="org-ul">
+<li>\(\mu = \cosh(\xi)\) and using our solution for \(\xi\) gives us
+the solution \(\mu(x, t) = \cosh(\xi(x,t)) = 0.5(t + e^{-x}) + 0.5/(t + e^{-x})\).</li>
+</ul></li>
+</ol>
+
+</div>
+
+<div class="math-example" id="org789368f">
+<p>
+Consider the nonlinear wave equation \(\partial_{t}\mu(x,t) + \mu(x,t)\partial_{x}\mu(x,t)=0\).
+We impose initial conditions \(\mu(x,0) = f(x)\).
+</p>
+
+<p>
+Let \(a(x,t,\mu) = 1\), \(b(x,t,\mu) = \mu\), \(c(x,t,\mu) = 0\).
+</p>
+
+<ol class="org-ol">
+<li>Parametrize the PDE
+<ul class="org-ul">
+<li>We have \(\D t(s)/\D s = a(x,t,\mu) = 1\),</li>
+<li>\(\D x(s)/\D s = b(x,t,\mu) = \mu\), and</li>
+<li>\(\D\mu(s)/\D s = c(x,t,\mu) = 0\).</li>
+</ul></li>
+<li>Parametrize the initial conditions
+<ul class="org-ul">
+<li>\(t(s_{0}) = 0\)</li>
+<li>\(x(s_{0}) = \xi\)</li>
+<li>\(\mu(s_{0}) = f(\xi)\)</li>
+</ul></li>
+<li>Find the characteristic curves
+<ul class="org-ul">
+<li>\(dt/ds = 1\) implies \(t = s - s_{0} = s\)</li>
+<li>\(dx/ds = \mu\) implies \(x(s) = s\mu(s) - s_{0}\mu(s_{0}) + x(s_{0})\)
+or \(x(s) = s\mu(s) + \xi\)</li>
+<li>\(d\mu(s)/ds = 0\) implies \(\mu(s) = \mu(s_{0}) = f(\xi)\)</li>
+</ul></li>
+<li>Eliminate the parameters \(s\) and \(\xi\)
+<ul class="org-ul">
+<li>We find from \(t = s\) that \(s = t\)</li>
+<li>From \(x(s) = s\mu(s) + \xi\) and \(\mu(s) = f(\xi)\) we have the
+implicit relation \(x = tf(\xi) + \xi\). In particular, this
+means that \(x - t\mu = \xi\).</li>
+</ul></li>
+<li>Solve for \(\mu\)
+<ul class="org-ul">
+<li>We find \(\mu = f(x -  t\mu)\) is the implicit relation for the
+equation.</li>
+</ul></li>
+</ol>
+
+<p>
+Observe this relation breaks down at times \(t>0\) since
+\(\partial_{x}\mu = f'/(1 + tf')\) which fails to exist when the
+denominator vanishes \(1 + tf' = 0\).
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge8bb802" class="outline-3">
+<h3 id="orge8bb802"><span class="section-number-3">4.3</span> Steps involved in solving Inhomogeneous PDES</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+To solve
+</p>
+
+\begin{equation}
+\vec{a}(\vec{x}, \mu(\vec{x}))\cdot\vec{\nabla}\mu = f(\vec{x})
+\end{equation}
+
+<p>
+we enumerate the steps as follows:
+</p>
+
+<ol class="org-ol">
+<li>Parametrize the PDE: \(\D x^{i}(s)/\D s = a^{i}(\vec{x}(s), \mu(s))\) for \(i=1,\dots,n\), and
+\(\D\mu(s)/\D s = f(\vec{x}(s))\)</li>
+<li>Parametrize the initial conditions
+<ul class="org-ul">
+<li>Introduce parameters \(\xi\)</li>
+<li>Set \(s=0\)</li>
+<li>This gives us initial conditions for \(\vec{x}(0) = \vec{\xi}\) and \(\mu(0)=\mu_{0}(\vec{\xi})\).</li>
+</ul></li>
+<li>Find the characteristic curves
+<ul class="org-ul">
+<li>Solve the system of equations from step 1 to find \(\vec{x}(s)\)</li>
+<li>Substitute in \(\vec\xi\) for \(\vec{x}(0)\), and \(\mu_{0}(\vec\xi)\) for \(u(0)\)</li>
+</ul></li>
+<li>Eliminate the parameters
+<ul class="org-ul">
+<li>We write the parameters \(\vec\xi\) introduced in step 2 in terms of the
+independent variables \(\vec{x}\) and dependent variable \(\mu\)</li>
+</ul></li>
+<li>Then we have the solution</li>
+</ol>
+
+<div class="math-example" id="org8d4b8b4">
+<p>
+Consider the inhomogeneous nonlinear differential equation
+\(\partial_{t}\mu + \mu\partial_{x}\mu = xe^{t}\) with
+\(\mu(x,0)=f(x)\).
+</p>
+
+<ol class="org-ol">
+<li>Parametrize the PDE
+<ul class="org-ul">
+<li>\(\D t/\D s = 1\)</li>
+<li>\(\D x/\D s = \mu\)</li>
+<li>\(\D\mu/\D s = xe^{t}\)</li>
+</ul></li>
+<li>Parametrize the initial conditions
+<ul class="org-ul">
+<li>Set \(t(0)=0\)</li>
+<li>Introduce \(x(0)=\xi\)</li>
+<li>\(\mu(0) = f(\xi)\)</li>
+</ul></li>
+<li>Find the characteristic curves
+<ul class="org-ul">
+<li>\(t = s\) from the parametrized ODEs and initial condition.</li>
+<li>This renders our system a coupled system of ODEs \(\D x/\D s = \mu\)
+and \(\D\mu/\D s = xe^{s}\). This gives us \(\D^{2}x/\D s^{2} = xe^{s}\).
+The solution to this involves a linear combination of modified
+Bessel functions of the second kind \(K_{0}(2\sqrt{\exp(s)})\)
+and modified Bessel functions of the first kind
+\(I_{0}(2\sqrt{\exp(s)})\). But as \(s\to0\),
+\(K_{0}(2\sqrt{\exp(s)})\to K_{0}(2\sqrt{e})\approx 3.2974425\)</li>
+</ul></li>
+<li>Uh&#x2026;wait, I don't think this is tractable anymore!</li>
+</ol>
+
+<p>
+Actually, I think a change of variables is needed from \(x\) to
+either \(\log(x)\) or \(\exp(x)\). But I could be wrong.
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4b65e2f" class="outline-2">
+<h2 id="org4b65e2f"><span class="section-number-2">5</span> References</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li>Andrew Hogg, "Mathematical Methods". <a href="https://people.maths.bris.ac.uk/~maajh/methods/chap1.pdf">Ch. 1</a>, lecture notes.</li>
+<li>W. Strauss, <cite class="book-title">An Introduction to Partial Differential Equations</cite>.
+John Wiley and Sons, first ed., 1992.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-03-18 Thu 16:22.</p>
+</div>
+</body>
+</html>

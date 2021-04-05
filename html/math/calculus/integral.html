@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integrals</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Integrals</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgb030377">1. Methods of Computation</a>
+<ul>
+<li><a href="#org7688575">1.1. Method of Substitution</a></li>
+<li><a href="#org0ad2ba6">1.2. Integration by Parts</a></li>
+</ul>
+</li>
+<li><a href="#orga0da881">2. Tricks</a>
+<ul>
+<li><a href="#org2f9d9c7">2.1. Weierstrass Substitution</a></li>
+</ul>
+</li>
+<li><a href="#org7692bc6">3. References</a>
+<ul>
+<li><a href="#org9b2301d">3.1. Treatises</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgb030377" class="outline-2">
+<h2 id="orgb030377"><span class="section-number-2">1</span> Methods of Computation</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The only way we can do integration analytically is from the fundamental
+theorem of calculus.
+</p>
+
+<div class="theorem" id="org7a8acf5">
+<p>
+Let \(f\colon[a,b]\to\RR\), and \(F\colon[a,b]\to\RR\)
+differentiable such that \(F'(x)=f(x)\) for each \(x\in[a,b]\). Then
+</p>
+\begin{equation}
+\int^{b}_{a}f(x)\,\D x = F(b)-F(a).
+\end{equation}
+
+</div>
+
+<div class="corollary" id="org27e81c4">
+<p>
+Let \(f\colon[a,b]\to\RR\) be continuous and \(F\) its antiderivative. Then
+for any \(x\in[a,b]\), we have
+</p>
+\begin{equation}
+\frac{\D}{\D x}\int^{x}_{a}f(t)\,\D t = f(x).
+\end{equation}
+
+</div>
+
+<p>
+Now the two main methods of computing integrals may be deduced immediately.
+</p>
+</div>
+
+<div id="outline-container-org7688575" class="outline-3">
+<h3 id="org7688575"><span class="section-number-3">1.1</span> Method of Substitution</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Let \(\varphi\) be differentiable, \(f\) some function. Then
+</p>
+\begin{equation}
+\int f(\varphi(t))\varphi'(t)\,\D t
+ = \int f(u)\,\D u.
+\end{equation}
+<p>
+Definite integration similarly is defined
+</p>
+\begin{equation}
+\int^{b}_{a} f(\varphi(t))\varphi'(t)\,\D t
+ = \int^{\varphi(b)}_{\varphi(a)} f(u)\,\D u.
+\end{equation}
+
+<p>
+The heuristic is \(\D u = \varphi'(t)\,\D t\), and the boundary of
+integration is determined by \(\varphi([a,b])\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0ad2ba6" class="outline-3">
+<h3 id="org0ad2ba6"><span class="section-number-3">1.2</span> Integration by Parts</h3>
+<div class="outline-text-3" id="text-1-2">
+<div class="theorem" id="org0f22ef7">
+<p>
+Let \(f,g\colon[a,b]\to\RR\) be such that \(g\) is differentiable on \([a,b]\)
+whose first derivative is integrable, and \(f\) differentiable on \([a,b]\)
+(possibly with at most countably many discontinuities), then
+</p>
+\begin{equation}
+\int^{b}_{a}f(x)g'(x)\,\D x = f(b)g(b)-f(a)g(a)-\int^{b}_{a}f'(x)g(x)\,\D x.
+\end{equation}
+
+</div>
+
+<div class="proof" id="orge740e20">
+<p>
+This may be obtained by the fundamental theorem of calculus applied to
+the product rule:
+</p>
+\begin{equation}
+\int^{b}_{a}\frac{\D}{\D x}\bigl(f(x)g(x)\bigr)\D x = f(b)g(b)-f(a)g(a)
+\end{equation}
+<p>
+and expanding the left-hand side using the product rule
+</p>
+\begin{equation}
+\int^{b}_{a}\frac{\D}{\D x}\bigl(f(x)g(x)\bigr)\D x
+ = \int^{b}_{a}f'(x)g(x)\,\D x + \int^{b}_{a}f(x)g'(x)\,\D x.
+\end{equation}
+<p>
+Setting these two equal give us
+</p>
+\begin{equation}
+\int^{b}_{a}f'(x)g(x)\,\D x + \int^{b}_{a}f(x)g'(x)\,\D x
+ = f(b)g(b)-f(a)g(a).
+\end{equation}
+<p>
+The result follows immediately.
+</p>
+
+</div>
+
+<div class="theorem" id="org829fadf">
+<p>
+Let \(f,g\colon\RR\to\RR\) be "sufficiently nice" functions. Then
+for indefinite integrals, we have
+</p>
+\begin{equation}
+\int f(x)g'(x)\,\D x = f(x)g(x) - \int f'(x)g(x)\,\D x.
+\end{equation}
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga0da881" class="outline-2">
+<h2 id="orga0da881"><span class="section-number-2">2</span> Tricks</h2>
+<div class="outline-text-2" id="text-2">
+<div class="theorem" id="orgd2da26e">
+<p>
+Let \(a>0\) and \(f\colon[-a,a]\to\RR\) be continuous. If \(f\) is even, then
+</p>
+\begin{equation}
+\int^{a}_{-a}\frac{f(x)}{1 + \E^{x}}\D x = \int^{a}_{0}f(x)\,\D x.
+\end{equation}
+
+</div>
+
+<p>
+(I first saw this on <a href="https://math.stackexchange.com/q/60045">math.SX</a>)
+</p>
+
+<div class="proof" id="org1470656">
+<p>
+Only the even part survives, so
+</p>
+\begin{equation}
+h(x) = \frac{1}{2}\left(\frac{f(x)}{1 + \E^{x}} + \frac{f(-x)}{1 + \E^{-x}}\right)
+\end{equation}
+<p>
+But we see
+</p>
+\begin{equation}
+\frac{1}{1+\E^{x}} + \frac{1}{1+\E^{-x}} = \frac{2 + \E^{x} +
+\E^{-x}}{1 + \E^{x} + \E^{-x} + 1} = 1
+\end{equation}
+<p>
+hence
+</p>
+\begin{equation}
+h(x) = \frac{1}{2}(f(x) + f(-x)) = f(x).
+\end{equation}
+<p>
+So the integral becomes
+</p>
+\begin{equation}
+2\int^{a}_{0}h(x)\,\D x = 2\int^{a}_{0}f(x)\,\D x
+\end{equation}
+<p>
+as desired.
+</p>
+
+</div>
+
+<div class="remark" id="org301f082">
+<p>
+There was nothing special about using \((1 + \E^{x})\), we could use any
+\((1 + c^{x})\) for positive real number \(c\gt0\).
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-org2f9d9c7" class="outline-3">
+<h3 id="org2f9d9c7"><span class="section-number-3">2.1</span> Weierstrass Substitution</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Take \(t = \tan(\theta/2)\), then
+</p>
+
+\begin{equation}
+\sin(\theta)=\frac{2t}{1+t^{2}},\quad\cos(\theta)=\frac{1-t^{2}}{1+t^{2}}
+\end{equation}
+
+<p>
+and in particular
+</p>
+
+\begin{equation}
+\D\theta = \frac{2\,\D t}{1 + t^{2}}.
+\end{equation}
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7692bc6" class="outline-2">
+<h2 id="org7692bc6"><span class="section-number-2">3</span> References</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>Michael Dougherty,
+<a href="https://web.archive.org/web/20180127095831/http://faculty.swosu.edu/michael.dougherty/book/chapter07.pdf">Advanced Integration Techniques</a>, 76 pages.</li>
+<li>Victor Moll's <a href="http://dauns01.math.tulane.edu/~vhm/pap-scientia.html">papers</a> about the proofs of Gradshteyn and Ryzhik</li>
+<li>Keith Conrad,
+<a href="https://web.archive.org/web/20140514090620/https://www.warwickmaths.org/files/gamma.pdf">The Gamma Function</a>.</li>
+</ul>
+</div>
+
+<div id="outline-container-org9b2301d" class="outline-3">
+<h3 id="org9b2301d"><span class="section-number-3">3.1</span> Treatises</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>Joseph Edward,
+<cite class="book-title">A treatise on the integral calculus; with applications</cite>.
+<a href="https://archive.org/details/treatiseonintegr01edwauoft">vol 1</a>, <a href="https://archive.org/details/treatiseonintegr02edwauoft">vol 2</a> 1921&#x2013;1922.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-03-21 Sun 12:37.</p>
+</div>
+</body>
+</html>

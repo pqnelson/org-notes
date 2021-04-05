@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-04-04 Sun 18:11 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Literate Programming</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Literate Programming</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgafd9ba8">1. Overview</a></li>
+<li><a href="#org07afa3a">2. Knuth's Web and CWeb</a>
+<ul>
+<li><a href="#orgd88aef4">2.1. Intention: Communicate with Human Beings</a></li>
+<li><a href="#orgd112924">2.2. Style</a></li>
+</ul>
+</li>
+<li><a href="#org85363dd">3. Misinterpretations of Knuth</a></li>
+<li><a href="#org916a905">4. My own experiences</a>
+<ul>
+<li><a href="#orgc6ebee1">4.1. Thoughts on Making a Lisp</a></li>
+<li><a href="#org6d9a273">4.2. Open Questions</a>
+<ul>
+<li><a href="#org725bd56">4.2.1. What <i>is</i> the "Best" Order for Human Understanding?</a></li>
+<li><a href="#orge875bd5">4.2.2. Contracts</a></li>
+<li><a href="#orge143fe5">4.2.3. Literate Proofs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org492ccbf">5. Notes on Noweb</a></li>
+<li><a href="#org89bc03d">6. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgafd9ba8" class="outline-2">
+<h2 id="orgafd9ba8"><span class="section-number-2">1</span> Overview</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Don Knuth coined the term "Literate Programming" to describing a
+method of exposition coupled to writing computer software. It was
+both literature and software. Unfortunately, since Javadoc,
+everyone has co-opted the term to refer to inline documentation of
+software, or something along those lines.
+</p>
+
+<p>
+Knuth's idea works well for static projects, or for writing code
+which non-programmer experts review. The latter case takes
+advantage of the "Web style" the documentation affords, so a
+non-programmer can read it as if it were pseudocode.
+</p>
+
+<p>
+But it doesn't adequately work with agile methods. I'm not even
+clear how to unit test code in this manner. If I had to iteratively
+refine some code, I wouldn't know how to do that effectively. There
+have been times when I wanted to create a stub, then revise it
+later (so the chapter could form a self-contained
+program). Literate programming doesn't handle the "then revise it
+later" step. Presumably I could have used function pointers to
+abstract away the methods used, or some other fancy trick.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org07afa3a" class="outline-2">
+<h2 id="org07afa3a"><span class="section-number-2">2</span> Knuth's Web and CWeb</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+The original software Knuth used for literate programming which
+allowed the author to extract Pascal code, which was then compiled
+into a binary for execution. This is how Knuth wrote TeX, which was
+then used to write Web (to make the documentation pretty).
+</p>
+
+<p>
+A web program consists of "chunks". Each chunk was numbered, and
+had some optional English text, followed by an optional source code
+fragment, but must have at least one of either. (Empty chunks were
+not allowed.) The code snippet could refer to other chunks as a
+sort of pseudocode, writing something like <code>&lt;Sort applicants by
+height&gt;</code> then later implement the code in a chunk named "Sort
+applicants by height".
+</p>
+
+<p>
+But Pascal didn't have the longevity of C.  Thus begat CWeb. It had
+the same style of chunks, labels, etc., but used C code instead of
+Pascal.
+</p>
+</div>
+
+<div id="outline-container-orgd88aef4" class="outline-3">
+<h3 id="orgd88aef4"><span class="section-number-3">2.1</span> Intention: Communicate with Human Beings</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Knuth explicitly pleas in his article "Literate Programming"
+(1984):
+</p>
+
+<blockquote>
+<p>
+Let us change the traditional attitude to the construction of
+programs. Instead of imagining that our main task is to instruct a
+<i>computer</i> what to do, let us concentrate rather on explaining to
+<i>human beings</i> what we want a computer to do.
+</p>
+
+<p>
+The practitioner of literate programming can be regarded as an
+essayist, whose main concern is with exposition and excellence of
+style. Such an author, with thesaurus in hand, chooses the names of
+variables carefully and explains what each variable means. He or
+she strives for a program that is comprehensible because its
+concepts have been introduced in an order that is best for human
+understanding, using a mixture of formal and informal methods that
+nicely reinforce each other.
+</p>
+</blockquote>
+
+<p>
+Sadly programmers do not view themselves as essayists while
+programming. It's probably for this reason that literate
+programming never caught on.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd112924" class="outline-3">
+<h3 id="orgd112924"><span class="section-number-3">2.2</span> Style</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Chunk names seem to be frequently in the imperative mood ("See <code>foo</code>",
+"Initialize <code>bar</code>", "Fetch <code>[data]</code>", etc.), at least in the TeXbook.
+</p>
+
+<p>
+Some numbers:
+</p>
+<ul class="org-ul">
+<li>1379 chunks in <code>tex.web</code></li>
+<li>6115 lines in <code>tex.p</code> (the tangled code), for an average of 4.434
+lines of Pascal code per chunk</li>
+<li>1216 <code>@d</code> definitions in <code>tex.web</code> in 214 chunks</li>
+<li>13 <code>@f</code> format specifiers in <code>tex.web</code></li>
+<li>125 chunks have no code segment</li>
+<li>45 chunks have no code segment and no definition/formats</li>
+<li>1254 chunks have code</li>
+<li>504 chunks have no commentary (all of them have code, none have
+definitions or formats)</li>
+<li>Among all chunks,
+<ul class="org-ul">
+<li>average of 11.066 lines of code</li>
+<li>median 9 lines of code</li>
+<li>25th quartile: 4 lines of code</li>
+<li>75h quartiles: 16</li>
+<li>standard deviation: 9.14 lines of code</li>
+<li>maximum of 115 lines of code in a single chunk</li>
+<li>The quartiles among all chunks of code: 0 and 13 lines of code</li>
+</ul></li>
+<li>Among the chunks with code,
+<ul class="org-ul">
+<li>average of 12.16905 lines of code</li>
+<li>standard deviation of 8.858455 lines of code</li>
+<li>median of 10 lines of code</li>
+<li>minimum of 2 lines of code</li>
+<li>25h quartile: 6 lines of code</li>
+<li>75th quartile: 16 lines of code</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org85363dd" class="outline-2">
+<h2 id="org85363dd"><span class="section-number-2">3</span> Misinterpretations of Knuth</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Following Knuth's enthusiastic examples, Javadoc added
+documentation for Java code using comments. (Lisp had this earlier
+in comment strings, but Javadoc extracted documentation from
+specific comments.) Since then, the programming community had
+misinterpreted "literate programming" as "programming with
+API documentation embedded as comments".
+</p>
+
+<p>
+Jupyter (formerly Python Notebooks) tried to introduce something
+closer to Knuth's sense of literate programming, but it didn't
+really adhere to Knuth's intentions. Org-babel seems to work along
+similar lines as Jupyter.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org916a905" class="outline-2">
+<h2 id="org916a905"><span class="section-number-2">4</span> My own experiences</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+For the most part, it's fine. After having acquired a taste for
+unit testing, it's a little unnatural at first (since C doesn't
+have a unit testing framework). My exposition has been at the level
+of documenting design decision, discussing alternatives, and so
+on. I suspect this is not quite what Knuth had in mind.
+</p>
+
+<p>
+The best example of a literate program, to my mind, is Bob
+Nystrom's <a href="https://www.craftinginterpreters.com">Crafting Interpreters</a>. He wrote his own toolkit to splice
+into his book (written in markdown) segments of code from a C
+program (or Java program). This probably tells a lot about the
+approach taken to writing a literate program, that the best one
+wrote the code first (albeit with explanations in mind) and worked
+a book around the code.
+</p>
+
+<p>
+I dislike org-mode's literate programming features, since it
+doesn't mesh well with org-mode. There's no way to create "chunks"
+the same way I could in cweb. On the other hand, each chunk is
+really six or seven stars, and I get to cluster them together in a
+way that is natural for org-mode.
+</p>
+</div>
+
+<div id="outline-container-orgc6ebee1" class="outline-3">
+<h3 id="orgc6ebee1"><span class="section-number-3">4.1</span> Thoughts on Making a Lisp</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+After some experiment with <a href="./mal-2.html">Making a Lisp</a>, I think one of the
+disadvantages is: I want to get a small interpreter up and
+running. But it's hard to organize the code such that I can revisit
+a chunk and replace it. Consequently, it doesn't communicate to the
+reader.
+</p>
+
+<p>
+Knuth writes:
+</p>
+
+<blockquote>
+<p>
+But after gaining experience with WEB, I have come to realize that
+there is no need to choose once and for all between top-down and
+bottom-up, becausea program is best tough of as a web instead of as
+a tree. A hierarchical structure is present, but the most important
+thing about a program is its structural relationships. A complex
+piece of software consists of simple parts and simple relations
+between those parts; the programmer's task is to state those parts
+and those relationships, in whatever order is best for human
+comprehension&#x2014;not in some rigidly determined order like top-down
+or bottom-up.
+</p>
+</blockquote>
+
+<p>
+I don't think I adequately appreciate his examples. Perhaps I need
+to sit down, and write code snippets on paper (as I write down
+slips for my <i>Zettelk&auml;sten</i> with the chunk name in the top-right
+corner, etc.), analogous to Knuth's chunks.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6d9a273" class="outline-3">
+<h3 id="org6d9a273"><span class="section-number-3">4.2</span> Open Questions</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+There are a few things I'm uncertain about how to handle with
+literate programming.
+</p>
+</div>
+
+<div id="outline-container-org725bd56" class="outline-4">
+<h4 id="org725bd56"><span class="section-number-4">4.2.1</span> What <i>is</i> the "Best" Order for Human Understanding?</h4>
+<div class="outline-text-4" id="text-4-2-1">
+<p>
+This was never clear to me, and I know myself well enough to
+know&#x2026;how I analyze things differs from how anyone else
+would. Consequently, what's "best" for me differs from what's best
+for anyone else. But I don't know how to begin, what order to
+present material. Presumably this requires "big design up front",
+which does not lend itself to rapid prototyping.
+</p>
+
+<p>
+Explaining design choices, well, that doesn't seem to be taught
+anywhere, ever. Consequently, instead of working through the design
+in a manner suitable for human beings, it's easier to lapse back
+into talking to the computer.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge875bd5" class="outline-4">
+<h4 id="orge875bd5"><span class="section-number-4">4.2.2</span> Contracts</h4>
+<div class="outline-text-4" id="text-4-2-2">
+<p>
+When I program, I have gotten in the habit of using <code>assert</code>
+preconditions and <code>assert</code> post-conditions. But literate
+programming blurs the distinction between functions and
+named-chunks. The former <i>can</i> have contracts, the latter should
+not.
+</p>
+
+<p>
+I suppose for a fragment of code in a chunk, this would become a
+Hoare triple annotation.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge143fe5" class="outline-4">
+<h4 id="orge143fe5"><span class="section-number-4">4.2.3</span> Literate Proofs</h4>
+<div class="outline-text-4" id="text-4-2-3">
+<p>
+I'm writing a manuscript on implementing theorem provers. For this,
+literate programming is a natural technique. It works fine. But
+proving properties about the code I've written requires a different
+style of writing, a different mode of presentation. Because I've
+introduced a new metalanguage (the input language for the theorem
+prover used to prove these properties). More generally, whenever
+defining and implementing a language, I have the problems of
+smoothly using all the tools at hand.
+</p>
+
+<p>
+When I write the code in, say, C&#x2026;I need something like <a href="./acsl.html">ACSL</a> to
+provide an annotated proof of Hoare triples. But <i>proving</i> the
+Hoare triple annotations hold is done in the text, and is
+<i>separate</i> from the essay explanation (at least, in my
+mind). Consequently, I need some "literate proofs" of the Hoare
+tripled. I suppose I could just shrug and hand it off to Frama-C to
+check the annotations, but this doesn't seem friendly.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org492ccbf" class="outline-2">
+<h2 id="org492ccbf"><span class="section-number-2">5</span> Notes on Noweb</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+I've been tinkering with Noweb to write a literate program in C, ACSL,
+and Twelf. I think this may be a promising approach when working with
+multiple languages.
+</p>
+
+<p>
+Briefly commands:
+</p>
+
+<ul class="org-ul">
+<li>Noweb files have a <code>.nw</code> suffix</li>
+<li>Extract HTML: <code>noweave -filter l2h -index -html foo.nw &gt; foo.html</code></li>
+<li>Extract TeX file: <code>noweave -x foo.nw &gt; foo.tex</code></li>
+<li>Extract code: <code>notangle -L -Rfoo.c foo.nw &gt; foo.c</code></li>
+</ul>
+
+<p>
+Formatting:
+</p>
+
+<ul class="org-ul">
+<li><code>@</code> as the first character starts a documentation chunk</li>
+<li>In LaTeX, <code>[[ ... ]]</code> for embedded code fragments</li>
+<li>Use <code>noweave -delay</code> to avoid automatically wrapping a document class,
+begin/end document environment</li>
+<li>Start a code chunk with <code>&lt;&lt;name of chunk&gt;&gt;=</code></li>
+<li>Insert a code chunk by reference with <code>&lt;&lt;...&gt;&gt;</code></li>
+<li>Chunk naming conventions:
+<ul class="org-ul">
+<li>Name chunks inside functions with verbs, usually in imperative mood
+("Do this", "Sort that", etc.)</li>
+<li>Name chunks holding declaration prototypes with nouns (e.g.,
+"private function prototypes", "definitions of exported functions", etc.)</li>
+<li>Name top-level "root" chunks after the files they are to represent
+(e.g., <code>&lt;&lt;foo.c&gt;&gt;=</code> or <code>&lt;&lt;foo.h&gt;&gt;=</code>)</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org89bc03d" class="outline-2">
+<h2 id="org89bc03d"><span class="section-number-2">6</span> References</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li>Donald Knuth,
+<cite class="book-title">Literate Programming</cite>.
+CSLI Lecture Notes no 27, 1992.</li>
+<li>Donald Knuth,
+<cite class="book-title">TeX: The Program</cite>.
+Specifically the forward on "Reading a Web".</li>
+<li>John Cook,
+<a href="https://www.johndcook.com/blog/2016/07/06/literate-programming-presenting-code-in-human-order/">Literate programming: presenting code in human order</a>,
+6 July 2016 blogpost.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-03-27 Sat 08:42.</p>
+</div>
+</body>
+</html>
