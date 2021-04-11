@@ -12,6 +12,9 @@
 # Created Monday February 15, 2021 at  3:07PM
 
 * Overview
+:PROPERTIES:
+:CUSTOM_ID: h-2139284d-7b5c-46c8-abce-c3ede3b2b67f
+:END:
 
 I've got a Raspberry Pi 3 lying around, and I've been interested in
 [[file:lisp/machine.org][Lisp Machines]] for a bit. Daniel Szmulewicz wrote a [[https://danielsz.github.io/blog/blog_on_lisp.html][blog post]] on treating
@@ -23,12 +26,18 @@ Lisp tools on it.
 (Apparently I have a Raspberry Pi 4B.)
 
 * Ssh into the Pi
+:PROPERTIES:
+:CUSTOM_ID: h-bd448f65-3561-4ce8-90da-580ef958cee7
+:END:
 
 We can ssh into Raspberry Pi by enabling ssh (the openssh-server seems
 to be installed but not yet enabled), then we can simply do
 ~ssh <user>@raspberrypi.local~ to
 
 * Debian Infrastructure
+:PROPERTIES:
+:CUSTOM_ID: h-b0d187d2-f502-4a62-9dd4-a6fd994a903a
+:END:
 
 Running the update can be time-consuming. Basically I updated the
 ~/etc/apt/sources.list~ and ~/etc/apt/sources.list.d/raspi.list~ to use
@@ -41,6 +50,9 @@ This took a few hours.
 Then I ran ~sudo rpi-update~ to update the firmware.
 
 ** Optimizing for my local computer
+:PROPERTIES:
+:CUSTOM_ID: h-75c9966a-5592-4ae4-a025-80e0e6c34f6a
+:END:
 
 I noticed that, for GCC, the flag =-Os= optimizes for size. Since
 there's only so little room for things on the Pi, I decided to install
@@ -48,6 +60,9 @@ apt-build and these go into ~/etc/apt/apt-build.conf~, then I can use
 =sudo apt-build install ...= instead of apt-get.
 
 * Installing Emacs
+:PROPERTIES:
+:CUSTOM_ID: h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f
+:END:
 
 I pulled down Emacs from the git repository:
 
@@ -88,6 +103,9 @@ If you configure with ~-Ofast~ you need to also include
 error saying Emacs won't compile with ~-ffinite-math-only~).
 
 ** Improving Startup Time
+:PROPERTIES:
+:CUSTOM_ID: h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c
+:END:
 
 I noticed the startup time was rather slow. The =(emacs-init-time)=
 reports it took 10.46182 seconds without optimization for my default
@@ -109,11 +127,17 @@ seconds. If I further compiled with =-Ofast=, I get startup time in
 3.713 seconds.
 
 * Installing Common Lisp
+:PROPERTIES:
+:CUSTOM_ID: h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9
+:END:
 
 I'm not sure what happened, but somehow I had SBCL 1.4 installed on my
 Raspberry Pi already. I was suspicious of this, and remain so to date.
 
 ** Clozure Common Lisp
+:PROPERTIES:
+:CUSTOM_ID: h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88
+:END:
 
 One Common Lisp compiler which emerged from the '80s was Clozure Common
 Lisp. Well, it was forked from Macintosh Common Lisp, which ran on a
@@ -151,6 +175,9 @@ same size, but the ~armcl.image~ is 17100816 bytes (and in ~v1.12-dev.4~,
 17158160 bytes).
 
 *** Making =armcl= global
+:PROPERTIES:
+:CUSTOM_ID: h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e
+:END:
 
 I also ran
 
@@ -161,6 +188,9 @@ I also ran
 This let me run armcl for any user.
 
 ** Adding Quicklisp
+:PROPERTIES:
+:CUSTOM_ID: h-caf05a1b-6f16-4430-a62b-200f4c5bd753
+:END:
 
 We get quicklisp:
 
@@ -189,12 +219,21 @@ default, you could just add a =(load-quicklisp)= line to the
 =~/.ccl-init.lisp= file.
 
 * Stumpwm
+:PROPERTIES:
+:CUSTOM_ID: h-3b62ead8-4526-46b2-a922-92053432e1c3
+:END:
 ** Dependencies
+:PROPERTIES:
+:CUSTOM_ID: h-c596939f-a681-4092-9c95-a4245ff3b73b
+:END:
 
 Trying to run ~sudo apt-get build-dep stumpwm~ will install a number of
 common lisp dependencies, which quicklisp would automatically handle.
 
 * Other Links
+:PROPERTIES:
+:CUSTOM_ID: h-88c07655-f971-4a20-b7f9-3f75d70adacd
+:END:
 
 - [[http://informatimago.com/articles/raspberrypi/ccl-sur-qemu.html][CCL on RPi]] (French)
 - [[http://thisoldlisp.com/talks/els-2018/][This Old Lisp]]
