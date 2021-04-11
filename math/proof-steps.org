@@ -12,6 +12,9 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 
 * Definition
+:PROPERTIES:
+:CUSTOM_ID: h-f907a02c-3947-40f7-a89d-ca2e4d86b81f
+:END:
 
 In formal proof sketches, we can limit our "logical vocabulary" to
 about a half-dozen "proof steps". These correspond to certain
@@ -24,6 +27,9 @@ inference. The proof skeleton transforms a goal until the theorem
 is proven.
 
 ** Formal Grammar
+:PROPERTIES:
+:CUSTOM_ID: h-53077d39-c377-4a30-a09c-70f6c158fdbd
+:END:
 
 Let's consider the formal grammar for formal proof
 sketches. Following Freek Wiedijk's "Mathematical Vernacular", we
@@ -70,7 +76,13 @@ cases = "per cases" simple-justification ";" {"suppose" proposition ";" {step}}
 Note that justifications allow for nested proofs.
 
 * Steps
+:PROPERTIES:
+:CUSTOM_ID: h-3c0fc0e4-a5f6-49f4-a913-7585fa0b4358
+:END:
 ** =let= or forall-introduction
+:PROPERTIES:
+:CUSTOM_ID: h-c8be4c51-ce97-433e-97be-ffe4a763c5ed
+:END:
 
 The proof skeleton for this step looks like:
 
@@ -88,7 +100,13 @@ $\forall$-introduction:
 \end{equation}
 
 ** =assume=
+:PROPERTIES:
+:CUSTOM_ID: h-292b4f0e-6142-45b3-b1b7-2a89d33c17b1
+:END:
 *** implies-intro
+:PROPERTIES:
+:CUSTOM_ID: h-c94efdcd-f2fb-4562-a9ce-702b424476b0
+:END:
 
 When we want to prove a goal of the form $A\implies B$, we begin by
 stipulating the hypothesis $A$ holds. That is to say, we =assume=
@@ -102,6 +120,9 @@ $A$.
 #+end_example
 
 *** not-introduction
+:PROPERTIES:
+:CUSTOM_ID: h-53117430-d9c1-4395-9d65-fc9c4c76b4b9
+:END:
 
 We can take advantage of the logical equivalence of $\neg A$ with
 $A\implies\bot$. That is, if we want to prove $\neg A$, we
@@ -117,6 +138,9 @@ be wrong, and that $A$ must be false (i.e., $\neg A$ is true).
 #+end_example
 
 *** Reductio ad Absurdum
+:PROPERTIES:
+:CUSTOM_ID: h-56f7caee-a8bd-4195-b0a9-6b2a340e8be5
+:END:
 
 The other way to look at this is, if assuming $A$ and deriving a
 contradiction implies $\neg A$, then assuming $\neg A$ and deriving
@@ -131,6 +155,9 @@ rule. Usually I write in parentheses "=assume= $A$ (for contradiction)".
 #+end_example
 
 ** =thus= or and-introduction
+:PROPERTIES:
+:CUSTOM_ID: h-f0c1272f-de5f-4cc9-a977-a8c14a897de1
+:END:
 
 When we have multiple goals we want to prove conjoined together
 (i.e., our goal looks like $A\land B$), and we have proven $A$, we
@@ -154,6 +181,9 @@ proof goal.
 #+end_example
 
 ** =per cases=, or-introduction
+:PROPERTIES:
+:CUSTOM_ID: h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88
+:END:
 
 When we want to prove a claim by cases. That is, we have
 established that $A_{1}\lor\dots\lor A_{n}$, but we want to prove
@@ -180,6 +210,9 @@ Each =suppose= block acts as if we temporarily "=assume= $A_{i}$"
 for the duration of the block.
 
 ** =consider=, exists-elimination
+:PROPERTIES:
+:CUSTOM_ID: h-4b92b0ba-c2e7-4b7f-813f-db15f44a4f7c
+:END:
 
 If we have proven "$\exists x, P[x]$", then we may take a "witness"
 or term $t$ which satisfies the predicate. In other words, we may
@@ -200,6 +233,9 @@ The top-left subgoal is the justification for the proof step.
 #+end_example
 
 ** =take=, exists-intro
+:PROPERTIES:
+:CUSTOM_ID: h-0e66da0e-d02c-4dd5-9009-9c31ec4b88b8
+:END:
 
 When we want to prove a claim of the form "$\exists x, P[x]$", the
 first thing we do is take a term $t$ then prove it satisfies
@@ -218,7 +254,13 @@ In natural deduction, this corresponds to $\exists$-intro:
 #+end_example
 
 * Syntactic Sugar
+:PROPERTIES:
+:CUSTOM_ID: h-443bfb2e-72f7-4c79-a3a8-90b179608fe8
+:END:
 ** =then= prefixes
+:PROPERTIES:
+:CUSTOM_ID: h-e82eeffb-df96-4f05-ad6f-c9b08e37cafb
+:END:
 
 For steps requiring justification, if we use the previous step as
 part of the justification, we can prefix the step with =then=. For
@@ -231,12 +273,18 @@ The justification for the =consider= step consists of just one
 reference, namely, the previous step.
 
 ** ~hence~ = ~then thus~
+:PROPERTIES:
+:CUSTOM_ID: h-ff7328a3-1ac3-44d8-8421-4fab0875eb35
+:END:
 
 There is some awkwardness to writing "Then thus". Instead, we write
 "hence". It is an abbreviation for "then thus". They are literal
 synonyms.
 
 ** ~given = assume + then consider~
+:PROPERTIES:
+:CUSTOM_ID: h-98017bb4-159d-4221-97a0-36601629712c
+:END:
 
 We also routinely write steps of the form
 
@@ -252,6 +300,9 @@ This is rather wordy. We contract the two steps into one:
 #+end_example
 
 ** =set=
+:PROPERTIES:
+:CUSTOM_ID: h-02599ff2-cf14-454a-be44-e46357f1b4bf
+:END:
 
 When we've already introduced an identifier (a symbol used for a
 term or variable) in a proof, but we want to re-use somewhere later
@@ -262,6 +313,9 @@ in the proof, we can flag this to the reader by writing:
 #+end_example
 
 ** =thesis= keyword
+:PROPERTIES:
+:CUSTOM_ID: h-6c8990af-64e7-4182-9121-13144eb7f6a9
+:END:
 
 When we start a =proof= environment, the initial goal we're trying
 to prove is stored in the =thesis= reserved keyword. In Mizar, it
@@ -269,8 +323,14 @@ has become idiomatic to conclude a proof by writing =thus thesis=
 or =hence thesis=.
 
 * Conventions
+:PROPERTIES:
+:CUSTOM_ID: h-fd84a1a8-251f-4c22-b557-6c4073e6a86c
+:END:
 
 ** Proving $A \iff B$
+:PROPERTIES:
+:CUSTOM_ID: h-aadd0d9c-fcfe-4f2c-a2d2-460e6b7f46a2
+:END:
 
 One of the conventions I've adopted is to use the proof skeleton:
 
@@ -312,6 +372,9 @@ something of the form:
 
 
 * References
+:PROPERTIES:
+:CUSTOM_ID: h-ec240c62-5e72-4270-b7bf-02c24604b297
+:END:
 
 Most of this comes from Freek Wiedijk's work and Mizar.
 

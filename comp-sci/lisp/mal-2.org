@@ -12,12 +12,18 @@
 # Created Saturday February 20, 2021 at  8:52AM
 
 * Overview
+:PROPERTIES:
+:CUSTOM_ID: h-818893e6-34f9-491b-ad77-e4aa59964583
+:END:
 
 This contains a discussion of the implementation of data structures for
 a Lisp interpreter. The focus will be on the data structures used for
 the data types provided by the Lisp interpreter.
 
 * Object Model = Tagged Union + Metadata
+:PROPERTIES:
+:CUSTOM_ID: h-16bc4d6b-f5ee-43a0-9c15-a42a1f701da1
+:END:
 
 The basic data type for a simple Lisp implementation in C amounts to a
 tagged union. Well, we stick the tag plus other metadata in an *"Object header"*
@@ -56,6 +62,9 @@ struct to (and from) a pointer to its first field. In other words, we
 get a standards-compliant form of "polymorphism".
 
 ** Helper Functions
+:PROPERTIES:
+:CUSTOM_ID: h-cd871865-9673-46ea-a9c3-0140c43390fe
+:END:
 
 There are a number of functions we'll use for S-expressions generically,
 like computing the hash code for an S-expression. (We could, further,
@@ -90,6 +99,9 @@ The contracts we demand of these functions:
     return the same value if called repeatedly and no other computation
     occurs in between these calls
 ** Object Model References
+:PROPERTIES:
+:CUSTOM_ID: h-e8ff3ec9-4acd-4799-aca4-1e63340eaf54
+:END:
 
 - [[https://shipilev.net/jvm/objects-inside-out/][Java Objects Inside Out]]
 - [[https://www.rubyguides.com/2017/04/memory-layout-of-an-object/][Ruby Internals: Exploring the Memory Layout of Ruby Objects]]
@@ -97,12 +109,18 @@ The contracts we demand of these functions:
 - [[https://docs.python.org/3/c-api/structures.html][Python Common Object Structures]]
 
 * Atoms
+:PROPERTIES:
+:CUSTOM_ID: h-cbab8801-fa1e-45d9-9a2d-6203c8817a73
+:END:
 
 There are two types of atoms: symbols and primitive values. The
 primitive values are numbers, strings, booleans, or characters.
 Symbols are associated to some value.
 
 ** Primitive Values
+:PROPERTIES:
+:CUSTOM_ID: h-187128fd-23ea-456f-8949-e6c6bbb05770
+:END:
 
 Primitive values would naively be represented by structures like:
 
@@ -129,6 +147,9 @@ memory usage (NaN boxing, [[https://bernsteinbear.com/blog/small-objects/][tagge
 addresses giving us 16 bits of metadata).
 
 ** Strings
+:PROPERTIES:
+:CUSTOM_ID: h-da478b87-1a15-420d-ad79-de86e7ecbbac
+:END:
 
 There are several different ways to represent a string. C uses a
 null-terminated sequence of characters. Pascal uses length-prefixed
@@ -165,6 +186,9 @@ struct String {
 #+end_src
 
 *** Constructor
+:PROPERTIES:
+:CUSTOM_ID: h-3a3dc182-6b69-4a88-84b5-3600a4925da7
+:END:
 
 The constructor copies the data from the given pointer. There are
 basically three key moments to this constructor:
@@ -201,6 +225,9 @@ String* string_new(char *str, int length) {
 #+end_src
 
 *** Destructor
+:PROPERTIES:
+:CUSTOM_ID: h-a16eefe6-4906-432b-a050-66d299c68e4b
+:END:
 
 The destructor for a string needs to also free the underlying array of
 characters. Then we free the data and metadata for the string object.
@@ -219,6 +246,9 @@ void string_free(String **this) {
 #+end_src
 
 *** String Equality
+:PROPERTIES:
+:CUSTOM_ID: h-ec996810-3861-4a40-95ae-0084f00c8a4a
+:END:
 
 We can use a couple shortcuts to compute equality. First, if both
 arguments are NULL pointers, then return true. But if only one is NULL,
@@ -241,6 +271,9 @@ bool string_equals(String *lhs, String *rhs) {
 #+end_src
 
 *** Computing Hash Code
+:PROPERTIES:
+:CUSTOM_ID: h-1cdab51f-7243-4962-9b44-7c5e268a0d39
+:END:
 
 There are a number of ways to compute the hash code for a string.
 Following the generic strategy of computing the hash code for a list
@@ -262,10 +295,16 @@ hash_t string_hashCode(String *string) {
 }
 #+end_src
 *** References
+:PROPERTIES:
+:CUSTOM_ID: h-8c4bc7f8-866a-4fec-966f-16e267fb06a0
+:END:
 
 - Java's ~String.java~ ([[https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/lang/String.java][jdk8-b120]], [[https://github.com/openjdk/jdk/blob/jdk7-b24/jdk/src/share/classes/java/lang/String.java][jdk7-b24]])
 
 ** Symbols
+:PROPERTIES:
+:CUSTOM_ID: h-b626d54a-265c-4799-b67a-579a51904c11
+:END:
 
 We intern symbols to make at most one object which corresponds with a
 symbol name. This could be done using a Hash Table, a binary tree, or
@@ -302,6 +341,9 @@ and specifically
 ~intern(x) != NULL~.
 
 *** Constructor
+:PROPERTIES:
+:CUSTOM_ID: h-b778912c-1a4b-4a98-b70b-177977d4aec6
+:END:
 
 The trick to this is we will use a Hash Table to lookup the symbol with
 a given name. If it exists, we return that; otherwise, we create a new
@@ -344,6 +386,9 @@ Symbol* intern(char *name) {
 #+end_src
 
 *** Destructor
+:PROPERTIES:
+:CUSTOM_ID: h-3a0baa71-eaf1-4350-a1b7-1ee865020c9c
+:END:
 
 I'm not sure I need this, exactly. But I'll vacate the symbol table, and
 delete the symbol and its underlying string.
@@ -359,6 +404,9 @@ void symbol_free(Symbol **symbol) {
 #+end_src
 
 *** Hash Code
+:PROPERTIES:
+:CUSTOM_ID: h-a780efa2-cd22-4bf5-9002-a94aa9cbc745
+:END:
 
 The hash code for a symbol amounts to computing the hash code for the
 associated string.
@@ -371,6 +419,9 @@ hash_t symbol_hashCode(Symbol *symbol) {
 #+end_src
 
 *** Equality
+:PROPERTIES:
+:CUSTOM_ID: h-a80606b8-63e7-4729-8331-d497f6ac0d39
+:END:
 
 Since we're interning symbols, we could use pointer equality. But
 ostensibly we'll extend symbols to a multithreaded environment...so we
@@ -394,6 +445,9 @@ bool symbol_equals(Symbol *lhs, Symbol *rhs) {
 #+end_src
 
 * Linked Lists
+:PROPERTIES:
+:CUSTOM_ID: h-6d571cfb-88b1-450c-bc4b-b2c6664f7dd5
+:END:
 
 Also called "cons cells", linked lists are what you'd expect. They're
 the only data type with pointers, so far.
@@ -427,6 +481,9 @@ pointed by the =ObjectRef=, we update the =ObjectRef= to be null. This
 requires using double pointers for this update to persist.
 
 ** Constructor
+:PROPERTIES:
+:CUSTOM_ID: h-c10033e0-c5c3-4676-b0fe-6c320aecb881
+:END:
 
 The constructor works as we would expect: allocate the memory for the
 header and addresses. If one of the arguments is NULL, then its double
@@ -444,6 +501,9 @@ Cons* cons_new(Object *car, Object *cdr) {
 #+end_src
 
 ** Destructor
+:PROPERTIES:
+:CUSTOM_ID: h-73c09617-5703-4cf3-9e1b-f375caf4bbfb
+:END:
 
 This requires a bit more care. We'll iterate through the list,
 recursively freeing the car and cdr, before finally freeing the wrapper
@@ -462,6 +522,9 @@ void cons_free(Cons **this) {
 }
 #+end_src
 ** Hash Code
+:PROPERTIES:
+:CUSTOM_ID: h-d23ebef4-d876-4daf-a9ad-9e541ffa0d8d
+:END:
 
 The basic computation amounts to
 
@@ -497,6 +560,9 @@ hash_t cons_hashCode(Cons *cell) {
 #+end_src
 
 ** Equality
+:PROPERTIES:
+:CUSTOM_ID: h-fa7a330c-701c-40cc-b2f6-1c31ea6a50ac
+:END:
 
 We test for equality by checking the car of the left-hand side equals
 the car of the right-hand side, and the cdr of both sides are equal.
@@ -517,6 +583,9 @@ bool cons_equals(Cons *lhs, Cons *rhs) {
 #+end_src
 
 * Hash Tables
+:PROPERTIES:
+:CUSTOM_ID: h-29531eeb-d7cf-4663-b39d-a9844134da25
+:END:
 
 There are many different implementations. Basically the difference boils
 down to using "chaining" (the buckets are a linked list --- Java did
@@ -549,6 +618,9 @@ size_t hashmap_size(HashMap *this);
 Arguably, there may be other functions to consider implementing.
 
 ** Data Structures
+:PROPERTIES:
+:CUSTOM_ID: h-59a6d948-fa1d-47a9-8253-2068ba12ea09
+:END:
 
 We will use simple chaining. The idea is to use an array of buckets (a
 bucket is a linked list of "Entries" --- key-value pairs plus some extra metadata),
@@ -557,6 +629,9 @@ many entries, we increase the number of buckets, then rebalance the
 entries.
 
 *** Entry
+:PROPERTIES:
+:CUSTOM_ID: h-ce9ee36b-9dbc-409a-a96e-70412cf03eb2
+:END:
 
 An entry is a data structure with some extra metadata, namely the hash
 code for the key (so we compute it once).
@@ -573,6 +648,9 @@ typedef struct Entry {
 #+end_src
 
 **** Constructor
+:PROPERTIES:
+:CUSTOM_ID: h-50fe776c-1679-4f94-860a-21f1265082d0
+:END:
 
 We have the usual boiler plate code for it, namely a constructor and
 destructor.
@@ -591,6 +669,9 @@ Entry* entry_new(Object *key, Object *value, hash_t hash) {
 #+end_src
 
 **** Destructor
+:PROPERTIES:
+:CUSTOM_ID: h-38bd088b-67ea-4751-838f-dd12c9517088
+:END:
 
 The only nuance to the Entry data structure is, unlike a Cons cell, its
 destructor will not recursively destroy its next Entry.
@@ -607,6 +688,9 @@ void entry_free(Entry **entry) {
 #+end_src
 
 **** Sorted Insertion
+:PROPERTIES:
+:CUSTOM_ID: h-ca39c5c2-ba5b-4330-aa6f-199c474b5ad6
+:END:
 
 Given a pointer to (a pointer to) an entry, and an entry we wish to
 insert into the linked list, insert the new entry in a manner that the
@@ -649,6 +733,9 @@ void entry_insert(Entry **list, Entry *entry) {
 #+end_src
 
 *** Hash Table
+:PROPERTIES:
+:CUSTOM_ID: h-a101f2a1-ba47-4d1c-b3c0-c0693c926117
+:END:
 
 The Hash Map consists of an array of Entry pointers. We track how many
 entries belong to the hash map in its =size= parameter; and when it
@@ -666,6 +753,9 @@ struct HashMap {
 #+end_src
 
 ** Constructor
+:PROPERTIES:
+:CUSTOM_ID: h-95293e2b-c4d0-4a82-8a23-21de97ccc862
+:END:
 
 The constructor expects no parameters. The default capacity for a hash
 map would be 16, its initial size 0.
@@ -686,6 +776,9 @@ HashMap* hashmap_new() {
 #+end_src
 
 ** Destructor
+:PROPERTIES:
+:CUSTOM_ID: h-dd78b2d8-df05-462e-886c-154eeda43b19
+:END:
 
 When we destroy a HashMap object, we also have to iteratively destroy
 the table entries.
@@ -711,6 +804,9 @@ void hashmap_free(HashMap **this) {
 #+end_src
 
 ** Getting a Value for a Key
+:PROPERTIES:
+:CUSTOM_ID: h-21bc7c7d-ba68-4268-b524-8a4296e9204f
+:END:
 
 We then need to isolate a helper function to get the index for a given
 hash code. Since our code makes sure there are 2^n buckets in the table,
@@ -747,6 +843,9 @@ Object* hashmap_get(HashMap *this, Object *key) {
 #+end_src
 
 ** Associating a Value for a Key
+:PROPERTIES:
+:CUSTOM_ID: h-cc6e6ee5-5175-4e6d-afbe-bcc038fc1f26
+:END:
 
 We associate a value to a key in a given hash map by finding the bucket
 associated for the hash code for that key. First, we try finding the key
@@ -800,6 +899,9 @@ Object* hashmap_put(HashMap *this, Object *key, Object *value) {
 #+end_src
 
 *** Resizing the Entry Table
+:PROPERTIES:
+:CUSTOM_ID: h-afd9bea1-3433-47c3-b212-8f0c7ee29225
+:END:
 
 The basic idea is to resize the hash map's underlying table by creating
 a new array of entry pointers, then transfer the contents of the array,
@@ -824,6 +926,9 @@ void resize(HashMap *this, size_t new_capacity) {
 #+end_src
 
 *** Transferring Table Contents
+:PROPERTIES:
+:CUSTOM_ID: h-6028f8e2-fbd4-4c44-902a-ac4f1f638ca9
+:END:
 
 Transferring the contents amounts to transferring rows in bucket ~i~,
 for ~i=0~ to the number of buckets.
@@ -858,6 +963,9 @@ void transfer_rows(Entry *row, Entry **new_table, size_t new_length) {
 #+end_src
 
 ** Removing a key from the Hash Map
+:PROPERTIES:
+:CUSTOM_ID: h-607cbc47-b766-4a6a-b455-5616d02fc07b
+:END:
 
 If we want to disassociate a key from the hash map altogether (assuming
 the hash map contains it), then we simply update the bucket containing
@@ -892,6 +1000,9 @@ void hashmap_remove(HashMap *this, Object *key) {
 #+end_src
 
 ** Size of the Hash Map
+:PROPERTIES:
+:CUSTOM_ID: h-e5caef6b-d138-4449-bb4d-7c620b2dc2be
+:END:
 
 The size of the hash map has been abstracted away to a helper function.
 It just accesses the size field. For ~*this~ null pointers, it defaults
@@ -908,6 +1019,9 @@ size_t hashmap_size(HashMap *this) {
 #+end_src
 
 ** Hash Code
+:PROPERTIES:
+:CUSTOM_ID: h-2cee9939-2abd-4aeb-9ae0-cb3c5c4cdc2e
+:END:
 
 We can implement the hashcode computation as treating it as a list of
 key-value entries.
@@ -936,6 +1050,9 @@ hash_t hashmap_hashCode(HashMap *this) {
 #+end_src
 
 ** Equality of Hash Maps
+:PROPERTIES:
+:CUSTOM_ID: h-f5f33c7c-cab8-4091-ae36-a13a4fe0d0ac
+:END:
 
 This is trickier, but basically checks if every key in the ~lhs~ map
 appears in the ~rhs~ map, and if that key is associated to the same
@@ -963,6 +1080,9 @@ bool hashmap_equals(HashMap *lhs, HashMap *rhs) {
 #+end_src
 
 ** Hash Table References
+:PROPERTIES:
+:CUSTOM_ID: h-1de2dc41-c561-4de7-8cad-5004ef30e23f
+:END:
 - [[http://coding-geek.com/how-does-a-hashmap-work-in-java/][How does a HashMap work in JAVA]]
   - OpenJDK's implementation changed from a linked list ([[https://github.com/openjdk/jdk/blob/jdk8-b01/jdk/src/share/classes/java/util/HashMap.java][jdk8-b01]]) to
     use a binary tree for buckets with 8 or more elements (by [[https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/classes/java/util/HashMap.java][jdk8-b120]])

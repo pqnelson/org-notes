@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-04 Sun 18:12 -->
+<!-- 2021-04-11 Sun 12:09 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ring of Formal Polynomials</title>
@@ -263,32 +263,32 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org51b4909">1. Introduction</a></li>
-<li><a href="#orge843720">2. Polynomial Methods</a>
+<li><a href="#h-cb1ea035-1b8c-4ccd-a7d5-5fefb74071e5">1. Introduction</a></li>
+<li><a href="#h-20d930e7-8d3b-4360-96e5-3204d34d5696">2. Polynomial Methods</a>
 <ul>
-<li><a href="#org10aed12">2.1. Long Division</a></li>
-<li><a href="#orgdd998aa">2.2. Pseudo-Division</a></li>
-<li><a href="#org31c0f72">2.3. Euclidean Algorithm</a>
+<li><a href="#h-3c8e788d-b518-4461-a38d-32a712da0309">2.1. Long Division</a></li>
+<li><a href="#h-a46c3f92-c5c8-4218-b5b1-0f992b6d96fe">2.2. Pseudo-Division</a></li>
+<li><a href="#h-1537ef09-adad-4c83-876c-91b8270bcd23">2.3. Euclidean Algorithm</a>
 <ul>
-<li><a href="#org83c716f">2.3.1. Extended Euclidean Algorithm</a></li>
-<li><a href="#org3a21ffb">2.3.2. Half-Extended Euclidean</a></li>
-<li><a href="#org296da51">2.3.3. Euclidean Algorithm</a></li>
-<li><a href="#orgf2429e3">2.3.4. Diophantine version of Extended Euclidean</a></li>
-<li><a href="#orgc31a352">2.3.5. Diophantine Half-Extended Euclidean</a></li>
-<li><a href="#org7ba0e72">2.3.6. Partial Fraction Decomposition</a></li>
-<li><a href="#orgd9873ee">2.3.7. Partial Fraction Decomposition with Multiplicity</a></li>
+<li><a href="#h-c1978393-3a06-4729-a076-eb6919b03b93">2.3.1. Extended Euclidean Algorithm</a></li>
+<li><a href="#h-2b7f76fa-69cc-4289-be25-6cfdbd03cbe9">2.3.2. Half-Extended Euclidean</a></li>
+<li><a href="#h-85ca51b2-bb65-4f0a-b27a-16d48d61e4c6">2.3.3. Euclidean Algorithm</a></li>
+<li><a href="#h-63ab8015-e645-4d71-8b37-b6fc9d363f6d">2.3.4. Diophantine version of Extended Euclidean</a></li>
+<li><a href="#h-28f779bb-5e95-44fa-b0a6-6010c0dab934">2.3.5. Diophantine Half-Extended Euclidean</a></li>
+<li><a href="#h-b241a9e1-876e-4de8-b2eb-37b79591e10d">2.3.6. Partial Fraction Decomposition</a></li>
+<li><a href="#h-ddaff7e3-7343-42d0-9805-220cf9b68a17">2.3.7. Partial Fraction Decomposition with Multiplicity</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgaa2c445">3. References</a></li>
+<li><a href="#h-3f8f5f1a-82c6-4d68-8526-ef9bbf45f7c7">3. References</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org51b4909" class="outline-2">
-<h2 id="org51b4909"><span class="section-number-2">1</span> Introduction</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-h-cb1ea035-1b8c-4ccd-a7d5-5fefb74071e5" class="outline-2">
+<h2 id="h-cb1ea035-1b8c-4ccd-a7d5-5fefb74071e5"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-cb1ea035-1b8c-4ccd-a7d5-5fefb74071e5">
 <p>
 This is just a review of the theory of formal polynomials over a
 (commutative) ring. These are written with symbolic computation in mind,
@@ -303,15 +303,15 @@ divisor of two polynomials).
 </div>
 </div>
 
-<div id="outline-container-orge843720" class="outline-2">
-<h2 id="orge843720"><span class="section-number-2">2</span> Polynomial Methods</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-h-20d930e7-8d3b-4360-96e5-3204d34d5696" class="outline-2">
+<h2 id="h-20d930e7-8d3b-4360-96e5-3204d34d5696"><span class="section-number-2">2</span> Polynomial Methods</h2>
+<div class="outline-text-2" id="text-h-20d930e7-8d3b-4360-96e5-3204d34d5696">
 <p>
 Given some representation of polynomials in a single variable, we review
 a few helper functions that come in handy.
 </p>
 
-<div class="theorem" id="org310df7d">
+<div class="theorem" id="org7be6d65">
 <p>
 If \(R\) is a principal ideal domain,
 then \((x,y) = (\gcd(x,y))\) for any \(x,y\in R\).
@@ -319,7 +319,7 @@ then \((x,y) = (\gcd(x,y))\) for any \(x,y\in R\).
 
 </div>
 
-<div class="definition" id="org2b812ca">
+<div class="definition" id="org3e4233c">
 <p>
 A <dfn>Euclidean Domain</dfn> consists of an <a href="integral-domain.html">integral domain</a> \((R, +, \cdot)\)
 equipped with a map \(\nu\colon R\setminus\{0\}\to\mathbb{N}\) called the
@@ -334,7 +334,7 @@ are \(q,r\in R\) such that \(a=bq+r\) and either \(r=0\) or \(\nu(r)\lt\nu(b)\).
 
 </div>
 
-<div class="puzzle" id="org5f4887a">
+<div class="puzzle" id="org6844603">
 <p>
 Is there anything lost by extending the size function to be over, say,
 the integers \(\nu\colon R\setminus\{0\}\to\mathbb{Z}\)? Or the reals
@@ -344,9 +344,9 @@ the integers \(\nu\colon R\setminus\{0\}\to\mathbb{Z}\)? Or the reals
 </div>
 </div>
 
-<div id="outline-container-org10aed12" class="outline-3">
-<h3 id="org10aed12"><span class="section-number-3">2.1</span> Long Division</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-h-3c8e788d-b518-4461-a38d-32a712da0309" class="outline-3">
+<h3 id="h-3c8e788d-b518-4461-a38d-32a712da0309"><span class="section-number-3">2.1</span> Long Division</h3>
+<div class="outline-text-3" id="text-h-3c8e788d-b518-4461-a38d-32a712da0309">
 <p>
 We can use a naive long division algorithm.
 </p>
@@ -392,9 +392,9 @@ this.
 </div>
 </div>
 
-<div id="outline-container-orgdd998aa" class="outline-3">
-<h3 id="orgdd998aa"><span class="section-number-3">2.2</span> Pseudo-Division</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-h-a46c3f92-c5c8-4218-b5b1-0f992b6d96fe" class="outline-3">
+<h3 id="h-a46c3f92-c5c8-4218-b5b1-0f992b6d96fe"><span class="section-number-3">2.2</span> Pseudo-Division</h3>
+<div class="outline-text-3" id="text-h-a46c3f92-c5c8-4218-b5b1-0f992b6d96fe">
 <p>
 When working over an integral domain \(D\), we can't necessarily compute
 the quotient and remainder of polynomials. But we can compute the <i>pseudo-quotient</i>
@@ -432,9 +432,9 @@ denoted \(\mathrm{prem}(A,B)\) by Bronstein.
 </div>
 </div>
 
-<div id="outline-container-org31c0f72" class="outline-3">
-<h3 id="org31c0f72"><span class="section-number-3">2.3</span> Euclidean Algorithm</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-h-1537ef09-adad-4c83-876c-91b8270bcd23" class="outline-3">
+<h3 id="h-1537ef09-adad-4c83-876c-91b8270bcd23"><span class="section-number-3">2.3</span> Euclidean Algorithm</h3>
+<div class="outline-text-3" id="text-h-1537ef09-adad-4c83-876c-91b8270bcd23">
 <p>
 There are several variations of Euclid's algorithm for GCD with polynomials.
 </p>
@@ -455,9 +455,9 @@ There are several variations of Euclid's algorithm for GCD with polynomials.
 </div>
 </div>
 
-<div id="outline-container-org83c716f" class="outline-4">
-<h4 id="org83c716f"><span class="section-number-4">2.3.1</span> Extended Euclidean Algorithm</h4>
-<div class="outline-text-4" id="text-2-3-1">
+<div id="outline-container-h-c1978393-3a06-4729-a076-eb6919b03b93" class="outline-4">
+<h4 id="h-c1978393-3a06-4729-a076-eb6919b03b93"><span class="section-number-4">2.3.1</span> Extended Euclidean Algorithm</h4>
+<div class="outline-text-4" id="text-h-c1978393-3a06-4729-a076-eb6919b03b93">
 <p>
 The "follow your nose" implementation of the extended Euclidean
 algorithm could be implemented quite quickly.
@@ -491,9 +491,9 @@ algorithm could be implemented quite quickly.
 </div>
 </div>
 
-<div id="outline-container-org3a21ffb" class="outline-4">
-<h4 id="org3a21ffb"><span class="section-number-4">2.3.2</span> Half-Extended Euclidean</h4>
-<div class="outline-text-4" id="text-2-3-2">
+<div id="outline-container-h-2b7f76fa-69cc-4289-be25-6cfdbd03cbe9" class="outline-4">
+<h4 id="h-2b7f76fa-69cc-4289-be25-6cfdbd03cbe9"><span class="section-number-4">2.3.2</span> Half-Extended Euclidean</h4>
+<div class="outline-text-4" id="text-h-2b7f76fa-69cc-4289-be25-6cfdbd03cbe9">
 <p>
 Alas, if we need only one of the coefficients <code>s</code> or <code>t</code>, we can use a
 variant of the Euclidean algorithm which Bronstein calls the
@@ -521,9 +521,9 @@ variant of the Euclidean algorithm which Bronstein calls the
 </div>
 </div>
 
-<div id="outline-container-org296da51" class="outline-4">
-<h4 id="org296da51"><span class="section-number-4">2.3.3</span> Euclidean Algorithm</h4>
-<div class="outline-text-4" id="text-2-3-3">
+<div id="outline-container-h-85ca51b2-bb65-4f0a-b27a-16d48d61e4c6" class="outline-4">
+<h4 id="h-85ca51b2-bb65-4f0a-b27a-16d48d61e4c6"><span class="section-number-4">2.3.3</span> Euclidean Algorithm</h4>
+<div class="outline-text-4" id="text-h-85ca51b2-bb65-4f0a-b27a-16d48d61e4c6">
 <p>
 We can use this half-extended Euclidean algorithm for a more efficient
 implementation of Euclid's algorithm.
@@ -540,9 +540,9 @@ implementation of Euclid's algorithm.
 </div>
 </div>
 
-<div id="outline-container-orgf2429e3" class="outline-4">
-<h4 id="orgf2429e3"><span class="section-number-4">2.3.4</span> Diophantine version of Extended Euclidean</h4>
-<div class="outline-text-4" id="text-2-3-4">
+<div id="outline-container-h-63ab8015-e645-4d71-8b37-b6fc9d363f6d" class="outline-4">
+<h4 id="h-63ab8015-e645-4d71-8b37-b6fc9d363f6d"><span class="section-number-4">2.3.4</span> Diophantine version of Extended Euclidean</h4>
+<div class="outline-text-4" id="text-h-63ab8015-e645-4d71-8b37-b6fc9d363f6d">
 <p>
 We can use the extended Euclidean algorithm to solve Diophantine
 equations of the form \(sa+tb=c\) where \(a,b,c\in D\) are given and \(s,t\in D\)
@@ -572,9 +572,9 @@ are the unknowns.
 </div>
 </div>
 
-<div id="outline-container-orgc31a352" class="outline-4">
-<h4 id="orgc31a352"><span class="section-number-4">2.3.5</span> Diophantine Half-Extended Euclidean</h4>
-<div class="outline-text-4" id="text-2-3-5">
+<div id="outline-container-h-28f779bb-5e95-44fa-b0a6-6010c0dab934" class="outline-4">
+<h4 id="h-28f779bb-5e95-44fa-b0a6-6010c0dab934"><span class="section-number-4">2.3.5</span> Diophantine Half-Extended Euclidean</h4>
+<div class="outline-text-4" id="text-h-28f779bb-5e95-44fa-b0a6-6010c0dab934">
 <p>
 When we only want the <code>s</code> in the Euclidean domain such that <code>s*a = c</code>
 modulo <code>b</code> and either <code>s = 0</code> or <code>nu(s) &lt; nu(b)</code>. The other solution is
@@ -624,9 +624,9 @@ This gives us a more efficient diophantine extended Euclidean method
 </div>
 </div>
 
-<div id="outline-container-org7ba0e72" class="outline-4">
-<h4 id="org7ba0e72"><span class="section-number-4">2.3.6</span> Partial Fraction Decomposition</h4>
-<div class="outline-text-4" id="text-2-3-6">
+<div id="outline-container-h-b241a9e1-876e-4de8-b2eb-37b79591e10d" class="outline-4">
+<h4 id="h-b241a9e1-876e-4de8-b2eb-37b79591e10d"><span class="section-number-4">2.3.6</span> Partial Fraction Decomposition</h4>
+<div class="outline-text-4" id="text-h-b241a9e1-876e-4de8-b2eb-37b79591e10d">
 <p>
 We can use Euclidean Algorithm to determine the partial fraction
 decomposition of a ratio of polynomials. For \(a/d\) we consider the
@@ -655,9 +655,9 @@ irreducible) factors \(\gcd(d_{i},d_{j})=1\) for \(i\neq j\).
 </div>
 </div>
 
-<div id="outline-container-orgd9873ee" class="outline-4">
-<h4 id="orgd9873ee"><span class="section-number-4">2.3.7</span> Partial Fraction Decomposition with Multiplicity</h4>
-<div class="outline-text-4" id="text-2-3-7">
+<div id="outline-container-h-ddaff7e3-7343-42d0-9805-220cf9b68a17" class="outline-4">
+<h4 id="h-ddaff7e3-7343-42d0-9805-220cf9b68a17"><span class="section-number-4">2.3.7</span> Partial Fraction Decomposition with Multiplicity</h4>
+<div class="outline-text-4" id="text-h-ddaff7e3-7343-42d0-9805-220cf9b68a17">
 <p>
 We explicitly assumed each factor \(d_{i}\) was coprime with each other.
 But what happens if \(d\) has a square factor \(d_{i}^{2}\)? Or more
@@ -741,9 +741,9 @@ respect to the factorization \(d = \prod_{i} d_{i}^{e_{i}}\).
 </div>
 </div>
 
-<div id="outline-container-orgaa2c445" class="outline-2">
-<h2 id="orgaa2c445"><span class="section-number-2">3</span> References</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-h-3f8f5f1a-82c6-4d68-8526-ef9bbf45f7c7" class="outline-2">
+<h2 id="h-3f8f5f1a-82c6-4d68-8526-ef9bbf45f7c7"><span class="section-number-2">3</span> References</h2>
+<div class="outline-text-2" id="text-h-3f8f5f1a-82c6-4d68-8526-ef9bbf45f7c7">
 <ul class="org-ul">
 <li>Manuel Bronstein, <cite class="book-title">Symbolic Integration 1: Transcendental Functions</cite>.
 Springer, second ed., 1996.</li>
@@ -752,7 +752,7 @@ Springer, second ed., 1996.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2020-12-27 Sun 09:09.</p>
+<p class="postamble">Last Updated 2021-04-11 Sun 12:00.</p>
 </div>
 </body>
 </html>

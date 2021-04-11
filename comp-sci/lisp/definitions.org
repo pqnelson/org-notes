@@ -12,27 +12,45 @@
 # Created Sunday December 27, 2020 at 10:12AM
 
 * Overview
+:PROPERTIES:
+:CUSTOM_ID: h-6763ca9e-d702-434d-b079-1fd86d324e3e
+:END:
 
 Common Lisp --- being a Lisp-2 --- has two namespaces for definitions:
 one for functions, the other for values. How does this work? And how
 does, say, =defgeneric= and ~defmethod~ work?
 
 * Defun
+:PROPERTIES:
+:CUSTOM_ID: h-21355c73-3eaa-4f77-8d2f-88e0904dc9db
+:END:
 
 Usually ~defun~ is a macro.
 
 ** SBCL
+:PROPERTIES:
+:CUSTOM_ID: h-627b296d-6abc-4fef-b925-82c03a785d50
+:END:
 
 As I understand it, SBCL's implementation is a [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/code/macros.lisp#L151-L163][macro]] which calls [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/code/target-misc.lisp#L164-L183][%defun]].
 It amounts to =(setf (fdefinition name) def)= as one might expect.
 
 ** ABCL
+:PROPERTIES:
+:CUSTOM_ID: h-69aa4f98-c4d1-435e-9cb3-f99e670f1931
+:END:
 
 Armed Bear CL has a primitive [[https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/Primitives.java#L1770-L1795][%defun]] Java class.
 
 * Defgeneric
+:PROPERTIES:
+:CUSTOM_ID: h-97c1b503-24df-468c-8280-647693666f69
+:END:
 
 ** SBCL
+:PROPERTIES:
+:CUSTOM_ID: h-4a546921-bd95-4a94-be91-77ea2d63f793
+:END:
 
 SBCL uses a rather contrived [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/boot.lisp#L251-L342][macro]] roughly 90 lines long.
 It boils down to delegating the binding to [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/boot.lisp#L1944-L1955][ensure-generic-function]].
@@ -43,11 +61,17 @@ calls [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/boot.lisp#L2288-L2
 [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/braid.lisp#L54-L79][amounts to]] =(setf (%funcallable-instance-fun name) ...)=.
 
 ** ABCL
+:PROPERTIES:
+:CUSTOM_ID: h-1f04467a-3d87-461a-a53f-44ddbe6d7c8a
+:END:
 
 Armed Bear uses a [[https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/clos.lisp#L1687-L1729][macro]]. It delegates to =%defgeneric= ([[https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/clos.lisp#L1786-L1802][L1786-L1802]]).
 which is a wrapper around =ensure-generic-function= ([[http://clhs.lisp.se/Body/f_ensure.htm#ensure-generic-function][CLHS]], [[https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/clos.lisp#L1807-L1864][implementation]]).
 
 ** CCL
+:PROPERTIES:
+:CUSTOM_ID: h-5e1b7266-70af-4147-aea6-e7d0b8e654b4
+:END:
 
 CCL has a [[https://github.com/Clozure/ccl/blob/v1.12/lib/macros.lisp#L2152-L2167][macro]] defining =defgeneric=. Like ABCL, it delegates to
 [[https://github.com/Clozure/ccl/blob/v1.12/level-1/l1-clos-boot.lisp#L3782-L3801][%defgeneric]] which is a wrapper around [[https://github.com/Clozure/ccl/blob/v1.12/level-1/l1-clos-boot.lisp#L644-L651][ensure-generic-function]].

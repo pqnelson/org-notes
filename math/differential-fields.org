@@ -12,6 +12,9 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 
 * Overview
+:PROPERTIES:
+:CUSTOM_ID: h-98e6773a-71b2-4c34-8d61-84f99cbdb3a5
+:END:
 
 If we want to try to symbolically solve differential equations, it is
 tempting to think of analogous problems (like finding the roots of
@@ -36,6 +39,9 @@ into finding an element $y\in\mathbb{k}$ such that
 \end{equation}
 
 * Polynomial Methods
+:PROPERTIES:
+:CUSTOM_ID: h-7c180687-c3b9-489c-b39a-68e04c6abc37
+:END:
 
 Given some representation of polynomials in a single variable, we review
 a few helper functions that come in handy.
@@ -56,6 +62,9 @@ equipped with a map $\nu\colon R\setminus\{0\}\to\mathbb{N}$ called the
 #+end_definition
 
 ** Long Division
+:PROPERTIES:
+:CUSTOM_ID: h-751a7ac3-f79a-4642-b613-a920eeea32ca
+:END:
 
 We can use a naive long division algorithm.
 
@@ -95,6 +104,9 @@ this.
 #+end_src
 
 ** Pseudo-Division
+:PROPERTIES:
+:CUSTOM_ID: h-8e98244d-56f8-4963-88c3-1f78471eb2ae
+:END:
 
 When working over an integral domain $D$, we can't necessarily compute
 the quotient and remainder of polynomials. But we can compute the /pseudo-quotient/
@@ -127,6 +139,9 @@ denoted $\mathrm{prem}(A,B)$ by Bronstein.
 #+end_src
 
 ** Euclidean Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-a3676324-9e86-4586-b707-27c267679ea9
+:END:
 
 There are several variations of Euclid's algorithm for GCD with polynomials.
 
@@ -145,6 +160,9 @@ There are several variations of Euclid's algorithm for GCD with polynomials.
 #+end_src
 
 *** Extended Euclidean Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-f44a2567-777a-4120-ad6b-f041226af660
+:END:
 
 The "follow your nose" implementation of the extended Euclidean
 algorithm could be implemented quite quickly.
@@ -175,6 +193,9 @@ algorithm could be implemented quite quickly.
 #+end_src
 
 *** Half-Extended Euclidean
+:PROPERTIES:
+:CUSTOM_ID: h-590cbbf3-ad55-4a26-9e49-d0c7f1ef9832
+:END:
 
 Alas, if we need only one of the coefficients =s= or ~t~, we can use a
 variant of the Euclidean algorithm which Bronstein calls the
@@ -199,6 +220,9 @@ variant of the Euclidean algorithm which Bronstein calls the
 #+end_src
 
 *** Euclidean Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-88893e7a-9439-47d6-9721-956d5796b621
+:END:
 
 We can use this half-extended Euclidean algorithm for a more efficient
 implementation of Euclid's algorithm.
@@ -212,6 +236,9 @@ implementation of Euclid's algorithm.
 #+end_src
 
 *** Diophantine version of Extended Euclidean
+:PROPERTIES:
+:CUSTOM_ID: h-09dee665-f595-430f-b349-0001d8e5da4d
+:END:
 
 We can use the extended Euclidean algorithm to solve Diophantine
 equations of the form $sa+tb=c$ where $a,b,c\in D$ are given and $s,t\in D$
@@ -238,6 +265,9 @@ are the unknowns.
 #+end_src
 
 *** Diophantine Half-Extended Euclidean
+:PROPERTIES:
+:CUSTOM_ID: h-9b99a81d-bf15-4199-b5d8-e7e6f334f34f
+:END:
 
 When we only want the ~s~ in the Euclidean domain such that ~s*a = c~
 modulo ~b~ and either ~s = 0~ or ~nu(s) < nu(b)~. The other solution is
@@ -279,6 +309,9 @@ This gives us a more efficient diophantine extended Euclidean method
 #+end_src
 
 *** Partial Fraction Decomposition
+:PROPERTIES:
+:CUSTOM_ID: h-74646ae1-4018-4052-8462-5ce4142bac65
+:END:
 
 We can use Euclidean Algorithm to determine the partial fraction
 decomposition of a ratio of polynomials. For $a/d$ we consider the
@@ -304,6 +337,9 @@ the corresponding denominator factors."
 #+end_src
 
 *** Partial Fraction Decomposition with Multiplicity
+:PROPERTIES:
+:CUSTOM_ID: h-c5046482-1209-4124-9a15-b5975ba58338
+:END:
 
 We explicitly assumed each factor $d_{i}$ was coprime with each other.
 But what happens if $d$ has a square factor $d_{i}^{2}$? Or more
@@ -372,6 +408,9 @@ respect to the factorization $d = \prod_{i} d_{i}^{e_{i}}$.
 # 34
 
 * Canonical Representation
+:PROPERTIES:
+:CUSTOM_ID: h-08823f23-c088-4e0d-8ede-0cff084699f0
+:END:
 
 Usually we have a field of rational polynomial $\mathbb{k}=\mathbb{Q}(x)$
 with $D=\D/\D x$, and $t$ a monomial over $\mathbb{k}$ such that
@@ -395,10 +434,16 @@ return the pair (normal-polynomial . special-polynomial) such that
 #+end_src
 
 * References
+:PROPERTIES:
+:CUSTOM_ID: h-17b4392e-7077-4233-8f29-289bbb4574da
+:END:
 - Manuel Bronstein, {{{book-title(Symbolic Integration 1: Transcendental Functions)}}}.
   Springer, second ed., 1996.
 
 ** Also See
+:PROPERTIES:
+:CUSTOM_ID: h-6faf3e58-92a3-42a5-8528-3eef7ae5133b
+:END:
 
 - Marius van Der Pu, Michael F. Singer,
   {{{book-title(Galois Theory of Linear Differential Equations)}}}.

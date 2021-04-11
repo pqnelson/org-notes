@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-10 Sat 20:46 -->
+<!-- 2021-04-11 Sun 12:08 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SECD Machine</title>
@@ -241,36 +241,36 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org50de900">1. Introduction</a></li>
-<li><a href="#org9454bfd">2. Basic Data Structures</a></li>
-<li><a href="#orgfed5830">3. Machine Description</a>
+<li><a href="#h-6c546b2a-247f-48bb-a0b7-47c3e839e7c5">1. Introduction</a></li>
+<li><a href="#h-5dba71ab-7d6a-4c90-a51d-eb85341a92d4">2. Basic Data Structures</a></li>
+<li><a href="#h-0b1b3966-14ab-48b7-b37c-bd0b5a846104">3. Machine Description</a>
 <ul>
-<li><a href="#orgec3c6a5">3.1. The four "registers"</a></li>
-<li><a href="#org10fee09">3.2. Operations</a></li>
-<li><a href="#orgea4d5f1">3.3. Operation Transition Rules</a>
+<li><a href="#h-9244ded3-4a09-499c-beb4-df1cf40e6567">3.1. The four "registers"</a></li>
+<li><a href="#h-ccfb66ef-c283-4e8f-98b2-7007dccf3924">3.2. Operations</a></li>
+<li><a href="#h-259ea8d3-ec51-43a5-81fb-229589d18c2c">3.3. Operation Transition Rules</a>
 <ul>
-<li><a href="#org7afc4d0">3.3.1. S-Expression related Rules</a></li>
-<li><a href="#org1e487b5">3.3.2. Arithmetic Rules</a></li>
-<li><a href="#orgc64b532">3.3.3. Loading Rules</a></li>
-<li><a href="#org3dbb1c9">3.3.4. Conditional Form Rules</a></li>
-<li><a href="#orgc66e0c7">3.3.5. Function Application</a></li>
+<li><a href="#h-a76bd3bb-ff0f-41b2-802d-524239a8c621">3.3.1. S-Expression related Rules</a></li>
+<li><a href="#h-0704e465-c2db-4018-baea-5d59d35c4a48">3.3.2. Arithmetic Rules</a></li>
+<li><a href="#h-a0bb400f-5054-4590-b399-040194213b8a">3.3.3. Loading Rules</a></li>
+<li><a href="#h-af2af415-3b1e-46c8-ab55-e5ae721b0c47">3.3.4. Conditional Form Rules</a></li>
+<li><a href="#h-dfb2fed7-0e66-4ca7-9fdf-ff3f9f95b7ad">3.3.5. Function Application</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgcde4791">4. References</a>
+<li><a href="#h-d66dc70a-7b37-4bef-bd7e-6a89f4791e7b">4. References</a>
 <ul>
-<li><a href="#orgaf77938">4.1. SECD Machine</a></li>
-<li><a href="#orgaca9b38">4.2. Lisp to SECD Compiler</a></li>
+<li><a href="#h-6f9e1dde-494d-4755-9f83-381a323a8d54">4.1. SECD Machine</a></li>
+<li><a href="#h-d00204c5-0ff0-4e26-9ba0-5881aeb4e634">4.2. Lisp to SECD Compiler</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org50de900" class="outline-2">
-<h2 id="org50de900"><span class="section-number-2">1</span> Introduction</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-h-6c546b2a-247f-48bb-a0b7-47c3e839e7c5" class="outline-2">
+<h2 id="h-6c546b2a-247f-48bb-a0b7-47c3e839e7c5"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-6c546b2a-247f-48bb-a0b7-47c3e839e7c5">
 <p>
 Landin introduced the SECD machine back in 1964, Plotkin used it in
 the mid 1970s, and Henderson employed it in his book on Lispkit
@@ -293,9 +293,9 @@ difficulties.
 </div>
 </div>
 
-<div id="outline-container-org9454bfd" class="outline-2">
-<h2 id="org9454bfd"><span class="section-number-2">2</span> Basic Data Structures</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-h-5dba71ab-7d6a-4c90-a51d-eb85341a92d4" class="outline-2">
+<h2 id="h-5dba71ab-7d6a-4c90-a51d-eb85341a92d4"><span class="section-number-2">2</span> Basic Data Structures</h2>
+<div class="outline-text-2" id="text-h-5dba71ab-7d6a-4c90-a51d-eb85341a92d4">
 <p>
 The five key data structures SECD machines will build, manipulate, and
 keep in memory:
@@ -310,18 +310,18 @@ keep in memory:
 </div>
 </div>
 
-<div id="outline-container-orgfed5830" class="outline-2">
-<h2 id="orgfed5830"><span class="section-number-2">3</span> Machine Description</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-h-0b1b3966-14ab-48b7-b37c-bd0b5a846104" class="outline-2">
+<h2 id="h-0b1b3966-14ab-48b7-b37c-bd0b5a846104"><span class="section-number-2">3</span> Machine Description</h2>
+<div class="outline-text-2" id="text-h-0b1b3966-14ab-48b7-b37c-bd0b5a846104">
 <p>
 Like any abstract machine, we have some instruction set which
 manipulates stacks or registers.
 </p>
 </div>
 
-<div id="outline-container-orgec3c6a5" class="outline-3">
-<h3 id="orgec3c6a5"><span class="section-number-3">3.1</span> The four "registers"</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-h-9244ded3-4a09-499c-beb4-df1cf40e6567" class="outline-3">
+<h3 id="h-9244ded3-4a09-499c-beb4-df1cf40e6567"><span class="section-number-3">3.1</span> The four "registers"</h3>
+<div class="outline-text-3" id="text-h-9244ded3-4a09-499c-beb4-df1cf40e6567">
 <p>
 There are four "registers" (stacks):
 </p>
@@ -342,9 +342,9 @@ on the stack, <code>y</code> is the position in that list.
 </div>
 </div>
 
-<div id="outline-container-org10fee09" class="outline-3">
-<h3 id="org10fee09"><span class="section-number-3">3.2</span> Operations</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-h-ccfb66ef-c283-4e8f-98b2-7007dccf3924" class="outline-3">
+<h3 id="h-ccfb66ef-c283-4e8f-98b2-7007dccf3924"><span class="section-number-3">3.2</span> Operations</h3>
+<div class="outline-text-3" id="text-h-ccfb66ef-c283-4e8f-98b2-7007dccf3924">
 <p>
 Following Henderson, we have the following instruction set for our
 SECD machine:
@@ -375,18 +375,18 @@ And then about a half-dozen arithmetic operators (<code>ADD</code>, <code>SUB</c
 </div>
 </div>
 
-<div id="outline-container-orgea4d5f1" class="outline-3">
-<h3 id="orgea4d5f1"><span class="section-number-3">3.3</span> Operation Transition Rules</h3>
-<div class="outline-text-3" id="text-3-3">
+<div id="outline-container-h-259ea8d3-ec51-43a5-81fb-229589d18c2c" class="outline-3">
+<h3 id="h-259ea8d3-ec51-43a5-81fb-229589d18c2c"><span class="section-number-3">3.3</span> Operation Transition Rules</h3>
+<div class="outline-text-3" id="text-h-259ea8d3-ec51-43a5-81fb-229589d18c2c">
 <p>
 The semantics for our SECD machine is described using a transition
 relation which maps <code>s e c d -&gt; s' e' c' d'</code>.
 </p>
 </div>
 
-<div id="outline-container-org7afc4d0" class="outline-4">
-<h4 id="org7afc4d0"><span class="section-number-4">3.3.1</span> S-Expression related Rules</h4>
-<div class="outline-text-4" id="text-3-3-1">
+<div id="outline-container-h-a76bd3bb-ff0f-41b2-802d-524239a8c621" class="outline-4">
+<h4 id="h-a76bd3bb-ff0f-41b2-802d-524239a8c621"><span class="section-number-4">3.3.1</span> S-Expression related Rules</h4>
+<div class="outline-text-4" id="text-h-a76bd3bb-ff0f-41b2-802d-524239a8c621">
 <p>
 The <code>CONS</code>, <code>CDR</code>, <code>CAR</code> instructions behave as we would hope and
 expect:
@@ -410,9 +410,9 @@ datum or not.
 </div>
 </div>
 
-<div id="outline-container-org1e487b5" class="outline-4">
-<h4 id="org1e487b5"><span class="section-number-4">3.3.2</span> Arithmetic Rules</h4>
-<div class="outline-text-4" id="text-3-3-2">
+<div id="outline-container-h-0704e465-c2db-4018-baea-5d59d35c4a48" class="outline-4">
+<h4 id="h-0704e465-c2db-4018-baea-5d59d35c4a48"><span class="section-number-4">3.3.2</span> Arithmetic Rules</h4>
+<div class="outline-text-4" id="text-h-0704e465-c2db-4018-baea-5d59d35c4a48">
 <p>
 The arithmetic operations applied to the top 2 items of the stack,
 but do not modify the other registers:
@@ -431,9 +431,9 @@ but do not modify the other registers:
 </div>
 
 
-<div id="outline-container-orgc64b532" class="outline-4">
-<h4 id="orgc64b532"><span class="section-number-4">3.3.3</span> Loading Rules</h4>
-<div class="outline-text-4" id="text-3-3-3">
+<div id="outline-container-h-a0bb400f-5054-4590-b399-040194213b8a" class="outline-4">
+<h4 id="h-a0bb400f-5054-4590-b399-040194213b8a"><span class="section-number-4">3.3.3</span> Loading Rules</h4>
+<div class="outline-text-4" id="text-h-a0bb400f-5054-4590-b399-040194213b8a">
 <dl class="org-dl">
 <dt><code>LD</code></dt><dd><code>s e (LD i . c) d</code> becomes <code>(x . s) e c d</code> where
 <code>x = locate(i, e)</code> is the current value for the index <code>i</code>, and
@@ -449,7 +449,7 @@ introducing a function which returns the <code>nth</code> member of a list
 (zero-indexed):
 </p>
 
-<pre class="example" id="org4a9ba6a">
+<pre class="example" id="org4b27020">
 index :: Int -&gt; List -&gt; a
 index 0 s = car(s)
 index n s = if n &lt; 0 then error "Must have non-negative index number"
@@ -461,16 +461,16 @@ We use this to define a function which determines, for an index
 pair <code>i = (b . n)</code> the corresponding value in the environment:
 </p>
 
-<pre class="example" id="org1e4278c">
+<pre class="example" id="org57439d1">
 locate :: (Int, Int) -&gt; Env -&gt; a
 locate (b, n) e = index n (index b e)
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org3dbb1c9" class="outline-4">
-<h4 id="org3dbb1c9"><span class="section-number-4">3.3.4</span> Conditional Form Rules</h4>
-<div class="outline-text-4" id="text-3-3-4">
+<div id="outline-container-h-af2af415-3b1e-46c8-ab55-e5ae721b0c47" class="outline-4">
+<h4 id="h-af2af415-3b1e-46c8-ab55-e5ae721b0c47"><span class="section-number-4">3.3.4</span> Conditional Form Rules</h4>
+<div class="outline-text-4" id="text-h-af2af415-3b1e-46c8-ab55-e5ae721b0c47">
 <p>
 There are two instructions for conditional forms, namely <code>SEL</code>
 selects a sublist of the control based on the value at the top of
@@ -500,9 +500,9 @@ caller.
 </div>
 </div>
 
-<div id="outline-container-orgc66e0c7" class="outline-4">
-<h4 id="orgc66e0c7"><span class="section-number-4">3.3.5</span> Function Application</h4>
-<div class="outline-text-4" id="text-3-3-5">
+<div id="outline-container-h-dfb2fed7-0e66-4ca7-9fdf-ff3f9f95b7ad" class="outline-4">
+<h4 id="h-dfb2fed7-0e66-4ca7-9fdf-ff3f9f95b7ad"><span class="section-number-4">3.3.5</span> Function Application</h4>
+<div class="outline-text-4" id="text-h-dfb2fed7-0e66-4ca7-9fdf-ff3f9f95b7ad">
 <p>
 We need to bear in mind how we encode closures, because they govern
 how we implement <code>AP</code>, <code>RTN</code>, etc. A closure is just <code>(c . e)</code> a
@@ -551,7 +551,7 @@ environment stack, simply replaces whatever is at the head of <code>e</code>
 with a new environment list.
 </p>
 
-<div class="remark" id="org5dbecce">
+<div class="remark" id="org297fda7">
 <p>
 For further consideration about recursive functions in SECD,
 consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
@@ -565,9 +565,9 @@ consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
 </div>
 
 
-<div id="outline-container-orgcde4791" class="outline-2">
-<h2 id="orgcde4791"><span class="section-number-2">4</span> References</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-h-d66dc70a-7b37-4bef-bd7e-6a89f4791e7b" class="outline-2">
+<h2 id="h-d66dc70a-7b37-4bef-bd7e-6a89f4791e7b"><span class="section-number-2">4</span> References</h2>
+<div class="outline-text-2" id="text-h-d66dc70a-7b37-4bef-bd7e-6a89f4791e7b">
 <ul class="org-ul">
 <li>Peter Henderson,
 <i>Functional Programming: Application and Implementation</i>.
@@ -581,9 +581,9 @@ Prentice-Hall International Series in Computer Science,
 </ul>
 </div>
 
-<div id="outline-container-orgaf77938" class="outline-3">
-<h3 id="orgaf77938"><span class="section-number-3">4.1</span> SECD Machine</h3>
-<div class="outline-text-3" id="text-4-1">
+<div id="outline-container-h-6f9e1dde-494d-4755-9f83-381a323a8d54" class="outline-3">
+<h3 id="h-6f9e1dde-494d-4755-9f83-381a323a8d54"><span class="section-number-3">4.1</span> SECD Machine</h3>
+<div class="outline-text-3" id="text-h-6f9e1dde-494d-4755-9f83-381a323a8d54">
 <ul class="org-ul">
 <li><a href="https://stackoverflow.com/q/7547951">StackOverflow thread</a></li>
 <li>Jia-Huai You, <a href="https://webdocs.cs.ualberta.ca/~you/courses/325/Mynotes/Fun/SECD-slides.html">SECD Virtual Machine</a> (<a href="https://web.archive.org/web/20150527050004/http://webdocs.cs.ualberta.ca/~you/courses/325/Mynotes/Fun/SECD-slides.html">archive</a>, lecture notes/slides)</li>
@@ -600,9 +600,9 @@ Addison-Wesley, 1975.</li>
 </div>
 </div>
 
-<div id="outline-container-orgaca9b38" class="outline-3">
-<h3 id="orgaca9b38"><span class="section-number-3">4.2</span> Lisp to SECD Compiler</h3>
-<div class="outline-text-3" id="text-4-2">
+<div id="outline-container-h-d00204c5-0ff0-4e26-9ba0-5881aeb4e634" class="outline-3">
+<h3 id="h-d00204c5-0ff0-4e26-9ba0-5881aeb4e634"><span class="section-number-3">4.2</span> Lisp to SECD Compiler</h3>
+<div class="outline-text-3" id="text-h-d00204c5-0ff0-4e26-9ba0-5881aeb4e634">
 <ul class="org-ul">
 <li>Peter Henderson's book is about this very topic</li>
 <li>Milos Radovanovic, Mirjana Ivanovic, "An Implementation of
@@ -617,7 +617,7 @@ Lispkit Lisp in Java". In <i>Proc. XV Conf. on Applied Math.</i>,
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-03-18 Thu 16:18.</p>
+<p class="postamble">Last Updated 2021-04-11 Sun 12:03.</p>
 </div>
 </body>
 </html>

@@ -14,6 +14,9 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 
 * Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-63e2a863-8cea-40fa-97cc-39b6e3c2be34
+:END:
 
 We have a notion of generic arithmetic where we can add symbols
 ("variables") to numbers. For example $(3+x)^{2}$ is completely
@@ -25,7 +28,13 @@ quotient results in a rational function), operating on matrices,
 and operating on numbers.
 
 * Generic Arithmetic
+:PROPERTIES:
+:CUSTOM_ID: h-5b779b24-746f-45ab-a0f4-ad1f17ca9dd3
+:END:
 ** Acting on two operands alone
+:PROPERTIES:
+:CUSTOM_ID: h-ea25c9ea-7a35-45d6-9c18-bcb1843e249a
+:END:
 
 We begin with making generic operations which act on two
 operands. Extending to an arbitrary number of operands is
@@ -33,6 +42,9 @@ straightforward afterwards. We define generic functions on two
 operands, with default for numbers.
 
 *** Addition
+:PROPERTIES:
+:CUSTOM_ID: h-bd3825c9-02c2-4475-abb6-dad6e6957b9b
+:END:
 
 #+begin_src lisp :export both
 (defgeneric add (x y))
@@ -42,6 +54,9 @@ operands, with default for numbers.
 #+end_src
 
 *** Subtraction
+:PROPERTIES:
+:CUSTOM_ID: h-759247bd-ef2f-4cd2-857f-8c975e7a7f10
+:END:
 
 #+begin_src lisp :export both
 (defgeneric sub (x y)
@@ -52,6 +67,9 @@ operands, with default for numbers.
 #+end_src
 
 *** Multiplication
+:PROPERTIES:
+:CUSTOM_ID: h-36103d85-177c-4887-88c9-4bd8143d6dc2
+:END:
 
 #+begin_src lisp :export both
 (defgeneric times (x y))
@@ -61,6 +79,9 @@ operands, with default for numbers.
 #+end_src
 
 *** Division
+:PROPERTIES:
+:CUSTOM_ID: h-8477e02a-6507-4258-8baa-b2d529f3d2a3
+:END:
 
 #+begin_src lisp :export both
 (defgeneric div (x y))
@@ -72,6 +93,9 @@ operands, with default for numbers.
 
 
 ** Generic Unary Operations
+:PROPERTIES:
+:CUSTOM_ID: h-db6db530-efa9-4e2d-867d-852f95627338
+:END:
 
 There are two special cases we need to consider when dealing with
 generic arithmetic, namely: negation and inversion. These are for
@@ -79,6 +103,9 @@ the case when subtraction and division are given a single argument
 (respectively).
 
 *** Negation
+:PROPERTIES:
+:CUSTOM_ID: h-21403667-81d9-414a-8a6f-f87fda9fc1b0
+:END:
 
 #+begin_src lisp
 (defgeneric negate (x))
@@ -88,6 +115,9 @@ the case when subtraction and division are given a single argument
 #+end_src
 
 *** Invert
+:PROPERTIES:
+:CUSTOM_ID: h-4b7eb3fb-0a4f-49b3-98a3-72b29c0a17e7
+:END:
 
 Of particular concern, in the future, will be having an =invert=
 for matrix classes.
@@ -100,11 +130,17 @@ for matrix classes.
 #+end_src
 
 ** Generic n-ary Operations
+:PROPERTIES:
+:CUSTOM_ID: h-bc159695-b7c6-45c4-a8bf-b77d2fdbeed1
+:END:
 
 We adhere to the signatures of arithmetic operators specified in
 /Common Lisp: The Language/, chapter 12, section 2.
 
 *** Addition
+:PROPERTIES:
+:CUSTOM_ID: h-2ba23892-b484-46b1-b763-8a4ed22eb1e9
+:END:
 
 Our first attempt at adding quantities should adhere to the
 function signature for =+= in /Common Lisp the Language/ (section
@@ -127,6 +163,9 @@ definition to be:
 #+end_src
 
 *** Subtraction
+:PROPERTIES:
+:CUSTOM_ID: h-42cb62bd-1e32-4ad0-8b0a-25d2a269254e
+:END:
 
 #+begin_src lisp
 (defun - (minuend & subtrahends)
@@ -136,6 +175,9 @@ definition to be:
 #+end_src
 
 *** Multiplication
+:PROPERTIES:
+:CUSTOM_ID: h-b53e0691-57fb-48d8-9723-4b8a90b6de60
+:END:
 
 #+begin_src lisp
 (defun * (&rest quantities)
@@ -146,6 +188,9 @@ definition to be:
 #+end_src
 
 *** Division
+:PROPERTIES:
+:CUSTOM_ID: h-f8f58081-ed0e-4457-a2a3-9a796a77a50a
+:END:
 
 #+begin_src lisp
 (defun / (numerator &rest denominators)
@@ -155,6 +200,9 @@ definition to be:
 #+end_src
 
 ** Derived Operations
+:PROPERTIES:
+:CUSTOM_ID: h-3ebe9fa6-d18a-46a7-a5d9-ce39ad8354e3
+:END:
 
 We have operations derived from these basic ones. For example,
 exponentiation.
@@ -167,6 +215,9 @@ exponentiation.
 #+end_src
 
 * SCMUTILS
+:PROPERTIES:
+:CUSTOM_ID: h-d7b07f1f-b9d8-4e3e-a826-1e41adbd5f14
+:END:
 
 It seems SCMUTILS has a =make-generic-operator <arity> <name> <default-operation>=
 method to declare a generic operator.
@@ -177,6 +228,9 @@ SCMUTILS uses [[file:multiple-dispatch.org::*Predicate Dispatching][Predicate Di
 selection.
 
 * References
+:PROPERTIES:
+:CUSTOM_ID: h-44d61996-abd3-41b8-8475-4d5c24920896
+:END:
 
 - SCMUTILS is a library with daunting generic arithmetic
   + =SCMUTILS/kernel/generic.scm=

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-10 Sat 20:46 -->
+<!-- 2021-04-11 Sun 12:09 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Floating Point Arithmetic</title>
@@ -263,26 +263,27 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org56ceaa2">1. Representing numbers</a>
+<li><a href="#h-94342c9b-ca5b-4af6-a37a-241d5b8db062">1. Representing numbers</a>
 <ul>
-<li><a href="#org9f9cf83">1.1. Motivational example</a></li>
-<li><a href="#org29d365c">1.2. Rounding, Truncating</a></li>
-<li><a href="#org92fdda6">1.3. Relative, Absolute Error</a></li>
+<li><a href="#h-03c844d3-a202-4c93-b502-6a3be680ddfa">1.1. Motivational example</a></li>
+<li><a href="#h-b8c81701-1a7b-454e-aa72-272e12e84564">1.2. Rounding, Truncating</a></li>
+<li><a href="#h-bb989840-6eab-4a44-89e2-4888f5adb8b3">1.3. Relative, Absolute Error</a></li>
 </ul>
 </li>
-<li><a href="#orge49f4b6">2. References</a></li>
+<li><a href="#h-e3540d7a-abe2-4b21-ba19-78638f885839">2. References</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-org56ceaa2" class="outline-2">
-<h2 id="org56ceaa2"><span class="section-number-2">1</span> Representing numbers</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-h-94342c9b-ca5b-4af6-a37a-241d5b8db062" class="outline-2">
+<h2 id="h-94342c9b-ca5b-4af6-a37a-241d5b8db062"><span class="section-number-2">1</span> Representing numbers</h2>
+<div class="outline-text-2" id="text-h-94342c9b-ca5b-4af6-a37a-241d5b8db062">
 </div>
-<div id="outline-container-org9f9cf83" class="outline-3">
-<h3 id="org9f9cf83"><span class="section-number-3">1.1</span> Motivational example</h3>
-<div class="outline-text-3" id="text-1-1">
+
+<div id="outline-container-h-03c844d3-a202-4c93-b502-6a3be680ddfa" class="outline-3">
+<h3 id="h-03c844d3-a202-4c93-b502-6a3be680ddfa"><span class="section-number-3">1.1</span> Motivational example</h3>
+<div class="outline-text-3" id="text-h-03c844d3-a202-4c93-b502-6a3be680ddfa">
 <p>
 The basic idea could be discussed by first considering a number
 system where a "number" is a triple <code>(s, c, f)</code> where
@@ -321,9 +322,9 @@ leading 1 (i.e., we can pretend the <code>c</code> tuple describes the bits
 </div>
 </div>
 
-<div id="outline-container-org29d365c" class="outline-3">
-<h3 id="org29d365c"><span class="section-number-3">1.2</span> Rounding, Truncating</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-h-b8c81701-1a7b-454e-aa72-272e12e84564" class="outline-3">
+<h3 id="h-b8c81701-1a7b-454e-aa72-272e12e84564"><span class="section-number-3">1.2</span> Rounding, Truncating</h3>
+<div class="outline-text-3" id="text-h-b8c81701-1a7b-454e-aa72-272e12e84564">
 <p>
 Given some number with decimal expansion
 <code>d[0]d[1]d[2]d[3]d[4]d[5]d[6]d[7]...</code>, how do we encode it in our
@@ -343,7 +344,7 @@ Either way, rounding/truncating is one source of error. But it's a
 price we always have to pay for using a computer.
 </p>
 
-<div class="definition" id="org62ce051">
+<div class="definition" id="org03362db">
 <p>
 Let \(x\) be a real number. Then the encoding of it to our number
 system corresponds to mapping it to the number \(fl(x)\).
@@ -356,7 +357,7 @@ We will continue working in our system of 7-digit scientific numbers,
 with 3-digit exponents.
 </p>
 
-<div class="remark" id="orgf24e369">
+<div class="remark" id="org866ae10">
 <p>
 The choice of 7 digits and 3-digit exponents is not arbitrary, this
 turns out to be one of the standard floating point representations for
@@ -369,15 +370,15 @@ computation), so we use it to clarify certain concepts.
 </div>
 </div>
 
-<div id="outline-container-org92fdda6" class="outline-3">
-<h3 id="org92fdda6"><span class="section-number-3">1.3</span> Relative, Absolute Error</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-h-bb989840-6eab-4a44-89e2-4888f5adb8b3" class="outline-3">
+<h3 id="h-bb989840-6eab-4a44-89e2-4888f5adb8b3"><span class="section-number-3">1.3</span> Relative, Absolute Error</h3>
+<div class="outline-text-3" id="text-h-bb989840-6eab-4a44-89e2-4888f5adb8b3">
 <p>
 How do we measure how good (or bad) an approximation is to its true
 value? We have two possibilities.
 </p>
 
-<div class="definition" id="org6e2708b">
+<div class="definition" id="orge62dcba">
 <p>
 Let \(x\) be a real number and \(x_{\ast}\) an approximation to
 \(x\). Then its <dfn>Absolute Error</dfn> is \(|x - x_{\ast}|\).
@@ -385,7 +386,7 @@ Let \(x\) be a real number and \(x_{\ast}\) an approximation to
 
 </div>
 
-<div class="definition" id="org2049097">
+<div class="definition" id="org243a5a7">
 <p>
 Let \(x\) be a real number and \(x_{\ast}\) an approximation to
 \(x\). Then its <dfn>Relative Error</dfn> is \(|x - x_{\ast}|/x\) if \(x\neq0\).
@@ -393,7 +394,7 @@ Let \(x\) be a real number and \(x_{\ast}\) an approximation to
 
 </div>
 
-<div class="math-example" id="orge40ccba">
+<div class="math-example" id="orgf06d89d">
 <p>
 When we have two numbers close to each other \(fl(x)\approx fl(y)\),
 say they agree to 4 digits, then \(fl(x) - fl(y)\)
@@ -408,9 +409,9 @@ is small, though the relative error is large.
 </div>
 
 
-<div id="outline-container-orge49f4b6" class="outline-2">
-<h2 id="orge49f4b6"><span class="section-number-2">2</span> References</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-h-e3540d7a-abe2-4b21-ba19-78638f885839" class="outline-2">
+<h2 id="h-e3540d7a-abe2-4b21-ba19-78638f885839"><span class="section-number-2">2</span> References</h2>
+<div class="outline-text-2" id="text-h-e3540d7a-abe2-4b21-ba19-78638f885839">
 <ul class="org-ul">
 <li>Richard L. Burden and J. Douglas Faires,
 <cite class="book-title">Numerical Analysis</cite>.
@@ -423,7 +424,7 @@ March 1991, <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-02-15 Mon 09:26.</p>
+<p class="postamble">Last Updated 2021-04-11 Sun 12:02.</p>
 </div>
 </body>
 </html>

@@ -12,6 +12,9 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 
 * Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-6c546b2a-247f-48bb-a0b7-47c3e839e7c5
+:END:
 
 Landin introduced the SECD machine back in 1964, Plotkin used it in
 the mid 1970s, and Henderson employed it in his book on Lispkit
@@ -28,6 +31,9 @@ simple input language. It's nothing more than wishing to avoid
 difficulties.
 
 * Basic Data Structures
+:PROPERTIES:
+:CUSTOM_ID: h-5dba71ab-7d6a-4c90-a51d-eb85341a92d4
+:END:
 
 The five key data structures SECD machines will build, manipulate, and
 keep in memory:
@@ -38,11 +44,17 @@ keep in memory:
 5. Closures to represent unprocessed function applications
 
 * Machine Description
+:PROPERTIES:
+:CUSTOM_ID: h-0b1b3966-14ab-48b7-b37c-bd0b5a846104
+:END:
 
 Like any abstract machine, we have some instruction set which
 manipulates stacks or registers.
 
 ** The four "registers"
+:PROPERTIES:
+:CUSTOM_ID: h-9244ded3-4a09-499c-beb4-df1cf40e6567
+:END:
 
 There are four "registers" (stacks):
 - =s= stack :: holds intermediate results, it's a list of expressions
@@ -57,6 +69,9 @@ essentially a tuple =(x, y)= where =x= is the location of the list
 on the stack, =y= is the position in that list.
 
 ** Operations
+:PROPERTIES:
+:CUSTOM_ID: h-ccfb66ef-c283-4e8f-98b2-7007dccf3924
+:END:
 
 Following Henderson, we have the following instruction set for our
 SECD machine:
@@ -81,11 +96,17 @@ And then about a half-dozen arithmetic operators (=ADD=, =SUB=,
 =MUL=, =DIV=, =REM=, =LEQ=).
 
 ** Operation Transition Rules
+:PROPERTIES:
+:CUSTOM_ID: h-259ea8d3-ec51-43a5-81fb-229589d18c2c
+:END:
 
 The semantics for our SECD machine is described using a transition
 relation which maps =s e c d -> s' e' c' d'=.
 
 *** S-Expression related Rules
+:PROPERTIES:
+:CUSTOM_ID: h-a76bd3bb-ff0f-41b2-802d-524239a8c621
+:END:
 
 The =CONS=, =CDR=, =CAR= instructions behave as we would hope and
 expect:
@@ -101,6 +122,9 @@ datum or not.
   ~t=T~ if =a= is in fact an atom, ~t=F~ if =a= is a list.
 
 *** Arithmetic Rules
+:PROPERTIES:
+:CUSTOM_ID: h-0704e465-c2db-4018-baea-5d59d35c4a48
+:END:
 
 The arithmetic operations applied to the top 2 items of the stack,
 but do not modify the other registers:
@@ -115,6 +139,9 @@ but do not modify the other registers:
 
 
 *** Loading Rules
+:PROPERTIES:
+:CUSTOM_ID: h-a0bb400f-5054-4590-b399-040194213b8a
+:END:
 
 - =LD= :: =s e (LD i . c) d= becomes =(x . s) e c d= where
   ~x = locate(i, e)~ is the current value for the index =i=, and
@@ -143,6 +170,9 @@ locate (b, n) e = index n (index b e)
 #+end_example
 
 *** Conditional Form Rules
+:PROPERTIES:
+:CUSTOM_ID: h-af2af415-3b1e-46c8-ab55-e5ae721b0c47
+:END:
 
 There are two instructions for conditional forms, namely =SEL=
 selects a sublist of the control based on the value at the top of
@@ -162,6 +192,9 @@ So =SEL= is a jump instruction, =JOIN= jumps back to the function
 caller.
 
 *** Function Application
+:PROPERTIES:
+:CUSTOM_ID: h-dfb2fed7-0e66-4ca7-9fdf-ff3f9f95b7ad
+:END:
 
 We need to bear in mind how we encode closures, because they govern
 how we implement =AP=, =RTN=, etc. A closure is just =(c . e)= a
@@ -207,6 +240,9 @@ consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
 
 
 * References
+:PROPERTIES:
+:CUSTOM_ID: h-d66dc70a-7b37-4bef-bd7e-6a89f4791e7b
+:END:
 
 - Peter Henderson,
   /Functional Programming: Application and Implementation/.
@@ -217,6 +253,9 @@ consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
   /Theoretical Computer Science/ *1* (1975) pp. 125-159.
 
 ** SECD Machine
+:PROPERTIES:
+:CUSTOM_ID: h-6f9e1dde-494d-4755-9f83-381a323a8d54
+:END:
 
 - [[https://stackoverflow.com/q/7547951][StackOverflow thread]]
 - Jia-Huai You, [[https://webdocs.cs.ualberta.ca/~you/courses/325/Mynotes/Fun/SECD-slides.html][SECD Virtual Machine]] ([[https://web.archive.org/web/20150527050004/http://webdocs.cs.ualberta.ca/~you/courses/325/Mynotes/Fun/SECD-slides.html][archive]], lecture notes/slides)
@@ -231,6 +270,9 @@ consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
   Addison-Wesley, 1975.
 
 ** Lisp to SECD Compiler
+:PROPERTIES:
+:CUSTOM_ID: h-d00204c5-0ff0-4e26-9ba0-5881aeb4e634
+:END:
 
 - Peter Henderson's book is about this very topic
 - Milos Radovanovic, Mirjana Ivanovic, "An Implementation of

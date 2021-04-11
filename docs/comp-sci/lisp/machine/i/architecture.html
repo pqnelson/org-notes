@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-10 Sat 20:46 -->
+<!-- 2021-04-11 Sun 12:08 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Architecture - I-Machine</title>
@@ -241,201 +241,201 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgc4aaa38">1. Lisp-Machine Data Types</a>
+<li><a href="#h-d1c9627f-d099-41ec-a628-3dee020f305a">1. Lisp-Machine Data Types</a>
 <ul>
-<li><a href="#org273bcaf">1.1. Introduction to Lisp-Machine Objects</a>
+<li><a href="#h-0293194a-5fba-4e0b-be4e-ecc4679ecc02">1.1. Introduction to Lisp-Machine Objects</a>
 <ul>
-<li><a href="#orgd254557">1.1.1. Memory Words</a>
+<li><a href="#h-74fefd70-8ad8-4ae7-adf0-ae019d0710b6">1.1.1. Memory Words</a>
 <ul>
-<li><a href="#org23b2b2f">1.1.1.1. Length and Format</a></li>
-<li><a href="#orgf00ce94">1.1.1.2. Fields</a></li>
+<li><a href="#h-f9acb81a-bf27-427f-b6eb-710104f21ba0">1.1.1.1. Length and Format</a></li>
+<li><a href="#h-ff4d7289-24ce-4f4d-8ac8-dcc1c94f2010">1.1.1.2. Fields</a></li>
 </ul>
 </li>
-<li><a href="#org848b45c">1.1.2. Classes of Stored Object Representations</a></li>
-<li><a href="#org18a92ff">1.1.3. Components of Stored Representations</a>
+<li><a href="#h-2c2520c4-8f48-4b5b-b183-0920c3407bb6">1.1.2. Classes of Stored Object Representations</a></li>
+<li><a href="#h-f90be5cd-dec3-4052-af10-a489d3303016">1.1.3. Components of Stored Representations</a>
 <ul>
-<li><a href="#org91ac4a0">1.1.3.1. Object References</a></li>
-<li><a href="#org69b6df7">1.1.3.2. Headers</a></li>
-<li><a href="#org734fa8d">1.1.3.3. Forwarding (Invisible) Pointers</a></li>
-<li><a href="#org0979240">1.1.3.4. Special Markers</a></li>
+<li><a href="#h-79acf3fb-e088-4b62-a885-4c5d06d88593">1.1.3.1. Object References</a></li>
+<li><a href="#h-871c1aa4-a57d-423c-9fa3-ebbe4d762396">1.1.3.2. Headers</a></li>
+<li><a href="#h-5e4fcff6-de73-43af-bd04-5baff674425e">1.1.3.3. Forwarding (Invisible) Pointers</a></li>
+<li><a href="#h-fb0d4eba-6586-4bca-bf1d-3d607de6c99b">1.1.3.4. Special Markers</a></li>
 </ul>
 </li>
-<li><a href="#orgb3bc49c">1.1.4. Operand-Reference Classification</a></li>
+<li><a href="#h-4f6d1bdd-db07-4bd3-bef4-fab56413353f">1.1.4. Operand-Reference Classification</a></li>
 </ul>
 </li>
-<li><a href="#orgc381c90">1.2. Data-Type Descriptions</a>
+<li><a href="#h-796e935d-f343-479c-b767-ab07cc73ae43">1.2. Data-Type Descriptions</a>
 <ul>
-<li><a href="#org59b1ee3">1.2.1. Representations of Symbols</a></li>
-<li><a href="#org8ef11e1">1.2.2. Representation of Instances and Related Data Types</a>
+<li><a href="#h-3ba54ac4-d2b2-4fb6-9d8e-a03e796d8e2c">1.2.1. Representations of Symbols</a></li>
+<li><a href="#h-4d50d059-d7f7-42da-a2d5-0458a2ed06b4">1.2.2. Representation of Instances and Related Data Types</a>
 <ul>
-<li><a href="#org5ae110e">1.2.2.1. Flavor Instances</a></li>
-<li><a href="#org9ae7cff">1.2.2.2. List Instance</a></li>
-<li><a href="#orgc1d3678">1.2.2.3. Array Instance</a></li>
-<li><a href="#org4d7181e">1.2.2.4. String Instance</a></li>
+<li><a href="#h-746e9565-76e7-4da4-bca4-d144bf9ba788">1.2.2.1. Flavor Instances</a></li>
+<li><a href="#h-716f1e1e-7caf-4f71-be1e-f3d99a25d93f">1.2.2.2. List Instance</a></li>
+<li><a href="#h-c41fde96-9806-49ae-abe7-988c3439b234">1.2.2.3. Array Instance</a></li>
+<li><a href="#h-0a77cef4-8498-45ba-9f68-68ad6ff28963">1.2.2.4. String Instance</a></li>
 </ul>
 </li>
-<li><a href="#org98bd319">1.2.3. Representation of Characters</a></li>
-<li><a href="#org610977c">1.2.4. Representation of Numbers</a>
+<li><a href="#h-d82957f1-4199-43b0-b1a0-0484e84e0734">1.2.3. Representation of Characters</a></li>
+<li><a href="#h-ef8bc228-4eda-4873-8853-30afaeda1d43">1.2.4. Representation of Numbers</a>
 <ul>
-<li><a href="#org676aac1">1.2.4.1. Fixnum Representation</a></li>
-<li><a href="#orgd70d478">1.2.4.2. Bignum Representation</a></li>
-<li><a href="#org6a5f535">1.2.4.3. Small-Ratio Representation</a></li>
-<li><a href="#org749d479">1.2.4.4. Big-Ratio Representation</a></li>
-<li><a href="#org552897c">1.2.4.5. Single-Precision Floating-Point Representation</a></li>
-<li><a href="#org1c3b920">1.2.4.6. Double-Precision Floating-Point Representation</a></li>
-<li><a href="#orgfac3886">1.2.4.7. Complex-Number Representation</a></li>
-<li><a href="#orgd6e17b8">1.2.4.8. The Spare-Number Type</a></li>
+<li><a href="#h-517003cd-d0b5-4710-bfc9-2ba4b72a6456">1.2.4.1. Fixnum Representation</a></li>
+<li><a href="#h-4fff7d2b-56b9-41e2-9de1-2da3a6695ffb">1.2.4.2. Bignum Representation</a></li>
+<li><a href="#h-cbc4bd43-5d89-4bf1-a47d-6184690f67de">1.2.4.3. Small-Ratio Representation</a></li>
+<li><a href="#h-666f093e-bcc3-41f0-a54e-d2243720dab0">1.2.4.4. Big-Ratio Representation</a></li>
+<li><a href="#h-4e80614e-1598-4bf9-96ea-7b53bd75b9e0">1.2.4.5. Single-Precision Floating-Point Representation</a></li>
+<li><a href="#h-de0a6904-527e-44cf-8cde-92a9febb8346">1.2.4.6. Double-Precision Floating-Point Representation</a></li>
+<li><a href="#h-5479c5a1-0e18-4835-8bd4-541ca733ad7d">1.2.4.7. Complex-Number Representation</a></li>
+<li><a href="#h-4173c5b5-462c-405f-ac42-0d5d16117633">1.2.4.8. The Spare-Number Type</a></li>
 </ul>
 </li>
-<li><a href="#orgfe310ff">1.2.5. Representations of Lists</a></li>
-<li><a href="#org232f324">1.2.6. Representations of Arrays and Strings</a></li>
-<li><a href="#org71580e8">1.2.7. I-Machine Array Registers</a></li>
-<li><a href="#orga6d2b4f">1.2.8. Representations of Functions and Closures</a>
+<li><a href="#h-c18c29dd-dc1f-4e32-b832-127ab888ebba">1.2.5. Representations of Lists</a></li>
+<li><a href="#h-f54aee0e-1d83-4009-8a9f-38fbd3581636">1.2.6. Representations of Arrays and Strings</a></li>
+<li><a href="#h-e3ecb8fe-0e4f-4f88-b583-0bc3d234b737">1.2.7. I-Machine Array Registers</a></li>
+<li><a href="#h-baca12c3-d791-4eba-9361-88b3d2519e88">1.2.8. Representations of Functions and Closures</a>
 <ul>
-<li><a href="#org7287833">1.2.8.1. Representation of Compiled Functions</a></li>
-<li><a href="#org15c2b20">1.2.8.2. Generic Functions</a></li>
-<li><a href="#org8c8658a">1.2.8.3. Representation of Lexical Closures</a></li>
-<li><a href="#org55d8a80">1.2.8.4. Representation of Dynamic Closures</a></li>
+<li><a href="#h-326a239d-e257-4ca0-bb70-c68b9c2a0b4c">1.2.8.1. Representation of Compiled Functions</a></li>
+<li><a href="#h-9816af15-8215-425b-9d25-cd720604f957">1.2.8.2. Generic Functions</a></li>
+<li><a href="#h-2243c620-15b4-47ab-8ebb-61554949d930">1.2.8.3. Representation of Lexical Closures</a></li>
+<li><a href="#h-7f0dc201-bd95-4e7b-b217-a9f609484869">1.2.8.4. Representation of Dynamic Closures</a></li>
 </ul>
 </li>
-<li><a href="#org43cdde0">1.2.9. Instruction Representation</a></li>
-<li><a href="#org416f7ae">1.2.10. Program-Counter Representation</a></li>
-<li><a href="#org6785643">1.2.11. Representation of Locatives</a></li>
-<li><a href="#orgfa24baa">1.2.12. Representation of Physical Addresses</a></li>
+<li><a href="#h-57eed90d-db43-4f20-b2f6-515640c41bf9">1.2.9. Instruction Representation</a></li>
+<li><a href="#h-c3d57316-74a0-44fc-ab54-900c78ce8a56">1.2.10. Program-Counter Representation</a></li>
+<li><a href="#h-22855c89-f8a9-4a6b-99d8-5d1f767f4bfd">1.2.11. Representation of Locatives</a></li>
+<li><a href="#h-019fcb89-bc97-4812-a031-980b36462407">1.2.12. Representation of Physical Addresses</a></li>
 </ul>
 </li>
-<li><a href="#orgb552905">1.3. Data-Type Code Assignments</a>
+<li><a href="#h-008d2ebc-901f-47ae-a01c-5a20a0b7b476">1.3. Data-Type Code Assignments</a>
 <ul>
-<li><a href="#org9709cb2">1.3.1. Headers, Special Markers, and Forwarding Pointers</a></li>
-<li><a href="#orgd393338">1.3.2. Number Data Types</a></li>
-<li><a href="#orga7a2bcf">1.3.3. Instance Data Types</a></li>
-<li><a href="#org328ffe2">1.3.4. Primitive Data Types</a></li>
-<li><a href="#orge52a942">1.3.5. Special Marker for Garbage Collector</a></li>
-<li><a href="#org50baa32">1.3.6. Data Types for Program Counter Values</a></li>
-<li><a href="#orgfd7021b">1.3.7. Full Word Instruction Data Types</a></li>
-<li><a href="#org0a69125">1.3.8. Half-Word Instruction Data Types</a></li>
+<li><a href="#h-f7d6f864-0582-4975-a487-a4b60e225ad0">1.3.1. Headers, Special Markers, and Forwarding Pointers</a></li>
+<li><a href="#h-48760e0b-dbdf-40c3-8e0c-f2dcc6a3fd09">1.3.2. Number Data Types</a></li>
+<li><a href="#h-a2bcff3e-b8af-4f87-8fe6-177d19691afe">1.3.3. Instance Data Types</a></li>
+<li><a href="#h-e88bebf3-ceef-486c-9bb0-9b5e7824b4da">1.3.4. Primitive Data Types</a></li>
+<li><a href="#h-3ddf3fc4-6df8-4e4c-80dc-4d68588a7824">1.3.5. Special Marker for Garbage Collector</a></li>
+<li><a href="#h-af49a4a0-fac5-472f-821e-740a54659600">1.3.6. Data Types for Program Counter Values</a></li>
+<li><a href="#h-af00b7b6-db58-4fbf-8b4f-17dbd641cb03">1.3.7. Full Word Instruction Data Types</a></li>
+<li><a href="#h-e918dbab-b15f-42ed-a737-d70de08a1182">1.3.8. Half-Word Instruction Data Types</a></li>
 </ul>
 </li>
-<li><a href="#org1beb512">1.4. Appendix: Comparison of 3600-Family and I-Machine Data Representations</a>
+<li><a href="#h-8c46aa13-3df2-4dc1-87fd-d8f5db5c27a7">1.4. Appendix: Comparison of 3600-Family and I-Machine Data Representations</a>
 <ul>
-<li><a href="#org930ffbb">1.4.1. Array Differences</a></li>
-<li><a href="#orge39a62e">1.4.2. Compiled Function Differences</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#orgd294ee1">2. Memory Layout and Addressing</a>
-<ul>
-<li><a href="#orge82df8e">2.1. Address Space</a>
-<ul>
-<li><a href="#org8bf34f4">2.1.1. Virtual Addresses</a></li>
-<li><a href="#org488331f">2.1.2. Ephemeral Addresses</a></li>
-<li><a href="#orga9eaff6">2.1.3. Unmapped Addresses</a></li>
-<li><a href="#org5b7d3a8">2.1.4. Wired Addresses</a></li>
-<li><a href="#org1685795">2.1.5. Pages</a>
-<ul>
-<li><a href="#org4c96855">2.1.5.1. Page Hash Table</a></li>
-<li><a href="#orgf68de5c">2.1.5.2. PHT Lookup Algorithm</a></li>
-<li><a href="#orgf622522">2.1.5.3. Translation Algorithm</a></li>
+<li><a href="#h-aa308c82-d539-47d6-bc21-c0c9205512dd">1.4.1. Array Differences</a></li>
+<li><a href="#h-cc5a8790-f854-422e-8a23-17cc9e03f89d">1.4.2. Compiled Function Differences</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org1aa2121">2.2. GC Support</a></li>
-<li><a href="#orgb954319">2.3. Address Translation</a>
+<li><a href="#h-23acae6c-cd54-4b24-8351-f711aa4a3287">2. Memory Layout and Addressing</a>
 <ul>
-<li><a href="#orgee1f08c">2.3.1. Page Hash Table</a></li>
-<li><a href="#orgf44ac11">2.3.2. PHT Lookup Algorithm</a></li>
-<li><a href="#orgd22c3b7">2.3.3. Translation Algorithm</a></li>
-</ul>
-</li>
-<li><a href="#org779c4da">2.4. Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</a></li>
-</ul>
-</li>
-<li><a href="#org614f179">3. Macroinstruction Set</a>
+<li><a href="#h-12472c74-024b-4a6b-921f-b969c395bf27">2.1. Address Space</a>
 <ul>
-<li><a href="#org9569351">3.1. Introduction</a>
+<li><a href="#h-fc155048-a837-406e-a5be-c27b7254218a">2.1.1. Virtual Addresses</a></li>
+<li><a href="#h-ca28130b-5fa7-42e7-a9be-fa5e8371efa8">2.1.2. Ephemeral Addresses</a></li>
+<li><a href="#h-53630603-244d-42c3-9770-42451306705c">2.1.3. Unmapped Addresses</a></li>
+<li><a href="#h-7418b856-81cf-425a-a31b-0039b0136636">2.1.4. Wired Addresses</a></li>
+<li><a href="#h-5740779d-eb55-4885-a813-0456ecc5033c">2.1.5. Pages</a>
 <ul>
-<li><a href="#org1748328">3.1.1. Instruction Sequencing</a></li>
-<li><a href="#org519763e">3.1.2. Internal Registers</a></li>
-<li><a href="#org02376fc">3.1.3. Memory Side Effects</a></li>
-<li><a href="#org504f78d">3.1.4. Explanation of Instruction Definitions</a>
+<li><a href="#h-43245575-3159-48b1-9243-846f8cbe8f6a">2.1.5.1. Page Hash Table</a></li>
+<li><a href="#h-34de35f1-c272-4194-893b-e630bdd4fb7e">2.1.5.2. PHT Lookup Algorithm</a></li>
+<li><a href="#h-98fe1c73-f86f-4d32-8f57-59a5850867c4">2.1.5.3. Translation Algorithm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-7a857463-a2cb-467a-b14a-0252a2cef7ba">2.2. GC Support</a></li>
+<li><a href="#h-6a2dcdb8-a8d2-4606-85d9-5e4b0836fc1d">2.3. Address Translation</a>
 <ul>
-<li><a href="#orgee9d4b9">3.1.4.1. Instruction Formats</a></li>
-<li><a href="#orgd651dea">3.1.4.2. Arguments: the Data Types Accepted</a></li>
-<li><a href="#org0d927f1">3.1.4.3. Types of Instruction Exceptions</a></li>
-<li><a href="#org2b977aa">3.1.4.4. Types of Memory References</a></li>
-<li><a href="#orged0e34e">3.1.4.5. Top-of-Stack Register Effects</a></li>
-<li><a href="#orgf2eb348">3.1.4.6. Cdr Codes of Values Returned</a></li>
+<li><a href="#h-6a2f3028-4c4a-4b2d-a0dd-fff73fda46fe">2.3.1. Page Hash Table</a></li>
+<li><a href="#h-b086f93b-f387-497e-89c6-1ecaa7653aed">2.3.2. PHT Lookup Algorithm</a></li>
+<li><a href="#h-6c6431ab-6d0d-431c-ae99-d97f1c159070">2.3.3. Translation Algorithm</a></li>
 </ul>
 </li>
+<li><a href="#h-761de232-072c-4117-8d01-c29be2fb7646">2.4. Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</a></li>
 </ul>
 </li>
-<li><a href="#orga471d66">3.2. The Instructions</a>
+<li><a href="#h-55635f4d-2e65-438d-b09c-0bb6f176aba7">3. Macroinstruction Set</a>
 <ul>
-<li><a href="#org6fa1bdf">3.2.1. List-Function Operations</a></li>
-<li><a href="#orgc59559e">3.2.2. Predicate Intsructions</a></li>
-<li><a href="#org9dee4df">3.2.3. Numeric Operations</a></li>
-<li><a href="#org0540748">3.2.4. Data-Movement Instructions</a></li>
-<li><a href="#org346b196">3.2.5. Field-Extraction Instructions</a></li>
-<li><a href="#orga0b0067">3.2.6. Array Operations</a></li>
-<li><a href="#org5bb8f30">3.2.7. Block Instructions</a></li>
-<li><a href="#org1344916">3.2.8. Function-Calling Instructions</a></li>
-<li><a href="#orgc683992">3.2.9. Binding Instructions</a></li>
-<li><a href="#orgc814526">3.2.10. Catch Instructions</a></li>
-<li><a href="#org575cac3">3.2.11. Lexical Variable Accessors</a></li>
-<li><a href="#org5085e38">3.2.12. Instance Variable Accessors</a></li>
-<li><a href="#org437655a">3.2.13. Subprimitive Instructions</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#orgcd02945">4. Function Calling, Message Passing, Stack-Group Switching</a>
+<li><a href="#h-6393ab61-8979-4fbf-8fd5-e8b8aca67fb4">3.1. Introduction</a>
 <ul>
-<li><a href="#orgba109bc">4.1. Stacks</a>
+<li><a href="#h-02109c7f-b260-4bf6-b074-ecafd47fb26f">3.1.1. Instruction Sequencing</a></li>
+<li><a href="#h-3db86b85-a0bd-4bc4-81a4-473e1359fb4c">3.1.2. Internal Registers</a></li>
+<li><a href="#h-fdcf3483-dd68-4337-b04b-aa8674742a0f">3.1.3. Memory Side Effects</a></li>
+<li><a href="#h-4d930461-09c1-4211-af67-2425603a4248">3.1.4. Explanation of Instruction Definitions</a>
 <ul>
-<li><a href="#org3b98133">4.1.1. Control Stack</a></li>
-<li><a href="#org21adc5e">4.1.2. Binding Stack</a></li>
-<li><a href="#orgfe8d4f8">4.1.3. Data Stack</a></li>
+<li><a href="#h-b916475b-05e6-4f17-a2af-632c45d2b0ab">3.1.4.1. Instruction Formats</a></li>
+<li><a href="#h-a7f4a9a6-f390-4a5c-8509-7144aff35394">3.1.4.2. Arguments: the Data Types Accepted</a></li>
+<li><a href="#h-06b8e5ed-2609-46ec-895d-f8f2bffb29bc">3.1.4.3. Types of Instruction Exceptions</a></li>
+<li><a href="#h-0a54a752-b3d5-404f-b4df-eb0250df142d">3.1.4.4. Types of Memory References</a></li>
+<li><a href="#h-0c74886b-c325-4235-aba0-9331d78840ed">3.1.4.5. Top-of-Stack Register Effects</a></li>
+<li><a href="#h-69e0038e-0a62-4133-ac72-f600f192645a">3.1.4.6. Cdr Codes of Values Returned</a></li>
 </ul>
 </li>
-<li><a href="#org120d772">4.2. Registers Important to Function Calling and Returning</a></li>
-<li><a href="#org1142661">4.3. Function Calling</a>
+</ul>
+</li>
+<li><a href="#h-694fbabb-f1ea-4e71-97dc-e9dcddeada50">3.2. The Instructions</a>
 <ul>
-<li><a href="#org1225310">4.3.1. Starting a Function Call</a></li>
-<li><a href="#org783ddf8">4.3.2. Pushing the Arguments</a></li>
-<li><a href="#org9960e04">4.3.3. Finishing the Call</a></li>
+<li><a href="#h-2b9732b9-d23c-4cb0-977d-58f8aebe3477">3.2.1. List-Function Operations</a></li>
+<li><a href="#h-759efdb7-8bfd-4c2e-84b3-1e5550d4f00c">3.2.2. Predicate Intsructions</a></li>
+<li><a href="#h-41d7af96-0fae-48c3-9f77-fce529b58210">3.2.3. Numeric Operations</a></li>
+<li><a href="#h-f0fa6dc7-13fb-40ea-8c6d-4470eb4046e2">3.2.4. Data-Movement Instructions</a></li>
+<li><a href="#h-0f9c82d1-9aae-4ade-985d-434be6596008">3.2.5. Field-Extraction Instructions</a></li>
+<li><a href="#h-0d22074d-4743-4466-9be0-3a009ae7c138">3.2.6. Array Operations</a></li>
+<li><a href="#h-240a9563-f584-480e-b4f4-574928ebaf58">3.2.7. Block Instructions</a></li>
+<li><a href="#h-d3813c2b-16a3-4bcf-8066-2a26cc6c06dc">3.2.8. Function-Calling Instructions</a></li>
+<li><a href="#h-118c622a-4812-4b0c-939e-5c617eeb75f4">3.2.9. Binding Instructions</a></li>
+<li><a href="#h-f19d4c35-9069-404d-ae39-dd2d41c0a39d">3.2.10. Catch Instructions</a></li>
+<li><a href="#h-c2038e1e-b1ed-4d25-8eec-301198e85e59">3.2.11. Lexical Variable Accessors</a></li>
+<li><a href="#h-4395697d-6d48-43a9-a84b-827433e825ce">3.2.12. Instance Variable Accessors</a></li>
+<li><a href="#h-25a48dfe-b0ed-4491-8a07-88cc7e90e683">3.2.13. Subprimitive Instructions</a></li>
 </ul>
 </li>
-<li><a href="#org7d92892">4.4. Function Entry</a>
+</ul>
+</li>
+<li><a href="#h-5ba79382-0d4f-4f95-8777-ddeb45d1bfcf">4. Function Calling, Message Passing, Stack-Group Switching</a>
 <ul>
-<li><a href="#orgcf9437e">4.4.1. Push-apply-args</a></li>
-<li><a href="#org8f2e065">4.4.2. Pull-apply-args</a></li>
-<li><a href="#org842fa78">4.4.3. Trapping Out of Entry and Restarting</a></li>
-</ul>
-</li>
-<li><a href="#org27f98ae">4.5. Function Returning</a>
+<li><a href="#h-704d1774-e762-4e20-a501-6f2fc8c3b43e">4.1. Stacks</a>
 <ul>
-<li><a href="#org0b23293">4.5.1. Function Return Instructions</a></li>
-<li><a href="#org18272b1">4.5.2. Frame Cleanup</a></li>
-<li><a href="#org11b7479">4.5.3. Value Matchup</a></li>
+<li><a href="#h-52d79706-3466-44c6-b956-f452552946b5">4.1.1. Control Stack</a></li>
+<li><a href="#h-e72b6765-a5bb-4360-b88d-ef2effe53c77">4.1.2. Binding Stack</a></li>
+<li><a href="#h-5eaca4a1-7cd6-49b9-a724-7a6397bc2c73">4.1.3. Data Stack</a></li>
 </ul>
 </li>
-<li><a href="#org752585b">4.6. Catch, Throw and Unwind-Protect</a></li>
-<li><a href="#orge59900b">4.7. Generic Functions and Message Passing</a>
+<li><a href="#h-fecf122a-0493-47fe-89fe-0bd9038338fa">4.2. Registers Important to Function Calling and Returning</a></li>
+<li><a href="#h-a1f3645d-73b5-4dd2-8079-a7bcc73bc1fe">4.3. Function Calling</a>
 <ul>
-<li><a href="#org3cda319">4.7.1. Flavor</a></li>
-<li><a href="#org093d20c">4.7.2. Handler Table</a></li>
-<li><a href="#org9c9add5">4.7.3. Calling a Generic Function</a></li>
-<li><a href="#orga32bccc">4.7.4. Sending a Message</a></li>
-<li><a href="#orga3f5ce4">4.7.5. Accessing Instance Variables</a></li>
+<li><a href="#h-9cdc18b9-c53a-4abf-89d0-91ae907a0709">4.3.1. Starting a Function Call</a></li>
+<li><a href="#h-2665f17e-162a-42fe-8e85-6deb3f1cccf3">4.3.2. Pushing the Arguments</a></li>
+<li><a href="#h-bfe7277e-ac65-4d02-bd74-626cfc76f73e">4.3.3. Finishing the Call</a></li>
 </ul>
 </li>
-<li><a href="#org898afdc">4.8. Stack-Group Switching</a></li>
-<li><a href="#org9ef0be4">4.9. Appendix: Comparison of 3600-Family and I-Machine Function Calling</a></li>
+<li><a href="#h-76accfc0-d147-4b3c-bfc8-ab1a38485273">4.4. Function Entry</a>
+<ul>
+<li><a href="#h-f201498c-c66f-44d9-89ad-a399912ec5aa">4.4.1. Push-apply-args</a></li>
+<li><a href="#h-3342c0c4-ca4b-4924-84c0-0de667473df8">4.4.2. Pull-apply-args</a></li>
+<li><a href="#h-cafc81ec-1665-47b5-ae96-66732c847d28">4.4.3. Trapping Out of Entry and Restarting</a></li>
 </ul>
 </li>
-<li><a href="#org66c8b76">5. Exception Handling</a></li>
+<li><a href="#h-0f6c0381-c993-4f84-95b0-f8cf52557059">4.5. Function Returning</a>
+<ul>
+<li><a href="#h-9a7a092f-c52a-4126-9afe-b9eabbe963a6">4.5.1. Function Return Instructions</a></li>
+<li><a href="#h-c1451534-889e-4e84-b449-9fb166c4ac44">4.5.2. Frame Cleanup</a></li>
+<li><a href="#h-a680f0ee-b7be-4dd2-a580-0b4072a185e3">4.5.3. Value Matchup</a></li>
+</ul>
+</li>
+<li><a href="#h-d48c1ba8-dd90-4cbd-9519-2a5f0029af02">4.6. Catch, Throw and Unwind-Protect</a></li>
+<li><a href="#h-b2b6ffe8-4db0-414a-b91b-e516eee647a7">4.7. Generic Functions and Message Passing</a>
+<ul>
+<li><a href="#h-77793ebe-70d2-49bb-bf22-1f32e9da8448">4.7.1. Flavor</a></li>
+<li><a href="#h-86857d87-3490-45ce-af83-13657c8ea378">4.7.2. Handler Table</a></li>
+<li><a href="#h-f1fb6ad2-c8eb-4470-a92d-09b35605b032">4.7.3. Calling a Generic Function</a></li>
+<li><a href="#h-12fabf3e-7177-4dc2-9a81-6563ba0cca10">4.7.4. Sending a Message</a></li>
+<li><a href="#h-2f3cba29-49f5-46e1-b0dc-ba207ab3809a">4.7.5. Accessing Instance Variables</a></li>
+</ul>
+</li>
+<li><a href="#h-a23ce6ab-f0b1-493f-b853-dadacd15eaf3">4.8. Stack-Group Switching</a></li>
+<li><a href="#h-11715f53-78f0-4204-8d83-05103042b611">4.9. Appendix: Comparison of 3600-Family and I-Machine Function Calling</a></li>
+</ul>
+</li>
+<li><a href="#h-465ae0d1-a1be-4641-8d1d-0220849d7a10">5. Exception Handling</a></li>
 </ul>
 </div>
 </div>
@@ -444,21 +444,21 @@
 Symbolics I-Machine.)
 </p>
 
-<div id="outline-container-orgc4aaa38" class="outline-2">
-<h2 id="orgc4aaa38"><span class="section-number-2">1</span> Lisp-Machine Data Types</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-h-d1c9627f-d099-41ec-a628-3dee020f305a" class="outline-2">
+<h2 id="h-d1c9627f-d099-41ec-a628-3dee020f305a"><span class="section-number-2">1</span> Lisp-Machine Data Types</h2>
+<div class="outline-text-2" id="text-h-d1c9627f-d099-41ec-a628-3dee020f305a">
 </div>
-<div id="outline-container-org273bcaf" class="outline-3">
-<h3 id="org273bcaf"><span class="section-number-3">1.1</span> Introduction to Lisp-Machine Objects</h3>
-<div class="outline-text-3" id="text-1-1">
+<div id="outline-container-h-0293194a-5fba-4e0b-be4e-ecc4679ecc02" class="outline-3">
+<h3 id="h-0293194a-5fba-4e0b-be4e-ecc4679ecc02"><span class="section-number-3">1.1</span> Introduction to Lisp-Machine Objects</h3>
+<div class="outline-text-3" id="text-h-0293194a-5fba-4e0b-be4e-ecc4679ecc02">
 </div>
-<div id="outline-container-orgd254557" class="outline-4">
-<h4 id="orgd254557"><span class="section-number-4">1.1.1</span> Memory Words</h4>
-<div class="outline-text-4" id="text-1-1-1">
+<div id="outline-container-h-74fefd70-8ad8-4ae7-adf0-ae019d0710b6" class="outline-4">
+<h4 id="h-74fefd70-8ad8-4ae7-adf0-ae019d0710b6"><span class="section-number-4">1.1.1</span> Memory Words</h4>
+<div class="outline-text-4" id="text-h-74fefd70-8ad8-4ae7-adf0-ae019d0710b6">
 </div>
-<div id="outline-container-org23b2b2f" class="outline-5">
-<h5 id="org23b2b2f"><span class="section-number-5">1.1.1.1</span> Length and Format</h5>
-<div class="outline-text-5" id="text-1-1-1-1">
+<div id="outline-container-h-f9acb81a-bf27-427f-b6eb-710104f21ba0" class="outline-5">
+<h5 id="h-f9acb81a-bf27-427f-b6eb-710104f21ba0"><span class="section-number-5">1.1.1.1</span> Length and Format</h5>
+<div class="outline-text-5" id="text-h-f9acb81a-bf27-427f-b6eb-710104f21ba0">
 <p>
 A word was 40-bits and contained three fields:
 </p>
@@ -523,9 +523,9 @@ In C, this would be a packed struct:
 </div>
 </div>
 
-<div id="outline-container-orgf00ce94" class="outline-5">
-<h5 id="orgf00ce94"><span class="section-number-5">1.1.1.2</span> Fields</h5>
-<div class="outline-text-5" id="text-1-1-1-2">
+<div id="outline-container-h-ff4d7289-24ce-4f4d-8ac8-dcc1c94f2010" class="outline-5">
+<h5 id="h-ff4d7289-24ce-4f4d-8ac8-dcc1c94f2010"><span class="section-number-5">1.1.1.2</span> Fields</h5>
+<div class="outline-text-5" id="text-h-ff4d7289-24ce-4f4d-8ac8-dcc1c94f2010">
 <p>
 The type field indicated what kind of information is stored in the
 word. (I think the types are <code>dtp-</code> prefixed identifiers in the
@@ -544,9 +544,9 @@ The cdr code is used for various different purposes depending on the type.
 </div>
 </div>
 
-<div id="outline-container-org848b45c" class="outline-4">
-<h4 id="org848b45c"><span class="section-number-4">1.1.2</span> Classes of Stored Object Representations</h4>
-<div class="outline-text-4" id="text-1-1-2">
+<div id="outline-container-h-2c2520c4-8f48-4b5b-b183-0920c3407bb6" class="outline-4">
+<h4 id="h-2c2520c4-8f48-4b5b-b183-0920c3407bb6"><span class="section-number-4">1.1.2</span> Classes of Stored Object Representations</h4>
+<div class="outline-text-4" id="text-h-2c2520c4-8f48-4b5b-b183-0920c3407bb6">
 <p>
 An object can be stored:
 </p>
@@ -573,9 +573,9 @@ Each word within the structure object may contain:
 </div>
 </div>
 
-<div id="outline-container-org18a92ff" class="outline-4">
-<h4 id="org18a92ff"><span class="section-number-4">1.1.3</span> Components of Stored Representations</h4>
-<div class="outline-text-4" id="text-1-1-3">
+<div id="outline-container-h-f90be5cd-dec3-4052-af10-a489d3303016" class="outline-4">
+<h4 id="h-f90be5cd-dec3-4052-af10-a489d3303016"><span class="section-number-4">1.1.3</span> Components of Stored Representations</h4>
+<div class="outline-text-4" id="text-h-f90be5cd-dec3-4052-af10-a489d3303016">
 <p>
 The components of stored representations found in Lisp Machine memory
 are:
@@ -588,9 +588,9 @@ are:
 </ul>
 </div>
 
-<div id="outline-container-org91ac4a0" class="outline-5">
-<h5 id="org91ac4a0"><span class="section-number-5">1.1.3.1</span> Object References</h5>
-<div class="outline-text-5" id="text-1-1-3-1">
+<div id="outline-container-h-79acf3fb-e088-4b62-a885-4c5d06d88593" class="outline-5">
+<h5 id="h-79acf3fb-e088-4b62-a885-4c5d06d88593"><span class="section-number-5">1.1.3.1</span> Object References</h5>
+<div class="outline-text-5" id="text-h-79acf3fb-e088-4b62-a885-4c5d06d88593">
 <p>
 Object references are the mechanism by which one refers to an object.
 There are three types of object references:
@@ -609,9 +609,9 @@ pointer to the value cell of a symbol).</li>
 </div>
 </div>
 
-<div id="outline-container-org69b6df7" class="outline-5">
-<h5 id="org69b6df7"><span class="section-number-5">1.1.3.2</span> Headers</h5>
-<div class="outline-text-5" id="text-1-1-3-2">
+<div id="outline-container-h-871c1aa4-a57d-423c-9fa3-ebbe4d762396" class="outline-5">
+<h5 id="h-871c1aa4-a57d-423c-9fa3-ebbe4d762396"><span class="section-number-5">1.1.3.2</span> Headers</h5>
+<div class="outline-text-5" id="text-h-871c1aa4-a57d-423c-9fa3-ebbe4d762396">
 <p>
 Headers separate objects in memory. This contains information about the
 type of object. There are two types of headers:
@@ -747,9 +747,9 @@ contains the addresses of the new locations of the objects.</li>
 </div>
 </div>
 
-<div id="outline-container-org734fa8d" class="outline-5">
-<h5 id="org734fa8d"><span class="section-number-5">1.1.3.3</span> Forwarding (Invisible) Pointers</h5>
-<div class="outline-text-5" id="text-1-1-3-3">
+<div id="outline-container-h-5e4fcff6-de73-43af-bd04-5baff674425e" class="outline-5">
+<h5 id="h-5e4fcff6-de73-43af-bd04-5baff674425e"><span class="section-number-5">1.1.3.3</span> Forwarding (Invisible) Pointers</h5>
+<div class="outline-text-5" id="text-h-5e4fcff6-de73-43af-bd04-5baff674425e">
 <p>
 The metaphor for a "forwarding pointer" is postal forwarding, specifying
 a reference to the location containing it should be redirected to
@@ -763,7 +763,7 @@ The data types of the forwarding pointers are:
 <ul class="org-ul">
 <li><code>dtp-external-value-cell-pointer</code>, used to link a symbol's value cell
 to a closure or an instance value cell (it is not invisible to binding
-and unbinding, see the section <a href="#org21adc5e">Binding Stack</a>)</li>
+and unbinding, see the section <a href="#h-e72b6765-a5bb-4360-b88d-ef2effe53c77">Binding Stack</a>)</li>
 <li><code>dtp-one-q-forward</code> forwards only the cell that contains it (i.e., it
 indicates the cell is contained at the address specified in the
 address field of the <code>dtp-one-q-forward</code> word and the cdr-code of the
@@ -777,7 +777,7 @@ applications).</li>
 
 <p>
 A header-forward pointer is also used with list representation (which is
-explained fulling in another section, see <a href="#orgfe310ff">Representations of Lists</a>).
+explained fulling in another section, see <a href="#h-c18c29dd-dc1f-4e32-b832-127ab888ebba">Representations of Lists</a>).
 When a one-word cons must be expanded to a two-word cons by <code>replacd</code>, a
 new two-word cons is allocated and the old one-word cons is replaced by
 a header-forward pointer containing the address of the new cons.
@@ -785,9 +785,9 @@ a header-forward pointer containing the address of the new cons.
 </div>
 </div>
 
-<div id="outline-container-org0979240" class="outline-5">
-<h5 id="org0979240"><span class="section-number-5">1.1.3.4</span> Special Markers</h5>
-<div class="outline-text-5" id="text-1-1-3-4">
+<div id="outline-container-h-fb0d4eba-6586-4bca-bf1d-3d607de6c99b" class="outline-5">
+<h5 id="h-fb0d4eba-6586-4bca-bf1d-3d607de6c99b"><span class="section-number-5">1.1.3.4</span> Special Markers</h5>
+<div class="outline-text-5" id="text-h-fb0d4eba-6586-4bca-bf1d-3d607de6c99b">
 <p>
 The data types of the special markers are:
 </p>
@@ -814,7 +814,7 @@ is initialized to all bits zero thus contains all null words, which
 will cause a trap if dereferenced.
 </p></li>
 <li><code>dtp-monitor-forward</code>, intended for use with a debugging feature (see
-the section/chapter <a href="#org66c8b76">Exception Handling</a>)</li>
+the section/chapter <a href="#h-465ae0d1-a1be-4641-8d1d-0220849d7a10">Exception Handling</a>)</li>
 <li><code>dtp-gc-forward</code>, used by the garbage collector and may only appear in
 oldspace.</li>
 </ul>
@@ -823,20 +823,20 @@ oldspace.</li>
 </div>
 
 
-<div id="outline-container-orgb3bc49c" class="outline-4">
-<h4 id="orgb3bc49c"><span class="section-number-4">1.1.4</span> Operand-Reference Classification</h4>
-<div class="outline-text-4" id="text-1-1-4">
+<div id="outline-container-h-4f6d1bdd-db07-4bd3-bef4-fab56413353f" class="outline-4">
+<h4 id="h-4f6d1bdd-db07-4bd3-bef4-fab56413353f"><span class="section-number-4">1.1.4</span> Operand-Reference Classification</h4>
+<div class="outline-text-4" id="text-h-4f6d1bdd-db07-4bd3-bef4-fab56413353f">
 <ul class="org-ul">
-<li>Immediate Data (22 type codes): <a href="#org676aac1">dtp-fixnum</a>, <a href="#org6a5f535">dtp-small-ratio</a>,
-<a href="#org552897c">dtp-single-float</a>, <a href="#org98bd319">dtp-character</a>, <a href="#orgfa24baa">dtp-physical-address</a>,
+<li>Immediate Data (22 type codes): <a href="#h-517003cd-d0b5-4710-bfc9-2ba4b72a6456">dtp-fixnum</a>, <a href="#h-cbc4bd43-5d89-4bf1-a47d-6184690f67de">dtp-small-ratio</a>,
+<a href="#h-4e80614e-1598-4bf9-96ea-7b53bd75b9e0">dtp-single-float</a>, <a href="#h-d82957f1-4199-43b0-b1a0-0484e84e0734">dtp-character</a>, <a href="#h-019fcb89-bc97-4812-a031-980b36462407">dtp-physical-address</a>,
 dtp-packed-instruction, dtp-spare-immediate-1</li>
-<li>Pointer data (33 type codes): <a href="#org1c3b920">dtp-double-float</a>, dtp-bignum, <a href="#org749d479">dtp-big-ratio</a>,
-<a href="#orgfac3886">dtp-complex</a>, <a href="#orgd6e17b8">dtp-spare-number</a>, <a href="#org5ae110e">dtp-instance</a>, <a href="#org9ae7cff">dtp-list-instance</a>,
-<a href="#orgc1d3678">dtp-array-instance</a>, <a href="#org4d7181e">dtp-string-instance</a>, <a href="#org59b1ee3">dtp-nil</a>, <a href="#orgfe310ff">dtp-list</a>,
-<a href="#org232f324">dtp-array, dtp-string</a>, <a href="#org59b1ee3">dtp-symbol</a>, <a href="#org6785643">dtp-locative</a>, <a href="#org8c8658a">dtp-lexical-closure</a>,
-<a href="#org55d8a80">dtp-dynamic-closure</a>, <a href="#org7287833">dtp-compiled-function</a>, <a href="#org15c2b20">dtp-generic-function</a>,
+<li>Pointer data (33 type codes): <a href="#h-de0a6904-527e-44cf-8cde-92a9febb8346">dtp-double-float</a>, dtp-bignum, <a href="#h-666f093e-bcc3-41f0-a54e-d2243720dab0">dtp-big-ratio</a>,
+<a href="#h-5479c5a1-0e18-4835-8bd4-541ca733ad7d">dtp-complex</a>, <a href="#h-4173c5b5-462c-405f-ac42-0d5d16117633">dtp-spare-number</a>, <a href="#h-746e9565-76e7-4da4-bca4-d144bf9ba788">dtp-instance</a>, <a href="#h-716f1e1e-7caf-4f71-be1e-f3d99a25d93f">dtp-list-instance</a>,
+<a href="#h-c41fde96-9806-49ae-abe7-988c3439b234">dtp-array-instance</a>, <a href="#h-0a77cef4-8498-45ba-9f68-68ad6ff28963">dtp-string-instance</a>, <a href="#h-3ba54ac4-d2b2-4fb6-9d8e-a03e796d8e2c">dtp-nil</a>, <a href="#h-c18c29dd-dc1f-4e32-b832-127ab888ebba">dtp-list</a>,
+<a href="#h-f54aee0e-1d83-4009-8a9f-38fbd3581636">dtp-array, dtp-string</a>, <a href="#h-3ba54ac4-d2b2-4fb6-9d8e-a03e796d8e2c">dtp-symbol</a>, <a href="#h-22855c89-f8a9-4a6b-99d8-5d1f767f4bfd">dtp-locative</a>, <a href="#h-2243c620-15b4-47ab-8ebb-61554949d930">dtp-lexical-closure</a>,
+<a href="#h-7f0dc201-bd95-4e7b-b217-a9f609484869">dtp-dynamic-closure</a>, <a href="#h-326a239d-e257-4ca0-bb70-c68b9c2a0b4c">dtp-compiled-function</a>, <a href="#h-9816af15-8215-425b-9d25-cd720604f957">dtp-generic-function</a>,
 dtp-spare-pointer-1, dtp-spare-pointer-2, dtp-spare-pointer-3,
-dtp-spare-pointer-4, <a href="#org416f7ae">dtp-even-pc, dtp-odd-pc</a>, dtp-call-compiled-even,
+dtp-spare-pointer-4, <a href="#h-c3d57316-74a0-44fc-ab54-900c78ce8a56">dtp-even-pc, dtp-odd-pc</a>, dtp-call-compiled-even,
 dtp-call-compiled-odd, dtp-call-indirect, dtp-call-generic,
 dtp-call-compiled-even-prefetch, dtp-call-compiled-odd-prefetch,
 dtp-call-indirect-prefetch, dtp-call-generic-prefetch</li>
@@ -883,14 +883,14 @@ following 9 additional codes
 </div>
 </div>
 
-<div id="outline-container-orgc381c90" class="outline-3">
-<h3 id="orgc381c90"><span class="section-number-3">1.2</span> Data-Type Descriptions</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-h-796e935d-f343-479c-b767-ab07cc73ae43" class="outline-3">
+<h3 id="h-796e935d-f343-479c-b767-ab07cc73ae43"><span class="section-number-3">1.2</span> Data-Type Descriptions</h3>
+<div class="outline-text-3" id="text-h-796e935d-f343-479c-b767-ab07cc73ae43">
 </div>
 
-<div id="outline-container-org59b1ee3" class="outline-4">
-<h4 id="org59b1ee3"><span class="section-number-4">1.2.1</span> Representations of Symbols</h4>
-<div class="outline-text-4" id="text-1-2-1">
+<div id="outline-container-h-3ba54ac4-d2b2-4fb6-9d8e-a03e796d8e2c" class="outline-4">
+<h4 id="h-3ba54ac4-d2b2-4fb6-9d8e-a03e796d8e2c"><span class="section-number-4">1.2.1</span> Representations of Symbols</h4>
+<div class="outline-text-4" id="text-h-3ba54ac4-d2b2-4fb6-9d8e-a03e796d8e2c">
 <p>
 The object reference to a symbol is a word of data type <code>dtp-symbol</code>
 or <code>dtp-nil</code>. The address field of this word contains the address of a
@@ -974,22 +974,22 @@ A straightforward implementation would be:
 <p>
 The I-Machine reserved locations for <code>nil</code> and <code>t</code> in fixed memory
 locations (vma=pma 1011000) and (vma=pma 1011005), respectively (see the
-section <a href="#org5b7d3a8">Wired Addresses</a>).
+section <a href="#h-7418b856-81cf-425a-a31b-0039b0136636">Wired Addresses</a>).
 </p>
 </div>
 </div>
 
-<div id="outline-container-org8ef11e1" class="outline-4">
-<h4 id="org8ef11e1"><span class="section-number-4">1.2.2</span> Representation of Instances and Related Data Types</h4>
-<div class="outline-text-4" id="text-1-2-2">
+<div id="outline-container-h-4d50d059-d7f7-42da-a2d5-0458a2ed06b4" class="outline-4">
+<h4 id="h-4d50d059-d7f7-42da-a2d5-0458a2ed06b4"><span class="section-number-4">1.2.2</span> Representation of Instances and Related Data Types</h4>
+<div class="outline-text-4" id="text-h-4d50d059-d7f7-42da-a2d5-0458a2ed06b4">
 <p>
 Before we had CLOS, we had Flavors.
 </p>
 </div>
 
-<div id="outline-container-org5ae110e" class="outline-5">
-<h5 id="org5ae110e"><span class="section-number-5">1.2.2.1</span> Flavor Instances</h5>
-<div class="outline-text-5" id="text-1-2-2-1">
+<div id="outline-container-h-746e9565-76e7-4da4-bca4-d144bf9ba788" class="outline-5">
+<h5 id="h-746e9565-76e7-4da4-bca4-d144bf9ba788"><span class="section-number-5">1.2.2.1</span> Flavor Instances</h5>
+<div class="outline-text-5" id="text-h-746e9565-76e7-4da4-bca4-d144bf9ba788">
 <p>
 The object reference to an instance is a word of data type <code>dtp-instance</code>
 whose address field points to the instance structure.
@@ -1080,7 +1080,7 @@ handler table is <code>nil</code>, the generic function or message is used as th
 parameter.</li>
 </ul>
 
-<div class="remark" id="orga1d1008">
+<div class="remark" id="orgda4b362">
 <p>
 I honestly do not understand the idea of a mapping table so far.
 </p>
@@ -1093,7 +1093,7 @@ filled with <code>nil</code> entries for its key, method, and parameter. Unused
 methods are likewise filled with <code>nil</code> entries.
 </p>
 
-<div class="remark" id="org8d21876">
+<div class="remark" id="org113006b">
 <p>
 We should note that it seems, thus far reading the fine manual, that
 <code>dtp-even-pc</code> and <code>dtp-odd-pc</code> are pointers to functions &#x2014; compiled,
@@ -1104,9 +1104,9 @@ or lexical closures (or dynamical closures?).
 </div>
 </div>
 
-<div id="outline-container-org9ae7cff" class="outline-5">
-<h5 id="org9ae7cff"><span class="section-number-5">1.2.2.2</span> List Instance</h5>
-<div class="outline-text-5" id="text-1-2-2-2">
+<div id="outline-container-h-716f1e1e-7caf-4f71-be1e-f3d99a25d93f" class="outline-5">
+<h5 id="h-716f1e1e-7caf-4f71-be1e-f3d99a25d93f"><span class="section-number-5">1.2.2.2</span> List Instance</h5>
+<div class="outline-text-5" id="text-h-716f1e1e-7caf-4f71-be1e-f3d99a25d93f">
 <p>
 An object reference to a list instance is a word of data type
 <code>dtp-list-instance</code> whose address field points to an instance structure.
@@ -1114,9 +1114,9 @@ An object reference to a list instance is a word of data type
 </div>
 </div>
 
-<div id="outline-container-orgc1d3678" class="outline-5">
-<h5 id="orgc1d3678"><span class="section-number-5">1.2.2.3</span> Array Instance</h5>
-<div class="outline-text-5" id="text-1-2-2-3">
+<div id="outline-container-h-c41fde96-9806-49ae-abe7-988c3439b234" class="outline-5">
+<h5 id="h-c41fde96-9806-49ae-abe7-988c3439b234"><span class="section-number-5">1.2.2.3</span> Array Instance</h5>
+<div class="outline-text-5" id="text-h-c41fde96-9806-49ae-abe7-988c3439b234">
 <p>
 An object reference to an array instance is a word of data type
 <code>dtp-array-instance</code> whose address field points to an instance field.
@@ -1124,9 +1124,9 @@ An object reference to an array instance is a word of data type
 </div>
 </div>
 
-<div id="outline-container-org4d7181e" class="outline-5">
-<h5 id="org4d7181e"><span class="section-number-5">1.2.2.4</span> String Instance</h5>
-<div class="outline-text-5" id="text-1-2-2-4">
+<div id="outline-container-h-0a77cef4-8498-45ba-9f68-68ad6ff28963" class="outline-5">
+<h5 id="h-0a77cef4-8498-45ba-9f68-68ad6ff28963"><span class="section-number-5">1.2.2.4</span> String Instance</h5>
+<div class="outline-text-5" id="text-h-0a77cef4-8498-45ba-9f68-68ad6ff28963">
 <p>
 An object reference to a string instance is a word of data type
 <code>dtp-string-instance</code> whose address field points to an instance structure.\
@@ -1135,9 +1135,9 @@ An object reference to a string instance is a word of data type
 </div>
 </div>
 
-<div id="outline-container-org98bd319" class="outline-4">
-<h4 id="org98bd319"><span class="section-number-4">1.2.3</span> Representation of Characters</h4>
-<div class="outline-text-4" id="text-1-2-3">
+<div id="outline-container-h-d82957f1-4199-43b0-b1a0-0484e84e0734" class="outline-4">
+<h4 id="h-d82957f1-4199-43b0-b1a0-0484e84e0734"><span class="section-number-4">1.2.3</span> Representation of Characters</h4>
+<div class="outline-text-4" id="text-h-d82957f1-4199-43b0-b1a0-0484e84e0734">
 <p>
 An object reference to a character is an immediate object of type <code>dtp-character</code>.
 Characters seem to use the 32-bit data as follows:
@@ -1197,27 +1197,27 @@ control, meta, super, hyper bits should be added, as well, giving a
 </div>
 </div>
 
-<div id="outline-container-org610977c" class="outline-4">
-<h4 id="org610977c"><span class="section-number-4">1.2.4</span> Representation of Numbers</h4>
-<div class="outline-text-4" id="text-1-2-4">
+<div id="outline-container-h-ef8bc228-4eda-4873-8853-30afaeda1d43" class="outline-4">
+<h4 id="h-ef8bc228-4eda-4873-8853-30afaeda1d43"><span class="section-number-4">1.2.4</span> Representation of Numbers</h4>
+<div class="outline-text-4" id="text-h-ef8bc228-4eda-4873-8853-30afaeda1d43">
 </div>
-<div id="outline-container-org676aac1" class="outline-5">
-<h5 id="org676aac1"><span class="section-number-5">1.2.4.1</span> Fixnum Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-1">
+<div id="outline-container-h-517003cd-d0b5-4710-bfc9-2ba4b72a6456" class="outline-5">
+<h5 id="h-517003cd-d0b5-4710-bfc9-2ba4b72a6456"><span class="section-number-5">1.2.4.1</span> Fixnum Representation</h5>
+<div class="outline-text-5" id="text-h-517003cd-d0b5-4710-bfc9-2ba4b72a6456">
 <p>
 A 32-bit two's-complement integer. Its data type is <code>dtp-fixnum</code>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgd70d478" class="outline-5">
-<h5 id="orgd70d478"><span class="section-number-5">1.2.4.2</span> Bignum Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-2">
+<div id="outline-container-h-4fff7d2b-56b9-41e2-9de1-2da3a6695ffb" class="outline-5">
+<h5 id="h-4fff7d2b-56b9-41e2-9de1-2da3a6695ffb"><span class="section-number-5">1.2.4.2</span> Bignum Representation</h5>
+<div class="outline-text-5" id="text-h-4fff7d2b-56b9-41e2-9de1-2da3a6695ffb">
 </div>
 </div>
-<div id="outline-container-org6a5f535" class="outline-5">
-<h5 id="org6a5f535"><span class="section-number-5">1.2.4.3</span> Small-Ratio Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-3">
+<div id="outline-container-h-cbc4bd43-5d89-4bf1-a47d-6184690f67de" class="outline-5">
+<h5 id="h-cbc4bd43-5d89-4bf1-a47d-6184690f67de"><span class="section-number-5">1.2.4.3</span> Small-Ratio Representation</h5>
+<div class="outline-text-5" id="text-h-cbc4bd43-5d89-4bf1-a47d-6184690f67de">
 <p>
 The 32-bit field is treated as an array of two 16-bit integers, the
 first is a signed two's-complement number treated as the numerator, the
@@ -1231,9 +1231,9 @@ is treated as an illegal value.
 </div>
 </div>
 
-<div id="outline-container-org749d479" class="outline-5">
-<h5 id="org749d479"><span class="section-number-5">1.2.4.4</span> Big-Ratio Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-4">
+<div id="outline-container-h-666f093e-bcc3-41f0-a54e-d2243720dab0" class="outline-5">
+<h5 id="h-666f093e-bcc3-41f0-a54e-d2243720dab0"><span class="section-number-5">1.2.4.4</span> Big-Ratio Representation</h5>
+<div class="outline-text-5" id="text-h-666f093e-bcc3-41f0-a54e-d2243720dab0">
 <p>
 An object reference to a big-ratio is a word of data type
 <code>dtp-big-ratio</code> whose address field points to a cons pair. The car of
@@ -1244,9 +1244,9 @@ or a negative number, is treated as an illegal value.
 </div>
 </div>
 
-<div id="outline-container-org552897c" class="outline-5">
-<h5 id="org552897c"><span class="section-number-5">1.2.4.5</span> Single-Precision Floating-Point Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-5">
+<div id="outline-container-h-4e80614e-1598-4bf9-96ea-7b53bd75b9e0" class="outline-5">
+<h5 id="h-4e80614e-1598-4bf9-96ea-7b53bd75b9e0"><span class="section-number-5">1.2.4.5</span> Single-Precision Floating-Point Representation</h5>
+<div class="outline-text-5" id="text-h-4e80614e-1598-4bf9-96ea-7b53bd75b9e0">
 <p>
 A single-precision floating-point number is an immediate object of data
 type <code>dtp-single-float</code> whose data field contains a 32-bit IEEE basic
@@ -1294,9 +1294,9 @@ floating-point number. The following fields are defined:
 </div>
 
 
-<div id="outline-container-org1c3b920" class="outline-5">
-<h5 id="org1c3b920"><span class="section-number-5">1.2.4.6</span> Double-Precision Floating-Point Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-6">
+<div id="outline-container-h-de0a6904-527e-44cf-8cde-92a9febb8346" class="outline-5">
+<h5 id="h-de0a6904-527e-44cf-8cde-92a9febb8346"><span class="section-number-5">1.2.4.6</span> Double-Precision Floating-Point Representation</h5>
+<div class="outline-text-5" id="text-h-de0a6904-527e-44cf-8cde-92a9febb8346">
 <p>
 The object reference to a double-precision floating point number is a
 word of data-type <code>dtp-double-float</code>. The address field of the
@@ -1381,9 +1381,9 @@ double-precision numbers.
 </div>
 
 
-<div id="outline-container-orgfac3886" class="outline-5">
-<h5 id="orgfac3886"><span class="section-number-5">1.2.4.7</span> Complex-Number Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-7">
+<div id="outline-container-h-5479c5a1-0e18-4835-8bd4-541ca733ad7d" class="outline-5">
+<h5 id="h-5479c5a1-0e18-4835-8bd4-541ca733ad7d"><span class="section-number-5">1.2.4.7</span> Complex-Number Representation</h5>
+<div class="outline-text-5" id="text-h-5479c5a1-0e18-4835-8bd4-541ca733ad7d">
 <p>
 The object reference to a complex number is a word of data type
 <code>dtp-complex</code> whose address points to a cons pair. The car of the cons
@@ -1391,7 +1391,7 @@ contains the real part of the number, and the cdr contains the imaginary
 part.
 </p>
 
-<div class="remark" id="org29b81cc">
+<div class="remark" id="orgadb9757">
 <p>
 Obviously, this is the Cartesian representation of the number. There are
 other representations (polar, etc.) which are also useful, but we
@@ -1402,18 +1402,18 @@ the '80s.
 </div>
 </div>
 </div>
-<div id="outline-container-orgd6e17b8" class="outline-5">
-<h5 id="orgd6e17b8"><span class="section-number-5">1.2.4.8</span> The Spare-Number Type</h5>
-<div class="outline-text-5" id="text-1-2-4-8">
+<div id="outline-container-h-4173c5b5-462c-405f-ac42-0d5d16117633" class="outline-5">
+<h5 id="h-4173c5b5-462c-405f-ac42-0d5d16117633"><span class="section-number-5">1.2.4.8</span> The Spare-Number Type</h5>
+<div class="outline-text-5" id="text-h-4173c5b5-462c-405f-ac42-0d5d16117633">
 <p>
 This is reserved for future use.
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-orgfe310ff" class="outline-4">
-<h4 id="orgfe310ff"><span class="section-number-4">1.2.5</span> Representations of Lists</h4>
-<div class="outline-text-4" id="text-1-2-5">
+<div id="outline-container-h-c18c29dd-dc1f-4e32-b832-127ab888ebba" class="outline-4">
+<h4 id="h-c18c29dd-dc1f-4e32-b832-127ab888ebba"><span class="section-number-4">1.2.5</span> Representations of Lists</h4>
+<div class="outline-text-4" id="text-h-c18c29dd-dc1f-4e32-b832-127ab888ebba">
 <p>
 An object reference to a list has its type be <code>dtp-list</code>.
 The cdr-code tag of a memory word which constitutes an element of a list
@@ -1517,9 +1517,9 @@ linked-list structure.
 </div>
 </div>
 
-<div id="outline-container-org232f324" class="outline-4">
-<h4 id="org232f324"><span class="section-number-4">1.2.6</span> Representations of Arrays and Strings</h4>
-<div class="outline-text-4" id="text-1-2-6">
+<div id="outline-container-h-f54aee0e-1d83-4009-8a9f-38fbd3581636" class="outline-4">
+<h4 id="h-f54aee0e-1d83-4009-8a9f-38fbd3581636"><span class="section-number-4">1.2.6</span> Representations of Arrays and Strings</h4>
+<div class="outline-text-4" id="text-h-f54aee0e-1d83-4009-8a9f-38fbd3581636">
 <p>
 Object references to an array or string is a word with data type
 <code>dtp-array</code> or <code>dtp-string</code>.
@@ -1630,7 +1630,7 @@ The byte fields in a prefix header's 32-bit immediate field are:
 
 <ul class="org-ul">
 <li>Bits <code>&lt;31:27&gt;</code> corresponds to the same bits of the control word of an
-array register. (Array registers are discussed in the <a href="#org71580e8">next section</a>.)</li>
+array register. (Array registers are discussed in the <a href="#h-e3ecb8fe-0e4f-4f88-b583-0bc3d234b737">next section</a>.)</li>
 <li>Bits <code>&lt;26:24&gt;</code> are not used by the hardware.</li>
 <li>Bits <code>&lt;31:27.23&gt;</code> enable various spceial pieces of hardware or
 microcode dispatches.</li>
@@ -1707,7 +1707,7 @@ array.data = (&amp;prefix) + 1; <span class="org-comment-delimiter">/* </span><s
 </pre>
 </div>
 
-<div class="remark" id="orgae1ec5a">
+<div class="remark" id="org45c93f1">
 <p>
 The address of leader element <code>i</code> of an array whose address is <code>a</code>,
 regardless of whether the prefix is long or short, is given by <code>(- a i 1)</code>.
@@ -1888,19 +1888,19 @@ prefix_data.fields = {element_type        = ELEMENT_FIXNUM,
 </div>
 </div>
 
-<div id="outline-container-org71580e8" class="outline-4">
-<h4 id="org71580e8"><span class="section-number-4">1.2.7</span> I-Machine Array Registers</h4>
-<div class="outline-text-4" id="text-1-2-7">
+<div id="outline-container-h-e3ecb8fe-0e4f-4f88-b583-0bc3d234b737" class="outline-4">
+<h4 id="h-e3ecb8fe-0e4f-4f88-b583-0bc3d234b737"><span class="section-number-4">1.2.7</span> I-Machine Array Registers</h4>
+<div class="outline-text-4" id="text-h-e3ecb8fe-0e4f-4f88-b583-0bc3d234b737">
 </div>
 </div>
 
-<div id="outline-container-orga6d2b4f" class="outline-4">
-<h4 id="orga6d2b4f"><span class="section-number-4">1.2.8</span> Representations of Functions and Closures</h4>
-<div class="outline-text-4" id="text-1-2-8">
+<div id="outline-container-h-baca12c3-d791-4eba-9361-88b3d2519e88" class="outline-4">
+<h4 id="h-baca12c3-d791-4eba-9361-88b3d2519e88"><span class="section-number-4">1.2.8</span> Representations of Functions and Closures</h4>
+<div class="outline-text-4" id="text-h-baca12c3-d791-4eba-9361-88b3d2519e88">
 </div>
-<div id="outline-container-org7287833" class="outline-5">
-<h5 id="org7287833"><span class="section-number-5">1.2.8.1</span> Representation of Compiled Functions</h5>
-<div class="outline-text-5" id="text-1-2-8-1">
+<div id="outline-container-h-326a239d-e257-4ca0-bb70-c68b9c2a0b4c" class="outline-5">
+<h5 id="h-326a239d-e257-4ca0-bb70-c68b9c2a0b4c"><span class="section-number-5">1.2.8.1</span> Representation of Compiled Functions</h5>
+<div class="outline-text-5" id="text-h-326a239d-e257-4ca0-bb70-c68b9c2a0b4c">
 <p>
 The object reference to a compiled function is a word of data type
 <code>dtp-compiled-function</code> whose address field points to a word inside a
@@ -1915,7 +1915,7 @@ information and constant data.</li>
 
 <p>
 The cdr code for the instruction words have special meaning, see the
-section <a href="#org1748328">Instruction Sequencing</a> for details.
+section <a href="#h-02109c7f-b260-4bf6-b074-ecafd47fb26f">Instruction Sequencing</a> for details.
 </p>
 
 <p>
@@ -1923,7 +1923,7 @@ The memory layout for this looks roughly as follows:
 </p>
 
 
-<div id="orgfce4cbe" class="figure">
+<div id="org343dc6a" class="figure">
 <p><object type="image/svg+xml" data="../../../../img/lisp-machine-0.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
@@ -1953,21 +1953,21 @@ symbol.function = Word{type = DTP_ONE_Q_FORWARD,
 </div>
 </div>
 
-<div id="outline-container-org15c2b20" class="outline-5">
-<h5 id="org15c2b20"><span class="section-number-5">1.2.8.2</span> Generic Functions</h5>
-<div class="outline-text-5" id="text-1-2-8-2">
+<div id="outline-container-h-9816af15-8215-425b-9d25-cd720604f957" class="outline-5">
+<h5 id="h-9816af15-8215-425b-9d25-cd720604f957"><span class="section-number-5">1.2.8.2</span> Generic Functions</h5>
+<div class="outline-text-5" id="text-h-9816af15-8215-425b-9d25-cd720604f957">
 <p>
 An object reference to a generic function has data type
 <code>dtp-generic-function</code>. The address field points to a list-like
 structure whose content is not architecturally defined; it is used
-internally by the flavor system. See the section <a href="#orge59900b">Generic Functions and Message Passing</a>.
+internally by the flavor system. See the section <a href="#h-b2b6ffe8-4db0-414a-b91b-e516eee647a7">Generic Functions and Message Passing</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org8c8658a" class="outline-5">
-<h5 id="org8c8658a"><span class="section-number-5">1.2.8.3</span> Representation of Lexical Closures</h5>
-<div class="outline-text-5" id="text-1-2-8-3">
+<div id="outline-container-h-2243c620-15b4-47ab-8ebb-61554949d930" class="outline-5">
+<h5 id="h-2243c620-15b4-47ab-8ebb-61554949d930"><span class="section-number-5">1.2.8.3</span> Representation of Lexical Closures</h5>
+<div class="outline-text-5" id="text-h-2243c620-15b4-47ab-8ebb-61554949d930">
 <p>
 An object reference to a lexical closure is a word of data type
 <code>dtp-lexical-closure</code> which points to a cons pair. The car of the cons is
@@ -1985,14 +1985,14 @@ past the address of the environment.
 <p>
 When a lexical closure is called as a function, the environment will be
 made an argument to the function. For more information, see the chapter
-on function calling, specifically the section <a href="#org1225310">Starting a Function Call</a>.
+on function calling, specifically the section <a href="#h-9cdc18b9-c53a-4abf-89d0-91ae907a0709">Starting a Function Call</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org55d8a80" class="outline-5">
-<h5 id="org55d8a80"><span class="section-number-5">1.2.8.4</span> Representation of Dynamic Closures</h5>
-<div class="outline-text-5" id="text-1-2-8-4">
+<div id="outline-container-h-7f0dc201-bd95-4e7b-b217-a9f609484869" class="outline-5">
+<h5 id="h-7f0dc201-bd95-4e7b-b217-a9f609484869"><span class="section-number-5">1.2.8.4</span> Representation of Dynamic Closures</h5>
+<div class="outline-text-5" id="text-h-7f0dc201-bd95-4e7b-b217-a9f609484869">
 <p>
 The object reference to a dynamic closure is a word of data type
 <code>dtp-dynamic-closure</code>, which points to a list structure. The format of a
@@ -2018,9 +2018,9 @@ which that cell is to be linked.
 </div>
 </div>
 
-<div id="outline-container-org43cdde0" class="outline-4">
-<h4 id="org43cdde0"><span class="section-number-4">1.2.9</span> Instruction Representation</h4>
-<div class="outline-text-4" id="text-1-2-9">
+<div id="outline-container-h-57eed90d-db43-4f20-b2f6-515640c41bf9" class="outline-4">
+<h4 id="h-57eed90d-db43-4f20-b2f6-515640c41bf9"><span class="section-number-4">1.2.9</span> Instruction Representation</h4>
+<div class="outline-text-4" id="text-h-57eed90d-db43-4f20-b2f6-515640c41bf9">
 <p>
 The instructions ins a compiled function are a sequence of words whose
 data-type field selects among three types of words:
@@ -2059,14 +2059,14 @@ invisible pointer.</li>
 
 <p>
 The fields within various types of instructions are described in the
-chapter on the <a href="#org614f179">Macroinstruction Set</a>.
+chapter on the <a href="#h-55635f4d-2e65-438d-b09c-0bb6f176aba7">Macroinstruction Set</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org416f7ae" class="outline-4">
-<h4 id="org416f7ae"><span class="section-number-4">1.2.10</span> Program-Counter Representation</h4>
-<div class="outline-text-4" id="text-1-2-10">
+<div id="outline-container-h-c3d57316-74a0-44fc-ab54-900c78ce8a56" class="outline-4">
+<h4 id="h-c3d57316-74a0-44fc-ab54-900c78ce8a56"><span class="section-number-4">1.2.10</span> Program-Counter Representation</h4>
+<div class="outline-text-4" id="text-h-c3d57316-74a0-44fc-ab54-900c78ce8a56">
 <p>
 The program counter (pc) is a register in the I-machine that contains
 the virtual address of the currently executing instruction. Since
@@ -2080,14 +2080,14 @@ thus there are two pc data types <code>dtp-even-pc</code> and <code>dtp-odd-pc</
 Word of these data types are not usually found in the stored
 representations of Lisp objects, but occur within stack frames or inside
 compiled functions for long branches. See
-<a href="#orgcd02945">Function Calling, Message Passing, Stack-Group Switching</a>.
+<a href="#h-5ba79382-0d4f-4f95-8777-ddeb45d1bfcf">Function Calling, Message Passing, Stack-Group Switching</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org6785643" class="outline-4">
-<h4 id="org6785643"><span class="section-number-4">1.2.11</span> Representation of Locatives</h4>
-<div class="outline-text-4" id="text-1-2-11">
+<div id="outline-container-h-22855c89-f8a9-4a6b-99d8-5d1f767f4bfd" class="outline-4">
+<h4 id="h-22855c89-f8a9-4a6b-99d8-5d1f767f4bfd"><span class="section-number-4">1.2.11</span> Representation of Locatives</h4>
+<div class="outline-text-4" id="text-h-22855c89-f8a9-4a6b-99d8-5d1f767f4bfd">
 <p>
 A locative is a pointer to virtual memory implemented as an object with
 data type <code>dtp-locative</code> and an address field that is the address of the
@@ -2106,9 +2106,9 @@ long format arrays and the base address of array registers.
 </div>
 </div>
 
-<div id="outline-container-orgfa24baa" class="outline-4">
-<h4 id="orgfa24baa"><span class="section-number-4">1.2.12</span> Representation of Physical Addresses</h4>
-<div class="outline-text-4" id="text-1-2-12">
+<div id="outline-container-h-019fcb89-bc97-4812-a031-980b36462407" class="outline-4">
+<h4 id="h-019fcb89-bc97-4812-a031-980b36462407"><span class="section-number-4">1.2.12</span> Representation of Physical Addresses</h4>
+<div class="outline-text-4" id="text-h-019fcb89-bc97-4812-a031-980b36462407">
 <p>
 The data type <code>dtp-physical-address</code> allows unmapped access to the full
 (up to 32 bits wide) physical address space. Since it is a separate data
@@ -2118,13 +2118,13 @@ type it has restricted usage.
 </div>
 </div>
 
-<div id="outline-container-orgb552905" class="outline-3">
-<h3 id="orgb552905"><span class="section-number-3">1.3</span> Data-Type Code Assignments</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-h-008d2ebc-901f-47ae-a01c-5a20a0b7b476" class="outline-3">
+<h3 id="h-008d2ebc-901f-47ae-a01c-5a20a0b7b476"><span class="section-number-3">1.3</span> Data-Type Code Assignments</h3>
+<div class="outline-text-3" id="text-h-008d2ebc-901f-47ae-a01c-5a20a0b7b476">
 </div>
-<div id="outline-container-org9709cb2" class="outline-4">
-<h4 id="org9709cb2"><span class="section-number-4">1.3.1</span> Headers, Special Markers, and Forwarding Pointers</h4>
-<div class="outline-text-4" id="text-1-3-1">
+<div id="outline-container-h-f7d6f864-0582-4975-a487-a4b60e225ad0" class="outline-4">
+<h4 id="h-f7d6f864-0582-4975-a487-a4b60e225ad0"><span class="section-number-4">1.3.1</span> Headers, Special Markers, and Forwarding Pointers</h4>
+<div class="outline-text-4" id="text-h-f7d6f864-0582-4975-a487-a4b60e225ad0">
 <table>
 
 
@@ -2195,9 +2195,9 @@ type it has restricted usage.
 </div>
 </div>
 
-<div id="outline-container-orgd393338" class="outline-4">
-<h4 id="orgd393338"><span class="section-number-4">1.3.2</span> Number Data Types</h4>
-<div class="outline-text-4" id="text-1-3-2">
+<div id="outline-container-h-48760e0b-dbdf-40c3-8e0c-f2dcc6a3fd09" class="outline-4">
+<h4 id="h-48760e0b-dbdf-40c3-8e0c-f2dcc6a3fd09"><span class="section-number-4">1.3.2</span> Number Data Types</h4>
+<div class="outline-text-4" id="text-h-48760e0b-dbdf-40c3-8e0c-f2dcc6a3fd09">
 <table>
 
 
@@ -2268,9 +2268,9 @@ type it has restricted usage.
 </div>
 </div>
 
-<div id="outline-container-orga7a2bcf" class="outline-4">
-<h4 id="orga7a2bcf"><span class="section-number-4">1.3.3</span> Instance Data Types</h4>
-<div class="outline-text-4" id="text-1-3-3">
+<div id="outline-container-h-a2bcff3e-b8af-4f87-8fe6-177d19691afe" class="outline-4">
+<h4 id="h-a2bcff3e-b8af-4f87-8fe6-177d19691afe"><span class="section-number-4">1.3.3</span> Instance Data Types</h4>
+<div class="outline-text-4" id="text-h-a2bcff3e-b8af-4f87-8fe6-177d19691afe">
 <table>
 
 
@@ -2317,9 +2317,9 @@ type it has restricted usage.
 </div>
 </div>
 
-<div id="outline-container-org328ffe2" class="outline-4">
-<h4 id="org328ffe2"><span class="section-number-4">1.3.4</span> Primitive Data Types</h4>
-<div class="outline-text-4" id="text-1-3-4">
+<div id="outline-container-h-e88bebf3-ceef-486c-9bb0-9b5e7824b4da" class="outline-4">
+<h4 id="h-e88bebf3-ceef-486c-9bb0-9b5e7824b4da"><span class="section-number-4">1.3.4</span> Primitive Data Types</h4>
+<div class="outline-text-4" id="text-h-e88bebf3-ceef-486c-9bb0-9b5e7824b4da">
 <p>
 There are 11 primitive types:
 </p>
@@ -2453,9 +2453,9 @@ spare immediate data type.
 </div>
 </div>
 
-<div id="outline-container-orge52a942" class="outline-4">
-<h4 id="orge52a942"><span class="section-number-4">1.3.5</span> Special Marker for Garbage Collector</h4>
-<div class="outline-text-4" id="text-1-3-5">
+<div id="outline-container-h-3ddf3fc4-6df8-4e4c-80dc-4d68588a7824" class="outline-4">
+<h4 id="h-3ddf3fc4-6df8-4e4c-80dc-4d68588a7824"><span class="section-number-4">1.3.5</span> Special Marker for Garbage Collector</h4>
+<div class="outline-text-4" id="text-h-3ddf3fc4-6df8-4e4c-80dc-4d68588a7824">
 <table>
 
 
@@ -2484,9 +2484,9 @@ spare immediate data type.
 </div>
 </div>
 
-<div id="outline-container-org50baa32" class="outline-4">
-<h4 id="org50baa32"><span class="section-number-4">1.3.6</span> Data Types for Program Counter Values</h4>
-<div class="outline-text-4" id="text-1-3-6">
+<div id="outline-container-h-af49a4a0-fac5-472f-821e-740a54659600" class="outline-4">
+<h4 id="h-af49a4a0-fac5-472f-821e-740a54659600"><span class="section-number-4">1.3.6</span> Data Types for Program Counter Values</h4>
+<div class="outline-text-4" id="text-h-af49a4a0-fac5-472f-821e-740a54659600">
 <table>
 
 
@@ -2521,9 +2521,9 @@ spare immediate data type.
 </div>
 </div>
 
-<div id="outline-container-orgfd7021b" class="outline-4">
-<h4 id="orgfd7021b"><span class="section-number-4">1.3.7</span> Full Word Instruction Data Types</h4>
-<div class="outline-text-4" id="text-1-3-7">
+<div id="outline-container-h-af00b7b6-db58-4fbf-8b4f-17dbd641cb03" class="outline-4">
+<h4 id="h-af00b7b6-db58-4fbf-8b4f-17dbd641cb03"><span class="section-number-4">1.3.7</span> Full Word Instruction Data Types</h4>
+<div class="outline-text-4" id="text-h-af00b7b6-db58-4fbf-8b4f-17dbd641cb03">
 <table>
 
 
@@ -2595,9 +2595,9 @@ spare immediate data type.
 </div>
 
 
-<div id="outline-container-org0a69125" class="outline-4">
-<h4 id="org0a69125"><span class="section-number-4">1.3.8</span> Half-Word Instruction Data Types</h4>
-<div class="outline-text-4" id="text-1-3-8">
+<div id="outline-container-h-e918dbab-b15f-42ed-a737-d70de08a1182" class="outline-4">
+<h4 id="h-e918dbab-b15f-42ed-a737-d70de08a1182"><span class="section-number-4">1.3.8</span> Half-Word Instruction Data Types</h4>
+<div class="outline-text-4" id="text-h-e918dbab-b15f-42ed-a737-d70de08a1182">
 <table>
 
 
@@ -2636,28 +2636,33 @@ described in the chapter on theinstruction set. The instruction in bits
 </div>
 
 
-<div id="outline-container-org1beb512" class="outline-3">
-<h3 id="org1beb512"><span class="section-number-3">1.4</span> Appendix: Comparison of 3600-Family and I-Machine Data Representations</h3>
-<div class="outline-text-3" id="text-1-4">
-</div>
-<div id="outline-container-org930ffbb" class="outline-4">
-<h4 id="org930ffbb"><span class="section-number-4">1.4.1</span> Array Differences</h4>
+<div id="outline-container-h-8c46aa13-3df2-4dc1-87fd-d8f5db5c27a7" class="outline-3">
+<h3 id="h-8c46aa13-3df2-4dc1-87fd-d8f5db5c27a7"><span class="section-number-3">1.4</span> Appendix: Comparison of 3600-Family and I-Machine Data Representations</h3>
+<div class="outline-text-3" id="text-h-8c46aa13-3df2-4dc1-87fd-d8f5db5c27a7">
 </div>
 
-<div id="outline-container-orge39a62e" class="outline-4">
-<h4 id="orge39a62e"><span class="section-number-4">1.4.2</span> Compiled Function Differences</h4>
-</div>
+<div id="outline-container-h-aa308c82-d539-47d6-bc21-c0c9205512dd" class="outline-4">
+<h4 id="h-aa308c82-d539-47d6-bc21-c0c9205512dd"><span class="section-number-4">1.4.1</span> Array Differences</h4>
+<div class="outline-text-4" id="text-h-aa308c82-d539-47d6-bc21-c0c9205512dd">
 </div>
 </div>
 
-<div id="outline-container-orgd294ee1" class="outline-2">
-<h2 id="orgd294ee1"><span class="section-number-2">2</span> Memory Layout and Addressing</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-h-cc5a8790-f854-422e-8a23-17cc9e03f89d" class="outline-4">
+<h4 id="h-cc5a8790-f854-422e-8a23-17cc9e03f89d"><span class="section-number-4">1.4.2</span> Compiled Function Differences</h4>
+<div class="outline-text-4" id="text-h-cc5a8790-f854-422e-8a23-17cc9e03f89d">
+</div>
+</div>
+</div>
 </div>
 
-<div id="outline-container-orge82df8e" class="outline-3">
-<h3 id="orge82df8e"><span class="section-number-3">2.1</span> Address Space</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-h-23acae6c-cd54-4b24-8351-f711aa4a3287" class="outline-2">
+<h2 id="h-23acae6c-cd54-4b24-8351-f711aa4a3287"><span class="section-number-2">2</span> Memory Layout and Addressing</h2>
+<div class="outline-text-2" id="text-h-23acae6c-cd54-4b24-8351-f711aa4a3287">
+</div>
+
+<div id="outline-container-h-12472c74-024b-4a6b-921f-b969c395bf27" class="outline-3">
+<h3 id="h-12472c74-024b-4a6b-921f-b969c395bf27"><span class="section-number-3">2.1</span> Address Space</h3>
+<div class="outline-text-3" id="text-h-12472c74-024b-4a6b-921f-b969c395bf27">
 <p>
 The address space is divided into thirty-two zones, each containing 128
 megabytes. The thirty-two zones are variously assigned to several
@@ -2680,9 +2685,9 @@ Note that <code>0o37777777777</code> is 2<sup>32</sup>-1.
 </p>
 </div>
 
-<div id="outline-container-org8bf34f4" class="outline-4">
-<h4 id="org8bf34f4"><span class="section-number-4">2.1.1</span> Virtual Addresses</h4>
-<div class="outline-text-4" id="text-2-1-1">
+<div id="outline-container-h-fc155048-a837-406e-a5be-c27b7254218a" class="outline-4">
+<h4 id="h-fc155048-a837-406e-a5be-c27b7254218a"><span class="section-number-4">2.1.1</span> Virtual Addresses</h4>
+<div class="outline-text-4" id="text-h-fc155048-a837-406e-a5be-c27b7254218a">
 <p>
 A virtual address is divided into two fields for mapping purposes: the
 virtual page number and the offset within page fields.
@@ -2729,14 +2734,14 @@ allows each zone to be specified as either old or new space.
 The virtual address space is partitioned by software into regions,
 areas, and quanta. These have no direct hardware impact. Note, however,
 that the hardware hash function for the Page Hash Table is optimized for
-a quantum of size 65536 words (see <a href="#org4c96855">Page Hash Table</a>).
+a quantum of size 65536 words (see <a href="#h-43245575-3159-48b1-9243-846f8cbe8f6a">Page Hash Table</a>).
 </p>
 </div>
 </div>
 
-<div id="outline-container-org488331f" class="outline-4">
-<h4 id="org488331f"><span class="section-number-4">2.1.2</span> Ephemeral Addresses</h4>
-<div class="outline-text-4" id="text-2-1-2">
+<div id="outline-container-h-ca28130b-5fa7-42e7-a9be-fa5e8371efa8" class="outline-4">
+<h4 id="h-ca28130b-5fa7-42e7-a9be-fa5e8371efa8"><span class="section-number-4">2.1.2</span> Ephemeral Addresses</h4>
+<div class="outline-text-4" id="text-h-ca28130b-5fa7-42e7-a9be-fa5e8371efa8">
 <p>
 The lowest zone of the virtual address is reserved for the storage of
 ephemeral objects. This space is provided to support a garbage
@@ -2804,69 +2809,89 @@ maintained in the PHT.
 </div>
 
 
-<div id="outline-container-orga9eaff6" class="outline-4">
-<h4 id="orga9eaff6"><span class="section-number-4">2.1.3</span> Unmapped Addresses</h4>
-<div class="outline-text-4" id="text-2-1-3">
+<div id="outline-container-h-53630603-244d-42c3-9770-42451306705c" class="outline-4">
+<h4 id="h-53630603-244d-42c3-9770-42451306705c"><span class="section-number-4">2.1.3</span> Unmapped Addresses</h4>
+<div class="outline-text-4" id="text-h-53630603-244d-42c3-9770-42451306705c">
 </div>
 </div>
-<div id="outline-container-org5b7d3a8" class="outline-4">
-<h4 id="org5b7d3a8"><span class="section-number-4">2.1.4</span> Wired Addresses</h4>
-</div>
-
-<div id="outline-container-org1685795" class="outline-4">
-<h4 id="org1685795"><span class="section-number-4">2.1.5</span> Pages</h4>
-<div class="outline-text-4" id="text-2-1-5">
-</div>
-<div id="outline-container-org4c96855" class="outline-5">
-<h5 id="org4c96855"><span class="section-number-5">2.1.5.1</span> Page Hash Table</h5>
-</div>
-<div id="outline-container-orgf68de5c" class="outline-5">
-<h5 id="orgf68de5c"><span class="section-number-5">2.1.5.2</span> PHT Lookup Algorithm</h5>
-</div>
-<div id="outline-container-orgf622522" class="outline-5">
-<h5 id="orgf622522"><span class="section-number-5">2.1.5.3</span> Translation Algorithm</h5>
-</div>
+<div id="outline-container-h-7418b856-81cf-425a-a31b-0039b0136636" class="outline-4">
+<h4 id="h-7418b856-81cf-425a-a31b-0039b0136636"><span class="section-number-4">2.1.4</span> Wired Addresses</h4>
+<div class="outline-text-4" id="text-h-7418b856-81cf-425a-a31b-0039b0136636">
 </div>
 </div>
 
-<div id="outline-container-org1aa2121" class="outline-3">
-<h3 id="org1aa2121"><span class="section-number-3">2.2</span> GC Support</h3>
+<div id="outline-container-h-5740779d-eb55-4885-a813-0456ecc5033c" class="outline-4">
+<h4 id="h-5740779d-eb55-4885-a813-0456ecc5033c"><span class="section-number-4">2.1.5</span> Pages</h4>
+<div class="outline-text-4" id="text-h-5740779d-eb55-4885-a813-0456ecc5033c">
 </div>
 
-<div id="outline-container-orgb954319" class="outline-3">
-<h3 id="orgb954319"><span class="section-number-3">2.3</span> Address Translation</h3>
-<div class="outline-text-3" id="text-2-3">
-</div>
-<div id="outline-container-orgee1f08c" class="outline-4">
-<h4 id="orgee1f08c"><span class="section-number-4">2.3.1</span> Page Hash Table</h4>
-</div>
-
-<div id="outline-container-orgf44ac11" class="outline-4">
-<h4 id="orgf44ac11"><span class="section-number-4">2.3.2</span> PHT Lookup Algorithm</h4>
-</div>
-
-<div id="outline-container-orgd22c3b7" class="outline-4">
-<h4 id="orgd22c3b7"><span class="section-number-4">2.3.3</span> Translation Algorithm</h4>
+<div id="outline-container-h-43245575-3159-48b1-9243-846f8cbe8f6a" class="outline-5">
+<h5 id="h-43245575-3159-48b1-9243-846f8cbe8f6a"><span class="section-number-5">2.1.5.1</span> Page Hash Table</h5>
+<div class="outline-text-5" id="text-h-43245575-3159-48b1-9243-846f8cbe8f6a">
 </div>
 </div>
-
-<div id="outline-container-org779c4da" class="outline-3">
-<h3 id="org779c4da"><span class="section-number-3">2.4</span> Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</h3>
+<div id="outline-container-h-34de35f1-c272-4194-893b-e630bdd4fb7e" class="outline-5">
+<h5 id="h-34de35f1-c272-4194-893b-e630bdd4fb7e"><span class="section-number-5">2.1.5.2</span> PHT Lookup Algorithm</h5>
+<div class="outline-text-5" id="text-h-34de35f1-c272-4194-893b-e630bdd4fb7e">
+</div>
+</div>
+<div id="outline-container-h-98fe1c73-f86f-4d32-8f57-59a5850867c4" class="outline-5">
+<h5 id="h-98fe1c73-f86f-4d32-8f57-59a5850867c4"><span class="section-number-5">2.1.5.3</span> Translation Algorithm</h5>
+<div class="outline-text-5" id="text-h-98fe1c73-f86f-4d32-8f57-59a5850867c4">
+</div>
+</div>
 </div>
 </div>
 
+<div id="outline-container-h-7a857463-a2cb-467a-b14a-0252a2cef7ba" class="outline-3">
+<h3 id="h-7a857463-a2cb-467a-b14a-0252a2cef7ba"><span class="section-number-3">2.2</span> GC Support</h3>
+<div class="outline-text-3" id="text-h-7a857463-a2cb-467a-b14a-0252a2cef7ba">
+</div>
+</div>
 
-<div id="outline-container-org614f179" class="outline-2">
-<h2 id="org614f179"><span class="section-number-2">3</span> Macroinstruction Set</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-h-6a2dcdb8-a8d2-4606-85d9-5e4b0836fc1d" class="outline-3">
+<h3 id="h-6a2dcdb8-a8d2-4606-85d9-5e4b0836fc1d"><span class="section-number-3">2.3</span> Address Translation</h3>
+<div class="outline-text-3" id="text-h-6a2dcdb8-a8d2-4606-85d9-5e4b0836fc1d">
 </div>
-<div id="outline-container-org9569351" class="outline-3">
-<h3 id="org9569351"><span class="section-number-3">3.1</span> Introduction</h3>
-<div class="outline-text-3" id="text-3-1">
+
+<div id="outline-container-h-6a2f3028-4c4a-4b2d-a0dd-fff73fda46fe" class="outline-4">
+<h4 id="h-6a2f3028-4c4a-4b2d-a0dd-fff73fda46fe"><span class="section-number-4">2.3.1</span> Page Hash Table</h4>
+<div class="outline-text-4" id="text-h-6a2f3028-4c4a-4b2d-a0dd-fff73fda46fe">
 </div>
-<div id="outline-container-org1748328" class="outline-4">
-<h4 id="org1748328"><span class="section-number-4">3.1.1</span> Instruction Sequencing</h4>
-<div class="outline-text-4" id="text-3-1-1">
+</div>
+
+<div id="outline-container-h-b086f93b-f387-497e-89c6-1ecaa7653aed" class="outline-4">
+<h4 id="h-b086f93b-f387-497e-89c6-1ecaa7653aed"><span class="section-number-4">2.3.2</span> PHT Lookup Algorithm</h4>
+<div class="outline-text-4" id="text-h-b086f93b-f387-497e-89c6-1ecaa7653aed">
+</div>
+</div>
+
+<div id="outline-container-h-6c6431ab-6d0d-431c-ae99-d97f1c159070" class="outline-4">
+<h4 id="h-6c6431ab-6d0d-431c-ae99-d97f1c159070"><span class="section-number-4">2.3.3</span> Translation Algorithm</h4>
+<div class="outline-text-4" id="text-h-6c6431ab-6d0d-431c-ae99-d97f1c159070">
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-761de232-072c-4117-8d01-c29be2fb7646" class="outline-3">
+<h3 id="h-761de232-072c-4117-8d01-c29be2fb7646"><span class="section-number-3">2.4</span> Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</h3>
+<div class="outline-text-3" id="text-h-761de232-072c-4117-8d01-c29be2fb7646">
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-h-55635f4d-2e65-438d-b09c-0bb6f176aba7" class="outline-2">
+<h2 id="h-55635f4d-2e65-438d-b09c-0bb6f176aba7"><span class="section-number-2">3</span> Macroinstruction Set</h2>
+<div class="outline-text-2" id="text-h-55635f4d-2e65-438d-b09c-0bb6f176aba7">
+</div>
+<div id="outline-container-h-6393ab61-8979-4fbf-8fd5-e8b8aca67fb4" class="outline-3">
+<h3 id="h-6393ab61-8979-4fbf-8fd5-e8b8aca67fb4"><span class="section-number-3">3.1</span> Introduction</h3>
+<div class="outline-text-3" id="text-h-6393ab61-8979-4fbf-8fd5-e8b8aca67fb4">
+</div>
+<div id="outline-container-h-02109c7f-b260-4bf6-b074-ecafd47fb26f" class="outline-4">
+<h4 id="h-02109c7f-b260-4bf6-b074-ecafd47fb26f"><span class="section-number-4">3.1.1</span> Instruction Sequencing</h4>
+<div class="outline-text-4" id="text-h-02109c7f-b260-4bf6-b074-ecafd47fb26f">
 <p>
 The cdr-code of instruction words specify the sequencing of instructions
 for execution.
@@ -2920,9 +2945,9 @@ for execution.
 
 
 
-<div id="outline-container-org519763e" class="outline-4">
-<h4 id="org519763e"><span class="section-number-4">3.1.2</span> Internal Registers</h4>
-<div class="outline-text-4" id="text-3-1-2">
+<div id="outline-container-h-3db86b85-a0bd-4bc4-81a4-473e1359fb4c" class="outline-4">
+<h4 id="h-3db86b85-a0bd-4bc4-81a4-473e1359fb4c"><span class="section-number-4">3.1.2</span> Internal Registers</h4>
+<div class="outline-text-4" id="text-h-3db86b85-a0bd-4bc4-81a4-473e1359fb4c">
 <p>
 The I-machine internal registers may be summarized in the following
 table. An asterisk by an address entry means the register may be defined
@@ -3426,9 +3451,9 @@ specific to Revision 0 of the Ivory chip.
 </div>
 
 
-<div id="outline-container-org02376fc" class="outline-4">
-<h4 id="org02376fc"><span class="section-number-4">3.1.3</span> Memory Side Effects</h4>
-<div class="outline-text-4" id="text-3-1-3">
+<div id="outline-container-h-fdcf3483-dd68-4337-b04b-aa8674742a0f" class="outline-4">
+<h4 id="h-fdcf3483-dd68-4337-b04b-aa8674742a0f"><span class="section-number-4">3.1.3</span> Memory Side Effects</h4>
+<div class="outline-text-4" id="text-h-fdcf3483-dd68-4337-b04b-aa8674742a0f">
 <p>
 Reading memory may not cause side effects. The architecture permits an
 implementation to start a memory read that it will not use, perhaps
@@ -3447,182 +3472,256 @@ effects; they are guaranteed to be performed exactly once.
 </div>
 </div>
 
-<div id="outline-container-org504f78d" class="outline-4">
-<h4 id="org504f78d"><span class="section-number-4">3.1.4</span> Explanation of Instruction Definitions</h4>
-<div class="outline-text-4" id="text-3-1-4">
+<div id="outline-container-h-4d930461-09c1-4211-af67-2425603a4248" class="outline-4">
+<h4 id="h-4d930461-09c1-4211-af67-2425603a4248"><span class="section-number-4">3.1.4</span> Explanation of Instruction Definitions</h4>
+<div class="outline-text-4" id="text-h-4d930461-09c1-4211-af67-2425603a4248">
 </div>
-<div id="outline-container-orgee9d4b9" class="outline-5">
-<h5 id="orgee9d4b9"><span class="section-number-5">3.1.4.1</span> Instruction Formats</h5>
-<div class="outline-text-5" id="text-3-1-4-1">
-</div>
-</div>
-<div id="outline-container-orgd651dea" class="outline-5">
-<h5 id="orgd651dea"><span class="section-number-5">3.1.4.2</span> Arguments: the Data Types Accepted</h5>
-<div class="outline-text-5" id="text-3-1-4-2">
+<div id="outline-container-h-b916475b-05e6-4f17-a2af-632c45d2b0ab" class="outline-5">
+<h5 id="h-b916475b-05e6-4f17-a2af-632c45d2b0ab"><span class="section-number-5">3.1.4.1</span> Instruction Formats</h5>
+<div class="outline-text-5" id="text-h-b916475b-05e6-4f17-a2af-632c45d2b0ab">
 </div>
 </div>
-<div id="outline-container-org0d927f1" class="outline-5">
-<h5 id="org0d927f1"><span class="section-number-5">3.1.4.3</span> Types of Instruction Exceptions</h5>
-</div>
-<div id="outline-container-org2b977aa" class="outline-5">
-<h5 id="org2b977aa"><span class="section-number-5">3.1.4.4</span> Types of Memory References</h5>
-</div>
-<div id="outline-container-orged0e34e" class="outline-5">
-<h5 id="orged0e34e"><span class="section-number-5">3.1.4.5</span> Top-of-Stack Register Effects</h5>
-<div class="outline-text-5" id="text-3-1-4-5">
+<div id="outline-container-h-a7f4a9a6-f390-4a5c-8509-7144aff35394" class="outline-5">
+<h5 id="h-a7f4a9a6-f390-4a5c-8509-7144aff35394"><span class="section-number-5">3.1.4.2</span> Arguments: the Data Types Accepted</h5>
+<div class="outline-text-5" id="text-h-a7f4a9a6-f390-4a5c-8509-7144aff35394">
 </div>
 </div>
-<div id="outline-container-orgf2eb348" class="outline-5">
-<h5 id="orgf2eb348"><span class="section-number-5">3.1.4.6</span> Cdr Codes of Values Returned</h5>
-<div class="outline-text-5" id="text-3-1-4-6">
+<div id="outline-container-h-06b8e5ed-2609-46ec-895d-f8f2bffb29bc" class="outline-5">
+<h5 id="h-06b8e5ed-2609-46ec-895d-f8f2bffb29bc"><span class="section-number-5">3.1.4.3</span> Types of Instruction Exceptions</h5>
+<div class="outline-text-5" id="text-h-06b8e5ed-2609-46ec-895d-f8f2bffb29bc">
 </div>
 </div>
+<div id="outline-container-h-0a54a752-b3d5-404f-b4df-eb0250df142d" class="outline-5">
+<h5 id="h-0a54a752-b3d5-404f-b4df-eb0250df142d"><span class="section-number-5">3.1.4.4</span> Types of Memory References</h5>
+<div class="outline-text-5" id="text-h-0a54a752-b3d5-404f-b4df-eb0250df142d">
 </div>
 </div>
-<div id="outline-container-orga471d66" class="outline-3">
-<h3 id="orga471d66"><span class="section-number-3">3.2</span> The Instructions</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-h-0c74886b-c325-4235-aba0-9331d78840ed" class="outline-5">
+<h5 id="h-0c74886b-c325-4235-aba0-9331d78840ed"><span class="section-number-5">3.1.4.5</span> Top-of-Stack Register Effects</h5>
+<div class="outline-text-5" id="text-h-0c74886b-c325-4235-aba0-9331d78840ed">
 </div>
-<div id="outline-container-org6fa1bdf" class="outline-4">
-<h4 id="org6fa1bdf"><span class="section-number-4">3.2.1</span> List-Function Operations</h4>
 </div>
-<div id="outline-container-orgc59559e" class="outline-4">
-<h4 id="orgc59559e"><span class="section-number-4">3.2.2</span> Predicate Intsructions</h4>
-</div>
-<div id="outline-container-org9dee4df" class="outline-4">
-<h4 id="org9dee4df"><span class="section-number-4">3.2.3</span> Numeric Operations</h4>
-</div>
-<div id="outline-container-org0540748" class="outline-4">
-<h4 id="org0540748"><span class="section-number-4">3.2.4</span> Data-Movement Instructions</h4>
-</div>
-<div id="outline-container-org346b196" class="outline-4">
-<h4 id="org346b196"><span class="section-number-4">3.2.5</span> Field-Extraction Instructions</h4>
-</div>
-<div id="outline-container-orga0b0067" class="outline-4">
-<h4 id="orga0b0067"><span class="section-number-4">3.2.6</span> Array Operations</h4>
-</div>
-<div id="outline-container-org5bb8f30" class="outline-4">
-<h4 id="org5bb8f30"><span class="section-number-4">3.2.7</span> Block Instructions</h4>
-</div>
-<div id="outline-container-org1344916" class="outline-4">
-<h4 id="org1344916"><span class="section-number-4">3.2.8</span> Function-Calling Instructions</h4>
-</div>
-<div id="outline-container-orgc683992" class="outline-4">
-<h4 id="orgc683992"><span class="section-number-4">3.2.9</span> Binding Instructions</h4>
-</div>
-<div id="outline-container-orgc814526" class="outline-4">
-<h4 id="orgc814526"><span class="section-number-4">3.2.10</span> Catch Instructions</h4>
-</div>
-<div id="outline-container-org575cac3" class="outline-4">
-<h4 id="org575cac3"><span class="section-number-4">3.2.11</span> Lexical Variable Accessors</h4>
-</div>
-<div id="outline-container-org5085e38" class="outline-4">
-<h4 id="org5085e38"><span class="section-number-4">3.2.12</span> Instance Variable Accessors</h4>
-</div>
-<div id="outline-container-org437655a" class="outline-4">
-<h4 id="org437655a"><span class="section-number-4">3.2.13</span> Subprimitive Instructions</h4>
+<div id="outline-container-h-69e0038e-0a62-4133-ac72-f600f192645a" class="outline-5">
+<h5 id="h-69e0038e-0a62-4133-ac72-f600f192645a"><span class="section-number-5">3.1.4.6</span> Cdr Codes of Values Returned</h5>
+<div class="outline-text-5" id="text-h-69e0038e-0a62-4133-ac72-f600f192645a">
 </div>
 </div>
 </div>
-<div id="outline-container-orgcd02945" class="outline-2">
-<h2 id="orgcd02945"><span class="section-number-2">4</span> Function Calling, Message Passing, Stack-Group Switching</h2>
-<div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-orgba109bc" class="outline-3">
-<h3 id="orgba109bc"><span class="section-number-3">4.1</span> Stacks</h3>
-<div class="outline-text-3" id="text-4-1">
+<div id="outline-container-h-694fbabb-f1ea-4e71-97dc-e9dcddeada50" class="outline-3">
+<h3 id="h-694fbabb-f1ea-4e71-97dc-e9dcddeada50"><span class="section-number-3">3.2</span> The Instructions</h3>
+<div class="outline-text-3" id="text-h-694fbabb-f1ea-4e71-97dc-e9dcddeada50">
 </div>
-<div id="outline-container-org3b98133" class="outline-4">
-<h4 id="org3b98133"><span class="section-number-4">4.1.1</span> Control Stack</h4>
-</div>
-<div id="outline-container-org21adc5e" class="outline-4">
-<h4 id="org21adc5e"><span class="section-number-4">4.1.2</span> Binding Stack</h4>
-</div>
-<div id="outline-container-orgfe8d4f8" class="outline-4">
-<h4 id="orgfe8d4f8"><span class="section-number-4">4.1.3</span> Data Stack</h4>
+<div id="outline-container-h-2b9732b9-d23c-4cb0-977d-58f8aebe3477" class="outline-4">
+<h4 id="h-2b9732b9-d23c-4cb0-977d-58f8aebe3477"><span class="section-number-4">3.2.1</span> List-Function Operations</h4>
+<div class="outline-text-4" id="text-h-2b9732b9-d23c-4cb0-977d-58f8aebe3477">
 </div>
 </div>
-<div id="outline-container-org120d772" class="outline-3">
-<h3 id="org120d772"><span class="section-number-3">4.2</span> Registers Important to Function Calling and Returning</h3>
-</div>
-<div id="outline-container-org1142661" class="outline-3">
-<h3 id="org1142661"><span class="section-number-3">4.3</span> Function Calling</h3>
-<div class="outline-text-3" id="text-4-3">
-</div>
-<div id="outline-container-org1225310" class="outline-4">
-<h4 id="org1225310"><span class="section-number-4">4.3.1</span> Starting a Function Call</h4>
-</div>
-<div id="outline-container-org783ddf8" class="outline-4">
-<h4 id="org783ddf8"><span class="section-number-4">4.3.2</span> Pushing the Arguments</h4>
-</div>
-<div id="outline-container-org9960e04" class="outline-4">
-<h4 id="org9960e04"><span class="section-number-4">4.3.3</span> Finishing the Call</h4>
+<div id="outline-container-h-759efdb7-8bfd-4c2e-84b3-1e5550d4f00c" class="outline-4">
+<h4 id="h-759efdb7-8bfd-4c2e-84b3-1e5550d4f00c"><span class="section-number-4">3.2.2</span> Predicate Intsructions</h4>
+<div class="outline-text-4" id="text-h-759efdb7-8bfd-4c2e-84b3-1e5550d4f00c">
 </div>
 </div>
-<div id="outline-container-org7d92892" class="outline-3">
-<h3 id="org7d92892"><span class="section-number-3">4.4</span> Function Entry</h3>
-<div class="outline-text-3" id="text-4-4">
-</div>
-<div id="outline-container-orgcf9437e" class="outline-4">
-<h4 id="orgcf9437e"><span class="section-number-4">4.4.1</span> Push-apply-args</h4>
-</div>
-<div id="outline-container-org8f2e065" class="outline-4">
-<h4 id="org8f2e065"><span class="section-number-4">4.4.2</span> Pull-apply-args</h4>
-</div>
-<div id="outline-container-org842fa78" class="outline-4">
-<h4 id="org842fa78"><span class="section-number-4">4.4.3</span> Trapping Out of Entry and Restarting</h4>
+<div id="outline-container-h-41d7af96-0fae-48c3-9f77-fce529b58210" class="outline-4">
+<h4 id="h-41d7af96-0fae-48c3-9f77-fce529b58210"><span class="section-number-4">3.2.3</span> Numeric Operations</h4>
+<div class="outline-text-4" id="text-h-41d7af96-0fae-48c3-9f77-fce529b58210">
 </div>
 </div>
-<div id="outline-container-org27f98ae" class="outline-3">
-<h3 id="org27f98ae"><span class="section-number-3">4.5</span> Function Returning</h3>
-<div class="outline-text-3" id="text-4-5">
-</div>
-<div id="outline-container-org0b23293" class="outline-4">
-<h4 id="org0b23293"><span class="section-number-4">4.5.1</span> Function Return Instructions</h4>
-</div>
-<div id="outline-container-org18272b1" class="outline-4">
-<h4 id="org18272b1"><span class="section-number-4">4.5.2</span> Frame Cleanup</h4>
-</div>
-<div id="outline-container-org11b7479" class="outline-4">
-<h4 id="org11b7479"><span class="section-number-4">4.5.3</span> Value Matchup</h4>
+<div id="outline-container-h-f0fa6dc7-13fb-40ea-8c6d-4470eb4046e2" class="outline-4">
+<h4 id="h-f0fa6dc7-13fb-40ea-8c6d-4470eb4046e2"><span class="section-number-4">3.2.4</span> Data-Movement Instructions</h4>
+<div class="outline-text-4" id="text-h-f0fa6dc7-13fb-40ea-8c6d-4470eb4046e2">
 </div>
 </div>
-<div id="outline-container-org752585b" class="outline-3">
-<h3 id="org752585b"><span class="section-number-3">4.6</span> Catch, Throw and Unwind-Protect</h3>
-</div>
-<div id="outline-container-orge59900b" class="outline-3">
-<h3 id="orge59900b"><span class="section-number-3">4.7</span> Generic Functions and Message Passing</h3>
-<div class="outline-text-3" id="text-4-7">
-</div>
-<div id="outline-container-org3cda319" class="outline-4">
-<h4 id="org3cda319"><span class="section-number-4">4.7.1</span> Flavor</h4>
-</div>
-<div id="outline-container-org093d20c" class="outline-4">
-<h4 id="org093d20c"><span class="section-number-4">4.7.2</span> Handler Table</h4>
-</div>
-<div id="outline-container-org9c9add5" class="outline-4">
-<h4 id="org9c9add5"><span class="section-number-4">4.7.3</span> Calling a Generic Function</h4>
-</div>
-<div id="outline-container-orga32bccc" class="outline-4">
-<h4 id="orga32bccc"><span class="section-number-4">4.7.4</span> Sending a Message</h4>
-</div>
-<div id="outline-container-orga3f5ce4" class="outline-4">
-<h4 id="orga3f5ce4"><span class="section-number-4">4.7.5</span> Accessing Instance Variables</h4>
+<div id="outline-container-h-0f9c82d1-9aae-4ade-985d-434be6596008" class="outline-4">
+<h4 id="h-0f9c82d1-9aae-4ade-985d-434be6596008"><span class="section-number-4">3.2.5</span> Field-Extraction Instructions</h4>
+<div class="outline-text-4" id="text-h-0f9c82d1-9aae-4ade-985d-434be6596008">
 </div>
 </div>
-<div id="outline-container-org898afdc" class="outline-3">
-<h3 id="org898afdc"><span class="section-number-3">4.8</span> Stack-Group Switching</h3>
-</div>
-<div id="outline-container-org9ef0be4" class="outline-3">
-<h3 id="org9ef0be4"><span class="section-number-3">4.9</span> Appendix: Comparison of 3600-Family and I-Machine Function Calling</h3>
+<div id="outline-container-h-0d22074d-4743-4466-9be0-3a009ae7c138" class="outline-4">
+<h4 id="h-0d22074d-4743-4466-9be0-3a009ae7c138"><span class="section-number-4">3.2.6</span> Array Operations</h4>
+<div class="outline-text-4" id="text-h-0d22074d-4743-4466-9be0-3a009ae7c138">
 </div>
 </div>
-<div id="outline-container-org66c8b76" class="outline-2">
-<h2 id="org66c8b76"><span class="section-number-2">5</span> Exception Handling</h2>
+<div id="outline-container-h-240a9563-f584-480e-b4f4-574928ebaf58" class="outline-4">
+<h4 id="h-240a9563-f584-480e-b4f4-574928ebaf58"><span class="section-number-4">3.2.7</span> Block Instructions</h4>
+<div class="outline-text-4" id="text-h-240a9563-f584-480e-b4f4-574928ebaf58">
+</div>
+</div>
+<div id="outline-container-h-d3813c2b-16a3-4bcf-8066-2a26cc6c06dc" class="outline-4">
+<h4 id="h-d3813c2b-16a3-4bcf-8066-2a26cc6c06dc"><span class="section-number-4">3.2.8</span> Function-Calling Instructions</h4>
+<div class="outline-text-4" id="text-h-d3813c2b-16a3-4bcf-8066-2a26cc6c06dc">
+</div>
+</div>
+<div id="outline-container-h-118c622a-4812-4b0c-939e-5c617eeb75f4" class="outline-4">
+<h4 id="h-118c622a-4812-4b0c-939e-5c617eeb75f4"><span class="section-number-4">3.2.9</span> Binding Instructions</h4>
+<div class="outline-text-4" id="text-h-118c622a-4812-4b0c-939e-5c617eeb75f4">
+</div>
+</div>
+<div id="outline-container-h-f19d4c35-9069-404d-ae39-dd2d41c0a39d" class="outline-4">
+<h4 id="h-f19d4c35-9069-404d-ae39-dd2d41c0a39d"><span class="section-number-4">3.2.10</span> Catch Instructions</h4>
+<div class="outline-text-4" id="text-h-f19d4c35-9069-404d-ae39-dd2d41c0a39d">
+</div>
+</div>
+<div id="outline-container-h-c2038e1e-b1ed-4d25-8eec-301198e85e59" class="outline-4">
+<h4 id="h-c2038e1e-b1ed-4d25-8eec-301198e85e59"><span class="section-number-4">3.2.11</span> Lexical Variable Accessors</h4>
+<div class="outline-text-4" id="text-h-c2038e1e-b1ed-4d25-8eec-301198e85e59">
+</div>
+</div>
+<div id="outline-container-h-4395697d-6d48-43a9-a84b-827433e825ce" class="outline-4">
+<h4 id="h-4395697d-6d48-43a9-a84b-827433e825ce"><span class="section-number-4">3.2.12</span> Instance Variable Accessors</h4>
+<div class="outline-text-4" id="text-h-4395697d-6d48-43a9-a84b-827433e825ce">
+</div>
+</div>
+<div id="outline-container-h-25a48dfe-b0ed-4491-8a07-88cc7e90e683" class="outline-4">
+<h4 id="h-25a48dfe-b0ed-4491-8a07-88cc7e90e683"><span class="section-number-4">3.2.13</span> Subprimitive Instructions</h4>
+<div class="outline-text-4" id="text-h-25a48dfe-b0ed-4491-8a07-88cc7e90e683">
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-h-5ba79382-0d4f-4f95-8777-ddeb45d1bfcf" class="outline-2">
+<h2 id="h-5ba79382-0d4f-4f95-8777-ddeb45d1bfcf"><span class="section-number-2">4</span> Function Calling, Message Passing, Stack-Group Switching</h2>
+<div class="outline-text-2" id="text-h-5ba79382-0d4f-4f95-8777-ddeb45d1bfcf">
+</div>
+<div id="outline-container-h-704d1774-e762-4e20-a501-6f2fc8c3b43e" class="outline-3">
+<h3 id="h-704d1774-e762-4e20-a501-6f2fc8c3b43e"><span class="section-number-3">4.1</span> Stacks</h3>
+<div class="outline-text-3" id="text-h-704d1774-e762-4e20-a501-6f2fc8c3b43e">
+</div>
+<div id="outline-container-h-52d79706-3466-44c6-b956-f452552946b5" class="outline-4">
+<h4 id="h-52d79706-3466-44c6-b956-f452552946b5"><span class="section-number-4">4.1.1</span> Control Stack</h4>
+<div class="outline-text-4" id="text-h-52d79706-3466-44c6-b956-f452552946b5">
+</div>
+</div>
+<div id="outline-container-h-e72b6765-a5bb-4360-b88d-ef2effe53c77" class="outline-4">
+<h4 id="h-e72b6765-a5bb-4360-b88d-ef2effe53c77"><span class="section-number-4">4.1.2</span> Binding Stack</h4>
+<div class="outline-text-4" id="text-h-e72b6765-a5bb-4360-b88d-ef2effe53c77">
+</div>
+</div>
+<div id="outline-container-h-5eaca4a1-7cd6-49b9-a724-7a6397bc2c73" class="outline-4">
+<h4 id="h-5eaca4a1-7cd6-49b9-a724-7a6397bc2c73"><span class="section-number-4">4.1.3</span> Data Stack</h4>
+<div class="outline-text-4" id="text-h-5eaca4a1-7cd6-49b9-a724-7a6397bc2c73">
+</div>
+</div>
+</div>
+<div id="outline-container-h-fecf122a-0493-47fe-89fe-0bd9038338fa" class="outline-3">
+<h3 id="h-fecf122a-0493-47fe-89fe-0bd9038338fa"><span class="section-number-3">4.2</span> Registers Important to Function Calling and Returning</h3>
+<div class="outline-text-3" id="text-h-fecf122a-0493-47fe-89fe-0bd9038338fa">
+</div>
+</div>
+<div id="outline-container-h-a1f3645d-73b5-4dd2-8079-a7bcc73bc1fe" class="outline-3">
+<h3 id="h-a1f3645d-73b5-4dd2-8079-a7bcc73bc1fe"><span class="section-number-3">4.3</span> Function Calling</h3>
+<div class="outline-text-3" id="text-h-a1f3645d-73b5-4dd2-8079-a7bcc73bc1fe">
+</div>
+<div id="outline-container-h-9cdc18b9-c53a-4abf-89d0-91ae907a0709" class="outline-4">
+<h4 id="h-9cdc18b9-c53a-4abf-89d0-91ae907a0709"><span class="section-number-4">4.3.1</span> Starting a Function Call</h4>
+<div class="outline-text-4" id="text-h-9cdc18b9-c53a-4abf-89d0-91ae907a0709">
+</div>
+</div>
+<div id="outline-container-h-2665f17e-162a-42fe-8e85-6deb3f1cccf3" class="outline-4">
+<h4 id="h-2665f17e-162a-42fe-8e85-6deb3f1cccf3"><span class="section-number-4">4.3.2</span> Pushing the Arguments</h4>
+<div class="outline-text-4" id="text-h-2665f17e-162a-42fe-8e85-6deb3f1cccf3">
+</div>
+</div>
+<div id="outline-container-h-bfe7277e-ac65-4d02-bd74-626cfc76f73e" class="outline-4">
+<h4 id="h-bfe7277e-ac65-4d02-bd74-626cfc76f73e"><span class="section-number-4">4.3.3</span> Finishing the Call</h4>
+<div class="outline-text-4" id="text-h-bfe7277e-ac65-4d02-bd74-626cfc76f73e">
+</div>
+</div>
+</div>
+<div id="outline-container-h-76accfc0-d147-4b3c-bfc8-ab1a38485273" class="outline-3">
+<h3 id="h-76accfc0-d147-4b3c-bfc8-ab1a38485273"><span class="section-number-3">4.4</span> Function Entry</h3>
+<div class="outline-text-3" id="text-h-76accfc0-d147-4b3c-bfc8-ab1a38485273">
+</div>
+<div id="outline-container-h-f201498c-c66f-44d9-89ad-a399912ec5aa" class="outline-4">
+<h4 id="h-f201498c-c66f-44d9-89ad-a399912ec5aa"><span class="section-number-4">4.4.1</span> Push-apply-args</h4>
+<div class="outline-text-4" id="text-h-f201498c-c66f-44d9-89ad-a399912ec5aa">
+</div>
+</div>
+<div id="outline-container-h-3342c0c4-ca4b-4924-84c0-0de667473df8" class="outline-4">
+<h4 id="h-3342c0c4-ca4b-4924-84c0-0de667473df8"><span class="section-number-4">4.4.2</span> Pull-apply-args</h4>
+<div class="outline-text-4" id="text-h-3342c0c4-ca4b-4924-84c0-0de667473df8">
+</div>
+</div>
+<div id="outline-container-h-cafc81ec-1665-47b5-ae96-66732c847d28" class="outline-4">
+<h4 id="h-cafc81ec-1665-47b5-ae96-66732c847d28"><span class="section-number-4">4.4.3</span> Trapping Out of Entry and Restarting</h4>
+<div class="outline-text-4" id="text-h-cafc81ec-1665-47b5-ae96-66732c847d28">
+</div>
+</div>
+</div>
+<div id="outline-container-h-0f6c0381-c993-4f84-95b0-f8cf52557059" class="outline-3">
+<h3 id="h-0f6c0381-c993-4f84-95b0-f8cf52557059"><span class="section-number-3">4.5</span> Function Returning</h3>
+<div class="outline-text-3" id="text-h-0f6c0381-c993-4f84-95b0-f8cf52557059">
+</div>
+<div id="outline-container-h-9a7a092f-c52a-4126-9afe-b9eabbe963a6" class="outline-4">
+<h4 id="h-9a7a092f-c52a-4126-9afe-b9eabbe963a6"><span class="section-number-4">4.5.1</span> Function Return Instructions</h4>
+<div class="outline-text-4" id="text-h-9a7a092f-c52a-4126-9afe-b9eabbe963a6">
+</div>
+</div>
+<div id="outline-container-h-c1451534-889e-4e84-b449-9fb166c4ac44" class="outline-4">
+<h4 id="h-c1451534-889e-4e84-b449-9fb166c4ac44"><span class="section-number-4">4.5.2</span> Frame Cleanup</h4>
+<div class="outline-text-4" id="text-h-c1451534-889e-4e84-b449-9fb166c4ac44">
+</div>
+</div>
+<div id="outline-container-h-a680f0ee-b7be-4dd2-a580-0b4072a185e3" class="outline-4">
+<h4 id="h-a680f0ee-b7be-4dd2-a580-0b4072a185e3"><span class="section-number-4">4.5.3</span> Value Matchup</h4>
+<div class="outline-text-4" id="text-h-a680f0ee-b7be-4dd2-a580-0b4072a185e3">
+</div>
+</div>
+</div>
+<div id="outline-container-h-d48c1ba8-dd90-4cbd-9519-2a5f0029af02" class="outline-3">
+<h3 id="h-d48c1ba8-dd90-4cbd-9519-2a5f0029af02"><span class="section-number-3">4.6</span> Catch, Throw and Unwind-Protect</h3>
+<div class="outline-text-3" id="text-h-d48c1ba8-dd90-4cbd-9519-2a5f0029af02">
+</div>
+</div>
+<div id="outline-container-h-b2b6ffe8-4db0-414a-b91b-e516eee647a7" class="outline-3">
+<h3 id="h-b2b6ffe8-4db0-414a-b91b-e516eee647a7"><span class="section-number-3">4.7</span> Generic Functions and Message Passing</h3>
+<div class="outline-text-3" id="text-h-b2b6ffe8-4db0-414a-b91b-e516eee647a7">
+</div>
+<div id="outline-container-h-77793ebe-70d2-49bb-bf22-1f32e9da8448" class="outline-4">
+<h4 id="h-77793ebe-70d2-49bb-bf22-1f32e9da8448"><span class="section-number-4">4.7.1</span> Flavor</h4>
+<div class="outline-text-4" id="text-h-77793ebe-70d2-49bb-bf22-1f32e9da8448">
+</div>
+</div>
+<div id="outline-container-h-86857d87-3490-45ce-af83-13657c8ea378" class="outline-4">
+<h4 id="h-86857d87-3490-45ce-af83-13657c8ea378"><span class="section-number-4">4.7.2</span> Handler Table</h4>
+<div class="outline-text-4" id="text-h-86857d87-3490-45ce-af83-13657c8ea378">
+</div>
+</div>
+<div id="outline-container-h-f1fb6ad2-c8eb-4470-a92d-09b35605b032" class="outline-4">
+<h4 id="h-f1fb6ad2-c8eb-4470-a92d-09b35605b032"><span class="section-number-4">4.7.3</span> Calling a Generic Function</h4>
+<div class="outline-text-4" id="text-h-f1fb6ad2-c8eb-4470-a92d-09b35605b032">
+</div>
+</div>
+<div id="outline-container-h-12fabf3e-7177-4dc2-9a81-6563ba0cca10" class="outline-4">
+<h4 id="h-12fabf3e-7177-4dc2-9a81-6563ba0cca10"><span class="section-number-4">4.7.4</span> Sending a Message</h4>
+<div class="outline-text-4" id="text-h-12fabf3e-7177-4dc2-9a81-6563ba0cca10">
+</div>
+</div>
+<div id="outline-container-h-2f3cba29-49f5-46e1-b0dc-ba207ab3809a" class="outline-4">
+<h4 id="h-2f3cba29-49f5-46e1-b0dc-ba207ab3809a"><span class="section-number-4">4.7.5</span> Accessing Instance Variables</h4>
+<div class="outline-text-4" id="text-h-2f3cba29-49f5-46e1-b0dc-ba207ab3809a">
+</div>
+</div>
+</div>
+<div id="outline-container-h-a23ce6ab-f0b1-493f-b853-dadacd15eaf3" class="outline-3">
+<h3 id="h-a23ce6ab-f0b1-493f-b853-dadacd15eaf3"><span class="section-number-3">4.8</span> Stack-Group Switching</h3>
+<div class="outline-text-3" id="text-h-a23ce6ab-f0b1-493f-b853-dadacd15eaf3">
+</div>
+</div>
+<div id="outline-container-h-11715f53-78f0-4204-8d83-05103042b611" class="outline-3">
+<h3 id="h-11715f53-78f0-4204-8d83-05103042b611"><span class="section-number-3">4.9</span> Appendix: Comparison of 3600-Family and I-Machine Function Calling</h3>
+<div class="outline-text-3" id="text-h-11715f53-78f0-4204-8d83-05103042b611">
+</div>
+</div>
+</div>
+<div id="outline-container-h-465ae0d1-a1be-4641-8d1d-0220849d7a10" class="outline-2">
+<h2 id="h-465ae0d1-a1be-4641-8d1d-0220849d7a10"><span class="section-number-2">5</span> Exception Handling</h2>
+<div class="outline-text-2" id="text-h-465ae0d1-a1be-4641-8d1d-0220849d7a10">
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-02-28 Sun 13:49.</p>
+<p class="postamble">Last Updated 2021-04-11 Sun 12:05.</p>
 </div>
 </body>
 </html>

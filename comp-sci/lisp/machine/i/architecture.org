@@ -15,9 +15,21 @@
 Symbolics I-Machine.)
 
 * Lisp-Machine Data Types
+:PROPERTIES:
+:CUSTOM_ID: h-d1c9627f-d099-41ec-a628-3dee020f305a
+:END:
 ** Introduction to Lisp-Machine Objects
+:PROPERTIES:
+:CUSTOM_ID: h-0293194a-5fba-4e0b-be4e-ecc4679ecc02
+:END:
 *** Memory Words
+:PROPERTIES:
+:CUSTOM_ID: h-74fefd70-8ad8-4ae7-adf0-ae019d0710b6
+:END:
 **** Length and Format
+:PROPERTIES:
+:CUSTOM_ID: h-f9acb81a-bf27-427f-b6eb-710104f21ba0
+:END:
 
 A word was 40-bits and contained three fields:
 
@@ -43,6 +55,9 @@ struct Word {
 #+end_src
 
 **** Fields
+:PROPERTIES:
+:CUSTOM_ID: h-ff4d7289-24ce-4f4d-8ac8-dcc1c94f2010
+:END:
 
 The type field indicated what kind of information is stored in the
 word. (I think the types are ~dtp-~ prefixed identifiers in the
@@ -54,6 +69,9 @@ type of the word.
 The cdr code is used for various different purposes depending on the type.
 
 *** Classes of Stored Object Representations
+:PROPERTIES:
+:CUSTOM_ID: h-2c2520c4-8f48-4b5b-b183-0920c3407bb6
+:END:
 # 1.1.2
 
 An object can be stored:
@@ -73,6 +91,9 @@ Each word within the structure object may contain:
 - a special marker.
 
 *** Components of Stored Representations
+:PROPERTIES:
+:CUSTOM_ID: h-f90be5cd-dec3-4052-af10-a489d3303016
+:END:
 
 The components of stored representations found in Lisp Machine memory
 are:
@@ -82,6 +103,9 @@ are:
 - special markers.
 
 **** Object References
+:PROPERTIES:
+:CUSTOM_ID: h-79acf3fb-e088-4b62-a885-4c5d06d88593
+:END:
 
 Object references are the mechanism by which one refers to an object.
 There are three types of object references:
@@ -96,6 +120,9 @@ There are three types of object references:
    pointer to the value cell of a symbol).
 
 **** Headers
+:PROPERTIES:
+:CUSTOM_ID: h-871c1aa4-a57d-423c-9fa3-ebbe4d762396
+:END:
 
 Headers separate objects in memory. This contains information about the
 type of object. There are two types of headers:
@@ -141,6 +168,9 @@ field's meaning:
     contains the addresses of the new locations of the objects.
 
 **** Forwarding (Invisible) Pointers
+:PROPERTIES:
+:CUSTOM_ID: h-5e4fcff6-de73-43af-bd04-5baff674425e
+:END:
 
 The metaphor for a "forwarding pointer" is postal forwarding, specifying
 a reference to the location containing it should be redirected to
@@ -168,6 +198,9 @@ new two-word cons is allocated and the old one-word cons is replaced by
 a header-forward pointer containing the address of the new cons.
 
 **** Special Markers
+:PROPERTIES:
+:CUSTOM_ID: h-fb0d4eba-6586-4bca-bf1d-3d607de6c99b
+:END:
 
 The data types of the special markers are:
 - ~dtp-null~ (placed in the value cell or function cell of a symbol or
@@ -192,6 +225,9 @@ The data types of the special markers are:
 
 
 *** Operand-Reference Classification
+:PROPERTIES:
+:CUSTOM_ID: h-4f6d1bdd-db07-4bd3-bef4-fab56413353f
+:END:
 # 1.1.4
 
 - Immediate Data (22 type codes): [[*Fixnum Representation][dtp-fixnum]], [[*Small-Ratio Representation][dtp-small-ratio]],
@@ -243,9 +279,15 @@ following 9 additional codes
 - Monitor: ~dtp-monitor-forward~
 
 ** Data-Type Descriptions
+:PROPERTIES:
+:CUSTOM_ID: h-796e935d-f343-479c-b767-ab07cc73ae43
+:END:
 # 1.2, pg 27
 
 *** Representations of Symbols
+:PROPERTIES:
+:CUSTOM_ID: h-3ba54ac4-d2b2-4fb6-9d8e-a03e796d8e2c
+:END:
 # 1.2.1
 
 The object reference to a symbol is a word of data type ~dtp-symbol~
@@ -291,11 +333,17 @@ locations (vma=pma 1011000) and (vma=pma 1011005), respectively (see the
 section [[*Wired Addresses][Wired Addresses]]).
 
 *** Representation of Instances and Related Data Types
+:PROPERTIES:
+:CUSTOM_ID: h-4d50d059-d7f7-42da-a2d5-0458a2ed06b4
+:END:
 # 1.2.2, pg 28
 
 Before we had CLOS, we had Flavors.
 
 **** Flavor Instances
+:PROPERTIES:
+:CUSTOM_ID: h-746e9565-76e7-4da4-bca4-d144bf9ba788
+:END:
 # 1.2.2.1
 
 The object reference to an instance is a word of data type ~dtp-instance~
@@ -386,23 +434,35 @@ or lexical closures (or dynamical closures?).
 #+end_remark
 
 **** List Instance
+:PROPERTIES:
+:CUSTOM_ID: h-716f1e1e-7caf-4f71-be1e-f3d99a25d93f
+:END:
 # 1.2.2.2
 
 An object reference to a list instance is a word of data type
 ~dtp-list-instance~ whose address field points to an instance structure.
 
 **** Array Instance
+:PROPERTIES:
+:CUSTOM_ID: h-c41fde96-9806-49ae-abe7-988c3439b234
+:END:
 # 1.2.2.3
 
 An object reference to an array instance is a word of data type
 ~dtp-array-instance~ whose address field points to an instance field.
 
 **** String Instance
+:PROPERTIES:
+:CUSTOM_ID: h-0a77cef4-8498-45ba-9f68-68ad6ff28963
+:END:
 
 An object reference to a string instance is a word of data type
 ~dtp-string-instance~ whose address field points to an instance structure.\
 
 *** Representation of Characters
+:PROPERTIES:
+:CUSTOM_ID: h-d82957f1-4199-43b0-b1a0-0484e84e0734
+:END:
 # 1.2.3
 
 An object reference to a character is an immediate object of type ~dtp-character~.
@@ -422,14 +482,26 @@ control, meta, super, hyper bits should be added, as well, giving a
 20-bit character set.)
 
 *** Representation of Numbers
+:PROPERTIES:
+:CUSTOM_ID: h-ef8bc228-4eda-4873-8853-30afaeda1d43
+:END:
 # 1.2.4
 **** Fixnum Representation
+:PROPERTIES:
+:CUSTOM_ID: h-517003cd-d0b5-4710-bfc9-2ba4b72a6456
+:END:
 
 A 32-bit two's-complement integer. Its data type is ~dtp-fixnum~.
 
 **** Bignum Representation
+:PROPERTIES:
+:CUSTOM_ID: h-4fff7d2b-56b9-41e2-9de1-2da3a6695ffb
+:END:
 # 1.2.4.2
 **** Small-Ratio Representation
+:PROPERTIES:
+:CUSTOM_ID: h-cbc4bd43-5d89-4bf1-a47d-6184690f67de
+:END:
 # 1.2.4.3
 
 The 32-bit field is treated as an array of two 16-bit integers, the
@@ -440,6 +512,9 @@ If the numerator is zero, or the denominator is 1 or 0, then the number
 is treated as an illegal value.
 
 **** Big-Ratio Representation
+:PROPERTIES:
+:CUSTOM_ID: h-666f093e-bcc3-41f0-a54e-d2243720dab0
+:END:
 # 1.2.4.4
 
 An object reference to a big-ratio is a word of data type
@@ -449,6 +524,9 @@ with the small-ratio, if the numerator is 0 or a denominator of 0 or 1,
 or a negative number, is treated as an illegal value.
 
 **** Single-Precision Floating-Point Representation
+:PROPERTIES:
+:CUSTOM_ID: h-4e80614e-1598-4bf9-96ea-7b53bd75b9e0
+:END:
 # 1.2.4.5
 
 A single-precision floating-point number is an immediate object of data
@@ -463,6 +541,9 @@ floating-point number. The following fields are defined:
 
 
 **** Double-Precision Floating-Point Representation
+:PROPERTIES:
+:CUSTOM_ID: h-de0a6904-527e-44cf-8cde-92a9febb8346
+:END:
 # 1.2.4.6
 
 The object reference to a double-precision floating point number is a
@@ -488,6 +569,9 @@ double-precision numbers.
 
 
 **** Complex-Number Representation
+:PROPERTIES:
+:CUSTOM_ID: h-5479c5a1-0e18-4835-8bd4-541ca733ad7d
+:END:
 # 1.2.4.7
 
 The object reference to a complex number is a word of data type
@@ -502,9 +586,15 @@ realize this now, long after the fact. We didn't know any better back in
 the '80s.
 #+end_remark
 **** The Spare-Number Type
+:PROPERTIES:
+:CUSTOM_ID: h-4173c5b5-462c-405f-ac42-0d5d16117633
+:END:
 # 1.2.4.8
 This is reserved for future use.
 *** Representations of Lists
+:PROPERTIES:
+:CUSTOM_ID: h-c18c29dd-dc1f-4e32-b832-127ab888ebba
+:END:
 # 1.2.5
 An object reference to a list has its type be ~dtp-list~.
 The cdr-code tag of a memory word which constitutes an element of a list
@@ -564,6 +654,9 @@ We see see that cdr-coding requires half as many cells as a naive
 linked-list structure.
 
 *** Representations of Arrays and Strings
+:PROPERTIES:
+:CUSTOM_ID: h-f54aee0e-1d83-4009-8a9f-38fbd3581636
+:END:
 # 1.2.6
 
 Object references to an array or string is a word with data type
@@ -770,10 +863,19 @@ Word array_pointer = {type = DTP_ARRAY,
 #+end_src
 
 *** I-Machine Array Registers
+:PROPERTIES:
+:CUSTOM_ID: h-e3ecb8fe-0e4f-4f88-b583-0bc3d234b737
+:END:
 # 1.2.7, pg 52
 
 *** Representations of Functions and Closures
+:PROPERTIES:
+:CUSTOM_ID: h-baca12c3-d791-4eba-9361-88b3d2519e88
+:END:
 **** Representation of Compiled Functions
+:PROPERTIES:
+:CUSTOM_ID: h-326a239d-e257-4ca0-bb70-c68b9c2a0b4c
+:END:
 The object reference to a compiled function is a word of data type
 ~dtp-compiled-function~ whose address field points to a word inside a
 compiled-function structure.
@@ -810,12 +912,18 @@ make_symbol(pointer_to(/* <function-name> string */), /* name */
 #+end_src
 
 **** Generic Functions
+:PROPERTIES:
+:CUSTOM_ID: h-9816af15-8215-425b-9d25-cd720604f957
+:END:
 An object reference to a generic function has data type
 ~dtp-generic-function~. The address field points to a list-like
 structure whose content is not architecturally defined; it is used
 internally by the flavor system. See the section [[*Generic Functions and Message Passing][Generic Functions and Message Passing]].
 
 **** Representation of Lexical Closures
+:PROPERTIES:
+:CUSTOM_ID: h-2243c620-15b4-47ab-8ebb-61554949d930
+:END:
 An object reference to a lexical closure is a word of data type
 ~dtp-lexical-closure~ which points to a cons pair. The car of the cons is
 the lexical environment, and the cdr is the function.
@@ -831,6 +939,9 @@ made an argument to the function. For more information, see the chapter
 on function calling, specifically the section [[*Starting a Function Call][Starting a Function Call]].
 
 **** Representation of Dynamic Closures
+:PROPERTIES:
+:CUSTOM_ID: h-7f0dc201-bd95-4e7b-b217-a9f609484869
+:END:
 The object reference to a dynamic closure is a word of data type
 ~dtp-dynamic-closure~, which points to a list structure. The format of a
 dynamic closure is not architecturally defined, but is determined by
@@ -848,6 +959,9 @@ element of each pair is a locative pointer to the closure value cell to
 which that cell is to be linked.
 
 *** Instruction Representation
+:PROPERTIES:
+:CUSTOM_ID: h-57eed90d-db43-4f20-b2f6-515640c41bf9
+:END:
 # 1.2.9
 The instructions ins a compiled function are a sequence of words whose
 data-type field selects among three types of words:
@@ -879,6 +993,9 @@ The fields within various types of instructions are described in the
 chapter on the [[*Macroinstruction Set][Macroinstruction Set]].
 
 *** Program-Counter Representation
+:PROPERTIES:
+:CUSTOM_ID: h-c3d57316-74a0-44fc-ab54-900c78ce8a56
+:END:
 # 1.2.10
 The program counter (pc) is a register in the I-machine that contains
 the virtual address of the currently executing instruction. Since
@@ -893,6 +1010,9 @@ compiled functions for long branches. See
 [[*Function Calling, Message Passing, Stack-Group Switching][Function Calling, Message Passing, Stack-Group Switching]].
 
 *** Representation of Locatives
+:PROPERTIES:
+:CUSTOM_ID: h-22855c89-f8a9-4a6b-99d8-5d1f767f4bfd
+:END:
 # 1.2.11
 A locative is a pointer to virtual memory implemented as an object with
 data type ~dtp-locative~ and an address field that is the address of the
@@ -905,6 +1025,9 @@ cell of a symbol. Other uses include the pointer to the start of data in
 long format arrays and the base address of array registers.
 
 *** Representation of Physical Addresses
+:PROPERTIES:
+:CUSTOM_ID: h-019fcb89-bc97-4812-a031-980b36462407
+:END:
 # 1.2.12
 
 The data type ~dtp-physical-address~ allows unmapped access to the full
@@ -912,8 +1035,14 @@ The data type ~dtp-physical-address~ allows unmapped access to the full
 type it has restricted usage.
 
 ** Data-Type Code Assignments
+:PROPERTIES:
+:CUSTOM_ID: h-008d2ebc-901f-47ae-a01c-5a20a0b7b476
+:END:
 # 1.3, pg 66
 *** Headers, Special Markers, and Forwarding Pointers
+:PROPERTIES:
+:CUSTOM_ID: h-f7d6f864-0582-4975-a487-a4b60e225ad0
+:END:
 
 | Type Code | Symbolic Name           | Description                                      |
 |-----------+-------------------------+--------------------------------------------------|
@@ -927,6 +1056,9 @@ type it has restricted usage.
 |         7 | DTP-ELEMENT-FORWARD     | Invisible pointer in element of structure        |
 
 *** Number Data Types
+:PROPERTIES:
+:CUSTOM_ID: h-48760e0b-dbdf-40c3-8e0c-f2dcc6a3fd09
+:END:
 
 | Type Code | Symbolic Name    | Description                                |
 |-----------+------------------+--------------------------------------------|
@@ -940,6 +1072,9 @@ type it has restricted usage.
 |        17 | DTP-SPARE-NUMBER | A number to the hardware trap mechanism    |
 
 *** Instance Data Types
+:PROPERTIES:
+:CUSTOM_ID: h-a2bcff3e-b8af-4f87-8fe6-177d19691afe
+:END:
 
 | Type Code | Symbolic Name       | Description                           |
 |-----------+---------------------+---------------------------------------|
@@ -949,6 +1084,9 @@ type it has restricted usage.
 |        23 | DTP-STRING-INSTANCE | Instance that masquerades as a string |
 
 *** Primitive Data Types
+:PROPERTIES:
+:CUSTOM_ID: h-e88bebf3-ceef-486c-9bb0-9b5e7824b4da
+:END:
 
 There are 11 primitive types:
 
@@ -976,12 +1114,18 @@ Note codes 36, 37, 42, 44 are spare pointer data types and code 41 is a
 spare immediate data type.
 
 *** Special Marker for Garbage Collector
+:PROPERTIES:
+:CUSTOM_ID: h-3ddf3fc4-6df8-4e4c-80dc-4d68588a7824
+:END:
 
 | Type Code | Symbolic Name  | Description                             |
 |-----------+----------------+-----------------------------------------|
 |        45 | DTP-GC-FORWARD | Object-moved flag for garbage collector |
 
 *** Data Types for Program Counter Values
+:PROPERTIES:
+:CUSTOM_ID: h-af49a4a0-fac5-472f-821e-740a54659600
+:END:
 
 
 | Type Code | Symbolic Name | Description                                                              |
@@ -990,6 +1134,9 @@ spare immediate data type.
 |        47 | DTP-ODD-PC    | PC at second instruction in word                                         |
 
 *** Full Word Instruction Data Types
+:PROPERTIES:
+:CUSTOM_ID: h-af00b7b6-db58-4fbf-8b4f-17dbd641cb03
+:END:
 
 | Type Code | Symbolic Name                   | Description                                              |
 |-----------+---------------------------------+----------------------------------------------------------|
@@ -1004,6 +1151,9 @@ spare immediate data type.
 
 
 *** Half-Word Instruction Data Types
+:PROPERTIES:
+:CUSTOM_ID: h-e918dbab-b15f-42ed-a737-d70de08a1182
+:END:
 
 | Type Code | Symbolic Name          | Description                             |
 |-----------+------------------------+-----------------------------------------|
@@ -1017,15 +1167,30 @@ described in the chapter on theinstruction set. The instruction in bits
 
 
 ** Appendix: Comparison of 3600-Family and I-Machine Data Representations
+:PROPERTIES:
+:CUSTOM_ID: h-8c46aa13-3df2-4dc1-87fd-d8f5db5c27a7
+:END:
 
 *** Array Differences
+:PROPERTIES:
+:CUSTOM_ID: h-aa308c82-d539-47d6-bc21-c0c9205512dd
+:END:
 
 *** Compiled Function Differences
+:PROPERTIES:
+:CUSTOM_ID: h-cc5a8790-f854-422e-8a23-17cc9e03f89d
+:END:
 
 * Memory Layout and Addressing
+:PROPERTIES:
+:CUSTOM_ID: h-23acae6c-cd54-4b24-8351-f711aa4a3287
+:END:
 # pg 77
 
 ** Address Space
+:PROPERTIES:
+:CUSTOM_ID: h-12472c74-024b-4a6b-921f-b969c395bf27
+:END:
 
 The address space is divided into thirty-two zones, each containing 128
 megabytes. The thirty-two zones are variously assigned to several
@@ -1043,6 +1208,9 @@ subset of the virtual address space:
 Note that ~0o37777777777~ is 2^{32}-1.
 
 *** Virtual Addresses
+:PROPERTIES:
+:CUSTOM_ID: h-fc155048-a837-406e-a5be-c27b7254218a
+:END:
 
 A virtual address is divided into two fields for mapping purposes: the
 virtual page number and the offset within page fields.
@@ -1062,6 +1230,9 @@ that the hardware hash function for the Page Hash Table is optimized for
 a quantum of size 65536 words (see [[*Page Hash Table][Page Hash Table]]).
 
 *** Ephemeral Addresses
+:PROPERTIES:
+:CUSTOM_ID: h-ca28130b-5fa7-42e7-a9be-fa5e8371efa8
+:END:
 
 The lowest zone of the virtual address is reserved for the storage of
 ephemeral objects. This space is provided to support a garbage
@@ -1089,33 +1260,78 @@ maintained in the PHT.
 
 
 *** Unmapped Addresses
+:PROPERTIES:
+:CUSTOM_ID: h-53630603-244d-42c3-9770-42451306705c
+:END:
 # pg 78
 *** Wired Addresses
+:PROPERTIES:
+:CUSTOM_ID: h-7418b856-81cf-425a-a31b-0039b0136636
+:END:
 
 *** Pages
+:PROPERTIES:
+:CUSTOM_ID: h-5740779d-eb55-4885-a813-0456ecc5033c
+:END:
 
 **** Page Hash Table
+:PROPERTIES:
+:CUSTOM_ID: h-43245575-3159-48b1-9243-846f8cbe8f6a
+:END:
 **** PHT Lookup Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-34de35f1-c272-4194-893b-e630bdd4fb7e
+:END:
 **** Translation Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-98fe1c73-f86f-4d32-8f57-59a5850867c4
+:END:
 
 ** GC Support
+:PROPERTIES:
+:CUSTOM_ID: h-7a857463-a2cb-467a-b14a-0252a2cef7ba
+:END:
 
 ** Address Translation
+:PROPERTIES:
+:CUSTOM_ID: h-6a2dcdb8-a8d2-4606-85d9-5e4b0836fc1d
+:END:
 
 *** Page Hash Table
+:PROPERTIES:
+:CUSTOM_ID: h-6a2f3028-4c4a-4b2d-a0dd-fff73fda46fe
+:END:
 
 *** PHT Lookup Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-b086f93b-f387-497e-89c6-1ecaa7653aed
+:END:
 
 *** Translation Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-6c6431ab-6d0d-431c-ae99-d97f1c159070
+:END:
 
 ** Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing
+:PROPERTIES:
+:CUSTOM_ID: h-761de232-072c-4117-8d01-c29be2fb7646
+:END:
 
 
 * Macroinstruction Set
+:PROPERTIES:
+:CUSTOM_ID: h-55635f4d-2e65-438d-b09c-0bb6f176aba7
+:END:
 # 3. pg 95 of pdf
 ** Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-6393ab61-8979-4fbf-8fd5-e8b8aca67fb4
+:END:
 # 3.1.
 *** Instruction Sequencing
+:PROPERTIES:
+:CUSTOM_ID: h-02109c7f-b260-4bf6-b074-ecafd47fb26f
+:END:
 # 3.1.1.
 The cdr-code of instruction words specify the sequencing of instructions
 for execution.
@@ -1130,6 +1346,9 @@ for execution.
 
 
 *** Internal Registers
+:PROPERTIES:
+:CUSTOM_ID: h-3db86b85-a0bd-4bc4-81a4-473e1359fb4c
+:END:
 # 3.1.2.
 
 The I-machine internal registers may be summarized in the following
@@ -1210,6 +1429,9 @@ specific to Revision 0 of the Ivory chip.
 
 
 *** Memory Side Effects
+:PROPERTIES:
+:CUSTOM_ID: h-fdcf3483-dd68-4337-b04b-aa8674742a0f
+:END:
 # 3.1.3.
 Reading memory may not cause side effects. The architecture permits an
 implementation to start a memory read that it will not use, perhaps
@@ -1224,61 +1446,208 @@ write is guaranteed to happen exactly once. Also both
 effects; they are guaranteed to be performed exactly once.
 
 *** Explanation of Instruction Definitions
+:PROPERTIES:
+:CUSTOM_ID: h-4d930461-09c1-4211-af67-2425603a4248
+:END:
 # 3.1.3
 **** Instruction Formats
+:PROPERTIES:
+:CUSTOM_ID: h-b916475b-05e6-4f17-a2af-632c45d2b0ab
+:END:
 # 3.1.3.1.
 # **** Internal Registers
 # # 3.1.3.2.
 # **** Explanation of Instruction Definitions
 # # 3.1.3.3.
 **** Arguments: the Data Types Accepted
+:PROPERTIES:
+:CUSTOM_ID: h-a7f4a9a6-f390-4a5c-8509-7144aff35394
+:END:
 # 3,1,3,2, Arguments: the Data Types Accepted
 # pg 108
 **** Types of Instruction Exceptions
+:PROPERTIES:
+:CUSTOM_ID: h-06b8e5ed-2609-46ec-895d-f8f2bffb29bc
+:END:
 **** Types of Memory References
+:PROPERTIES:
+:CUSTOM_ID: h-0a54a752-b3d5-404f-b4df-eb0250df142d
+:END:
 **** Top-of-Stack Register Effects
+:PROPERTIES:
+:CUSTOM_ID: h-0c74886b-c325-4235-aba0-9331d78840ed
+:END:
 # 3.1.3.5
 **** Cdr Codes of Values Returned
+:PROPERTIES:
+:CUSTOM_ID: h-69e0038e-0a62-4133-ac72-f600f192645a
+:END:
 # 3.1.3.6
 ** The Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-694fbabb-f1ea-4e71-97dc-e9dcddeada50
+:END:
 *** List-Function Operations
+:PROPERTIES:
+:CUSTOM_ID: h-2b9732b9-d23c-4cb0-977d-58f8aebe3477
+:END:
 *** Predicate Intsructions
+:PROPERTIES:
+:CUSTOM_ID: h-759efdb7-8bfd-4c2e-84b3-1e5550d4f00c
+:END:
 *** Numeric Operations
+:PROPERTIES:
+:CUSTOM_ID: h-41d7af96-0fae-48c3-9f77-fce529b58210
+:END:
 *** Data-Movement Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-f0fa6dc7-13fb-40ea-8c6d-4470eb4046e2
+:END:
 *** Field-Extraction Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-0f9c82d1-9aae-4ade-985d-434be6596008
+:END:
 *** Array Operations
+:PROPERTIES:
+:CUSTOM_ID: h-0d22074d-4743-4466-9be0-3a009ae7c138
+:END:
 *** Block Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-240a9563-f584-480e-b4f4-574928ebaf58
+:END:
 *** Function-Calling Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-d3813c2b-16a3-4bcf-8066-2a26cc6c06dc
+:END:
 *** Binding Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-118c622a-4812-4b0c-939e-5c617eeb75f4
+:END:
 *** Catch Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-f19d4c35-9069-404d-ae39-dd2d41c0a39d
+:END:
 *** Lexical Variable Accessors
+:PROPERTIES:
+:CUSTOM_ID: h-c2038e1e-b1ed-4d25-8eec-301198e85e59
+:END:
 *** Instance Variable Accessors
+:PROPERTIES:
+:CUSTOM_ID: h-4395697d-6d48-43a9-a84b-827433e825ce
+:END:
 *** Subprimitive Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-25a48dfe-b0ed-4491-8a07-88cc7e90e683
+:END:
 * Function Calling, Message Passing, Stack-Group Switching
+:PROPERTIES:
+:CUSTOM_ID: h-5ba79382-0d4f-4f95-8777-ddeb45d1bfcf
+:END:
 ** Stacks
+:PROPERTIES:
+:CUSTOM_ID: h-704d1774-e762-4e20-a501-6f2fc8c3b43e
+:END:
 *** Control Stack
+:PROPERTIES:
+:CUSTOM_ID: h-52d79706-3466-44c6-b956-f452552946b5
+:END:
 *** Binding Stack
+:PROPERTIES:
+:CUSTOM_ID: h-e72b6765-a5bb-4360-b88d-ef2effe53c77
+:END:
 *** Data Stack
+:PROPERTIES:
+:CUSTOM_ID: h-5eaca4a1-7cd6-49b9-a724-7a6397bc2c73
+:END:
 ** Registers Important to Function Calling and Returning
+:PROPERTIES:
+:CUSTOM_ID: h-fecf122a-0493-47fe-89fe-0bd9038338fa
+:END:
 ** Function Calling
+:PROPERTIES:
+:CUSTOM_ID: h-a1f3645d-73b5-4dd2-8079-a7bcc73bc1fe
+:END:
 *** Starting a Function Call
+:PROPERTIES:
+:CUSTOM_ID: h-9cdc18b9-c53a-4abf-89d0-91ae907a0709
+:END:
 *** Pushing the Arguments
+:PROPERTIES:
+:CUSTOM_ID: h-2665f17e-162a-42fe-8e85-6deb3f1cccf3
+:END:
 *** Finishing the Call
+:PROPERTIES:
+:CUSTOM_ID: h-bfe7277e-ac65-4d02-bd74-626cfc76f73e
+:END:
 ** Function Entry
+:PROPERTIES:
+:CUSTOM_ID: h-76accfc0-d147-4b3c-bfc8-ab1a38485273
+:END:
 *** Push-apply-args
+:PROPERTIES:
+:CUSTOM_ID: h-f201498c-c66f-44d9-89ad-a399912ec5aa
+:END:
 *** Pull-apply-args
+:PROPERTIES:
+:CUSTOM_ID: h-3342c0c4-ca4b-4924-84c0-0de667473df8
+:END:
 *** Trapping Out of Entry and Restarting
+:PROPERTIES:
+:CUSTOM_ID: h-cafc81ec-1665-47b5-ae96-66732c847d28
+:END:
 ** Function Returning
+:PROPERTIES:
+:CUSTOM_ID: h-0f6c0381-c993-4f84-95b0-f8cf52557059
+:END:
 *** Function Return Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-9a7a092f-c52a-4126-9afe-b9eabbe963a6
+:END:
 *** Frame Cleanup
+:PROPERTIES:
+:CUSTOM_ID: h-c1451534-889e-4e84-b449-9fb166c4ac44
+:END:
 *** Value Matchup
+:PROPERTIES:
+:CUSTOM_ID: h-a680f0ee-b7be-4dd2-a580-0b4072a185e3
+:END:
 ** Catch, Throw and Unwind-Protect
+:PROPERTIES:
+:CUSTOM_ID: h-d48c1ba8-dd90-4cbd-9519-2a5f0029af02
+:END:
 ** Generic Functions and Message Passing
+:PROPERTIES:
+:CUSTOM_ID: h-b2b6ffe8-4db0-414a-b91b-e516eee647a7
+:END:
 *** Flavor
+:PROPERTIES:
+:CUSTOM_ID: h-77793ebe-70d2-49bb-bf22-1f32e9da8448
+:END:
 *** Handler Table
+:PROPERTIES:
+:CUSTOM_ID: h-86857d87-3490-45ce-af83-13657c8ea378
+:END:
 *** Calling a Generic Function
+:PROPERTIES:
+:CUSTOM_ID: h-f1fb6ad2-c8eb-4470-a92d-09b35605b032
+:END:
 *** Sending a Message
+:PROPERTIES:
+:CUSTOM_ID: h-12fabf3e-7177-4dc2-9a81-6563ba0cca10
+:END:
 *** Accessing Instance Variables
+:PROPERTIES:
+:CUSTOM_ID: h-2f3cba29-49f5-46e1-b0dc-ba207ab3809a
+:END:
 ** Stack-Group Switching
+:PROPERTIES:
+:CUSTOM_ID: h-a23ce6ab-f0b1-493f-b853-dadacd15eaf3
+:END:
 ** Appendix: Comparison of 3600-Family and I-Machine Function Calling
+:PROPERTIES:
+:CUSTOM_ID: h-11715f53-78f0-4204-8d83-05103042b611
+:END:
 * Exception Handling
+:PROPERTIES:
+:CUSTOM_ID: h-465ae0d1-a1be-4641-8d1d-0220849d7a10
+:END:

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-10 Sat 20:46 -->
+<!-- 2021-04-11 Sun 12:08 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Toy LispKit Compiler</title>
@@ -241,26 +241,26 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga9887b2">1. Introduction</a></li>
-<li><a href="#orgf462c5e">2. Lisp Primitives</a></li>
-<li><a href="#org2e5442a">3. Compiling to SECD</a>
+<li><a href="#h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3">1. Introduction</a></li>
+<li><a href="#h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41">2. Lisp Primitives</a></li>
+<li><a href="#h-5d573b7e-8dcb-4490-9781-ca307200782f">3. Compiling to SECD</a>
 <ul>
-<li><a href="#org1bcee1d">3.1. Helper Functions</a></li>
-<li><a href="#orgd5eb26e">3.2. Compile SExpression</a>
+<li><a href="#h-e8d4c07b-1a2b-4398-8ec8-f027194e3471">3.1. Helper Functions</a></li>
+<li><a href="#h-732b7cb4-396b-4469-839e-7a45e8636baa">3.2. Compile SExpression</a>
 <ul>
-<li><a href="#org586a23f">3.2.1. Compiling Let-expressions</a></li>
+<li><a href="#h-9a92a2ad-41fc-452d-a0d5-dae117769683">3.2.1. Compiling Let-expressions</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgb5f70fb">4. References</a></li>
+<li><a href="#h-8c101aab-be9e-4cb3-82ff-cd053abae6b0">4. References</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orga9887b2" class="outline-2">
-<h2 id="orga9887b2"><span class="section-number-2">1</span> Introduction</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3" class="outline-2">
+<h2 id="h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3">
 <p>
 Following Peter Henderson's book, I'm going to investigate implementing
 a toy compiler for a simple Lisp targeting the <a href="../abstract-machines/secd.html">SECD machine</a>.
@@ -270,9 +270,9 @@ fragment, then I will write the compiler for the Lisp fragment.
 </div>
 </div>
 
-<div id="outline-container-orgf462c5e" class="outline-2">
-<h2 id="orgf462c5e"><span class="section-number-2">2</span> Lisp Primitives</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41" class="outline-2">
+<h2 id="h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41"><span class="section-number-2">2</span> Lisp Primitives</h2>
+<div class="outline-text-2" id="text-h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41">
 <p>
 The language will provide the following primitives:
 </p>
@@ -307,9 +307,9 @@ numeric value of <code>&lt;exp&gt;</code></li>
 </div>
 </div>
 
-<div id="outline-container-org2e5442a" class="outline-2">
-<h2 id="org2e5442a"><span class="section-number-2">3</span> Compiling to SECD</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-h-5d573b7e-8dcb-4490-9781-ca307200782f" class="outline-2">
+<h2 id="h-5d573b7e-8dcb-4490-9781-ca307200782f"><span class="section-number-2">3</span> Compiling to SECD</h2>
+<div class="outline-text-2" id="text-h-5d573b7e-8dcb-4490-9781-ca307200782f">
 <p>
 Let's now examine how to compile Lisp expressions to SECD code. This
 summarizes section 6.3 in Henderson's <cite class="book-title">Functional Programming</cite>.
@@ -318,9 +318,9 @@ is inductively defined.
 </p>
 </div>
 
-<div id="outline-container-org1bcee1d" class="outline-3">
-<h3 id="org1bcee1d"><span class="section-number-3">3.1</span> Helper Functions</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-h-e8d4c07b-1a2b-4398-8ec8-f027194e3471" class="outline-3">
+<h3 id="h-e8d4c07b-1a2b-4398-8ec8-f027194e3471"><span class="section-number-3">3.1</span> Helper Functions</h3>
+<div class="outline-text-3" id="text-h-e8d4c07b-1a2b-4398-8ec8-f027194e3471">
 <p>
 We need some helper functions first to make sense of the namelist data
 structure.
@@ -366,9 +366,9 @@ return the pair <code>(p . q)</code> encoding its position.
 </div>
 </div>
 
-<div id="outline-container-orgd5eb26e" class="outline-3">
-<h3 id="orgd5eb26e"><span class="section-number-3">3.2</span> Compile SExpression</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-h-732b7cb4-396b-4469-839e-7a45e8636baa" class="outline-3">
+<h3 id="h-732b7cb4-396b-4469-839e-7a45e8636baa"><span class="section-number-3">3.2</span> Compile SExpression</h3>
+<div class="outline-text-3" id="text-h-732b7cb4-396b-4469-839e-7a45e8636baa">
 <p>
 To compile an S-Expression to SECD code, we have:
 </p>
@@ -434,9 +434,9 @@ bytecode <code>c</code>
 </div>
 </div>
 
-<div id="outline-container-org586a23f" class="outline-4">
-<h4 id="org586a23f"><span class="section-number-4">3.2.1</span> Compiling Let-expressions</h4>
-<div class="outline-text-4" id="text-3-2-1">
+<div id="outline-container-h-9a92a2ad-41fc-452d-a0d5-dae117769683" class="outline-4">
+<h4 id="h-9a92a2ad-41fc-452d-a0d5-dae117769683"><span class="section-number-4">3.2.1</span> Compiling Let-expressions</h4>
+<div class="outline-text-4" id="text-h-9a92a2ad-41fc-452d-a0d5-dae117769683">
 <p>
 When compiling <code>(let ((x1 e1) ... (x-n e-n)) body)</code>, we rewrite this as
 <code>((lambda (x1 ... x-n) body) e1 ... e-n)</code>.
@@ -469,9 +469,9 @@ We have the ancillary functions when compiling <code>(let ...)</code>.
 </div>
 </div>
 
-<div id="outline-container-orgb5f70fb" class="outline-2">
-<h2 id="orgb5f70fb"><span class="section-number-2">4</span> References</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-h-8c101aab-be9e-4cb3-82ff-cd053abae6b0" class="outline-2">
+<h2 id="h-8c101aab-be9e-4cb3-82ff-cd053abae6b0"><span class="section-number-2">4</span> References</h2>
+<div class="outline-text-2" id="text-h-8c101aab-be9e-4cb3-82ff-cd053abae6b0">
 <ul class="org-ul">
 <li>P. Henderson,
 <cite class="book-title">Functional Programming: Application and Implementation</cite>.
@@ -483,7 +483,7 @@ PalmPilot.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-02-14 Sun 12:38.</p>
+<p class="postamble">Last Updated 2021-04-11 Sun 12:04.</p>
 </div>
 </body>
 </html>

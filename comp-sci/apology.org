@@ -12,6 +12,9 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 
 * Programming Language
+:PROPERTIES:
+:CUSTOM_ID: h-a82e2b95-2055-45f6-9f75-91596f250b51
+:END:
 
 I'm still debating the programming language I should use for this
 endeavor. Among the choices, it seems that [[file:lisp.org][Lisp]] is best prepared for my
@@ -50,6 +53,9 @@ Scheme interpreter/VM in the C code. I like this approach better.
   were generic functions in Guile.
 
 ** Dialects
+:PROPERTIES:
+:CUSTOM_ID: h-79a28f2f-2488-40b0-ae54-8073b2aa6f05
+:END:
 
 *Scheme* is probably the first dialect most people encounter,
 since it's used in the textbook
@@ -77,13 +83,22 @@ While it has marginally cleaner syntax (using not just parentheses but
 also square braces =[...]= for vectors, and braces ={...}= for hashmaps),
 its STM memory model leads to accidentally bloated software all too easily.
 ** Flaws
+:PROPERTIES:
+:CUSTOM_ID: h-f4ba5355-ba33-4f28-b077-c30a6a828679
+:END:
 
 The biggest flaws that come to mind are figuring out which dialect to
 use. Each of them have their quirks and shortcomings.
 
 *** Scheme
+:PROPERTIES:
+:CUSTOM_ID: h-10500493-3ac4-48c9-951e-74a7b0e52494
+:END:
 
 **** No Canonical Implementation
+:PROPERTIES:
+:CUSTOM_ID: h-31198688-8e76-470a-8196-2954e63db051
+:END:
 
 One of the features of Scheme's minimalism is that it's not hard to
 write your own Scheme interpreter. The problem: there are dozens of
@@ -105,6 +120,9 @@ Although I /really/ like Guile, I'm afraid it may be unstable and remove
 functionality I'd use.
 
 *** Common Lisp
+:PROPERTIES:
+:CUSTOM_ID: h-00b3a4bb-8be3-4ea1-b3f8-cfa573ba9579
+:END:
 
 Probably the biggest complaint is how baroque the language is (for
 example: =setf= and =setq= are both included, but only one is really
@@ -114,6 +132,9 @@ numbers, ~eq~ for pointers, ~eql~ for pointers or numbers, ~equal~, and
 instances [objects]).
 
 **** Floating Point Arithmetic isn't part of the Standard
+:PROPERTIES:
+:CUSTOM_ID: h-873760ae-9db9-424e-bda5-39a4746dee67
+:END:
 
 The Language standard was written before IEEE 754 floating point was
 finalized (or written), so this is a serious shortcoming with Common
@@ -125,11 +146,17 @@ it's just compiler dependent.
 - ABCL uses IEEE-754 if the JVM running it uses the standard
 
 *** Clojure
+:PROPERTIES:
+:CUSTOM_ID: h-929f80eb-b3c3-4c47-b41f-9abd0bc46b36
+:END:
 
 Slow startup with repls and bloated software are two of the biggest
 issues facing Clojure.
 
 **** Memory Usage
+:PROPERTIES:
+:CUSTOM_ID: h-412e8188-b046-4b4b-9aaa-41d8764c3ef4
+:END:
 
 Clojure's memory usage can easily run out of control. The STM memory
 model requires greater diligence when programming, otherwise duplicate
@@ -141,17 +168,26 @@ collector doesn't seem to handle this memory model all too well, either.
 This frequently leads to rewriting the code in Java.
 
 **** There is no standard
+:PROPERTIES:
+:CUSTOM_ID: h-49ce9144-6029-451d-95bd-fb3ef3864168
+:END:
 
 Unlike Scheme and Common Lisp, there is no standard. So, is =mapcat=
 doing what I expect? Erm...maybe?
 
 **** JVM Historically didn't have IEEE 754 floating point
+:PROPERTIES:
+:CUSTOM_ID: h-86c65538-7974-4832-958a-f809c15c3417
+:END:
 
 This may be a subtle source of bugs, but floating point support is
 comparatively modern. For old-timers using JVM 6 (or whatever), this is
 problematic.
 
 ** Further Reading
+:PROPERTIES:
+:CUSTOM_ID: h-b5520db7-1764-4f43-87d0-7f901bfe2709
+:END:
 
 - Antoine Kalmbach, [[https://ane.github.io/2020/10/05/between-two-lisps.html][Between two Lisps]]. Posted Oct 5, 2020.
 - Antoine Kalmbach, [[https://ane.github.io/programming/lisp/goops-virtual-slots-and-ffi.html][Recutils, GOOPS and virtual slots]]. Posted Dec 6, 2020.

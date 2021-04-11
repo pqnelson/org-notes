@@ -12,6 +12,9 @@
 # Created Sunday December 27, 2020 at  8:50AM
 
 * Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-cb1ea035-1b8c-4ccd-a7d5-5fefb74071e5
+:END:
 
 This is just a review of the theory of formal polynomials over a
 (commutative) ring. These are written with symbolic computation in mind,
@@ -22,6 +25,9 @@ things (e.g., the =gcd= function really does return the greatest common
 divisor of two polynomials).
 
 * Polynomial Methods
+:PROPERTIES:
+:CUSTOM_ID: h-20d930e7-8d3b-4360-96e5-3204d34d5696
+:END:
 
 Given some representation of polynomials in a single variable, we review
 a few helper functions that come in handy.
@@ -48,6 +54,9 @@ $\nu\colon R\setminus\{0\}\to\mathbb{R}$?
 #+end_puzzle
 
 ** Long Division
+:PROPERTIES:
+:CUSTOM_ID: h-3c8e788d-b518-4461-a38d-32a712da0309
+:END:
 
 We can use a naive long division algorithm.
 
@@ -87,6 +96,9 @@ this.
 #+end_src
 
 ** Pseudo-Division
+:PROPERTIES:
+:CUSTOM_ID: h-a46c3f92-c5c8-4218-b5b1-0f992b6d96fe
+:END:
 
 When working over an integral domain $D$, we can't necessarily compute
 the quotient and remainder of polynomials. But we can compute the /pseudo-quotient/
@@ -119,6 +131,9 @@ denoted $\mathrm{prem}(A,B)$ by Bronstein.
 #+end_src
 
 ** Euclidean Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-1537ef09-adad-4c83-876c-91b8270bcd23
+:END:
 
 There are several variations of Euclid's algorithm for GCD with polynomials.
 
@@ -137,6 +152,9 @@ There are several variations of Euclid's algorithm for GCD with polynomials.
 #+end_src
 
 *** Extended Euclidean Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-c1978393-3a06-4729-a076-eb6919b03b93
+:END:
 
 The "follow your nose" implementation of the extended Euclidean
 algorithm could be implemented quite quickly.
@@ -167,6 +185,9 @@ algorithm could be implemented quite quickly.
 #+end_src
 
 *** Half-Extended Euclidean
+:PROPERTIES:
+:CUSTOM_ID: h-2b7f76fa-69cc-4289-be25-6cfdbd03cbe9
+:END:
 
 Alas, if we need only one of the coefficients =s= or ~t~, we can use a
 variant of the Euclidean algorithm which Bronstein calls the
@@ -191,6 +212,9 @@ variant of the Euclidean algorithm which Bronstein calls the
 #+end_src
 
 *** Euclidean Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-85ca51b2-bb65-4f0a-b27a-16d48d61e4c6
+:END:
 
 We can use this half-extended Euclidean algorithm for a more efficient
 implementation of Euclid's algorithm.
@@ -204,6 +228,9 @@ implementation of Euclid's algorithm.
 #+end_src
 
 *** Diophantine version of Extended Euclidean
+:PROPERTIES:
+:CUSTOM_ID: h-63ab8015-e645-4d71-8b37-b6fc9d363f6d
+:END:
 
 We can use the extended Euclidean algorithm to solve Diophantine
 equations of the form $sa+tb=c$ where $a,b,c\in D$ are given and $s,t\in D$
@@ -230,6 +257,9 @@ are the unknowns.
 #+end_src
 
 *** Diophantine Half-Extended Euclidean
+:PROPERTIES:
+:CUSTOM_ID: h-28f779bb-5e95-44fa-b0a6-6010c0dab934
+:END:
 
 When we only want the ~s~ in the Euclidean domain such that ~s*a = c~
 modulo ~b~ and either ~s = 0~ or ~nu(s) < nu(b)~. The other solution is
@@ -271,6 +301,9 @@ This gives us a more efficient diophantine extended Euclidean method
 #+end_src
 
 *** Partial Fraction Decomposition
+:PROPERTIES:
+:CUSTOM_ID: h-b241a9e1-876e-4de8-b2eb-37b79591e10d
+:END:
 
 We can use Euclidean Algorithm to determine the partial fraction
 decomposition of a ratio of polynomials. For $a/d$ we consider the
@@ -296,6 +329,9 @@ the corresponding denominator factors."
 #+end_src
 
 *** Partial Fraction Decomposition with Multiplicity
+:PROPERTIES:
+:CUSTOM_ID: h-ddaff7e3-7343-42d0-9805-220cf9b68a17
+:END:
 
 We explicitly assumed each factor $d_{i}$ was coprime with each other.
 But what happens if $d$ has a square factor $d_{i}^{2}$? Or more
@@ -364,5 +400,8 @@ respect to the factorization $d = \prod_{i} d_{i}^{e_{i}}$.
 # 34
 
 * References
+:PROPERTIES:
+:CUSTOM_ID: h-3f8f5f1a-82c6-4d68-8526-ef9bbf45f7c7
+:END:
 - Manuel Bronstein, {{{book-title(Symbolic Integration 1: Transcendental Functions)}}}.
   Springer, second ed., 1996.

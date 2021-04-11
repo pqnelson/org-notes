@@ -12,6 +12,9 @@
 # Created Thursday February 11, 2021 at  2:22PM
 
 * Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3
+:END:
 
 Following Peter Henderson's book, I'm going to investigate implementing
 a toy compiler for a simple Lisp targeting the [[file:../abstract-machines/secd.org][SECD machine]].
@@ -19,6 +22,9 @@ For completeness, I will try to write down the language for the Lisp
 fragment, then I will write the compiler for the Lisp fragment.
 
 * Lisp Primitives
+:PROPERTIES:
+:CUSTOM_ID: h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41
+:END:
 
 The language will provide the following primitives:
 
@@ -49,6 +55,9 @@ The language will provide the following primitives:
   numeric value of =<exp>=
 
 * Compiling to SECD
+:PROPERTIES:
+:CUSTOM_ID: h-5d573b7e-8dcb-4490-9781-ca307200782f
+:END:
 
 Let's now examine how to compile Lisp expressions to SECD code. This
 summarizes section 6.3 in Henderson's {{{book-title(Functional Programming)}}}.
@@ -56,6 +65,9 @@ We basically want to examine how a function =compile(exp, namelist)=
 is inductively defined.
 
 ** Helper Functions
+:PROPERTIES:
+:CUSTOM_ID: h-e8d4c07b-1a2b-4398-8ec8-f027194e3471
+:END:
 
 We need some helper functions first to make sense of the namelist data
 structure.
@@ -95,6 +107,9 @@ List* location(Symbol *x, List *namelist) {
 #+end_src
 
 ** Compile SExpression
+:PROPERTIES:
+:CUSTOM_ID: h-732b7cb4-396b-4469-839e-7a45e8636baa
+:END:
 
 To compile an S-Expression to SECD code, we have:
 
@@ -155,6 +170,9 @@ List* comp(SExp *e, SExp *n, SExp *c) {
 #+end_src
 
 *** Compiling Let-expressions
+:PROPERTIES:
+:CUSTOM_ID: h-9a92a2ad-41fc-452d-a0d5-dae117769683
+:END:
 
 When compiling =(let ((x1 e1) ... (x-n e-n)) body)=, we rewrite this as
 =((lambda (x1 ... x-n) body) e1 ... e-n)=.
@@ -180,6 +198,9 @@ SExp* exprs(SExp *d) {
 #+end_src
 
 * References
+:PROPERTIES:
+:CUSTOM_ID: h-8c101aab-be9e-4cb3-82ff-cd053abae6b0
+:END:
 
 - P. Henderson,
   {{{book-title(Functional Programming: Application and Implementation)}}}.
