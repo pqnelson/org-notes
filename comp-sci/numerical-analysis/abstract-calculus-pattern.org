@@ -1,0 +1,36 @@
+#+TITLE: Abstract Calculus Pattern
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-04-05T10:34:28-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Monday April  5, 2021 at 10:34AM
+
+* Overview
+
+The basic idea is to write functions which encapsulate the conceptual
+mathematics, using the strategy pattern, so different numerical schemes
+can be used to solve the problem. For example, something like
+
+#+begin_src lisp
+(defparameter *equation*
+  '(= (d u time) (* -k (laplacian u))))
+
+(defparameter *system*
+  '((:dependent-var (u))
+    (:independent-var (time x y z))
+    (:params ((k 1.0d0)))))
+
+(solve finite-difference-solver *equation* *system* :initial-cond ...)
+#+end_src
+
+* References
+
+- Damian Rouson, Jim Xia, Xiaofeng Xu,
+  {{{book-title(Scientific Software Design: The Object-Oriented Way)}}}.
+  Cambridge University Press, 2011; see esp. ch.6

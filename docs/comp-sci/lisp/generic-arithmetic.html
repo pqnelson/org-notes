@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-04 Sun 18:10 -->
+<!-- 2021-04-10 Sat 20:46 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Generic Arithmetic</title>
@@ -263,42 +263,42 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org35b2b5b">1. Introduction</a></li>
-<li><a href="#org1c770a1">2. Generic Arithmetic</a>
+<li><a href="#orgfee3d41">1. Introduction</a></li>
+<li><a href="#orgaafe33b">2. Generic Arithmetic</a>
 <ul>
-<li><a href="#org494b03a">2.1. Acting on two operands alone</a>
+<li><a href="#org16a748b">2.1. Acting on two operands alone</a>
 <ul>
-<li><a href="#org9088014">2.1.1. Addition</a></li>
-<li><a href="#org16800cc">2.1.2. Subtraction</a></li>
-<li><a href="#org9e0f885">2.1.3. Multiplication</a></li>
-<li><a href="#org10b0e82">2.1.4. Division</a></li>
+<li><a href="#org9bea450">2.1.1. Addition</a></li>
+<li><a href="#orgc2daa15">2.1.2. Subtraction</a></li>
+<li><a href="#org59628b6">2.1.3. Multiplication</a></li>
+<li><a href="#org687c95f">2.1.4. Division</a></li>
 </ul>
 </li>
-<li><a href="#orgf0ecb8f">2.2. Generic Unary Operations</a>
+<li><a href="#org8796163">2.2. Generic Unary Operations</a>
 <ul>
-<li><a href="#org61da949">2.2.1. Negation</a></li>
-<li><a href="#org6a9194d">2.2.2. Invert</a></li>
+<li><a href="#orgf20fcba">2.2.1. Negation</a></li>
+<li><a href="#org40048ab">2.2.2. Invert</a></li>
 </ul>
 </li>
-<li><a href="#org04635d5">2.3. Generic n-ary Operations</a>
+<li><a href="#org9062e64">2.3. Generic n-ary Operations</a>
 <ul>
-<li><a href="#orgaec5876">2.3.1. Addition</a></li>
-<li><a href="#org4f35a88">2.3.2. Subtraction</a></li>
-<li><a href="#org608747d">2.3.3. Multiplication</a></li>
-<li><a href="#org3aabd16">2.3.4. Division</a></li>
+<li><a href="#org09cf3d8">2.3.1. Addition</a></li>
+<li><a href="#org71ae9bc">2.3.2. Subtraction</a></li>
+<li><a href="#orgca48c1e">2.3.3. Multiplication</a></li>
+<li><a href="#org25e6227">2.3.4. Division</a></li>
 </ul>
 </li>
-<li><a href="#orge971091">2.4. Derived Operations</a></li>
+<li><a href="#orged6d5f8">2.4. Derived Operations</a></li>
 </ul>
 </li>
-<li><a href="#org562b137">3. SCMUTILS</a></li>
-<li><a href="#org8775f88">4. References</a></li>
+<li><a href="#org62e0623">3. SCMUTILS</a></li>
+<li><a href="#org5cf729e">4. References</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org35b2b5b" class="outline-2">
-<h2 id="org35b2b5b"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgfee3d41" class="outline-2">
+<h2 id="orgfee3d41"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 We have a notion of generic arithmetic where we can add symbols
@@ -315,12 +315,12 @@ and operating on numbers.
 </div>
 </div>
 
-<div id="outline-container-org1c770a1" class="outline-2">
-<h2 id="org1c770a1"><span class="section-number-2">2</span> Generic Arithmetic</h2>
+<div id="outline-container-orgaafe33b" class="outline-2">
+<h2 id="orgaafe33b"><span class="section-number-2">2</span> Generic Arithmetic</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org494b03a" class="outline-3">
-<h3 id="org494b03a"><span class="section-number-3">2.1</span> Acting on two operands alone</h3>
+<div id="outline-container-org16a748b" class="outline-3">
+<h3 id="org16a748b"><span class="section-number-3">2.1</span> Acting on two operands alone</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 We begin with making generic operations which act on two
@@ -330,8 +330,8 @@ operands, with default for numbers.
 </p>
 </div>
 
-<div id="outline-container-org9088014" class="outline-4">
-<h4 id="org9088014"><span class="section-number-4">2.1.1</span> Addition</h4>
+<div id="outline-container-org9bea450" class="outline-4">
+<h4 id="org9bea450"><span class="section-number-4">2.1.1</span> Addition</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <div class="org-src-container">
 <pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">add</span> (x y))
@@ -343,8 +343,8 @@ operands, with default for numbers.
 </div>
 </div>
 
-<div id="outline-container-org16800cc" class="outline-4">
-<h4 id="org16800cc"><span class="section-number-4">2.1.2</span> Subtraction</h4>
+<div id="outline-container-orgc2daa15" class="outline-4">
+<h4 id="orgc2daa15"><span class="section-number-4">2.1.2</span> Subtraction</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <div class="org-src-container">
 <pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">sub</span> (x y)
@@ -357,8 +357,8 @@ operands, with default for numbers.
 </div>
 </div>
 
-<div id="outline-container-org9e0f885" class="outline-4">
-<h4 id="org9e0f885"><span class="section-number-4">2.1.3</span> Multiplication</h4>
+<div id="outline-container-org59628b6" class="outline-4">
+<h4 id="org59628b6"><span class="section-number-4">2.1.3</span> Multiplication</h4>
 <div class="outline-text-4" id="text-2-1-3">
 <div class="org-src-container">
 <pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">times</span> (x y))
@@ -370,8 +370,8 @@ operands, with default for numbers.
 </div>
 </div>
 
-<div id="outline-container-org10b0e82" class="outline-4">
-<h4 id="org10b0e82"><span class="section-number-4">2.1.4</span> Division</h4>
+<div id="outline-container-org687c95f" class="outline-4">
+<h4 id="org687c95f"><span class="section-number-4">2.1.4</span> Division</h4>
 <div class="outline-text-4" id="text-2-1-4">
 <div class="org-src-container">
 <pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">div</span> (x y))
@@ -386,8 +386,8 @@ operands, with default for numbers.
 
 
 
-<div id="outline-container-orgf0ecb8f" class="outline-3">
-<h3 id="orgf0ecb8f"><span class="section-number-3">2.2</span> Generic Unary Operations</h3>
+<div id="outline-container-org8796163" class="outline-3">
+<h3 id="org8796163"><span class="section-number-3">2.2</span> Generic Unary Operations</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 There are two special cases we need to consider when dealing with
@@ -397,8 +397,8 @@ the case when subtraction and division are given a single argument
 </p>
 </div>
 
-<div id="outline-container-org61da949" class="outline-4">
-<h4 id="org61da949"><span class="section-number-4">2.2.1</span> Negation</h4>
+<div id="outline-container-orgf20fcba" class="outline-4">
+<h4 id="orgf20fcba"><span class="section-number-4">2.2.1</span> Negation</h4>
 <div class="outline-text-4" id="text-2-2-1">
 <div class="org-src-container">
 <pre class="src src-lisp">(<span class="org-keyword">defgeneric</span> <span class="org-function-name">negate</span> (x))
@@ -410,8 +410,8 @@ the case when subtraction and division are given a single argument
 </div>
 </div>
 
-<div id="outline-container-org6a9194d" class="outline-4">
-<h4 id="org6a9194d"><span class="section-number-4">2.2.2</span> Invert</h4>
+<div id="outline-container-org40048ab" class="outline-4">
+<h4 id="org40048ab"><span class="section-number-4">2.2.2</span> Invert</h4>
 <div class="outline-text-4" id="text-2-2-2">
 <p>
 Of particular concern, in the future, will be having an <code>invert</code>
@@ -429,8 +429,8 @@ for matrix classes.
 </div>
 </div>
 
-<div id="outline-container-org04635d5" class="outline-3">
-<h3 id="org04635d5"><span class="section-number-3">2.3</span> Generic n-ary Operations</h3>
+<div id="outline-container-org9062e64" class="outline-3">
+<h3 id="org9062e64"><span class="section-number-3">2.3</span> Generic n-ary Operations</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 We adhere to the signatures of arithmetic operators specified in
@@ -438,8 +438,8 @@ We adhere to the signatures of arithmetic operators specified in
 </p>
 </div>
 
-<div id="outline-container-orgaec5876" class="outline-4">
-<h4 id="orgaec5876"><span class="section-number-4">2.3.1</span> Addition</h4>
+<div id="outline-container-org09cf3d8" class="outline-4">
+<h4 id="org09cf3d8"><span class="section-number-4">2.3.1</span> Addition</h4>
 <div class="outline-text-4" id="text-2-3-1">
 <p>
 Our first attempt at adding quantities should adhere to the
@@ -469,8 +469,8 @@ definition to be:
 </div>
 </div>
 
-<div id="outline-container-org4f35a88" class="outline-4">
-<h4 id="org4f35a88"><span class="section-number-4">2.3.2</span> Subtraction</h4>
+<div id="outline-container-org71ae9bc" class="outline-4">
+<h4 id="org71ae9bc"><span class="section-number-4">2.3.2</span> Subtraction</h4>
 <div class="outline-text-4" id="text-2-3-2">
 <div class="org-src-container">
 <pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">-</span> (minuend &amp; subtrahends)
@@ -482,8 +482,8 @@ definition to be:
 </div>
 </div>
 
-<div id="outline-container-org608747d" class="outline-4">
-<h4 id="org608747d"><span class="section-number-4">2.3.3</span> Multiplication</h4>
+<div id="outline-container-orgca48c1e" class="outline-4">
+<h4 id="orgca48c1e"><span class="section-number-4">2.3.3</span> Multiplication</h4>
 <div class="outline-text-4" id="text-2-3-3">
 <div class="org-src-container">
 <pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">*</span> (<span class="org-type">&amp;rest</span> quantities)
@@ -496,8 +496,8 @@ definition to be:
 </div>
 </div>
 
-<div id="outline-container-org3aabd16" class="outline-4">
-<h4 id="org3aabd16"><span class="section-number-4">2.3.4</span> Division</h4>
+<div id="outline-container-org25e6227" class="outline-4">
+<h4 id="org25e6227"><span class="section-number-4">2.3.4</span> Division</h4>
 <div class="outline-text-4" id="text-2-3-4">
 <div class="org-src-container">
 <pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">/</span> (numerator <span class="org-type">&amp;rest</span> denominators)
@@ -510,8 +510,8 @@ definition to be:
 </div>
 </div>
 
-<div id="outline-container-orge971091" class="outline-3">
-<h3 id="orge971091"><span class="section-number-3">2.4</span> Derived Operations</h3>
+<div id="outline-container-orged6d5f8" class="outline-3">
+<h3 id="orged6d5f8"><span class="section-number-3">2.4</span> Derived Operations</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 We have operations derived from these basic ones. For example,
@@ -529,8 +529,8 @@ exponentiation.
 </div>
 </div>
 
-<div id="outline-container-org562b137" class="outline-2">
-<h2 id="org562b137"><span class="section-number-2">3</span> SCMUTILS</h2>
+<div id="outline-container-org62e0623" class="outline-2">
+<h2 id="org62e0623"><span class="section-number-2">3</span> SCMUTILS</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 It seems SCMUTILS has a <code>make-generic-operator &lt;arity&gt; &lt;name&gt; &lt;default-operation&gt;</code>
@@ -540,14 +540,14 @@ method to declare a generic operator.
 <p>
 Then <code>assign-operation</code> will take a generic-operator, the
 appropriate handler, and some number of argument predicates. As
-SCMUTILS uses <a href="multiple-dispatch.html#org9df990e">Predicate Dispatching</a> the predicates control method
+SCMUTILS uses <a href="multiple-dispatch.html#org418737a">Predicate Dispatching</a> the predicates control method
 selection.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org8775f88" class="outline-2">
-<h2 id="org8775f88"><span class="section-number-2">4</span> References</h2>
+<div id="outline-container-org5cf729e" class="outline-2">
+<h2 id="org5cf729e"><span class="section-number-2">4</span> References</h2>
 <div class="outline-text-2" id="text-4">
 <ul class="org-ul">
 <li>SCMUTILS is a library with daunting generic arithmetic

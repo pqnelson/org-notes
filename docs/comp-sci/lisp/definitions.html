@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-04 Sun 18:10 -->
+<!-- 2021-04-10 Sat 20:46 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Definitions in Lisp</title>
@@ -241,26 +241,26 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org8b7ffa8">1. Overview</a></li>
-<li><a href="#orgd835d6c">2. Defun</a>
+<li><a href="#org4e42ca0">1. Overview</a></li>
+<li><a href="#org5329532">2. Defun</a>
 <ul>
-<li><a href="#orgf06e6c3">2.1. SBCL</a></li>
-<li><a href="#orga76dc39">2.2. ABCL</a></li>
+<li><a href="#orgc3e7b50">2.1. SBCL</a></li>
+<li><a href="#org13968ed">2.2. ABCL</a></li>
 </ul>
 </li>
-<li><a href="#orgc4e9ac4">3. Defgeneric</a>
+<li><a href="#org7a289be">3. Defgeneric</a>
 <ul>
-<li><a href="#org5d6fc40">3.1. SBCL</a></li>
-<li><a href="#org31af693">3.2. ABCL</a></li>
-<li><a href="#org7f8562b">3.3. CCL</a></li>
+<li><a href="#orgbcbc641">3.1. SBCL</a></li>
+<li><a href="#org69a757a">3.2. ABCL</a></li>
+<li><a href="#orga36efb5">3.3. CCL</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org8b7ffa8" class="outline-2">
-<h2 id="org8b7ffa8"><span class="section-number-2">1</span> Overview</h2>
+<div id="outline-container-org4e42ca0" class="outline-2">
+<h2 id="org4e42ca0"><span class="section-number-2">1</span> Overview</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Common Lisp &#x2014; being a Lisp-2 &#x2014; has two namespaces for definitions:
@@ -270,16 +270,16 @@ does, say, <code>defgeneric</code> and <code>defmethod</code> work?
 </div>
 </div>
 
-<div id="outline-container-orgd835d6c" class="outline-2">
-<h2 id="orgd835d6c"><span class="section-number-2">2</span> Defun</h2>
+<div id="outline-container-org5329532" class="outline-2">
+<h2 id="org5329532"><span class="section-number-2">2</span> Defun</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Usually <code>defun</code> is a macro.
 </p>
 </div>
 
-<div id="outline-container-orgf06e6c3" class="outline-3">
-<h3 id="orgf06e6c3"><span class="section-number-3">2.1</span> SBCL</h3>
+<div id="outline-container-orgc3e7b50" class="outline-3">
+<h3 id="orgc3e7b50"><span class="section-number-3">2.1</span> SBCL</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 As I understand it, SBCL's implementation is a <a href="https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/code/macros.lisp#L151-L163">macro</a> which calls <a href="https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/code/target-misc.lisp#L164-L183">%defun</a>.
@@ -288,8 +288,8 @@ It amounts to <code>(setf (fdefinition name) def)</code> as one might expect.
 </div>
 </div>
 
-<div id="outline-container-orga76dc39" class="outline-3">
-<h3 id="orga76dc39"><span class="section-number-3">2.2</span> ABCL</h3>
+<div id="outline-container-org13968ed" class="outline-3">
+<h3 id="org13968ed"><span class="section-number-3">2.2</span> ABCL</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 Armed Bear CL has a primitive <a href="https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/Primitives.java#L1770-L1795">%defun</a> Java class.
@@ -298,12 +298,12 @@ Armed Bear CL has a primitive <a href="https://github.com/armedbear/abcl/blob/08
 </div>
 </div>
 
-<div id="outline-container-orgc4e9ac4" class="outline-2">
-<h2 id="orgc4e9ac4"><span class="section-number-2">3</span> Defgeneric</h2>
+<div id="outline-container-org7a289be" class="outline-2">
+<h2 id="org7a289be"><span class="section-number-2">3</span> Defgeneric</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org5d6fc40" class="outline-3">
-<h3 id="org5d6fc40"><span class="section-number-3">3.1</span> SBCL</h3>
+<div id="outline-container-orgbcbc641" class="outline-3">
+<h3 id="orgbcbc641"><span class="section-number-3">3.1</span> SBCL</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 SBCL uses a rather contrived <a href="https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/boot.lisp#L251-L342">macro</a> roughly 90 lines long.
@@ -317,8 +317,8 @@ calls <a href="https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/boot.lisp#L
 </div>
 </div>
 
-<div id="outline-container-org31af693" class="outline-3">
-<h3 id="org31af693"><span class="section-number-3">3.2</span> ABCL</h3>
+<div id="outline-container-org69a757a" class="outline-3">
+<h3 id="org69a757a"><span class="section-number-3">3.2</span> ABCL</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 Armed Bear uses a <a href="https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/clos.lisp#L1687-L1729">macro</a>. It delegates to <code>%defgeneric</code> (<a href="https://github.com/armedbear/abcl/blob/084f0cb28a80a9040bec3927b8a167190fd38d38/src/org/armedbear/lisp/clos.lisp#L1786-L1802">L1786-L1802</a>).
@@ -327,8 +327,8 @@ which is a wrapper around <code>ensure-generic-function</code> (<a href="http://
 </div>
 </div>
 
-<div id="outline-container-org7f8562b" class="outline-3">
-<h3 id="org7f8562b"><span class="section-number-3">3.3</span> CCL</h3>
+<div id="outline-container-orga36efb5" class="outline-3">
+<h3 id="orga36efb5"><span class="section-number-3">3.3</span> CCL</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 CCL has a <a href="https://github.com/Clozure/ccl/blob/v1.12/lib/macros.lisp#L2152-L2167">macro</a> defining <code>defgeneric</code>. Like ABCL, it delegates to

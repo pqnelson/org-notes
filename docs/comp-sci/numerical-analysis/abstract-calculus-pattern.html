@@ -4,7 +4,7 @@
 <!-- 2021-04-10 Sat 20:46 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Multiple Dispatch</title>
+<title>Abstract Calculus Pattern</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -236,87 +236,54 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Multiple Dispatch</h1>
+<h1 class="title">Abstract Calculus Pattern</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgd5cd7b0">1. Introduction</a></li>
-<li><a href="#orgbb6c655">2. Common Lisp</a></li>
-<li><a href="#org418737a">3. Predicate Dispatching</a></li>
-<li><a href="#org8bd9801">4. References</a></li>
+<li><a href="#orgad4a365">1. Overview</a></li>
+<li><a href="#orgaf13de6">2. References</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgd5cd7b0" class="outline-2">
-<h2 id="orgd5cd7b0"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgad4a365" class="outline-2">
+<h2 id="orgad4a365"><span class="section-number-2">1</span> Overview</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Multimethods, or multiple dispatch, is a feature of Common
-Lisp. The exact details depend on the Common Lisp Object System.
+The basic idea is to write functions which encapsulate the conceptual
+mathematics, using the strategy pattern, so different numerical schemes
+can be used to solve the problem. For example, something like
 </p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defparameter</span> <span class="org-variable-name">*equation*</span>
+  '(= (d u time) (* -k (laplacian u))))
+
+(<span class="org-keyword">defparameter</span> <span class="org-variable-name">*system*</span>
+  '((<span class="org-builtin">:dependent-var</span> (u))
+    (<span class="org-builtin">:independent-var</span> (time x y z))
+    (<span class="org-builtin">:params</span> ((k 1.0d0)))))
+
+(solve finite-difference-solver *equation* *system* <span class="org-builtin">:initial-cond</span> ...)
+</pre>
+</div>
 </div>
 </div>
 
-<div id="outline-container-orgbb6c655" class="outline-2">
-<h2 id="orgbb6c655"><span class="section-number-2">2</span> Common Lisp</h2>
+<div id="outline-container-orgaf13de6" class="outline-2">
+<h2 id="orgaf13de6"><span class="section-number-2">2</span> References</h2>
 <div class="outline-text-2" id="text-2">
-<p>
-We can have multiple inheritance in Common Lisp, which complicates
-things. If we avoid multiple inheritance, we can use <code>defgeneric</code>
-to create a generic function, and provide a <code>defmethod</code>
-implementation for each data type or class.
-</p>
-
-<p>
-The dispatch mechanism proceeds as follows:
-</p>
-
-<ol class="org-ol">
-<li>Compute the list of applicable methods</li>
-<li>If no method is applicable, signal an error</li>
-<li>Sort the applicable methods in order of specificity</li>
-<li>Invoke the most specific method.</li>
-</ol>
-</div>
-</div>
-
-<div id="outline-container-org418737a" class="outline-2">
-<h2 id="org418737a"><span class="section-number-2">3</span> Predicate Dispatching</h2>
-<div class="outline-text-2" id="text-3">
-<p>
-Apparently more sophisticated than Common Lisp's builtin
-<code>defgeneric</code> and <code>defmethod</code>. Predicates are used to determine if a
-generic method applies to its arguments, and method <code>m1</code> overrides
-<code>m2</code> if the predicate for <code>m1</code> implies <code>m2</code>. This relationship is
-computed at compile-time.
-</p>
-
-<p>
-One advantage predicate dispatching has over multiple dispatch,
-predicate dispatching allows for some degree of pattern
-matching. This is impossible with multiple dispatching.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org8bd9801" class="outline-2">
-<h2 id="org8bd9801"><span class="section-number-2">4</span> References</h2>
-<div class="outline-text-2" id="text-4">
 <ul class="org-ul">
-<li>Ernst, Kaplan, Chambers, "Predicate Dispatching: A Unified Theory
-of Dispatch". In ECOOP'98, LNCS vol 1445, Springer, pp 186-211
-(1998). <a href="https://homes.cs.washington.edu/~mernst/pubs/dispatching-ecoop98-abstract.html">Eprint</a>.</li>
-<li>Aaron Mark Ucko, "Predicate Dispatching in the Common Lisp Object
-System". MIT AI Tech Report 2001-006, dated June 2001.
-<a href="https://dspace.mit.edu/handle/1721.1/7071">Eprint</a>.</li>
+<li>Damian Rouson, Jim Xia, Xiaofeng Xu,
+<cite class="book-title">Scientific Software Design: The Object-Oriented Way</cite>.
+Cambridge University Press, 2011; see esp. ch.6</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-03-18 Thu 15:43.</p>
+<p class="postamble">Last Updated 2021-04-05 Mon 10:46.</p>
 </div>
 </body>
 </html>

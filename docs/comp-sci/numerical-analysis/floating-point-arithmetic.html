@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-04 Sun 18:11 -->
+<!-- 2021-04-10 Sat 20:46 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Floating Point Arithmetic</title>
@@ -263,25 +263,25 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org2bc69f6">1. Representing numbers</a>
+<li><a href="#org56ceaa2">1. Representing numbers</a>
 <ul>
-<li><a href="#orgc3697c6">1.1. Motivational example</a></li>
-<li><a href="#orgd3ef1b5">1.2. Rounding, Truncating</a></li>
-<li><a href="#org6c654f2">1.3. Relative, Absolute Error</a></li>
+<li><a href="#org9f9cf83">1.1. Motivational example</a></li>
+<li><a href="#org29d365c">1.2. Rounding, Truncating</a></li>
+<li><a href="#org92fdda6">1.3. Relative, Absolute Error</a></li>
 </ul>
 </li>
-<li><a href="#org7e6988a">2. References</a></li>
+<li><a href="#orge49f4b6">2. References</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-org2bc69f6" class="outline-2">
-<h2 id="org2bc69f6"><span class="section-number-2">1</span> Representing numbers</h2>
+<div id="outline-container-org56ceaa2" class="outline-2">
+<h2 id="org56ceaa2"><span class="section-number-2">1</span> Representing numbers</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgc3697c6" class="outline-3">
-<h3 id="orgc3697c6"><span class="section-number-3">1.1</span> Motivational example</h3>
+<div id="outline-container-org9f9cf83" class="outline-3">
+<h3 id="org9f9cf83"><span class="section-number-3">1.1</span> Motivational example</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 The basic idea could be discussed by first considering a number
@@ -321,8 +321,8 @@ leading 1 (i.e., we can pretend the <code>c</code> tuple describes the bits
 </div>
 </div>
 
-<div id="outline-container-orgd3ef1b5" class="outline-3">
-<h3 id="orgd3ef1b5"><span class="section-number-3">1.2</span> Rounding, Truncating</h3>
+<div id="outline-container-org29d365c" class="outline-3">
+<h3 id="org29d365c"><span class="section-number-3">1.2</span> Rounding, Truncating</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 Given some number with decimal expansion
@@ -343,7 +343,7 @@ Either way, rounding/truncating is one source of error. But it's a
 price we always have to pay for using a computer.
 </p>
 
-<div class="definition" id="org03362db">
+<div class="definition" id="org62ce051">
 <p>
 Let \(x\) be a real number. Then the encoding of it to our number
 system corresponds to mapping it to the number \(fl(x)\).
@@ -356,7 +356,7 @@ We will continue working in our system of 7-digit scientific numbers,
 with 3-digit exponents.
 </p>
 
-<div class="remark" id="org487f5cf">
+<div class="remark" id="orgf24e369">
 <p>
 The choice of 7 digits and 3-digit exponents is not arbitrary, this
 turns out to be one of the standard floating point representations for
@@ -369,15 +369,15 @@ computation), so we use it to clarify certain concepts.
 </div>
 </div>
 
-<div id="outline-container-org6c654f2" class="outline-3">
-<h3 id="org6c654f2"><span class="section-number-3">1.3</span> Relative, Absolute Error</h3>
+<div id="outline-container-org92fdda6" class="outline-3">
+<h3 id="org92fdda6"><span class="section-number-3">1.3</span> Relative, Absolute Error</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 How do we measure how good (or bad) an approximation is to its true
 value? We have two possibilities.
 </p>
 
-<div class="definition" id="orge62dcba">
+<div class="definition" id="org6e2708b">
 <p>
 Let \(x\) be a real number and \(x_{\ast}\) an approximation to
 \(x\). Then its <dfn>Absolute Error</dfn> is \(|x - x_{\ast}|\).
@@ -385,7 +385,7 @@ Let \(x\) be a real number and \(x_{\ast}\) an approximation to
 
 </div>
 
-<div class="definition" id="org243a5a7">
+<div class="definition" id="org2049097">
 <p>
 Let \(x\) be a real number and \(x_{\ast}\) an approximation to
 \(x\). Then its <dfn>Relative Error</dfn> is \(|x - x_{\ast}|/x\) if \(x\neq0\).
@@ -393,7 +393,7 @@ Let \(x\) be a real number and \(x_{\ast}\) an approximation to
 
 </div>
 
-<div class="math-example" id="org3264758">
+<div class="math-example" id="orge40ccba">
 <p>
 When we have two numbers close to each other \(fl(x)\approx fl(y)\),
 say they agree to 4 digits, then \(fl(x) - fl(y)\)
@@ -408,8 +408,8 @@ is small, though the relative error is large.
 </div>
 
 
-<div id="outline-container-org7e6988a" class="outline-2">
-<h2 id="org7e6988a"><span class="section-number-2">2</span> References</h2>
+<div id="outline-container-orge49f4b6" class="outline-2">
+<h2 id="orge49f4b6"><span class="section-number-2">2</span> References</h2>
 <div class="outline-text-2" id="text-2">
 <ul class="org-ul">
 <li>Richard L. Burden and J. Douglas Faires,
