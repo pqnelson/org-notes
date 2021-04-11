@@ -418,7 +418,9 @@ element consists of:
   or message to the method as an extra argument. If the parameter in the
   handler table is ~nil~, the generic function or message is used as the
   parameter.
-
+  
+#+NAME: rmk-map-table
+#+ATTR_HTML: :id rmk-map-table
 #+begin_remark
 I honestly do not understand the idea of a mapping table so far.
 #+end_remark
@@ -427,6 +429,9 @@ There's a "fence object" at the end of the handler hash table, which is
 filled with ~nil~ entries for its key, method, and parameter. Unused
 methods are likewise filled with ~nil~ entries.
 
+#+NAME: rmk-dtp-pc
+#+ATTR_HTML: :id
+#+ATTR_HTML: :id rmk-dtp-pc
 #+begin_remark
 We should note that it seems, thus far reading the fine manual, that
 ~dtp-even-pc~ and ~dtp-odd-pc~ are pointers to functions --- compiled,
@@ -579,6 +584,8 @@ The object reference to a complex number is a word of data type
 contains the real part of the number, and the cdr contains the imaginary
 part.
 
+#+NAME: rmk-complex-number
+#+ATTR_HTML: :id rmk-complex-number
 #+begin_remark
 Obviously, this is the Cartesian representation of the number. There are
 other representations (polar, etc.) which are also useful, but we
@@ -751,6 +758,8 @@ array.type = DTP_ARRAY;
 array.data = (&prefix) + 1; /* start address of array data */
 #+end_src
 
+#+NAME: rmk-addr-leader
+#+ATTR_HTML: :id rmk-addr-leader
 #+begin_remark
 The address of leader element ~i~ of an array whose address is ~a~,
 regardless of whether the prefix is long or short, is given by ~(- a i 1)~.
@@ -891,6 +900,7 @@ The memory layout for this looks roughly as follows:
 
 #+CAPTION: The memory layout for a compiled function
 #+NAME:   fig:SED-HR4049
+#+ATTR_HTML: :id fig:SED-HR4049
 [[../../../../img/lisp-machine-0.svg]]
 
 Now, for a ~(defun <function-name> (params...) body..)~ we have a symbol

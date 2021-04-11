@@ -154,6 +154,8 @@ The pseudocode for the ~locate()~ function requires first
 introducing a function which returns the ~nth~ member of a list
 (zero-indexed):
 
+#+NAME: secd-index
+#+ATTR_HTML: :id secd-index
 #+begin_example
 index :: Int -> List -> a
 index 0 s = car(s)
@@ -164,6 +166,8 @@ index n s = if n < 0 then error "Must have non-negative index number"
 We use this to define a function which determines, for an index
 pair ~i = (b . n)~ the corresponding value in the environment:
 
+#+NAME: secd-locate
+#+ATTR_HTML: :id secd-locate
 #+begin_example
 locate :: (Int, Int) -> Env -> a
 locate (b, n) e = index n (index b e)
@@ -232,6 +236,8 @@ That's why =RAP=, instead of pushing a new list onto the
 environment stack, simply replaces whatever is at the head of =e=
 with a new environment list.
 
+#+NAME: rmk-tail-recursion
+#+ATTR_HTML: :id rmk-tail-recursion
 #+begin_remark
 For further consideration about recursive functions in SECD,
 consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
