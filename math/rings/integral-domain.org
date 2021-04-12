@@ -16,21 +16,25 @@
 :CUSTOM_ID: h-4240abb9-9c4e-4b3b-bd9d-03f7a69513fe
 :END:
 
+#+ATTR_HTML: :id defn-integral-domain
 #+begin_definition
 An {{{define(Integral Domain)}}} is a unital ring with no nonzero
 divisors, i.e., if $ab = 0$ then either $a=0$ or $b=0$.
 #+end_definition
 
+#+ATTR_HTML: :id rmk-integral-domain
 #+begin_remark
 Constructive mathematicians would phrase this differently, as saying
 $ab\neq0$ whenever $a\neq0$ and $b\neq0$.
 #+end_remark
 
+#+ATTR_HTML: :id ex-basic-id
 #+begin_math-example
 The integers $\ZZ$, rationals $\QQ$, reals $\RR$, and complex numbers
 are integral domains.
 #+end_math-example
 
+#+ATTR_HTML: :id nonex-id
 #+begin_math-example
 Let $X$ be a non-empty set with at least 2 disjoint subsets $X_{1}$, $X_{2}$;
 and let $R$ be any ring. Then $\hom(X,R)$ is *not an integral domain.*
@@ -62,6 +66,7 @@ since $X_{0}\cap X_{1}=\emptyset$. Although both $f\neq0$ and $g\neq0$,
 we have $fg=0$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-z-5-is-id
 #+begin_math-example
 The ring $\ZZ[\sqrt{-5}]$ is an integral domain.
 #+end_math-example
@@ -71,11 +76,13 @@ The ring $\ZZ[\sqrt{-5}]$ is an integral domain.
 :CUSTOM_ID: h-31593adb-6a69-49fd-b399-e0d57ba9103f
 :END:
 
+#+ATTR_HTML: :id defn-divides
 #+begin_definition
 Let $R$ be an integral domain, and $x,y\in R$. We say that $x$
 {{{define(Divides)}}} $y$, and write $x\mid y$, if $y=xt$ for some $t\in R$.
 #+end_definition
 
+#+ATTR_HTML: :id defn-unit
 #+begin_definition
 We call an element $x\in R$ a {{{define(Unit)}}} if $x\mid 1$. The set
 of units of $R$ is denoted $R^{*}$.
@@ -86,6 +93,7 @@ a multiplicative inverse. Every integral domain has at least one unit
 (indeed, all /unital/ rings have at least one unit): the multiplicative
 identity $1\in R$ is its own multiplicative inverse.
 
+#+ATTR_HTML: :id defn-gcd
 #+NAME: defn-gcd
 #+begin_definition
 We say $z\in R$ is  a {{{define(Greatest Common Divisor)}}} of $x_{1}$,
@@ -100,11 +108,13 @@ which is a gcd of $x$ and $y$.
 #+end_definition
 
 
+#+ATTR_HTML: :id lemma-gcd-unique-up-to-unit
 #+begin_lemma
 Let $R$ be an integral domain, and $x,y\in R$.
 If  $z$ and $t$ are both GCDs of $x$ and $y$, then there exists a $u\in R$
 such that $z=ut$.
 #+end_lemma
+#+ATTR_HTML: :id proof-gcd-unique-up-to-unit
 #+begin_proof
 - Assume $z = \gcd(x,y)$, $t=\gcd(x,y)$, and $t\neq z$.
 - Then $t\mid x$ and $t\mid y$ by [[defn-gcd][definition of gcd]].
@@ -112,6 +122,7 @@ such that $z=ut$.
 - Thus $z=ut$ for some $u\in R$.
 #+end_proof
 
+#+ATTR_HTML: :id thm-gcd-unique-up-to-limit
 #+begin_theorem
 (Bronstein, 1.1.1)
 Let $R$ be an integral domain, and $x,y\in R$.
@@ -119,6 +130,7 @@ If $z$ and $t$ are both GCDs of $x$ and $y$, then $z=ut$ and $t=vz$ for
 some units $u,v\in R^{*}$.
 #+end_theorem
 
+#+ATTR_HTML: :id proof-gcd-unique-up-to-limit
 #+begin_proof
 - Assume $z = \gcd(x,y)$, $t=\gcd(x,y)$, and $t\neq z$.
 - Consider $u\in R$ such that $z=ut$ by the previous lemma.
@@ -129,6 +141,7 @@ some units $u,v\in R^{*}$.
 - Thus $u,v\in R^{*}$.
 #+end_proof
 
+#+ATTR_HTML: :id defn-associates
 #+begin_definition
 In an integral domain $R$, let $a,b\in R$. If $a$ divides $b$, and $b$
 divides $a$, then we call them {{{define(Associates)}}}. Equivalently,
@@ -140,12 +153,14 @@ if there is some unit $u\in R^{*}$ such that $a=ub$.
 :CUSTOM_ID: h-ab39792c-a710-41bc-9bdc-6050a248c005
 :END:
 
+#+ATTR_HTML: :id defn-prime
 #+begin_definition
 Let $R$ be an integral domain.
 A nonzero element $p\in R\setminus R^{*}$ is called {{{define(Prime)}}}
 if for any $a,b\in R$, $p\mid ab$ implies $p\mid a$ or $p\mid b$.
 #+end_definition
 
+#+ATTR_HTML: :id defn-irreducible
 #+begin_definition
 Let $R$ be an integral domain.
 A nonzero element $p\in R\setminus R^{\ast}$ is called {{{define(Irreducible)}}}
@@ -157,11 +172,13 @@ is irreducible if for any $a,b\in R$, we have
 $a\notin R^{\ast}$ and $b\notin R^{\ast}$ implies
 $p\neq ab$. That is, it can't be written as the product of two non-units.
 
+#+ATTR_HTML: :id thm-every-prime-is-irreducible-in-id
 #+begin_theorem
 Let $R$ be an integral domain.
 Then every prime $p\in R$ is irreducible.
 #+end_theorem
 
+#+ATTR_HTML: :id proof-every-prime-is-irreducible-in-id
 #+begin_proof
 - Let $p\in R$ be prime.
 - Assume $a,b\in R$ satisfy $p=ab$.
@@ -175,6 +192,7 @@ Then every prime $p\in R$ is irreducible.
 - Hence $p$ is irreducible.
 #+end_proof
 
+#+ATTR_HTML: :id rmk-not-all-irreducibles-are-prime
 #+begin_remark
 In any integral domain, a prime is always irreducible. The converse is
 not always true.

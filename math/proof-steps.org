@@ -50,6 +50,7 @@ leave informal the following syntactic categories:
 
 Using Wirth syntax notation:
 
+#+ATTR_HTML: :id grammar
 #+begin_example
 statement = proposition justification ";"
           | term "=" term justification
@@ -86,6 +87,7 @@ Note that justifications allow for nested proofs.
 
 The proof skeleton for this step looks like:
 
+#+ATTR_HTML: :id let
 #+begin_example
 <proof of 'forall x, P(x)'> ::=
     <preliminary steps>
@@ -112,6 +114,7 @@ When we want to prove a goal of the form $A\implies B$, we begin by
 stipulating the hypothesis $A$ holds. That is to say, we =assume=
 $A$.
 
+#+ATTR_HTML: :id assume
 #+begin_example
 <proof of $A\implies B$> ::=
     <preliminary steps>
@@ -130,6 +133,7 @@ stipulate $A$ is true, then demonstrate this leads to a
 contradiction. We're forced to conclude that our stipulation must
 be wrong, and that $A$ must be false (i.e., $\neg A$ is true).
 
+#+ATTR_HTML: :id assume-negation
 #+begin_example
 <proof of ¬A> ::=
     <preliminary steps>
@@ -147,6 +151,7 @@ contradiction implies $\neg A$, then assuming $\neg A$ and deriving
 a contradiction implies $A$. This is the /reductio ad absurdum/
 rule. Usually I write in parentheses "=assume= $A$ (for contradiction)".
 
+#+ATTR_HTML: :id assume-reductio
 #+begin_example
 <proof of A> ::=
     <preliminary steps>
@@ -173,6 +178,7 @@ upper-left obligation $\Gamma\vdash A$ is referenced as the
 justification for the step. The upper-right obligation is the new
 proof goal.
 
+#+ATTR_HTML: :id and-intro
 #+begin_example
 <proof of A and B> ::=
     <preliminary steps>
@@ -195,6 +201,7 @@ The natural deduction rule is of the form
 \end{equation}
 The upper-left proof obligation is used to justify the =per cases= step.
 
+#+ATTR_HTML: :id or-intro
 #+begin_example
 <proof of B> ::=
     <preliminary steps>
@@ -225,6 +232,7 @@ The natural deduction inference rule corresponding to this step is
 \end{equation}
 The top-left subgoal is the justification for the proof step.
 
+#+ATTR_HTML: :id exists-elim
 #+begin_example
 <proof of A> ::=
     <preliminary steps>
@@ -246,6 +254,7 @@ In natural deduction, this corresponds to $\exists$-intro:
 \frac{\Gamma\vdash P[a]}{\Gamma\vdash \exists x, P[x]}
 \end{equation}
 
+#+ATTR_HTML: :id exists-intro
 #+begin_example
 <proof of exists x such that P[x]> ::=
     <preliminary steps>
@@ -265,6 +274,8 @@ In natural deduction, this corresponds to $\exists$-intro:
 For steps requiring justification, if we use the previous step as
 part of the justification, we can prefix the step with =then=. For
 example:
+
+#+ATTR_HTML: :id then-step
 #+begin_example
     <step>
     then consider t such that P[t];
@@ -288,6 +299,7 @@ synonyms.
 
 We also routinely write steps of the form
 
+#+ATTR_HTML: :id ex-assume-then-consider
 #+begin_example
     assume exists x such that [x];
     then consider t such that P[t];
@@ -295,6 +307,7 @@ We also routinely write steps of the form
 
 This is rather wordy. We contract the two steps into one:
 
+#+ATTR_HTML: :id given
 #+begin_example
     given t such that P[t];
 #+end_example
@@ -308,6 +321,7 @@ When we've already introduced an identifier (a symbol used for a
 term or variable) in a proof, but we want to re-use somewhere later
 in the proof, we can flag this to the reader by writing:
 
+#+ATTR_HTML: :id set
 #+begin_example
 "set" variable "=" term ";"
 #+end_example
@@ -334,6 +348,7 @@ or =hence thesis=.
 
 One of the conventions I've adopted is to use the proof skeleton:
 
+#+ATTR_HTML: :id iff
 #+begin_example
 <proof of A iff B> ::=
     <preliminary steps>
@@ -354,6 +369,7 @@ This is technically incorrect, it's certainly invalid Mizar. One
 step towards writing correct Mizar would be to instead use
 something of the form:
 
+#+ATTR_HTML: :id iff2
 #+begin_example
 <proof of A iff B> ::=
     <preliminary steps>

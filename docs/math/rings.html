@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:09 -->
+<!-- 2021-04-11 Sun 19:03 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rings and Things</title>
@@ -309,7 +309,7 @@ rationals, the reals, and the complex numbers. But not the natural
 numbers (because we want to include subtraction).
 </p>
 
-<div class="definition" id="org8657734">
+<div id="defn-ring" class="definition">
 <p>
 A <dfn>Ring</dfn> consists of
 </p>
@@ -351,7 +351,7 @@ If, in addition, multiplication is commutative, then we call the ring a
 
 </div>
 
-<div class="remark" id="org614f58e">
+<div id="rmk-rng" class="remark">
 <p>
 If we abandon the existence of a multiplicative identity, then we have a
 non-unital ring.
@@ -363,7 +363,7 @@ non-unital ring.
 There are probably a few more properties I'm forgetting about.
 </p>
 
-<div class="remark" id="org163f9f7">
+<div id="rmk-internal-ring-object" class="remark">
 <p>
 (Internalization, category theoretic definition.)
 We could define a "ring object" as a monoid object in the category
@@ -381,7 +381,7 @@ want to have commutativity for addition.
 <div id="outline-container-h-03deb5e7-4e53-4c2a-bfd8-fdbcf9ba4078" class="outline-3">
 <h3 id="h-03deb5e7-4e53-4c2a-bfd8-fdbcf9ba4078"><span class="section-number-3">1.1</span> Examples</h3>
 <div class="outline-text-3" id="text-h-03deb5e7-4e53-4c2a-bfd8-fdbcf9ba4078">
-<div class="math-example" id="org4844c4b">
+<div id="ex-integers-are-a-ring" class="math-example">
 <p>
 The integer \(\ZZ\) is the epitome of a ring, as are the rationals \(\QQ\),
 and the reals \(\RR\).
@@ -389,7 +389,7 @@ and the reals \(\RR\).
 
 </div>
 
-<div class="math-example" id="org4ad9264">
+<div id="ex-polynomials" class="math-example">
 <p>
 Let \(R\) be a commutative ring, then the collection of polynomials in a single
 indeterminate \(z\) with coefficients in \(R\) is a ring&#x2026;called the
@@ -411,7 +411,7 @@ is not consistent (this pops up in vertex operator algebras).
 
 </div>
 
-<div class="math-example" id="orgb955436">
+<div id="ex-matrix-ring" class="math-example">
 <p>
 Let \(R\) be a ring, and \(n\in\NN\) a natural number greater than zero.
 Then the set of \(n\)-by-\(n\) matrices with entries in \(R\), denoted
@@ -426,7 +426,7 @@ noncommutative.
 
 </div>
 
-<div class="math-example" id="org7790b05">
+<div id="ex-function-ring" class="math-example">
 <p>
 Let \(X\) be some non-empty set, and \(R\) a ring. Then the function space
 \(\hom(X,R)\) of \(R\)-valued functions on \(X\) forms a ring. Addition is
@@ -438,7 +438,7 @@ identity is the function \(e(x) = 1\) for all \(x\in X\).
 
 </div>
 
-<div class="math-example" id="org16fa08d">
+<div id="ex-ring-continuous-functions" class="math-example">
 <p>
 If \(X\) is a topological space, then continuous real-valued functions
 form a ring. (Continuous complex-valued functions form another ring.)
@@ -446,7 +446,7 @@ form a ring. (Continuous complex-valued functions form another ring.)
 
 </div>
 
-<div class="exercise" id="org2864f6d">
+<div id="xca-noncommutative-polynomials" class="exercise">
 <p>
 Let \(R\) be a noncommutative ring. Can we extend the notion of a
 polynomial ring to \(R[x]\)?
@@ -454,7 +454,7 @@ polynomial ring to \(R[x]\)?
 
 </div>
 
-<div class="exercise" id="org5d4b4c4">
+<div id="xca-mat-polynomial" class="exercise">
 <p>
 Let \(n\in\NN\) be greater than 1, \(R\) some fixed commutative ring.
 Is \(M(n, R[z])\) the same ring as \((M(n, R))[z]\)?
@@ -468,7 +468,7 @@ What happens for noncommutative rings \(R\)?
 <div id="outline-container-h-6b3e4190-1cb1-41dc-960b-24cedee5bb0d" class="outline-3">
 <h3 id="h-6b3e4190-1cb1-41dc-960b-24cedee5bb0d"><span class="section-number-3">1.2</span> Special Elements in a Ring</h3>
 <div class="outline-text-3" id="text-h-6b3e4190-1cb1-41dc-960b-24cedee5bb0d">
-<div class="definition" id="org11ce60a">
+<div id="defn-nilpotent" class="definition">
 <p>
 Let \(r\in R\) be an element in a ring. We call it <dfn>Nilpotent</dfn>
 if there exists some \(k\in\NN\) such that \(r^{k}=0\).
@@ -480,7 +480,7 @@ if there exists some \(k\in\NN\) such that \(r^{k}=0\).
 We could consider nilpotents as modeling "infinitesimals" of yore.
 </p>
 
-<div class="definition" id="orgba4ddea">
+<div id="defn-idempotent" class="definition">
 <p>
 Let \(r\in R\) be an element in a ring. We call it <dfn>Idempotent</dfn>
 if \(r^{2}=r\).
@@ -493,7 +493,7 @@ if \(r^{2}=r\).
 <div id="outline-container-h-440ddc6d-4548-4e18-b747-e1f40b0f4f4e" class="outline-3">
 <h3 id="h-440ddc6d-4548-4e18-b747-e1f40b0f4f4e"><span class="section-number-3">1.3</span> Ring Morphisms</h3>
 <div class="outline-text-3" id="text-h-440ddc6d-4548-4e18-b747-e1f40b0f4f4e">
-<div class="definition" id="org0d9343e">
+<div id="defn-ring-morphism" class="definition">
 <p>
 Let \(R\) and \(S\) be rings. A <dfn>Ring Morphism</dfn> is a function of
 the underlying sets \(f\colon R\to S\) such that
@@ -513,7 +513,7 @@ which implies \(f(0)=0\). Further \(f(0-a) = f(0) + f(-a) = f(-a)\) and
 \(f(a-a) = f(a) + f(-a) = 0\) implies \(f(-a)=-f(a)\).
 </p>
 
-<div class="math-example" id="org3a2e4cd">
+<div id="ex-morphism-of-z-into-ring" class="math-example">
 <p>
 Let \(R\) be a ring. Then we always have a morphism \(f\colon\ZZ\to R\)
 defined by \(f(0)=0\), \(f(1)=1\), \(f(2)=f(1)+f(1)\), and more generally for
@@ -530,7 +530,7 @@ Sometimes we abuse notation and write \(f(n)=nf(1)\).
 
 </div>
 
-<div class="math-example" id="org63ae00d">
+<div id="ex-morphism-of-polynomial-evaluation" class="math-example">
 <p>
 Let \(R\) be a ring, \(r\in R\) some fixed element. Then we have a natural
 morphism \(e_{r}\colon R[z]\to R\) by evaluating a polynomial at \(z=r\),
@@ -539,7 +539,7 @@ i.e., \(e_{r}(p(z)) = p(r)\).
 
 </div>
 
-<div class="math-example" id="org62f4ec0">
+<div id="ex-include-constant-in-polynomial" class="math-example">
 <p>
 For a ring \(R\) and the polynomial ring \(R[z]\), the inclusion mapping
 \(R\to R[z]\) mapping \(r\in R\) to \(r\in R[z]\) is a ring morphism.
@@ -555,7 +555,7 @@ necessarily mapped to \(\rho(p(z)) + \rho(q(z))\).
 
 </div>
 
-<div class="definition" id="orgb866371">
+<div id="defn-ring-isomorphism" class="definition">
 <p>
 Let \(R\) and \(S\) be rings, we call the ring morphism \(f\colon R\to S\)
 a <dfn>Ring Isomorphism</dfn> (or just <i>isomorphism</i>) if there is a
@@ -575,7 +575,7 @@ A ring isomorphism, like all isomorphisms, tells us when two rings are
 <div id="outline-container-h-b18f1c1f-bad7-4f83-be69-f4b8e8d9e06a" class="outline-3">
 <h3 id="h-b18f1c1f-bad7-4f83-be69-f4b8e8d9e06a"><span class="section-number-3">1.4</span> Subrings, Adjoining Elements</h3>
 <div class="outline-text-3" id="text-h-b18f1c1f-bad7-4f83-be69-f4b8e8d9e06a">
-<div class="definition" id="org34e9397">
+<div id="defn-subring" class="definition">
 <p>
 Let \(R\) be a ring, \(S\subset R\) some subset of \(R\). We call \(S\) a
 <dfn>Subring</dfn> of \(R\) if
@@ -589,7 +589,7 @@ Let \(R\) be a ring, \(S\subset R\) some subset of \(R\). We call \(S\) a
 
 </div>
 
-<div class="math-example" id="org779b1b1">
+<div id="ex-obvious-subrings" class="math-example">
 <p>
 The integers \(\ZZ\) are a subring of the rationals \(\QQ\); the rationals
 are a subring of the reals \(\RR\); the reals are again a subring of the
@@ -598,7 +598,7 @@ complex numbers \(\CC\).
 
 </div>
 
-<div class="math-example" id="orgdc6f878">
+<div id="nonex-modular-subring" class="math-example">
 <p>
 A non-example: the modular ring \(\ZZ/(24)\) of hours in a day, this is
 not a subring of \(\ZZ\). The operators are distinct.
@@ -606,7 +606,7 @@ not a subring of \(\ZZ\). The operators are distinct.
 
 </div>
 
-<div class="definition" id="org9a82fdc">
+<div id="defn-adjoin-elt" class="definition">
 <p>
 Let \(S\) be a subring of a commutative ring \(R\).
 We can <dfn>Adjoin an Element</dfn>
@@ -618,7 +618,7 @@ subring \(S[z]\subset R[z]\) gives us \(S[r] = e_{r}(S[z])\subset e_{r}(R[z])\).
 
 </div>
 
-<div class="math-example" id="orgbe287a8">
+<div id="ex-gaussian-integers" class="math-example">
 <p>
 We can consider \(\ZZ\subset\CC\) as a subring, then adjoining
 \(\I=\sqrt{-1}\) to \(\ZZ\) gives us the <dfn>Gaussian Integers</dfn>
@@ -638,7 +638,7 @@ Addition is defined component-wise.
 
 </div>
 
-<div class="remark" id="org0086b0f">
+<div id="rmk-generalized-gauss-integers" class="remark">
 <p>
 We can generalize this example to any square-free number \(d\in\NN\), then
 \(\ZZ[\sqrt{-d}]\) is another ring adjoined with a new element. (The
@@ -653,7 +653,7 @@ example of \(\ZZ[\sqrt{-5}]\) is thrown around a lot because in that ring,
 <div id="outline-container-h-e35ff4ad-70ff-422e-8fd3-bc8a0da7bd51" class="outline-3">
 <h3 id="h-e35ff4ad-70ff-422e-8fd3-bc8a0da7bd51"><span class="section-number-3">1.5</span> Ideals</h3>
 <div class="outline-text-3" id="text-h-e35ff4ad-70ff-422e-8fd3-bc8a0da7bd51">
-<div class="definition" id="org6fe5cc4">
+<div id="defn-kernel" class="definition">
 <p>
 Let \(f\colon R\to S\) be a ring morphism, \(0_{S}\in S\) be the additive
 identity ("zero") of \(S\). We define the <dfn>Kernel</dfn> of \(f\) to
@@ -678,7 +678,7 @@ multiplication by elements of the domain on the right and left, respectively.
 This idea is captured by the following definition:
 </p>
 
-<div class="definition" id="org53e1222">
+<div id="defn-ideal" class="definition">
 <p>
 Let \(R\) be a ring.
 </p>
@@ -712,7 +712,7 @@ Otherwise, we say "ideal" with the understanding it may mean any of the
 three kinds.
 </p>
 
-<div class="theorem" id="org1e06233">
+<div id="thm-ideal-isa-subgroup" class="theorem">
 <p>
 Let \(I\) be an ideal of \(R\). Then \(I\) is a subgroup of the underlying
 Abelian group of \(R\) (equipped with addition).
@@ -720,7 +720,7 @@ Abelian group of \(R\) (equipped with addition).
 
 </div>
 
-<div class="math-example" id="orgb6e97c1">
+<div id="ex-ideal" class="math-example">
 <p>
 Let \(R\subset R'\) be a proper subring, and \(q\in R'\) an element not in \(R\).
 Then \(R[q]\) is a ring obtained by taking \(R[z]\subset R'[z]\),
@@ -734,7 +734,7 @@ restricted to \(R[z]\). That is to say, \(e_{q}(R[z])\subseteq R'\).
 It's not uncommon to see things like, if \(r\in R\), then \(rR = \{rx\mid x\in R\}\).
 </p>
 
-<div class="definition" id="orgdba6dad">
+<div id="defn-generated-ideal" class="definition">
 <p>
 Let \(R\) be a ring, \(S\subset R\) some nonempty subset.
 We describe the <dfn>Ideal Generated by \(S\)</dfn> to be the sums of
@@ -748,7 +748,7 @@ For commutative rings, we can use commutativity to rewrite \(xsy=xys\) and
 thus \((S) = RS\).
 </p>
 
-<div class="remark" id="org73b9dd9">
+<div id="rmk-notation-ideal" class="remark">
 <p>
 Let \(I\) and \(J\) be ideals of \(R\).
 Notation:
@@ -762,7 +762,7 @@ Notation:
 
 </div>
 
-<div class="exercise" id="orgc79665b">
+<div id="xca-ideal-arithmetic" class="exercise">
 <p>
 (Jacobson) Let \(I\), \(J\), \(K\) be ideals of \(R\). Does distributivity hold
 for "ideal arithmetic"? I.e., is \((I+J)K\) equal to \(IK + JK\)?
@@ -770,7 +770,7 @@ for "ideal arithmetic"? I.e., is \((I+J)K\) equal to \(IK + JK\)?
 
 </div>
 
-<div class="exercise" id="org26b83d4">
+<div id="xca-ir-is-i" class="exercise">
 <p>
 Let \(R\) be a ring, \(I\) an ideal of \(R\). Prove or find a counter-example:
 \(IR\subseteq I\). Is this true for noncommutative rings?
@@ -783,7 +783,7 @@ Let \(R\) be a ring, \(I\) an ideal of \(R\). Prove or find a counter-example:
 <div id="outline-container-h-1fb500b5-9715-4693-8feb-f1fb5db1e16a" class="outline-3">
 <h3 id="h-1fb500b5-9715-4693-8feb-f1fb5db1e16a"><span class="section-number-3">1.6</span> Integral Domain</h3>
 <div class="outline-text-3" id="text-h-1fb500b5-9715-4693-8feb-f1fb5db1e16a">
-<div class="definition" id="org75a2650">
+<div id="defn-integral-domain" class="definition">
 <p>
 An <dfn>Integral Domain</dfn> is a unital ring with no nonzero
 divisors, i.e., if \(ab = 0\) then either \(a=0\) or \(b=0\).
@@ -791,7 +791,7 @@ divisors, i.e., if \(ab = 0\) then either \(a=0\) or \(b=0\).
 
 </div>
 
-<div class="remark" id="org842bd06">
+<div id="rmk-on-criteria-of-id" class="remark">
 <p>
 Constructive mathematicians would phrase this differently, as saying
 \(ab\neq0\) whenever \(a\neq0\) and \(b\neq0\).
@@ -799,7 +799,7 @@ Constructive mathematicians would phrase this differently, as saying
 
 </div>
 
-<div class="math-example" id="org670982f">
+<div id="ex-z-q-r-c-are-id" class="math-example">
 <p>
 The integers \(\ZZ\), rationals \(\QQ\), reals \(\RR\), and complex numbers
 are integral domains.
@@ -807,7 +807,7 @@ are integral domains.
 
 </div>
 
-<div class="math-example" id="org58141e7">
+<div id="nonex-not-id" class="math-example">
 <p>
 Let \(X\) be a non-empty set with at least 2 disjoint subsets \(X_{1}\), \(X_{2}\);
 and let \(R\) be any ring. Then \(\hom(X,R)\) is <b>not an integral domain.</b>
@@ -847,7 +847,7 @@ we have \(fg=0\).
 
 </div>
 
-<div class="math-example" id="org8ceecf2">
+<div id="ex-z-with-sqrt-5-is-id" class="math-example">
 <p>
 The ring \(\ZZ[\sqrt{-5}]\) is an integral domain.
 </p>
@@ -858,7 +858,7 @@ The ring \(\ZZ[\sqrt{-5}]\) is an integral domain.
 <div id="outline-container-h-738b2d99-d841-4742-8dec-4cec26ed04ab" class="outline-4">
 <h4 id="h-738b2d99-d841-4742-8dec-4cec26ed04ab"><span class="section-number-4">1.6.1</span> Factors</h4>
 <div class="outline-text-4" id="text-h-738b2d99-d841-4742-8dec-4cec26ed04ab">
-<div class="definition" id="orgf4774cd">
+<div id="defn-division" class="definition">
 <p>
 Let \(R\) be an integral domain, and \(x,y\in R\). We say that \(x\)
 <dfn>Divides</dfn> \(y\), and write \(x\mid y\), if \(y=xt\) for some \(t\in R\).
@@ -866,7 +866,7 @@ Let \(R\) be an integral domain, and \(x,y\in R\). We say that \(x\)
 
 </div>
 
-<div class="definition" id="orgf74b686">
+<div id="defn-unit" class="definition">
 <p>
 We call an element \(x\in R\) a <dfn>Unit</dfn> if \(x\mid 1\). The set
 of units of \(R\) is denoted \(R^{*}\).
@@ -874,7 +874,7 @@ of units of \(R\) is denoted \(R^{*}\).
 
 </div>
 
-<div class="definition" id="orgf043c98">
+<div id="defn-gcd" class="definition">
 <p>
 We say \(z\in R\) is  a <dfn>Greatest Common Divisor</dfn> of \(x_{1}\),
 &#x2026;, \(x_{n}\) and write \(z=\gcd(x_{1},\dots, x_{n})\) if
@@ -894,7 +894,7 @@ which is a gcd of \(x\) and \(y\).
 </div>
 
 
-<div class="lemma" id="org80a9ad5">
+<div id="lemma-gcd-unique-up-to-unit" class="lemma">
 <p>
 Let \(R\) be an integral domain, and \(x,y\in R\).
 If  \(z\) and \(t\) are both GCDs of \(x\) and \(y\), then there exists a \(u\in R\)
@@ -902,17 +902,17 @@ such that \(z=ut\).
 </p>
 
 </div>
-<div class="proof" id="orgfbcfbab">
+<div class="proof" id="orga2b6695">
 <ul class="org-ul">
 <li>Assume \(z = \gcd(x,y)\), \(t=\gcd(x,y)\), and \(t\neq z\).</li>
-<li>Then \(t\mid x\) and \(t\mid y\) by <a href="#orgf043c98">definition of gcd</a>.</li>
+<li>Then \(t\mid x\) and \(t\mid y\) by <a href="#org3e85ce6">definition of gcd</a>.</li>
 <li>Then \(t\mid z\) by \(z=\gcd(x,y)\).</li>
 <li>Thus \(z=ut\) for some \(u\in R\).</li>
 </ul>
 
 </div>
 
-<div class="theorem" id="org894981c">
+<div id="thm-gcd-unique-up-to-unit" class="theorem">
 <p>
 (Bronstein, 1.1.1)
 Let \(R\) be an integral domain, and \(x,y\in R\).
@@ -922,7 +922,7 @@ some units \(u,v\in R^{*}\).
 
 </div>
 
-<div class="proof" id="orgf783715">
+<div class="proof" id="org64b8ac8">
 <ul class="org-ul">
 <li>Assume \(z = \gcd(x,y)\), \(t=\gcd(x,y)\), and \(t\neq z\).</li>
 <li>Consider \(u\in R\) such that \(z=ut\) by the previous lemma.</li>
@@ -935,7 +935,7 @@ some units \(u,v\in R^{*}\).
 
 </div>
 
-<div class="definition" id="orgd4d24d3">
+<div id="defn-associates" class="definition">
 <p>
 In an integral domain \(R\), let \(a,b\in R\). If \(a\) divides \(b\), and \(b\)
 divides \(a\), then we call them <dfn>Associates</dfn>. Equivalently,
@@ -949,7 +949,7 @@ if there is some unit \(u\in R^{*}\) such that \(a=ub\).
 <div id="outline-container-h-b90357b9-9646-4544-aa00-4059af933f2b" class="outline-4">
 <h4 id="h-b90357b9-9646-4544-aa00-4059af933f2b"><span class="section-number-4">1.6.2</span> Prime, Irreducible Elements</h4>
 <div class="outline-text-4" id="text-h-b90357b9-9646-4544-aa00-4059af933f2b">
-<div class="definition" id="org0d01676">
+<div id="defn-prime-elt" class="definition">
 <p>
 Let \(R\) be an integral domain.
 A nonzero element \(p\in R\setminus R^{*}\) is called <dfn>Prime</dfn>
@@ -958,7 +958,7 @@ if for any \(a,b\in R\), \(p\mid ab\) implies \(p\mid a\) or \(p\mid b\).
 
 </div>
 
-<div class="definition" id="org89769a5">
+<div id="defn-irreducible-elts" class="definition">
 <p>
 Let \(R\) be an integral domain.
 A nonzero element \(p\in R\setminus R^{\ast}\) is called <dfn>Irreducible</dfn>
@@ -967,7 +967,7 @@ if for any \(a,b\in R\), \(p = ab\) implies \(a\in R^{\ast}\) or \(b\in R^{\ast}
 
 </div>
 
-<div class="theorem" id="orga199c66">
+<div id="thm-in-id-every-prime-is-irreducible" class="theorem">
 <p>
 Let \(R\) be an integral domain.
 Then every prime \(p\in R\) is irreducible.
@@ -975,7 +975,7 @@ Then every prime \(p\in R\) is irreducible.
 
 </div>
 
-<div class="proof" id="org69e9dc7">
+<div class="proof" id="org28db04c">
 <ul class="org-ul">
 <li>Let \(p\in R\) be prime.</li>
 <li>Assume \(a,b\in R\) satisfy \(p=ab\).</li>
@@ -993,7 +993,7 @@ Then every prime \(p\in R\) is irreducible.
 
 </div>
 
-<div class="remark" id="org3ca5505">
+<div id="rmk-prime-always-irreducible" class="remark">
 <p>
 In any integral domain, a prime is always irreducible. The converse is
 not always true.
@@ -1007,7 +1007,7 @@ not always true.
 <div id="outline-container-h-0a367193-227e-413a-ae7d-8a42cfc8bebd" class="outline-3">
 <h3 id="h-0a367193-227e-413a-ae7d-8a42cfc8bebd"><span class="section-number-3">1.7</span> Unique Factorization Domain</h3>
 <div class="outline-text-3" id="text-h-0a367193-227e-413a-ae7d-8a42cfc8bebd">
-<div class="definition" id="orgf61de95">
+<div id="defn-ufd" class="definition">
 <p>
 A <dfn>Unique Factorization Domain</dfn> consists of an integral
 domain such that for any nonzero \(x\in R\setminus R^{\ast}\) there is
@@ -1026,7 +1026,7 @@ and \(p_{j}\)'s by units and up to permutation of indices.
 
 </div>
 
-<div class="theorem" id="org3dc340b">
+<div id="thm-ufd-every-irreducible-is-prime" class="theorem">
 <p>
 Let \(R\) be a unique factorization domain, then every irreducible \(p\in R\)
 is prime.
@@ -1034,14 +1034,14 @@ is prime.
 
 </div>
 
-<div class="theorem" id="org6438f59">
+<div id="thm-gcd-always-exists-in-ufd" class="theorem">
 <p>
 If \(R\) is a UFD, then any \(x,y\in R\) has a gcd in \(R\).
 </p>
 
 </div>
 
-<div class="theorem" id="org6a7f797">
+<div id="thm-polynomial-ring-over-ufd-isa-ufd" class="theorem">
 <p>
 If \(R\) is a UFD, then the polynomial ring \(R[x_{1},\dots,x_{n}]\) is a UFD.
 </p>
@@ -1053,7 +1053,7 @@ If \(R\) is a UFD, then the polynomial ring \(R[x_{1},\dots,x_{n}]\) is a UFD.
 <div id="outline-container-h-c8386128-fe00-4c69-8489-1e127df235e1" class="outline-3">
 <h3 id="h-c8386128-fe00-4c69-8489-1e127df235e1"><span class="section-number-3">1.8</span> Principal Ideal Domain</h3>
 <div class="outline-text-3" id="text-h-c8386128-fe00-4c69-8489-1e127df235e1">
-<div class="definition" id="orgb51ca46">
+<div id="defn-principal-ideal" class="definition">
 <p>
 Let \(R\) be a ring, \(I\) an ideal of \(R\). We call \(I\)
 <dfn>Principal</dfn> if it is generated by a single element. In this
@@ -1062,7 +1062,7 @@ case, we have \(I=(g)\) where \(g\in R\) is the generator of the ideal.
 
 </div>
 
-<div class="definition" id="org9f38a60">
+<div id="defn-principal-ideal-domain" class="definition">
 <p>
 We call a ring \(R\) a <dfn>Principal Ideal Domain</dfn> if
 </p>
@@ -1074,14 +1074,14 @@ We call a ring \(R\) a <dfn>Principal Ideal Domain</dfn> if
 
 </div>
 
-<div class="theorem" id="org2e31da7">
+<div id="thm-pid-is-ufd" class="theorem">
 <p>
 Every principal ideal domain is a UFD.
 </p>
 
 </div>
 
-<div class="theorem" id="org9af1da6">
+<div id="thm-pid-gcd-ideal" class="theorem">
 <p>
 If \(R\) is a PID, then \((x,y) = (\gcd(x,y))\) for any \(x,y\in R\).
 </p>
@@ -1103,7 +1103,7 @@ We often want to divide by a nonzero number, which requires forming the
 multiplicative inverse operation.
 </p>
 
-<div class="definition" id="org9cf9a40">
+<div id="defn-field" class="definition">
 <p>
 A <dfn>Field</dfn> consists of a commutative (unital) ring \(R\) equipped
 with a multiplicative inverse operation \((-)^{-1}\colon R\setminus\{0\}\to R\).
@@ -1134,14 +1134,14 @@ formed by the relation
 Intuition suggests these describe the same fraction "\(a/b\)".
 </p>
 
-<div class="math-example" id="orgde3bba0">
+<div id="ex-q-r-field-of-fractions" class="math-example">
 <p>
 The rational numbers \(\QQ\) are formed from the integers \(\RR\) in this manner.
 </p>
 
 </div>
 
-<div class="math-example" id="org15ae1c3">
+<div id="ex-fraction-of-polynomials" class="math-example">
 <p>
 If \(\mathbb{F}\) is any field, then the field of fractions for
 \(\mathbb{F}[x]\) is the field of rational functions \(\mathbb{F}(x)\)
@@ -1218,7 +1218,7 @@ doi:<a href="https://doi.org/10.1006/jsco.2001.0456">10.1006/jsco.2001.0456</a><
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 11:59.</p>
+<p class="postamble">Last Updated 2021-04-11 Sun 18:51.</p>
 </div>
 </body>
 </html>

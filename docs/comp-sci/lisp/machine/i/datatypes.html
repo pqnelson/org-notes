@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:08 -->
+<!-- 2021-04-11 Sun 17:49 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Data Types - I-Machine</title>
@@ -241,135 +241,139 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org0550617">1. Lisp-Machine Data Types</a>
+<li><a href="#h-e55640d0-77a8-4782-83dd-4e29d5bcb8e0">1. Lisp-Machine Data Types</a>
 <ul>
-<li><a href="#org0b6a644">1.1. Introduction to Lisp-Machine Objects</a>
+<li><a href="#h-ac2ae1e7-7955-4869-bc3d-28774bc554f6">1.1. Introduction to Lisp-Machine Objects</a>
 <ul>
-<li><a href="#org0aeb607">1.1.1. Memory Words</a>
+<li><a href="#h-d745c692-baca-436a-b677-5c4218c765a0">1.1.1. Memory Words</a>
 <ul>
-<li><a href="#orgbd32f76">1.1.1.1. Length and Format</a></li>
-<li><a href="#org131690e">1.1.1.2. Fields</a></li>
+<li><a href="#h-3030a59d-6c07-4669-99b0-54477308f071">1.1.1.1. Length and Format</a></li>
+<li><a href="#h-f2c9ad06-4003-4509-a8a6-71e2e4fdfb70">1.1.1.2. Fields</a></li>
 </ul>
 </li>
-<li><a href="#orgedcbba4">1.1.2. Classes of Stored Object Representations</a></li>
-<li><a href="#org4fdb514">1.1.3. Components of Stored Representations (1.1.3)</a>
+<li><a href="#h-32631210-20cf-4e7a-b596-fbd6c275ac44">1.1.2. Classes of Stored Object Representations</a></li>
+<li><a href="#h-a5620fe0-daca-4da1-b849-e6e1195d1449">1.1.3. Components of Stored Representations (1.1.3)</a>
 <ul>
-<li><a href="#org01cc4b2">1.1.3.1. Object References (1.1.3.1)</a></li>
-<li><a href="#orgdf57265">1.1.3.2. Headers</a></li>
+<li><a href="#h-173c8fc5-a29a-435b-be71-1b6a19c351d6">1.1.3.1. Object References (1.1.3.1)</a></li>
+<li><a href="#h-a22d462e-8294-4209-8c40-a8e7c77b4826">1.1.3.2. Headers</a></li>
 </ul>
 </li>
-<li><a href="#org854d793">1.1.4. Operand-Reference Classification</a></li>
+<li><a href="#h-91b1edab-d15b-4d14-a2ac-fe19cd17f2fb">1.1.4. Operand-Reference Classification</a></li>
 </ul>
 </li>
-<li><a href="#orgef264cd">1.2. Data-Type Descriptions</a>
+<li><a href="#h-e3c91800-0d31-4496-98bd-8c3dcb16324f">1.2. Data-Type Descriptions</a>
 <ul>
-<li><a href="#orga450c4d">1.2.1. Representations of Symbols</a></li>
-<li><a href="#org04ab78e">1.2.2. Representation of Instances and Related Data Types</a>
+<li><a href="#h-bf7499b5-0a41-4caf-baf4-1fe34917e961">1.2.1. Representations of Symbols</a></li>
+<li><a href="#h-ee111361-32dc-463a-86d3-db36c43e6d79">1.2.2. Representation of Instances and Related Data Types</a>
 <ul>
-<li><a href="#org772f7ac">1.2.2.1. Flavor Instances</a></li>
-<li><a href="#orgdcc4729">1.2.2.2. List Instance</a></li>
-<li><a href="#org60b3fe2">1.2.2.3. Array Instance</a></li>
-<li><a href="#orgfacd529">1.2.2.4. String Instance</a></li>
+<li><a href="#h-792593a6-ae07-4d6b-9170-40fad03448c0">1.2.2.1. Flavor Instances</a></li>
+<li><a href="#h-310002f4-1322-4e17-bae4-0dda5c26034d">1.2.2.2. List Instance</a></li>
+<li><a href="#h-674b1f04-3757-4a1d-975b-0f5e4727421f">1.2.2.3. Array Instance</a></li>
+<li><a href="#h-acc14984-5eba-46f9-a4a2-cf9339a7f586">1.2.2.4. String Instance</a></li>
 </ul>
 </li>
-<li><a href="#org748435e">1.2.3. Representation of Characters</a></li>
-<li><a href="#org038f384">1.2.4. Representation of Numbers</a>
+<li><a href="#h-ee6bef8a-2330-49e5-aad2-a30ac97d91bc">1.2.3. Representation of Characters</a></li>
+<li><a href="#h-c3bf5550-9a2f-43e6-90e9-68bef7315017">1.2.4. Representation of Numbers</a>
 <ul>
-<li><a href="#org25eb044">1.2.4.1. Fixnum Representation</a></li>
-<li><a href="#org2af27a3">1.2.4.2. Bignum Representation</a></li>
-<li><a href="#org2aa7f74">1.2.4.3. Small-Ratio Representation</a></li>
-<li><a href="#orgc6f9873">1.2.4.4. Big-Ratio Representation</a></li>
-<li><a href="#orgb3e01b9">1.2.4.5. Single-Precision Floating-Point Representation</a></li>
-<li><a href="#org8dfb0a1">1.2.4.6. Double-Precision Floating-Point Representation</a></li>
-<li><a href="#orgf08148e">1.2.4.7. Complex-Number Representation</a></li>
-<li><a href="#org35106e6">1.2.4.8. The Spare-Number Type</a></li>
+<li><a href="#h-56d7878b-443f-4532-bf36-c916146b30fe">1.2.4.1. Fixnum Representation</a></li>
+<li><a href="#h-69617a64-9eb2-4b93-accd-164fd5b2e6db">1.2.4.2. Bignum Representation</a></li>
+<li><a href="#h-16ed042e-a4e1-41e6-a2a8-783c8afd4f40">1.2.4.3. Small-Ratio Representation</a></li>
+<li><a href="#h-ac3eff75-64d6-4b93-a896-c23cdc6a0f00">1.2.4.4. Big-Ratio Representation</a></li>
+<li><a href="#h-96c0c7d8-1d92-4c87-9eb6-76d974234bf1">1.2.4.5. Single-Precision Floating-Point Representation</a></li>
+<li><a href="#h-de551fc6-301a-4f71-a8c3-c077228778d3">1.2.4.6. Double-Precision Floating-Point Representation</a></li>
+<li><a href="#h-f041d274-2bb5-44b3-b560-50b27278b4a2">1.2.4.7. Complex-Number Representation</a></li>
+<li><a href="#h-5387d8a5-ef33-4e5b-b99e-7a0bc16885fa">1.2.4.8. The Spare-Number Type</a></li>
 </ul>
 </li>
-<li><a href="#org9cb7bab">1.2.5. Representations of Lists</a></li>
-<li><a href="#org9ca7c9f">1.2.6. Representations of Arrays and Strings</a></li>
-<li><a href="#org84f1db2">1.2.7. I-Machine Array Registers</a></li>
-<li><a href="#orge2ed7ce">1.2.8. Representations of Functions and Closures</a>
+<li><a href="#h-790c8b08-dba7-46e9-8ff4-adacae6da284">1.2.5. Representations of Lists</a></li>
+<li><a href="#h-70df9ee8-feeb-4dda-9213-0f37299e464d">1.2.6. Representations of Arrays and Strings</a></li>
+<li><a href="#h-66e5d98e-9631-463f-bfaf-b181069b6399">1.2.7. I-Machine Array Registers</a></li>
+<li><a href="#h-55192ad7-8dff-4a79-91d7-808c8b7dbcf1">1.2.8. Representations of Functions and Closures</a>
 <ul>
-<li><a href="#org6180afd">1.2.8.1. Representation of Compiled Functions</a></li>
-<li><a href="#org1b972e1">1.2.8.2. Generic Functions</a></li>
-<li><a href="#org1efea64">1.2.8.3. Representation of Lexical Closures</a></li>
-<li><a href="#org6ff2b67">1.2.8.4. Representation of Dynamic Closures</a></li>
+<li><a href="#h-6ba48934-d194-4724-970d-0e8bd102007d">1.2.8.1. Representation of Compiled Functions</a></li>
+<li><a href="#h-1f4596ff-1bee-4a6b-854d-39a901c5e7ae">1.2.8.2. Generic Functions</a></li>
+<li><a href="#h-9588d74c-45a2-4da4-9700-7588f3e99de9">1.2.8.3. Representation of Lexical Closures</a></li>
+<li><a href="#h-b598da4a-aa2b-45a3-b45d-17b4a9eb51a9">1.2.8.4. Representation of Dynamic Closures</a></li>
 </ul>
 </li>
-<li><a href="#org264b97d">1.2.9. Instruction Representation</a></li>
-<li><a href="#org17b5ede">1.2.10. Program-Counter Representation</a></li>
-<li><a href="#orgf9816b7">1.2.11. Representation of Locatives</a></li>
+<li><a href="#h-f11c25a7-40ff-4832-8267-9b39441dde99">1.2.9. Instruction Representation</a></li>
+<li><a href="#h-f76a118f-88e0-4227-a7c3-87ab1fa4670f">1.2.10. Program-Counter Representation</a></li>
+<li><a href="#h-407b53a3-cd23-4d77-bca2-a964cb259feb">1.2.11. Representation of Locatives</a></li>
 </ul>
 </li>
-<li><a href="#org99fe39f">1.3. Data-Type Code Assignments</a>
+<li><a href="#h-4ab26848-db9a-4283-a6be-fec5bb2dfa7e">1.3. Data-Type Code Assignments</a>
 <ul>
-<li><a href="#org2e64921">1.3.1. Headers, Special Markers, and Forwarding Pointers</a></li>
-<li><a href="#org558bb6d">1.3.2. Number Data Types</a></li>
-<li><a href="#orgc7fee4e">1.3.3. Instance Data Types</a></li>
-<li><a href="#orge646faa">1.3.4. Primitive Data Types</a></li>
-<li><a href="#org5d1fe6d">1.3.5. Special Marker for Garbage Collector</a></li>
-<li><a href="#org9248b33">1.3.6. Data Types for Program Counter Values</a></li>
-<li><a href="#orga0c4063">1.3.7. Full Word Instruction Data Types</a></li>
-<li><a href="#org9bd086b">1.3.8. Half-Word Instruction Data Types</a></li>
+<li><a href="#h-ef6fdb1c-99ee-431f-bbc2-b25ee8c574d8">1.3.1. Headers, Special Markers, and Forwarding Pointers</a></li>
+<li><a href="#h-23771287-919f-4eb8-902a-310176085f54">1.3.2. Number Data Types</a></li>
+<li><a href="#h-94c3f0b1-fcd8-4b33-aa64-a5fc655d8d76">1.3.3. Instance Data Types</a></li>
+<li><a href="#h-5c46beca-9670-4170-a27b-a42d491b3a58">1.3.4. Primitive Data Types</a></li>
+<li><a href="#h-e7670d47-824c-4a3b-bc7c-38352ea6d923">1.3.5. Special Marker for Garbage Collector</a></li>
+<li><a href="#h-e21026e3-2df0-44c1-bc9c-09cb15434965">1.3.6. Data Types for Program Counter Values</a></li>
+<li><a href="#h-345ea908-58bb-4456-abe1-d0a3ba8d2737">1.3.7. Full Word Instruction Data Types</a></li>
+<li><a href="#h-69edfa62-4b28-4c24-83b0-a2c06147e63f">1.3.8. Half-Word Instruction Data Types</a></li>
 </ul>
 </li>
-<li><a href="#orgf37f8ec">1.4. Appendix: Comparison of 3600-Family and I-Machine Data Representations</a>
+<li><a href="#h-70ac46a8-0685-47b4-8bdd-b70e8377fa74">1.4. Appendix: Comparison of 3600-Family and I-Machine Data Representations</a>
 <ul>
-<li><a href="#org0bb0850">1.4.1. Array Differences</a></li>
-<li><a href="#orga0ea1e7">1.4.2. Compiled Function Differences</a></li>
+<li><a href="#h-3da8479d-441a-4a53-befa-2af9ef6adade">1.4.1. Array Differences</a></li>
+<li><a href="#h-18ccb133-9a45-4cb7-b379-30cef20320fb">1.4.2. Compiled Function Differences</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgccff18a">2. Memory Layout and Addressing</a>
+<li><a href="#h-7bd1b412-4d15-4506-8396-fd2de1d87b8f">2. Memory Layout and Addressing</a>
 <ul>
-<li><a href="#org26fbc14">2.1. Address Space</a>
+<li><a href="#h-f9cbc0d2-989f-487d-86a1-263a2dd0328a">2.1. Address Space</a>
 <ul>
-<li><a href="#org75b2854">2.1.1. Virtual Addresses</a></li>
-<li><a href="#org431ed50">2.1.2. Ephemeral Addresses</a></li>
-<li><a href="#orge6fc5d7">2.1.3. Unmapped Addresses</a></li>
-<li><a href="#org9b88fc1">2.1.4. Wired Addresses</a></li>
-<li><a href="#orgb7b4bd9">2.1.5. Pages</a></li>
+<li><a href="#h-61deb73f-f375-4a97-85f9-4968a98c7042">2.1.1. Virtual Addresses</a></li>
+<li><a href="#h-f382d97e-8de3-4dfe-8145-042535dfb3ba">2.1.2. Ephemeral Addresses</a></li>
+<li><a href="#h-97d83652-fef9-4636-809b-2de320b90434">2.1.3. Unmapped Addresses</a></li>
+<li><a href="#h-3a0a198f-34df-41bf-9572-1d18fcaca83f">2.1.4. Wired Addresses</a></li>
+<li><a href="#h-3726b39e-f722-4faf-a901-a850660e5255">2.1.5. Pages</a></li>
 </ul>
 </li>
-<li><a href="#orgfbbb7ea">2.2. GC Support</a></li>
-<li><a href="#orgf8dce50">2.3. Address Translation</a>
+<li><a href="#h-6434d929-a732-4830-a92d-b80db3c24427">2.2. GC Support</a></li>
+<li><a href="#h-38d41061-fa97-4039-ad28-a820aacb8391">2.3. Address Translation</a>
 <ul>
-<li><a href="#org52028a4">2.3.1. Page Hash Table</a></li>
-<li><a href="#orgad0c540">2.3.2. PHT Lookup Algorithm</a></li>
-<li><a href="#org0135fde">2.3.3. Translation Algorithm</a></li>
+<li><a href="#h-246b26d2-c961-45e2-a837-1a89dfc1e273">2.3.1. Page Hash Table</a></li>
+<li><a href="#h-766a3441-45c7-4943-b934-46e3a591b336">2.3.2. PHT Lookup Algorithm</a></li>
+<li><a href="#h-0462b6cd-67f1-4517-914e-39550fce8f46">2.3.3. Translation Algorithm</a></li>
 </ul>
 </li>
-<li><a href="#orga7b14d8">2.4. Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</a></li>
+<li><a href="#h-a77a744c-c5ec-42db-a3ae-36522931e73d">2.4. Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org0550617" class="outline-2">
-<h2 id="org0550617"><span class="section-number-2">1</span> Lisp-Machine Data Types</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-h-e55640d0-77a8-4782-83dd-4e29d5bcb8e0" class="outline-2">
+<h2 id="h-e55640d0-77a8-4782-83dd-4e29d5bcb8e0"><span class="section-number-2">1</span> Lisp-Machine Data Types</h2>
+<div class="outline-text-2" id="text-h-e55640d0-77a8-4782-83dd-4e29d5bcb8e0">
 </div>
-<div id="outline-container-org0b6a644" class="outline-3">
-<h3 id="org0b6a644"><span class="section-number-3">1.1</span> Introduction to Lisp-Machine Objects</h3>
-<div class="outline-text-3" id="text-1-1">
+<div id="outline-container-h-ac2ae1e7-7955-4869-bc3d-28774bc554f6" class="outline-3">
+<h3 id="h-ac2ae1e7-7955-4869-bc3d-28774bc554f6"><span class="section-number-3">1.1</span> Introduction to Lisp-Machine Objects</h3>
+<div class="outline-text-3" id="text-h-ac2ae1e7-7955-4869-bc3d-28774bc554f6">
 </div>
-<div id="outline-container-org0aeb607" class="outline-4">
-<h4 id="org0aeb607"><span class="section-number-4">1.1.1</span> Memory Words</h4>
-<div class="outline-text-4" id="text-1-1-1">
+<div id="outline-container-h-d745c692-baca-436a-b677-5c4218c765a0" class="outline-4">
+<h4 id="h-d745c692-baca-436a-b677-5c4218c765a0"><span class="section-number-4">1.1.1</span> Memory Words</h4>
+<div class="outline-text-4" id="text-h-d745c692-baca-436a-b677-5c4218c765a0">
 </div>
-<div id="outline-container-orgbd32f76" class="outline-5">
-<h5 id="orgbd32f76"><span class="section-number-5">1.1.1.1</span> Length and Format</h5>
+<div id="outline-container-h-3030a59d-6c07-4669-99b0-54477308f071" class="outline-5">
+<h5 id="h-3030a59d-6c07-4669-99b0-54477308f071"><span class="section-number-5">1.1.1.1</span> Length and Format</h5>
+<div class="outline-text-5" id="text-h-3030a59d-6c07-4669-99b0-54477308f071">
 </div>
-<div id="outline-container-org131690e" class="outline-5">
-<h5 id="org131690e"><span class="section-number-5">1.1.1.2</span> Fields</h5>
+</div>
+<div id="outline-container-h-f2c9ad06-4003-4509-a8a6-71e2e4fdfb70" class="outline-5">
+<h5 id="h-f2c9ad06-4003-4509-a8a6-71e2e4fdfb70"><span class="section-number-5">1.1.1.2</span> Fields</h5>
+<div class="outline-text-5" id="text-h-f2c9ad06-4003-4509-a8a6-71e2e4fdfb70">
+</div>
 </div>
 </div>
 
-<div id="outline-container-orgedcbba4" class="outline-4">
-<h4 id="orgedcbba4"><span class="section-number-4">1.1.2</span> Classes of Stored Object Representations</h4>
-<div class="outline-text-4" id="text-1-1-2">
+<div id="outline-container-h-32631210-20cf-4e7a-b596-fbd6c275ac44" class="outline-4">
+<h4 id="h-32631210-20cf-4e7a-b596-fbd6c275ac44"><span class="section-number-4">1.1.2</span> Classes of Stored Object Representations</h4>
+<div class="outline-text-4" id="text-h-32631210-20cf-4e7a-b596-fbd6c275ac44">
 <p>
 An object can be stored:
 </p>
@@ -396,9 +400,9 @@ Each word within the structure object may contain:
 </div>
 </div>
 
-<div id="outline-container-org4fdb514" class="outline-4">
-<h4 id="org4fdb514"><span class="section-number-4">1.1.3</span> Components of Stored Representations (1.1.3)</h4>
-<div class="outline-text-4" id="text-1-1-3">
+<div id="outline-container-h-a5620fe0-daca-4da1-b849-e6e1195d1449" class="outline-4">
+<h4 id="h-a5620fe0-daca-4da1-b849-e6e1195d1449"><span class="section-number-4">1.1.3</span> Components of Stored Representations (1.1.3)</h4>
+<div class="outline-text-4" id="text-h-a5620fe0-daca-4da1-b849-e6e1195d1449">
 <p>
 The components of stored representations found in Lisp Machine memory
 are:
@@ -411,9 +415,9 @@ are:
 </ul>
 </div>
 
-<div id="outline-container-org01cc4b2" class="outline-5">
-<h5 id="org01cc4b2"><span class="section-number-5">1.1.3.1</span> Object References (1.1.3.1)</h5>
-<div class="outline-text-5" id="text-1-1-3-1">
+<div id="outline-container-h-173c8fc5-a29a-435b-be71-1b6a19c351d6" class="outline-5">
+<h5 id="h-173c8fc5-a29a-435b-be71-1b6a19c351d6"><span class="section-number-5">1.1.3.1</span> Object References (1.1.3.1)</h5>
+<div class="outline-text-5" id="text-h-173c8fc5-a29a-435b-be71-1b6a19c351d6">
 <p>
 Object references are the mechanism by which one refers to an object.
 There are three types of object references:
@@ -433,9 +437,9 @@ pointer to the value cell of a symbol).</li>
 </div>
 
 
-<div id="outline-container-orgdf57265" class="outline-5">
-<h5 id="orgdf57265"><span class="section-number-5">1.1.3.2</span> Headers</h5>
-<div class="outline-text-5" id="text-1-1-3-2">
+<div id="outline-container-h-a22d462e-8294-4209-8c40-a8e7c77b4826" class="outline-5">
+<h5 id="h-a22d462e-8294-4209-8c40-a8e7c77b4826"><span class="section-number-5">1.1.3.2</span> Headers</h5>
+<div class="outline-text-5" id="text-h-a22d462e-8294-4209-8c40-a8e7c77b4826">
 <p>
 Headers separate objects in memory. This contains information about the
 type of object. There are two types of headers:
@@ -449,9 +453,9 @@ descriptive data</li>
 </div>
 </div>
 
-<div id="outline-container-org854d793" class="outline-4">
-<h4 id="org854d793"><span class="section-number-4">1.1.4</span> Operand-Reference Classification</h4>
-<div class="outline-text-4" id="text-1-1-4">
+<div id="outline-container-h-91b1edab-d15b-4d14-a2ac-fe19cd17f2fb" class="outline-4">
+<h4 id="h-91b1edab-d15b-4d14-a2ac-fe19cd17f2fb"><span class="section-number-4">1.1.4</span> Operand-Reference Classification</h4>
+<div class="outline-text-4" id="text-h-91b1edab-d15b-4d14-a2ac-fe19cd17f2fb">
 <p>
 Page 26 of the PDF
 </p>
@@ -459,14 +463,14 @@ Page 26 of the PDF
 </div>
 </div>
 
-<div id="outline-container-orgef264cd" class="outline-3">
-<h3 id="orgef264cd"><span class="section-number-3">1.2</span> Data-Type Descriptions</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-h-e3c91800-0d31-4496-98bd-8c3dcb16324f" class="outline-3">
+<h3 id="h-e3c91800-0d31-4496-98bd-8c3dcb16324f"><span class="section-number-3">1.2</span> Data-Type Descriptions</h3>
+<div class="outline-text-3" id="text-h-e3c91800-0d31-4496-98bd-8c3dcb16324f">
 </div>
 
-<div id="outline-container-orga450c4d" class="outline-4">
-<h4 id="orga450c4d"><span class="section-number-4">1.2.1</span> Representations of Symbols</h4>
-<div class="outline-text-4" id="text-1-2-1">
+<div id="outline-container-h-bf7499b5-0a41-4caf-baf4-1fe34917e961" class="outline-4">
+<h4 id="h-bf7499b5-0a41-4caf-baf4-1fe34917e961"><span class="section-number-4">1.2.1</span> Representations of Symbols</h4>
+<div class="outline-text-4" id="text-h-bf7499b5-0a41-4caf-baf4-1fe34917e961">
 <p>
 The object reference to a symbol is a word of data type <code>dtp-symbol</code>
 or <code>dtp-nil</code>.
@@ -474,14 +478,14 @@ or <code>dtp-nil</code>.
 </div>
 </div>
 
-<div id="outline-container-org04ab78e" class="outline-4">
-<h4 id="org04ab78e"><span class="section-number-4">1.2.2</span> Representation of Instances and Related Data Types</h4>
-<div class="outline-text-4" id="text-1-2-2">
+<div id="outline-container-h-ee111361-32dc-463a-86d3-db36c43e6d79" class="outline-4">
+<h4 id="h-ee111361-32dc-463a-86d3-db36c43e6d79"><span class="section-number-4">1.2.2</span> Representation of Instances and Related Data Types</h4>
+<div class="outline-text-4" id="text-h-ee111361-32dc-463a-86d3-db36c43e6d79">
 </div>
 
-<div id="outline-container-org772f7ac" class="outline-5">
-<h5 id="org772f7ac"><span class="section-number-5">1.2.2.1</span> Flavor Instances</h5>
-<div class="outline-text-5" id="text-1-2-2-1">
+<div id="outline-container-h-792593a6-ae07-4d6b-9170-40fad03448c0" class="outline-5">
+<h5 id="h-792593a6-ae07-4d6b-9170-40fad03448c0"><span class="section-number-5">1.2.2.1</span> Flavor Instances</h5>
+<div class="outline-text-5" id="text-h-792593a6-ae07-4d6b-9170-40fad03448c0">
 <p>
 The object reference to an instance is a word of data type <code>dtp-instance</code>
 whose address field points to the instance structure.
@@ -489,115 +493,129 @@ whose address field points to the instance structure.
 </div>
 </div>
 
-<div id="outline-container-orgdcc4729" class="outline-5">
-<h5 id="orgdcc4729"><span class="section-number-5">1.2.2.2</span> List Instance</h5>
-<div class="outline-text-5" id="text-1-2-2-2">
+<div id="outline-container-h-310002f4-1322-4e17-bae4-0dda5c26034d" class="outline-5">
+<h5 id="h-310002f4-1322-4e17-bae4-0dda5c26034d"><span class="section-number-5">1.2.2.2</span> List Instance</h5>
+<div class="outline-text-5" id="text-h-310002f4-1322-4e17-bae4-0dda5c26034d">
 </div>
 </div>
-<div id="outline-container-org60b3fe2" class="outline-5">
-<h5 id="org60b3fe2"><span class="section-number-5">1.2.2.3</span> Array Instance</h5>
-<div class="outline-text-5" id="text-1-2-2-3">
+<div id="outline-container-h-674b1f04-3757-4a1d-975b-0f5e4727421f" class="outline-5">
+<h5 id="h-674b1f04-3757-4a1d-975b-0f5e4727421f"><span class="section-number-5">1.2.2.3</span> Array Instance</h5>
+<div class="outline-text-5" id="text-h-674b1f04-3757-4a1d-975b-0f5e4727421f">
 </div>
 </div>
-<div id="outline-container-orgfacd529" class="outline-5">
-<h5 id="orgfacd529"><span class="section-number-5">1.2.2.4</span> String Instance</h5>
-</div>
-</div>
-<div id="outline-container-org748435e" class="outline-4">
-<h4 id="org748435e"><span class="section-number-4">1.2.3</span> Representation of Characters</h4>
-<div class="outline-text-4" id="text-1-2-3">
-</div>
-</div>
-<div id="outline-container-org038f384" class="outline-4">
-<h4 id="org038f384"><span class="section-number-4">1.2.4</span> Representation of Numbers</h4>
-<div class="outline-text-4" id="text-1-2-4">
-</div>
-<div id="outline-container-org25eb044" class="outline-5">
-<h5 id="org25eb044"><span class="section-number-5">1.2.4.1</span> Fixnum Representation</h5>
-</div>
-<div id="outline-container-org2af27a3" class="outline-5">
-<h5 id="org2af27a3"><span class="section-number-5">1.2.4.2</span> Bignum Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-2">
-</div>
-</div>
-<div id="outline-container-org2aa7f74" class="outline-5">
-<h5 id="org2aa7f74"><span class="section-number-5">1.2.4.3</span> Small-Ratio Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-3">
-</div>
-</div>
-<div id="outline-container-orgc6f9873" class="outline-5">
-<h5 id="orgc6f9873"><span class="section-number-5">1.2.4.4</span> Big-Ratio Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-4">
-</div>
-</div>
-<div id="outline-container-orgb3e01b9" class="outline-5">
-<h5 id="orgb3e01b9"><span class="section-number-5">1.2.4.5</span> Single-Precision Floating-Point Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-5">
-</div>
-</div>
-<div id="outline-container-org8dfb0a1" class="outline-5">
-<h5 id="org8dfb0a1"><span class="section-number-5">1.2.4.6</span> Double-Precision Floating-Point Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-6">
-</div>
-</div>
-<div id="outline-container-orgf08148e" class="outline-5">
-<h5 id="orgf08148e"><span class="section-number-5">1.2.4.7</span> Complex-Number Representation</h5>
-<div class="outline-text-5" id="text-1-2-4-7">
-</div>
-</div>
-<div id="outline-container-org35106e6" class="outline-5">
-<h5 id="org35106e6"><span class="section-number-5">1.2.4.8</span> The Spare-Number Type</h5>
-<div class="outline-text-5" id="text-1-2-4-8">
+<div id="outline-container-h-acc14984-5eba-46f9-a4a2-cf9339a7f586" class="outline-5">
+<h5 id="h-acc14984-5eba-46f9-a4a2-cf9339a7f586"><span class="section-number-5">1.2.2.4</span> String Instance</h5>
+<div class="outline-text-5" id="text-h-acc14984-5eba-46f9-a4a2-cf9339a7f586">
 </div>
 </div>
 </div>
-<div id="outline-container-org9cb7bab" class="outline-4">
-<h4 id="org9cb7bab"><span class="section-number-4">1.2.5</span> Representations of Lists</h4>
-<div class="outline-text-4" id="text-1-2-5">
+<div id="outline-container-h-ee6bef8a-2330-49e5-aad2-a30ac97d91bc" class="outline-4">
+<h4 id="h-ee6bef8a-2330-49e5-aad2-a30ac97d91bc"><span class="section-number-4">1.2.3</span> Representation of Characters</h4>
+<div class="outline-text-4" id="text-h-ee6bef8a-2330-49e5-aad2-a30ac97d91bc">
 </div>
 </div>
-<div id="outline-container-org9ca7c9f" class="outline-4">
-<h4 id="org9ca7c9f"><span class="section-number-4">1.2.6</span> Representations of Arrays and Strings</h4>
-<div class="outline-text-4" id="text-1-2-6">
+<div id="outline-container-h-c3bf5550-9a2f-43e6-90e9-68bef7315017" class="outline-4">
+<h4 id="h-c3bf5550-9a2f-43e6-90e9-68bef7315017"><span class="section-number-4">1.2.4</span> Representation of Numbers</h4>
+<div class="outline-text-4" id="text-h-c3bf5550-9a2f-43e6-90e9-68bef7315017">
+</div>
+<div id="outline-container-h-56d7878b-443f-4532-bf36-c916146b30fe" class="outline-5">
+<h5 id="h-56d7878b-443f-4532-bf36-c916146b30fe"><span class="section-number-5">1.2.4.1</span> Fixnum Representation</h5>
+<div class="outline-text-5" id="text-h-56d7878b-443f-4532-bf36-c916146b30fe">
 </div>
 </div>
-<div id="outline-container-org84f1db2" class="outline-4">
-<h4 id="org84f1db2"><span class="section-number-4">1.2.7</span> I-Machine Array Registers</h4>
-</div>
-<div id="outline-container-orge2ed7ce" class="outline-4">
-<h4 id="orge2ed7ce"><span class="section-number-4">1.2.8</span> Representations of Functions and Closures</h4>
-<div class="outline-text-4" id="text-1-2-8">
-</div>
-<div id="outline-container-org6180afd" class="outline-5">
-<h5 id="org6180afd"><span class="section-number-5">1.2.8.1</span> Representation of Compiled Functions</h5>
-</div>
-<div id="outline-container-org1b972e1" class="outline-5">
-<h5 id="org1b972e1"><span class="section-number-5">1.2.8.2</span> Generic Functions</h5>
-</div>
-<div id="outline-container-org1efea64" class="outline-5">
-<h5 id="org1efea64"><span class="section-number-5">1.2.8.3</span> Representation of Lexical Closures</h5>
-</div>
-<div id="outline-container-org6ff2b67" class="outline-5">
-<h5 id="org6ff2b67"><span class="section-number-5">1.2.8.4</span> Representation of Dynamic Closures</h5>
+<div id="outline-container-h-69617a64-9eb2-4b93-accd-164fd5b2e6db" class="outline-5">
+<h5 id="h-69617a64-9eb2-4b93-accd-164fd5b2e6db"><span class="section-number-5">1.2.4.2</span> Bignum Representation</h5>
+<div class="outline-text-5" id="text-h-69617a64-9eb2-4b93-accd-164fd5b2e6db">
 </div>
 </div>
-<div id="outline-container-org264b97d" class="outline-4">
-<h4 id="org264b97d"><span class="section-number-4">1.2.9</span> Instruction Representation</h4>
-<div class="outline-text-4" id="text-1-2-9">
+<div id="outline-container-h-16ed042e-a4e1-41e6-a2a8-783c8afd4f40" class="outline-5">
+<h5 id="h-16ed042e-a4e1-41e6-a2a8-783c8afd4f40"><span class="section-number-5">1.2.4.3</span> Small-Ratio Representation</h5>
+<div class="outline-text-5" id="text-h-16ed042e-a4e1-41e6-a2a8-783c8afd4f40">
 </div>
 </div>
-<div id="outline-container-org17b5ede" class="outline-4">
-<h4 id="org17b5ede"><span class="section-number-4">1.2.10</span> Program-Counter Representation</h4>
-<div class="outline-text-4" id="text-1-2-10">
+<div id="outline-container-h-ac3eff75-64d6-4b93-a896-c23cdc6a0f00" class="outline-5">
+<h5 id="h-ac3eff75-64d6-4b93-a896-c23cdc6a0f00"><span class="section-number-5">1.2.4.4</span> Big-Ratio Representation</h5>
+<div class="outline-text-5" id="text-h-ac3eff75-64d6-4b93-a896-c23cdc6a0f00">
+</div>
+</div>
+<div id="outline-container-h-96c0c7d8-1d92-4c87-9eb6-76d974234bf1" class="outline-5">
+<h5 id="h-96c0c7d8-1d92-4c87-9eb6-76d974234bf1"><span class="section-number-5">1.2.4.5</span> Single-Precision Floating-Point Representation</h5>
+<div class="outline-text-5" id="text-h-96c0c7d8-1d92-4c87-9eb6-76d974234bf1">
+</div>
+</div>
+<div id="outline-container-h-de551fc6-301a-4f71-a8c3-c077228778d3" class="outline-5">
+<h5 id="h-de551fc6-301a-4f71-a8c3-c077228778d3"><span class="section-number-5">1.2.4.6</span> Double-Precision Floating-Point Representation</h5>
+<div class="outline-text-5" id="text-h-de551fc6-301a-4f71-a8c3-c077228778d3">
+</div>
+</div>
+<div id="outline-container-h-f041d274-2bb5-44b3-b560-50b27278b4a2" class="outline-5">
+<h5 id="h-f041d274-2bb5-44b3-b560-50b27278b4a2"><span class="section-number-5">1.2.4.7</span> Complex-Number Representation</h5>
+<div class="outline-text-5" id="text-h-f041d274-2bb5-44b3-b560-50b27278b4a2">
+</div>
+</div>
+<div id="outline-container-h-5387d8a5-ef33-4e5b-b99e-7a0bc16885fa" class="outline-5">
+<h5 id="h-5387d8a5-ef33-4e5b-b99e-7a0bc16885fa"><span class="section-number-5">1.2.4.8</span> The Spare-Number Type</h5>
+<div class="outline-text-5" id="text-h-5387d8a5-ef33-4e5b-b99e-7a0bc16885fa">
+</div>
+</div>
+</div>
+<div id="outline-container-h-790c8b08-dba7-46e9-8ff4-adacae6da284" class="outline-4">
+<h4 id="h-790c8b08-dba7-46e9-8ff4-adacae6da284"><span class="section-number-4">1.2.5</span> Representations of Lists</h4>
+<div class="outline-text-4" id="text-h-790c8b08-dba7-46e9-8ff4-adacae6da284">
+</div>
+</div>
+<div id="outline-container-h-70df9ee8-feeb-4dda-9213-0f37299e464d" class="outline-4">
+<h4 id="h-70df9ee8-feeb-4dda-9213-0f37299e464d"><span class="section-number-4">1.2.6</span> Representations of Arrays and Strings</h4>
+<div class="outline-text-4" id="text-h-70df9ee8-feeb-4dda-9213-0f37299e464d">
+</div>
+</div>
+<div id="outline-container-h-66e5d98e-9631-463f-bfaf-b181069b6399" class="outline-4">
+<h4 id="h-66e5d98e-9631-463f-bfaf-b181069b6399"><span class="section-number-4">1.2.7</span> I-Machine Array Registers</h4>
+<div class="outline-text-4" id="text-h-66e5d98e-9631-463f-bfaf-b181069b6399">
+</div>
+</div>
+<div id="outline-container-h-55192ad7-8dff-4a79-91d7-808c8b7dbcf1" class="outline-4">
+<h4 id="h-55192ad7-8dff-4a79-91d7-808c8b7dbcf1"><span class="section-number-4">1.2.8</span> Representations of Functions and Closures</h4>
+<div class="outline-text-4" id="text-h-55192ad7-8dff-4a79-91d7-808c8b7dbcf1">
+</div>
+<div id="outline-container-h-6ba48934-d194-4724-970d-0e8bd102007d" class="outline-5">
+<h5 id="h-6ba48934-d194-4724-970d-0e8bd102007d"><span class="section-number-5">1.2.8.1</span> Representation of Compiled Functions</h5>
+<div class="outline-text-5" id="text-h-6ba48934-d194-4724-970d-0e8bd102007d">
+</div>
+</div>
+<div id="outline-container-h-1f4596ff-1bee-4a6b-854d-39a901c5e7ae" class="outline-5">
+<h5 id="h-1f4596ff-1bee-4a6b-854d-39a901c5e7ae"><span class="section-number-5">1.2.8.2</span> Generic Functions</h5>
+<div class="outline-text-5" id="text-h-1f4596ff-1bee-4a6b-854d-39a901c5e7ae">
+</div>
+</div>
+<div id="outline-container-h-9588d74c-45a2-4da4-9700-7588f3e99de9" class="outline-5">
+<h5 id="h-9588d74c-45a2-4da4-9700-7588f3e99de9"><span class="section-number-5">1.2.8.3</span> Representation of Lexical Closures</h5>
+<div class="outline-text-5" id="text-h-9588d74c-45a2-4da4-9700-7588f3e99de9">
+</div>
+</div>
+<div id="outline-container-h-b598da4a-aa2b-45a3-b45d-17b4a9eb51a9" class="outline-5">
+<h5 id="h-b598da4a-aa2b-45a3-b45d-17b4a9eb51a9"><span class="section-number-5">1.2.8.4</span> Representation of Dynamic Closures</h5>
+<div class="outline-text-5" id="text-h-b598da4a-aa2b-45a3-b45d-17b4a9eb51a9">
+</div>
+</div>
+</div>
+<div id="outline-container-h-f11c25a7-40ff-4832-8267-9b39441dde99" class="outline-4">
+<h4 id="h-f11c25a7-40ff-4832-8267-9b39441dde99"><span class="section-number-4">1.2.9</span> Instruction Representation</h4>
+<div class="outline-text-4" id="text-h-f11c25a7-40ff-4832-8267-9b39441dde99">
+</div>
+</div>
+<div id="outline-container-h-f76a118f-88e0-4227-a7c3-87ab1fa4670f" class="outline-4">
+<h4 id="h-f76a118f-88e0-4227-a7c3-87ab1fa4670f"><span class="section-number-4">1.2.10</span> Program-Counter Representation</h4>
+<div class="outline-text-4" id="text-h-f76a118f-88e0-4227-a7c3-87ab1fa4670f">
 <p>
 The program counter (pc) is a register in the I-machine that contains
 the virtual address of the currently executing instruction.
 </p>
 </div>
 </div>
-<div id="outline-container-orgf9816b7" class="outline-4">
-<h4 id="orgf9816b7"><span class="section-number-4">1.2.11</span> Representation of Locatives</h4>
-<div class="outline-text-4" id="text-1-2-11">
+<div id="outline-container-h-407b53a3-cd23-4d77-bca2-a964cb259feb" class="outline-4">
+<h4 id="h-407b53a3-cd23-4d77-bca2-a964cb259feb"><span class="section-number-4">1.2.11</span> Representation of Locatives</h4>
+<div class="outline-text-4" id="text-h-407b53a3-cd23-4d77-bca2-a964cb259feb">
 <p>
 A locative is a pointer to virtual memory implemented as an object with
 data type <code>dtp-locative</code> and an address field that is the address of the
@@ -617,22 +635,28 @@ long format arrays and the base address of array registers.
 </div>
 </div>
 
-<div id="outline-container-org99fe39f" class="outline-3">
-<h3 id="org99fe39f"><span class="section-number-3">1.3</span> Data-Type Code Assignments</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-h-4ab26848-db9a-4283-a6be-fec5bb2dfa7e" class="outline-3">
+<h3 id="h-4ab26848-db9a-4283-a6be-fec5bb2dfa7e"><span class="section-number-3">1.3</span> Data-Type Code Assignments</h3>
+<div class="outline-text-3" id="text-h-4ab26848-db9a-4283-a6be-fec5bb2dfa7e">
 </div>
-<div id="outline-container-org2e64921" class="outline-4">
-<h4 id="org2e64921"><span class="section-number-4">1.3.1</span> Headers, Special Markers, and Forwarding Pointers</h4>
+<div id="outline-container-h-ef6fdb1c-99ee-431f-bbc2-b25ee8c574d8" class="outline-4">
+<h4 id="h-ef6fdb1c-99ee-431f-bbc2-b25ee8c574d8"><span class="section-number-4">1.3.1</span> Headers, Special Markers, and Forwarding Pointers</h4>
+<div class="outline-text-4" id="text-h-ef6fdb1c-99ee-431f-bbc2-b25ee8c574d8">
 </div>
-<div id="outline-container-org558bb6d" class="outline-4">
-<h4 id="org558bb6d"><span class="section-number-4">1.3.2</span> Number Data Types</h4>
 </div>
-<div id="outline-container-orgc7fee4e" class="outline-4">
-<h4 id="orgc7fee4e"><span class="section-number-4">1.3.3</span> Instance Data Types</h4>
+<div id="outline-container-h-23771287-919f-4eb8-902a-310176085f54" class="outline-4">
+<h4 id="h-23771287-919f-4eb8-902a-310176085f54"><span class="section-number-4">1.3.2</span> Number Data Types</h4>
+<div class="outline-text-4" id="text-h-23771287-919f-4eb8-902a-310176085f54">
 </div>
-<div id="outline-container-orge646faa" class="outline-4">
-<h4 id="orge646faa"><span class="section-number-4">1.3.4</span> Primitive Data Types</h4>
-<div class="outline-text-4" id="text-1-3-4">
+</div>
+<div id="outline-container-h-94c3f0b1-fcd8-4b33-aa64-a5fc655d8d76" class="outline-4">
+<h4 id="h-94c3f0b1-fcd8-4b33-aa64-a5fc655d8d76"><span class="section-number-4">1.3.3</span> Instance Data Types</h4>
+<div class="outline-text-4" id="text-h-94c3f0b1-fcd8-4b33-aa64-a5fc655d8d76">
+</div>
+</div>
+<div id="outline-container-h-5c46beca-9670-4170-a27b-a42d491b3a58" class="outline-4">
+<h4 id="h-5c46beca-9670-4170-a27b-a42d491b3a58"><span class="section-number-4">1.3.4</span> Primitive Data Types</h4>
+<div class="outline-text-4" id="text-h-5c46beca-9670-4170-a27b-a42d491b3a58">
 <p>
 There are 11 primitive types:
 </p>
@@ -657,95 +681,130 @@ There are 11 primitive types:
 </div>
 </div>
 
-<div id="outline-container-org5d1fe6d" class="outline-4">
-<h4 id="org5d1fe6d"><span class="section-number-4">1.3.5</span> Special Marker for Garbage Collector</h4>
-</div>
-
-<div id="outline-container-org9248b33" class="outline-4">
-<h4 id="org9248b33"><span class="section-number-4">1.3.6</span> Data Types for Program Counter Values</h4>
-</div>
-
-<div id="outline-container-orga0c4063" class="outline-4">
-<h4 id="orga0c4063"><span class="section-number-4">1.3.7</span> Full Word Instruction Data Types</h4>
-</div>
-
-<div id="outline-container-org9bd086b" class="outline-4">
-<h4 id="org9bd086b"><span class="section-number-4">1.3.8</span> Half-Word Instruction Data Types</h4>
+<div id="outline-container-h-e7670d47-824c-4a3b-bc7c-38352ea6d923" class="outline-4">
+<h4 id="h-e7670d47-824c-4a3b-bc7c-38352ea6d923"><span class="section-number-4">1.3.5</span> Special Marker for Garbage Collector</h4>
+<div class="outline-text-4" id="text-h-e7670d47-824c-4a3b-bc7c-38352ea6d923">
 </div>
 </div>
 
-<div id="outline-container-orgf37f8ec" class="outline-3">
-<h3 id="orgf37f8ec"><span class="section-number-3">1.4</span> Appendix: Comparison of 3600-Family and I-Machine Data Representations</h3>
-<div class="outline-text-3" id="text-1-4">
+<div id="outline-container-h-e21026e3-2df0-44c1-bc9c-09cb15434965" class="outline-4">
+<h4 id="h-e21026e3-2df0-44c1-bc9c-09cb15434965"><span class="section-number-4">1.3.6</span> Data Types for Program Counter Values</h4>
+<div class="outline-text-4" id="text-h-e21026e3-2df0-44c1-bc9c-09cb15434965">
 </div>
-<div id="outline-container-org0bb0850" class="outline-4">
-<h4 id="org0bb0850"><span class="section-number-4">1.4.1</span> Array Differences</h4>
 </div>
 
-<div id="outline-container-orga0ea1e7" class="outline-4">
-<h4 id="orga0ea1e7"><span class="section-number-4">1.4.2</span> Compiled Function Differences</h4>
+<div id="outline-container-h-345ea908-58bb-4456-abe1-d0a3ba8d2737" class="outline-4">
+<h4 id="h-345ea908-58bb-4456-abe1-d0a3ba8d2737"><span class="section-number-4">1.3.7</span> Full Word Instruction Data Types</h4>
+<div class="outline-text-4" id="text-h-345ea908-58bb-4456-abe1-d0a3ba8d2737">
+</div>
+</div>
+
+<div id="outline-container-h-69edfa62-4b28-4c24-83b0-a2c06147e63f" class="outline-4">
+<h4 id="h-69edfa62-4b28-4c24-83b0-a2c06147e63f"><span class="section-number-4">1.3.8</span> Half-Word Instruction Data Types</h4>
+<div class="outline-text-4" id="text-h-69edfa62-4b28-4c24-83b0-a2c06147e63f">
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgccff18a" class="outline-2">
-<h2 id="orgccff18a"><span class="section-number-2">2</span> Memory Layout and Addressing</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-h-70ac46a8-0685-47b4-8bdd-b70e8377fa74" class="outline-3">
+<h3 id="h-70ac46a8-0685-47b4-8bdd-b70e8377fa74"><span class="section-number-3">1.4</span> Appendix: Comparison of 3600-Family and I-Machine Data Representations</h3>
+<div class="outline-text-3" id="text-h-70ac46a8-0685-47b4-8bdd-b70e8377fa74">
 </div>
 
-<div id="outline-container-org26fbc14" class="outline-3">
-<h3 id="org26fbc14"><span class="section-number-3">2.1</span> Address Space</h3>
-<div class="outline-text-3" id="text-2-1">
-</div>
-<div id="outline-container-org75b2854" class="outline-4">
-<h4 id="org75b2854"><span class="section-number-4">2.1.1</span> Virtual Addresses</h4>
-</div>
-
-<div id="outline-container-org431ed50" class="outline-4">
-<h4 id="org431ed50"><span class="section-number-4">2.1.2</span> Ephemeral Addresses</h4>
-</div>
-
-<div id="outline-container-orge6fc5d7" class="outline-4">
-<h4 id="orge6fc5d7"><span class="section-number-4">2.1.3</span> Unmapped Addresses</h4>
-</div>
-
-<div id="outline-container-org9b88fc1" class="outline-4">
-<h4 id="org9b88fc1"><span class="section-number-4">2.1.4</span> Wired Addresses</h4>
-</div>
-
-<div id="outline-container-orgb7b4bd9" class="outline-4">
-<h4 id="orgb7b4bd9"><span class="section-number-4">2.1.5</span> Pages</h4>
+<div id="outline-container-h-3da8479d-441a-4a53-befa-2af9ef6adade" class="outline-4">
+<h4 id="h-3da8479d-441a-4a53-befa-2af9ef6adade"><span class="section-number-4">1.4.1</span> Array Differences</h4>
+<div class="outline-text-4" id="text-h-3da8479d-441a-4a53-befa-2af9ef6adade">
 </div>
 </div>
 
-<div id="outline-container-orgfbbb7ea" class="outline-3">
-<h3 id="orgfbbb7ea"><span class="section-number-3">2.2</span> GC Support</h3>
+<div id="outline-container-h-18ccb133-9a45-4cb7-b379-30cef20320fb" class="outline-4">
+<h4 id="h-18ccb133-9a45-4cb7-b379-30cef20320fb"><span class="section-number-4">1.4.2</span> Compiled Function Differences</h4>
+<div class="outline-text-4" id="text-h-18ccb133-9a45-4cb7-b379-30cef20320fb">
 </div>
-
-<div id="outline-container-orgf8dce50" class="outline-3">
-<h3 id="orgf8dce50"><span class="section-number-3">2.3</span> Address Translation</h3>
-<div class="outline-text-3" id="text-2-3">
 </div>
-<div id="outline-container-org52028a4" class="outline-4">
-<h4 id="org52028a4"><span class="section-number-4">2.3.1</span> Page Hash Table</h4>
-</div>
-
-<div id="outline-container-orgad0c540" class="outline-4">
-<h4 id="orgad0c540"><span class="section-number-4">2.3.2</span> PHT Lookup Algorithm</h4>
-</div>
-
-<div id="outline-container-org0135fde" class="outline-4">
-<h4 id="org0135fde"><span class="section-number-4">2.3.3</span> Translation Algorithm</h4>
 </div>
 </div>
 
-<div id="outline-container-orga7b14d8" class="outline-3">
-<h3 id="orga7b14d8"><span class="section-number-3">2.4</span> Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</h3>
+<div id="outline-container-h-7bd1b412-4d15-4506-8396-fd2de1d87b8f" class="outline-2">
+<h2 id="h-7bd1b412-4d15-4506-8396-fd2de1d87b8f"><span class="section-number-2">2</span> Memory Layout and Addressing</h2>
+<div class="outline-text-2" id="text-h-7bd1b412-4d15-4506-8396-fd2de1d87b8f">
+</div>
+
+<div id="outline-container-h-f9cbc0d2-989f-487d-86a1-263a2dd0328a" class="outline-3">
+<h3 id="h-f9cbc0d2-989f-487d-86a1-263a2dd0328a"><span class="section-number-3">2.1</span> Address Space</h3>
+<div class="outline-text-3" id="text-h-f9cbc0d2-989f-487d-86a1-263a2dd0328a">
+</div>
+
+<div id="outline-container-h-61deb73f-f375-4a97-85f9-4968a98c7042" class="outline-4">
+<h4 id="h-61deb73f-f375-4a97-85f9-4968a98c7042"><span class="section-number-4">2.1.1</span> Virtual Addresses</h4>
+<div class="outline-text-4" id="text-h-61deb73f-f375-4a97-85f9-4968a98c7042">
+</div>
+</div>
+
+<div id="outline-container-h-f382d97e-8de3-4dfe-8145-042535dfb3ba" class="outline-4">
+<h4 id="h-f382d97e-8de3-4dfe-8145-042535dfb3ba"><span class="section-number-4">2.1.2</span> Ephemeral Addresses</h4>
+<div class="outline-text-4" id="text-h-f382d97e-8de3-4dfe-8145-042535dfb3ba">
+</div>
+</div>
+
+<div id="outline-container-h-97d83652-fef9-4636-809b-2de320b90434" class="outline-4">
+<h4 id="h-97d83652-fef9-4636-809b-2de320b90434"><span class="section-number-4">2.1.3</span> Unmapped Addresses</h4>
+<div class="outline-text-4" id="text-h-97d83652-fef9-4636-809b-2de320b90434">
+</div>
+</div>
+
+<div id="outline-container-h-3a0a198f-34df-41bf-9572-1d18fcaca83f" class="outline-4">
+<h4 id="h-3a0a198f-34df-41bf-9572-1d18fcaca83f"><span class="section-number-4">2.1.4</span> Wired Addresses</h4>
+<div class="outline-text-4" id="text-h-3a0a198f-34df-41bf-9572-1d18fcaca83f">
+</div>
+</div>
+
+<div id="outline-container-h-3726b39e-f722-4faf-a901-a850660e5255" class="outline-4">
+<h4 id="h-3726b39e-f722-4faf-a901-a850660e5255"><span class="section-number-4">2.1.5</span> Pages</h4>
+<div class="outline-text-4" id="text-h-3726b39e-f722-4faf-a901-a850660e5255">
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-6434d929-a732-4830-a92d-b80db3c24427" class="outline-3">
+<h3 id="h-6434d929-a732-4830-a92d-b80db3c24427"><span class="section-number-3">2.2</span> GC Support</h3>
+<div class="outline-text-3" id="text-h-6434d929-a732-4830-a92d-b80db3c24427">
+</div>
+</div>
+
+<div id="outline-container-h-38d41061-fa97-4039-ad28-a820aacb8391" class="outline-3">
+<h3 id="h-38d41061-fa97-4039-ad28-a820aacb8391"><span class="section-number-3">2.3</span> Address Translation</h3>
+<div class="outline-text-3" id="text-h-38d41061-fa97-4039-ad28-a820aacb8391">
+</div>
+
+<div id="outline-container-h-246b26d2-c961-45e2-a837-1a89dfc1e273" class="outline-4">
+<h4 id="h-246b26d2-c961-45e2-a837-1a89dfc1e273"><span class="section-number-4">2.3.1</span> Page Hash Table</h4>
+<div class="outline-text-4" id="text-h-246b26d2-c961-45e2-a837-1a89dfc1e273">
+</div>
+</div>
+
+<div id="outline-container-h-766a3441-45c7-4943-b934-46e3a591b336" class="outline-4">
+<h4 id="h-766a3441-45c7-4943-b934-46e3a591b336"><span class="section-number-4">2.3.2</span> PHT Lookup Algorithm</h4>
+<div class="outline-text-4" id="text-h-766a3441-45c7-4943-b934-46e3a591b336">
+</div>
+</div>
+
+<div id="outline-container-h-0462b6cd-67f1-4517-914e-39550fce8f46" class="outline-4">
+<h4 id="h-0462b6cd-67f1-4517-914e-39550fce8f46"><span class="section-number-4">2.3.3</span> Translation Algorithm</h4>
+<div class="outline-text-4" id="text-h-0462b6cd-67f1-4517-914e-39550fce8f46">
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-a77a744c-c5ec-42db-a3ae-36522931e73d" class="outline-3">
+<h3 id="h-a77a744c-c5ec-42db-a3ae-36522931e73d"><span class="section-number-3">2.4</span> Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</h3>
+<div class="outline-text-3" id="text-h-a77a744c-c5ec-42db-a3ae-36522931e73d">
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-02-24 Wed 20:52.</p>
+<p class="postamble">Last Updated 2021-04-11 Sun 16:50.</p>
 </div>
 </body>
 </html>

@@ -22,6 +22,7 @@ rationals, the reals, and the complex numbers. But not the natural
 numbers (because we want to include subtraction).
 
 #+NAME: defn-ring
+#+ATTR_HTML: :id defn-ring
 #+begin_definition
 A {{{define(Ring)}}} consists of
 
@@ -49,6 +50,7 @@ If, in addition, multiplication is commutative, then we call the ring a
 {{{define(Commutative Ring)}}}.
 #+end_definition
 
+#+ATTR_HTML: :id rmk-rng
 #+begin_remark
 If we abandon the existence of a multiplicative identity, then we have a
 non-unital ring.
@@ -56,6 +58,7 @@ non-unital ring.
 
 There are probably a few more properties I'm forgetting about.
 
+#+ATTR_HTML: :id rmk-internal-ring-object
 #+begin_remark
 (Internalization, category theoretic definition.)
 We could define a "ring object" as a monoid object in the category
@@ -72,11 +75,13 @@ want to have commutativity for addition.
 :CUSTOM_ID: h-03deb5e7-4e53-4c2a-bfd8-fdbcf9ba4078
 :END:
 
+#+ATTR_HTML: :id ex-integers-are-a-ring
 #+begin_math-example
 The integer $\ZZ$ is the epitome of a ring, as are the rationals $\QQ$,
 and the reals $\RR$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-polynomials
 #+begin_math-example
 Let $R$ be a commutative ring, then the collection of polynomials in a single
 indeterminate $z$ with coefficients in $R$ is a ring...called the
@@ -92,6 +97,7 @@ distributions over $R$, i.e., $R[{[z,z^{-1}]}]$ because multiplication
 is not consistent (this pops up in vertex operator algebras).
 #+end_math-example
 
+#+ATTR_HTML: :id ex-matrix-ring
 #+begin_math-example
 Let $R$ be a ring, and $n\in\NN$ a natural number greater than zero.
 Then the set of \(n\)-by-\(n\) matrices with entries in $R$, denoted
@@ -102,6 +108,7 @@ This is an important example, because for $n\gt1$ the ring is
 noncommutative.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-function-ring
 #+begin_math-example
 Let $X$ be some non-empty set, and $R$ a ring. Then the function space
 $\hom(X,R)$ of \(R\)-valued functions on $X$ forms a ring. Addition is
@@ -111,16 +118,19 @@ constant function $Z(x) = 0$ for all $x\in X$, and the multiplicative
 identity is the function $e(x) = 1$ for all $x\in X$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-ring-continuous-functions
 #+begin_math-example
 If $X$ is a topological space, then continuous real-valued functions
 form a ring. (Continuous complex-valued functions form another ring.)
 #+end_math-example
 
+#+ATTR_HTML: :id xca-noncommutative-polynomials
 #+begin_exercise
 Let $R$ be a noncommutative ring. Can we extend the notion of a
 polynomial ring to $R[x]$?
 #+end_exercise
 
+#+ATTR_HTML: :id xca-mat-polynomial
 #+begin_exercise
 Let $n\in\NN$ be greater than 1, $R$ some fixed commutative ring.
 Is $M(n, R[z])$ the same ring as $(M(n, R))[z]$?
@@ -132,6 +142,7 @@ What happens for noncommutative rings $R$?
 :CUSTOM_ID: h-6b3e4190-1cb1-41dc-960b-24cedee5bb0d
 :END:
 
+#+ATTR_HTML: :id defn-nilpotent
 #+begin_definition
 Let $r\in R$ be an element in a ring. We call it {{{define(Nilpotent)}}}
 if there exists some $k\in\NN$ such that $r^{k}=0$.
@@ -139,6 +150,7 @@ if there exists some $k\in\NN$ such that $r^{k}=0$.
 
 We could consider nilpotents as modeling "infinitesimals" of yore.
 
+#+ATTR_HTML: :id defn-idempotent
 #+begin_definition
 Let $r\in R$ be an element in a ring. We call it {{{define(Idempotent)}}}
 if $r^{2}=r$.
@@ -149,6 +161,7 @@ if $r^{2}=r$.
 :CUSTOM_ID: h-440ddc6d-4548-4e18-b747-e1f40b0f4f4e
 :END:
 
+#+ATTR_HTML: :id defn-ring-morphism
 #+begin_definition
 Let $R$ and $S$ be rings. A {{{define(Ring Morphism)}}} is a function of
 the underlying sets $f\colon R\to S$ such that
@@ -162,6 +175,7 @@ As a consequence of preserving addition, we have $f(0+0)=f(0)+f(0)=f(0)$
 which implies $f(0)=0$. Further $f(0-a) = f(0) + f(-a) = f(-a)$ and
 $f(a-a) = f(a) + f(-a) = 0$ implies $f(-a)=-f(a)$.
 
+#+ATTR_HTML: :id ex-morphism-of-z-into-ring
 #+begin_math-example
 Let $R$ be a ring. Then we always have a morphism $f\colon\ZZ\to R$
 defined by $f(0)=0$, $f(1)=1$, $f(2)=f(1)+f(1)$, and more generally for
@@ -174,12 +188,14 @@ f(n) = \sum^{n}_{j=1}f(1).
 Sometimes we abuse notation and write $f(n)=nf(1)$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-morphism-of-polynomial-evaluation
 #+begin_math-example
 Let $R$ be a ring, $r\in R$ some fixed element. Then we have a natural
 morphism $e_{r}\colon R[z]\to R$ by evaluating a polynomial at $z=r$,
 i.e., $e_{r}(p(z)) = p(r)$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-include-constant-in-polynomial
 #+begin_math-example
 For a ring $R$ and the polynomial ring $R[z]$, the inclusion mapping
 $R\to R[z]$ mapping $r\in R$ to $r\in R[z]$ is a ring morphism.
@@ -191,6 +207,7 @@ additive inverse? What's addition?), but $\rho(p(z) + q(z))$ is not
 necessarily mapped to $\rho(p(z)) + \rho(q(z))$.
 #+end_math-example
 
+#+ATTR_HTML: :id defn-ring-isomorphism
 #+begin_definition
 Let $R$ and $S$ be rings, we call the ring morphism $f\colon R\to S$
 a {{{define(Ring Isomorphism)}}} (or just /isomorphism/) if there is a
@@ -206,6 +223,7 @@ A ring isomorphism, like all isomorphisms, tells us when two rings are
 :CUSTOM_ID: h-b18f1c1f-bad7-4f83-be69-f4b8e8d9e06a
 :END:
 
+#+ATTR_HTML: :id defn-subring
 #+begin_definition
 Let $R$ be a ring, $S\subset R$ some subset of $R$. We call $S$ a
 {{{define(Subring)}}} of $R$ if
@@ -215,17 +233,20 @@ Let $R$ be a ring, $S\subset R$ some subset of $R$. We call $S$ a
 3. $1\in S$.
 #+end_definition
 
+#+ATTR_HTML: :id ex-obvious-subrings
 #+begin_math-example
 The integers $\ZZ$ are a subring of the rationals $\QQ$; the rationals
 are a subring of the reals $\RR$; the reals are again a subring of the
 complex numbers $\CC$.
 #+end_math-example
 
+#+ATTR_HTML: :id nonex-modular-subring
 #+begin_math-example
 A non-example: the modular ring $\ZZ/(24)$ of hours in a day, this is
 not a subring of $\ZZ$. The operators are distinct.
 #+end_math-example
 
+#+ATTR_HTML: :id defn-adjoin-elt
 #+begin_definition
 Let $S$ be a subring of a commutative ring $R$.
 We can {{{define(Adjoin an Element)}}}
@@ -235,6 +256,7 @@ and the evaluation morphism $e_{r}\colon R[z]\to R$ restricted to the
 subring $S[z]\subset R[z]$ gives us $S[r] = e_{r}(S[z])\subset e_{r}(R[z])$.
 #+end_definition
 
+#+ATTR_HTML: :id ex-gaussian-integers
 #+begin_math-example
 We can consider $\ZZ\subset\CC$ as a subring, then adjoining
 $\I=\sqrt{-1}$ to $\ZZ$ gives us the {{{define(Gaussian Integers)}}}
@@ -250,6 +272,7 @@ for arbitrary integers $a,b\in\ZZ$. Multiplication is defined as
 Addition is defined component-wise.
 #+end_math-example
 
+#+ATTR_HTML: :id rmk-generalized-gauss-integers
 #+begin_remark
 We can generalize this example to any square-free number $d\in\NN$, then
 $\ZZ[\sqrt{-d}]$ is another ring adjoined with a new element. (The
@@ -262,6 +285,7 @@ $6=2\cdot3=(1-\sqrt{-5})(1+\sqrt{-5})$ has two distinct factorizations.)
 :CUSTOM_ID: h-e35ff4ad-70ff-422e-8fd3-bc8a0da7bd51
 :END:
 
+#+ATTR_HTML: :id defn-kernel
 #+begin_definition
 Let $f\colon R\to S$ be a ring morphism, $0_{S}\in S$ be the additive
 identity ("zero") of $S$. We define the {{{define(Kernel)}}} of $f$ to
@@ -280,6 +304,7 @@ multiplication by elements of the domain on the right and left, respectively.
 
 This idea is captured by the following definition:
 
+#+ATTR_HTML: :id defn-ideal
 #+NAME: defn-ideal
 #+begin_definition
 Let $R$ be a ring.
@@ -306,11 +331,13 @@ Whenever results depend on the kind of ideal, we make note of it.
 Otherwise, we say "ideal" with the understanding it may mean any of the
 three kinds.
 
+#+ATTR_HTML: :id thm-ideal-isa-subgroup
 #+begin_theorem
 Let $I$ be an ideal of $R$. Then $I$ is a subgroup of the underlying
 Abelian group of $R$ (equipped with addition).
 #+end_theorem
 
+#+ATTR_HTML: :id ex-ideal
 #+begin_math-example
 Let $R\subset R'$ be a proper subring, and $q\in R'$ an element not in $R$.
 Then $R[q]$ is a ring obtained by taking $R[z]\subset R'[z]$,
@@ -321,6 +348,7 @@ restricted to $R[z]$. That is to say, $e_{q}(R[z])\subseteq R'$.
 
 It's not uncommon to see things like, if $r\in R$, then $rR = \{rx\mid x\in R\}$.
 
+#+ATTR_HTML: :id defn-generated-ideal
 #+NAME: defn-generated-ideal
 #+begin_definition
 Let $R$ be a ring, $S\subset R$ some nonempty subset.
@@ -331,6 +359,7 @@ elements of the form $xsy$ where $s\in S$ and $x,y\in R$.
 For commutative rings, we can use commutativity to rewrite $xsy=xys$ and
 thus $(S) = RS$.
 
+#+ATTR_HTML: :id rmk-notation-ideal
 #+begin_remark
 Let $I$ and $J$ be ideals of $R$.
 Notation:
@@ -340,11 +369,13 @@ Notation:
    $ab$ for $a\in I$ and $b\in J$.
 #+end_remark
 
+#+ATTR_HTML: :id xca-ideal-arithmetic
 #+begin_exercise
 (Jacobson) Let $I$, $J$, $K$ be ideals of $R$. Does distributivity hold
 for "ideal arithmetic"? I.e., is $(I+J)K$ equal to $IK + JK$?
 #+end_exercise
 
+#+ATTR_HTML: :id xca-ir-is-i
 #+begin_exercise
 Let $R$ be a ring, $I$ an ideal of $R$. Prove or find a counter-example:
 $IR\subseteq I$. Is this true for noncommutative rings?
@@ -355,21 +386,25 @@ $IR\subseteq I$. Is this true for noncommutative rings?
 :CUSTOM_ID: h-1fb500b5-9715-4693-8feb-f1fb5db1e16a
 :END:
 
+#+ATTR_HTML: :id defn-integral-domain
 #+begin_definition
 An {{{define(Integral Domain)}}} is a unital ring with no nonzero
 divisors, i.e., if $ab = 0$ then either $a=0$ or $b=0$.
 #+end_definition
 
+#+ATTR_HTML: :id rmk-on-criteria-of-id
 #+begin_remark
 Constructive mathematicians would phrase this differently, as saying
 $ab\neq0$ whenever $a\neq0$ and $b\neq0$.
 #+end_remark
 
+#+ATTR_HTML: :id ex-z-q-r-c-are-id
 #+begin_math-example
 The integers $\ZZ$, rationals $\QQ$, reals $\RR$, and complex numbers
 are integral domains.
 #+end_math-example
 
+#+ATTR_HTML: :id nonex-not-id
 #+begin_math-example
 Let $X$ be a non-empty set with at least 2 disjoint subsets $X_{1}$, $X_{2}$;
 and let $R$ be any ring. Then $\hom(X,R)$ is *not an integral domain.*
@@ -401,6 +436,7 @@ since $X_{0}\cap X_{1}=\emptyset$. Although both $f\neq0$ and $g\neq0$,
 we have $fg=0$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-z-with-sqrt-5-is-id
 #+begin_math-example
 The ring $\ZZ[\sqrt{-5}]$ is an integral domain.
 #+end_math-example
@@ -410,16 +446,19 @@ The ring $\ZZ[\sqrt{-5}]$ is an integral domain.
 :CUSTOM_ID: h-738b2d99-d841-4742-8dec-4cec26ed04ab
 :END:
 
+#+ATTR_HTML: :id defn-division
 #+begin_definition
 Let $R$ be an integral domain, and $x,y\in R$. We say that $x$
 {{{define(Divides)}}} $y$, and write $x\mid y$, if $y=xt$ for some $t\in R$.
 #+end_definition
 
+#+ATTR_HTML: :id defn-unit
 #+begin_definition
 We call an element $x\in R$ a {{{define(Unit)}}} if $x\mid 1$. The set
 of units of $R$ is denoted $R^{*}$.
 #+end_definition
 
+#+ATTR_HTML: :id defn-gcd
 #+NAME: defn-gcd
 #+begin_definition
 We say $z\in R$ is  a {{{define(Greatest Common Divisor)}}} of $x_{1}$,
@@ -434,6 +473,7 @@ which is a gcd of $x$ and $y$.
 #+end_definition
 
 
+#+ATTR_HTML: :id lemma-gcd-unique-up-to-unit
 #+begin_lemma
 Let $R$ be an integral domain, and $x,y\in R$.
 If  $z$ and $t$ are both GCDs of $x$ and $y$, then there exists a $u\in R$
@@ -446,6 +486,7 @@ such that $z=ut$.
 - Thus $z=ut$ for some $u\in R$.
 #+end_proof
 
+#+ATTR_HTML: :id thm-gcd-unique-up-to-unit
 #+begin_theorem
 (Bronstein, 1.1.1)
 Let $R$ be an integral domain, and $x,y\in R$.
@@ -463,6 +504,7 @@ some units $u,v\in R^{*}$.
 - Thus $u,v\in R^{*}$.
 #+end_proof
 
+#+ATTR_HTML: :id defn-associates
 #+begin_definition
 In an integral domain $R$, let $a,b\in R$. If $a$ divides $b$, and $b$
 divides $a$, then we call them {{{define(Associates)}}}. Equivalently,
@@ -474,18 +516,21 @@ if there is some unit $u\in R^{*}$ such that $a=ub$.
 :CUSTOM_ID: h-b90357b9-9646-4544-aa00-4059af933f2b
 :END:
 
+#+ATTR_HTML: :id defn-prime-elt
 #+begin_definition
 Let $R$ be an integral domain.
 A nonzero element $p\in R\setminus R^{*}$ is called {{{define(Prime)}}}
 if for any $a,b\in R$, $p\mid ab$ implies $p\mid a$ or $p\mid b$.
 #+end_definition
 
+#+ATTR_HTML: :id defn-irreducible-elts
 #+begin_definition
 Let $R$ be an integral domain.
 A nonzero element $p\in R\setminus R^{\ast}$ is called {{{define(Irreducible)}}}
 if for any $a,b\in R$, $p = ab$ implies $a\in R^{\ast}$ or $b\in R^{\ast}$.
 #+end_definition
 
+#+ATTR_HTML: :id thm-in-id-every-prime-is-irreducible
 #+begin_theorem
 Let $R$ be an integral domain.
 Then every prime $p\in R$ is irreducible.
@@ -504,6 +549,7 @@ Then every prime $p\in R$ is irreducible.
 - Hence $p$ is irreducible.
 #+end_proof
 
+#+ATTR_HTML: :id rmk-prime-always-irreducible
 #+begin_remark
 In any integral domain, a prime is always irreducible. The converse is
 not always true.
@@ -514,6 +560,7 @@ not always true.
 :CUSTOM_ID: h-0a367193-227e-413a-ae7d-8a42cfc8bebd
 :END:
 
+#+ATTR_HTML: :id defn-ufd
 #+begin_definition
 A {{{define(Unique Factorization Domain)}}} consists of an integral
 domain such that for any nonzero $x\in R\setminus R^{\ast}$ there is
@@ -528,15 +575,18 @@ Furthermore, this factorization is unique up to multiplication of $u$
 and $p_{j}$'s by units and up to permutation of indices.
 #+end_definition
 
+#+ATTR_HTML: :id thm-ufd-every-irreducible-is-prime
 #+begin_theorem
 Let $R$ be a unique factorization domain, then every irreducible $p\in R$
 is prime.
 #+end_theorem
 
+#+ATTR_HTML: :id thm-gcd-always-exists-in-ufd
 #+begin_theorem
 If $R$ is a UFD, then any $x,y\in R$ has a gcd in $R$.
 #+end_theorem
 
+#+ATTR_HTML: :id thm-polynomial-ring-over-ufd-isa-ufd
 #+begin_theorem
 If $R$ is a UFD, then the polynomial ring $R[x_{1},\dots,x_{n}]$ is a UFD.
 #+end_theorem
@@ -546,12 +596,14 @@ If $R$ is a UFD, then the polynomial ring $R[x_{1},\dots,x_{n}]$ is a UFD.
 :CUSTOM_ID: h-c8386128-fe00-4c69-8489-1e127df235e1
 :END:
 
+#+ATTR_HTML: :id defn-principal-ideal
 #+begin_definition
 Let $R$ be a ring, $I$ an ideal of $R$. We call $I$
 {{{define(Principal)}}} if it is generated by a single element. In this
 case, we have $I=(g)$ where $g\in R$ is the generator of the ideal.
 #+end_definition
 
+#+ATTR_HTML: :id defn-principal-ideal-domain
 #+begin_definition
 We call a ring $R$ a {{{define(Principal Ideal Domain)}}} if
 
@@ -559,10 +611,12 @@ We call a ring $R$ a {{{define(Principal Ideal Domain)}}} if
 2. every ideal in $R$ is a principal ideal.
 #+end_definition
 
+#+ATTR_HTML: :id thm-pid-is-ufd
 #+begin_theorem
 Every principal ideal domain is a UFD.
 #+end_theorem
 
+#+ATTR_HTML: :id thm-pid-gcd-ideal
 #+begin_theorem
 If $R$ is a PID, then $(x,y) = (\gcd(x,y))$ for any $x,y\in R$.
 #+end_theorem
@@ -579,6 +633,7 @@ If $R$ is a PID, then $(x,y) = (\gcd(x,y))$ for any $x,y\in R$.
 We often want to divide by a nonzero number, which requires forming the
 multiplicative inverse operation.
 
+#+ATTR_HTML: :id defn-field
 #+begin_definition
 A {{{define(Field)}}} consists of a commutative (unital) ring $R$ equipped
 with a multiplicative inverse operation $(-)^{-1}\colon R\setminus\{0\}\to R$.
@@ -602,10 +657,12 @@ formed by the relation
 
 Intuition suggests these describe the same fraction "\(a/b\)".
 
+#+ATTR_HTML: :id ex-q-r-field-of-fractions
 #+begin_math-example
 The rational numbers $\QQ$ are formed from the integers $\RR$ in this manner.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-fraction-of-polynomials
 #+begin_math-example
 If $\mathbb{F}$ is any field, then the field of fractions for
 $\mathbb{F}[x]$ is the field of rational functions $\mathbb{F}(x)$

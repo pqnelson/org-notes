@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:09 -->
+<!-- 2021-04-11 Sun 19:03 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Proof Steps</title>
@@ -349,7 +349,7 @@ sketches. These are intuitively "propositions".</dd>
 Using Wirth syntax notation:
 </p>
 
-<pre class="example" id="org17d9bdf">
+<pre class="example" id="grammar">
 statement = proposition justification ";"
           | term "=" term justification
                 {"=" term justification} .
@@ -390,7 +390,7 @@ Note that justifications allow for nested proofs.
 The proof skeleton for this step looks like:
 </p>
 
-<pre class="example" id="orgbb4ec4e">
+<pre class="example" id="let">
 &lt;proof of 'forall x, P(x)'&gt; ::=
     &lt;preliminary steps&gt;
     let y;
@@ -420,7 +420,7 @@ stipulating the hypothesis \(A\) holds. That is to say, we <code>assume</code>
 \(A\).
 </p>
 
-<pre class="example" id="org13c2a33">
+<pre class="example" id="assume">
 &lt;proof of $A\implies B$&gt; ::=
     &lt;preliminary steps&gt;
     assume $A$;
@@ -440,7 +440,7 @@ contradiction. We're forced to conclude that our stipulation must
 be wrong, and that \(A\) must be false (i.e., \(\neg A\) is true).
 </p>
 
-<pre class="example" id="org2616542">
+<pre class="example" id="assume-negation">
 &lt;proof of ¬A&gt; ::=
     &lt;preliminary steps&gt;
     assume A;
@@ -459,7 +459,7 @@ a contradiction implies \(A\). This is the <i>reductio ad absurdum</i>
 rule. Usually I write in parentheses "<code>assume</code> \(A\) (for contradiction)".
 </p>
 
-<pre class="example" id="orgc8efa5d">
+<pre class="example" id="assume-reductio">
 &lt;proof of A&gt; ::=
     &lt;preliminary steps&gt;
     assume ¬A;
@@ -492,7 +492,7 @@ justification for the step. The upper-right obligation is the new
 proof goal.
 </p>
 
-<pre class="example" id="org793ca93">
+<pre class="example" id="and-intro">
 &lt;proof of A and B&gt; ::=
     &lt;preliminary steps&gt;
     thus A by ...;
@@ -520,7 +520,7 @@ The natural deduction rule is of the form
 The upper-left proof obligation is used to justify the <code>per cases</code> step.
 </p>
 
-<pre class="example" id="org2b039b3">
+<pre class="example" id="or-intro">
 &lt;proof of B&gt; ::=
     &lt;preliminary steps&gt;
     per cases by ...;
@@ -558,7 +558,7 @@ The natural deduction inference rule corresponding to this step is
 The top-left subgoal is the justification for the proof step.
 </p>
 
-<pre class="example" id="orgf610d8d">
+<pre class="example" id="exists-elim">
 &lt;proof of A&gt; ::=
     &lt;preliminary steps&gt;
     consider t such that P[t] (proof ... end | by ...);
@@ -583,7 +583,7 @@ In natural deduction, this corresponds to $&exist;$-intro:
 \frac{\Gamma\vdash P[a]}{\Gamma\vdash \exists x, P[x]}
 \end{equation}
 
-<pre class="example" id="orgece3c6b">
+<pre class="example" id="exists-intro">
 &lt;proof of exists x such that P[x]&gt; ::=
     &lt;preliminary steps&gt;
     take a;
@@ -605,7 +605,8 @@ For steps requiring justification, if we use the previous step as
 part of the justification, we can prefix the step with <code>then</code>. For
 example:
 </p>
-<pre class="example" id="orgadbf843">
+
+<pre class="example" id="then-step">
     &lt;step&gt;
     then consider t such that P[t];
 </pre>
@@ -634,7 +635,7 @@ synonyms.
 We also routinely write steps of the form
 </p>
 
-<pre class="example" id="org81a7873">
+<pre class="example" id="ex-assume-then-consider">
     assume exists x such that [x];
     then consider t such that P[t];
 </pre>
@@ -643,7 +644,7 @@ We also routinely write steps of the form
 This is rather wordy. We contract the two steps into one:
 </p>
 
-<pre class="example" id="org10bd00f">
+<pre class="example" id="given">
     given t such that P[t];
 </pre>
 </div>
@@ -658,7 +659,7 @@ term or variable) in a proof, but we want to re-use somewhere later
 in the proof, we can flag this to the reader by writing:
 </p>
 
-<pre class="example" id="orgab191e9">
+<pre class="example" id="set">
 "set" variable "=" term ";"
 </pre>
 </div>
@@ -689,7 +690,7 @@ or <code>hence thesis</code>.
 One of the conventions I've adopted is to use the proof skeleton:
 </p>
 
-<pre class="example" id="org0d04943">
+<pre class="example" id="iff">
 &lt;proof of A iff B&gt; ::=
     &lt;preliminary steps&gt;
     thus A implies B
@@ -711,7 +712,7 @@ step towards writing correct Mizar would be to instead use
 something of the form:
 </p>
 
-<pre class="example" id="org7abd40d">
+<pre class="example" id="iff2">
 &lt;proof of A iff B&gt; ::=
     &lt;preliminary steps&gt;
     thus (1) A implies B
@@ -753,7 +754,7 @@ See especially section 3. <a href="https://www.cs.ru.nl/F.Wiedijk/pubs/sketches2
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 12:02.</p>
+<p class="postamble">Last Updated 2021-04-11 Sun 18:40.</p>
 </div>
 </body>
 </html>

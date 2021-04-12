@@ -20,6 +20,7 @@ archetypical number systems include our favorites: the integers, the
 rationals, the reals, and the complex numbers. But not the natural
 numbers (because we want to include subtraction).
 
+#+ATTR_HTML: :id defn-ring
 #+NAME: defn-ring
 #+begin_definition
 A {{{define(Ring)}}} consists of
@@ -48,6 +49,7 @@ If, in addition, multiplication is commutative, then we call the ring a
 {{{define(Commutative Ring)}}}.
 #+end_definition
 
+#+ATTR_HTML: :id rmk-rng
 #+begin_remark
 If we abandon the existence of a multiplicative identity, then we have a
 non-unital ring.
@@ -55,6 +57,7 @@ non-unital ring.
 
 There are probably a few more properties I'm forgetting about.
 
+#+ATTR_HTML: :id rmk-internal-ring-object
 #+begin_remark
 (Internalization, category theoretic definition.)
 We could define a "ring object" as a monoid object in the category
@@ -71,11 +74,13 @@ want to have commutativity for addition.
 :CUSTOM_ID: h-1e521f71-a528-481c-947d-65d03bd9d46d
 :END:
 
+#+ATTR_HTML: :id ex-z-etc-rings
 #+begin_math-example
 The integer $\ZZ$ is the epitome of a ring, as are the rationals $\QQ$,
 and the reals $\RR$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-polynomial-ring
 #+begin_math-example
 Let $R$ be a commutative ring, then the collection of polynomials in a single
 indeterminate $z$ with coefficients in $R$ is a ring...called the
@@ -91,6 +96,7 @@ distributions over $R$, i.e., $R[{[z,z^{-1}]}]$ because multiplication
 is not consistent (this pops up in vertex operator algebras).
 #+end_math-example
 
+#+ATTR_HTML: :id ex-matrix-ring
 #+begin_math-example
 Let $R$ be a ring, and $n\in\NN$ a natural number greater than zero.
 Then the set of \(n\)-by-\(n\) matrices with entries in $R$, denoted
@@ -101,6 +107,7 @@ This is an important example, because for $n\gt1$ the ring is
 noncommutative.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-function-space
 #+begin_math-example
 Let $X$ be some non-empty set, and $R$ a ring. Then the function space
 $\hom(X,R)$ of \(R\)-valued functions on $X$ forms a ring. Addition is
@@ -110,16 +117,19 @@ constant function $Z(x) = 0$ for all $x\in X$, and the multiplicative
 identity is the function $e(x) = 1$ for all $x\in X$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-continuous-real-functions
 #+begin_math-example
 If $X$ is a topological space, then continuous real-valued functions
 form a ring. (Continuous complex-valued functions form another ring.)
 #+end_math-example
 
+#+ATTR_HTML: :id  xca-noncommutative-polynomials
 #+begin_exercise
 Let $R$ be a noncommutative ring. Can we extend the notion of a
 polynomial ring to $R[x]$?
 #+end_exercise
 
+#+ATTR_HTML: :id xca-noncommutative-polynomial-matrix-rings
 #+begin_exercise
 Let $n\in\NN$ be greater than 1, $R$ some fixed commutative ring.
 Is $M(n, R[z])$ the same ring as $(M(n, R))[z]$?
@@ -131,6 +141,7 @@ What happens for noncommutative rings $R$?
 :CUSTOM_ID: h-c92ff606-4a41-4d6f-9eac-de2ba3156409
 :END:
 
+#+ATTR_HTML: :id defn-nilpotent
 #+begin_definition
 Let $r\in R$ be an element in a ring. We call it {{{define(Nilpotent)}}}
 if there exists some $k\in\NN$ such that $r^{k}=0$.
@@ -138,6 +149,7 @@ if there exists some $k\in\NN$ such that $r^{k}=0$.
 
 We could consider nilpotents as modeling "infinitesimals" of yore.
 
+#+ATTR_HTML: :id defn-idempotent
 #+begin_definition
 Let $r\in R$ be an element in a ring. We call it {{{define(Idempotent)}}}
 if $r^{2}=r$.
@@ -148,6 +160,7 @@ if $r^{2}=r$.
 :CUSTOM_ID: h-c729dc88-dcee-4d4d-b22f-e59901c82078
 :END:
 
+#+ATTR_HTML: :id defn-ring-morphism
 #+begin_definition
 Let $R$ and $S$ be rings. A {{{define(Ring Morphism)}}} is a function of
 the underlying sets $f\colon R\to S$ such that
@@ -161,6 +174,7 @@ As a consequence of preserving addition, we have $f(0+0)=f(0)+f(0)=f(0)$
 which implies $f(0)=0$. Further $f(0-a) = f(0) + f(-a) = f(-a)$ and
 $f(a-a) = f(a) + f(-a) = 0$ implies $f(-a)=-f(a)$.
 
+#+ATTR_HTML: :id ex-z-to-ring-morphism
 #+begin_math-example
 Let $R$ be a ring. Then we always have a morphism $f\colon\ZZ\to R$
 defined by $f(0)=0$, $f(1)=1$, $f(2)=f(1)+f(1)$, and more generally for
@@ -173,12 +187,14 @@ f(n) = \sum^{n}_{j=1}f(1).
 Sometimes we abuse notation and write $f(n)=nf(1)$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-evaluate-polynomial-morphism
 #+begin_math-example
 Let $R$ be a ring, $r\in R$ some fixed element. Then we have a natural
 morphism $e_{r}\colon R[z]\to R$ by evaluating a polynomial at $z=r$,
 i.e., $e_{r}(p(z)) = p(r)$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-inclusion-of-constants-morphism
 #+begin_math-example
 For a ring $R$ and the polynomial ring $R[z]$, the inclusion mapping
 $R\to R[z]$ mapping $r\in R$ to $r\in R[z]$ is a ring morphism.
@@ -190,6 +206,7 @@ additive inverse? What's addition?), but $\rho(p(z) + q(z))$ is not
 necessarily mapped to $\rho(p(z)) + \rho(q(z))$.
 #+end_math-example
 
+#+ATTR_HTML: :id defn-ring-isomorphism
 #+begin_definition
 Let $R$ and $S$ be rings, we call the ring morphism $f\colon R\to S$
 a {{{define(Ring Isomorphism)}}} (or just /isomorphism/) if there is a
@@ -205,6 +222,7 @@ A ring isomorphism, like all isomorphisms, tells us when two rings are
 :CUSTOM_ID: h-cb976d68-7ca8-45cf-a85b-50355b13fbb6
 :END:
 
+#+ATTR_HTML: :id defn-subring
 #+begin_definition
 Let $R$ be a ring, $S\subset R$ some subset of $R$. We call $S$ a
 {{{define(Subring)}}} of $R$ if
@@ -214,17 +232,20 @@ Let $R$ be a ring, $S\subset R$ some subset of $R$. We call $S$ a
 3. $1\in S$.
 #+end_definition
 
+#+ATTR_HTML: :id ex-z-is-subring-of-q-etc
 #+begin_math-example
 The integers $\ZZ$ are a subring of the rationals $\QQ$; the rationals
 are a subring of the reals $\RR$; the reals are again a subring of the
 complex numbers $\CC$.
 #+end_math-example
 
+#+ATTR_HTML: :id nonex-z24-isnt-subring-of-z
 #+begin_math-example
 A non-example: the modular ring $\ZZ/(24)$ of hours in a day, this is
 not a subring of $\ZZ$. The operators are distinct.
 #+end_math-example
 
+#+ATTR_HTML: :id defn-adjoin-elt
 #+begin_definition
 Let $S$ be a subring of a commutative ring $R$.
 We can {{{define(Adjoin an Element)}}}
@@ -234,6 +255,7 @@ and the evaluation morphism $e_{r}\colon R[z]\to R$ restricted to the
 subring $S[z]\subset R[z]$ gives us $S[r] = e_{r}(S[z])\subset e_{r}(R[z])$.
 #+end_definition
 
+#+ATTR_HTML: :id ex-gaussian-integers
 #+begin_math-example
 We can consider $\ZZ\subset\CC$ as a subring, then adjoining
 $\I=\sqrt{-1}$ to $\ZZ$ gives us the {{{define(Gaussian Integers)}}}
@@ -249,6 +271,7 @@ for arbitrary integers $a,b\in\ZZ$. Multiplication is defined as
 Addition is defined component-wise.
 #+end_math-example
 
+#+ATTR_HTML: :id rmk-gaussian-integers
 #+begin_remark
 We can generalize this example to any square-free number $d\in\NN$, then
 $\ZZ[\sqrt{-d}]$ is another ring adjoined with a new element. (The
@@ -261,6 +284,7 @@ $6=2\cdot3=(1-\sqrt{-5})(1+\sqrt{-5})$ has two distinct factorizations.)
 :CUSTOM_ID: h-b8ef717a-da02-44cd-973b-6b08e80cc888
 :END:
 
+#+ATTR_HTML: :id defn-kernel
 #+begin_definition
 Let $f\colon R\to S$ be a ring morphism, $0_{S}\in S$ be the additive
 identity ("zero") of $S$. We define the {{{define(Kernel)}}} of $f$ to
@@ -279,6 +303,7 @@ multiplication by elements of the domain on the right and left, respectively.
 
 This idea is captured by the following definition:
 
+#+ATTR_HTML: :id defn-ideal
 #+NAME: defn-ideal
 #+begin_definition
 Let $R$ be a ring.
@@ -305,11 +330,13 @@ Whenever results depend on the kind of ideal, we make note of it.
 Otherwise, we say "ideal" with the understanding it may mean any of the
 three kinds.
 
+#+ATTR_HTML: :id thm-ideal-isa-subgroup
 #+begin_theorem
 Let $I$ be an ideal of $R$. Then $I$ is a subgroup of the underlying
 Abelian group of $R$ (equipped with addition).
 #+end_theorem
 
+#+ATTR_HTML: :id ex-restriction-of-evaluation
 #+begin_math-example
 Let $R\subset R'$ be a proper subring, and $q\in R'$ an element not in $R$.
 Then $R[q]$ is a ring obtained by taking $R[z]\subset R'[z]$,
@@ -320,6 +347,7 @@ restricted to $R[z]$. That is to say, $e_{q}(R[z])\subseteq R'$.
 
 It's not uncommon to see things like, if $r\in R$, then $rR = \{rx\mid x\in R\}$.
 
+#+ATTR_HTML: :id defn-generated-ideal
 #+NAME: defn-generated-ideal
 #+begin_definition
 Let $R$ be a ring, $S\subset R$ some nonempty subset.
@@ -330,6 +358,7 @@ elements of the form $xsy$ where $s\in S$ and $x,y\in R$.
 For commutative rings, we can use commutativity to rewrite $xsy=xys$ and
 thus $(S) = RS$.
 
+#+ATTR_HTML: :id rmk-generated-elt
 #+begin_remark
 Let $I$ and $J$ be ideals of $R$.
 Notation:
@@ -339,11 +368,13 @@ Notation:
    $ab$ for $a\in I$ and $b\in J$.
 #+end_remark
 
+#+ATTR_HTML: :id xca-ideal-arithmetic
 #+begin_exercise
 (Jacobson) Let $I$, $J$, $K$ be ideals of $R$. Does distributivity hold
 for "ideal arithmetic"? I.e., is $(I+J)K$ equal to $IK + JK$?
 #+end_exercise
 
+#+ATTR_HTML: :id xca-ir-is-i
 #+begin_exercise
 Let $R$ be a ring, $I$ an ideal of $R$. Prove or find a counter-example:
 $IR\subseteq I$. Is this true for noncommutative rings?

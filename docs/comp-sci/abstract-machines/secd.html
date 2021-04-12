@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:08 -->
+<!-- 2021-04-11 Sun 17:48 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SECD Machine</title>
@@ -449,7 +449,7 @@ introducing a function which returns the <code>nth</code> member of a list
 (zero-indexed):
 </p>
 
-<pre class="example" id="org4b27020">
+<pre class="example" id="secd-index">
 index :: Int -&gt; List -&gt; a
 index 0 s = car(s)
 index n s = if n &lt; 0 then error "Must have non-negative index number"
@@ -461,7 +461,7 @@ We use this to define a function which determines, for an index
 pair <code>i = (b . n)</code> the corresponding value in the environment:
 </p>
 
-<pre class="example" id="org57439d1">
+<pre class="example" id="secd-locate">
 locate :: (Int, Int) -&gt; Env -&gt; a
 locate (b, n) e = index n (index b e)
 </pre>
@@ -551,7 +551,7 @@ environment stack, simply replaces whatever is at the head of <code>e</code>
 with a new environment list.
 </p>
 
-<div class="remark" id="org297fda7">
+<div id="rmk-tail-recursion" class="remark">
 <p>
 For further consideration about recursive functions in SECD,
 consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
@@ -617,7 +617,7 @@ Lispkit Lisp in Java". In <i>Proc. XV Conf. on Applied Math.</i>,
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 12:03.</p>
+<p class="postamble">Last Updated 2021-04-11 Sun 17:48.</p>
 </div>
 </body>
 </html>

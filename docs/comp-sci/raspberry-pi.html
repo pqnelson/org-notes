@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:09 -->
+<!-- 2021-04-11 Sun 17:49 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raspberry Pi</title>
@@ -241,41 +241,41 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org849a5e1">1. Overview</a></li>
-<li><a href="#orgf8b8875">2. Ssh into the Pi</a></li>
-<li><a href="#orgd9039c4">3. Debian Infrastructure</a>
+<li><a href="#h-2139284d-7b5c-46c8-abce-c3ede3b2b67f">1. Overview</a></li>
+<li><a href="#h-bd448f65-3561-4ce8-90da-580ef958cee7">2. Ssh into the Pi</a></li>
+<li><a href="#h-b0d187d2-f502-4a62-9dd4-a6fd994a903a">3. Debian Infrastructure</a>
 <ul>
-<li><a href="#org53b84f2">3.1. Optimizing for my local computer</a></li>
+<li><a href="#h-75c9966a-5592-4ae4-a025-80e0e6c34f6a">3.1. Optimizing for my local computer</a></li>
 </ul>
 </li>
-<li><a href="#orgfff2a37">4. Installing Emacs</a>
+<li><a href="#h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f">4. Installing Emacs</a>
 <ul>
-<li><a href="#org44f5349">4.1. Improving Startup Time</a></li>
+<li><a href="#h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c">4.1. Improving Startup Time</a></li>
 </ul>
 </li>
-<li><a href="#orgc0322ef">5. Installing Common Lisp</a>
+<li><a href="#h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9">5. Installing Common Lisp</a>
 <ul>
-<li><a href="#org081e24a">5.1. Clozure Common Lisp</a>
+<li><a href="#h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88">5.1. Clozure Common Lisp</a>
 <ul>
-<li><a href="#org8e654e5">5.1.1. Making <code>armcl</code> global</a></li>
+<li><a href="#h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e">5.1.1. Making <code>armcl</code> global</a></li>
 </ul>
 </li>
-<li><a href="#orgb761e9e">5.2. Adding Quicklisp</a></li>
+<li><a href="#h-caf05a1b-6f16-4430-a62b-200f4c5bd753">5.2. Adding Quicklisp</a></li>
 </ul>
 </li>
-<li><a href="#org24ba1ae">6. Stumpwm</a>
+<li><a href="#h-3b62ead8-4526-46b2-a922-92053432e1c3">6. Stumpwm</a>
 <ul>
-<li><a href="#org7e7df3a">6.1. Dependencies</a></li>
+<li><a href="#h-c596939f-a681-4092-9c95-a4245ff3b73b">6.1. Dependencies</a></li>
 </ul>
 </li>
-<li><a href="#orgd0bc87d">7. Other Links</a></li>
+<li><a href="#h-88c07655-f971-4a20-b7f9-3f75d70adacd">7. Other Links</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org849a5e1" class="outline-2">
-<h2 id="org849a5e1"><span class="section-number-2">1</span> Overview</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-h-2139284d-7b5c-46c8-abce-c3ede3b2b67f" class="outline-2">
+<h2 id="h-2139284d-7b5c-46c8-abce-c3ede3b2b67f"><span class="section-number-2">1</span> Overview</h2>
+<div class="outline-text-2" id="text-h-2139284d-7b5c-46c8-abce-c3ede3b2b67f">
 <p>
 I've got a Raspberry Pi 3 lying around, and I've been interested in
 <a href="lisp/machine.html">Lisp Machines</a> for a bit. Daniel Szmulewicz wrote a <a href="https://danielsz.github.io/blog/blog_on_lisp.html">blog post</a> on treating
@@ -291,9 +291,9 @@ Lisp tools on it.
 </div>
 </div>
 
-<div id="outline-container-orgf8b8875" class="outline-2">
-<h2 id="orgf8b8875"><span class="section-number-2">2</span> Ssh into the Pi</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-h-bd448f65-3561-4ce8-90da-580ef958cee7" class="outline-2">
+<h2 id="h-bd448f65-3561-4ce8-90da-580ef958cee7"><span class="section-number-2">2</span> Ssh into the Pi</h2>
+<div class="outline-text-2" id="text-h-bd448f65-3561-4ce8-90da-580ef958cee7">
 <p>
 We can ssh into Raspberry Pi by enabling ssh (the openssh-server seems
 to be installed but not yet enabled), then we can simply do
@@ -302,9 +302,9 @@ to be installed but not yet enabled), then we can simply do
 </div>
 </div>
 
-<div id="outline-container-orgd9039c4" class="outline-2">
-<h2 id="orgd9039c4"><span class="section-number-2">3</span> Debian Infrastructure</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-h-b0d187d2-f502-4a62-9dd4-a6fd994a903a" class="outline-2">
+<h2 id="h-b0d187d2-f502-4a62-9dd4-a6fd994a903a"><span class="section-number-2">3</span> Debian Infrastructure</h2>
+<div class="outline-text-2" id="text-h-b0d187d2-f502-4a62-9dd4-a6fd994a903a">
 <p>
 Running the update can be time-consuming. Basically I updated the
 <code>/etc/apt/sources.list</code> and <code>/etc/apt/sources.list.d/raspi.list</code> to use
@@ -320,9 +320,9 @@ Then I ran <code>sudo rpi-update</code> to update the firmware.
 </p>
 </div>
 
-<div id="outline-container-org53b84f2" class="outline-3">
-<h3 id="org53b84f2"><span class="section-number-3">3.1</span> Optimizing for my local computer</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-h-75c9966a-5592-4ae4-a025-80e0e6c34f6a" class="outline-3">
+<h3 id="h-75c9966a-5592-4ae4-a025-80e0e6c34f6a"><span class="section-number-3">3.1</span> Optimizing for my local computer</h3>
+<div class="outline-text-3" id="text-h-75c9966a-5592-4ae4-a025-80e0e6c34f6a">
 <p>
 I noticed that, for GCC, the flag <code>-Os</code> optimizes for size. Since
 there's only so little room for things on the Pi, I decided to install
@@ -333,14 +333,14 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 </div>
 </div>
 
-<div id="outline-container-orgfff2a37" class="outline-2">
-<h2 id="orgfff2a37"><span class="section-number-2">4</span> Installing Emacs</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f" class="outline-2">
+<h2 id="h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f"><span class="section-number-2">4</span> Installing Emacs</h2>
+<div class="outline-text-2" id="text-h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f">
 <p>
 I pulled down Emacs from the git repository:
 </p>
 
-<pre class="example" id="orgac57988">
+<pre class="example" id="orgdcefde4">
 ~/$ cd src
 ~/src/$ git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git
 ...
@@ -352,7 +352,7 @@ I pulled down Emacs from the git repository:
 We need to install the GNU-Autotools:
 </p>
 
-<pre class="example" id="org8a0345d">
+<pre class="example" id="org782f18d">
 ~/src/emacs/$ sudo apt-get install autoconf automake
 </pre>
 
@@ -361,7 +361,7 @@ We can try installing the dependencies, but will also have to install
 the <code>dev</code> version of the libraries:
 </p>
 
-<pre class="example" id="orgaa462b5">
+<pre class="example" id="org898310d">
 ~/src/emacs/$ sudo apt-get build-dep emacs
 ...
 ~/src/emacs/$ sudo apt-get install libm17n-dev libgif-dev libxpm-dev libtiff5-dev
@@ -373,7 +373,7 @@ the <code>dev</code> version of the libraries:
 Now for the configuration
 </p>
 
-<pre class="example" id="org97902a2">
+<pre class="example" id="org260d0e4">
 ~/src/emacs/$ ./autogen.sh
 ~/src/emacs/$ ./configure --with-x-toolkit=no --with-m17n-flt --with-modules CFLAGS="-mtune=native -mcpu=native -Os -marm"
 </pre>
@@ -385,9 +385,9 @@ error saying Emacs won't compile with <code>-ffinite-math-only</code>).
 </p>
 </div>
 
-<div id="outline-container-org44f5349" class="outline-3">
-<h3 id="org44f5349"><span class="section-number-3">4.1</span> Improving Startup Time</h3>
-<div class="outline-text-3" id="text-4-1">
+<div id="outline-container-h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c" class="outline-3">
+<h3 id="h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c"><span class="section-number-3">4.1</span> Improving Startup Time</h3>
+<div class="outline-text-3" id="text-h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c">
 <p>
 I noticed the startup time was rather slow. The <code>(emacs-init-time)</code>
 reports it took 10.46182 seconds without optimization for my default
@@ -418,18 +418,18 @@ seconds. If I further compiled with <code>-Ofast</code>, I get startup time in
 </div>
 </div>
 
-<div id="outline-container-orgc0322ef" class="outline-2">
-<h2 id="orgc0322ef"><span class="section-number-2">5</span> Installing Common Lisp</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9" class="outline-2">
+<h2 id="h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9"><span class="section-number-2">5</span> Installing Common Lisp</h2>
+<div class="outline-text-2" id="text-h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9">
 <p>
 I'm not sure what happened, but somehow I had SBCL 1.4 installed on my
 Raspberry Pi already. I was suspicious of this, and remain so to date.
 </p>
 </div>
 
-<div id="outline-container-org081e24a" class="outline-3">
-<h3 id="org081e24a"><span class="section-number-3">5.1</span> Clozure Common Lisp</h3>
-<div class="outline-text-3" id="text-5-1">
+<div id="outline-container-h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88" class="outline-3">
+<h3 id="h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88"><span class="section-number-3">5.1</span> Clozure Common Lisp</h3>
+<div class="outline-text-3" id="text-h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88">
 <p>
 One Common Lisp compiler which emerged from the '80s was Clozure Common
 Lisp. Well, it was forked from Macintosh Common Lisp, which ran on a
@@ -441,7 +441,7 @@ constraints for the Raspberry Pi today (at least, I do).
 I followed Rainer's <a href="https://web.archive.org/web/20121010001720/http://lispm.dyndns.org/ccl">instructions</a> .
 </p>
 
-<pre class="example" id="orgdabc2cf">
+<pre class="example" id="org96d7629">
 ~/src/$ git clone https://github.com/Clozure/ccl/
 ...
 ~/src/$ cd ccl/
@@ -474,14 +474,14 @@ same size, but the <code>armcl.image</code> is 17100816 bytes (and in <code>v1.1
 </p>
 </div>
 
-<div id="outline-container-org8e654e5" class="outline-4">
-<h4 id="org8e654e5"><span class="section-number-4">5.1.1</span> Making <code>armcl</code> global</h4>
-<div class="outline-text-4" id="text-5-1-1">
+<div id="outline-container-h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e" class="outline-4">
+<h4 id="h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e"><span class="section-number-4">5.1.1</span> Making <code>armcl</code> global</h4>
+<div class="outline-text-4" id="text-h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e">
 <p>
 I also ran
 </p>
 
-<pre class="example" id="orgdf18e3d">
+<pre class="example" id="orgba3416e">
 ~/src/$ sudo ln -s /home/alex/src/ccl/armcl /usr/local/bin/armcl
 </pre>
 
@@ -492,14 +492,14 @@ This let me run armcl for any user.
 </div>
 </div>
 
-<div id="outline-container-orgb761e9e" class="outline-3">
-<h3 id="orgb761e9e"><span class="section-number-3">5.2</span> Adding Quicklisp</h3>
-<div class="outline-text-3" id="text-5-2">
+<div id="outline-container-h-caf05a1b-6f16-4430-a62b-200f4c5bd753" class="outline-3">
+<h3 id="h-caf05a1b-6f16-4430-a62b-200f4c5bd753"><span class="section-number-3">5.2</span> Adding Quicklisp</h3>
+<div class="outline-text-3" id="text-h-caf05a1b-6f16-4430-a62b-200f4c5bd753">
 <p>
 We get quicklisp:
 </p>
 
-<pre class="example" id="org1f2ad7f">
+<pre class="example" id="org957d6f8">
 ~/$ wget http://beta.quicklisp.org/quicklisp.lisp
 ...
 ~/$ armcl
@@ -531,13 +531,13 @@ default, you could just add a <code>(load-quicklisp)</code> line to the
 </div>
 </div>
 
-<div id="outline-container-org24ba1ae" class="outline-2">
-<h2 id="org24ba1ae"><span class="section-number-2">6</span> Stumpwm</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-h-3b62ead8-4526-46b2-a922-92053432e1c3" class="outline-2">
+<h2 id="h-3b62ead8-4526-46b2-a922-92053432e1c3"><span class="section-number-2">6</span> Stumpwm</h2>
+<div class="outline-text-2" id="text-h-3b62ead8-4526-46b2-a922-92053432e1c3">
 </div>
-<div id="outline-container-org7e7df3a" class="outline-3">
-<h3 id="org7e7df3a"><span class="section-number-3">6.1</span> Dependencies</h3>
-<div class="outline-text-3" id="text-6-1">
+<div id="outline-container-h-c596939f-a681-4092-9c95-a4245ff3b73b" class="outline-3">
+<h3 id="h-c596939f-a681-4092-9c95-a4245ff3b73b"><span class="section-number-3">6.1</span> Dependencies</h3>
+<div class="outline-text-3" id="text-h-c596939f-a681-4092-9c95-a4245ff3b73b">
 <p>
 Trying to run <code>sudo apt-get build-dep stumpwm</code> will install a number of
 common lisp dependencies, which quicklisp would automatically handle.
@@ -546,9 +546,9 @@ common lisp dependencies, which quicklisp would automatically handle.
 </div>
 </div>
 
-<div id="outline-container-orgd0bc87d" class="outline-2">
-<h2 id="orgd0bc87d"><span class="section-number-2">7</span> Other Links</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-h-88c07655-f971-4a20-b7f9-3f75d70adacd" class="outline-2">
+<h2 id="h-88c07655-f971-4a20-b7f9-3f75d70adacd"><span class="section-number-2">7</span> Other Links</h2>
+<div class="outline-text-2" id="text-h-88c07655-f971-4a20-b7f9-3f75d70adacd">
 <ul class="org-ul">
 <li><a href="http://informatimago.com/articles/raspberrypi/ccl-sur-qemu.html">CCL on RPi</a> (French)</li>
 <li><a href="http://thisoldlisp.com/talks/els-2018/">This Old Lisp</a></li>
@@ -560,7 +560,7 @@ common lisp dependencies, which quicklisp would automatically handle.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-02-24 Wed 16:50.</p>
+<p class="postamble">Last Updated 2021-04-11 Sun 16:50.</p>
 </div>
 </body>
 </html>

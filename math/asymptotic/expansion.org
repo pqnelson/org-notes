@@ -16,6 +16,7 @@
 :CUSTOM_ID: h-217d9061-6164-475a-8958-eaa84e4f32e2
 :END:
 
+#+ATTR_HTML: :id defn-asymptotic-sequence
 #+begin_definition
 An {{{define(Asymptotic Sequence)}}} (or "asymptotic scale")
 as $x\to x_{0}$ consists of a
@@ -23,6 +24,7 @@ sequence of functions $\{\phi_{j}(x)\}_{j\in\NN}$ such that for all $j$,
 $\phi_{j}(x)\gg\phi_{j+1}(x)$.
 #+end_definition
 
+#+ATTR_HTML: :id rmk-asymptotic-sequence
 #+begin_remark
 1. Some definitions of an asymptotic sequence reverses the ordering, i.e.,
    defines it as such that $\phi_{j+1}(x)\gg\phi_{j}(x)$ as $x\to x_{0}$,
@@ -32,12 +34,14 @@ $\phi_{j}(x)\gg\phi_{j+1}(x)$.
    set of integers, we may run into difficulties.
 #+end_remark
 
+#+ATTR_HTML: :id ex-asymptotic-sequence
 #+begin_math-example
 An asymptotic sequence as $x\to\infty$ which is frequently used are the
 inverse monomials $\phi_{k}(x) = x^{-k}$. We see $\phi_{k+1}(x)\ll\phi_{k}(x)$
 as $x\to\infty$.
 #+end_math-example
 
+#+ATTR_HTML: :id defn-asymptotic-expansion
 #+begin_definition
 Let $f(x)$ be a function and $\{\phi_{j}(x)\}_{j\in\NN}$ an asymptotic
 sequence as $x\to x_{0}$.
@@ -109,6 +113,7 @@ which we find the coefficient by
 a_{2} = \lim_{x\to x_{0}}\frac{f(x) - a_{1}\phi_{1}(x)}{\phi_{2}(x)}.
 \end{equation}
 
+#+ATTR_HTML: :id xca-asymptotic-equiv-subtraction
 #+begin_exercise
 Prove if $f(x)\sim g_{1}(x) + g_{2}(x)$ as $x\to x_{0}$, then
 $f(x)-g_{1}(x)\sim g_{2}(x)$ as $x\to x_{0}$. Do we need the additional
@@ -147,15 +152,18 @@ expansions as $x\to\infty$.
 :CUSTOM_ID: h-a3ce3903-3101-42f5-ba18-02dec031507a
 :END:
 
+#+ATTR_HTML: :id defn-tst
 #+begin_definition
 We call $f(x)$ a {{{define(Transcendentally Small Term)}}} if $f(x)\ll x^{-n}$
 as $x\to\infty$ for any (fixed) $n\geq0$.
 #+end_definition
 
+#+ATTR_HTML: :id rmk-tst
 #+begin_remark
 Bender and Orszog calls such a term {{{define(Subdominant)}}} to $x^{-n}$.
 #+end_remark
 
+#+ATTR_HTML: :id ex-tst
 #+begin_math-example
 The function $\exp(-x)$ is a transcendentally small term as $x\to\infty$.
 We'll need to show that $\exp(-x)\ll x^{-n}$ as $x\to\infty$ for any
@@ -179,6 +187,7 @@ transcendentally small terms are /invisible/ to asymptotic power series
 and can cause numerical difficulties.
 #+end_math-example
 
+#+ATTR_HTML: :id rmk-hyperasymptotics
 #+begin_remark
 1. "Hyper-asymptotics" attempts to deal with transcendentally small
    terms (also called "asymptotics beyond all orders" or a
@@ -211,6 +220,7 @@ and so on.
 *BUT* we must be careful with the operations of substitution and
 differentiation.
 
+#+ATTR_HTML: :id ex-arithmetic-asymptotics
 #+begin_math-example
 Consider
 \begin{equation}
@@ -252,6 +262,7 @@ f(x(\varepsilon))\sim\E^{1/\varepsilon^{2}}\quad\mbox{(WRONG!)}
 which is off numerically by a factor of $\E^{2}$.
 #+end_math-example
 
+#+ATTR_HTML: :id ex-derivative-asymptotic-series
 #+begin_math-example
 Differentiation also causes problems if done without care. Observe
 \begin{equation}
@@ -273,6 +284,7 @@ as $x\to\infty$. The trouble is $\sin(z)$ has an essential singularity
 at $\infty$.
 #+end_math-example
 
+#+ATTR_HTML: :id rmk-tauberian-thms
 #+begin_remark
 Tauberian theorems tell us when it is okay to differentiate an
 asymptotic expansion. For example, if $f(x)$ and $f'(x)$ have asymptotic
