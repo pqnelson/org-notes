@@ -1,0 +1,76 @@
+#+TITLE: Monadology
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-04-16T19:17:34-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Friday April 16, 2021 at  7:17PM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-fc1853e3-fe90-45e5-b000-ecc1cad4ed65
+:END:
+
+Monads provide a way to reason about side-effects in an equational way.
+Basically a monad encodes a computation.
+
+#+begin_src sml
+signature MONAD =
+sig
+    type 'a m;
+    val return : 'a -> 'a m;
+    val >>= : 'a m * ('a -> 'b m) -> 'b m;
+end;
+#+end_src
+
+* State Monad
+:PROPERTIES:
+:CUSTOM_ID: h-b106ae0d-9e48-4b83-946a-196e0a157a3c
+:END:
+
+The state monad encodes a computation =state -> (a, state)=.
+
+#+begin_src sml
+signature STATE =
+sig
+    type state;
+    include MONAD where type 'a m = state -> 'a * state;
+
+    (* core *)
+    val runState : 'a m -> state -> 'a * state;
+    val get : state m;
+    val put : state -> unit m;
+
+    val modify : (state -> state) -> unit m;
+    val gets : (state -> 'a) -> 'a m;
+    val evalState : 'a m -> state -> 'a;
+    val execState : 'a m -> state -> state;
+    val mapState : ('a * state -> 'b * state) -> 'a m -> 'b m;
+    val withState : (state -> state) -> 'a m -> 'a m;
+end;
+#+end_src
+
+* Input Output Monad
+:PROPERTIES:
+:CUSTOM_ID: h-ae2fffc8-6678-42d4-ac03-0bf3c39d9b28
+:END:
+
+When writing output, whether logging a program or displaying information
+to the user, we can treat this as a monad of type =(output, a)= where
+=a= is the value returned from the computation. Haskell uses
+=RealWorld -> (RealWorld, a)= computation for its =IO= monad.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-e4b4aced-cb78-493a-8c35-a12e1492cf09
+:END:
+
+- Robert Harper, [[https://existentialtype.wordpress.com/2011/05/01/of-course-ml-has-monads/][Of Course ML Has Monads!]]
+- [[https://github.com/msullivan/sml-util/blob/master/hacks/monad.sml][monad.sml]]
+- [[https://stackoverflow.com/q/39202738/1296973][Compilation of IORef and STRef]]
+- [[https://stackoverflow.com/q/30448007/1296973][What does 'MutVar#' mean?]]
