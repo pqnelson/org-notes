@@ -66,6 +66,7 @@ apt-build and these go into ~/etc/apt/apt-build.conf~, then I can use
 
 I pulled down Emacs from the git repository:
 
+#+ATTR_HTML: :id ex-build-emacs
 #+begin_example
 ~/$ cd src
 ~/src/$ git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git
@@ -76,6 +77,7 @@ I pulled down Emacs from the git repository:
 
 We need to install the GNU-Autotools:
 
+#+ATTR_HTML: :id ex-gnu-autotools
 #+begin_example
 ~/src/emacs/$ sudo apt-get install autoconf automake
 #+end_example
@@ -83,6 +85,7 @@ We need to install the GNU-Autotools:
 We can try installing the dependencies, but will also have to install
 the =dev= version of the libraries:
 
+#+ATTR_HTML: :id ex-build-dep-emacs
 #+begin_example
 ~/src/emacs/$ sudo apt-get build-dep emacs
 ...
@@ -93,6 +96,7 @@ the =dev= version of the libraries:
 
 Now for the configuration
 
+#+ATTR_HTML: :id emacs-autogen
 #+begin_example
 ~/src/emacs/$ ./autogen.sh
 ~/src/emacs/$ ./configure --with-x-toolkit=no --with-m17n-flt --with-modules CFLAGS="-mtune=native -mcpu=native -Os -marm"
@@ -146,6 +150,7 @@ constraints for the Raspberry Pi today (at least, I do).
 
 I followed Rainer's [[https://web.archive.org/web/20121010001720/http://lispm.dyndns.org/ccl][instructions]] .
 
+#+ATTR_HTML: :id building-clozure
 #+begin_example
 ~/src/$ git clone https://github.com/Clozure/ccl/
 ...
@@ -181,6 +186,7 @@ same size, but the ~armcl.image~ is 17100816 bytes (and in ~v1.12-dev.4~,
 
 I also ran
 
+#+ATTR_HTML: :id armcl
 #+begin_example
 ~/src/$ sudo ln -s /home/alex/src/ccl/armcl /usr/local/bin/armcl
 #+end_example
@@ -194,6 +200,7 @@ This let me run armcl for any user.
 
 We get quicklisp:
 
+#+ATTR_HTML: :id quicklisp
 #+begin_example
 ~/$ wget http://beta.quicklisp.org/quicklisp.lisp
 ...
@@ -205,6 +212,7 @@ We get quicklisp:
 Then we append to (or create) the file =~/.ccl-init.lisp= with the
 following content:
 
+#+ATTR_HTML: :id ccl-quicklisp-init
 #+begin_src lisp
 (defun load-quicklisp ()
   (let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"

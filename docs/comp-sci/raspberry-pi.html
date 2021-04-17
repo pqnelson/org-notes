@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 17:49 -->
+<!-- 2021-04-17 Sat 09:41 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raspberry Pi</title>
@@ -340,7 +340,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I pulled down Emacs from the git repository:
 </p>
 
-<pre class="example" id="orgdcefde4">
+<pre class="example" id="ex-build-emacs">
 ~/$ cd src
 ~/src/$ git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git
 ...
@@ -352,7 +352,7 @@ I pulled down Emacs from the git repository:
 We need to install the GNU-Autotools:
 </p>
 
-<pre class="example" id="org782f18d">
+<pre class="example" id="ex-gnu-autotools">
 ~/src/emacs/$ sudo apt-get install autoconf automake
 </pre>
 
@@ -361,7 +361,7 @@ We can try installing the dependencies, but will also have to install
 the <code>dev</code> version of the libraries:
 </p>
 
-<pre class="example" id="org898310d">
+<pre class="example" id="ex-build-dep-emacs">
 ~/src/emacs/$ sudo apt-get build-dep emacs
 ...
 ~/src/emacs/$ sudo apt-get install libm17n-dev libgif-dev libxpm-dev libtiff5-dev
@@ -373,7 +373,7 @@ the <code>dev</code> version of the libraries:
 Now for the configuration
 </p>
 
-<pre class="example" id="org260d0e4">
+<pre class="example" id="emacs-autogen">
 ~/src/emacs/$ ./autogen.sh
 ~/src/emacs/$ ./configure --with-x-toolkit=no --with-m17n-flt --with-modules CFLAGS="-mtune=native -mcpu=native -Os -marm"
 </pre>
@@ -441,7 +441,7 @@ constraints for the Raspberry Pi today (at least, I do).
 I followed Rainer's <a href="https://web.archive.org/web/20121010001720/http://lispm.dyndns.org/ccl">instructions</a> .
 </p>
 
-<pre class="example" id="org96d7629">
+<pre class="example" id="building-clozure">
 ~/src/$ git clone https://github.com/Clozure/ccl/
 ...
 ~/src/$ cd ccl/
@@ -481,7 +481,7 @@ same size, but the <code>armcl.image</code> is 17100816 bytes (and in <code>v1.1
 I also ran
 </p>
 
-<pre class="example" id="orgba3416e">
+<pre class="example" id="armcl">
 ~/src/$ sudo ln -s /home/alex/src/ccl/armcl /usr/local/bin/armcl
 </pre>
 
@@ -499,7 +499,7 @@ This let me run armcl for any user.
 We get quicklisp:
 </p>
 
-<pre class="example" id="org957d6f8">
+<pre class="example" id="quicklisp">
 ~/$ wget http://beta.quicklisp.org/quicklisp.lisp
 ...
 ~/$ armcl
@@ -560,7 +560,7 @@ common lisp dependencies, which quicklisp would automatically handle.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 16:50.</p>
+<p class="postamble">Last Updated 2021-04-17 Sat 09:40.</p>
 </div>
 </body>
 </html>
