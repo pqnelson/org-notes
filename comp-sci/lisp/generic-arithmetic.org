@@ -27,6 +27,12 @@ Examples to bear in mind: operating on polynomials (taking their
 quotient results in a rational function), operating on matrices,
 and operating on numbers.
 
+#+begin_remark
+This seems to require "shadowing" the original functions from the ~cl~
+namespace. At first I hoped there was a way around this, but it now
+seems inevitable.
+#+end_remark
+
 * Generic Arithmetic
 :PROPERTIES:
 :CUSTOM_ID: h-5b779b24-746f-45ab-a0f4-ad1f17ca9dd3
@@ -214,6 +220,11 @@ exponentiation.
   (cl:expt x m))
 #+end_src
 
+#+begin_remark
+Following Knuth, in his "Two Notes on Notation" ([[https://arxiv.org/abs/math/9205211][arXiv:math/9205211]]), we
+will have =(expt 0 0)= evaluate to 1.
+#+end_remark
+
 * SCMUTILS
 :PROPERTIES:
 :CUSTOM_ID: h-d7b07f1f-b9d8-4e3e-a826-1e41adbd5f14
@@ -238,3 +249,5 @@ selection.
     and infrastructure
 - Richard Fateman,
   [[https://people.eecs.berkeley.edu/~fateman/generic/overload-small.pdf][Building Algebra Systems by Overloading Lisp]]. January 13, 2006.
+- [[https://web.archive.org/web/20080216182353/http://sleepingsquirrel.org/lisp/sym_diff.lisp][~sym_diff.lisp~]] for symbolic differentiation and (rudimentary) generic
+  arithmetic.

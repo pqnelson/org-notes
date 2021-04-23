@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:08 -->
+<!-- 2021-04-22 Thu 18:34 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Generic Arithmetic</title>
@@ -312,6 +312,15 @@ Examples to bear in mind: operating on polynomials (taking their
 quotient results in a rational function), operating on matrices,
 and operating on numbers.
 </p>
+
+<div class="remark" id="orgf892cb2">
+<p>
+This seems to require "shadowing" the original functions from the <code>cl</code>
+namespace. At first I hoped there was a way around this, but it now
+seems inevitable.
+</p>
+
+</div>
 </div>
 </div>
 
@@ -525,6 +534,14 @@ exponentiation.
   (cl:expt x m))
 </pre>
 </div>
+
+<div class="remark" id="org0d27d13">
+<p>
+Following Knuth, in his "Two Notes on Notation" (<a href="https://arxiv.org/abs/math/9205211">arXiv:math/9205211</a>), we
+will have <code>(expt 0 0)</code> evaluate to 1.
+</p>
+
+</div>
 </div>
 </div>
 </div>
@@ -540,7 +557,7 @@ method to declare a generic operator.
 <p>
 Then <code>assign-operation</code> will take a generic-operator, the
 appropriate handler, and some number of argument predicates. As
-SCMUTILS uses <a href="multiple-dispatch.html#org9df990e">Predicate Dispatching</a> the predicates control method
+SCMUTILS uses <a href="multiple-dispatch.html#h-8dcbb43f-512f-40d7-8445-d6acdf974b8c">Predicate Dispatching</a> the predicates control method
 selection.
 </p>
 </div>
@@ -558,12 +575,14 @@ and infrastructure</li>
 </ul></li>
 <li>Richard Fateman,
 <a href="https://people.eecs.berkeley.edu/~fateman/generic/overload-small.pdf">Building Algebra Systems by Overloading Lisp</a>. January 13, 2006.</li>
+<li><a href="https://web.archive.org/web/20080216182353/http://sleepingsquirrel.org/lisp/sym_diff.lisp"><code>sym_diff.lisp</code></a> for symbolic differentiation and (rudimentary) generic
+arithmetic.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 12:04.</p>
+<p class="postamble">Last Updated 2021-04-22 Thu 15:43.</p>
 </div>
 </body>
 </html>
