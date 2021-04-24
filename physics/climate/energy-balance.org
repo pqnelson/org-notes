@@ -1,0 +1,163 @@
+#+TITLE: Energy Balance Models
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-04-24T14:33:47-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday April 24, 2021 at  2:33PM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-118dd919-ab2b-4598-9ff6-485e77ebd55b
+:END:
+
+Energy balance models appear to balance the incoming and outgoing
+radiation at the Earth's surface. The simplest model is
+"zero-dimensional" without an atmosphere, which means we just model the
+Earth as a point particle. We can refine this by adding an atmosphere to
+the zero-dimensional model, then add several atmosphere layers. Or we
+could make the model one-dimensional by having the amount of radiation
+balanced depend on the latitude alone.
+
+* Zero Dimensional Model
+:PROPERTIES:
+:CUSTOM_ID: h-2018e9b8-78c3-4a47-a4d1-d97ea0bef8a6
+:END:
+
+The basic model is to use the Stefan-Boltzmann law to describe how the
+Earth radiates off its energy balance, while the incoming radiation is
+described using the [[file:solar-constant.org][solar constant]]. We expect to recover the
+[[file:effective-temperature.org][effective temperature of the Earth]]. But these contributions give us
+
+\begin{equation}
+C\frac{\D T_{s}}{\D t} = \frac{(1-\alpha)S}{4} - \varepsilon\sigma T_{s}^{4}
+\end{equation}
+
+where:
+
+- $T_{s}$ is the surface temperature of the Earth
+- $\varepsilon$ is the emissivity of the Earth
+- $C\approx 2.08\times 10^{8}J\,K^{-1}m^{-2}$ is the effective heat capacity of the Earth
+- $\sigma = 5.67\times 10^{-8}W\,m^{-2}\,K^{-4}$ is the Stefan--Boltzmann constant
+- $\alpha$ is the Earth's albedo
+- $S\approx 1370 \,W\,m^{-2}$ is the solar constant
+
+For equilibrium, the time-derivative of temperature vanishes. So now
+we're just trying to solve the equation:
+
+\begin{equation}
+\frac{(1-\alpha)S}{4} = \varepsilon\sigma T_{s}^{4}.
+\end{equation}
+
+** Emissivity vs Temperature
+:PROPERTIES:
+:CUSTOM_ID: h-0ff1a82f-5332-41db-a7b8-c780ffecf336
+:END:
+
+If we keep the quartic equation, then we can create a table for various
+values of emissivity (a parameter between 0 and 1).
+
+#+begin_src elisp :results value vector :exports both
+(defun full-model (emissivity)
+  (let ((solar-constant 1361.1972737230658)
+        (stefan-boltzmann 5.67037441918443e-008)
+        (albedo 0.32))
+    (expt (/ (* 0.25 (- 1 albedo) solar-constant)
+             (* emissivity stefan-boltzmann))
+          0.25)))
+
+(cons '(emissivity temperature)
+(mapcar (lambda (emissivity)
+          (list emissivity (full-model emissivity)))
+        '(0.01 0.25 0.5 0.75 0.8 0.85 0.9 0.95 0.9655 1)))
+#+end_src
+
+#+RESULTS:
+| emissivity |       temperature |
+|       0.01 | 799.2627332202043 |
+|       0.25 | 357.4411606725312 |
+|        0.5 | 300.5709906736585 |
+|       0.75 | 271.5965493997138 |
+|        0.8 |  267.249601984984 |
+|       0.85 |  263.229665812042 |
+|        0.9 | 259.4949655115338 |
+|       0.95 | 256.0110215222003 |
+|     0.9655 | 254.9772860954031 |
+|          1 | 252.7490685867371 |
+
+** Linearization
+:PROPERTIES:
+:CUSTOM_ID: h-5856efa8-6157-41f5-847c-2273a61fa3b2
+:END:
+Usually the quartic temperature expression is linearized. After all, the
+Earth's surface temperature varies at most by 30 degrees about its
+long-term average (of 273 K). So we make the switcheroo:
+
+\begin{equation}
+\varepsilon\sigma T_{s}^{4} = A + BT_{s}
+\end{equation}
+
+where $A=315 W\,m^{-2}$ and $B=4.6\,W\,m^{-2}K^{-1}$ are empirically
+measured constants. Then we can solve
+
+\begin{equation}
+T_{s} = \left(\frac{S(1-\alpha)}{4}-A\right)\frac{1}{B} \approx 255\,K.
+\end{equation}
+
+The exact value may be determined:
+
+#+begin_src elisp :exports both
+(defun celsius->kelvin (temp)
+  (+ temp 273.15))
+
+(defun linearized-solution ()
+  (let ((solar-constant 1361.1972737230658)
+        (stefan-boltzmann 5.67037441918443e-008)
+        (albedo 0.32)
+        (a 315.0)
+        (b 4.6))
+    (celsius->kelvin
+     (/ (- (* 0.25 (- 1 albedo) solar-constant) a)
+        b))))
+
+(linearized-solution)
+#+end_src
+
+#+RESULTS:
+: 254.97685576802633
+
+We can estimate the emissivity for this value of the Earth's surface
+temperature:
+
+#+begin_src elisp :exports both
+(defun equilibrium-emissivity (temperature)
+  (let ((solar-constant 1361.1972737230658)
+        (stefan-boltzmann 5.67037441918443e-008)
+        (albedo 0.32))
+    (/ (* 0.25 (- 1 albedo) solar-constant)
+       (* (expt temperature 4) stefan-boltzmann))
+       ))
+
+(equilibrium-emissivity (linearized-solution))
+#+end_src
+
+#+RESULTS:
+: 0.9655065179583905
+
+** Evaluating Results
+:PROPERTIES:
+:CUSTOM_ID: h-efb8e0c4-7665-4134-aa66-86474b03ba43
+:END:
+
+We find the linearized approximation yield results similar to the
+quartic equation, which is good. Further the effective temperature of
+the surface of the Earth $T_{s}\approx 255\,K$ is /less/ than the
+[[file:effective-temperature.org][effective temperature]] we estimated using only the Stefan--Boltzmann law,
+but that /should/ be expected /because/ we're now also modeling the fact
+the Earth radiates off heat. And again we've yet to include any modeling
+of greenhouse gases.

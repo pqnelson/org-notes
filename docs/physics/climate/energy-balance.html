@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en toc:nil num:nil">
+<html lang="en">
 <head>
-<!-- 2021-04-24 Sat 15:04 -->
+<!-- 2021-04-24 Sat 15:28 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Climate Science</title>
+<title>Energy Balance Models</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -229,23 +229,286 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../index.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Climate Science</h1>
-<ul class="org-ul">
-<li><a href="effective-temperature.html">Effective Temperature of the Earth</a> computation</li>
-<li><a href="solar-constant.html">Solar Constant</a> computation</li>
-<li><a href="earth-albedo.html">Earth's Albedo</a></li>
-<li><a href="energy-balance.html">Energy Balance Models</a></li>
+<h1 class="title">Energy Balance Models</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-118dd919-ab2b-4598-9ff6-485e77ebd55b">1. Overview</a></li>
+<li><a href="#h-2018e9b8-78c3-4a47-a4d1-d97ea0bef8a6">2. Zero Dimensional Model</a>
+<ul>
+<li><a href="#h-0ff1a82f-5332-41db-a7b8-c780ffecf336">2.1. Emissivity vs Temperature</a></li>
+<li><a href="#h-5856efa8-6157-41f5-847c-2273a61fa3b2">2.2. Linearization</a></li>
+<li><a href="#h-efb8e0c4-7665-4134-aa66-86474b03ba43">2.3. Evaluating Results</a></li>
+</ul>
+</li>
 </ul>
 </div>
+</div>
+
+<div id="outline-container-h-118dd919-ab2b-4598-9ff6-485e77ebd55b" class="outline-2">
+<h2 id="h-118dd919-ab2b-4598-9ff6-485e77ebd55b"><span class="section-number-2">1</span> Overview</h2>
+<div class="outline-text-2" id="text-h-118dd919-ab2b-4598-9ff6-485e77ebd55b">
+<p>
+Energy balance models appear to balance the incoming and outgoing
+radiation at the Earth's surface. The simplest model is
+"zero-dimensional" without an atmosphere, which means we just model the
+Earth as a point particle. We can refine this by adding an atmosphere to
+the zero-dimensional model, then add several atmosphere layers. Or we
+could make the model one-dimensional by having the amount of radiation
+balanced depend on the latitude alone.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-2018e9b8-78c3-4a47-a4d1-d97ea0bef8a6" class="outline-2">
+<h2 id="h-2018e9b8-78c3-4a47-a4d1-d97ea0bef8a6"><span class="section-number-2">2</span> Zero Dimensional Model</h2>
+<div class="outline-text-2" id="text-h-2018e9b8-78c3-4a47-a4d1-d97ea0bef8a6">
+<p>
+The basic model is to use the Stefan-Boltzmann law to describe how the
+Earth radiates off its energy balance, while the incoming radiation is
+described using the <a href="solar-constant.html">solar constant</a>. We expect to recover the
+<a href="effective-temperature.html">effective temperature of the Earth</a>. But these contributions give us
+</p>
+
+\begin{equation}
+C\frac{\D T_{s}}{\D t} = \frac{(1-\alpha)S}{4} - \varepsilon\sigma T_{s}^{4}
+\end{equation}
+
+<p>
+where:
+</p>
+
+<ul class="org-ul">
+<li>\(T_{s}\) is the surface temperature of the Earth</li>
+<li>\(\varepsilon\) is the emissivity of the Earth</li>
+<li>\(C\approx 2.08\times 10^{8}J\,K^{-1}m^{-2}\) is the effective heat capacity of the Earth</li>
+<li>\(\sigma = 5.67\times 10^{-8}W\,m^{-2}\,K^{-4}\) is the Stefan&#x2013;Boltzmann constant</li>
+<li>\(\alpha\) is the Earth's albedo</li>
+<li>\(S\approx 1370 \,W\,m^{-2}\) is the solar constant</li>
+</ul>
+
+<p>
+For equilibrium, the time-derivative of temperature vanishes. So now
+we're just trying to solve the equation:
+</p>
+
+\begin{equation}
+\frac{(1-\alpha)S}{4} = \varepsilon\sigma T_{s}^{4}.
+\end{equation}
+</div>
+
+<div id="outline-container-h-0ff1a82f-5332-41db-a7b8-c780ffecf336" class="outline-3">
+<h3 id="h-0ff1a82f-5332-41db-a7b8-c780ffecf336"><span class="section-number-3">2.1</span> Emissivity vs Temperature</h3>
+<div class="outline-text-3" id="text-h-0ff1a82f-5332-41db-a7b8-c780ffecf336">
+<p>
+If we keep the quartic equation, then we can create a table for various
+values of emissivity (a parameter between 0 and 1).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp">(<span class="org-keyword">defun</span> <span class="org-function-name">full-model</span> (emissivity)
+  (<span class="org-keyword">let</span> ((solar-constant 1361.1972737230658)
+        (stefan-boltzmann 5.67037441918443e-008)
+        (albedo 0.32))
+    (expt (/ (* 0.25 (- 1 albedo) solar-constant)
+             (* emissivity stefan-boltzmann))
+          0.25)))
+
+(cons '(emissivity temperature)
+(mapcar (<span class="org-keyword">lambda</span> (emissivity)
+          (list emissivity (full-model emissivity)))
+        '(0.01 0.25 0.5 0.75 0.8 0.85 0.9 0.95 0.9655 1)))
+</pre>
+</div>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">emissivity</td>
+<td class="org-right">temperature</td>
+</tr>
+
+<tr>
+<td class="org-right">0.01</td>
+<td class="org-right">799.2627332202043</td>
+</tr>
+
+<tr>
+<td class="org-right">0.25</td>
+<td class="org-right">357.4411606725312</td>
+</tr>
+
+<tr>
+<td class="org-right">0.5</td>
+<td class="org-right">300.5709906736585</td>
+</tr>
+
+<tr>
+<td class="org-right">0.75</td>
+<td class="org-right">271.5965493997138</td>
+</tr>
+
+<tr>
+<td class="org-right">0.8</td>
+<td class="org-right">267.249601984984</td>
+</tr>
+
+<tr>
+<td class="org-right">0.85</td>
+<td class="org-right">263.229665812042</td>
+</tr>
+
+<tr>
+<td class="org-right">0.9</td>
+<td class="org-right">259.4949655115338</td>
+</tr>
+
+<tr>
+<td class="org-right">0.95</td>
+<td class="org-right">256.0110215222003</td>
+</tr>
+
+<tr>
+<td class="org-right">0.9655</td>
+<td class="org-right">254.9772860954031</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">252.7490685867371</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-h-5856efa8-6157-41f5-847c-2273a61fa3b2" class="outline-3">
+<h3 id="h-5856efa8-6157-41f5-847c-2273a61fa3b2"><span class="section-number-3">2.2</span> Linearization</h3>
+<div class="outline-text-3" id="text-h-5856efa8-6157-41f5-847c-2273a61fa3b2">
+<p>
+Usually the quartic temperature expression is linearized. After all, the
+Earth's surface temperature varies at most by 30 degrees about its
+long-term average (of 273 K). So we make the switcheroo:
+</p>
+
+\begin{equation}
+\varepsilon\sigma T_{s}^{4} = A + BT_{s}
+\end{equation}
+
+<p>
+where \(A=315 W\,m^{-2}\) and \(B=4.6\,W\,m^{-2}K^{-1}\) are empirically
+measured constants. Then we can solve
+</p>
+
+\begin{equation}
+T_{s} = \left(\frac{S(1-\alpha)}{4}-A\right)\frac{1}{B} \approx 255\,K.
+\end{equation}
+
+<p>
+The exact value may be determined:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp">(<span class="org-keyword">defun</span> <span class="org-function-name">celsius-&gt;kelvin</span> (temp)
+  (+ temp 273.15))
+
+(<span class="org-keyword">defun</span> <span class="org-function-name">linearized-solution</span> ()
+  (<span class="org-keyword">let</span> ((solar-constant 1361.1972737230658)
+        (stefan-boltzmann 5.67037441918443e-008)
+        (albedo 0.32)
+        (a 315.0)
+        (b 4.6))
+    (celsius-&gt;kelvin
+     (/ (- (* 0.25 (- 1 albedo) solar-constant) a)
+        b))))
+
+(linearized-solution)
+</pre>
+</div>
+
+<pre class="example">
+254.97685576802633
+</pre>
+
+
+<p>
+We can estimate the emissivity for this value of the Earth's surface
+temperature:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp">(<span class="org-keyword">defun</span> <span class="org-function-name">equilibrium-emissivity</span> (temperature)
+  (<span class="org-keyword">let</span> ((solar-constant 1361.1972737230658)
+        (stefan-boltzmann 5.67037441918443e-008)
+        (albedo 0.32))
+    (/ (* 0.25 (- 1 albedo) solar-constant)
+       (* (expt temperature 4) stefan-boltzmann))
+       ))
+
+(equilibrium-emissivity (linearized-solution))
+</pre>
+</div>
+
+<pre class="example">
+0.9655065179583905
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-efb8e0c4-7665-4134-aa66-86474b03ba43" class="outline-3">
+<h3 id="h-efb8e0c4-7665-4134-aa66-86474b03ba43"><span class="section-number-3">2.3</span> Evaluating Results</h3>
+<div class="outline-text-3" id="text-h-efb8e0c4-7665-4134-aa66-86474b03ba43">
+<p>
+We find the linearized approximation yield results similar to the
+quartic equation, which is good. Further the effective temperature of
+the surface of the Earth \(T_{s}\approx 255\,K\) is <i>less</i> than the
+<a href="effective-temperature.html">effective temperature</a> we estimated using only the Stefan&#x2013;Boltzmann law,
+but that <i>should</i> be expected <i>because</i> we're now also modeling the fact
+the Earth radiates off heat. And again we've yet to include any modeling
+of greenhouse gases.</p>
+</div>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-24 Sat 15:04.</p>
+<p class="postamble">Last Updated 2021-04-24 Sat 15:28.</p>
 </div>
 </body>
 </html>
