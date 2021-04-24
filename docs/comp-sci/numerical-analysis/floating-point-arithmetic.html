@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 17:49 -->
+<!-- 2021-04-24 Sat 11:01 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Floating Point Arithmetic</title>
@@ -263,26 +263,205 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#h-94342c9b-ca5b-4af6-a37a-241d5b8db062">1. Representing numbers</a>
+<li><a href="#h-573e907e-2568-4ff7-8ebd-7e324680f885">1. Idealized Floating Point</a>
 <ul>
-<li><a href="#h-03c844d3-a202-4c93-b502-6a3be680ddfa">1.1. Motivational example</a></li>
-<li><a href="#h-b8c81701-1a7b-454e-aa72-272e12e84564">1.2. Rounding, Truncating</a></li>
-<li><a href="#h-bb989840-6eab-4a44-89e2-4888f5adb8b3">1.3. Relative, Absolute Error</a></li>
+<li><a href="#h-b32b117e-4922-4a2c-ac51-40b1660255be">1.1. Encoding Real Numbers as Idealized Floating Point</a></li>
 </ul>
 </li>
-<li><a href="#h-e3540d7a-abe2-4b21-ba19-78638f885839">2. References</a></li>
+<li><a href="#h-94342c9b-ca5b-4af6-a37a-241d5b8db062">2. Representing numbers</a>
+<ul>
+<li><a href="#h-03c844d3-a202-4c93-b502-6a3be680ddfa">2.1. Motivational example</a></li>
+<li><a href="#h-b8c81701-1a7b-454e-aa72-272e12e84564">2.2. Rounding, Truncating</a></li>
+<li><a href="#h-bb989840-6eab-4a44-89e2-4888f5adb8b3">2.3. Relative, Absolute Error</a></li>
+</ul>
+</li>
+<li><a href="#h-e3540d7a-abe2-4b21-ba19-78638f885839">3. References</a></li>
 </ul>
 </div>
 </div>
 
+<div id="outline-container-h-573e907e-2568-4ff7-8ebd-7e324680f885" class="outline-2">
+<h2 id="h-573e907e-2568-4ff7-8ebd-7e324680f885"><span class="section-number-2">1</span> Idealized Floating Point</h2>
+<div class="outline-text-2" id="text-h-573e907e-2568-4ff7-8ebd-7e324680f885">
+<div id="defn-idealized-floating-point" class="definition">
+<p>
+Let \(\beta\geq2\) be a fixed integer called the "base" (or "radix"), and
+\(t\geq1\) a fixed integer called the "precision".
+We define the set of <dfn>Idealized Floating Point</dfn> as
+consisting of rational numbers
+\[\mathbf{F}_{\beta,t} = \{0\}\cup\{\pm(m/\beta^{t})\beta^{c}\mid \beta^{t-1}\leq m\lt\beta^{t},c\in\ZZ\}. \]
+The \(m/\beta^{t}\) is called the <dfn>Mantissa</dfn> (or
+"Significand"), and the \(c\) integer is called the <dfn>Exponent</dfn>.
+</p>
+
+</div>
+
+<p>
+This is "idealized" because the exponent is unbounded. The goal is to
+capture the difficulties we'll encounter when doing numerical analysis
+using IEEE-754 floating point, but ignore the rare difficulties of
+overflow and underflow.
+</p>
+
+<div id="rmk-ieee-754" class="remark">
+<p>
+IEEE-754 floating point specifies that \(\beta=2\) or \(\beta=10\). For
+\(\beta=2\), single-precision has \(t=24\) and double-precision has \(t=53\).
+For \(\beta=10\), single-precision has \(t=7\) and double-precision has \(t=16\).
+</p>
+
+</div>
+
+<div id="thm-properties-of-idealized-float" class="theorem">
+<p>
+Idealized floating point has the following properties:
+</p>
+
+<ol class="org-ol">
+<li>It's self-similar: \(\beta\mathbf{F}_{\beta,t} = \mathbf{F}_{\beta,t}\)</li>
+<li>It doesn't contain the integers \(\ZZ\not\subset\mathbf{F}_{\beta,t}\)</li>
+<li>\(\mathbf{F}_{\beta,t}\) is countably infinite</li>
+<li>If we let \(0\lt m\lt\beta^{t}\), then it's not unique; i.e., we could
+have multiple different choices of \(m\) and exponent \(c\) which
+correspond to the same rational number \((m/\beta^{t})\beta^{c}\).</li>
+</ol>
+
+</div>
+
+<p>
+What does this look like? To gain some intuition, we pick \(t=1\) and
+\(\beta=10\), then the distribution of positive floating point numbers
+look like:
+</p>
+\begin{equation}
+\mathbf{F}_{\beta,t}\supset \{1/10, 2/10, \dots, 9/10\}\cup\{1, 2,\dots, 9\}\cup\{10,20,\dots,90\}\dots.
+\end{equation}
+<p>
+We see this is logarithmically distributed, arbitrarily close to zero,
+but the spacing between floating point numbers grows as the exponent
+grows.
+</p>
+</div>
+
+<div id="outline-container-h-b32b117e-4922-4a2c-ac51-40b1660255be" class="outline-3">
+<h3 id="h-b32b117e-4922-4a2c-ac51-40b1660255be"><span class="section-number-3">1.1</span> Encoding Real Numbers as Idealized Floating Point</h3>
+<div class="outline-text-3" id="text-h-b32b117e-4922-4a2c-ac51-40b1660255be">
+<p>
+For us to use floating point to compute anything, we need to encode real
+numbers into the floating point system. This requires some care with how
+to handle real numbers half-way between two floating point numbers.
+</p>
+
+<div id="defn-idealized-fl-encoding" class="definition">
+<p>
+We have a function \(fl\colon\RR\to\mathbf{F}_{\beta,t}\) which assigns to
+each real number its closest floating point number, and
+rounds-up-on-nearest ("banker's rounding").
+</p>
+
+</div>
+
+<p>
+The rounding scheme is not terribly important, though it is a
+fascinating topic since bad rounding schemes may unintentionally skew
+the distribution of floating point numbers. This could be a new source
+of error.
+</p>
+
+<p>
+Now how do we determine the error of this encoding? We can use the
+self-similarity of idealized floating point numbers to determine the
+error of one number half-way between two possible floating point
+numbers, then scale it accordingly. Let's define this error for a
+number greater than 1 but half-way between \(1\in\mathbf{F}_{\beta,t}\)
+and the next greatest floating point number:
+</p>
+
+<div id="defn-machine-epsilon" class="definition">
+<p>
+We define the <dfn>Machine Epsilon</dfn> of \(\mathbf{F}_{\beta,t}\)
+to be the real number \(\varepsilon_{\text{machine}}\) defined as
+\[ \varepsilon_{\text{machine}} =_{df} \frac{\min\{x\in\mathbf{F}_{\beta,t}\mid x\gt1\}-1}{2} \]
+or explicitly
+\[ \varepsilon_{\text{machine}} = \frac{1}{2}\beta^{1-t}. \]
+</p>
+
+</div>
+
+<div id="prop-fl-err" class="proposition">
+<p>
+For any real number \(x\in\RR\), there exists an \(\varepsilon\in\RR\)
+with \(|\varepsilon|\lt\varepsilon_{\text{machine}}\) such that
+</p>
+\begin{equation}
+fl(x) = x(1+\varepsilon).
+\end{equation}
+<p>
+That is, the difference between a real number and its closest floating
+point number is always smaller than machine epsilon <b>in relative error.</b>
+</p>
+
+</div>
+
+<div id="rmk-notation-fl-inverse" class="remark">
+<p>
+We adopt the notation of \(fl^{-1}\colon\mathbf{F}_{\beta,t}\to\RR\) to
+translate floating-point back to real numbers. Also, if we want to add
+two floating-point numbers using IEEE-754 arithmetic rules, we adopt the
+convention of "circling" the operation
+\(\oplus\colon\mathbf{F}\times\mathbf{F}\to\mathbf{F}\) for example. This
+is just to clarify "What operation we're performing: floating point
+arithmetic, or the arithmetic of real numbers."
+</p>
+
+</div>
+
+<div id="fundamental-axiom-of-floating-point" class="theorem">
+<p>
+(Fundamental Axiom of Floating Point Arithmetic)
+Let \(\star\in\{+,-,\times,/\}\) be some binary operator of real numbers, and
+let \(fl(\star)\) be the corresponding operation for floating point numbers.
+</p>
+
+<p>
+For all floating point numbers \(x,y\in\mathbf{F}_{\beta,t}\), there
+exists an \(\varepsilon\in\RR\) with
+\(|\varepsilon|\leq\varepsilon_{\text{machine}}\) such that
+</p>
+\begin{equation}
+fl^{-1}(x\mathbin{fl(\star)} y) = (fl^{-1}(x)\star fl^{-1}(y))(1+\varepsilon).
+\end{equation}
+
+</div>
+
+<div id="rmk-axiom-float" class="remark">
+<p>
+Two remarks are worth stressing at this point:
+</p>
+
+<ol class="org-ol">
+<li>The fundamental axiom of floating point arithmetic is a statement of
+relative error of floating point operations, <b>not</b> absolute error.</li>
+<li>We could use the fundamental axiom of floating point arithmetic as a
+definition of floating point operations:
+\(x\mathbin{fl(\star)}y := fl(fl^{-1}(x)\star fl^{-1}(y))\)
+treating the operands as real numbers, performing the operation on
+the floating point numbers treated as rational numbers, then
+translating back to the floating point encoding.</li>
+</ol>
+
+</div>
+</div>
+</div>
+</div>
 
 <div id="outline-container-h-94342c9b-ca5b-4af6-a37a-241d5b8db062" class="outline-2">
-<h2 id="h-94342c9b-ca5b-4af6-a37a-241d5b8db062"><span class="section-number-2">1</span> Representing numbers</h2>
+<h2 id="h-94342c9b-ca5b-4af6-a37a-241d5b8db062"><span class="section-number-2">2</span> Representing numbers</h2>
 <div class="outline-text-2" id="text-h-94342c9b-ca5b-4af6-a37a-241d5b8db062">
 </div>
 
 <div id="outline-container-h-03c844d3-a202-4c93-b502-6a3be680ddfa" class="outline-3">
-<h3 id="h-03c844d3-a202-4c93-b502-6a3be680ddfa"><span class="section-number-3">1.1</span> Motivational example</h3>
+<h3 id="h-03c844d3-a202-4c93-b502-6a3be680ddfa"><span class="section-number-3">2.1</span> Motivational example</h3>
 <div class="outline-text-3" id="text-h-03c844d3-a202-4c93-b502-6a3be680ddfa">
 <p>
 The basic idea could be discussed by first considering a number
@@ -323,7 +502,7 @@ leading 1 (i.e., we can pretend the <code>c</code> tuple describes the bits
 </div>
 
 <div id="outline-container-h-b8c81701-1a7b-454e-aa72-272e12e84564" class="outline-3">
-<h3 id="h-b8c81701-1a7b-454e-aa72-272e12e84564"><span class="section-number-3">1.2</span> Rounding, Truncating</h3>
+<h3 id="h-b8c81701-1a7b-454e-aa72-272e12e84564"><span class="section-number-3">2.2</span> Rounding, Truncating</h3>
 <div class="outline-text-3" id="text-h-b8c81701-1a7b-454e-aa72-272e12e84564">
 <p>
 Given some number with decimal expansion
@@ -371,7 +550,7 @@ computation), so we use it to clarify certain concepts.
 </div>
 
 <div id="outline-container-h-bb989840-6eab-4a44-89e2-4888f5adb8b3" class="outline-3">
-<h3 id="h-bb989840-6eab-4a44-89e2-4888f5adb8b3"><span class="section-number-3">1.3</span> Relative, Absolute Error</h3>
+<h3 id="h-bb989840-6eab-4a44-89e2-4888f5adb8b3"><span class="section-number-3">2.3</span> Relative, Absolute Error</h3>
 <div class="outline-text-3" id="text-h-bb989840-6eab-4a44-89e2-4888f5adb8b3">
 <p>
 How do we measure how good (or bad) an approximation is to its true
@@ -410,7 +589,7 @@ is small, though the relative error is large.
 
 
 <div id="outline-container-h-e3540d7a-abe2-4b21-ba19-78638f885839" class="outline-2">
-<h2 id="h-e3540d7a-abe2-4b21-ba19-78638f885839"><span class="section-number-2">2</span> References</h2>
+<h2 id="h-e3540d7a-abe2-4b21-ba19-78638f885839"><span class="section-number-2">3</span> References</h2>
 <div class="outline-text-2" id="text-h-e3540d7a-abe2-4b21-ba19-78638f885839">
 <ul class="org-ul">
 <li>Richard L. Burden and J. Douglas Faires,
@@ -419,12 +598,16 @@ is small, though the relative error is large.
 <li>David Goldberg,
 "What Every Computer Scientist Should Know About Floating-Point Arithmetic".
 March 1991, <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">eprint</a>.</li>
+<li>N.L. Trefethen and David Bau III,
+<cite class="book-title">Numerical Linear Algebra</cite>.
+SIAM, 1997. This is where I took inspiration for discussing "idealized
+floating point", their lecture 13.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 17:48.</p>
+<p class="postamble">Last Updated 2021-04-24 Sat 11:01.</p>
 </div>
 </body>
 </html>

@@ -11,6 +11,155 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 # Created Monday February 15, 2021 at  9:14AM
 
+* Idealized Floating Point
+:PROPERTIES:
+:CUSTOM_ID: h-573e907e-2568-4ff7-8ebd-7e324680f885
+:END:
+
+#+ATTR_HTML: :id defn-idealized-floating-point
+#+begin_definition
+Let $\beta\geq2$ be a fixed integer called the "base" (or "radix"), and
+$t\geq1$ a fixed integer called the "precision".
+We define the set of {{{define(Idealized Floating Point)}}} as
+consisting of rational numbers
+$$\mathbf{F}_{\beta,t} = \{0\}\cup\{\pm(m/\beta^{t})\beta^{c}\mid \beta^{t-1}\leq m\lt\beta^{t},c\in\ZZ\}. $$
+The $m/\beta^{t}$ is called the {{{define(Mantissa)}}} (or
+"Significand"), and the $c$ integer is called the {{{define(Exponent)}}}.
+#+end_definition
+
+This is "idealized" because the exponent is unbounded. The goal is to
+capture the difficulties we'll encounter when doing numerical analysis
+using IEEE-754 floating point, but ignore the rare difficulties of
+overflow and underflow.
+
+#+ATTR_HTML: :id rmk-ieee-754
+#+begin_remark
+IEEE-754 floating point specifies that $\beta=2$ or $\beta=10$. For
+$\beta=2$, single-precision has $t=24$ and double-precision has $t=53$.
+For $\beta=10$, single-precision has $t=7$ and double-precision has $t=16$.
+#+end_remark
+
+#+ATTR_HTML: :id thm-properties-of-idealized-float
+#+begin_theorem
+Idealized floating point has the following properties:
+
+1. It's self-similar: $\beta\mathbf{F}_{\beta,t} = \mathbf{F}_{\beta,t}$
+2. It doesn't contain the integers $\ZZ\not\subset\mathbf{F}_{\beta,t}$
+3. $\mathbf{F}_{\beta,t}$ is countably infinite
+4. If we let $0\lt m\lt\beta^{t}$, then it's not unique; i.e., we could
+   have multiple different choices of $m$ and exponent $c$ which
+   correspond to the same rational number $(m/\beta^{t})\beta^{c}$.
+#+end_theorem
+
+What does this look like? To gain some intuition, we pick $t=1$ and
+$\beta=10$, then the distribution of positive floating point numbers
+look like:
+\begin{equation}
+\mathbf{F}_{\beta,t}\supset \{1/10, 2/10, \dots, 9/10\}\cup\{1, 2,\dots, 9\}\cup\{10,20,\dots,90\}\dots.
+\end{equation}
+We see this is logarithmically distributed, arbitrarily close to zero,
+but the spacing between floating point numbers grows as the exponent
+grows.
+
+** Encoding Real Numbers as Idealized Floating Point
+:PROPERTIES:
+:CUSTOM_ID: h-b32b117e-4922-4a2c-ac51-40b1660255be
+:END:
+
+For us to use floating point to compute anything, we need to encode real
+numbers into the floating point system. This requires some care with how
+to handle real numbers half-way between two floating point numbers.
+
+#+ATTR_HTML: :id defn-idealized-fl-encoding
+#+begin_definition
+We have a function $fl\colon\RR\to\mathbf{F}_{\beta,t}$ which assigns to
+each real number its closest floating point number, and
+rounds-up-on-nearest ("banker's rounding").
+#+end_definition
+
+The rounding scheme is not terribly important, though it is a
+fascinating topic since bad rounding schemes may unintentionally skew
+the distribution of floating point numbers. This could be a new source
+of error.
+
+Now how do we determine the error of this encoding? We can use the
+self-similarity of idealized floating point numbers to determine the
+error of one number half-way between two possible floating point
+numbers, then scale it accordingly. Let's define this error for a
+number greater than 1 but half-way between $1\in\mathbf{F}_{\beta,t}$
+and the next greatest floating point number:
+
+#+ATTR_HTML: :id defn-machine-epsilon
+#+begin_definition
+We define the {{{define(Machine Epsilon)}}} of $\mathbf{F}_{\beta,t}$
+to be the real number $\varepsilon_{\text{machine}}$ defined as
+$$ \varepsilon_{\text{machine}} =_{df} \frac{\min\{x\in\mathbf{F}_{\beta,t}\mid x\gt1\}-1}{2} $$
+or explicitly
+$$ \varepsilon_{\text{machine}} = \frac{1}{2}\beta^{1-t}. $$
+#+end_definition
+
+#+ATTR_HTML: :id prop-fl-err
+#+begin_proposition
+For any real number $x\in\RR$, there exists an $\varepsilon\in\RR$
+with $|\varepsilon|\lt\varepsilon_{\text{machine}}$ such that
+\begin{equation}
+fl(x) = x(1+\varepsilon).
+\end{equation}
+That is, the difference between a real number and its closest floating
+point number is always smaller than machine epsilon *in relative error.*
+#+end_proposition
+
+#+ATTR_HTML: :id rmk-notation-fl-inverse
+#+begin_remark
+We adopt the notation of $fl^{-1}\colon\mathbf{F}_{\beta,t}\to\RR$ to
+translate floating-point back to real numbers. Also, if we want to add
+two floating-point numbers using IEEE-754 arithmetic rules, we adopt the
+convention of "circling" the operation
+$\oplus\colon\mathbf{F}\times\mathbf{F}\to\mathbf{F}$ for example. This
+is just to clarify "What operation we're performing: floating point
+arithmetic, or the arithmetic of real numbers."
+#+end_remark
+
+# #+BEGIN_SRC latex-macros
+# \usepackage{graphicx}
+# \makeatletter
+# \newcommand{\ostar}{\mathbin{\mathpalette\make@circled\star}}
+# \newcommand{\make@circled}[2]{%
+#   \ooalign{$\m@th#1\smallbigcirc{#1}$\cr\hidewidth$\m@th#1#2$\hidewidth\cr}%
+# }
+# \newcommand{\smallbigcirc}[1]{%
+#   \vcenter{\hbox{\scalebox{0.77778}{$\m@th#1\bigcirc$}}}%
+# }
+# \makeatother
+# #+END_SRC
+
+#+ATTR_HTML: :id fundamental-axiom-of-floating-point
+#+begin_theorem
+(Fundamental Axiom of Floating Point Arithmetic)
+Let $\star\in\{+,-,\times,/\}$ be some binary operator of real numbers, and
+let $fl(\star)$ be the corresponding operation for floating point numbers.
+
+For all floating point numbers $x,y\in\mathbf{F}_{\beta,t}$, there
+exists an $\varepsilon\in\RR$ with
+$|\varepsilon|\leq\varepsilon_{\text{machine}}$ such that
+\begin{equation}
+fl^{-1}(x\mathbin{fl(\star)} y) = (fl^{-1}(x)\star fl^{-1}(y))(1+\varepsilon).
+\end{equation}
+#+end_theorem
+
+#+ATTR_HTML: :id rmk-axiom-float
+#+begin_remark
+Two remarks are worth stressing at this point:
+
+1. The fundamental axiom of floating point arithmetic is a statement of
+   relative error of floating point operations, *not* absolute error.
+2. We could use the fundamental axiom of floating point arithmetic as a
+   definition of floating point operations:
+   $x\mathbin{fl(\star)}y := fl(fl^{-1}(x)\star fl^{-1}(y))$
+   treating the operands as real numbers, performing the operation on
+   the floating point numbers treated as rational numbers, then
+   translating back to the floating point encoding.
+#+end_remark
 
 * Representing numbers
 :PROPERTIES:
@@ -129,3 +278,7 @@ is small, though the relative error is large.
 - David Goldberg,
   "What Every Computer Scientist Should Know About Floating-Point Arithmetic".
   March 1991, [[https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html][eprint]].
+- N.L. Trefethen and David Bau III,
+  {{{book-title(Numerical Linear Algebra)}}}.
+  SIAM, 1997. This is where I took inspiration for discussing "idealized
+  floating point", their lecture 13.
