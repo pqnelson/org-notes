@@ -1,0 +1,179 @@
+#+TITLE: Hierarchy of Climate Models
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-05-22T12:43:27-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday May 22, 2021 at 12:43PM
+
+This is an annotated bibliography of the available software for climate
+models. It seems that each component has been independently developed by
+different groups and agencies.
+
+* Radiative Transfer Models
+:PROPERTIES:
+:CUSTOM_ID: h-78f8baee-6f4b-4f02-95f7-3ab2697eaffb
+:END:
+
+** Atmospheric & Environmental Research (AER) Working Group
+:PROPERTIES:
+:CUSTOM_ID: h-b411b9fa-b776-4b87-a0f0-58a5ca2b2fb1
+:END:
+
+This group seems to have standardized the abbreviations for many models
+of radiative transfer.
+
+- [[https://web.archive.org/web/20210413060526/http://www.rtweb.aer.com/][rtweb.aer.com]] (archived)
+- [[https://www.aer.com/science-research/atmosphere/radiative-transfer/][aer.com]]
+
+* Atmospheric General Circulation Models
+:PROPERTIES:
+:CUSTOM_ID: h-bf370b6d-78a9-4e61-a2f8-43149b238ea1
+:END:
+
+
+There's a plethora of models here. I'm following Paul Edwards's
+{{{book-title(A Vast Machine: Computer Models, Climate Data, and the Politics of Global Warming)}}}
+appendix (also available [[https://pne.people.si.umich.edu/vastmachine/agcm.html][online]]) and the [[https://web.archive.org/web/20040825054939/http://www.aip.org/history/gcm/][AIP's history of GCMs]].
+
+** Primordial Models
+:PROPERTIES:
+:CUSTOM_ID: h-b472bf21-5aa6-4620-86e6-e0f07ac8360e
+:END:
+
+Edwards classified the models in the 1955--1965 period as consisting of
+four families of general circulation models:
+
+1. Norman Phillips' model, apparently called the GCRS model (named after
+   where he worked: the general circulation research section)
+2. the UCLA Models
+3. Lawrence Livermore model, referred to as LAM ("Leith Atmospheric Model" or "Livermore Atmospheric Model")
+4. National Center for Atmospheric Research (NCAR)
+
+Pre-internet computer-based research had this pattern of: one institute
+came up with some program, then proselytized it on the "academic
+circuit" (i.e., at conferences, seminars, etc.), sharing the source
+code. Then followed a Cambrian explosion of innovation. Rather, rinse,
+repeat.
+
+*** General Circulation Research Section [GCRS] (1956)
+:PROPERTIES:
+:CUSTOM_ID: h-65de0020-de60-4547-8d19-4afd58ebfa11
+:END:
+
+this seems to have been the first major paper about general circulation
+models, which inspired everyone else.
+
+- Norman Phillips,\\
+  "The general circulation of the atmosphere: a numerical experiment".\\
+  /Q. J. of the Roy. Met. Soc./ *82*, 352 (1956) 123--164;
+
+*** UCLA Models
+:PROPERTIES:
+:CUSTOM_ID: h-66c4aeb3-885f-4c50-b41c-29f704a12dbf
+:END:
+
+Yale Mintz recruited Akio Arakawa (of Tokyo University) to team up and
+make a model. Well, it was a happy family of models, more properly.
+
+#+begin_remark
+The numbering scheme for the models seems inconsistent to me. In the
+book {{{book-title(A Vast Machine)}}}, Paul Edwards enumerates them from
+I, to V; but on his [[https://pne.people.si.umich.edu/vastmachine/i.UCLA.html][website]] he starts at "prototype", then numbers them
+I to IV. I'll follow his book's conventions.
+#+end_remark
+
+**** Model I (1960?--1965)
+:PROPERTIES:
+:CUSTOM_ID: h-3cba208b-e58a-4dc8-9443-834c78e2ef38
+:END:
+
+The initial model was completed in 1963 then abandoned in 1965.
+
+The first Mintz/Arakawa model was a 2-level global, primitive-equation
+GCM at a 7° latitude x 9° longitude horizontal resolution. It included
+realistic land-sea distributions and surface topography. Mintz never
+learned to program computers; Arakawa carried out all the model coding.
+
+**** Model II (1965--1972??)
+:PROPERTIES:
+:CUSTOM_ID: h-02d3e4e2-f2b0-4c57-9a5d-156a4adc293f
+:END:
+
+This extended the first model with more vertical layers. A 3-layer and
+9-layer version were made.
+
+- A. Arakawa and V.R. Lamb,\\
+  "Computational Design of the Basic Dynamical Processes of the UCLA General Circulation Model".\\
+  In {{{book-title(General Circulation Models of the Atmosphere)}}}, ed. J. Chang,
+  Methods in Computational Physics: Advances in Research and Applications
+  (San Francisco: Academic Press, 1977), 173--265.
+- D. Randall,\\
+  "Colorado State University General Circulation Model: Introduction".\\
+  (n.d.) available from http://kiwi.atmos.colostate.edu/BUGS/BUGSintro.html.
+
+**** Model III (1972??--mid 1970s)
+:PROPERTIES:
+:CUSTOM_ID: h-51e23b0c-ac21-4ea2-966c-20e65107f585
+:END:
+
+This incorporated Arakawa/Lamb "C" finite-difference horizontal grid.
+In a nutshell: the velocity vectors are evaluated at the grid-edges.
+It was a 12-level model. Two variants were built in the mid-1970s.
+
+- A.Arakawa, V.R. Lamb,\\
+  "Computational design of the basic dynamical processes of the UCLA general circulation model".\\
+  /Methods in Computational Physics: Advances in Research and Applications/ *17* (1977) pp.173--265. doi:10.1016/B978-0-12-460817-7.50009-4. ISBN 9780124608177.
+
+**** Model IV (late 1970s)
+:PROPERTIES:
+:CUSTOM_ID: h-2238ffc9-cdc5-49e2-9633-2a8ca2b2cd2a
+:END:
+
+This model employed a new vertical coordinate system which used the
+planetary boundary layer as a coordinate surface, and extended vertical
+resolution to 15 layers.
+
+**** Model V (c.1990-????)
+:PROPERTIES:
+:CUSTOM_ID: h-c9ea2a8e-de5c-46c9-bc11-af09d963719a
+:END:
+
+A heavily modified version of UCLA III with up to 29 vertical levels.
+
+*** The Livermore Atmospheric Model "LAM" (1960--1965)
+:PROPERTIES:
+:CUSTOM_ID: h-32736c4d-9f84-4ca5-9d8f-2a9738b2da11
+:END:
+
+Although this model began around 1960, the first unclassified
+publication appears in 1965, when Leith abandoned the project. But
+Leith's influence was felt in talks and presentations at conferences,
+where his visualization techniques were adopted by the field.
+
+- C.E. Leith,\\
+  "Numerical Simulation of the Earth's Atmosphere".
+  In {{{book-title(Methods in Computational Physics)}}},
+  eds. B. Alder, S. Fernbach, and M. Rotenberg
+  (New York: Academic Press, 1965), 1--28.
+- [[https://pne.people.si.umich.edu/vastmachine/llnl-lam.html][Characteristics]]
+
+** Australian  Numerical  Meteorological  Research  Centre [ANMRC] (1977)
+:PROPERTIES:
+:CUSTOM_ID: h-1a943d30-650d-4ad9-819b-620b7af5f6ea
+:END:
+
+Innovative use of spectral methods, which inspired NCAR's CCM-0A model.
+
+- Bourke, W.P., B. McAvaney, K. Puri, and R. Thurling, 1977:\\
+  "Global modelling of atmospheric flow by spectral methods".\\
+  In {{{book-title(Methods in Computational Physics)}}}, 17, J. Chang (ed.), Academic Press, New York,
+  267--324.
+- McAvaney, B.J., W. Bourke, and K. Puri,\\
+  "A global spectral model for simulation of the general circulation".\\
+  /J. Atmos. Sci./ *35* (1978) 1557--1583.
