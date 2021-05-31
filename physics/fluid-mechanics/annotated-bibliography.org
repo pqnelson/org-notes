@@ -1,0 +1,320 @@
+#+TITLE: Annotated Bibliography
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-05-31T10:00:48-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Monday May 31, 2021 at 10:00AM
+
+See also Fairbairn and Macdonald's [[https://www.math.ubc.ca/~cbm/projects/fluids_biblio/fluids_biblio.html][Bibliography of Fluid Dynamics Books]],
+which lists a number of useful books within several domains of fluids.
+
+* Intermediate linear algebra
+:PROPERTIES:
+:CUSTOM_ID: h-0ca4682d-9f77-433c-9f71-f1361e535886
+:END:
+
+Linear algebra in infinite dimensions is basically functional analysis,
+which underlies a lot of partial differential equation machinery. So you
+need to be very comfortable with linear algebra.
+
+- Axler's {{{book-title(Linear algebra done right)}}}
+- Strang's book on linear algebra
+* Partial differential equations
+:PROPERTIES:
+:CUSTOM_ID: h-6fee042b-d6c0-4a15-9fbf-9191b160012d
+:END:
+
+Fluids are famously nonlinear PDEs. So we'll need to get very
+comfortable with PDEs.
+
+- Walter Strauss,\\
+  {{{book-title(Partial Differential Equations: An Introduction)}}}.\\
+  This is the book where I learned the basics of first-order PDEs, and the "big three"
+  second-order PDEs (the heat equation, wave equation, Poisson's equation)
+- Lawrence Evans,\\
+  {{{book-title(Partial Differential Equations)}}}.\\
+  This has become /the/ textbook for graduate level PDEs.
+- (I don't know where to put this, but Atkinson and Han's
+  {{{book-title(Theoretical Numerical Analysis: A Functional Analysis Framework)}}}
+  discusses functional analysis and numerical differential equations
+  in a unique way; it may be useful for people who want to learn
+  functional analysis in an "applied" manner.)
+* Numerical Analysis
+:PROPERTIES:
+:CUSTOM_ID: h-04388f5f-fb6e-4b5b-89dd-bd0b76fb19f3
+:END:
+** Basic Numerical Analysis
+:PROPERTIES:
+:CUSTOM_ID: h-8cd33e76-df0f-4711-96b7-079e9856762d
+:END:
+
+Learning floating-point arithmetic, root finding algorithms, polynomial interpolation, quadrature)
+
+- Burden and Faires' {{{book-title(Numerical Analysis)}}} is the
+  standard introductory text
+- Timothy Sauer's {{{book-title(Numerical Analysis)}}} was the
+  text I learned from, it's decent but not rigorous enough for my tastes.
+- Trefethen and Bau's Numerical Linear Algebra book does a great
+  job discussing floating point in chapter 13
+
+** Numerical Linear Algebra
+:PROPERTIES:
+:CUSTOM_ID: h-a8bb56ef-6f42-4fd3-8b1f-5d974a9531aa
+:END:
+
+- Lloyd N. Trefethen, David Bau III,\\
+  {{{book-title(Numerical Linear Algebra)}}}.\\
+  Trefethen is a giant in numerical analysis, and the tone of this
+  book is gentle and approachable.
+- James Demmel,\\
+  {{{book-title(Applied Numerical Linear Algebra)}}}.\\
+  This complements Trefethen and Bau, a similar tone, and if
+  possible should be checked out from the library.
+- Golub's {{{book-title(Matrix Computations)}}} has been
+  recommended, but it's an encyclopedia of results rather than an
+  introduction to the field. I wouldn't recommend this as an
+  introduction, but if you're serious about numerical linear
+  algebra, then this is as necessary as a dictionary to a writer.
+
+** Numerical Differential Equations
+:PROPERTIES:
+:CUSTOM_ID: h-0ae24c9b-81d7-4117-9d89-d3cae353886e
+:END:
+
+This is trickier, because there are three basic toolkits to solve differential equations
+numerically (finite difference schemes, finite element method, and
+finite volume method)
+
+*** Finite Difference Method
+:PROPERTIES:
+:CUSTOM_ID: h-5f57c166-ec6b-44e7-b55f-b1e9a2e57013
+:END:
+
+The "immediately obvious" method to numerically solve a differential
+equation is to replace the differential operator with finite differences.
+
+- R. LeVeque,\\
+  {{{book-title(Finite Difference Methods for Ordinary and Partial Differential Equations: Steady State and Time Dependent Problems)}}}.\\
+  LeVeque writes beautifully, so I recommend whatever he writes;
+  however, if you have the ability to check this out from the
+  library, then check out the library's copy.
+- JW Thomas,\\
+  {{{book-title(Numerical Partial Differential Equations: Finite Differences)}}}.\\
+  Springer. Thomas' book is an amazing experience, I heartily
+  recommend it.
+  - The sequel to this, {{{book-title(Numerical Partial Differential Equations: Conservation Laws and Elliptic Equations)}}},
+    I have yet to read, but I am excited to begin it soon.
+
+*** Finite Volume Method
+:PROPERTIES:
+:CUSTOM_ID: h-f32b60e6-dc2f-4273-b52a-33631029b311
+:END:
+
+Since continuity equations are usually in integral form, we can use a
+mesh to discretize the domain of integration, use the divergence theorem
+(or Stokes' theorem, or whatever) and sufficiently fine meshes to
+transform the continuity equations into sums of integrals of
+approximately piecewise-linear functions. This is the finite volume
+method (in a nutshell), and LeVeque writes beautifully about it.
+
+- R. LeVeque,\\
+  {{{book-title(Finite Volume Methods for Hyperbolic Problems)}}}.\\
+  This specifically has fluids in mind, and discusses the algorithms
+  used by LeVeque's CLAWPACK library.
+
+*** Finite Element Method
+:PROPERTIES:
+:CUSTOM_ID: h-538e1ab5-fe19-4aec-80a5-da1b444c4c41
+:END:
+
+I'm still looking for /good/ references on finite element method.
+Currently I refer to Hughes, which is a very readable and enjoyable book.
+Basically, the finite element method discretizes the function space of
+solutions and test functions using locally smooth functions (usually
+piecewise linear functions like the "hat function", or some low order
+polynomial defined on some local domain).
+
+- Thomas J.R. Hughes,\\
+  {{{book-title(The Finite Element Method: Linear Static and Dynamic Finite Element Analysis)}}}.\\
+  Published by Dover, it's the best (and only) book I've seen on finite
+  element analysis. Basically, we transform a PDE into its weak form,
+  which requires integrating against arbitrary test functions. The
+  finite element method discretizes the space of test functions, which
+  transforms the problem to one of linear algebra.
+
+*** Spectral Methods
+:PROPERTIES:
+:CUSTOM_ID: h-22bb7fa2-f402-4b16-b36b-860ba9496967
+:END:
+
+I have no good reference for this, but basically this discretizes the
+function space as a truncated Fourier series. More generally, instead of
+using $\exp(\I nx)$ as the basis functions, we could use a different
+choice of basis. We could view this as a generalization of the finite
+element method, I think; the difference being the basis functions used
+in finite element method are *local* smooth functions (like the bump
+function), whereas the spectral method uses *global* smooth functions
+(like $\E^{\I nx}$).
+
+Here are some references which have been /recommended to me/ but I have not followed up reading yet...
+
+- John P. Boyd,\\
+  {{{book-title(Chebyshev and Fourier Spectral Methods)}}}.\\
+  This is one of the only references I know for the spectral method,
+  which basically uses a truncated Fourier series with unknown
+  coefficients. For sufficiently smooth solutions, we only need a few
+  coefficients to get a good approximation, which tends to work
+  remarkably well with climate models. It also helps this book has been
+  republished by Dover, so it's on the cheap side, and it's available on
+  the [[http://www-personal.umich.edu/~jpboyd/BOOK_Spectral2000.html][author's website]].
+- C. Canuto, M.Y. Hussaini, A. Quarteroni, and T.A. Zang,\\
+  {{{book-title(Spectral Methods in Fluid Dynamics)}}}.\\
+  Springer Verlag, Berlin, Germany; Heidelberg, Germany, 1988.
+- C. Canuto, M.Y. Hussaini, A. Quarteroni, and T.A. Zang,\\
+  {{{book-title(Spectral Methods: Fundamentals in Single Domains)}}}.\\
+  Springer Verlag, Berlin, Germany; Heidelberg, Germany, 2006).
+- C. Canuto, M.Y. Hussaini, A. Quarteroni, and T.A. Zang,\\
+  {{{book-title(Spectral Methods: Evolution to Complex Geometries and Applications to Fluid Dynamics)}}}.\\
+  Springer Verlag, Berlin, Germany;Heidelberg, Germany, 2007.
+- B. Fornberg,\\
+  {{{book-title(Practical Guide to Pseudospectral Methods)}}}.\\
+  Cambridge University Press, Cambridge, U.K., 1995.
+- D. Gottlieb and S.A. Orszag,\\
+  {{{book-title(Numerical Analysis of Spectral Methods: Theory and Applications)}}}.\\
+  Society for Industrial and Applied Mathematics, Philadelphia, U.S.A., 1977.
+- J.S. Hesthaven, S. Gottlieb, and D. Gottlieb,\\
+  {{{book-title(Spectral Methods for Time-Dependent Problems)}}}.\\
+  Cambridge University Press, Cambridge, U.K., 2007.
+
+
+* Basic Fluids
+:PROPERTIES:
+:CUSTOM_ID: h-79eebd81-d355-4a58-b827-c2dab6f8f762
+:END:
+
+- George Batchelor's {{{book-title(An Introduction to Fluid Dynamics)}}}
+  is the classic introduction to the field; the first few chapters
+  are required reading for everyone
+  - Simon J.A. Malham's [[http://www.macs.hw.ac.uk/~simonm/lms-epsrc_short_course_2011/fluidsnotes.pdf][Introductory fluid mechanics]] (pdf) is based
+    on Batchelor's book, just as Batchelor's book was based on Lamb's
+    {{{book-title(Hydrodynamics)}}}
+- Stephen Childress,\\
+  "An Introduction to Theoretical Fluid Dynamics".\\
+  Lecture notes, [[https://www.math.nyu.edu/~childres/fluidsbook.pdf][pdf]], 177 pages. This was polished then published as
+  a book, I think it's wonderful.
+- Landau and Lifshitz,\\
+  {{{book-title(Fluid Mechanics)}}}, 2nd ed.\\
+  This is a "classic", but assumes the reader knows thermodynamics,
+  and is presented in a "reverse mathematical style" (instead of
+  "definition--theorem--proof", they do "definition--proof--theorem"
+  without any clear delineations). I admit I have not seen as elegant
+  a derivation of consequences from Euler's flow equations.
+- Alexandre Chorin, Jerrold Marsden,\\
+  {{{book-title(A Mathematical Introduction to Fluid Mechanics)}}}.\\
+  Third ed., Springer, 1993. This is probably the introduction most
+  "pure mathematicians" prefer (your mileage may vary).
+- Frank White,\\
+  {{{book-title(Fluid Mechanics)}}}.\\
+  Written with hydrodynamics in mind, it's a friendly introductory
+  physics text.
+- Pijush K. Kundu and Ira M. Cohen,\\
+  {{{book-title(Fluid Mechanics)}}}.\\
+  A standard introductory text, used by MIT.
+- D. J. Tritton,\\
+  {{{book-title(Physical fluid dynamics)}}}.\\
+  An experimentally grounded text, written for physicists, but I'm
+  including it to note (if mathematicians want to learn the empirical
+  side of fluids) this is the resource for experiments.
+- M. Van Dyke,\\
+  {{{book-title(Album of Fluid Motion)}}}.\\
+  Referenced by several syllabi, it's a picture book of various flows.
+
+* Numerical Methods for Fluids
+:PROPERTIES:
+:CUSTOM_ID: h-d29dcbeb-f755-41c1-8bb0-77f7e115dfd4
+:END:
+
+- R. LeVeque,\\
+  {{{book-title(Numerical Methods for Conservation Laws)}}}.\\
+  A slim but beautiful book.
+- Roger Temam,\\
+  {{{book-title(Navier-Stokes equations, Theory and numerical analysis)}}}.\\
+  This book beautifully works through the numerical analysis (as of
+  the mid 1980s) of the steady state Navier--Stokes, first the
+  linearized version and then the full nonlinear stead-state, and
+  then gives some discussion to the full problem.\\
+  If interested, the reader may consult Galdi's 2-volume
+  {{{book-title(An introduction to the mathematical theory of the Navier-Stokes equations, Steady-state problems)}}}.
+
+* Navier--Stokes Equations
+:PROPERTIES:
+:CUSTOM_ID: h-ee42a495-78bb-4ac1-9544-bee33e6f197a
+:END:
+
+- Pierre Gilles Lemarie-Rieusset,\\
+  {{{book-title(The Navier-Stokes problem in the 21st century)}}}.\\
+  This is an amazingly thorough yet gentle introduction to the subject.
+  It's written with the Clay millennium prize in mind.
+- Tai-Peng Tsai,\\
+  {{{book-title(Lectures on Navier-Stokes equations)}}}.\\
+  AMS Graduate studies series. A good book after reading the first
+  few chapters of Evans' _PDEs_, Tsai reviews the various aspects to
+  Navier-Stokes in a very gentle manner. Also good is the citations
+  to the literature (done immediately on page ix, literally the
+  second sentence). The focus of this book is theory of the
+  existence, uniqueness, and regularity of solutions to Navier-Stokes.
+-
+
+
+
+
+* Syllabi
+:PROPERTIES:
+:CUSTOM_ID: h-0697d22a-8246-4e68-a12f-cb3a5a502eb6
+:END:
+
+Whenever learning a subject, it's wise to examine what the top
+universities are doing when teaching the subject.
+
+- MIT
+  + 1.63 "Advanced Fluid Dynamics of the Environment" [[https://ocw.mit.edu/courses/civil-and-environmental-engineering/1-63-advanced-fluid-dynamics-of-the-environment-fall-2002/syllabus/][syllabus]]
+  + 2.06 "Fluid Dynamics" [[https://ocw.mit.edu/courses/mechanical-engineering/2-06-fluid-dynamics-spring-2013/syllabus/][syllabus]] (studies the first three chapters
+    of Frank White's {{{book-title(Fluid Mechanics)}}}, 7th ed.)
+  + 2.25 "Advanced fluid mechanics" [[https://ocw.mit.edu/courses/mechanical-engineering/2-25-advanced-fluid-mechanics-fall-2013/syllabus/][syllabus]]
+  + 2.26 "Compressible Fluid Dynamics" [[https://ocw.mit.edu/courses/mechanical-engineering/2-26-compressible-fluid-dynamics-spring-2004/syllabus/][syllabus]]
+  + 2.29 "Numerical Fluid Mechanics" [[https://ocw.mit.edu/courses/mechanical-engineering/2-29-numerical-fluid-mechanics-spring-2015/syllabus/][syllabus]]
+  + 12.003 "Atmosphere, Ocean and Climate Dynamics" [[https://ocw.mit.edu/courses/earth-atmospheric-and-planetary-sciences/12-003-atmosphere-ocean-and-climate-dynamics-fall-2008/syllabus/][syllabus]]
+  + 12.800 "Fluid Dynamics of the Atmosphere and Ocean" [[https://ocw.mit.edu/courses/earth-atmospheric-and-planetary-sciences/12-800-fluid-dynamics-of-the-atmosphere-and-ocean-fall-2004/syllabus/][syllabus]]
+  + 13.024 "Numerical Marine Hydrodynamics" [[https://ocw.mit.edu/courses/mechanical-engineering/2-29-numerical-marine-hydrodynamics-13-024-spring-2003/syllabus/][syllabus]]
+- Caltech
+  + [[https://shepherd.caltech.edu/T5/resources/AE101_Guide.pdf][Fluid Mechanics 101: A Skeleton Guide]] (pdf)
+  + Ae/APh/CE/ME 101c: Fluid Mechanics [[https://www.mckeon.caltech.edu/teaching/101/AeAPhCEME101c_Syllabus_2019.pdf][syllabus]]
+  + Hermann Schlichting, {{{book-title(Boundary Layer Theory)}}}.
+- Georgia Tech
+  + ME3340 [[https://lorraine.gatech.edu/sites/default/files/academic-info/syllabus/fa20/2_me3340_fluids_zhang_brief_syllabus.pdf][Syllabus]]
+    + Munson, Young, and Okiishi’s {{{book-title(Fundamentals of Fluid Mechanics)}}}
+  + ME6601 [[http://me.gatech.edu/graduate/courses/me6601][syllabus]] Introduction to Fluid Mechanics
+    + Ronald Panton, {{{book-title(Incompressible Flow)}}}, Panton; 2nd Edition, John Wiley; 1995.
+    + G. M. Homsy, et al, {{{book-title(Multi-Media Fluid Mechanics)}}} (w/CD), Cambridge University Press, 2000.
+  + ME7751 [[http://me.gatech.edu/graduate/courses/me7751][Syllabus]] Computational Fluid Mechanics
+    + Pieter Wesseling,
+      {{{book-title(Principles of Computational Fluid Dynamics)}}};
+      Springer-Verlag, 2000.
+    + Joel H. Ferziger and Milovan Peric,
+      {{{book-title(Computational Methods of Fluid Dynamics)}}},
+      3rd Edition, Springer-Verlag, 2001
+    + C. Hirsch,
+      {{{book-title(Numerical Computation of Internal and External Flows)}}},
+      Vol. 1 and 2, John Wiley & Sons, Ltd., 1988.
+    + G. F. Carey and Oden, J. T.,
+      {{{book-title(Finite Elements: Fluid Mechanics)}}},
+      Vol. VI, Prentice-Hall, 1986.
+    + C. Canuto, M. Y. Hussaini, A. Quarteroni, and T. A. Zang,
+      {{{book-title(Spectral Methods in Fluid Mechanics)}}},
+      Springer-Verlag, 1988.
