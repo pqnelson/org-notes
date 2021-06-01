@@ -66,12 +66,21 @@ repeat.
 :CUSTOM_ID: h-65de0020-de60-4547-8d19-4afd58ebfa11
 :END:
 
-this seems to have been the first major paper about general circulation
-models, which inspired everyone else.
+Note: I've seen this referred to as the "GCRS" model, but no one really
+expands on what that acronym abbreviates. It turns out to abbreviate
+"General Circulation Research Section" (which was the forerunner to the
+GFDL group).
+
+This was the first published general circulation model. It was a proof
+of concept, starting with simplifying assumptions like barotropy and
+quasi-geostrophy, then removing them one by one.
 
 - Norman Phillips,\\
   "The general circulation of the atmosphere: a numerical experiment".\\
   /Q. J. of the Roy. Met. Soc./ *82*, 352 (1956) 123--164;
+- J.M. Lewis,\\
+  "Clarifying the Dynamics of the General Circulation: Phillips's 1956 Experiment".\\
+  /Bulletin of the American Meteorological Society/ *79*, no.1 (1998) 39--60. 
 
 *** UCLA Models
 :PROPERTIES:
@@ -99,6 +108,19 @@ The first Mintz/Arakawa model was a 2-level global, primitive-equation
 GCM at a 7° latitude x 9° longitude horizontal resolution. It included
 realistic land-sea distributions and surface topography. Mintz never
 learned to program computers; Arakawa carried out all the model coding.
+The UCLA prototype model has been credited as inspiring the European
+Centre for Medium-Range Weather Forecasts (ECMWF) model.
+
+- Y. Mintz,\\
+  "Design of Some Numerical General Circulation Experiments".\\
+  /Bulletin of the Research Council of Israel/ *76* (1958) 67--114.
+- W.E. Langlois and H.C.W. Kwok,\\
+  "Description of the Mintz-Arakawa Numerical General Circulation Model".\\
+  (Dept. of Meteorology, University of California at Los Angeles, 1969).
+- A. Arakawa,\\
+  "Numerical Simulation of Large-Scale Atmospheric Motions".\\
+  /Numerical Solution of Field Problems in Continuum Physics/
+  (SIAM-AMS Proceedings, American Mathematical Society) *2* (1970) 24--40.
 
 **** Model II (1965--1972??)
 :PROPERTIES:
@@ -107,6 +129,25 @@ learned to program computers; Arakawa carried out all the model coding.
 
 This extended the first model with more vertical layers. A 3-layer and
 9-layer version were made.
+
+This model inspired RAND's model pretty directly.
+
+Edwards describes this system's characteristics:
+
+#+begin_quote
+When Arakawa returned to UCLA from Japan in 1965, he and Mintz began
+work on the first-generation "production" UCLA GCM. It increased model
+resolution to 4° latitude x 5° longitude, although it still had only two
+vertical levels, and introduced a new horizontal grid structure (the
+Arakawa/Lamb "B" grid).[5] This was an extremely influential GCM. About
+1970 Lawrence Gates, a UCLA graduate, carried the model with him to the
+RAND Corporation, where he used it in a series of studies sponsored by
+the Advanced Research Projects Agency of the U.S. Defense Dept. The RAND
+version of the model was eventually carried to Oregon State
+University.[6]
+#+end_quote
+
+The citations Edwards gives are:
 
 - A. Arakawa and V.R. Lamb,\\
   "Computational Design of the Basic Dynamical Processes of the UCLA General Circulation Model".\\
@@ -151,6 +192,27 @@ A heavily modified version of UCLA III with up to 29 vertical levels.
 :CUSTOM_ID: h-32736c4d-9f84-4ca5-9d8f-2a9738b2da11
 :END:
 
+Cecil Leith began working on a GCM while at Lawrence Livermore National
+Laboratories. Due to the nature of Lawrence Livermore (working on
+classified research most of the time), Leith's only unclassified
+publication occurred when he was ending his work on the model.
+
+But Leith's contributions are non-negligible: he would talk at
+conferences about the innovative visualizations techniques, which other
+models began copying.
+
+Edwards describes the [[https://pne.people.si.umich.edu/vastmachine/llnl-lam.html][model's characteristics]] as:
+
+#+begin_quote
+The initial model was based on the Bjerknes/Richardson primitive
+equations. It had five vertical levels and used a 5° x 5° horizontal
+grid. It covered only the northern hemisphere, with a "slippery wall" at
+60°N. In order to damp the effects of small-scale atmospheric waves,
+Leith introduced an artificially high viscosity, which caused serious
+problems and stimulated Leith's career-long interest in turbulence
+problems.
+#+end_quote
+
 Although this model began around 1960, the first unclassified
 publication appears in 1965, when Leith abandoned the project. But
 Leith's influence was felt in talks and presentations at conferences,
@@ -162,6 +224,90 @@ where his visualization techniques were adopted by the field.
   eds. B. Alder, S. Fernbach, and M. Rotenberg
   (New York: Academic Press, 1965), 1--28.
 - [[https://pne.people.si.umich.edu/vastmachine/llnl-lam.html][Characteristics]]
+
+
+*** The National Center for Atmospheric Research (1964--????)
+
+There are two families of models NCAR produced. One used finite
+difference schemes (generically referred to as NCAR family of models),
+the other used spectral schemes (the Community Climate Model Series, CCM).
+
+**** NCAR 1 (1964--1967?)
+
+A simple 2-layer atmosphere global model with 5-degree horizontal
+resolution. Although they began working on the model in 1964, the first
+publication on it appeared in 1967.
+
+- A. Kasahara and W.M. Washington,\\
+  "NCAR Global General Circulation Model of the Atmosphere".\\
+  /Monthly Weather Review/ *95*, no.7 (1967) pp.389--402.
+
+**** NCAR 2 (1967?--1970)
+
+he basic model had a 5° horizontal, 6-layer resolution, but it could
+also be run at resolutions as fine as 0.625° horizontal over a limited
+domain, with up to 24 vertical layers.
+
+- J.E. Oliger /et al/.,\\
+  "Description of NCAR Global Circulation Model".
+  National Center for Atmospheric Research, 1970
+- A. Kasahara and W. M. Washington,\\
+  "General Circulation Experiments with a Six-Layer NCAR Model, Including Orography, Cloudiness and Surface Temperature Calculations".\\
+  /Journal of the Atmospheric Sciences/ *28*, no. 5 (1971) pp.657--701;
+- A. Kasahara /et al/.,\\
+  "Simulation Experiments with a 12-Layer Stratospheric Global Circulation Model. I. Dynamical Effect of the Earth's Orography and Thermal  Influence of Continentality".\\
+  /Journal of Atmospheric Sciences/ *30*, no.7 (1973) pp.1229--51.
+
+**** NCAR 3 (1970?--1973)
+
+NCAR 3, finished about 1973, also allowed multiple resolutions,
+including a user-specifiable vertical increment. The most significant
+changes, however, involved improved finite-difference schemes.
+ 
+- W.M. Washington /et al/.,\\
+  "Preliminary Atmospheric Simulation with the Third-Generation NCAR General Circulation Model: January and July".\\
+  In /Report of the JOC Conference on Climate Models: Performance, Intercomparison, and Sensitivity Studies/,
+  (ed. W. Lawrence), WMO/ICSU Joint Organizing Committee and Global Atmospheric Research Programme, 1979. 
+
+
+**** CCM-0A (197?--1977?)
+
+The initial version of the Community Climate Model was based on the
+spectral model of the Australian Numerical Meteorological Research
+Centre. One member of the ANMRC team (K. Puri) brought the model to NCAR
+during an extended visit. Later, it was extensively revised.
+
+- W. Bourke /et al/.,\\
+  "Global Modeling of Atmospheric Flow by Spectral Methods".\\
+  In /General Circulation Models of the Atmosphere/,
+  Methods in Computational Physics: Advances in Research and Applications
+  (San Francisco: Academic Press, 1977), pp.267--324.
+
+**** CCM-0B (1981--198?)
+
+Initial code for CCM-0B came from an early version of the European
+Center for Medium Range Weather Forecasts model. Physical
+parameterizations, including the radiation and cloud routines of
+Ramanathan, and numerical approximations were added from CCM-0A.
+Energy balance and flux prescriptions from the early GFDL models were
+incorporated, while the finite difference scheme was derived from the
+Australian spectral model that was the basis for CCM-0A.
+
+- V. Ramanathan /et al/.,\\
+  "The Response of a Spectral General Circulation Model to Refinements in Radiative Processes".\\
+  /Journal of Atmospheric Sciences/ *40* (1983) pp.605--630.
+
+**** CCM-1 (1987?--????)
+
+CCM-1 evolved from CCM-0B in the mid-1980s. The primary differences were
+changed parameterizations, new horizontal and vertical diffusion
+schemes, and changes to moisture adjustment and condensation schemes.
+
+
+- D.L. Williamson /et al/.,\\
+  "Description of NCAR Community Climate Model (CCM1)".
+  (National Center for Atmospheric Reasearch, 1987).
+
 
 ** Australian  Numerical  Meteorological  Research  Centre [ANMRC] (1977)
 :PROPERTIES:
