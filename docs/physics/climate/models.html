@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-05-29 Sat 13:56 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hierarchy of Climate Models</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Hierarchy of Climate Models</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-78f8baee-6f4b-4f02-95f7-3ab2697eaffb">1. Radiative Transfer Models</a>
+<ul>
+<li><a href="#h-b411b9fa-b776-4b87-a0f0-58a5ca2b2fb1">1.1. Atmospheric &amp; Environmental Research (AER) Working Group</a></li>
+</ul>
+</li>
+<li><a href="#h-bf370b6d-78a9-4e61-a2f8-43149b238ea1">2. GCM</a>
+<ul>
+<li><a href="#h-65de0020-de60-4547-8d19-4afd58ebfa11">2.1. GCRS (1956)</a></li>
+<li><a href="#h-32736c4d-9f84-4ca5-9d8f-2a9738b2da11">2.2. The Livermore Atmospheric Model "LAM" (1960&#x2013;1965)</a></li>
+<li><a href="#h-1a943d30-650d-4ad9-819b-620b7af5f6ea">2.3. ANMRC (1977)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+This is an annotated bibliography of the available software for climate
+models. It seems that each component has been independently developed by
+different groups and agencies.
+</p>
+
+<div id="outline-container-h-78f8baee-6f4b-4f02-95f7-3ab2697eaffb" class="outline-2">
+<h2 id="h-78f8baee-6f4b-4f02-95f7-3ab2697eaffb"><span class="section-number-2">1</span> Radiative Transfer Models</h2>
+<div class="outline-text-2" id="text-h-78f8baee-6f4b-4f02-95f7-3ab2697eaffb">
+</div>
+
+<div id="outline-container-h-b411b9fa-b776-4b87-a0f0-58a5ca2b2fb1" class="outline-3">
+<h3 id="h-b411b9fa-b776-4b87-a0f0-58a5ca2b2fb1"><span class="section-number-3">1.1</span> Atmospheric &amp; Environmental Research (AER) Working Group</h3>
+<div class="outline-text-3" id="text-h-b411b9fa-b776-4b87-a0f0-58a5ca2b2fb1">
+<p>
+This group seems to have standardized the abbreviations for many models
+of radiative transfer.
+</p>
+
+<ul class="org-ul">
+<li><a href="https://web.archive.org/web/20210413060526/http://www.rtweb.aer.com/">rtweb.aer.com</a> (archived)</li>
+<li><a href="https://www.aer.com/science-research/atmosphere/radiative-transfer/">aer.com</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-bf370b6d-78a9-4e61-a2f8-43149b238ea1" class="outline-2">
+<h2 id="h-bf370b6d-78a9-4e61-a2f8-43149b238ea1"><span class="section-number-2">2</span> GCM</h2>
+<div class="outline-text-2" id="text-h-bf370b6d-78a9-4e61-a2f8-43149b238ea1">
+<p>
+www.aip.org/history/gcm
+There's a plethora of models here. I'm following Paul Edwards's
+<cite class="book-title">A Vast Machine: Computer Models</cite>
+appendix (also available <a href="https://pne.people.si.umich.edu/vastmachine/agcm.html">online</a>) and the <a href="https://web.archive.org/web/20040825054939/http://www.aip.org/history/gcm/">AIP's history of GCMs</a>.
+</p>
+</div>
+
+<div id="outline-container-h-65de0020-de60-4547-8d19-4afd58ebfa11" class="outline-3">
+<h3 id="h-65de0020-de60-4547-8d19-4afd58ebfa11"><span class="section-number-3">2.1</span> GCRS (1956)</h3>
+<div class="outline-text-3" id="text-h-65de0020-de60-4547-8d19-4afd58ebfa11">
+<p>
+Norman Phillips's "The general circulation of the atmosphere: a numerical experiment"
+<i>Q. J. of the Roy. Met. Soc.</i> <b>82</b>, 352 (1956) 123&#x2013;164;
+this seems to have been the first major paper about general circulation
+models, which inspired everyone else.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-32736c4d-9f84-4ca5-9d8f-2a9738b2da11" class="outline-3">
+<h3 id="h-32736c4d-9f84-4ca5-9d8f-2a9738b2da11"><span class="section-number-3">2.2</span> The Livermore Atmospheric Model "LAM" (1960&#x2013;1965)</h3>
+<div class="outline-text-3" id="text-h-32736c4d-9f84-4ca5-9d8f-2a9738b2da11">
+<p>
+Although this model began around 1960, the first unclassified
+publication appears in 1965, when Leith abandoned the project. But
+Leith's influence was felt in talks and presentations at conferences,
+where his visualization techniques were adopted by the field.
+</p>
+
+<ul class="org-ul">
+<li>C.E. Leith,<br>
+"Numerical Simulation of the Earth's Atmosphere".
+In <cite class="book-title">Methods in Computational Physics</cite>,
+eds. B. Alder, S. Fernbach, and M. Rotenberg
+(New York: Academic Press, 1965), 1&#x2013;28.</li>
+<li><a href="https://pne.people.si.umich.edu/vastmachine/llnl-lam.html">Characteristics</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-1a943d30-650d-4ad9-819b-620b7af5f6ea" class="outline-3">
+<h3 id="h-1a943d30-650d-4ad9-819b-620b7af5f6ea"><span class="section-number-3">2.3</span> ANMRC (1977)</h3>
+<div class="outline-text-3" id="text-h-1a943d30-650d-4ad9-819b-620b7af5f6ea">
+<ul class="org-ul">
+<li>Bourke, W.P., B. McAvaney, K. Puri, and R. Thurling, 1977:<br>
+"Global modelling of atmospheric flow by spectral methods".<br>
+In <cite class="book-title">Methods in Computational Physics</cite>, 17, J. Chang (ed.), Academic Press, New York,
+267&#x2013;324.</li>
+<li>McAvaney, B.J., W. Bourke, and K. Puri,<br>
+"A global spectral model for simulation of the general circulation".
+<i>J. Atmos. Sci.</i> <b>35</b> (1978) 1557&#x2013;1583.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-05-29 Sat 13:55.</p>
+</div>
+</body>
+</html>
