@@ -62,8 +62,66 @@ end;
 
 When writing output, whether logging a program or displaying information
 to the user, we can treat this as a monad of type =(output, a)= where
-=a= is the value returned from the computation. Haskell uses
+=a= is the value returned from the computation. So ~getChar~ would be of
+type ~IO Char~, whereas ~putChar~ would be of type ~IO ()~ (since it
+returns nothing, and "nothing" is encoded as the unit type).
+
+The intuition (but seeming lie?) is that: Haskell uses
 =RealWorld -> (RealWorld, a)= computation for its =IO= monad.
+So ~type IO a = RealWorld -> (RealWorld, a)~?
+
+** How Haskell Does it...
+
+Looking through the GHC source code, it seems that the IO Monad is
+defined in [[https://github.com/ghc/ghc/blob/b73c9c5face16cc8bedf4168ce10770c7cc67f80/libraries/ghc-prim/GHC/Types.hs#L233][ghc-prim/GHC/Types.hs]] line 233:
+
+#+begin_src haskell
+{- |
+A value of type @'IO' a@ is a computation which, when performed,
+does some I\/O before returning a value of type @a@.
+There is really only one way to \"perform\" an I\/O action: bind it to
+@Main.main@ in your program.  When your program is run, the I\/O will
+be performed.  It isn't possible to perform I\/O from an arbitrary
+function, unless that function is itself in the 'IO' monad and called
+at some point, directly or indirectly, from @Main.main@.
+'IO' is a monad, so 'IO' actions can be combined using either the do-notation
+or the 'Prelude.>>' and 'Prelude.>>=' operations from the 'Prelude.Monad'
+class.
+-}
+newtype IO a = IO (State# RealWorld -> (# State# RealWorld, a #))
+#+end_src
+
+But it's used all over the place: 
+
+- [[https://github.com/ghc/ghc/blob/master/libraries/base/GHC/IO.hs][GHC.IO]] asserts ~IO~ is just an ~ST~ monad, "The IO Monad is just an
+  instance of the ST monad, where the state thread is the real world."
+- Its monadic structure is defined in [[https://github.com/ghc/ghc/blob/0619fb0fb14a98f04aac5f031f6566419fd27495/libraries/base/GHC/Base.hs#L1561-L1565][GHC.Base]], Lines 1561--1565 (it
+  seems that ~bindIO~ does the heavy lifting).
+  - Note: ~State#~ and ~RealWorld~ are defined in [[https://github.com/ghc/ghc/blob/a7f9670e899bcbc87276446a1aac2304cade2b2f/compiler/GHC/Builtin/primops.txt.pp#L2759-L2769][GHC.Builtin.primops]]
+    lines 2759--2769. They are pseudo-operations.
+    
+Note that ~bindIO~ is defined as:
+
+#+begin_src haskell
+--  ghc/libraries/base/GHC/Base.hs 
+bindIO :: IO a -> (a -> IO b) -> IO b
+bindIO (IO m) k = IO (\ s -> case m s of (# new_s, a #) -> unIO (k a) new_s)
+
+unIO :: IO a -> (State# RealWorld -> (# State# RealWorld, a #))
+unIO (IO a) = a
+#+end_src
+Peyton Jones and Wadler write in their paper, "Imperative Functional Programming", (page 4):
+
+#+begin_quote
+If ~m :: IO a~ and ~k :: a -> IO b~, then ~m `bindIO` k~ denotes the
+action that, when performed, behaves as follows: first perform action
+~m~, yielding a value ~x~ of type ~a~, then perform action ~k x~,
+yielding a value ~y~ of type ~b~, then return value ~y~.
+#+end_quote
+
+This only makes sense if ~IO a~ is a wrapper around ~(State# RealWorld -> (# State# RealWorld, a #))~,
+or (less exciting and probably more accurate): things have changed since
+January 1993...
 
 * References
 :PROPERTIES:
@@ -74,3 +132,33 @@ to the user, we can treat this as a monad of type =(output, a)= where
 - [[https://github.com/msullivan/sml-util/blob/master/hacks/monad.sml][monad.sml]]
 - [[https://stackoverflow.com/q/39202738/1296973][Compilation of IORef and STRef]]
 - [[https://stackoverflow.com/q/30448007/1296973][What does 'MutVar#' mean?]]
+- Philip Wadler,\\
+  "Monads for Functional Programming".\\
+  [[https://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf][Eprint]] (1995)
+- Philip Wadler,\\
+  "How to declare an imperative".\\
+  [[https://homepages.inf.ed.ac.uk/wadler/papers/monadsdeclare/monadsdeclare.ps][PS]] (1997). Gives an example of reasoning with ~IO~ monad.
+- Jeremy Gibbons and Ralf Hinze,\\
+  "Just ~do~ It:Simple Monadic Equational Reasoning".\\
+  [[http://www.cs.ox.ac.uk/jeremy.gibbons/publications/mr.pdf][Eprint]] (2011)
+- Philip Wadler and Simon Peyton Jones,\\
+  "Imperative Functional Programming".\\
+  [[https://homepages.inf.ed.ac.uk/wadler/papers/imperative/imperative.ps][PS]] [[https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.86.9725&rep=rep1&type=pdf][Eprint]] (1993)
+- John Launchbury and Simon Peyton Jones,\\
+  "Lazy Functional State Threads".\\
+  1994 (discusses ~IO~ as a ~ST~ instance)
+- R. Affeldt, D. Nowak, T. Saikawa,\\
+  "A Hierarchy of Monadic Effects for Program Verification using
+  Equational Reasoning".\\
+  [[https://staff.aist.go.jp/reynald.affeldt/documents/monae.pdf][Eprint]] discusses using Coq to verify Monadic effects.
+- Andrew Butterfield and Glenn Strong,\\
+  "Proving Correctness of Programs with IO—A Paradigm Comparison".\\
+  In Proceedings of IFL2001.
+- Wouter Swierstra and Thorsten Altenkirch,\\
+  "Beauty in the Beast: A Functional Semantics for the Awkward Squad".\\
+  [[https://www.cs.nott.ac.uk/~psztxa/publ/beast.pdf][PDF]] (2007)
+- Simon Peyton Jones,\\
+ "Tackling the Awkward Squad: monadic input/output, concurrency,
+  exceptions, and foreign-language calls in Haskell".\\
+  [[https://www.microsoft.com/en-us/research/wp-content/uploads/2016/07/mark.pdf?from=https%3A%2F%2Fresearch.microsoft.com%2F%7Esimonpj%2Fpapers%2Fmarktoberdorf%2Fmark.pdf][EPrint]] (2010) 
+ 
