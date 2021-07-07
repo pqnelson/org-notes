@@ -71,6 +71,9 @@ The intuition (but seeming lie?) is that: Haskell uses
 So ~type IO a = RealWorld -> (RealWorld, a)~?
 
 ** How Haskell Does it...
+:PROPERTIES:
+:CUSTOM_ID: h-08a4f52f-3779-44f3-981f-8d68675beb2c
+:END:
 
 Looking through the GHC source code, it seems that the IO Monad is
 defined in [[https://github.com/ghc/ghc/blob/b73c9c5face16cc8bedf4168ce10770c7cc67f80/libraries/ghc-prim/GHC/Types.hs#L233][ghc-prim/GHC/Types.hs]] line 233:
@@ -91,7 +94,7 @@ class.
 newtype IO a = IO (State# RealWorld -> (# State# RealWorld, a #))
 #+end_src
 
-But it's used all over the place: 
+But it's used all over the place:
 
 - [[https://github.com/ghc/ghc/blob/master/libraries/base/GHC/IO.hs][GHC.IO]] asserts ~IO~ is just an ~ST~ monad, "The IO Monad is just an
   instance of the ST monad, where the state thread is the real world."
@@ -99,11 +102,11 @@ But it's used all over the place:
   seems that ~bindIO~ does the heavy lifting).
   - Note: ~State#~ and ~RealWorld~ are defined in [[https://github.com/ghc/ghc/blob/a7f9670e899bcbc87276446a1aac2304cade2b2f/compiler/GHC/Builtin/primops.txt.pp#L2759-L2769][GHC.Builtin.primops]]
     lines 2759--2769. They are pseudo-operations.
-    
+
 Note that ~bindIO~ is defined as:
 
 #+begin_src haskell
---  ghc/libraries/base/GHC/Base.hs 
+--  ghc/libraries/base/GHC/Base.hs
 bindIO :: IO a -> (a -> IO b) -> IO b
 bindIO (IO m) k = IO (\ s -> case m s of (# new_s, a #) -> unIO (k a) new_s)
 
@@ -132,6 +135,12 @@ January 1993...
 - [[https://github.com/msullivan/sml-util/blob/master/hacks/monad.sml][monad.sml]]
 - [[https://stackoverflow.com/q/39202738/1296973][Compilation of IORef and STRef]]
 - [[https://stackoverflow.com/q/30448007/1296973][What does 'MutVar#' mean?]]
+- Stefan Kahrs,\\
+  "First-Class Polymorphism for ML".\\
+  In: Sannella D. (eds) Programming Languages and Systems — ESOP '94. ESOP 1994. Lecture Notes in Computer Science, vol 788. Springer, Berlin, Heidelberg. https://doi.org/10.1007/3-540-57880-3_22
+  [[https://kar.kent.ac.uk/21199/][Eprint]].
+  - This is particularly interesting, an overlooked article which
+    explicitly gives an example of a monad in Standard ML in section 2.
 - Philip Wadler,\\
   "Monads for Functional Programming".\\
   [[https://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf][Eprint]] (1995)
@@ -160,5 +169,4 @@ January 1993...
 - Simon Peyton Jones,\\
  "Tackling the Awkward Squad: monadic input/output, concurrency,
   exceptions, and foreign-language calls in Haskell".\\
-  [[https://www.microsoft.com/en-us/research/wp-content/uploads/2016/07/mark.pdf?from=https%3A%2F%2Fresearch.microsoft.com%2F%7Esimonpj%2Fpapers%2Fmarktoberdorf%2Fmark.pdf][EPrint]] (2010) 
- 
+  [[https://www.microsoft.com/en-us/research/wp-content/uploads/2016/07/mark.pdf?from=https%3A%2F%2Fresearch.microsoft.com%2F%7Esimonpj%2Fpapers%2Fmarktoberdorf%2Fmark.pdf][EPrint]] (2010)
