@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-17 Sat 09:41 -->
+<!-- 2021-07-06 Tue 21:41 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raspberry Pi</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -268,13 +268,19 @@
 <li><a href="#h-c596939f-a681-4092-9c95-a4245ff3b73b">6.1. Dependencies</a></li>
 </ul>
 </li>
-<li><a href="#h-88c07655-f971-4a20-b7f9-3f75d70adacd">7. Other Links</a></li>
+<li><a href="#h-a66006a4-533e-4994-be5f-307174039327">7. Window Managers</a>
+<ul>
+<li><a href="#h-0aed8294-f790-4e82-bf2c-5707990dd55f">7.1. TWM</a></li>
+<li><a href="#h-fa7f411e-d0be-4c94-8277-87cabddb3838">7.2. FVWM</a></li>
+</ul>
+</li>
+<li><a href="#h-88c07655-f971-4a20-b7f9-3f75d70adacd">8. Other Links</a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-h-2139284d-7b5c-46c8-abce-c3ede3b2b67f" class="outline-2">
-<h2 id="h-2139284d-7b5c-46c8-abce-c3ede3b2b67f"><span class="section-number-2">1</span> Overview</h2>
+<h2 id="h-2139284d-7b5c-46c8-abce-c3ede3b2b67f"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-2139284d-7b5c-46c8-abce-c3ede3b2b67f">
 <p>
 I've got a Raspberry Pi 3 lying around, and I've been interested in
@@ -292,7 +298,7 @@ Lisp tools on it.
 </div>
 
 <div id="outline-container-h-bd448f65-3561-4ce8-90da-580ef958cee7" class="outline-2">
-<h2 id="h-bd448f65-3561-4ce8-90da-580ef958cee7"><span class="section-number-2">2</span> Ssh into the Pi</h2>
+<h2 id="h-bd448f65-3561-4ce8-90da-580ef958cee7"><span class="section-number-2">2.</span> Ssh into the Pi</h2>
 <div class="outline-text-2" id="text-h-bd448f65-3561-4ce8-90da-580ef958cee7">
 <p>
 We can ssh into Raspberry Pi by enabling ssh (the openssh-server seems
@@ -303,7 +309,7 @@ to be installed but not yet enabled), then we can simply do
 </div>
 
 <div id="outline-container-h-b0d187d2-f502-4a62-9dd4-a6fd994a903a" class="outline-2">
-<h2 id="h-b0d187d2-f502-4a62-9dd4-a6fd994a903a"><span class="section-number-2">3</span> Debian Infrastructure</h2>
+<h2 id="h-b0d187d2-f502-4a62-9dd4-a6fd994a903a"><span class="section-number-2">3.</span> Debian Infrastructure</h2>
 <div class="outline-text-2" id="text-h-b0d187d2-f502-4a62-9dd4-a6fd994a903a">
 <p>
 Running the update can be time-consuming. Basically I updated the
@@ -321,7 +327,7 @@ Then I ran <code>sudo rpi-update</code> to update the firmware.
 </div>
 
 <div id="outline-container-h-75c9966a-5592-4ae4-a025-80e0e6c34f6a" class="outline-3">
-<h3 id="h-75c9966a-5592-4ae4-a025-80e0e6c34f6a"><span class="section-number-3">3.1</span> Optimizing for my local computer</h3>
+<h3 id="h-75c9966a-5592-4ae4-a025-80e0e6c34f6a"><span class="section-number-3">3.1.</span> Optimizing for my local computer</h3>
 <div class="outline-text-3" id="text-h-75c9966a-5592-4ae4-a025-80e0e6c34f6a">
 <p>
 I noticed that, for GCC, the flag <code>-Os</code> optimizes for size. Since
@@ -334,7 +340,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 </div>
 
 <div id="outline-container-h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f" class="outline-2">
-<h2 id="h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f"><span class="section-number-2">4</span> Installing Emacs</h2>
+<h2 id="h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f"><span class="section-number-2">4.</span> Installing Emacs</h2>
 <div class="outline-text-2" id="text-h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f">
 <p>
 I pulled down Emacs from the git repository:
@@ -386,7 +392,7 @@ error saying Emacs won't compile with <code>-ffinite-math-only</code>).
 </div>
 
 <div id="outline-container-h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c" class="outline-3">
-<h3 id="h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c"><span class="section-number-3">4.1</span> Improving Startup Time</h3>
+<h3 id="h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c"><span class="section-number-3">4.1.</span> Improving Startup Time</h3>
 <div class="outline-text-3" id="text-h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c">
 <p>
 I noticed the startup time was rather slow. The <code>(emacs-init-time)</code>
@@ -419,7 +425,7 @@ seconds. If I further compiled with <code>-Ofast</code>, I get startup time in
 </div>
 
 <div id="outline-container-h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9" class="outline-2">
-<h2 id="h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9"><span class="section-number-2">5</span> Installing Common Lisp</h2>
+<h2 id="h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9"><span class="section-number-2">5.</span> Installing Common Lisp</h2>
 <div class="outline-text-2" id="text-h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9">
 <p>
 I'm not sure what happened, but somehow I had SBCL 1.4 installed on my
@@ -428,7 +434,7 @@ Raspberry Pi already. I was suspicious of this, and remain so to date.
 </div>
 
 <div id="outline-container-h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88" class="outline-3">
-<h3 id="h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88"><span class="section-number-3">5.1</span> Clozure Common Lisp</h3>
+<h3 id="h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88"><span class="section-number-3">5.1.</span> Clozure Common Lisp</h3>
 <div class="outline-text-3" id="text-h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88">
 <p>
 One Common Lisp compiler which emerged from the '80s was Clozure Common
@@ -475,7 +481,7 @@ same size, but the <code>armcl.image</code> is 17100816 bytes (and in <code>v1.1
 </div>
 
 <div id="outline-container-h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e" class="outline-4">
-<h4 id="h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e"><span class="section-number-4">5.1.1</span> Making <code>armcl</code> global</h4>
+<h4 id="h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e"><span class="section-number-4">5.1.1.</span> Making <code>armcl</code> global</h4>
 <div class="outline-text-4" id="text-h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e">
 <p>
 I also ran
@@ -493,7 +499,7 @@ This let me run armcl for any user.
 </div>
 
 <div id="outline-container-h-caf05a1b-6f16-4430-a62b-200f4c5bd753" class="outline-3">
-<h3 id="h-caf05a1b-6f16-4430-a62b-200f4c5bd753"><span class="section-number-3">5.2</span> Adding Quicklisp</h3>
+<h3 id="h-caf05a1b-6f16-4430-a62b-200f4c5bd753"><span class="section-number-3">5.2.</span> Adding Quicklisp</h3>
 <div class="outline-text-3" id="text-h-caf05a1b-6f16-4430-a62b-200f4c5bd753">
 <p>
 We get quicklisp:
@@ -532,11 +538,11 @@ default, you could just add a <code>(load-quicklisp)</code> line to the
 </div>
 
 <div id="outline-container-h-3b62ead8-4526-46b2-a922-92053432e1c3" class="outline-2">
-<h2 id="h-3b62ead8-4526-46b2-a922-92053432e1c3"><span class="section-number-2">6</span> Stumpwm</h2>
+<h2 id="h-3b62ead8-4526-46b2-a922-92053432e1c3"><span class="section-number-2">6.</span> Stumpwm</h2>
 <div class="outline-text-2" id="text-h-3b62ead8-4526-46b2-a922-92053432e1c3">
 </div>
 <div id="outline-container-h-c596939f-a681-4092-9c95-a4245ff3b73b" class="outline-3">
-<h3 id="h-c596939f-a681-4092-9c95-a4245ff3b73b"><span class="section-number-3">6.1</span> Dependencies</h3>
+<h3 id="h-c596939f-a681-4092-9c95-a4245ff3b73b"><span class="section-number-3">6.1.</span> Dependencies</h3>
 <div class="outline-text-3" id="text-h-c596939f-a681-4092-9c95-a4245ff3b73b">
 <p>
 Trying to run <code>sudo apt-get build-dep stumpwm</code> will install a number of
@@ -546,8 +552,42 @@ common lisp dependencies, which quicklisp would automatically handle.
 </div>
 </div>
 
+<div id="outline-container-h-a66006a4-533e-4994-be5f-307174039327" class="outline-2">
+<h2 id="h-a66006a4-533e-4994-be5f-307174039327"><span class="section-number-2">7.</span> Window Managers</h2>
+<div class="outline-text-2" id="text-h-a66006a4-533e-4994-be5f-307174039327">
+<p>
+I may want to consider looking at other window managers (ahem, <i>window</i> shopping?).
+</p>
+
+
+<ul class="org-ul">
+<li><a href="https://l3net.wordpress.com/2014/02/15/a-memory-comparison-of-light-linux-desktops-part-3/">A Memory Comparison of Light Linux Desktops – Part 3</a></li>
+<li><a href="https://www.linuxquestions.org/questions/linux-desktop-74/memory-comparison-of-really-light-linux-wms-desktops-4175605421/">Memory Comparison of Really Light Linux WMs / Desktops</a></li>
+<li><a href="https://www.reddit.com/r/unixporn/comments/4tfdzu/ram_usage_of_small_window_managers_a_comparison/">RAM Usage of small window managers - a comparison</a></li>
+</ul>
+</div>
+
+<div id="outline-container-h-0aed8294-f790-4e82-bf2c-5707990dd55f" class="outline-3">
+<h3 id="h-0aed8294-f790-4e82-bf2c-5707990dd55f"><span class="section-number-3">7.1.</span> TWM</h3>
+<div class="outline-text-3" id="text-h-0aed8294-f790-4e82-bf2c-5707990dd55f">
+<ul class="org-ul">
+<li><a href="https://wiki.archlinux.org/title/twm">Arch Linux Wiki page</a></li>
+<li><a href="https://opensource.com/article/19/12/twm-linux-desktop">Get back to basics with the TWM Linux desktop</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-fa7f411e-d0be-4c94-8277-87cabddb3838" class="outline-3">
+<h3 id="h-fa7f411e-d0be-4c94-8277-87cabddb3838"><span class="section-number-3">7.2.</span> FVWM</h3>
+<div class="outline-text-3" id="text-h-fa7f411e-d0be-4c94-8277-87cabddb3838">
+<ul class="org-ul">
+<li><a href="https://wiki.archlinux.org/title/FVWM">Arch Linux Wiki page</a></li>
+</ul>
+</div>
+</div>
+</div>
 <div id="outline-container-h-88c07655-f971-4a20-b7f9-3f75d70adacd" class="outline-2">
-<h2 id="h-88c07655-f971-4a20-b7f9-3f75d70adacd"><span class="section-number-2">7</span> Other Links</h2>
+<h2 id="h-88c07655-f971-4a20-b7f9-3f75d70adacd"><span class="section-number-2">8.</span> Other Links</h2>
 <div class="outline-text-2" id="text-h-88c07655-f971-4a20-b7f9-3f75d70adacd">
 <ul class="org-ul">
 <li><a href="http://informatimago.com/articles/raspberrypi/ccl-sur-qemu.html">CCL on RPi</a> (French)</li>
@@ -560,7 +600,7 @@ common lisp dependencies, which quicklisp would automatically handle.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-17 Sat 09:40.</p>
+<p class="postamble">Last Updated 2021-07-06 Tue 20:13.</p>
 </div>
 </body>
 </html>
