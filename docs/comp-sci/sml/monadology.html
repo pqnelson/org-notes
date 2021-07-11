@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-07-06 Tue 22:02 -->
+<!-- 2021-07-07 Wed 22:00 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Monadology</title>
@@ -246,9 +246,15 @@
 <li><a href="#h-ae2fffc8-6678-42d4-ac03-0bf3c39d9b28">3. Input Output Monad</a>
 <ul>
 <li><a href="#h-08a4f52f-3779-44f3-981f-8d68675beb2c">3.1. How Haskell Does it&#x2026;</a></li>
+<li><a href="#h-9898e93b-cd74-49f3-95cc-681d75bca8a0">3.2. Standard ML Hackery</a></li>
 </ul>
 </li>
-<li><a href="#h-e4b4aced-cb78-493a-8c35-a12e1492cf09">4. References</a></li>
+<li><a href="#h-e4b4aced-cb78-493a-8c35-a12e1492cf09">4. References</a>
+<ul>
+<li><a href="#h-cac676fe-d364-4f03-9c2a-4750ce01619d">4.1. Monads in Haskell</a></li>
+<li><a href="#h-9ccaab01-de54-45dd-a3fc-f8c3deab52da">4.2. Monads in Functional Programming (in general)</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -392,6 +398,82 @@ This only makes sense if <code>IO a</code> is a wrapper around <code>(State# Rea
 or (less exciting and probably more accurate): things have changed since
 January 1993&#x2026;
 </p>
+
+<p>
+Printing a string in Haskell is done in <a href="https://github.com/ghc/ghc/blob/f90487cacb16e8398c4c4a84de5a1e33ac4e7867/libraries/base/System/IO.hs#L277">System.IO</a>, line 277, for
+example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-haskell-definition">putStr</span>          <span class="org-haskell-operator">::</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
+<span class="org-haskell-definition">putStr</span> s        <span class="org-haskell-operator">=</span>  hPutStr stdout s
+</pre>
+</div>
+
+<p>
+This delegates the heavy lifting to <a href="https://github.com/ghc/ghc/blob/0619fb0fb14a98f04aac5f031f6566419fd27495/libraries/base/GHC/IO/Handle/Text.hs#L613">GHC.IO.Handle.Text</a> defining
+<code>hPutStr</code> (lines 613 <i>et seq.</i>):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-haskell-definition">hPutStr</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Handle</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
+<span class="org-haskell-definition">hPutStr</span> handle str <span class="org-haskell-operator">=</span> hPutStr' handle str <span class="org-haskell-constructor">False</span>
+
+<span class="org-doc">-- | The same as 'hPutStr', but adds a newline character.</span>
+<span class="org-haskell-definition">hPutStrLn</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Handle</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
+<span class="org-haskell-definition">hPutStrLn</span> handle str <span class="org-haskell-operator">=</span> hPutStr' handle str <span class="org-haskell-constructor">True</span>
+  <span class="org-comment-delimiter">-- </span><span class="org-comment">An optimisation: we treat hPutStrLn specially, to avoid the</span>
+  <span class="org-comment-delimiter">-- </span><span class="org-comment">overhead of a single putChar '\n', which is quite high now that we</span>
+  <span class="org-comment-delimiter">-- </span><span class="org-comment">have to encode eagerly.</span>
+
+<span class="org-haskell-pragma">{-# NOINLINE hPutStr' #-}</span>
+<span class="org-haskell-definition">hPutStr'</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Handle</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Bool</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
+<span class="org-haskell-definition">hPutStr'</span> handle str add_nl <span class="org-haskell-operator">=</span>
+  <span class="org-haskell-keyword">do</span>
+    (buffer_mode, nl) <span class="org-haskell-operator">&lt;-</span>
+         wantWritableHandle <span class="org-string">"hPutStr"</span> handle <span class="org-haskell-operator">$</span> <span class="org-haskell-operator">\</span>h_ <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-keyword">do</span>
+                       bmode <span class="org-haskell-operator">&lt;-</span> getSpareBuffer h_
+                       return (bmode, haOutputNL h_)
+
+    <span class="org-haskell-keyword">case</span> buffer_mode <span class="org-haskell-keyword">of</span>
+       (<span class="org-haskell-constructor">NoBuffering</span>, <span class="org-haskell-keyword">_</span>) <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-keyword">do</span>
+            hPutChars handle str        <span class="org-comment-delimiter">-- </span><span class="org-comment">v. slow, but we don't care</span>
+            when add_nl <span class="org-haskell-operator">$</span> hPutChar handle <span class="org-string">'\n'</span>
+       (<span class="org-haskell-constructor">LineBuffering</span>, buf) <span class="org-haskell-operator">-&gt;</span>
+            writeBlocks handle <span class="org-haskell-constructor">True</span>  add_nl nl buf str
+       (<span class="org-haskell-constructor">BlockBuffering</span> <span class="org-haskell-keyword">_</span>, buf) <span class="org-haskell-operator">-&gt;</span>
+            writeBlocks handle <span class="org-haskell-constructor">False</span> add_nl nl buf str
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-9898e93b-cd74-49f3-95cc-681d75bca8a0" class="outline-3">
+<h3 id="h-9898e93b-cd74-49f3-95cc-681d75bca8a0"><span class="section-number-3">3.2.</span> Standard ML Hackery</h3>
+<div class="outline-text-3" id="text-h-9898e93b-cd74-49f3-95cc-681d75bca8a0">
+<p>
+If I try to do something similar with Standard ML, then I'd guess:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> 'a <span class="org-type-def">IO</span> = IO <span class="org-keyword">of</span> (unit -&gt; 'a);
+
+<span class="org-keyword">fun</span> <span class="org-function-name">putStr</span> (s : string) : unit IO = IO (<span class="org-keyword">fn</span> () =&gt; print s);
+</pre>
+</div>
+
+<p>
+This typechecks fine, but it doesn't produce what we'd expect. For
+example, in Hamlet:
+</p>
+
+<pre class="example" id="orge55c04b">
+- putStr "foo";
+val it = IO _fn : unit IO
+- print "foo\n";
+foo
+val it = () : unit
+</pre>
 </div>
 </div>
 </div>
@@ -400,10 +482,10 @@ January 1993&#x2026;
 <h2 id="h-e4b4aced-cb78-493a-8c35-a12e1492cf09"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-e4b4aced-cb78-493a-8c35-a12e1492cf09">
 <ul class="org-ul">
+<li><a href="https://www.cl.cam.ac.uk/teaching//1819/ConceptsPL/lectures.pdf">Slides on Programming Languages</a>, pp. 220 <i>et seq.</i>, discuss Monads in
+Standard ML.</li>
 <li>Robert Harper, <a href="https://existentialtype.wordpress.com/2011/05/01/of-course-ml-has-monads/">Of Course ML Has Monads!</a></li>
 <li><a href="https://github.com/msullivan/sml-util/blob/master/hacks/monad.sml">monad.sml</a></li>
-<li><a href="https://stackoverflow.com/q/39202738/1296973">Compilation of IORef and STRef</a></li>
-<li><a href="https://stackoverflow.com/q/30448007/1296973">What does 'MutVar#' mean?</a></li>
 <li>Stefan Kahrs,<br>
 "First-Class Polymorphism for ML".<br>
 In: Sannella D. (eds) Programming Languages and Systems — ESOP '94. ESOP 1994. Lecture Notes in Computer Science, vol 788. Springer, Berlin, Heidelberg. <a href="https://doi.org/10.1007/3-540-57880-3_22">https://doi.org/10.1007/3-540-57880-3_22</a>
@@ -412,25 +494,24 @@ In: Sannella D. (eds) Programming Languages and Systems — ESOP '94. ESOP 1994.
 <li>This is particularly interesting, an overlooked article which
 explicitly gives an example of a monad in Standard ML in section 2.</li>
 </ul></li>
-<li>Philip Wadler,<br>
-"Monads for Functional Programming".<br>
-<a href="https://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf">Eprint</a> (1995)</li>
-<li>Philip Wadler,<br>
-"How to declare an imperative".<br>
-<a href="https://homepages.inf.ed.ac.uk/wadler/papers/monadsdeclare/monadsdeclare.ps">PS</a> (1997). Gives an example of reasoning with <code>IO</code> monad.</li>
-<li>Jeremy Gibbons and Ralf Hinze,<br>
-"Just <code>do</code> It:Simple Monadic Equational Reasoning".<br>
-<a href="http://www.cs.ox.ac.uk/jeremy.gibbons/publications/mr.pdf">Eprint</a> (2011)</li>
-<li>Philip Wadler and Simon Peyton Jones,<br>
-"Imperative Functional Programming".<br>
-<a href="https://homepages.inf.ed.ac.uk/wadler/papers/imperative/imperative.ps">PS</a> <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.86.9725&amp;rep=rep1&amp;type=pdf">Eprint</a> (1993)</li>
-<li>John Launchbury and Simon Peyton Jones,<br>
-"Lazy Functional State Threads".<br>
-1994 (discusses <code>IO</code> as a <code>ST</code> instance)</li>
-<li>R. Affeldt, D. Nowak, T. Saikawa,<br>
-"A Hierarchy of Monadic Effects for Program Verification using
-Equational Reasoning".<br>
-<a href="https://staff.aist.go.jp/reynald.affeldt/documents/monae.pdf">Eprint</a> discusses using Coq to verify Monadic effects.</li>
+<li>Mads Sig Ager, Olivier Danvy, Jan Midtgaard,<br>
+"A Functional Correspondence between Monadic Evaluators and Abstract Machinesfor Languages with Computational Effects".<br>
+<a href="https://www.brics.dk/RS/03/35/BRICS-RS-03-35.pdf">BRICS</a> preprint, 34 pages; implements monads in Standard ML.</li>
+<li>Yutaka Nagashima, Liam O'Connor,<br>
+"Close Encounters of the Higher Kind Emulating Constructor Classes in Standard ML".<br>
+<a href="https://arxiv.org/abs/1608.03350">arXiv:1608.03350</a>, 3 pages; implements <code>Applicative</code>, <code>Monad</code>,
+etc., in Standard ML. The code is <a href="https://www.isa-afp.org/browser_info/current/AFP/Proof_Strategy_Language/files/Constructor_Class.ML.html">available</a>, with some <a href="https://www.isa-afp.org/browser_info/current/AFP/Proof_Strategy_Language/files/Instantiation.ML.html">instances</a>.
+(It was discussed on a <a href="https://keens.github.io/blog/2016/10/10/smldemonado/">blog</a>, if you can read Japanese&#x2026;also see <a href="https://github.com/br0ns/PreML">PreML</a>
+for <code>do</code>-notation in Standard ML.)</li>
+</ul>
+</div>
+
+<div id="outline-container-h-cac676fe-d364-4f03-9c2a-4750ce01619d" class="outline-3">
+<h3 id="h-cac676fe-d364-4f03-9c2a-4750ce01619d"><span class="section-number-3">4.1.</span> Monads in Haskell</h3>
+<div class="outline-text-3" id="text-h-cac676fe-d364-4f03-9c2a-4750ce01619d">
+<ul class="org-ul">
+<li><a href="https://stackoverflow.com/q/39202738/1296973">Compilation of IORef and STRef</a></li>
+<li><a href="https://stackoverflow.com/q/30448007/1296973">What does 'MutVar#' mean?</a></li>
 <li>Andrew Butterfield and Glenn Strong,<br>
 "Proving Correctness of Programs with IO—A Paradigm Comparison".<br>
 In Proceedings of IFL2001.</li>
@@ -441,12 +522,41 @@ In Proceedings of IFL2001.</li>
 "Tackling the Awkward Squad: monadic input/output, concurrency,
  exceptions, and foreign-language calls in Haskell".<br>
  <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/07/mark.pdf?from=https%3A%2F%2Fresearch.microsoft.com%2F%7Esimonpj%2Fpapers%2Fmarktoberdorf%2Fmark.pdf">EPrint</a> (2010)</li>
+<li>Jeremy Gibbons and Ralf Hinze,<br>
+"Just <code>do</code> It:Simple Monadic Equational Reasoning".<br>
+<a href="http://www.cs.ox.ac.uk/jeremy.gibbons/publications/mr.pdf">Eprint</a> (2011)</li>
+<li>John Launchbury and Simon Peyton Jones,<br>
+"Lazy Functional State Threads".<br>
+1994 (discusses <code>IO</code> as a <code>ST</code> instance)</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-h-9ccaab01-de54-45dd-a3fc-f8c3deab52da" class="outline-3">
+<h3 id="h-9ccaab01-de54-45dd-a3fc-f8c3deab52da"><span class="section-number-3">4.2.</span> Monads in Functional Programming (in general)</h3>
+<div class="outline-text-3" id="text-h-9ccaab01-de54-45dd-a3fc-f8c3deab52da">
+<ul class="org-ul">
+<li>Philip Wadler,<br>
+"Monads for Functional Programming".<br>
+<a href="https://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf">Eprint</a> (1995)</li>
+<li>Philip Wadler,<br>
+"How to declare an imperative".<br>
+<a href="https://homepages.inf.ed.ac.uk/wadler/papers/monadsdeclare/monadsdeclare.ps">PS</a> (1997). Gives an example of reasoning with <code>IO</code> monad.</li>
+<li>Philip Wadler and Simon Peyton Jones,<br>
+"Imperative Functional Programming".<br>
+<a href="https://homepages.inf.ed.ac.uk/wadler/papers/imperative/imperative.ps">PS</a> <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.86.9725&amp;rep=rep1&amp;type=pdf">Eprint</a> (1993)</li>
+<li>R. Affeldt, D. Nowak, T. Saikawa,<br>
+"A Hierarchy of Monadic Effects for Program Verification using
+Equational Reasoning".<br>
+<a href="https://staff.aist.go.jp/reynald.affeldt/documents/monae.pdf">Eprint</a> discusses using Coq to verify Monadic effects.</li>
 </ul>
 </div>
 </div>
 </div>
+</div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-06 Tue 22:01.</p>
+<p class="postamble">Last Updated 2021-07-07 Wed 21:59.</p>
 </div>
 </body>
 </html>

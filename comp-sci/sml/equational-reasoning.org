@@ -1,0 +1,343 @@
+#+TITLE: Equational Reasoning in Standard ML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-07-10T14:36:36-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday July 10, 2021 at  2:36PM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-b5b06cfd-93e5-4383-8b89-f4f872d9ee67
+:END:
+
+The excitement with statically-typed functional programming is that we
+can reason about it. The technical term is "equational reasoning" and
+resembles Dijkstra's [[https://en.wikipedia.org/wiki/Structured_derivations][structured derivations]]. For purely functional
+languages, we can use equational reasoning for the entire program.
+
+#+begin_remark
+The critical property enabling us to reason about functional programs is
+*referential transparency.* The only two features of Standard ML which
+hinders referential transparency: IO, and references. (IO is a thorny
+issue in functional programming.)
+#+end_remark
+
+Since Standard ML has some impure aspects, and has eager evaluation,
+there are some subtleties about how to reason about ML code.
+
+*Moral:* Well-written functional code corresponds to its own correctness
+proof.
+
+* Definitions
+:PROPERTIES:
+:CUSTOM_ID: h-eb7b240e-e63c-4035-89a9-2c55052df004
+:END:
+
+We have an equivalence, in ascii written ~==~ (so ~e1 == e2 : T~ is a
+predicate on two closed expressions ~e1~ and ~e2~, both have the same
+type ~T~). In math, on paper, we write $e_{1}\cong e_{2} : \tau$. We
+usually suppress the type.
+
+- ~e value~ means that ~e~ is a value; not every expression has a value
+  (e.g., ~5 div 0~). For now, values may be described inductively as:
+  - The basic types like numbers, strings, characters,
+  - applications of datatype constructors to values,
+- ~e valuable~ mean "There exists a ~v~ such that ~v value~ and ~e == v~"
+  - If an expression raises an exception, then it is not valuable.
+- ~f : T1 -> T2, f total~ means "For all values ~v1 : T1~, if ~v1 value~,
+  then ~(f v2) valuable~."
+  - Examples: ~(fn s => s)~, ~op +~, ~Int.toString~
+  - Non-Examples: ~div~, ~exp~
+- It's common to abuse language and write: "for all values ~e : T~..."
+  or even "for all ~v : T~ ..." to mean "for all ~e : T~, if ~e value~,
+  then...".
+  Specifically, this means a quantifier over arbitrary expressions must
+  be explicitly indicates as, "For all expressions ~e : T~ ...".
+- We write ~e'[e/x]~ for substitution of ~e~ for ~x~ in ~e'~.
+- We write ~e |-> e'~ for one step of calculation or evaluation,
+  ~e |=> e''~ for multiple parallel steps of calculation or evaluation,
+  and ~e ==> e'''~ for an arbitrary-but-finite number of steps of evaluation.
+  - Observe if ~e |-> e'~, then ~e |=> e'~
+  - If ~e |=> e'~, then ~e ==> e'~
+  - If ~e1 ==> e2~ and ~e2 ==> e3~, then ~e1 ==> e3~.
+
+* Basic Properties
+:PROPERTIES:
+:CUSTOM_ID: h-1bb08f53-6114-4227-8897-b85963f0d0b8
+:END:
+
+#+begin_theorem
+For every syntactically valid Standard ML expression ~e~ that we can
+evaluate, exactly one of the following holds:
+- ~e ==> v~ for some value ~v~
+- the evaluation of ~e~ raises some exception
+- the evaluation of ~e~ loops forever.
+#+end_theorem
+
+#+begin_definition
+Two expressions ~e~ and ~e'~ are said to be {{{define(Extensionally Equivalent)}}}
+(written $e\cong e'$ or ~e == e'~) if either
+- there is some value ~v~ such that ~e ==> v~ and ~e' ==> v~, or
+- the evaluation of ~e~ and ~e'~ both raise the /same/ exception, or
+- the evaluation of both ~e~ and ~e'~ loop forever.
+#+end_definition
+
+#+begin_remark
+Two functions ~f~ and ~g~ have a slightly different notion of
+extensionally equivalent, discussed down below.
+#+end_remark
+
+#+begin_proposition
+If ~e1 ==> e2~, then ~e1 == e2~.
+#+end_proposition
+
+#+begin_definition
+{{{define(Referential Transparency)}}}:
+If $e\cong e'$, then any instance of $e$ can be freely replaced with $e'$.
+#+end_definition
+
+#+begin_theorem
+Equivalence is an equivalence relation:
+1. Reflexivity: ~e == e~
+2. Symmetry: if ~e1 == e2~, then ~e2 == e1~
+3. Transitivity: if ~e1 == e2~ and ~e2 == e3~, then ~e1 == e3~.
+#+end_theorem
+
+Further equivalence is a congruence, meaning we can replace one
+expression with an equivalent one "inside" any bigger expression.
+
+#+begin_math-example
+For applications, we may generalize from the situation with a single argument:
+- If ~e2 == e2'~, then ~e1 e2 == e1 e2'~
+- If ~e1 == e1'~, then ~e1 e2 == e1' e2~
+#+end_math-example
+
+#+begin_math-example
+On tuples, the general pattern may be gleaned from the ordered pair:
+- If ~e1 == e1'~, then ~(e1, e2) == (e1', e2)~
+- If ~e2 == e2'~, then ~(e1, e2) == (e1, e2')~
+#+end_math-example
+
+#+begin_math-example
+If ~e1 == e1'~,
+then ~(let val x = e1 in e2 end) == (let val x = e1' in e2 end)~.
+#+end_math-example
+
+#+begin_math-example
+If ~e1 == e1'~, then
+
+#+begin_example
+case e of [] => e1 | x :: xs => e2
+
+==
+
+case e of [] => e1' | x :: xs => e2
+#+end_example
+
+#+end_math-example
+
+For subexpressions which "go under binders", we quantify over all values
+of the appropriate type. Consider the following examples:
+
+#+begin_math-example
+(Function bodies)
+If for all values ~v : T~, ~e[v/x] == e'[v/x]~, then
+~(fn x : T => e) == (fn x : T => e')~.
+#+end_math-example
+
+#+begin_math-example
+(Let bodies)
+If for all values ~v : T~, we have ~e2[v/x] == e2'[v/x]~, then
+~(let val x : T = e1 in e2 end) == (let val x : T = e1 in e2' end)~.
+#+end_math-example
+
+#+begin_math-example
+(Destructuring lists)
+If for all values ~v~ and ~vs~ we have ~e2[v/x][vs/xs] == e2'[v/x][vs/xs]~,
+then
+
+#+begin_example
+case e of [] => e1 | x::xs => e2
+
+==
+
+case e of [] => e1 | x::xs => e2'
+#+end_example
+#+end_math-example
+
+* Reductions
+:PROPERTIES:
+:CUSTOM_ID: h-bc08c8a9-465d-41cb-b9fc-0ad222f6410d
+:END:
+
+Since Standard ML is call-by-value, we evaluate the arugment to a
+function /before/ substituting into the body. We can express this by the
+following:
+
+#+begin_proposition
+If ~e2 |-> e2'~,
+then ~(fn x => e) e2 |-> (fn x => e) e2'~.
+#+end_proposition
+
+#+begin_remark
+We write ~|->~ for one step of calculation, and we write ~==>~ to mean
+there have been an arbitrary number of steps.
+#+end_remark
+
+#+begin_proposition
+For short-circuiting boolean operators, ~andalso~ and ~orelse~, we have
+different rules of evaluation:
+- If ~e1 ==> true~, then ~e1 andalso e2 ==> e2~ and ~e1 orelse e2 ==> true~;
+- If ~e1 ==> false~, then ~e1 andalso e2 ==> false~ and ~e1 orelse e2 ==> e2~.
+
+(This is because ~andalso~ and ~orelse~ are not functions)
+#+end_proposition
+
+#+begin_proposition
+If ~e' value~, then
+~(fn x => e) e' = e[e'/x]~.
+#+end_proposition
+
+The critical aspect of this second rule is the premise ~e' value~. We
+have several other reduction rules, which "should be obvious".
+
+#+begin_math-example
+~(case [] of [] => e1 | x::xs => e2) == e1~
+
+and
+
+If ~v::vs value~, then
+~(case v::vs of [] => e1 | x::xs => e2) == e2[v/x][vs/xs]~
+#+end_math-example
+
+#+begin_math-example
+If ~(v1,v2) value~, then
+~(let val (x,y) = (v1,v2) in e end) == e[v1/x][v2/y]~.
+#+end_math-example
+
+#+begin_theorem
+If ~e'~ is valuable, then ~((fn x => e) e') == (let x = e' in e end)~.
+#+end_theorem
+
+* Type-Directed Rules
+:PROPERTIES:
+:CUSTOM_ID: h-1b53c25f-fb11-47bc-8174-d73aa0dfb041
+:END:
+
+#+begin_proposition
+Two functions are equivalent if they agree on all arguments; i.e.,
+if for all values ~v : T1~ we have ~f v == g v : T2~,
+then ~f == g : T1 -> T2~.
+
+Further, for all values ~v~ and ~v'~,
+if ~v == v' : T1~, then ~f v == g v' : T2~
+#+end_proposition
+
+#+begin_proposition
+Constructors are injective and disjoint.
+#+end_proposition
+
+#+begin_math-example
+Denote by ~!=~ the negation of our equivalence relation (so ~a != b~
+means not ~a==b~), then we have
+- ~x::xs != []~
+- If ~y::ys == x::xs~, then ~x==y~ and ~xs==ys~.
+#+end_math-example
+
+* Valuability
+:PROPERTIES:
+:CUSTOM_ID: h-517e93d9-e267-41b9-86d7-ec893dfe7f73
+:END:
+
+#+begin_lemma
+~[] valuable~
+#+end_lemma
+#+begin_lemma
+If ~x~ and ~xs~ are valuable (with values ~v~ and ~vs~, respectively),
+then ~x::xs valuable~.
+#+end_lemma
+
+#+begin_lemma
+If ~x~ and ~y~ are valuable, then ~(x,y) valuable~.
+#+end_lemma
+
+#+begin_lemma
+~(fn x => e) valuable~
+#+end_lemma
+
+#+begin_theorem
+If ~f total~ and ~e valuable~,
+then ~(f e) valuable~.
+#+end_theorem
+
+#+begin_remark
+To prove ~f:T->T'~ is total, we want to show ~f v~ is valuable for all
+values ~v:T~.
+#+end_remark
+
+#+begin_theorem
+Let ~e~, ~e1~, ~e2~ be expressions.
+If:
+- ~e~ is valuable,
+- ~e==[]~ implies ~e1 valuable~, and
+- for all values ~v~ and ~vs~,
+  ~e==v::vs~ implies ~e2[v/x][vs/xs]~ is valuable;
+
+...then we have
+#+begin_example
+(case e of [] => e1 | x::xs => e2) valuable
+#+end_example
+#+end_theorem
+
+#+begin_theorem
+In general, valuability is closed under equivalence:
+If ~e==e'~ and ~e'~ is valuable, then ~e~ is valuable.
+#+end_theorem
+
+#+begin_theorem
+(Valuable-Stepping Principle)
+
+If ~e2~ is a valuable expression, then
+~(fn x => e1) e2 == e1[e2/x]~.
+#+end_theorem
+#+begin_remark
+This can be made more complicated if ~e1~ or ~e2~ is impure.
+#+end_remark
+
+* Inversions
+:PROPERTIES:
+:CUSTOM_ID: h-29c752da-965c-44b2-97fa-0375f6722045
+:END:
+
+For closed terms, ~e == v~ implies ~e~ evaluates to a value ~e ==> v'~ where ~v' == v~. This
+justifies the following inversion(s):
+
+#+begin_theorem
+If ~e1 e2 == v~,
+then there exists an expression ~e~ and a value ~v~ such that
+
+1. ~e1 == (fn x => e)~
+2. ~e2 == v2~
+3. ~e[v2/x] == v~
+#+end_theorem
+
+#+begin_theorem
+If ~case e of [...]~ is valuable,
+then ~e~ is valuable.
+#+end_theorem
+
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-63a006e4-bb72-451a-b884-463a6e9e9d42
+:END:
+
+- Bob Harper, "Equational Reasoning Guide",
+  [[http://www.cs.cmu.edu/~15150/][CMU CS15-150]].
+- David Walker, Princeton [[https://www.cs.princeton.edu/~dpw/courses/cos326-12/notes/reasoning.php][COS326]] notes, 2012

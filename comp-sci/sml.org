@@ -11,6 +11,12 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 # Created Thursday March 25, 2021 at  3:31PM
 
+#+begin_remark
+This page has gotten a little unruly. I might refactor out the
+discussion of the Core and Module language into a separate tutorial
+page. For [[file:sml/index.org][additional topics]], I have separated out other discussions.
+#+end_remark
+
 * Overview
 :PROPERTIES:
 :CUSTOM_ID: h-507f2c0c-f5e9-4589-926e-9ef4b6b62622
@@ -34,22 +40,652 @@ The "pure" fragment of the core language is called {{{define(PCF)}}}
 an interesting little language.
 #+end_remark
 
+* Core Language
+:PROPERTIES:
+:CUSTOM_ID: h-ecf81378-cc50-4217-94cb-971e4ec51413
+:END:
+
+The top-level amounts to declaration of values, functions, and type
+definitions. Let's examine these one-by-one.
+
+** Values
+:PROPERTIES:
+:CUSTOM_ID: h-1c6c13a5-097d-4bdc-a46b-340ad8527af4
+:END:
+
+These are the easiest to visualize and explain. Values are named
+constants.
+
+#+begin_src sml
+val pi = 3.14159; (* A declaration without a type annotation *)
+val tau : real = 6.28318; (* An annotated declaration *)
+#+end_src
+
+** Functions
+:PROPERTIES:
+:CUSTOM_ID: h-e732e4de-a608-4f24-8c76-cdaaf08da5f6
+:END:
+
+There are two styles to declaring functions, the curried approach and
+the uncurried approach. The uncurried approach declares the function to
+take a tuple and produce a value.
+
+#+begin_src sml
+fun cylinder_volume(r,h) = pi*r*r*h;
+#+end_src
+
+We can optionally annotate each parameter with its type:
+
+#+begin_src sml
+fun cyl_vol2(r : real, h : real) = pi*r*r*h;
+#+end_src
+
+We can optionally annotate the result
+
+#+begin_src sml
+fun cyl_vol3(r,h) : real = pi*r*r*h;
+#+end_src
+
+We can use curried versions:
+
+#+begin_src sml
+fun cyl_vol4 r h = pi*r*r*h;
+#+end_src
+
+To have a type annotated curried function definition, we must
+parenthetize each argument to declare its type:
+
+#+begin_src sml
+fun cyl_vol5 (r : real) (h : real) = pi*r*r*h;
+#+end_src
+
+This makes the line really long when we have more than a couple
+arguments to a function; I suspect this is one reason people use
+signatures and modules. We stick the declaration in the signature and
+the definition in the module, but we'll tackle that later.
+
+*** Semantics
+:PROPERTIES:
+:CUSTOM_ID: h-8abe6c8b-d365-461c-ab27-6a25e7f1e7e6
+:END:
+
+Function calls are call-by-value (i.e., evaluate the arguments, then
+copy the value to be bound by the formal parameters).
+
+Also, when a function is defined, it binds with the environment
+available at the time. For example:
+
+#+begin_src sml
+val pi = 3.14159;
+
+fun area(r) = pi*r*r;
+
+val pi = 1.0; (* redefinitions are allowed *)
+
+area(1.0);
+#+end_src
+
+What do you think will be produced? Well, when ~area~ was defined, ~pi~
+was bound to ~3.14159~, so ~area(1.0)~ evaluates to ~3.14159*1.0*1.0~.
+
+** Expressions
+:PROPERTIES:
+:CUSTOM_ID: h-5334a3b3-dce4-4839-8355-3f0e5787381b
+:END:
+
+Besides the usual arithmetic expressions, we have a few more worth
+mentioning:
+- ~let-in-end~ expressions for local definitions
+- ~if-then-else~ expressions for conditional flow
+- ~case~ expressions for pattern matching
+
+** Boolean Operators
+:PROPERTIES:
+:CUSTOM_ID: h-6001f34b-fc1a-465b-aa48-423c135b9201
+:END:
+
+Care must be taken, since in Standard ML the boolean operators provided
+are:
+- ~andalso~ for short-circuiting conjunction
+- ~orelse~ for short-circuiting disjunction
+- ~not~ for negation
+
+The ~and~ keyword has a technical meaning for simultaneous definitions.
+
+We test for equality using ~=~ and inequality using ~<>~, but this only
+works on "equality types" (unit, int, word, char, string, array, vector, ref).
+
+** Types
+:PROPERTIES:
+:CUSTOM_ID: h-d089eb20-5800-457a-ab86-4dca3ff3c60c
+:END:
+
+The built-in types include: ~bool~, ~int~, ~real~ (for floating point),
+~char~, ~string~, and ~unit~ (analogous to ~void~ in C-like languages).
+We can build tuples using the Cartesian product, written ~T1*T2~ for the
+product of type ~T1~ with type ~T2~. Function types are built using
+arrows ~T1 -> T2~, like in Haskell or OCaml.
+
+There are two ways to introduce types: one is to make an alias of an
+existing type, the other is to construct an algebraic data type.
+
+#+begin_src sml
+type Identifier = string;
+
+datatype Expr = Var of Identifier
+              | Abs of (Expr*Expr)
+              | App of (Expr*Expr);
+#+end_src
+
+It's important to note the constructor is separated from the rest of the
+row by an "~of~" keyword.
+
+*CAUTION:* Unlike Haskell, Standard ML writes parametrized types
+"backwards"; e.g., in Haskell we have a ~List int~, but in Standard ML
+we have ~int list~.
+
+#+begin_remark
+Unlike Haskell, if we want to have a parametrized type, we need to
+include the apostrophe, e.g., ~datatype 'a Foo = Bar of ('a * int)~.
+#+end_remark
+
+*** Records
+:PROPERTIES:
+:CUSTOM_ID: h-43934354-d980-4def-9ab7-7e68d303df78
+:END:
+
+Records are key-value data structures, like tuples, but we access a
+field by name rather than by its position.
+
+#+begin_src sml
+type person : {name:string,
+               age:int,
+               born:int,
+               occupation:string};
+val harry : person = {name = "Harry",
+                      age = 17,
+                      born = 1956,
+                      occupation = "Master of the Universe"};
+
+print (#occupation harry); (* prints "Master of the Universe" to screen *)
+#+end_src
+
+We can destructure records in functions, provided we give a type
+annotation (the "~: person~" in parentheses). Without it, we get an
+error alerting us about an unresolved flexible record type.
+
+#+begin_src rml
+fun is_nice ({occupation,...} : person) =
+    occupation="Barista" orelse occupation="Cook";
+
+(* alternatively *)
+fun is_really_nice(p : person) =
+let
+    val {occupation, ...} = p (* example of destructuring value declarations *)
+in
+    occupation="Barista" orelse occupation="Cook"
+end;
+#+end_src
+
+Without the dots in either destructuring instance produces errors
+(mismatch between pattern and expression).
+
+*** Pattern Matching in Functions
+:PROPERTIES:
+:CUSTOM_ID: h-7504a762-210f-4259-9f3e-7f478ce9c328
+:END:
+
+We can continue with our expression data structure, and compute the
+number of symbols involved "by cases":
+
+#+begin_src sml
+type Identifier = string;
+
+datatype Expr = Var of Identifier
+              | Abs of (Expr*Expr)
+              | App of (Expr*Expr);
+
+fun expr_length(Var id) = 1
+  | expr_length(Abs(e1, e2)) = expr_length e1 + expr_length e2 + 1
+  | expr_length(App(e1, e2)) = expr_length e1 + expr_length e2;
+#+end_src
+
+We can have a "catch all" pattern which handles all other cases. For
+example, if we want to count the number of distinct ~Abs~ instances in
+an expression, we could write:
+
+#+begin_src sml
+fun abs_count(Abs(e1, e2)) = 1 + abs_count e1 + abs_count e2
+  | abs_count(App(e1, e2)) = abs_count e1 + abs_count e2
+  | _ = 0;
+#+end_src
+
+** References to Memory Locations
+:PROPERTIES:
+:CUSTOM_ID: h-4b7e79f2-48fb-4a60-96f1-e9fb645c82e1
+:END:
+
+Standard ML provides the ability to have mutable variables, by making
+them references to memory locations. Basically, we dereference the ~ref~
+using an exclamation point, and assign it a value using ~:=~. For
+example:
+
+#+begin_src sml
+val iref : int ref;
+
+iref := 3; (* initialize the ref *)
+
+iref := !iref - 1; (* update the ref *)
+
+val foo : int = (!iref)*7; (* use the ref *)
+#+end_src
+
+We should think of ~ref~ as a parametrized type, ~'a ref~.
+
+** Primitive Functions and Types
+:PROPERTIES:
+:CUSTOM_ID: h-41afbff2-e546-4cda-a2a6-62612610b9ae
+:END:
+
+We are given some initial functions and type declarations in the
+"initial basis". The types given:
+
+- ~eqtype unit~ which has a single value, ~()~
+- ~eqtype int~
+- ~eqtype word~
+- ~type real~ for floating point numbers
+- ~eqtype char~, characters are indicated by ~#"a"~ for 'a', or ~#"\n"~
+  for a newline character, or ~#"\uxxxx"~ where ~xxxx~ are 4 hexadecimal constants
+- ~eqtype string~ for strings (double quoted, ~"foo"~)
+- ~type substring~
+- ~type exn~ for exceptions
+- ~eqtype 'a array~
+- ~eqtype 'a vector~
+- ~eqtype 'a ref~
+- ~datatype bool = false | true~
+- ~datatype 'a option = NONE | SOME of 'a~
+- ~datatype order = LESS | EQUAL | GREATER~
+- =datatype 'a list = nil | ​:​: of ('a * 'a list)=
+
+There are about a dozen primitive exceptions defined:
+
+#+begin_example
+exception Bind
+exception Chr
+exception Div
+exception Domain
+exception Empty
+exception Fail of string
+exception Match
+exception Option
+exception Overflow
+exception Size
+exception Span
+exception Subscript
+#+end_example
+
+The non-overloaded functions provided at the top-level:
+
++ List functions
+  - ~val app : ('a -> unit) -> 'a list -> unit~, so ~app f lst~ applies
+    ~f~ to ~lst~ ("from left to right")
+  - ~val @ : ('a list * 'a list) -> 'a list~ for concatenating lists
+  - ~val foldl : ('a*'b->'b)-> 'b -> 'a list -> 'b~, interpreted as
+    ~foldl f init x1::xs = foldl f f(x1,init) xs~, and ~foldl f init [] = init~.
+  - ~val foldr : ('a*'b->'b)-> 'b -> 'a list -> 'b~, interpreted as
+    ~foldr f init x::xs = f(x, foldr f init xs)~, and ~foldr f init [] = init~.
+  - ~val hd : 'a list -> 'a~ produces the first element in a list ~hd x::xs = x~,
+    raises error if operating on empty list ~hd [] = raise Empty~
+  - ~val length : 'a list -> int~ for the length of a list
+  - ~val map : ('a -> 'b) -> 'a list -> 'b list~ produces a new list by
+    applying a function to each element of the supplied list
+  - ~val null : 'a list -> bool~, tests if the list is empty
+  - ~val rev : 'a list -> 'a list~ reverses the list
+  - ~val tl : 'a list -> 'a list~ gives the rest of the list ~tl x::xs = xs~,
+    raises error if operating on empty list ~tl [] = raise Empty~
++ Characters
+  - ~val chr : int -> char~ produces a character from a "code point" integer
+  - ~val ord : char -> int~ produces the "code point" for a given integer
++ Options
+  - ~val getOpt : ('a option * 'a) -> 'a~
+  - ~val isSome : 'a option -> bool~
+  - ~val valOf : 'a option -> 'a~ gives the value of the option (i.e.,
+    ~valOf (SOME x) = x~)
++ Reals
+  - ~val ceil : real -> int~
+  - ~val floor : real -> int~
+  - ~val real : int -> real~ produces a real for a given int
+  - ~val round : real -> int~ rounds a real to its nearest integer
+  - ~val trunc : real -> int~ truncates a real (i.e., "throws away the
+    fractional part")
++ References
+  - ~val ref : 'a -> 'a ref~ 	primitive
+  - ~val ! : 'a ref -> 'a~
+  - ~val := : 'a ref * 'a -> unit~
++ Strings
+  - ~val ^ : string * string -> string~, an inline string concatenation
+    ~s ^ t~
+  - ~val concat : string list -> string~ concatenates together a list of
+    strings (~concat s::strs = foldr ^ s strs | [] = ""~)
+  - ~val explode : string -> char list~ produces the list of characters
+    in a string
+  - ~val implode : char list -> string~ creates a string from a list of
+    characters, should be the same as ~concat o (map str)~.
+  - ~val size : string -> int~ gives the size of the string
+  - ~val str : char -> string~ turns a character into a string, e.g.,
+    ~str #"a" = a~
+  - ~val substring : string * int * int -> string~ will produce the
+    substring starting at the first number taking a specific number of
+    characters,
+    e.g., ~substring (s,i,j)~ returns ~s[i..i+(j-1)]~; it raises an
+    exception if ~i < 0~ or ~j < 0~ or ~|s| < i+j~
++ Miscellaneous
+  + ~val not : bool -> bool~, negation (~not true = false~, ~not false=true~)
+  + ~val before : 'a * unit -> 'a~, an infixed operation, ~a before b~
+    returns a. It provides a notational shorthand for evaluating ~a~,
+    then ~b~, before returning the value of ~a~.
+  + ~val exnMessage : exn -> string~, get the message for an exception
+  + ~val exnName : exn -> string~, get the name for an exception
+  + ~val ignore : 'a -> unit~, ~ignore a~ returns ~()~. The purpose of
+    ignore is to discard the result of a computation, returning ~()~
+    instead. This is useful, for example, when a higher-order function,
+    such as ~List.app~, requires a function returning ~unit~, but the
+    function to be used returns values of some other type.
+  + ~val o : ('a->'b) * ('c->'a) -> 'c->'b~ composes functions, like
+    Haskell's dot operator, ~(g o f)(x) = g(f(x))~.
+  + ~val use : string -> unit~ will load a file (compiler/system dependent)
+  + ~val print : string -> unit~, prints a given string to the screen
+  + ~val vector : 'a list -> 'a vector~ produces a vector from a list
+
+There are also about a dozen "overloaded identifiers" which programmers
+may not overload:
+
+- ~val + : num * num -> num~ addition (defaults to ~num=int~)
+- ~val - : num * num -> num~, subtraction
+- ~val * : num * num -> num~, multiplication
+- ~val div : wordint * wordint -> wordint~, takes the quotient of
+  integers (or word-sized integers)
+- ~val mod : wordint * wordint -> wordint~, ~i mod j~ returns ~i-j*floor((i/j))~
+- ~val / : real * real -> real~ divides two real numbers
+- ~val ~ : num -> num~ negation, equivalent to multiplying by -1
+- ~val abs : realint -> realint~, the absolute value of either a ~real~
+  or an ~int~
+- ~val < : numtext * numtext -> bool~, compares two number (or two
+  strings lexicographically)
+- ~val > : numtext * numtext -> bool~, compares two number (or two
+  strings lexicographically)
+- ~val <= : numtext * numtext -> bool~, compares two number (or two
+  strings lexicographically)
+- ~val >= : numtext * numtext -> bool~, compares two number (or two
+  strings lexicographically)
+
+The top-level environment has the following infix identifiers and
+associated precedence levels:
+- infix  7  ~*~, ~/~, ~div~, ~mod~
+- infix  6  ~+~, ~-~, ~^~
+- infixr 5  ~::~, ~@~
+- infix  4  ~=~, ~<>~, ~>~, ~>=~, ~<~, ~<=~
+- infix  3  ~:=~, ~o~
+- infix  0  ~before~
+
+So we would parse ~a*b + i/j~ as ~(a*b) + (i/j)~ since the precedence
+for multiplication is higher than addition, and division is higher than
+addition.
+
+#+begin_remark
+There's a lot more functionality provided by the Standard ML built-in
+library, but the rest seem to be contained in modules.
+#+end_remark
+
+
+* Modules
+:PROPERTIES:
+:CUSTOM_ID: h-8a5ab802-daf2-4883-b486-87759924c0b7
+:END:
+
+We can structure programs using modules. Standard ML's module system is
+extraordinarily sophisticated. It consists of ~structure~, ~signature~,
+and ~functor~ (analogous to expressions, types, and functions).
+
+We can think of a structure as acting like a namespacing mechanism at
+minimum. For example,
+
+#+begin_src sml
+structure Foo = struct
+    val foo = [];
+    fun spam q::qs = 1 + spam qs
+      | spam    [] = 0;
+end;
+
+Foo.span Foo.foo; (* => 0 *)
+#+end_src
+
+** Signatures
+:PROPERTIES:
+:CUSTOM_ID: h-41283ae2-b29d-4a49-8ce1-dfd108f47ce7
+:END:
+
+Signatures specify a minimum necessary for a structure. Each entry in a
+signature is interpreted as a specification.
+
+#+begin_src sml
+signature QUEUE = sig
+    type 'a t; (* type of queues *)
+    exception E; (* for errors *)
+    val empty : 'a t; (* the empty queue *)
+    val enq : 'a t * 'a -> 'a t; (* add to end *)
+    val null : 'a t -> bool; (* test for empty queue *)
+    val hd : 'a t -> 'a; (* return the front of the queue *)
+    val deq : 'a t -> 'a t; (* remove the front of the queue *)
+end;
+#+end_src
+
+This seems to be the naming convention most Standard ML programmers use:
+signatures are ~ALL_UPPER_CASE~, structures are ~PascalCased~.
+
+Also, for something like this ~QUEUE~ signature, where the signature
+specifies a single type, it seems to be convention to call it "~t~"
+(presumably short for "type").
+
+We can "implement" a queue by making the types declared in the signature
+"transparent" (accessible outside the structure) or "opaque"
+(inaccessible outside the structure). For example:
+
+#+begin_src sml
+structure Q1 : QUEUE = struct
+    type 'a t = 'a list;
+    exception E;
+
+    val empty = [];
+
+    fun enq (q, x) = q@[x];
+
+    fun null(x::q) = false
+      | null _     = true;
+
+    fun head(x::q) = x
+      | head _     = raise E;
+
+    fun deq(x::q) = q
+      | deq _     = raise E;
+end;
+
+structure Q2 :> QUEUE = struct
+    type 'a t = 'a list;
+    exception E;
+
+    val empty = [];
+
+    fun enq (q, x) = q@[x];
+
+    fun null(x::q) = false
+      | null _     = true;
+
+    fun head(x::q) = x
+      | head _     = raise E;
+
+    fun deq(x::q) = q
+      | deq _     = raise E;
+end;
+
+List.null Q1.empty; (* evaluates to "true" *)
+
+List.null Q2.empty; (* ERROR!!! *)
+(* In SML/NJ we get:
+
+stdIn:7.1-7.19 Error: operator and operand do not agree [tycon mismatch]
+  operator domain: 'Z list
+  operand:         'Y Q3.t
+  in expression:
+    List.null Q3.empty
+
+In HaMLet:
+
+(input 2):1.0-1.18: type mismatch on application
+,*)
+#+end_src
+
+Since ~QUEUE~ had not defined its ~type 'a t~, when we have ~structure Q2~
+opaquely ascribe to ~QUEUE~, it hides the definition of ~type 'a t~: its
+constructors are hidden from the user, and distinct from existing
+constructors.
+
+*** Usefulness of Opaque Ascription
+:PROPERTIES:
+:CUSTOM_ID: h-d3c46854-c3eb-4747-ae77-ed8bfbc9cc47
+:END:
+
+If we don't want the user to cheat and use a certain data structure, we
+use opaque ascription ~:>~. Why on Earth would this be useful?
+
+In the LCF style of theorem provers, we have a ~KERNEL~ signature which
+encodes the state of the theorem prover. We encode *proven* theorems
+using a ~thm~ data type. But we do not want the user to promote any
+arbitrary formula to be a theorem. How can we enforce using only certain
+specific axioms?
+
+With opaque signature ascription! We have
+
+#+begin_src sml
+signature KERNEL = sig
+    type thm;
+    type context;
+
+    val axiom_trueR : context -> thm;
+    (* other inference rules omitted *)
+end;
+
+structure Kernel :> KERNEL = struct
+    datatype thm = datatype Syntax.formula;
+    type context = Syntax.formula list;
+
+    (* inference rules omitted *)
+end;
+#+end_src
+
+If a user tries to do something like ~thm my_result = RiemannHypothesisFormula~,
+then they'll get an error.
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-8bb21485-1413-4bef-9b13-d8255e14c965
 :END:
+
+- John Mitchell and Robert Harper,\\
+  "The Essence of ML".
+- Robert Harper and Christopher Stone,\\
+  "An Interpretation of Standard ML in Type Theory".\\
+  CMU-CS-97-147 Tech. Report, dated June 27, 1997, [[https://www.cs.cmu.edu/~rwh/papers/ismltt/ismltt.pdf][PDF]].
+
+** Standard Basis
+:PROPERTIES:
+:CUSTOM_ID: h-8f79e9f1-f460-40a5-8172-d70436622563
+:END:
+
+- Implementations
+  - [[https://github.com/sml-nj/smlnj/blob/master/sml/system/Basis/Implementation/][SML/NJ]] (see also [[http://smlnj-gforge.cs.uchicago.edu/scm/viewvc.php/sml/trunk/system/Basis/Implementation/?root=smlnj][cvs]])
+  - [[https://github.com/rossberg/hamlet/tree/master/basis][HaMLet]]
+  - [[https://github.com/polyml/polyml/tree/master/basis][PolyML]]
+
+** Tutorials
+:PROPERTIES:
+:CUSTOM_ID: h-cf15cca4-a340-407e-9cbc-4a7eed153e63
+:END:
+
+- Lawrence Paulson,\\
+  {{{book-title(ML for the Working Programmer)}}}.
+  CUP, second ed., 1996; [[https://www.cl.cam.ac.uk/~lp15/MLbook/pub-details.html][Online version]]
+- M.Tofte,
+  "Tips for Computer Scientists on Standard ML (Revised)".
+  [[https://www.cs.tufts.edu/comp/105-2020f/readings/tofte-tips.pdf][Eprint]].
+
+** Definition of Standard ML
+:PROPERTIES:
+:CUSTOM_ID: h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940
+:END:
+
+There is a precise definition of Standard ML (first [[https://smlfamily.github.io/sml90-defn.pdf][published]] in 1990, later
+[[https://smlfamily.github.io/sml97-defn.pdf][revised]] in 1997).
+
+- The "initial basis" (top-level environment provided by Standard ML)
+  is described [[https://smlfamily.github.io/Basis/top-level-chapter.html][here]], and the [[https://smlfamily.github.io/Basis/][Standard Basis documentation]] describes the
+  libraries provided "out of the box".
+  - [[https://smlfamily.github.io/Basis/toc.html][Standard ML Basis documentation]]
+- Robin Milner, Mads Tofte,\\
+  {{{book-title(Commentary on Standard ML)}}}.\\
+  MIT Press, 1991; [[https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.368.3752&rep=rep1&type=pdf][CiteSeerX]]
+  - Anyone trying to read the formal definition should start with this
+    commentary and the 1990 definition; although the 1997 revision is
+    now the standard, it seems to have only modified the module portion
+    of the definition.
+- Daniel K. Lee, Karl Crary, Robert Harper,\\
+  "Mechanizing the Metatheory of Standard ML".\\
+  Tech. Report, [[http://www.cs.cmu.edu/~dklee/papers/tslf.pdf][PDF]]
+  - Harper and friends have produced a [[http://www.cs.cmu.edu/~dklee/tslf/][mechanization]] in Twelf of the
+    definition of Standard ML (amazing!)
+
+** Classic ML
+:PROPERTIES:
+:CUSTOM_ID: h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc
+:END:
+
+A "dialect", I suppose we could call the "primordial Ur ML" (or
+"pre-Standard ML").
+
+- Christoph Kreitz and Vincent Rahli,
+  "Introduction to Classic ML".
+  [[http://www.nuprl.org/KB/show.php?ShowPub=KR11][Eprint]], dated 2011.
 
 ** PCF
 :PROPERTIES:
 :CUSTOM_ID: h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa
 :END:
 
+- Martin Hotzel Escardo, [[https://www.cs.bham.ac.uk/~mhe/papers/RNC3.pdf][Introduction to Real PCF]].
+- John C Mitchell,\\
+  {{{book-title(Foundations for Programming Languages)}}}.\\
+  MIT Press, 1996;
+  Chapter 2 discusses PCF, using an ML-like syntax.
+- Gilles Dowek,\\
+  {{{book-title(Introduction to the Theory of Programming Languages)}}}.
+  Springer, 2011; chapter 2 introduces PCF.
+- Ingmar Dasseville, Marc Denecker,\\
+  "Transpiling Programmable Computable Functions to Answer Set Programs".
+  {{{arXiv(1808.07770)}}}, 15 pages.
+- Catuscia Palamidessi,\\
+  "The Language PCF".\\
+  [[http://www.lix.polytechnique.fr/Labo/Catuscia.Palamidessi/teaching/cg520/98Fall/lecture_notes_98/L11.html][Lecture Notes]], 1998, CSE520
 
+*** Full Abstraction of PCF
+:PROPERTIES:
+:CUSTOM_ID: h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb
+:END:
 There are concerns about whether the operational semantics of PCF
 coincides with its denotational semantics; if so, then it's a property
 called [[https://plato.stanford.edu/entries/games-abstraction/]["full abstraction"]] (Stanford encyclopedia of philosophy entry).
 
-Hyland and Ong note:
+Hyland and Ong's "On Full Abstraction for PCF: I, II, and III" note on
+page 293:
 
 #+NAME: quote-pcf
 #+ATTR_HTML: :id quote-pcf

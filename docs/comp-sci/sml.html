@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 17:49 -->
+<!-- 2021-07-10 Sat 19:19 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Standard ML</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -242,18 +242,63 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#h-507f2c0c-f5e9-4589-926e-9ef4b6b62622">1. Overview</a></li>
-<li><a href="#h-8bb21485-1413-4bef-9b13-d8255e14c965">2. References</a>
+<li><a href="#h-ecf81378-cc50-4217-94cb-971e4ec51413">2. Core Language</a>
 <ul>
-<li><a href="#h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa">2.1. PCF</a></li>
-<li><a href="#h-412ef711-6f44-4b0b-bdea-31d24d849d87">2.2. Category Theory</a></li>
+<li><a href="#h-1c6c13a5-097d-4bdc-a46b-340ad8527af4">2.1. Values</a></li>
+<li><a href="#h-e732e4de-a608-4f24-8c76-cdaaf08da5f6">2.2. Functions</a>
+<ul>
+<li><a href="#h-8abe6c8b-d365-461c-ab27-6a25e7f1e7e6">2.2.1. Semantics</a></li>
+</ul>
+</li>
+<li><a href="#h-5334a3b3-dce4-4839-8355-3f0e5787381b">2.3. Expressions</a></li>
+<li><a href="#h-6001f34b-fc1a-465b-aa48-423c135b9201">2.4. Boolean Operators</a></li>
+<li><a href="#h-d089eb20-5800-457a-ab86-4dca3ff3c60c">2.5. Types</a>
+<ul>
+<li><a href="#h-43934354-d980-4def-9ab7-7e68d303df78">2.5.1. Records</a></li>
+<li><a href="#h-7504a762-210f-4259-9f3e-7f478ce9c328">2.5.2. Pattern Matching in Functions</a></li>
+</ul>
+</li>
+<li><a href="#h-4b7e79f2-48fb-4a60-96f1-e9fb645c82e1">2.6. References to Memory Locations</a></li>
+<li><a href="#h-41afbff2-e546-4cda-a2a6-62612610b9ae">2.7. Primitive Functions and Types</a></li>
+</ul>
+</li>
+<li><a href="#h-8a5ab802-daf2-4883-b486-87759924c0b7">3. Modules</a>
+<ul>
+<li><a href="#h-41283ae2-b29d-4a49-8ce1-dfd108f47ce7">3.1. Signatures</a>
+<ul>
+<li><a href="#h-d3c46854-c3eb-4747-ae77-ed8bfbc9cc47">3.1.1. Usefulness of Opaque Ascription</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-8bb21485-1413-4bef-9b13-d8255e14c965">4. References</a>
+<ul>
+<li><a href="#h-8f79e9f1-f460-40a5-8172-d70436622563">4.1. Standard Basis</a></li>
+<li><a href="#h-cf15cca4-a340-407e-9cbc-4a7eed153e63">4.2. Tutorials</a></li>
+<li><a href="#h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940">4.3. Definition of Standard ML</a></li>
+<li><a href="#h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc">4.4. Classic ML</a></li>
+<li><a href="#h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa">4.5. PCF</a>
+<ul>
+<li><a href="#h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb">4.5.1. Full Abstraction of PCF</a></li>
+</ul>
+</li>
+<li><a href="#h-412ef711-6f44-4b0b-bdea-31d24d849d87">4.6. Category Theory</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
+<div class="remark" id="org9d381d2">
+<p>
+This page has gotten a little unruly. I might refactor out the
+discussion of the Core and Module language into a separate tutorial
+page. For <a href="sml/index.html">additional topics</a>, I have separated out other discussions.
+</p>
+
+</div>
 
 <div id="outline-container-h-507f2c0c-f5e9-4589-926e-9ef4b6b62622" class="outline-2">
-<h2 id="h-507f2c0c-f5e9-4589-926e-9ef4b6b62622"><span class="section-number-2">1</span> Overview</h2>
+<h2 id="h-507f2c0c-f5e9-4589-926e-9ef4b6b62622"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-507f2c0c-f5e9-4589-926e-9ef4b6b62622">
 <p>
 The primordial "statically typed functional programming language",
@@ -282,14 +327,802 @@ an interesting little language.
 </div>
 </div>
 
+<div id="outline-container-h-ecf81378-cc50-4217-94cb-971e4ec51413" class="outline-2">
+<h2 id="h-ecf81378-cc50-4217-94cb-971e4ec51413"><span class="section-number-2">2.</span> Core Language</h2>
+<div class="outline-text-2" id="text-h-ecf81378-cc50-4217-94cb-971e4ec51413">
+<p>
+The top-level amounts to declaration of values, functions, and type
+definitions. Let's examine these one-by-one.
+</p>
+</div>
+
+<div id="outline-container-h-1c6c13a5-097d-4bdc-a46b-340ad8527af4" class="outline-3">
+<h3 id="h-1c6c13a5-097d-4bdc-a46b-340ad8527af4"><span class="section-number-3">2.1.</span> Values</h3>
+<div class="outline-text-3" id="text-h-1c6c13a5-097d-4bdc-a46b-340ad8527af4">
+<p>
+These are the easiest to visualize and explain. Values are named
+constants.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 3.14159; <span class="org-comment-delimiter">(* </span><span class="org-comment">A declaration without a type annotation </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">val</span> <span class="org-variable-name">tau</span> : real = 6.28318; <span class="org-comment-delimiter">(* </span><span class="org-comment">An annotated declaration </span><span class="org-comment-delimiter">*)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-e732e4de-a608-4f24-8c76-cdaaf08da5f6" class="outline-3">
+<h3 id="h-e732e4de-a608-4f24-8c76-cdaaf08da5f6"><span class="section-number-3">2.2.</span> Functions</h3>
+<div class="outline-text-3" id="text-h-e732e4de-a608-4f24-8c76-cdaaf08da5f6">
+<p>
+There are two styles to declaring functions, the curried approach and
+the uncurried approach. The uncurried approach declares the function to
+take a tuple and produce a value.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> cylinder_volume(r,h) = pi*r*r*h;
+</pre>
+</div>
+
+<p>
+We can optionally annotate each parameter with its type:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> cyl_vol2(r : real, h : real) = pi*r*r*h;
+</pre>
+</div>
+
+<p>
+We can optionally annotate the result
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> cyl_vol3(r,h) : real = pi*r*r*h;
+</pre>
+</div>
+
+<p>
+We can use curried versions:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">cyl_vol4</span> r h = pi*r*r*h;
+</pre>
+</div>
+
+<p>
+To have a type annotated curried function definition, we must
+parenthetize each argument to declare its type:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">cyl_vol5</span> (r : real) (h : real) = pi*r*r*h;
+</pre>
+</div>
+
+<p>
+This makes the line really long when we have more than a couple
+arguments to a function; I suspect this is one reason people use
+signatures and modules. We stick the declaration in the signature and
+the definition in the module, but we'll tackle that later.
+</p>
+</div>
+
+<div id="outline-container-h-8abe6c8b-d365-461c-ab27-6a25e7f1e7e6" class="outline-4">
+<h4 id="h-8abe6c8b-d365-461c-ab27-6a25e7f1e7e6"><span class="section-number-4">2.2.1.</span> Semantics</h4>
+<div class="outline-text-4" id="text-h-8abe6c8b-d365-461c-ab27-6a25e7f1e7e6">
+<p>
+Function calls are call-by-value (i.e., evaluate the arguments, then
+copy the value to be bound by the formal parameters).
+</p>
+
+<p>
+Also, when a function is defined, it binds with the environment
+available at the time. For example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 3.14159;
+
+<span class="org-keyword">fun</span> area(r) = pi*r*r;
+
+<span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 1.0; <span class="org-comment-delimiter">(* </span><span class="org-comment">redefinitions are allowed </span><span class="org-comment-delimiter">*)</span>
+
+area(1.0);
+</pre>
+</div>
+
+<p>
+What do you think will be produced? Well, when <code>area</code> was defined, <code>pi</code>
+was bound to <code>3.14159</code>, so <code>area(1.0)</code> evaluates to <code>3.14159*1.0*1.0</code>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-5334a3b3-dce4-4839-8355-3f0e5787381b" class="outline-3">
+<h3 id="h-5334a3b3-dce4-4839-8355-3f0e5787381b"><span class="section-number-3">2.3.</span> Expressions</h3>
+<div class="outline-text-3" id="text-h-5334a3b3-dce4-4839-8355-3f0e5787381b">
+<p>
+Besides the usual arithmetic expressions, we have a few more worth
+mentioning:
+</p>
+<ul class="org-ul">
+<li><code>let-in-end</code> expressions for local definitions</li>
+<li><code>if-then-else</code> expressions for conditional flow</li>
+<li><code>case</code> expressions for pattern matching</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-6001f34b-fc1a-465b-aa48-423c135b9201" class="outline-3">
+<h3 id="h-6001f34b-fc1a-465b-aa48-423c135b9201"><span class="section-number-3">2.4.</span> Boolean Operators</h3>
+<div class="outline-text-3" id="text-h-6001f34b-fc1a-465b-aa48-423c135b9201">
+<p>
+Care must be taken, since in Standard ML the boolean operators provided
+are:
+</p>
+<ul class="org-ul">
+<li><code>andalso</code> for short-circuiting conjunction</li>
+<li><code>orelse</code> for short-circuiting disjunction</li>
+<li><code>not</code> for negation</li>
+</ul>
+
+<p>
+The <code>and</code> keyword has a technical meaning for simultaneous definitions.
+</p>
+
+<p>
+We test for equality using <code>=</code> and inequality using <code>&lt;&gt;</code>, but this only
+works on "equality types" (unit, int, word, char, string, array, vector, ref).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-d089eb20-5800-457a-ab86-4dca3ff3c60c" class="outline-3">
+<h3 id="h-d089eb20-5800-457a-ab86-4dca3ff3c60c"><span class="section-number-3">2.5.</span> Types</h3>
+<div class="outline-text-3" id="text-h-d089eb20-5800-457a-ab86-4dca3ff3c60c">
+<p>
+The built-in types include: <code>bool</code>, <code>int</code>, <code>real</code> (for floating point),
+<code>char</code>, <code>string</code>, and <code>unit</code> (analogous to <code>void</code> in C-like languages).
+We can build tuples using the Cartesian product, written <code>T1*T2</code> for the
+product of type <code>T1</code> with type <code>T2</code>. Function types are built using
+arrows <code>T1 -&gt; T2</code>, like in Haskell or OCaml.
+</p>
+
+<p>
+There are two ways to introduce types: one is to make an alias of an
+existing type, the other is to construct an algebraic data type.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Identifier</span> = string;
+
+<span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> = Var <span class="org-keyword">of</span> Identifier
+              | Abs <span class="org-keyword">of</span> (Expr*Expr)
+              | App <span class="org-keyword">of</span> (Expr*Expr);
+</pre>
+</div>
+
+<p>
+It's important to note the constructor is separated from the rest of the
+row by an "<code>of</code>" keyword.
+</p>
+
+<p>
+<b>CAUTION:</b> Unlike Haskell, Standard ML writes parametrized types
+"backwards"; e.g., in Haskell we have a <code>List int</code>, but in Standard ML
+we have <code>int list</code>.
+</p>
+
+<div class="remark" id="org5e0fd59">
+<p>
+Unlike Haskell, if we want to have a parametrized type, we need to
+include the apostrophe, e.g., <code>datatype 'a Foo = Bar of ('a * int)</code>.
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-h-43934354-d980-4def-9ab7-7e68d303df78" class="outline-4">
+<h4 id="h-43934354-d980-4def-9ab7-7e68d303df78"><span class="section-number-4">2.5.1.</span> Records</h4>
+<div class="outline-text-4" id="text-h-43934354-d980-4def-9ab7-7e68d303df78">
+<p>
+Records are key-value data structures, like tuples, but we access a
+field by name rather than by its position.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">person</span> : {name:string,
+               age:int,
+               born:int,
+               occupation:string};
+<span class="org-keyword">val</span> <span class="org-variable-name">harry</span> : person = {name = <span class="org-string">"Harry"</span>,
+                      age = 17,
+                      born = 1956,
+                      occupation = <span class="org-string">"Master of the Universe"</span>};
+
+print (#occupation harry); <span class="org-comment-delimiter">(* </span><span class="org-comment">prints "Master of the Universe" to screen </span><span class="org-comment-delimiter">*)</span>
+</pre>
+</div>
+
+<p>
+We can destructure records in functions, provided we give a type
+annotation (the "<code>: person</code>" in parentheses). Without it, we get an
+error alerting us about an unresolved flexible record type.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-rml">fun is_nice ({occupation,...} : person) =
+    occupation="Barista" orelse occupation="Cook";
+
+(* alternatively *)
+fun is_really_nice(p : person) =
+let
+    val {occupation, ...} = p (* example of destructuring value declarations *)
+in
+    occupation="Barista" orelse occupation="Cook"
+end;
+</pre>
+</div>
+
+<p>
+Without the dots in either destructuring instance produces errors
+(mismatch between pattern and expression).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-7504a762-210f-4259-9f3e-7f478ce9c328" class="outline-4">
+<h4 id="h-7504a762-210f-4259-9f3e-7f478ce9c328"><span class="section-number-4">2.5.2.</span> Pattern Matching in Functions</h4>
+<div class="outline-text-4" id="text-h-7504a762-210f-4259-9f3e-7f478ce9c328">
+<p>
+We can continue with our expression data structure, and compute the
+number of symbols involved "by cases":
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Identifier</span> = string;
+
+<span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> = Var <span class="org-keyword">of</span> Identifier
+              | Abs <span class="org-keyword">of</span> (Expr*Expr)
+              | App <span class="org-keyword">of</span> (Expr*Expr);
+
+<span class="org-keyword">fun</span> expr_length(Var id) = 1
+  | expr_length(Abs(e1, e2)) = expr_length e1 + expr_length e2 + 1
+  | expr_length(App(e1, e2)) = expr_length e1 + expr_length e2;
+</pre>
+</div>
+
+<p>
+We can have a "catch all" pattern which handles all other cases. For
+example, if we want to count the number of distinct <code>Abs</code> instances in
+an expression, we could write:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> abs_count(Abs(e1, e2)) = 1 + abs_count e1 + abs_count e2
+  | abs_count(App(e1, e2)) = abs_count e1 + abs_count e2
+  | _ = 0;
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-4b7e79f2-48fb-4a60-96f1-e9fb645c82e1" class="outline-3">
+<h3 id="h-4b7e79f2-48fb-4a60-96f1-e9fb645c82e1"><span class="section-number-3">2.6.</span> References to Memory Locations</h3>
+<div class="outline-text-3" id="text-h-4b7e79f2-48fb-4a60-96f1-e9fb645c82e1">
+<p>
+Standard ML provides the ability to have mutable variables, by making
+them references to memory locations. Basically, we dereference the <code>ref</code>
+using an exclamation point, and assign it a value using <code>:=</code>. For
+example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">iref</span> : int ref;
+
+iref := 3; <span class="org-comment-delimiter">(* </span><span class="org-comment">initialize the ref </span><span class="org-comment-delimiter">*)</span>
+
+iref := !iref - 1; <span class="org-comment-delimiter">(* </span><span class="org-comment">update the ref </span><span class="org-comment-delimiter">*)</span>
+
+<span class="org-keyword">val</span> <span class="org-variable-name">foo</span> : int = (!iref)*7; <span class="org-comment-delimiter">(* </span><span class="org-comment">use the ref </span><span class="org-comment-delimiter">*)</span>
+</pre>
+</div>
+
+<p>
+We should think of <code>ref</code> as a parametrized type, <code>'a ref</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-41afbff2-e546-4cda-a2a6-62612610b9ae" class="outline-3">
+<h3 id="h-41afbff2-e546-4cda-a2a6-62612610b9ae"><span class="section-number-3">2.7.</span> Primitive Functions and Types</h3>
+<div class="outline-text-3" id="text-h-41afbff2-e546-4cda-a2a6-62612610b9ae">
+<p>
+We are given some initial functions and type declarations in the
+"initial basis". The types given:
+</p>
+
+<ul class="org-ul">
+<li><code>eqtype unit</code> which has a single value, <code>()</code></li>
+<li><code>eqtype int</code></li>
+<li><code>eqtype word</code></li>
+<li><code>type real</code> for floating point numbers</li>
+<li><code>eqtype char</code>, characters are indicated by <code>#"a"</code> for 'a', or <code>#"\n"</code>
+for a newline character, or <code>#"\uxxxx"</code> where <code>xxxx</code> are 4 hexadecimal constants</li>
+<li><code>eqtype string</code> for strings (double quoted, <code>"foo"</code>)</li>
+<li><code>type substring</code></li>
+<li><code>type exn</code> for exceptions</li>
+<li><code>eqtype 'a array</code></li>
+<li><code>eqtype 'a vector</code></li>
+<li><code>eqtype 'a ref</code></li>
+<li><code>datatype bool = false | true</code></li>
+<li><code>datatype 'a option = NONE | SOME of 'a</code></li>
+<li><code>datatype order = LESS | EQUAL | GREATER</code></li>
+<li><code>datatype 'a list = nil | ​:​: of ('a * 'a list)</code></li>
+</ul>
+
+<p>
+There are about a dozen primitive exceptions defined:
+</p>
+
+<pre class="example" id="org46acfca">
+exception Bind
+exception Chr
+exception Div
+exception Domain
+exception Empty
+exception Fail of string
+exception Match
+exception Option
+exception Overflow
+exception Size
+exception Span
+exception Subscript
+</pre>
+
+<p>
+The non-overloaded functions provided at the top-level:
+</p>
+
+<ul class="org-ul">
+<li>List functions
+<ul class="org-ul">
+<li><code>val app : ('a -&gt; unit) -&gt; 'a list -&gt; unit</code>, so <code>app f lst</code> applies
+<code>f</code> to <code>lst</code> ("from left to right")</li>
+<li><code>val @ : ('a list * 'a list) -&gt; 'a list</code> for concatenating lists</li>
+<li><code>val foldl : ('a*'b-&gt;'b)-&gt; 'b -&gt; 'a list -&gt; 'b</code>, interpreted as
+<code>foldl f init x1::xs = foldl f f(x1,init) xs</code>, and <code>foldl f init [] = init</code>.</li>
+<li><code>val foldr : ('a*'b-&gt;'b)-&gt; 'b -&gt; 'a list -&gt; 'b</code>, interpreted as
+<code>foldr f init x::xs = f(x, foldr f init xs)</code>, and <code>foldr f init [] = init</code>.</li>
+<li><code>val hd : 'a list -&gt; 'a</code> produces the first element in a list <code>hd x::xs = x</code>,
+raises error if operating on empty list <code>hd [] = raise Empty</code></li>
+<li><code>val length : 'a list -&gt; int</code> for the length of a list</li>
+<li><code>val map : ('a -&gt; 'b) -&gt; 'a list -&gt; 'b list</code> produces a new list by
+applying a function to each element of the supplied list</li>
+<li><code>val null : 'a list -&gt; bool</code>, tests if the list is empty</li>
+<li><code>val rev : 'a list -&gt; 'a list</code> reverses the list</li>
+<li><code>val tl : 'a list -&gt; 'a list</code> gives the rest of the list <code>tl x::xs = xs</code>,
+raises error if operating on empty list <code>tl [] = raise Empty</code></li>
+</ul></li>
+<li>Characters
+<ul class="org-ul">
+<li><code>val chr : int -&gt; char</code> produces a character from a "code point" integer</li>
+<li><code>val ord : char -&gt; int</code> produces the "code point" for a given integer</li>
+</ul></li>
+<li>Options
+<ul class="org-ul">
+<li><code>val getOpt : ('a option * 'a) -&gt; 'a</code></li>
+<li><code>val isSome : 'a option -&gt; bool</code></li>
+<li><code>val valOf : 'a option -&gt; 'a</code> gives the value of the option (i.e.,
+<code>valOf (SOME x) = x</code>)</li>
+</ul></li>
+<li>Reals
+<ul class="org-ul">
+<li><code>val ceil : real -&gt; int</code></li>
+<li><code>val floor : real -&gt; int</code></li>
+<li><code>val real : int -&gt; real</code> produces a real for a given int</li>
+<li><code>val round : real -&gt; int</code> rounds a real to its nearest integer</li>
+<li><code>val trunc : real -&gt; int</code> truncates a real (i.e., "throws away the
+fractional part")</li>
+</ul></li>
+<li>References
+<ul class="org-ul">
+<li><code>val ref : 'a -&gt; 'a ref</code>  primitive</li>
+<li><code>val ! : 'a ref -&gt; 'a</code></li>
+<li><code>val := : 'a ref * 'a -&gt; unit</code></li>
+</ul></li>
+<li>Strings
+<ul class="org-ul">
+<li><code>val ^ : string * string -&gt; string</code>, an inline string concatenation
+<code>s ^ t</code></li>
+<li><code>val concat : string list -&gt; string</code> concatenates together a list of
+strings (<code>concat s::strs = foldr ^ s strs | [] = ""</code>)</li>
+<li><code>val explode : string -&gt; char list</code> produces the list of characters
+in a string</li>
+<li><code>val implode : char list -&gt; string</code> creates a string from a list of
+characters, should be the same as <code>concat o (map str)</code>.</li>
+<li><code>val size : string -&gt; int</code> gives the size of the string</li>
+<li><code>val str : char -&gt; string</code> turns a character into a string, e.g.,
+<code>str #"a" = a</code></li>
+<li><code>val substring : string * int * int -&gt; string</code> will produce the
+substring starting at the first number taking a specific number of
+characters,
+e.g., <code>substring (s,i,j)</code> returns <code>s[i..i+(j-1)]</code>; it raises an
+exception if <code>i &lt; 0</code> or <code>j &lt; 0</code> or <code>|s| &lt; i+j</code></li>
+</ul></li>
+<li>Miscellaneous
+<ul class="org-ul">
+<li><code>val not : bool -&gt; bool</code>, negation (<code>not true = false</code>, <code>not false=true</code>)</li>
+<li><code>val before : 'a * unit -&gt; 'a</code>, an infixed operation, <code>a before b</code>
+returns a. It provides a notational shorthand for evaluating <code>a</code>,
+then <code>b</code>, before returning the value of <code>a</code>.</li>
+<li><code>val exnMessage : exn -&gt; string</code>, get the message for an exception</li>
+<li><code>val exnName : exn -&gt; string</code>, get the name for an exception</li>
+<li><code>val ignore : 'a -&gt; unit</code>, <code>ignore a</code> returns <code>()</code>. The purpose of
+ignore is to discard the result of a computation, returning <code>()</code>
+instead. This is useful, for example, when a higher-order function,
+such as <code>List.app</code>, requires a function returning <code>unit</code>, but the
+function to be used returns values of some other type.</li>
+<li><code>val o : ('a-&gt;'b) * ('c-&gt;'a) -&gt; 'c-&gt;'b</code> composes functions, like
+Haskell's dot operator, <code>(g o f)(x) = g(f(x))</code>.</li>
+<li><code>val use : string -&gt; unit</code> will load a file (compiler/system dependent)</li>
+<li><code>val print : string -&gt; unit</code>, prints a given string to the screen</li>
+<li><code>val vector : 'a list -&gt; 'a vector</code> produces a vector from a list</li>
+</ul></li>
+</ul>
+
+<p>
+There are also about a dozen "overloaded identifiers" which programmers
+may not overload:
+</p>
+
+<ul class="org-ul">
+<li><code>val + : num * num -&gt; num</code> addition (defaults to <code>num=int</code>)</li>
+<li><code>val - : num * num -&gt; num</code>, subtraction</li>
+<li><code>val * : num * num -&gt; num</code>, multiplication</li>
+<li><code>val div : wordint * wordint -&gt; wordint</code>, takes the quotient of
+integers (or word-sized integers)</li>
+<li><code>val mod : wordint * wordint -&gt; wordint</code>, <code>i mod j</code> returns <code>i-j*floor((i/j))</code></li>
+<li><code>val / : real * real -&gt; real</code> divides two real numbers</li>
+<li><code>val ~ : num -&gt; num</code> negation, equivalent to multiplying by -1</li>
+<li><code>val abs : realint -&gt; realint</code>, the absolute value of either a <code>real</code>
+or an <code>int</code></li>
+<li><code>val &lt; : numtext * numtext -&gt; bool</code>, compares two number (or two
+strings lexicographically)</li>
+<li><code>val &gt; : numtext * numtext -&gt; bool</code>, compares two number (or two
+strings lexicographically)</li>
+<li><code>val &lt;= : numtext * numtext -&gt; bool</code>, compares two number (or two
+strings lexicographically)</li>
+<li><code>val &gt;= : numtext * numtext -&gt; bool</code>, compares two number (or two
+strings lexicographically)</li>
+</ul>
+
+<p>
+The top-level environment has the following infix identifiers and
+associated precedence levels:
+</p>
+<ul class="org-ul">
+<li>infix  7  <code>*</code>, <code>/</code>, <code>div</code>, <code>mod</code></li>
+<li>infix  6  <code>+</code>, <code>-</code>, <code>^</code></li>
+<li>infixr 5  <code>::</code>, <code>@</code></li>
+<li>infix  4  <code>=</code>, <code>&lt;&gt;</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code></li>
+<li>infix  3  <code>:=</code>, <code>o</code></li>
+<li>infix  0  <code>before</code></li>
+</ul>
+
+<p>
+So we would parse <code>a*b + i/j</code> as <code>(a*b) + (i/j)</code> since the precedence
+for multiplication is higher than addition, and division is higher than
+addition.
+</p>
+
+<div class="remark" id="orgba64d11">
+<p>
+There's a lot more functionality provided by the Standard ML built-in
+library, but the rest seem to be contained in modules.
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-h-8a5ab802-daf2-4883-b486-87759924c0b7" class="outline-2">
+<h2 id="h-8a5ab802-daf2-4883-b486-87759924c0b7"><span class="section-number-2">3.</span> Modules</h2>
+<div class="outline-text-2" id="text-h-8a5ab802-daf2-4883-b486-87759924c0b7">
+<p>
+We can structure programs using modules. Standard ML's module system is
+extraordinarily sophisticated. It consists of <code>structure</code>, <code>signature</code>,
+and <code>functor</code> (analogous to expressions, types, and functions).
+</p>
+
+<p>
+We can think of a structure as acting like a namespacing mechanism at
+minimum. For example,
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">Foo</span> = <span class="org-keyword">struct</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">foo</span> = [];
+    <span class="org-keyword">fun</span> <span class="org-function-name">spam</span> q::qs = 1 + spam qs
+      | spam    [] = 0;
+<span class="org-keyword">end</span>;
+
+Foo.span Foo.foo; <span class="org-comment-delimiter">(* </span><span class="org-comment">=&gt; 0 </span><span class="org-comment-delimiter">*)</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-41283ae2-b29d-4a49-8ce1-dfd108f47ce7" class="outline-3">
+<h3 id="h-41283ae2-b29d-4a49-8ce1-dfd108f47ce7"><span class="section-number-3">3.1.</span> Signatures</h3>
+<div class="outline-text-3" id="text-h-41283ae2-b29d-4a49-8ce1-dfd108f47ce7">
+<p>
+Signatures specify a minimum necessary for a structure. Each entry in a
+signature is interpreted as a specification.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">QUEUE</span> = <span class="org-keyword">sig</span>
+    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>; <span class="org-comment-delimiter">(* </span><span class="org-comment">type of queues </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-keyword">exception</span> E; <span class="org-comment-delimiter">(* </span><span class="org-comment">for errors </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">the empty queue </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">enq</span> : 'a t * 'a -&gt; 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">add to end </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">null</span> : 'a t -&gt; bool; <span class="org-comment-delimiter">(* </span><span class="org-comment">test for empty queue </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">hd</span> : 'a t -&gt; 'a; <span class="org-comment-delimiter">(* </span><span class="org-comment">return the front of the queue </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">deq</span> : 'a t -&gt; 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">remove the front of the queue </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+This seems to be the naming convention most Standard ML programmers use:
+signatures are <code>ALL_UPPER_CASE</code>, structures are <code>PascalCased</code>.
+</p>
+
+<p>
+Also, for something like this <code>QUEUE</code> signature, where the signature
+specifies a single type, it seems to be convention to call it "<code>t</code>"
+(presumably short for "type").
+</p>
+
+<p>
+We can "implement" a queue by making the types declared in the signature
+"transparent" (accessible outside the structure) or "opaque"
+(inaccessible outside the structure). For example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">Q1</span> : QUEUE = <span class="org-keyword">struct</span>
+    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span> = 'a list;
+    <span class="org-keyword">exception</span> E;
+
+    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = [];
+
+    <span class="org-keyword">fun</span> <span class="org-function-name">enq</span> (q, x) = q@[x];
+
+    <span class="org-keyword">fun</span> null(x::q) = false
+      | null _     = true;
+
+    <span class="org-keyword">fun</span> head(x::q) = x
+      | head _     = <span class="org-keyword">raise</span> E;
+
+    <span class="org-keyword">fun</span> deq(x::q) = q
+      | deq _     = <span class="org-keyword">raise</span> E;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">structure</span> <span class="org-module-def">Q2</span> :&gt; QUEUE = <span class="org-keyword">struct</span>
+    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span> = 'a list;
+    <span class="org-keyword">exception</span> E;
+
+    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = [];
+
+    <span class="org-keyword">fun</span> <span class="org-function-name">enq</span> (q, x) = q@[x];
+
+    <span class="org-keyword">fun</span> null(x::q) = false
+      | null _     = true;
+
+    <span class="org-keyword">fun</span> head(x::q) = x
+      | head _     = <span class="org-keyword">raise</span> E;
+
+    <span class="org-keyword">fun</span> deq(x::q) = q
+      | deq _     = <span class="org-keyword">raise</span> E;
+<span class="org-keyword">end</span>;
+
+List.null Q1.empty; <span class="org-comment-delimiter">(* </span><span class="org-comment">evaluates to "true" </span><span class="org-comment-delimiter">*)</span>
+
+List.null Q2.empty; <span class="org-comment-delimiter">(* </span><span class="org-comment">ERROR!!! </span><span class="org-comment-delimiter">*)</span>
+<span class="org-comment-delimiter">(* </span><span class="org-comment">In SML/NJ we get:</span>
+
+<span class="org-comment">stdIn:7.1-7.19 Error: operator and operand do not agree [tycon mismatch]</span>
+<span class="org-comment">  operator domain: 'Z list</span>
+<span class="org-comment">  operand:         'Y Q3.t</span>
+<span class="org-comment">  in expression:</span>
+<span class="org-comment">    List.null Q3.empty</span>
+
+<span class="org-comment">In HaMLet:</span>
+
+<span class="org-comment">(input 2):1.0-1.18: type mismatch on application</span>
+<span class="org-comment-delimiter">*)</span>
+</pre>
+</div>
+
+<p>
+Since <code>QUEUE</code> had not defined its <code>type 'a t</code>, when we have <code>structure Q2</code>
+opaquely ascribe to <code>QUEUE</code>, it hides the definition of <code>type 'a t</code>: its
+constructors are hidden from the user, and distinct from existing
+constructors.
+</p>
+</div>
+
+<div id="outline-container-h-d3c46854-c3eb-4747-ae77-ed8bfbc9cc47" class="outline-4">
+<h4 id="h-d3c46854-c3eb-4747-ae77-ed8bfbc9cc47"><span class="section-number-4">3.1.1.</span> Usefulness of Opaque Ascription</h4>
+<div class="outline-text-4" id="text-h-d3c46854-c3eb-4747-ae77-ed8bfbc9cc47">
+<p>
+If we don't want the user to cheat and use a certain data structure, we
+use opaque ascription <code>:&gt;</code>. Why on Earth would this be useful?
+</p>
+
+<p>
+In the LCF style of theorem provers, we have a <code>KERNEL</code> signature which
+encodes the state of the theorem prover. We encode <b>proven</b> theorems
+using a <code>thm</code> data type. But we do not want the user to promote any
+arbitrary formula to be a theorem. How can we enforce using only certain
+specific axioms?
+</p>
+
+<p>
+With opaque signature ascription! We have
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">KERNEL</span> = <span class="org-keyword">sig</span>
+    <span class="org-keyword">type</span> <span class="org-type-def">thm</span>;
+    <span class="org-keyword">type</span> <span class="org-type-def">context</span>;
+
+    <span class="org-keyword">val</span> <span class="org-variable-name">axiom_trueR</span> : context -&gt; thm;
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">other inference rules omitted </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">structure</span> <span class="org-module-def">Kernel</span> :&gt; KERNEL = <span class="org-keyword">struct</span>
+    <span class="org-keyword">datatype</span> <span class="org-type-def">thm</span> = <span class="org-keyword">datatype</span> <span class="org-type-def">Syntax.formula</span>;
+    <span class="org-keyword">type</span> <span class="org-type-def">context</span> = Syntax.formula list;
+
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">inference rules omitted </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+If a user tries to do something like <code>thm my_result = RiemannHypothesisFormula</code>,
+then they'll get an error.
+</p>
+</div>
+</div>
+</div>
+</div>
+
 <div id="outline-container-h-8bb21485-1413-4bef-9b13-d8255e14c965" class="outline-2">
-<h2 id="h-8bb21485-1413-4bef-9b13-d8255e14c965"><span class="section-number-2">2</span> References</h2>
+<h2 id="h-8bb21485-1413-4bef-9b13-d8255e14c965"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-8bb21485-1413-4bef-9b13-d8255e14c965">
+<ul class="org-ul">
+<li>John Mitchell and Robert Harper,<br>
+"The Essence of ML".</li>
+<li>Robert Harper and Christopher Stone,<br>
+"An Interpretation of Standard ML in Type Theory".<br>
+CMU-CS-97-147 Tech. Report, dated June 27, 1997, <a href="https://www.cs.cmu.edu/~rwh/papers/ismltt/ismltt.pdf">PDF</a>.</li>
+</ul>
+</div>
+
+<div id="outline-container-h-8f79e9f1-f460-40a5-8172-d70436622563" class="outline-3">
+<h3 id="h-8f79e9f1-f460-40a5-8172-d70436622563"><span class="section-number-3">4.1.</span> Standard Basis</h3>
+<div class="outline-text-3" id="text-h-8f79e9f1-f460-40a5-8172-d70436622563">
+<ul class="org-ul">
+<li>Implementations
+<ul class="org-ul">
+<li><a href="https://github.com/sml-nj/smlnj/blob/master/sml/system/Basis/Implementation/">SML/NJ</a> (see also <a href="http://smlnj-gforge.cs.uchicago.edu/scm/viewvc.php/sml/trunk/system/Basis/Implementation/?root=smlnj">cvs</a>)</li>
+<li><a href="https://github.com/rossberg/hamlet/tree/master/basis">HaMLet</a></li>
+<li><a href="https://github.com/polyml/polyml/tree/master/basis">PolyML</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-cf15cca4-a340-407e-9cbc-4a7eed153e63" class="outline-3">
+<h3 id="h-cf15cca4-a340-407e-9cbc-4a7eed153e63"><span class="section-number-3">4.2.</span> Tutorials</h3>
+<div class="outline-text-3" id="text-h-cf15cca4-a340-407e-9cbc-4a7eed153e63">
+<ul class="org-ul">
+<li>Lawrence Paulson,<br>
+<cite class="book-title">ML for the Working Programmer</cite>.
+CUP, second ed., 1996; <a href="https://www.cl.cam.ac.uk/~lp15/MLbook/pub-details.html">Online version</a></li>
+<li>M.Tofte,
+"Tips for Computer Scientists on Standard ML (Revised)".
+<a href="https://www.cs.tufts.edu/comp/105-2020f/readings/tofte-tips.pdf">Eprint</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940" class="outline-3">
+<h3 id="h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940"><span class="section-number-3">4.3.</span> Definition of Standard ML</h3>
+<div class="outline-text-3" id="text-h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940">
+<p>
+There is a precise definition of Standard ML (first <a href="https://smlfamily.github.io/sml90-defn.pdf">published</a> in 1990, later
+<a href="https://smlfamily.github.io/sml97-defn.pdf">revised</a> in 1997).
+</p>
+
+<ul class="org-ul">
+<li>The "initial basis" (top-level environment provided by Standard ML)
+is described <a href="https://smlfamily.github.io/Basis/top-level-chapter.html">here</a>, and the <a href="https://smlfamily.github.io/Basis/">Standard Basis documentation</a> describes the
+libraries provided "out of the box".
+<ul class="org-ul">
+<li><a href="https://smlfamily.github.io/Basis/toc.html">Standard ML Basis documentation</a></li>
+</ul></li>
+<li>Robin Milner, Mads Tofte,<br>
+<cite class="book-title">Commentary on Standard ML</cite>.<br>
+MIT Press, 1991; <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.368.3752&amp;rep=rep1&amp;type=pdf">CiteSeerX</a>
+<ul class="org-ul">
+<li>Anyone trying to read the formal definition should start with this
+commentary and the 1990 definition; although the 1997 revision is
+now the standard, it seems to have only modified the module portion
+of the definition.</li>
+</ul></li>
+<li>Daniel K. Lee, Karl Crary, Robert Harper,<br>
+"Mechanizing the Metatheory of Standard ML".<br>
+Tech. Report, <a href="http://www.cs.cmu.edu/~dklee/papers/tslf.pdf">PDF</a>
+<ul class="org-ul">
+<li>Harper and friends have produced a <a href="http://www.cs.cmu.edu/~dklee/tslf/">mechanization</a> in Twelf of the
+definition of Standard ML (amazing!)</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc" class="outline-3">
+<h3 id="h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc"><span class="section-number-3">4.4.</span> Classic ML</h3>
+<div class="outline-text-3" id="text-h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc">
+<p>
+A "dialect", I suppose we could call the "primordial Ur ML" (or
+"pre-Standard ML").
+</p>
+
+<ul class="org-ul">
+<li>Christoph Kreitz and Vincent Rahli,
+"Introduction to Classic ML".
+<a href="http://www.nuprl.org/KB/show.php?ShowPub=KR11">Eprint</a>, dated 2011.</li>
+</ul>
+</div>
 </div>
 
 <div id="outline-container-h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa" class="outline-3">
-<h3 id="h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa"><span class="section-number-3">2.1</span> PCF</h3>
+<h3 id="h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa"><span class="section-number-3">4.5.</span> PCF</h3>
 <div class="outline-text-3" id="text-h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa">
+<ul class="org-ul">
+<li>Martin Hotzel Escardo, <a href="https://www.cs.bham.ac.uk/~mhe/papers/RNC3.pdf">Introduction to Real PCF</a>.</li>
+<li>John C Mitchell,<br>
+<cite class="book-title">Foundations for Programming Languages</cite>.<br>
+MIT Press, 1996;
+Chapter 2 discusses PCF, using an ML-like syntax.</li>
+<li>Gilles Dowek,<br>
+<cite class="book-title">Introduction to the Theory of Programming Languages</cite>.
+Springer, 2011; chapter 2 introduces PCF.</li>
+<li>Ingmar Dasseville, Marc Denecker,<br>
+"Transpiling Programmable Computable Functions to Answer Set Programs".
+<a href="https://arxiv.org/abs/1808.07770">arXiv:1808.07770</a>, 15 pages.</li>
+<li>Catuscia Palamidessi,<br>
+"The Language PCF".<br>
+<a href="http://www.lix.polytechnique.fr/Labo/Catuscia.Palamidessi/teaching/cg520/98Fall/lecture_notes_98/L11.html">Lecture Notes</a>, 1998, CSE520</li>
+</ul>
+</div>
+
+<div id="outline-container-h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb" class="outline-4">
+<h4 id="h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb"><span class="section-number-4">4.5.1.</span> Full Abstraction of PCF</h4>
+<div class="outline-text-4" id="text-h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb">
 <p>
 There are concerns about whether the operational semantics of PCF
 coincides with its denotational semantics; if so, then it's a property
@@ -297,7 +1130,8 @@ called <a href="https://plato.stanford.edu/entries/games-abstraction/">"full abs
 </p>
 
 <p>
-Hyland and Ong note:
+Hyland and Ong's "On Full Abstraction for PCF: I, II, and III" note on
+page 293:
 </p>
 
 <blockquote id="quote-pcf">
@@ -352,9 +1186,10 @@ Eprint: <a href="https://ora.ox.ac.uk/objects/uuid:63c54392-39f3-46f1-8a68-e6ff0
 </ul>
 </div>
 </div>
+</div>
 
 <div id="outline-container-h-412ef711-6f44-4b0b-bdea-31d24d849d87" class="outline-3">
-<h3 id="h-412ef711-6f44-4b0b-bdea-31d24d849d87"><span class="section-number-3">2.2</span> Category Theory</h3>
+<h3 id="h-412ef711-6f44-4b0b-bdea-31d24d849d87"><span class="section-number-3">4.6.</span> Category Theory</h3>
 <div class="outline-text-3" id="text-h-412ef711-6f44-4b0b-bdea-31d24d849d87">
 <p>
 One major unresolved issue, for me, is whether we can articulate
@@ -377,7 +1212,7 @@ pp 32-46
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 17:48.</p>
+<p class="postamble">Last Updated 2021-07-10 Sat 19:03.</p>
 </div>
 </body>
 </html>
