@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:08 -->
+<!-- 2021-07-12 Mon 20:17 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Categorical Abstract Machine</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -229,6 +229,28 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -242,23 +264,103 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#h-9e568af4-9c25-4aa8-b387-5219a6144983">1. Overview</a></li>
-<li><a href="#h-06f7a39e-934a-4eb9-9406-571895a897e0">2. References</a></li>
+<li><a href="#h-32d0602a-e85e-467c-b921-c32d7d0ff28f">2. Correctness</a></li>
+<li><a href="#h-c6d87caf-43fd-4e9b-9778-032fc5b59a99">3. Compiling ML</a></li>
+<li><a href="#h-06f7a39e-934a-4eb9-9406-571895a897e0">4. References</a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-h-9e568af4-9c25-4aa8-b387-5219a6144983" class="outline-2">
-<h2 id="h-9e568af4-9c25-4aa8-b387-5219a6144983"><span class="section-number-2">1</span> Overview</h2>
+<h2 id="h-9e568af4-9c25-4aa8-b387-5219a6144983"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-9e568af4-9c25-4aa8-b387-5219a6144983">
 <p>
 Using the connection between Cartesian closed categories and lambda
 calculus, we can construct an abstract machine.
 </p>
+
+<p>
+The state of CAM may be described as a triple:
+</p>
+<ul class="org-ul">
+<li>a register (for the environment and computed value),</li>
+<li>a stack (for saving and restoring environments), and</li>
+<li>a code area.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-32d0602a-e85e-467c-b921-c32d7d0ff28f" class="outline-2">
+<h2 id="h-32d0602a-e85e-467c-b921-c32d7d0ff28f"><span class="section-number-2">2.</span> Correctness</h2>
+<div class="outline-text-2" id="text-h-32d0602a-e85e-467c-b921-c32d7d0ff28f">
+<p>
+Section 3 of Cousineau, Curien, Mauny sketches correctness of the CAM:
+</p>
+
+<blockquote>
+<p>
+Establishing the correctness of our machine amounts to formally justify
+that it is both like a reduction machine, and like a ‘De Bruijn’
+machine, i.e. a device performing \(\beta\) reductions in the De Bruijn’s
+notation. More precisely we want to prove
+</p>
+
+<ol class="org-ol">
+<li>that the CAM stops with empty code and stack if and only if the
+evaluated term reduces in innermost strategy to the term of the final
+configuration, using the rules of Section 1;</li>
+<li>that the innermost combinatory evaluation of a term stops if and only
+if its call-by-value evaluation by De Bruijn's \(\beta\) reduction stops, and
+that the final De Bruijn’s term realizes the final combinatory term
+in a sense which we define below.</li>
+</ol>
+</blockquote>
+</div>
+</div>
+
+<div id="outline-container-h-c6d87caf-43fd-4e9b-9778-032fc5b59a99" class="outline-2">
+<h2 id="h-c6d87caf-43fd-4e9b-9778-032fc5b59a99"><span class="section-number-2">3.</span> Compiling ML</h2>
+<div class="outline-text-2" id="text-h-c6d87caf-43fd-4e9b-9778-032fc5b59a99">
+<p>
+We typically study CAM as a target for compiling an ML-like language.
+Note the ML-like language is desugared and we may assume it has already
+been typechecked.
+Hinze gives us:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-haskell-keyword">type</span> <span class="org-haskell-type">Var</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-type">String</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">variables</span>
+<span class="org-haskell-keyword">type</span> <span class="org-haskell-type">Con</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-type">Int</span>    <span class="org-comment-delimiter">-- </span><span class="org-comment">desugared type constructors</span>
+<span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Sys</span> x <span class="org-haskell-keyword">where</span>  <span class="org-comment-delimiter">-- </span><span class="org-comment">primitive functions</span>
+  <span class="org-haskell-constructor">SVal</span> <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> a <span class="org-comment-delimiter">-- </span><span class="org-comment">values, like bools, ints, characters, etc.</span>
+  <span class="org-haskell-constructor">SUnary</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Sys</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> b <span class="org-comment-delimiter">-- </span><span class="org-comment">primitive unary operators</span>
+  <span class="org-haskell-constructor">SBin</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Sys</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> b <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> c <span class="org-comment-delimiter">-- </span><span class="org-comment">primitive bindary operators</span>
+
+<span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Expr</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">EVar</span> <span class="org-haskell-constructor">Var</span>
+          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">ApplyPrim</span> <span class="org-haskell-constructor">Sys</span> [<span class="org-haskell-constructor">Expr</span>]
+          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">EmptyTuple</span>
+          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Pair</span> (<span class="org-haskell-constructor">Expr</span>, <span class="org-haskell-constructor">Expr</span>)
+          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Construct</span> <span class="org-haskell-constructor">Con</span> <span class="org-haskell-constructor">Expr</span>
+          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">App</span> <span class="org-haskell-constructor">Expr</span> <span class="org-haskell-constructor">Expr</span>
+          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Lam</span> <span class="org-haskell-constructor">Pat</span> <span class="org-haskell-constructor">Expr</span>
+          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">IfThenElse</span> <span class="org-haskell-constructor">Expr</span> <span class="org-haskell-constructor">Expr</span> <span class="org-haskell-constructor">Expr</span>
+          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">ECase</span> <span class="org-haskell-constructor">Expr</span> [(<span class="org-haskell-constructor">Pat</span>, <span class="org-haskell-constructor">Expr</span>)]
+          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">ELet</span> (<span class="org-haskell-constructor">Pat</span>, <span class="org-haskell-constructor">Expr</span>) <span class="org-haskell-constructor">Expr</span>
+          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">ELetRec</span> (<span class="org-haskell-constructor">Pat</span>, <span class="org-haskell-constructor">Expr</span>) <span class="org-haskell-constructor">Expr</span>;
+
+<span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Pat</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">PVar</span> <span class="org-haskell-constructor">Var</span>
+         <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">PEmpty</span>
+         <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">PPair</span> (<span class="org-haskell-constructor">Pat</span>, <span class="org-haskell-constructor">Pat</span>)
+         <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">PLayer</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Pat</span>;
+
+<span class="org-haskell-constructor">Compile</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Expr</span> <span class="org-haskell-operator">-&gt;</span> [<span class="org-haskell-type">Instruction</span>]
+</pre>
+</div>
 </div>
 </div>
 
 <div id="outline-container-h-06f7a39e-934a-4eb9-9406-571895a897e0" class="outline-2">
-<h2 id="h-06f7a39e-934a-4eb9-9406-571895a897e0"><span class="section-number-2">2</span> References</h2>
+<h2 id="h-06f7a39e-934a-4eb9-9406-571895a897e0"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-06f7a39e-934a-4eb9-9406-571895a897e0">
 <ul class="org-ul">
 <li>Lambek &amp; Scott,
@@ -270,12 +372,19 @@ CUP, 1986.</li>
 <li>Cousineau G., Curien P.-L., Mauny M.
 "The categorical abstract machine".
 LNCS, 201, <cite class="book-title">Functional programming languages computer architecture</cite>, 1985, pp.50&#x2013;64.</li>
+<li>Ralf Hinze,
+"The Categorical Abstract Machine: Basics and Enhancements".
+<a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.3358&amp;rep=rep1&amp;type=pdf">PDF</a> dated April 28, 1993.</li>
+<li>Gerard Huet,<br>
+"Cartesian Closed Categories and Lambda-Calculus".<br>
+<a href="http://pauillac.inria.fr/~huet/PUBLIC/cat.pdf">PDF</a>, 13 pages.</li>
+<li><a href="https://gist.github.com/myuon/ed48542406fc8b2bb839903aebeade8b">Implementation in OCaml</a></li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 12:03.</p>
+<p class="postamble">Last Updated 2021-07-12 Mon 20:17.</p>
 </div>
 </body>
 </html>

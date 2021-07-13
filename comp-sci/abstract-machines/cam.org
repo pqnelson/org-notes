@@ -19,6 +19,71 @@
 Using the connection between Cartesian closed categories and lambda
 calculus, we can construct an abstract machine.
 
+The state of CAM may be described as a triple:
+- a register (for the environment and computed value),
+- a stack (for saving and restoring environments), and
+- a code area.
+
+* Correctness
+:PROPERTIES:
+:CUSTOM_ID: h-32d0602a-e85e-467c-b921-c32d7d0ff28f
+:END:
+
+Section 3 of Cousineau, Curien, Mauny sketches correctness of the CAM:
+
+#+begin_quote
+Establishing the correctness of our machine amounts to formally justify
+that it is both like a reduction machine, and like a ‘De Bruijn’
+machine, i.e. a device performing $\beta$ reductions in the De Bruijn’s
+notation. More precisely we want to prove
+
+1. that the CAM stops with empty code and stack if and only if the
+   evaluated term reduces in innermost strategy to the term of the final
+   configuration, using the rules of Section 1;
+2. that the innermost combinatory evaluation of a term stops if and only
+   if its call-by-value evaluation by De Bruijn's $\beta$ reduction stops, and
+   that the final De Bruijn’s term realizes the final combinatory term
+   in a sense which we define below.
+#+end_quote
+
+* Compiling ML
+:PROPERTIES:
+:CUSTOM_ID: h-c6d87caf-43fd-4e9b-9778-032fc5b59a99
+:END:
+
+We typically study CAM as a target for compiling an ML-like language.
+Note the ML-like language is desugared and we may assume it has already
+been typechecked.
+Hinze gives us:
+
+#+begin_src haskell
+type Var = String -- variables
+type Con = Int    -- desugared type constructors
+data Sys x where  -- primitive functions
+  SVal :: a -> Sys a -- values, like bools, ints, characters, etc.
+  SUnary :: Sys a -> Sys b -- primitive unary operators
+  SBin :: Sys a -> Sys b -> Sys c -- primitive bindary operators
+
+data Expr = EVar Var
+          | ApplyPrim Sys [Expr]
+          | EmptyTuple
+          | Pair (Expr, Expr)
+          | Construct Con Expr
+          | App Expr Expr
+          | Lam Pat Expr
+          | IfThenElse Expr Expr Expr
+          | ECase Expr [(Pat, Expr)]
+          | ELet (Pat, Expr) Expr
+          | ELetRec (Pat, Expr) Expr;
+
+data Pat = PVar Var
+         | PEmpty
+         | PPair (Pat, Pat)
+         | PLayer Var Pat;
+
+Compile :: Expr -> [Instruction]
+#+end_src
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-06f7a39e-934a-4eb9-9406-571895a897e0
@@ -33,3 +98,10 @@ calculus, we can construct an abstract machine.
 - Cousineau G., Curien P.-L., Mauny M.
   "The categorical abstract machine".
   LNCS, 201, {{{book-title(Functional programming languages computer architecture)}}}, 1985, pp.50--64.
+- Ralf Hinze,
+  "The Categorical Abstract Machine: Basics and Enhancements".
+  [[https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.3358&rep=rep1&type=pdf][PDF]] dated April 28, 1993.
+- Gerard Huet,\\
+  "Cartesian Closed Categories and Lambda-Calculus".\\
+  [[http://pauillac.inria.fr/~huet/PUBLIC/cat.pdf][PDF]], 13 pages.
+- [[https://gist.github.com/myuon/ed48542406fc8b2bb839903aebeade8b][Implementation in OCaml]]
