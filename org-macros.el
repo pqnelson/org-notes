@@ -265,7 +265,8 @@ So a typical ID could look like \"Org-4nd91V40HI\"."
   (insert "#+OPTIONS: H:5\n")
   (insert "#+HTML_DOCTYPE: html5\n")
   ;; filename starts with alex.org/notes-base-dir
-  (when (string-prefix-p alex.org/notes-base-dir (buffer-file-name))
+  (when (string-prefix-p (expand-file-name alex.org/notes-base-dir)
+                         (expand-file-name (buffer-file-name)))
     (alex.org/include-org-macros (buffer-file-name))
     (alex.org/html-link-up (buffer-file-name))
     (alex.org/html-link-home (buffer-file-name))
