@@ -1,0 +1,55 @@
+#+TITLE: Soft Type System
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-07-11T08:44:26-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday July 11, 2021 at  8:44AM
+
+* Idea
+:PROPERTIES:
+:CUSTOM_ID: h-59371bea-b6af-4a93-9a75-133d687e25e3
+:END:
+
+In type theory, when we write the type judgement $\Gamma\vdash t:T$,
+this is a proposition in the metalanguage. But in ordinary mathematics,
+we often muddle metavariables and object variables (more generally, we
+muddle metalanguage constructs with object language constructs). We can
+approximate this muddling by building in the object language a typing
+judgement and a type system. This type system is called a
+{{{define(Soft Type System)}}}.
+
+More specifically, instead of writing something like ~G : Group~, we
+have a unary predicate ~isGroup[-]~ and treat the judgement as
+~isGroup[G]~.
+
+- Subtyping :: for all ~x~, ~isSubtype[x]~ implies ~isSupertype[x]~.
+- Dependent Types :: A dependent type with $n$ parameters is encoded as
+  an $(n+1)$ -ary predicate.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-bb2328e4-6f99-4f79-9b25-4711aa0d9ac5
+:END:
+
+- Freek Wiedijk,\\
+  "Mizar's Soft Type System".\\
+  In {{{book-title(International Conference on Theorem Proving in Higher Order Logics)}}}
+  (pp. 383-399). Springer, Berlin, Heidelberg.
+  [[http://cs.ru.nl/F.Wiedijk/mizar/miztype.pdf][Eprint]], 17 pages.
+  - Wiedijk invented the notion of soft type systems to describe Mizar's
+    typing system.
+- Cezary Kaliszyk, Florian Rabe,\\
+  "A Survey of Languages for Formalizing Mathematics".
+  A CICM2020 paper, {{{arXiv(2005.12876)}}}, 19 pages
+  - This paper seems to invent the notion of a "semi-soft type system"
+    and a "hard type system"
+- Florian Rabe,\\
+  "A Language with Type-Dependent Equality".\\
+  [[https://kwarc.info/people/frabe/Research/rabe_tde_21.pdf][Eprint]], 16 pages
+  - Notes how soft-type systems makes typing and equality both undecidable.

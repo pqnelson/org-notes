@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-07-11 Sun 20:35 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automath</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Automath</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-dd38ce5b-94f5-4c8b-8c6b-c84a6cbc91e1">1. Introduction</a></li>
+<li><a href="#h-0310fe71-5442-47c9-9665-a69fee68b8ec">2. Expressions</a>
+<ul>
+<li><a href="#h-d1315b98-5921-4b87-bb9a-8930e362a4fe">2.1. Terms, Types, Kinds</a></li>
+<li><a href="#h-f030f1fd-6994-4e53-9c90-ba2590ababbf">2.2. Comments</a></li>
+</ul>
+</li>
+<li><a href="#h-bd13716b-85fb-49fb-aa9f-cb9ce920a0ca">3. Lines</a>
+<ul>
+<li><a href="#h-b5abaff3-85ff-4170-97d0-1cc0910e8376">3.1. Contexts</a></li>
+<li><a href="#h-bd7926f4-2d6f-4a2d-b322-0edd3f6debcb">3.2. Lambda Abstraction as Block Openers</a></li>
+</ul>
+</li>
+<li><a href="#h-bc217b30-656f-4ed2-8c35-f8cdcf806fbe">4. Quasi-Expressions</a>
+<ul>
+<li><a href="#h-a556e9fe-7d03-4392-8c2e-0c42c86bd2be">4.1. Type Inclusion</a></li>
+</ul>
+</li>
+<li><a href="#h-f6a441e8-cce8-442d-9811-2a989e4284b7">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-dd38ce5b-94f5-4c8b-8c6b-c84a6cbc91e1" class="outline-2">
+<h2 id="h-dd38ce5b-94f5-4c8b-8c6b-c84a6cbc91e1"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-dd38ce5b-94f5-4c8b-8c6b-c84a6cbc91e1">
+<p>
+A proof assistant invented by Nick de Bruijn back in the '60s, it seems
+to be the first one using dependently-typed lambda calculus. A proof
+script for Automath is called a "Book", its statements are called "Lines".
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-0310fe71-5442-47c9-9665-a69fee68b8ec" class="outline-2">
+<h2 id="h-0310fe71-5442-47c9-9665-a69fee68b8ec"><span class="section-number-2">2.</span> Expressions</h2>
+<div class="outline-text-2" id="text-h-0310fe71-5442-47c9-9665-a69fee68b8ec">
+<p>
+There are four or five types of expressions:
+</p>
+
+<ol class="org-ol">
+<li>Symbols (namespaced identifiers within paragraphs/modules, <i>or</i> "just
+identifiers")</li>
+<li>Lambda abstractions, written <code>[x:T]e</code> where <code>e</code> is an expression
+(sometimes <code>[x,T]e</code> is used in older literature) &#x2014; note here that
+<code>x</code> is an identifier, not a symbol</li>
+<li>Applications, <code>&lt;arg&gt;fn</code> instead of <code>fn arg</code></li>
+<li>Abbreviations, <code>d(c_1, ..., c_k)</code></li>
+<li>"Kinds", specifically <code>TYPE</code> (and sometimes <code>PROP</code>)</li>
+</ol>
+
+<p>
+What's the difference between an abbreviation and an application? Well,
+we typically do things in math like "Let <code>G</code> be a group, then we call
+<code>H</code> a subgroup of <code>G</code> if&#x2026;". If we want to say <code>N</code> is a subgroup of <code>M</code>
+in Automath, we write <code>N : Subgroup(M)</code>.
+</p>
+
+<p>
+As far as the kernel cares, it could treat the two as the same, with the
+caveat that if <code>d</code> is an abbreviation with <code>n&gt;k</code> parameters, then
+<code>d(c_1, ..., c_k)</code> fixes the last <code>k</code> parameters (<code>x_(n-k)=c_1</code>, &#x2026;,
+<code>x_n=c_k</code>).
+</p>
+</div>
+
+<div id="outline-container-h-d1315b98-5921-4b87-bb9a-8930e362a4fe" class="outline-3">
+<h3 id="h-d1315b98-5921-4b87-bb9a-8930e362a4fe"><span class="section-number-3">2.1.</span> Terms, Types, Kinds</h3>
+<div class="outline-text-3" id="text-h-d1315b98-5921-4b87-bb9a-8930e362a4fe">
+<p>
+The jargon used by de Bruijn and the Automath community is that:
+</p>
+
+<ul class="org-ul">
+<li>A 1-expression is either <code>TYPE</code> or <code>PROP</code></li>
+<li>A 2-expression is one of the form <code>T:TYPE</code> or <code>T:PROP</code> (we call them
+"types" nowadays)</li>
+<li>A 3-expression is of the form <code>t:T</code> where <code>T</code> is a 2-expression (we
+call them "terms" nowadays)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-f030f1fd-6994-4e53-9c90-ba2590ababbf" class="outline-3">
+<h3 id="h-f030f1fd-6994-4e53-9c90-ba2590ababbf"><span class="section-number-3">2.2.</span> Comments</h3>
+<div class="outline-text-3" id="text-h-f030f1fd-6994-4e53-9c90-ba2590ababbf">
+<p>
+The only current implementation for Automath is Freek Wiedijk's
+wonderful <a href="http://cs.ru.nl/F.Wiedijk/aut/index.html">implementation</a>. Comments in his implementation come in two
+forms:
+</p>
+<ul class="org-ul">
+<li>Single line comment, start at <code>#</code> or <code>%</code> and continues until the end of the line</li>
+<li>Multi-line comments, anything in between <code>{</code> and <code>}</code> (possibly nested)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-bd13716b-85fb-49fb-aa9f-cb9ce920a0ca" class="outline-2">
+<h2 id="h-bd13716b-85fb-49fb-aa9f-cb9ce920a0ca"><span class="section-number-2">3.</span> Lines</h2>
+<div class="outline-text-2" id="text-h-bd13716b-85fb-49fb-aa9f-cb9ce920a0ca">
+<p>
+There are three types of lines:
+</p>
+
+<ol class="org-ol">
+<li><b>Block Openers</b> push the identifier onto the context,
+<code>&lt;context&gt; &lt;turnstile&gt; &lt;identifier&gt; := &lt;EB&gt; : &lt;expr&gt;</code></li>
+<li><b>Primitive Notions</b> defines new primitive notions,
+<code>&lt;context&gt; &lt;turnstile&gt; &lt;identifier&gt; := &lt;PN&gt; : &lt;expr&gt;</code></li>
+<li><b>Definitions</b> (or abbreviations)
+<code>&lt;context&gt; &lt;turnstile&gt; &lt;identifier&gt; := &lt;expr&gt; : &lt;expr&gt;</code></li>
+</ol>
+
+<p>
+We see these are all basically the same, but we have some freedom here.
+(Well, there's <i>a lot more</i> freedom, e.g., we can place the typing
+annotation after the identifier, <code>&lt;context&gt; &lt;turnstile&gt; &lt;identifier&gt; : &lt;expr&gt; :=...</code>,
+for example.)
+In Automath, we can suppress the <code>&lt;context&gt; &lt;turnstile&gt;</code> prefix
+sometimes (I'm still figuring out <i>when</i> we can).
+</p>
+
+<ul class="org-ul">
+<li><code>&lt;turnstile&gt;</code> can be either <code>*</code> or <code>@</code></li>
+<li><code>&lt;PN&gt;</code> can be <code>'pn'</code>, <code>'prim'</code>, <code>PN</code></li>
+<li><code>&lt;EB&gt;</code> can be <code>---</code>, <code>EB</code>, <code>'eb'</code></li>
+<li>We can use <code>;</code> instead of <code>:</code> for the typing declaration at the end of
+the line</li>
+</ul>
+</div>
+
+<div id="outline-container-h-b5abaff3-85ff-4170-97d0-1cc0910e8376" class="outline-3">
+<h3 id="h-b5abaff3-85ff-4170-97d0-1cc0910e8376"><span class="section-number-3">3.1.</span> Contexts</h3>
+<div class="outline-text-3" id="text-h-b5abaff3-85ff-4170-97d0-1cc0910e8376">
+<p>
+We have a directed "tree of knowledge", where the EB lines form
+branches, and the other two lines are leafs (leaves?). Automath uses
+"indicator strings" for the context, i.e., the symbol which is the end
+of the context. The root node for this tree-of-knowledge is the empty
+context.
+</p>
+
+<p>
+The context is set using the <code>&lt;symbol&gt; &lt;turnstile&gt;</code> prefix. We can set
+the context to be empty by just writing <code>&lt;turnstile&gt;</code>.
+</p>
+
+<p>
+Consider the following (adapted from Freek Wiedijk's formalization of
+<a href="http://www.cs.ru.nl/~freek/zfc-etc/holl.aut">HOL Light's logic</a>):
+</p>
+<pre class="example" id="orgce7713d">
+  * type : TYPE := PRIM    # sets the context to be initial empty context
+  * bool : type := PRIM
+  * A : type := ---        # sets the context to be A
+    term : TYPE := PRIM
+A * B : type := ---
+
+    fun : type := PRIM
+    [t:term(fun(A,B))][u:term(A)] comb : term(B) := PRIM
+</pre>
+
+<p>
+What is the context for the fourth line, <code>term : TYPE := PRIM</code>?
+We see the third line pushes <code>A</code> onto the top of the empty context.
+Without a turnstile, it reuses the previous context (which is basically
+<code>A</code>).
+</p>
+
+<p>
+Similarly, the fifth line <code>A * B : type := ---</code> pushes <code>B</code> on top of the
+context ending at <code>A</code>, creating a new context <code>A:type, B:type</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-bd7926f4-2d6f-4a2d-b322-0edd3f6debcb" class="outline-3">
+<h3 id="h-bd7926f4-2d6f-4a2d-b322-0edd3f6debcb"><span class="section-number-3">3.2.</span> Lambda Abstraction as Block Openers</h3>
+<div class="outline-text-3" id="text-h-bd7926f4-2d6f-4a2d-b322-0edd3f6debcb">
+<p>
+The kernel interprets a line of the form
+</p>
+<pre class="example" id="orgb6ce300">
+a * [x:T] b := ... : T'
+</pre>
+
+<p>
+as two lines:
+</p>
+<pre class="example" id="org5814ca8">
+a * x := --- : T
+x * b := ... : T'
+</pre>
+
+<p>
+See Wiedijk's "A new implementation of Automath", section 3.4 for
+discussion on this.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-bc217b30-656f-4ed2-8c35-f8cdcf806fbe" class="outline-2">
+<h2 id="h-bc217b30-656f-4ed2-8c35-f8cdcf806fbe"><span class="section-number-2">4.</span> Quasi-Expressions</h2>
+<div class="outline-text-2" id="text-h-bc217b30-656f-4ed2-8c35-f8cdcf806fbe">
+<p>
+De Bruijn revised the original Automath to include the following
+situation: suppose we want to encode a predicate. How to do it? Well, we
+have a proposition be a 2-expression ("type") of the form <code>p : PROP</code>. A
+predicate would parametrize this by a "term":
+</p>
+
+<pre class="example" id="org25499d9">
+   * T : TYPE := ---
+ T * [x:T]predicate : [x:T]PROP := PN
+</pre>
+
+<p>
+But is <code>[x:T]PROP</code> a valid expression? De Bruijn calls such a thing a
+<dfn>Quasi-Expression</dfn>. This makes encoding first-order logic
+(and higher-order logic) really nifty.
+</p>
+
+<p>
+Quantifiers can be written down easily as:
+</p>
+<pre class="example" id="org9287c13">
+T * [p:[z:T]PROP] forall : PROP := p
+  * [a:PROP][b:PROP] imp:PROP := [x:a]b
+  * false : PROP := PRIM
+a * not : PROP := imp(false)
+p * exists : PROP := not(forall([z,T]not(&lt;z&gt;p)))
+</pre>
+<p>
+We use de Morgan's laws to express existential quantification in terms
+of negating the universal quantifier.
+</p>
+</div>
+
+<div id="outline-container-h-a556e9fe-7d03-4392-8c2e-0c42c86bd2be" class="outline-3">
+<h3 id="h-a556e9fe-7d03-4392-8c2e-0c42c86bd2be"><span class="section-number-3">4.1.</span> Type Inclusion</h3>
+<div class="outline-text-3" id="text-h-a556e9fe-7d03-4392-8c2e-0c42c86bd2be">
+<p>
+There's also <dfn>Type Inclusion</dfn>, where we can take any
+2-expression of the form <code>T : [x,T']TYPE</code> and assert it is also
+acceptable in situations when we just need a <code>T:TYPE</code>. However, this
+makes it impossible for a 2-expression to have a unique type: we just
+saw how <code>T : [x,T']TYPE</code> and <code>T:TYPE</code>, but <code>[x,T']TYPE != TYPE</code>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-f6a441e8-cce8-442d-9811-2a989e4284b7" class="outline-2">
+<h2 id="h-f6a441e8-cce8-442d-9811-2a989e4284b7"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-f6a441e8-cce8-442d-9811-2a989e4284b7">
+<ul class="org-ul">
+<li>F. Wiedijk,<br>
+"A new implementation of Automath".<br>
+<i>Journal of Automated Reasoning</i> <b>29</b> (2002) 365-387,
+<a href="http://cs.ru.nl/F.Wiedijk/aut/aut.pdf">Eprint</a>.</li>
+<li>F. Wiedijk,<br>
+"Is ZF a hack? Comparing the complexity of some (formalist
+interpretations of) foundational systems for mathematics".<br>
+<i>Journal of Applied Logic</i> <b>4</b> (2006) 622-645,
+<a href="http://cs.ru.nl/F.Wiedijk/zfc-etc/zfc-etc.pdf">Eprint</a> and <a href="http://www.cs.ru.nl/~freek/zfc-etc/">Code</a></li>
+<li>Freek Wiedijk,
+<a href="http://cs.ru.nl/F.Wiedijk/aut/aut-4.1-manual.pdf">A  Nice  and  Accurate  Checker  for  the  Mathematical  Language Automath</a>.
+Manual for his <a href="http://cs.ru.nl/F.Wiedijk/aut/index.html">implementation</a></li>
+<li>R.Nederpelt, J.Geuvers, and R.de Vrijer,<br>
+<cite class="book-title">Selected Papers on Automath</cite>.<br>
+Elsevier Science, 1994.
+<ul class="org-ul">
+<li>A valuable (and expensive) reference, collating many papers on
+Automath.</li>
+</ul></li>
+<li><a href="https://www.win.tue.nl/automath/">Automath Archive</a> has scanned a number of tech. reports written by de
+Bruijn's team.</li>
+<li>N.G. de Bruijn,<br>
+"The mathematical language AUTOMATH, its usage and some of its
+extensions".<br>
+<a href="https://www.win.tue.nl/automath/archive/webversion/aut002/aut002.html">Eprint</a>, dated December 1968</li>
+<li>N.G. de Bruijn,<br>
+"AUTOMATH, a language for mathematics".<br>
+<a href="https://www.win.tue.nl/automath/archive/webversion/aut001/aut001.html">Eprint</a>, T.H. Report 66-WSK-05, dated November 1968</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-07-11 Sun 13:41.</p>
+</div>
+</body>
+</html>

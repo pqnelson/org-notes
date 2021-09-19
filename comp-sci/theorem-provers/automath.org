@@ -1,0 +1,225 @@
+#+TITLE: Automath
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-07-11T09:08:47-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday July 11, 2021 at  9:08AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-dd38ce5b-94f5-4c8b-8c6b-c84a6cbc91e1
+:END:
+
+A proof assistant invented by Nick de Bruijn back in the '60s, it seems
+to be the first one using dependently-typed lambda calculus. A proof
+script for Automath is called a "Book", its statements are called "Lines".
+
+* Expressions
+:PROPERTIES:
+:CUSTOM_ID: h-0310fe71-5442-47c9-9665-a69fee68b8ec
+:END:
+
+There are four or five types of expressions:
+
+1. Symbols (namespaced identifiers within paragraphs/modules, /or/ "just
+   identifiers")
+2. Lambda abstractions, written ~[x:T]e~ where ~e~ is an expression
+   (sometimes ~[x,T]e~ is used in older literature) --- note here that
+   ~x~ is an identifier, not a symbol
+3. Applications, ~<arg>fn~ instead of ~fn arg~
+4. Abbreviations, ~d(c_1, ..., c_k)~
+5. "Kinds", specifically ~TYPE~ (and sometimes ~PROP~)
+
+What's the difference between an abbreviation and an application? Well,
+we typically do things in math like "Let ~G~ be a group, then we call
+~H~ a subgroup of ~G~ if...". If we want to say ~N~ is a subgroup of ~M~
+in Automath, we write ~N : Subgroup(M)~.
+
+As far as the kernel cares, it could treat the two as the same, with the
+caveat that if ~d~ is an abbreviation with ~n>k~ parameters, then
+~d(c_1, ..., c_k)~ fixes the last ~k~ parameters (~x_(n-k)=c_1~, ...,
+~x_n=c_k~).
+
+** Terms, Types, Kinds
+:PROPERTIES:
+:CUSTOM_ID: h-d1315b98-5921-4b87-bb9a-8930e362a4fe
+:END:
+
+The jargon used by de Bruijn and the Automath community is that:
+
+- A 1-expression is either ~TYPE~ or ~PROP~
+- A 2-expression is one of the form ~T:TYPE~ or ~T:PROP~ (we call them
+  "types" nowadays)
+- A 3-expression is of the form ~t:T~ where ~T~ is a 2-expression (we
+  call them "terms" nowadays)
+
+** Comments
+:PROPERTIES:
+:CUSTOM_ID: h-f030f1fd-6994-4e53-9c90-ba2590ababbf
+:END:
+
+The only current implementation for Automath is Freek Wiedijk's
+wonderful [[http://cs.ru.nl/F.Wiedijk/aut/index.html][implementation]]. Comments in his implementation come in two
+forms:
+- Single line comment, start at ~#~ or ~%~ and continues until the end of the line
+- Multi-line comments, anything in between ~{~ and ~}~ (possibly nested)
+
+* Lines
+:PROPERTIES:
+:CUSTOM_ID: h-bd13716b-85fb-49fb-aa9f-cb9ce920a0ca
+:END:
+
+There are three types of lines:
+
+1. *Block Openers* push the identifier onto the context,
+   ~<context> <turnstile> <identifier> := <EB> : <expr>~
+2. *Primitive Notions* defines new primitive notions,
+   ~<context> <turnstile> <identifier> := <PN> : <expr>~
+3. *Definitions* (or abbreviations)
+   ~<context> <turnstile> <identifier> := <expr> : <expr>~
+
+We see these are all basically the same, but we have some freedom here.
+(Well, there's /a lot more/ freedom, e.g., we can place the typing
+annotation after the identifier, ~<context> <turnstile> <identifier> : <expr> :=...~,
+for example.)
+In Automath, we can suppress the ~<context> <turnstile>~ prefix
+sometimes (I'm still figuring out /when/ we can).
+
+- ~<turnstile>~ can be either ~*~ or ~@~
+- ~<PN>~ can be ~'pn'~, ~'prim'~, ~PN~
+- ~<EB>~ can be ~---~, ~EB~, ~'eb'~
+- We can use ~;~ instead of ~:~ for the typing declaration at the end of
+  the line
+
+** Contexts
+:PROPERTIES:
+:CUSTOM_ID: h-b5abaff3-85ff-4170-97d0-1cc0910e8376
+:END:
+
+We have a directed "tree of knowledge", where the EB lines form
+branches, and the other two lines are leafs (leaves?). Automath uses
+"indicator strings" for the context, i.e., the symbol which is the end
+of the context. The root node for this tree-of-knowledge is the empty
+context.
+
+The context is set using the ~<symbol> <turnstile>~ prefix. We can set
+the context to be empty by just writing ~<turnstile>~.
+
+Consider the following (adapted from Freek Wiedijk's formalization of
+[[http://www.cs.ru.nl/~freek/zfc-etc/holl.aut][HOL Light's logic]]):
+#+begin_example
+  * type : TYPE := PRIM    # sets the context to be initial empty context
+  * bool : type := PRIM
+  * A : type := ---        # sets the context to be A
+    term : TYPE := PRIM
+A * B : type := ---
+
+    fun : type := PRIM
+    [t:term(fun(A,B))][u:term(A)] comb : term(B) := PRIM
+#+end_example
+
+What is the context for the fourth line, ~term : TYPE := PRIM~?
+We see the third line pushes ~A~ onto the top of the empty context.
+Without a turnstile, it reuses the previous context (which is basically
+~A~).
+
+Similarly, the fifth line ~A * B : type := ---~ pushes ~B~ on top of the
+context ending at ~A~, creating a new context ~A:type, B:type~.
+
+** Lambda Abstraction as Block Openers
+:PROPERTIES:
+:CUSTOM_ID: h-bd7926f4-2d6f-4a2d-b322-0edd3f6debcb
+:END:
+
+The kernel interprets a line of the form
+#+begin_example
+a * [x:T] b := ... : T'
+#+end_example
+
+as two lines:
+#+begin_example
+a * x := --- : T
+x * b := ... : T'
+#+end_example
+
+See Wiedijk's "A new implementation of Automath", section 3.4 for
+discussion on this.
+
+* Quasi-Expressions
+:PROPERTIES:
+:CUSTOM_ID: h-bc217b30-656f-4ed2-8c35-f8cdcf806fbe
+:END:
+
+De Bruijn revised the original Automath to include the following
+situation: suppose we want to encode a predicate. How to do it? Well, we
+have a proposition be a 2-expression ("type") of the form ~p : PROP~. A
+predicate would parametrize this by a "term":
+
+#+begin_example
+   * T : TYPE := ---
+ T * [x:T]predicate : [x:T]PROP := PN
+#+end_example
+
+But is ~[x:T]PROP~ a valid expression? De Bruijn calls such a thing a
+{{{define(Quasi-Expression)}}}. This makes encoding first-order logic
+(and higher-order logic) really nifty.
+
+Quantifiers can be written down easily as:
+#+begin_example
+T * [p:[z:T]PROP] forall : PROP := p
+  * [a:PROP][b:PROP] imp:PROP := [x:a]b
+  * false : PROP := PRIM
+a * not : PROP := imp(false)
+p * exists : PROP := not(forall([z,T]not(<z>p)))
+#+end_example
+We use de Morgan's laws to express existential quantification in terms
+of negating the universal quantifier.
+
+** Type Inclusion
+:PROPERTIES:
+:CUSTOM_ID: h-a556e9fe-7d03-4392-8c2e-0c42c86bd2be
+:END:
+
+There's also {{{define(Type Inclusion)}}}, where we can take any
+2-expression of the form ~T : [x,T']TYPE~ and assert it is also
+acceptable in situations when we just need a ~T:TYPE~. However, this
+makes it impossible for a 2-expression to have a unique type: we just
+saw how ~T : [x,T']TYPE~ and ~T:TYPE~, but ~[x,T']TYPE != TYPE~.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-f6a441e8-cce8-442d-9811-2a989e4284b7
+:END:
+
+- F. Wiedijk,\\
+  "A new implementation of Automath".\\
+  /Journal of Automated Reasoning/ *29* (2002) 365-387,
+  [[http://cs.ru.nl/F.Wiedijk/aut/aut.pdf][Eprint]].
+- F. Wiedijk,\\
+  "Is ZF a hack? Comparing the complexity of some (formalist
+  interpretations of) foundational systems for mathematics".\\
+  /Journal of Applied Logic/ *4* (2006) 622-645,
+  [[http://cs.ru.nl/F.Wiedijk/zfc-etc/zfc-etc.pdf][Eprint]] and [[http://www.cs.ru.nl/~freek/zfc-etc/][Code]]
+- Freek Wiedijk,
+  [[http://cs.ru.nl/F.Wiedijk/aut/aut-4.1-manual.pdf][A  Nice  and  Accurate  Checker  for  the  Mathematical  Language Automath]].
+  Manual for his [[http://cs.ru.nl/F.Wiedijk/aut/index.html][implementation]]
+- R.Nederpelt, J.Geuvers, and R.de Vrijer,\\
+  {{{book-title(Selected Papers on Automath)}}}.\\
+  Elsevier Science, 1994.
+  - A valuable (and expensive) reference, collating many papers on
+    Automath.
+- [[https://www.win.tue.nl/automath/][Automath Archive]] has scanned a number of tech. reports written by de
+  Bruijn's team.
+- N.G. de Bruijn,\\
+  "The mathematical language AUTOMATH, its usage and some of its
+  extensions".\\
+  [[https://www.win.tue.nl/automath/archive/webversion/aut002/aut002.html][Eprint]], dated December 1968
+- N.G. de Bruijn,\\
+  "AUTOMATH, a language for mathematics".\\
+  [[https://www.win.tue.nl/automath/archive/webversion/aut001/aut001.html][Eprint]], T.H. Report 66-WSK-05, dated November 1968
