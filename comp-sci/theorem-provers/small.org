@@ -1,0 +1,48 @@
+#+TITLE: On Kernel Size
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-09-18T20:13:55-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday September 18, 2021 at  8:13PM
+
+*Puzzle:* How small should a proof assistant's kernel be, for it to be
+ considered "bug free"?
+
+*Solution:* Use the [[https://en.wikipedia.org/wiki/Negative_binomial_distribution][Negative Bernoulli distribution]] for $r$ bugs, the
+probability of a line of code being bug free is $p$, and the probability
+of a bug is $q\approx 20/1000$ (which is the currently accepted rate,
+informally used among programmers), and [[https://en.wikipedia.org/wiki/Chebyshev%27s_inequality][Chebyshev's inequality]] to
+estimate the number of bugs $r$ within $3\sigma$ of zero. Recall
+$\mu=pr/q$ is the mean for the distribution, and $\sigma^{2}=pr/q^{2}$
+is the variance. Then Chebyshev gives us, for tolerance of $k\sigma$:
+
+\begin{equation}
+\mu < k\sigma\implies \frac{p}{q}r < \frac{k}{q}\sqrt{pr}.
+\end{equation}
+
+We solve for $r$:
+
+\begin{equation}
+r < \frac{k^{2}}{p}.
+\end{equation}
+
+Then we find the expected number of lines of code should be
+
+\begin{equation}
+\mu \approx\frac{k^{2}}{q}.
+\end{equation}
+
+For the figures given, we have
+
+\begin{equation}
+\mu = 441.
+\end{equation}
+
+Thus the upper-bound on a program to be a candidate for being "bug free"
+is approximately 441 lines of code.

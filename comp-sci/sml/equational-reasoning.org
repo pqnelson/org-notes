@@ -66,6 +66,20 @@ usually suppress the type.
   - Observe if ~e |-> e'~, then ~e |=> e'~
   - If ~e |=> e'~, then ~e ==> e'~
   - If ~e1 ==> e2~ and ~e2 ==> e3~, then ~e1 ==> e3~.
+  - *Example:* evaluating ~(1 + 2)*(3 + 4)~
+    - We have ~(1 + 2)*(3 + 4) |=> 3*7~ since ~(1 + 2) |=> 3~ and
+      separately ~3 + 4 |=> 7~; and then we have ~3*7 |=> 21~.
+      So ~|=>~ does one step of evaluation on disjoint subexpressions.
+    - But we also have ~(1 + 2)*(3 + 4) ==> 21~ done in one step.
+    - The longest route is to do one step of evaluation at a time, which
+      could look something like: ~(1 + 2)*(3 + 4) |-> 3*(3 + 4) |-> 3*7 |-> 21~,
+      but there are other possibilities.
+  - Syntax on paper, we would write:
+    - ~e ==> e'~ as $e \Longrightarrow e'$
+    - ~e |-> e'~ as $e \mapsto e'$
+    - ~e |=> e'~
+    - $e\hookrightarrow v$ for $e\Longrightarrow v$ and $v$ is a value,
+      i.e., $e$ is valuable and $e\Longrightarrow v$
 
 * Basic Properties
 :PROPERTIES:
@@ -340,4 +354,8 @@ then ~e~ is valuable.
 
 - Bob Harper, "Equational Reasoning Guide",
   [[http://www.cs.cmu.edu/~15150/][CMU CS15-150]].
+  - [[https://www.cs.cmu.edu/~15150/previous-semesters/2012-spring/resources/handouts/equational.pdf][2012 Handout]]
+  - [[https://www.cs.cmu.edu/~me/courses/15-150-Spring2020/lectures/09/structural-poly.pdf][Notes on structural induction]]
+  - [[https://www.cs.cmu.edu/~me/courses/15-150-Spring2020/lectures/01/evaluation.pdf][Notes on Evaluation]]
+  - [[https://www.cs.cmu.edu/~15150/resources/lectures/notes-lec0102.pdf][Notes]] using ~=>*~ instead of ~==>~
 - David Walker, Princeton [[https://www.cs.princeton.edu/~dpw/courses/cos326-12/notes/reasoning.php][COS326]] notes, 2012
