@@ -1,0 +1,116 @@
+#+TITLE: TeX Notes
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-10-24T09:48:24-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Sunday October 24, 2021 at  9:48AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-84848014-a2ce-403a-9dec-20a86af11ca5
+:END:
+
+These are random observations about TeX and LaTeX.
+
+* Poor Man's LaTeX
+:PROPERTIES:
+:CUSTOM_ID: h-f706e3fa-e88f-4439-9095-907b9b20d0e2
+:END:
+
+I've been curious about how LaTeX is built out of TeX macros for a while
+now. These are just some observations about it.
+
+** Environments
+:PROPERTIES:
+:CUSTOM_ID: h-61eb6d82-0759-480a-ac89-743dd455f86d
+:END:
+
+Someone asked on tex.stackexchange about how environments in LaTeX are
+implemented using only plain TeX. David Carlisle's [[https://tex.stackexchange.com/a/572575][answer]] was quite
+enlightening: ~\begin{foo}~ executes ~\foo~, and ~\end{foo}~ executes
+~\endfoo~. But this requires redefining plain TeX's ~\end~ primitive,
+setting it to be ~\@@end~ in LaTeX.
+
+This sparked a curiousity about LaTeX's implementation details. They can
+be found, for texlive users, in
+~/usr/share/texlive/texmf-dist/tex/latex-dev/base/latex.ltx~ or somewhere
+similar.
+
+If one imitates LaTeX, and writes something like ~\let\@@end\end~, then
+one needs to redefine ~\bye~ to be something like:
+
+#+begin_src tex
+\def\makeatletter{\catcode`\@11\relax}
+\def\makeatother{\catcode`\@12\relax}
+\makeatletter
+\let\@@end\end
+\outer\def\bye{\par\vfill\supereject\@@end}
+
+% define environment syntax
+\def\begin#1{\begingroup\csname#1\endcsname}
+\def\end#1{\csname end#1\endcsname\endgroup}
+\makeatother
+#+end_src
+
+** Equations
+:PROPERTIES:
+:CUSTOM_ID: h-481e8d2b-e5e1-41be-a892-ebba10a94b60
+:END:
+
+The implementation is fairly straightforward.
+
+#+begin_src tex
+%% LaTeX's implementation:
+%%
+%% \def\stepcounter#1{%
+%%   \addtocounter{#1}\@ne
+%%   \begingroup
+%%     \let\@elt\@stpelt
+%%     \csname cl@#1\endcsname
+%%   \endgroup}
+%% \def\@definecounter#1{\expandafter\newcount\csname c@#1\endcsname
+%%      \setcounter{#1}\z@
+%%      \global\expandafter\let\csname cl@#1\endcsname\@empty
+%%      \@addtoreset{#1}{@ckpt}%
+%%      \global\expandafter\let\csname p@#1\endcsname\@empty
+%%      \expandafter
+%%      \gdef\csname the#1\expandafter\endcsname\expandafter
+%%           {\expandafter\@arabic\csname c@#1\endcsname}}
+\def\stepcounter#1{
+    \expandafter\global\expandafter\advance\csname c@#1\endcsname by1
+}
+\def\setcounter#1#2{
+    \expandafter\global\csname c@#1\endcsname=#2
+}
+\def\@definecounter#1{
+    \expandafter\newcount\csname c@#1\endcsname
+    \setcounter{#1}{0}
+    \expandafter
+    \gdef\csname the#1\expandafter\endcsname\expandafter
+         {\expandafter\number\csname c@#1\endcsname}
+}
+
+\@definecounter{equation}
+\def\equation{$$\refstepcounter{equation}}
+\def\endequation{\eqno \hbox{\@eqnnum}$$\@ignoretrue}
+\def\@eqnnum{{\normalfont \normalcolor (\theequation)}}
+#+end_src
+* Math Gallery
+:PROPERTIES:
+:CUSTOM_ID: h-9003bdc5-57ad-4ef9-aa76-5b45c8f1f8ab
+:END:
+
+** Normal Ordering Operators
+:PROPERTIES:
+:CUSTOM_ID: h-024d8f89-6eec-4422-8e82-ba3e2e15a117
+:END:
+
+In Quantum Field Theory (and Vertex Operator Algebras, and related
+subjects), we need normal ordering of operators. This has been discussed
+at least [[https://tex.stackexchange.com/q/214347][once]] on tex.stackexchange, and the answers are quite good.
