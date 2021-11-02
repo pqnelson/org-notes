@@ -114,3 +114,149 @@ The implementation is fairly straightforward.
 In Quantum Field Theory (and Vertex Operator Algebras, and related
 subjects), we need normal ordering of operators. This has been discussed
 at least [[https://tex.stackexchange.com/q/214347][once]] on tex.stackexchange, and the answers are quite good.
+
+** Tractatus Numbering in Plain TeX
+:PROPERTIES:
+:CUSTOM_ID: h-952ca320-c41f-4992-8f2f-03b63e69c307
+:END:
+
+Someone asked for this in plain TeX, and David Carlisle's [[https://tex.stackexchange.com/a/500105/14751][solution]]
+fits my needs perfectly.
+
+#+begin_src tex
+\newcount\zzdepth
+\newcount\zza
+\edef\zzbase{\the\allocationnumber}
+\zzdepth\allocationnumber
+\newcount\zzb
+\newcount\zzc
+\newcount\zzd
+
+\def\thezz{{%
+\ifnum\zzdepth>\zzbase\relax
+\advance\zzdepth-1 %
+\expandafter\thezz
+\fi
+}\the\count\zzdepth.%
+}
+
+\everypar{{\bf\thezz} }
+
+
+
+\def\on{\advance\count\zzdepth 1\relax}
+\def\eatstar*{}
+\def\down{\futurelet\tmp\xxdown}
+\def\xxdown{%
+\ifx*\tmp
+\advance\zzdepth 1 \count\zzdepth 0\relax
+\expandafter\eatstar
+\else
+\advance\zzdepth 1 \count\zzdepth 1\relax
+\fi}
+
+\def\up{\advance\zzdepth -1 \advance\count\zzdepth 1\relax}
+
+\on
+This is the first paragraph, paragraph number 1.
+
+\on
+This is paragraph number 2.
+
+\down
+This is paragraph number 2.1
+
+\down*
+This is 2.10
+
+\up
+This is 2.2
+
+\down
+This is 2.2.1
+
+\up\up
+This is 3
+
+\bye
+#+end_src
+
+I liked this, but wanted to hack something together more suitable for my
+own personal purposes:
+
+#+begin_src tex
+\newcount\zzdepth
+\newcount\zza
+\edef\zzbase{\the\allocationnumber}
+\zzdepth\allocationnumber
+\newcount\zzb
+\newcount\zzc
+\newcount\zzd
+
+\def\thezz{{%
+\ifnum\zzdepth>\zzbase\relax
+\advance\zzdepth-1 %
+\expandafter\thezz
+\fi
+}\the\count\zzdepth.%
+}
+\def\theM{{\bf\thezz}\quad\ignorespaces}
+
+\def\None#1{\advance\count\zzdepth 1\relax\theM{\bf#1.}\quad\ignorespaces}
+\def\Nmany[#1]#2{\advance\zzdepth by#1
+  \ifnum#1<0\advance\count\zzdepth 1
+  \else\count\zzdepth 1
+  \fi\relax
+  {\bf\thezz\ #2.}\quad\ignorespaces}
+\def\xN{\ifx\tmp[\expandafter\Nmany\else\None\fi}
+\def\N{\futurelet\tmp\xN}
+
+\def\Mone{\advance\count\zzdepth 1\relax\theM}
+\def\Mmany[#1]{\advance\zzdepth by#1
+  \ifnum#1<0\advance\count\zzdepth 1
+  \else\count\zzdepth 1
+  \fi\relax\theM}
+\def\xM{\ifx\tmp[\expandafter\Mmany\else\Mone\fi}
+\def\M{\futurelet\tmp\xM}
+
+
+\M
+Paragraph 1, reporting!
+
+\M
+Paragraph 2, alert!
+
+\N[1]{Theorem}
+{\it Paragraph {2.1} should be present.}
+
+\M
+This is the first paragraph, paragraph number 1.
+
+\M
+This is paragraph number 2.
+
+\M[1]
+This is paragraph number 2.1
+
+\M[1]
+This is 2.10
+
+\M[-1]
+This is 2.3.2
+
+\M[1]
+This is 2.2.1
+
+\M[2]
+This is, uh, 2.2.1.1.1?
+
+\M[-1]
+Wait, what does this do?
+
+\M[-4]
+This is 3
+
+Spam and eggs test!
+
+\bye
+#+end_src
