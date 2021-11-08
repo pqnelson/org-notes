@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-11-08 Mon 08:06 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Definitions in Mizar</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Definitions in Mizar</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-047a8ccd-0114-408c-8e78-12a96609bd82">1. Introduction</a></li>
+<li><a href="#h-3a6c46b9-1ddf-4bf3-b3a6-61df8423f835">2. General Descriptions</a>
+<ul>
+<li><a href="#h-e99e01cb-23ee-4780-8f44-1b0127f2c2b9">2.1. Mizar Language</a>
+<ul>
+<li><a href="#h-b3211e1b-db9c-4f65-ac61-4f4635e09703">2.1.1. Attributes</a></li>
+<li><a href="#h-5ae672f3-988d-478a-bc55-949a091a0934">2.1.2. Terms</a></li>
+<li><a href="#h-99bf5b98-2250-49bd-9a0b-ef9a2c721af6">2.1.3. Type Translation</a></li>
+</ul>
+</li>
+<li><a href="#h-69eb70b7-71c4-499a-970f-1d0278a7ba97">2.2. Syntactic Levels</a></li>
+<li><a href="#h-afd51419-9f5f-4d56-8059-8c545235ca10">2.3. First Order Formats, Outline of Translation</a></li>
+</ul>
+</li>
+<li><a href="#h-b82c3de9-2b8e-4674-a8bc-a5b895f75f68">3. Translations of Mizar Definitions</a>
+<ul>
+<li><a href="#h-93786a76-990f-4302-b6b9-e0d8101b1665">3.1. Mode Definitions</a></li>
+<li><a href="#h-4a4a21b9-71fb-49ee-9a1f-6dded027c808">3.2. Predicate and Attribute Definitions</a>
+<ul>
+<li><a href="#h-f048d47c-ccaf-4522-899a-8cd3bbec0cfc">3.2.1. Example</a></li>
+<li><a href="#h-0918eb83-8a7c-4b8d-a58f-4e9bd98527ff">3.2.2. Translation</a></li>
+<li><a href="#h-84b71f04-d53d-46ac-996d-ffac36c314e1">3.2.3. Attributes</a></li>
+</ul>
+</li>
+<li><a href="#h-6177f78e-3a2b-4783-88be-c6cdc907e665">3.3. Functor Definitions</a></li>
+<li><a href="#h-ffc5ae5c-4648-48b9-b614-c57b6ad51c58">3.4. Structures</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-047a8ccd-0114-408c-8e78-12a96609bd82" class="outline-2">
+<h2 id="h-047a8ccd-0114-408c-8e78-12a96609bd82"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-047a8ccd-0114-408c-8e78-12a96609bd82">
+<p>
+These are some quick notes on Josef Urban's "Translating Mizar for First
+Order Theorem Provers", In <i>Mathematical Knowledge Management:
+Proceedings of the Second International Conference</i> (Eds., A. Asperti,
+B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in
+Computer Science vol 2594, 2003, pp. 203&#x2013;215.
+</p>
+
+
+<p>
+The <a href="http://wiki.mizar.org/twiki/bin/view/Mizar/MizarSyntax">Mizar Syntax</a> might be consulted from time to time. All syntactic
+categories will be written in pseudo-BNF brackets, like so:
+<code>&lt;category&gt;</code>. (The Mizar wiki appears to use some variant of EBNF, it
+seems.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-3a6c46b9-1ddf-4bf3-b3a6-61df8423f835" class="outline-2">
+<h2 id="h-3a6c46b9-1ddf-4bf3-b3a6-61df8423f835"><span class="section-number-2">2</span> General Descriptions</h2>
+<div class="outline-text-2" id="text-h-3a6c46b9-1ddf-4bf3-b3a6-61df8423f835">
+</div>
+
+<div id="outline-container-h-e99e01cb-23ee-4780-8f44-1b0127f2c2b9" class="outline-3">
+<h3 id="h-e99e01cb-23ee-4780-8f44-1b0127f2c2b9"><span class="section-number-3">2.1</span> Mizar Language</h3>
+<div class="outline-text-3" id="text-h-e99e01cb-23ee-4780-8f44-1b0127f2c2b9">
+<p>
+The main parts of a Mizar article are:
+</p>
+
+<ol class="org-ol">
+<li>Definitions
+<ul class="org-ul">
+<li><code>&lt;Definitional-Items&gt;</code></li>
+<li><code>&lt;Function&gt;</code></li>
+<li><code>&lt;Predicate&gt;</code></li>
+<li><code>&lt;Mode&gt;</code></li>
+<li><code>&lt;Structure&gt;</code></li>
+<li><code>&lt;Attribute-Definition&gt;</code></li>
+</ul></li>
+<li><code>&lt;Theorems&gt;</code></li>
+<li><code>&lt;Schemes&gt;</code></li>
+</ol>
+</div>
+
+<div id="outline-container-h-b3211e1b-db9c-4f65-ac61-4f4635e09703" class="outline-4">
+<h4 id="h-b3211e1b-db9c-4f65-ac61-4f4635e09703"><span class="section-number-4">2.1.1</span> Attributes</h4>
+<div class="outline-text-4" id="text-h-b3211e1b-db9c-4f65-ac61-4f4635e09703">
+<p>
+Attributes are predicates handled specially by the system, according to rules defined by the user in <code>&lt;Cluster-Registrations&gt;</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-5ae672f3-988d-478a-bc55-949a091a0934" class="outline-4">
+<h4 id="h-5ae672f3-988d-478a-bc55-949a091a0934"><span class="section-number-4">2.1.2</span> Terms</h4>
+<div class="outline-text-4" id="text-h-5ae672f3-988d-478a-bc55-949a091a0934">
+<p>
+All Mizar terms are typed. There is a largest (default) type called <code>set</code> or <code>Any</code>.
+</p>
+
+<p>
+All other types have one or more mother types.
+</p>
+
+<p>
+Types of variables are given either in global <code>&lt;Reservations&gt;</code> or local <code>&lt;Loci-Definitions&gt;</code> or inside quantified formulas.
+</p>
+
+<p>
+Types of other terms are computed according to <code>&lt;Functor-Definitions&gt;</code>.
+</p>
+
+<p>
+Types can have arguments (i.e., be parametrized) in Mizar, e.g., <code>Element of X</code> or <code>Function of NAT, REAL</code> are legal types with one or two aguments, respectively.
+</p>
+
+<p>
+<b>References</b>
+</p>
+
+<ul class="org-ul">
+<li>F. Wiedijk,<br>
+"Mizar's Soft Type System."<br>
+In: K. Schneider &amp; J. Brandt (eds.), <span class="underline">Theorem Proving in Higher Order Logics 2007</span>, LNCS <b><b>4732</b></b>, 383-399, 2007 <a href="http://www.cs.ru.nl/F.Wiedijk/mizar/miztype.pdf">pdf</a>.<br>
+Discusses how Mizar handles types atop set theory.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-99bf5b98-2250-49bd-9a0b-ef9a2c721af6" class="outline-4">
+<h4 id="h-99bf5b98-2250-49bd-9a0b-ef9a2c721af6"><span class="section-number-4">2.1.3</span> Type Translation</h4>
+<div class="outline-text-4" id="text-h-99bf5b98-2250-49bd-9a0b-ef9a2c721af6">
+<p>
+Type translation is the largest part of the first order translation. There are two basic approaches to type translation:
+</p>
+
+<ol class="org-ol">
+<li>Types can be thought of as set-theoretic classes</li>
+<li>Types can be thought of as predicates; thus <code>set(X)</code> is true for any
+<code>X</code>, <code>Integer(X)</code> is true iff <code>X</code> is an integer, and <code>Element(X,Y)</code>
+is true iff <code>X</code> is an element of <code>Y</code>.</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-69eb70b7-71c4-499a-970f-1d0278a7ba97" class="outline-3">
+<h3 id="h-69eb70b7-71c4-499a-970f-1d0278a7ba97"><span class="section-number-3">2.2</span> Syntactic Levels</h3>
+<div class="outline-text-3" id="text-h-69eb70b7-71c4-499a-970f-1d0278a7ba97">
+<p>
+Constructors are the real, unambiguous functions, predicates, types, and
+attributes to which the patterns are translated before any checking
+takes place.
+</p>
+
+<p>
+Patterns are mapped to the constructors; they accomodate the need for
+having different symbols for the same constructor or vice-versa.
+</p>
+
+<p>
+The process, mapping patterns to constructors, is done separately for
+each Mizar article depending on its <code>&lt;Environment-Declarations&gt;</code>. It is
+usually quite nontrivial.
+</p>
+
+<p>
+(I suppose this is somewhat analogous to a macro system?)
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-afd51419-9f5f-4d56-8059-8c545235ca10" class="outline-3">
+<h3 id="h-afd51419-9f5f-4d56-8059-8c545235ca10"><span class="section-number-3">2.3</span> First Order Formats, Outline of Translation</h3>
+<div class="outline-text-3" id="text-h-afd51419-9f5f-4d56-8059-8c545235ca10">
+<p>
+The possible choices were TPTP, DFG (for SPASS), and Otter formatting. Urban went with DFG for SPASS.
+</p>
+
+<p>
+The basic approach to translation was the following:
+</p>
+
+<ol class="org-ol">
+<li>The Mizar Parser and Analyzer translated Mizar articles to the
+constructor level</li>
+<li>Absolute (i.e., context independent) names are given to all
+constructors</li>
+<li>Definitions of constructors translate usually to several first-order
+formulas
+<ul class="org-ul">
+<li>We have to translate both the type hierarchy information given in
+the definition, and the actual <code>&lt;Definiens&gt;</code></li>
+</ul></li>
+<li>Sometimes additional properties of the defined constructor are stated
+inside the definition (e.g., commutativity, transitivity, etc.).
+<ul class="org-ul">
+<li>They are also translated into corresponding first-order formulas.</li>
+</ul></li>
+<li>All formulas are relativized with respect to the typed variables
+occurring in them; so <code>for x being Real holds x-x = 0</code> translates to
+<code>Real(x) implies x-x=0</code></li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-b82c3de9-2b8e-4674-a8bc-a5b895f75f68" class="outline-2">
+<h2 id="h-b82c3de9-2b8e-4674-a8bc-a5b895f75f68"><span class="section-number-2">3</span> Translations of Mizar Definitions</h2>
+<div class="outline-text-2" id="text-h-b82c3de9-2b8e-4674-a8bc-a5b895f75f68">
+</div>
+
+<div id="outline-container-h-93786a76-990f-4302-b6b9-e0d8101b1665" class="outline-3">
+<h3 id="h-93786a76-990f-4302-b6b9-e0d8101b1665"><span class="section-number-3">3.1</span> Mode Definitions</h3>
+<div class="outline-text-3" id="text-h-93786a76-990f-4302-b6b9-e0d8101b1665">
+<p>
+The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Mode-Definition">syntactic structure</a> of <code>&lt;Mode-Definition&gt;</code> is:
+</p>
+
+<pre class="example" id="orgd4711f3">
+&lt;Mode-Definition&gt; =
+	"mode" &lt;Mode-Pattern&gt; ( [ &lt;Specification&gt; ] [ "means" &lt;Definiens&gt; ] ";"
+&lt;Correctness-Conditions&gt; | "is" &lt;Type-Expression&gt; ";" ) { &lt;Mode-Property&gt; } .
+
+&lt;Mode-Pattern&gt; = &lt;Mode-Symbol&gt; [ "of" &lt;Loci&gt; ] .
+&lt;Mode-Symbol&gt; = &lt;Symbol&gt; | "set"
+
+&lt;Loci&gt; = &lt;Locus&gt; { "," &lt;Locus&gt; }
+&lt;Locus&gt; = &lt;Variable-Identifier&gt;
+</pre>
+
+<p>
+An example of this might be:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar">definition let X;
+  mode Element of X means
+  :Def2: it in X if X is non empty
+    otherwise it is empty;
+  existency by BOOLE:def 1;
+  consistency;
+end;
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>We have the <code>&lt;Loci-Declaration&gt;</code> be the first statement after the
+definition, i.e., the "<code>let X;</code>" is such a declaration. It declares
+the variables occurring in the definition.</li>
+<li>The <code>&lt;Specification&gt;</code> part is missing for this example. (If it were
+present, it gives the "mother type" for the newly defined mode. If
+not, the largest type <code>set</code> is used as the mother type.)</li>
+<li>The <code>&lt;Definiens&gt;</code> after the keyword <code>means</code> consists of an optional
+<code>&lt;Label-Identifier&gt;</code> and either (a) a simple sentence, or (b) several
+sentences separated by the keywords <code>if</code> and <code>otherwise</code>. The latter
+condition (<code>&lt;Conditional-Definiens&gt;</code>) is used for "per cases"
+definitions.
+<ul class="org-ul">
+<li>In our example, the <code>&lt;Conditional-Definiens&gt;</code> separates the case
+when the mode argument <code>X</code> is non-empty from the case when it is
+empty.
+<ul class="org-ul">
+<li>For the first case states, for any <code>it</code> (special variable used in
+definitions) being of type <code>Element of X</code> means that <code>it in X</code></li>
+<li>The second case, in the degenerate case when <code>X</code> is empty, being
+of the type <code>Element of X</code> means to be empty too.</li>
+</ul></li>
+</ul></li>
+<li><code>&lt;Correctness-Conditions&gt;</code> in our example is given by the <code>existence</code>
+and <code>consistency</code> conditions.
+<ul class="org-ul">
+<li>The <code>existence</code> condition states the extension of the defined type
+is non-empty</li>
+<li>The <code>consistency</code> condition states the disjunction of all the cases
+into which the definition was split, is true.</li>
+</ul></li>
+</ul>
+
+<p>
+(Note, <code>Element of</code> transforms a given set into a "soft type".)
+</p>
+
+<p>
+Types in Mizar may be translated as predicates. So <code>n</code>-ary types become
+<code>n+1</code>-ary predicates. So, the Mizar type qualification <code>X is Element of
+Y</code> will be translated as <code>m1_subset_1(X,Y)</code>.
+</p>
+
+<p>
+The definiens translates as <code>m1_subset_1(X,Y) iff ( (not(empty(Y)) and
+in(X,Y)) or (empty(X) and empty(Y)) )</code>.
+</p>
+
+<p>
+The existence condition translates to: <code>forall([Y], exists([X],
+m1_subset_1(X,Y)))</code>
+</p>
+
+<p>
+Another couple examples, from <a href="http://www.mizar.org/version/current/mml/binop_1.miz"><code>binop_1.miz</code></a>:
+</p>
+
+<pre class="example" id="org5c06d32">
+definition
+  let A be set; :: loci-declaration
+  :: defines a unary operation on A
+  mode UnOp of A is Function of A,A;
+  :: defines a binary operation on A, note that [:A,A:] is the Cartesian product of A with A
+  mode BinOp of A is Function of [:A,A:],A;
+end;
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-4a4a21b9-71fb-49ee-9a1f-6dded027c808" class="outline-3">
+<h3 id="h-4a4a21b9-71fb-49ee-9a1f-6dded027c808"><span class="section-number-3">3.2</span> Predicate and Attribute Definitions</h3>
+<div class="outline-text-3" id="text-h-4a4a21b9-71fb-49ee-9a1f-6dded027c808">
+<p>
+The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predicate-Definition">syntactic structure</a> to a <code>&lt;Predicate-Definition&gt;</code> is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ebnf">&lt;Predicate-Definition&gt; =
+  "pred" &lt;Predicate-Pattern&gt; [ "means" &lt;Definiens&gt; ] ";" &lt;Correctness-Conditions&gt; { &lt;Predicate-Property&gt; } .
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-f048d47c-ccaf-4522-899a-8cd3bbec0cfc" class="outline-4">
+<h4 id="h-f048d47c-ccaf-4522-899a-8cd3bbec0cfc"><span class="section-number-4">3.2.1</span> Example</h4>
+<div class="outline-text-4" id="text-h-f048d47c-ccaf-4522-899a-8cd3bbec0cfc">
+<p>
+An example given:
+</p>
+
+<pre class="example" id="orgc2be017">
+definition let X,Y:
+  pred X c= Y means
+:: TARSKI:def 3
+   x in X implies x in Y;
+  reflexivity;
+end;
+</pre>
+
+<p>
+We have the <code>&lt;Loci-Declaration&gt;</code> right after the definition, it is
+specifically <code>let X,Y;</code> indicating we have two sets <code>X</code> and <code>Y</code>.
+</p>
+
+<p>
+Then we have the <code>&lt;Predicate-Pattern&gt;</code> for our example be <code>X c= Y</code>.
+</p>
+
+<p>
+The <code>&lt;Definiens&gt;</code> is "<code>x in Y implies x in Y</code>".
+</p>
+
+<p>
+The <code>&lt;Predicate-Property&gt;</code> is states simply as <code>reflexivity;</code>.
+</p>
+
+<p>
+The <code>&lt;Correctness-Conditions&gt;</code> occur only in redefinitions of
+predicates, which we will discuss later.
+</p>
+
+<p>
+So this definition creates both a pattern and a constructor.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-0918eb83-8a7c-4b8d-a58f-4e9bd98527ff" class="outline-4">
+<h4 id="h-0918eb83-8a7c-4b8d-a58f-4e9bd98527ff"><span class="section-number-4">3.2.2</span> Translation</h4>
+<div class="outline-text-4" id="text-h-0918eb83-8a7c-4b8d-a58f-4e9bd98527ff">
+<p>
+The <code>&lt;Definiens&gt;</code> formula is translated as equivalence:
+<code>r1_tarski(X,Y) iff (x in X implies x in Y)</code>.
+</p>
+
+<p>
+The <code>&lt;Predicate-Property&gt;</code> can be symmetry, connectedness, reflexivity,
+or irreflexivity. We could add a corresponding theorem for each
+property, e.g., proving <code>r1_tarski(X,X)</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-84b71f04-d53d-46ac-996d-ffac36c314e1" class="outline-4">
+<h4 id="h-84b71f04-d53d-46ac-996d-ffac36c314e1"><span class="section-number-4">3.2.3</span> Attributes</h4>
+<div class="outline-text-4" id="text-h-84b71f04-d53d-46ac-996d-ffac36c314e1">
+<p>
+Attributes are very similar to predicates. They are used to restrict a
+type to a subtype. They are <i>adjectives</i> which can be assembled together
+(e.g., <code>finite non empty set</code> uses the adjectives <code>finite</code> and <code>non
+empty</code> &#x2014; <code>finite</code> and <code>empty</code> are attributes, <code>non empty</code> is the
+negation of <code>empty</code>). The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Attribute-Definition">syntax</a> for it is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ebnf">&lt;Attribute-Definition&gt; =
+  "attr" &lt;Attribute-Pattern&gt; "means" &lt;Definiens&gt; ";" &lt;Correctness-Conditions&gt; .
+</pre>
+</div>
+
+<p>
+Here's an example:
+</p>
+
+<pre class="example" id="orgb35242a">
+definition let i be number;
+ attr i is even means
+  ex j being Integer st i = 2*j;
+end;
+</pre>
+
+<ul class="org-ul">
+<li>We have the <code>&lt;Loci-Definition&gt;</code> be "<code>let i be number</code>"</li>
+<li>The <code>&lt;Attribute-Pattern&gt;</code> is here "<code>i is even</code>" &#x2014; <code>is</code> is a keyword, <code>even</code> is the attribute we are defining.</li>
+<li>The <code>&lt;Definiens&gt;</code> is "<code>ex j being Integer st i = 2*j</code>"</li>
+</ul>
+
+<p>
+<b>Example 2.</b> From
+<a href="https://fbc.pionier.net.pl/details/nnTX0Rl">Formalization of Fundamental Theorem of Finite Abelian Groups in Mizar</a> (by Kazuhisa Nakasho,
+Hiroyuki Okazaki, Hiroshi Yamazaki, and Yasunari Shidama) discusses the
+formalization of groups in Mizar. The definition of a group appears in
+<a href="http://www.mizar.org/version/current/mml/group_1.miz"><code>group_1.miz</code></a> by first introducing attributes on the notion of a magma
+(recall, a magma consists of a set equipped with some [not necessarily
+associative] law of composition). Mizar refers to a <code>multMagma</code> as a
+magma with a single law of composition.
+</p>
+
+<pre class="example" id="org6624886">
+definition
+  let IT be multMagma;
+
+:: definition 1: unital
+  attr IT is unital means
+  ex e being Element of IT st for h being
+  Element of IT holds h * e = h &amp; e * h = h;
+
+:: definition 2: group-like
+  attr IT is Group-like means
+  :Def2:
+  ex e being Element of IT st for h being
+Element of IT holds h * e = h &amp; e * h = h &amp; ex g being Element of IT st h * g =
+  e &amp; g * h = e;
+
+:: definition 3: associative
+  attr IT is associative means
+  :Def3:
+  for x,y,z being Element of IT holds (x*y )*z = x*(y*z);
+end;
+</pre>
+
+<p>
+This is really 3 attributes:
+</p>
+<ol class="org-ol">
+<li>A magma is defined to be "unital" if there is an element <code>e</code> such
+that for any element <code>h</code> of the magma, <code>eh = he = h</code>.</li>
+<li>A magma is group-like if there is a unit (with respect to the law of
+composition), and inverses exist.</li>
+<li>A magma is called associative if for any elements <code>x</code>, <code>y</code>, and <code>z</code>
+we have <code>(xy)z = x(yz)</code>.</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-6177f78e-3a2b-4783-88be-c6cdc907e665" class="outline-3">
+<h3 id="h-6177f78e-3a2b-4783-88be-c6cdc907e665"><span class="section-number-3">3.3</span> Functor Definitions</h3>
+<div class="outline-text-3" id="text-h-6177f78e-3a2b-4783-88be-c6cdc907e665">
+<p>
+Functions must define the types of their arguments and the type of their
+result. Several <code>&lt;Functor-Properties&gt;</code> (like <code>commutativity</code>) can be
+associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Functor-Definition">syntax</a> is:
+</p>
+
+<pre class="example" id="org7a15486">
+&lt;Functor-Definition&gt; =
+ "func" &lt;Functor-Pattern&gt; [ &lt;Specification&gt; ] [ ( "means" | "equals" ) &lt;Definiens&gt; ] ";"
+ &lt;Correctness-Conditions&gt; { &lt;Functor-Property&gt; } .
+
+&lt;Specification&gt; = "-&gt;" &lt;Type-Expression&gt;
+</pre>
+
+<p>
+The example given:
+</p>
+
+<pre class="example" id="org9e595c5">
+definition let x be real number;
+  func -x -&gt; real number means :Def1: x + it = 0;
+  existence by AXIOMS:19;
+  uniqueness by Th10;
+</pre>
+
+<p>
+Lets analyze this definition.
+</p>
+
+<ul class="org-ul">
+<li>The <code>&lt;Loci-Declaration&gt;</code> declares a variable <code>x</code> for the type <code>number</code>
+with the adjective <code>real</code>
+<ul class="org-ul">
+<li>The type <code>number</code> is now just a convenient synonym for the larget
+type <code>set</code>, and <code>real</code> is also defined in the same Mizar article
+<code>arytm</code>.</li>
+</ul></li>
+<li>The <code>&lt;Functor-Pattern&gt;</code> is <code>-x</code> here</li>
+<li>The <code>&lt;Specification&gt;</code> is <code>-&gt; real number</code>, which tells us the result
+type of the function (a real number).</li>
+<li>The <code>&lt;Definiens&gt;</code> here is <code>:Def1: x + it = 0</code>.</li>
+<li>The <code>&lt;Correctness-Condition&gt;</code>, we have 2 of them which the system
+always checks:
+<ul class="org-ul">
+<li>"<code>existence</code>" states there exists an object (of the desired type
+<code>real number</code>) conforming to the <code>&lt;Definiens&gt;</code></li>
+<li>"<code>uniqueness</code>" says it is unique (proven, in fact, by a previous
+theorem, <code>Th10</code>)</li>
+</ul></li>
+</ul>
+
+<p>
+The definition creates one new pattern, and one new constructor. 
+</p>
+
+<div class="remark" id="org20bf1b5">
+<p>
+Defining a "morphism" requires some involved work with cluster
+registrations, it's not as simple as defining a new function. See, e.g.,
+how group morphisms are defined in
+<a href="http://www.mizar.org/version/current/mml/group_6.miz"><code>group_6.miz</code></a>.
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-ffc5ae5c-4648-48b9-b614-c57b6ad51c58" class="outline-3">
+<h3 id="h-ffc5ae5c-4648-48b9-b614-c57b6ad51c58"><span class="section-number-3">3.4</span> Structures</h3>
+<div class="outline-text-3" id="text-h-ffc5ae5c-4648-48b9-b614-c57b6ad51c58">
+<p>
+From <a href="http://www.mizar.org/version/current/mml/algstr_0.miz"><code>algstr_0.miz</code></a>, we have:
+</p>
+
+<pre class="example" id="org20095c0">
+:: Multiplicative structures
+definition
+  struct (1-sorted) multMagma (# carrier -&gt; set, multF -&gt; BinOp of the carrier
+  #);
+end;
+
+:: multiplication is later defined as:
+:: 
+:: definition
+::   let M be multMagma;
+::   let x,y be Element of M;
+::   func x*y -&gt; Element of M equals
+::   (the multF of M).(x,y);
+::   coherence;
+:: end;
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2021-11-08 Mon 08:06.</p>
+</div>
+</body>
+</html>

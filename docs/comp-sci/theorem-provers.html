@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-07-11 Sun 08:57 -->
+<!-- 2021-11-08 Mon 08:18 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>On Theorem Provers</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -247,7 +247,11 @@
 <li><a href="#h-0d8b24ba-8575-45c7-bd31-3d003d8bc87e">1.2. Vernacular</a></li>
 </ul>
 </li>
-<li><a href="#h-f631746a-da52-4b86-958f-8eb98d9593b4">2. Rapid Prototyping</a></li>
+<li><a href="#h-f631746a-da52-4b86-958f-8eb98d9593b4">2. Rapid Prototyping</a>
+<ul>
+<li><a href="#h-f26ec2ee-cdcd-4606-a006-5030d73f83ac">2.1. Formalizing Mathematics</a></li>
+</ul>
+</li>
 <li><a href="#h-936b2cbd-53e0-49b7-b496-052d2ba3b091">3. References</a>
 <ul>
 <li><a href="#h-31684bce-5827-4fe5-b9cd-00405898307d">3.1. Vernacular</a>
@@ -263,7 +267,7 @@
 </div>
 
 <div id="outline-container-h-6cd236b0-da47-4d1e-b956-7bac67f3d86f" class="outline-2">
-<h2 id="h-6cd236b0-da47-4d1e-b956-7bac67f3d86f"><span class="section-number-2">1.</span> Introduction</h2>
+<h2 id="h-6cd236b0-da47-4d1e-b956-7bac67f3d86f"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-6cd236b0-da47-4d1e-b956-7bac67f3d86f">
 <p>
 There is much to say, too much. In the golden age of GOFAI, theorem
@@ -276,7 +280,7 @@ mathematics.
 
 
 <div id="outline-container-h-043b1579-6f46-4130-a530-a3778c6037db" class="outline-3">
-<h3 id="h-043b1579-6f46-4130-a530-a3778c6037db"><span class="section-number-3">1.1.</span> Components of a Theorem Prover</h3>
+<h3 id="h-043b1579-6f46-4130-a530-a3778c6037db"><span class="section-number-3">1.1</span> Components of a Theorem Prover</h3>
 <div class="outline-text-3" id="text-h-043b1579-6f46-4130-a530-a3778c6037db">
 <p>
 Basically a theorem prover is an interpreter for a foundations of
@@ -299,7 +303,7 @@ implement the kernel and elaborator.</dd>
 </div>
 
 <div id="outline-container-h-0d8b24ba-8575-45c7-bd31-3d003d8bc87e" class="outline-3">
-<h3 id="h-0d8b24ba-8575-45c7-bd31-3d003d8bc87e"><span class="section-number-3">1.2.</span> Vernacular</h3>
+<h3 id="h-0d8b24ba-8575-45c7-bd31-3d003d8bc87e"><span class="section-number-3">1.2</span> Vernacular</h3>
 <div class="outline-text-3" id="text-h-0d8b24ba-8575-45c7-bd31-3d003d8bc87e">
 <p>
 The design of the vernacular is quite difficult and under-studied. One
@@ -320,7 +324,7 @@ Mizar's <a href="http://www.mizar.org/language/mizar-grammar.xml">grammar</a> is
 </div>
 
 <div id="outline-container-h-f631746a-da52-4b86-958f-8eb98d9593b4" class="outline-2">
-<h2 id="h-f631746a-da52-4b86-958f-8eb98d9593b4"><span class="section-number-2">2.</span> Rapid Prototyping</h2>
+<h2 id="h-f631746a-da52-4b86-958f-8eb98d9593b4"><span class="section-number-2">2</span> Rapid Prototyping</h2>
 <div class="outline-text-2" id="text-h-f631746a-da52-4b86-958f-8eb98d9593b4">
 <p>
 We can implement theorem provers quickly in functional languages.
@@ -333,10 +337,68 @@ formulas and logical languages, etc.
 We can use Lisp (e.g., <a href="https://github.com/latte-central/LaTTe">LaTTe</a>).
 </p>
 </div>
+
+<div id="outline-container-h-f26ec2ee-cdcd-4606-a006-5030d73f83ac" class="outline-3">
+<h3 id="h-f26ec2ee-cdcd-4606-a006-5030d73f83ac"><span class="section-number-3">2.1</span> Formalizing Mathematics</h3>
+<div class="outline-text-3" id="text-h-f26ec2ee-cdcd-4606-a006-5030d73f83ac">
+<p>
+Actually, this is one of the least appreciated aspects of theorem
+provers: that we're trying to invent a formal language for doing
+mathematics. Instead, we end up with contrived proof formats and the
+proof assistant communities are so insular they don't realize how
+terrible it is.
+</p>
+
+<p>
+What should be done instead is something like a "stepping stone" to
+theorem provers by using a "<a href="https://en.wikipedia.org/wiki/Controlled_natural_language">structured subset</a>" of English. We need to
+identify the "subdomains" of mathematical practice, viz:
+</p>
+
+<ul class="org-ul">
+<li>Formulating definitions</li>
+<li>Stating theorems</li>
+<li>Writing proofs</li>
+</ul>
+
+<p>
+As far as formulating definitions, although I'm a partisan for
+Baez&#x2013;Dolan "Stuff, Structure, Properties" (briefly discussed with
+<a href="../math/category-theory/internalization.html">Internalization</a>), there are times when it's clunky (in topology, field
+theory and I suspect Galois theory). It may be useful to carve out the
+notion of <b>adjectives</b> (e.g., 'we call a function "continuous" if
+<code>&lt;property&gt;</code>').  At this point, it feels quite a bit like Mizar's
+approach to definitions. For more on this, see:
+</p>
+
+<ul class="org-ul">
+<li>Josef Urban,<br>
+"Translating Mizar for First Order Theorem Provers".<br>
+In <i>Mathematical Knowledge Management: Proceedings of the Second International Conference</i> 
+(Eds., A. Asperti, B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in Computer Science vol 2594, 2003, pp. 203–215.</li>
+</ul>
+
+<p>
+Stating theorems and proving them are rather tightly coupled.
+We could try formalizing a basic <a href="../math/proof-steps.html">Mathematical Vernacular</a>, similar to
+Wiedijk's variant of de Bruijn. This would give us proof steps, while
+leaving "stating theorems" completely unspecified.
+</p>
+
+<p>
+The main point I'd like to drive home, however: it is <b>wrong</b> to just
+shrug and accept unintelligible commands as "the only way" to do theorem
+proving. Our goal is not to update Russell and Whitehead's <i>Principia</i>
+replacing archaic symbols with archaic keywords, nor should it be. Sadly
+this is what procedural provers have become (looking at <i>you</i>, Lean
+community).
+</p>
+</div>
+</div>
 </div>
 
 <div id="outline-container-h-936b2cbd-53e0-49b7-b496-052d2ba3b091" class="outline-2">
-<h2 id="h-936b2cbd-53e0-49b7-b496-052d2ba3b091"><span class="section-number-2">3.</span> References</h2>
+<h2 id="h-936b2cbd-53e0-49b7-b496-052d2ba3b091"><span class="section-number-2">3</span> References</h2>
 <div class="outline-text-2" id="text-h-936b2cbd-53e0-49b7-b496-052d2ba3b091">
 <ul class="org-ul">
 <li>John Harrison, Josef Urban and Freek Wiedijk,
@@ -346,7 +408,7 @@ We can use Lisp (e.g., <a href="https://github.com/latte-central/LaTTe">LaTTe</a
 </div>
 
 <div id="outline-container-h-31684bce-5827-4fe5-b9cd-00405898307d" class="outline-3">
-<h3 id="h-31684bce-5827-4fe5-b9cd-00405898307d"><span class="section-number-3">3.1.</span> Vernacular</h3>
+<h3 id="h-31684bce-5827-4fe5-b9cd-00405898307d"><span class="section-number-3">3.1</span> Vernacular</h3>
 <div class="outline-text-3" id="text-h-31684bce-5827-4fe5-b9cd-00405898307d">
 <ul class="org-ul">
 <li>John Harrison,
@@ -362,19 +424,23 @@ Eprint: <a href="https://arxiv.org/abs/1201.3601">arXiv:1201.3601</a>, 26 pages.
 </div>
 
 <div id="outline-container-h-7f07b242-0684-49af-9b3a-53d89ab36cbf" class="outline-4">
-<h4 id="h-7f07b242-0684-49af-9b3a-53d89ab36cbf"><span class="section-number-4">3.1.1.</span> Mizar</h4>
+<h4 id="h-7f07b242-0684-49af-9b3a-53d89ab36cbf"><span class="section-number-4">3.1.1</span> Mizar</h4>
 <div class="outline-text-4" id="text-h-7f07b242-0684-49af-9b3a-53d89ab36cbf">
 <ul class="org-ul">
 <li>Andrzej Trybulec,<br>
 "Some Features of the Mizar Language".<br>
 <a href="http://mizar.org/project/trybulec93.pdf">Eprint</a>, 1993, 17 pages.</li>
+<li>Josef Urban,<br>
+"Translating Mizar for First Order Theorem Provers".<br>
+In <i>Mathematical Knowledge Management: Proceedings of the Second International Conference</i> 
+(Eds., A. Asperti, B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in Computer Science vol 2594, 2003, pp. 203–215.</li>
 </ul>
 </div>
 </div>
 </div>
 
 <div id="outline-container-h-f7b249a0-b1ec-4a8b-a5ca-303733594963" class="outline-3">
-<h3 id="h-f7b249a0-b1ec-4a8b-a5ca-303733594963"><span class="section-number-3">3.2.</span> Mathematical Analysis in Theorem Provers</h3>
+<h3 id="h-f7b249a0-b1ec-4a8b-a5ca-303733594963"><span class="section-number-3">3.2</span> Mathematical Analysis in Theorem Provers</h3>
 <div class="outline-text-3" id="text-h-f7b249a0-b1ec-4a8b-a5ca-303733594963">
 <ul class="org-ul">
 <li>Sylvie Boldo, Catherine Lelay, Guillaume Melquiond,
@@ -391,7 +457,7 @@ pp 246&#x2013;262.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-11 Sun 08:56.</p>
+<p class="postamble">Last Updated 2021-11-08 Mon 08:18.</p>
 </div>
 </body>
 </html>

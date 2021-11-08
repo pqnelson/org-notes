@@ -68,6 +68,50 @@ formulas and logical languages, etc.
 
 We can use Lisp (e.g., [[https://github.com/latte-central/LaTTe][LaTTe]]).
 
+** Formalizing Mathematics
+:PROPERTIES:
+:CUSTOM_ID: h-f26ec2ee-cdcd-4606-a006-5030d73f83ac
+:END:
+
+Actually, this is one of the least appreciated aspects of theorem
+provers: that we're trying to invent a formal language for doing
+mathematics. Instead, we end up with contrived proof formats and the
+proof assistant communities are so insular they don't realize how
+terrible it is.
+
+What should be done instead is something like a "stepping stone" to
+theorem provers by using a "[[https://en.wikipedia.org/wiki/Controlled_natural_language][structured subset]]" of English. We need to
+identify the "subdomains" of mathematical practice, viz:
+
+- Formulating definitions
+- Stating theorems
+- Writing proofs
+
+As far as formulating definitions, although I'm a partisan for
+Baez--Dolan "Stuff, Structure, Properties" (briefly discussed with
+[[file:../math/category-theory/internalization.org][Internalization]]), there are times when it's clunky (in topology, field
+theory and I suspect Galois theory). It may be useful to carve out the
+notion of *adjectives* (e.g., 'we call a function "continuous" if
+~<property>~').  At this point, it feels quite a bit like Mizar's
+approach to definitions. For more on this, see:
+
+- Josef Urban,\\
+  "Translating Mizar for First Order Theorem Provers".\\
+  In /Mathematical Knowledge Management: Proceedings of the Second International Conference/ 
+  (Eds., A. Asperti, B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in Computer Science vol 2594, 2003, pp. 203–215.
+
+Stating theorems and proving them are rather tightly coupled.
+We could try formalizing a basic [[file:../math/proof-steps.org][Mathematical Vernacular]], similar to
+Wiedijk's variant of de Bruijn. This would give us proof steps, while
+leaving "stating theorems" completely unspecified.
+
+The main point I'd like to drive home, however: it is *wrong* to just
+shrug and accept unintelligible commands as "the only way" to do theorem
+proving. Our goal is not to update Russell and Whitehead's /Principia/
+replacing archaic symbols with archaic keywords, nor should it be. Sadly
+this is what procedural provers have become (looking at /you/, Lean
+community).
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-936b2cbd-53e0-49b7-b496-052d2ba3b091
@@ -100,6 +144,10 @@ We can use Lisp (e.g., [[https://github.com/latte-central/LaTTe][LaTTe]]).
 - Andrzej Trybulec,\\
   "Some Features of the Mizar Language".\\
   [[http://mizar.org/project/trybulec93.pdf][Eprint]], 1993, 17 pages.
+- Josef Urban,\\
+  "Translating Mizar for First Order Theorem Provers".\\
+  In /Mathematical Knowledge Management: Proceedings of the Second International Conference/ 
+  (Eds., A. Asperti, B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in Computer Science vol 2594, 2003, pp. 203–215.
 
 ** Mathematical Analysis in Theorem Provers
 :PROPERTIES:

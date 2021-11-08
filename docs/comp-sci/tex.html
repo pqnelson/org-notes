@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-11-02 Tue 18:42 -->
+<!-- 2021-11-08 Mon 07:31 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TeX Notes</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -244,7 +244,11 @@
 <li><a href="#h-84848014-a2ce-403a-9dec-20a86af11ca5">1. Introduction</a></li>
 <li><a href="#h-f706e3fa-e88f-4439-9095-907b9b20d0e2">2. Poor Man's LaTeX</a>
 <ul>
-<li><a href="#h-61eb6d82-0759-480a-ac89-743dd455f86d">2.1. Environments</a></li>
+<li><a href="#h-61eb6d82-0759-480a-ac89-743dd455f86d">2.1. Environments</a>
+<ul>
+<li><a href="#h-d37b46ee-efb8-4b81-8c1c-0afc91010dbb">2.1.1. What LaTeX does</a></li>
+</ul>
+</li>
 <li><a href="#h-481e8d2b-e5e1-41be-a892-ebba10a94b60">2.2. Equations</a></li>
 </ul>
 </li>
@@ -259,7 +263,7 @@
 </div>
 
 <div id="outline-container-h-84848014-a2ce-403a-9dec-20a86af11ca5" class="outline-2">
-<h2 id="h-84848014-a2ce-403a-9dec-20a86af11ca5"><span class="section-number-2">1.</span> Introduction</h2>
+<h2 id="h-84848014-a2ce-403a-9dec-20a86af11ca5"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-84848014-a2ce-403a-9dec-20a86af11ca5">
 <p>
 These are random observations about TeX and LaTeX.
@@ -268,7 +272,7 @@ These are random observations about TeX and LaTeX.
 </div>
 
 <div id="outline-container-h-f706e3fa-e88f-4439-9095-907b9b20d0e2" class="outline-2">
-<h2 id="h-f706e3fa-e88f-4439-9095-907b9b20d0e2"><span class="section-number-2">2.</span> Poor Man's LaTeX</h2>
+<h2 id="h-f706e3fa-e88f-4439-9095-907b9b20d0e2"><span class="section-number-2">2</span> Poor Man's LaTeX</h2>
 <div class="outline-text-2" id="text-h-f706e3fa-e88f-4439-9095-907b9b20d0e2">
 <p>
 I've been curious about how LaTeX is built out of TeX macros for a while
@@ -277,7 +281,7 @@ now. These are just some observations about it.
 </div>
 
 <div id="outline-container-h-61eb6d82-0759-480a-ac89-743dd455f86d" class="outline-3">
-<h3 id="h-61eb6d82-0759-480a-ac89-743dd455f86d"><span class="section-number-3">2.1.</span> Environments</h3>
+<h3 id="h-61eb6d82-0759-480a-ac89-743dd455f86d"><span class="section-number-3">2.1</span> Environments</h3>
 <div class="outline-text-3" id="text-h-61eb6d82-0759-480a-ac89-743dd455f86d">
 <p>
 Someone asked on tex.stackexchange about how environments in LaTeX are
@@ -313,10 +317,64 @@ one needs to redefine <code>\bye</code> to be something like:
 </pre>
 </div>
 </div>
+
+<div id="outline-container-h-d37b46ee-efb8-4b81-8c1c-0afc91010dbb" class="outline-4">
+<h4 id="h-d37b46ee-efb8-4b81-8c1c-0afc91010dbb"><span class="section-number-4">2.1.1</span> What LaTeX does</h4>
+<div class="outline-text-4" id="text-h-d37b46ee-efb8-4b81-8c1c-0afc91010dbb">
+<p>
+In <code>latex.ltx</code> around lines 4400, we find
+</p>
+
+<div class="org-src-container">
+<pre class="src src-tex"><span class="org-keyword">\DeclareRobustCommand\begin</span>[1]{<span class="org-comment">%</span>
+<span class="org-function-name">  \@ifundefined{#1}</span><span class="org-comment">%</span>
+<span class="org-function-name">    {\def\reserved@a{\@latex@error{Environment #1 undefined}\@eha</span>}}<span class="org-comment">%</span>
+    {<span class="org-keyword">\def\reserved@a</span>{<span class="org-keyword">\def\@currenvir</span>{#1}<span class="org-comment">%</span>
+     <span class="org-keyword">\edef\@currenvline</span>{<span class="org-keyword">\on@line</span>}<span class="org-comment">%</span>
+     <span class="org-keyword">\csname</span> #1<span class="org-keyword">\endcsname</span>}}<span class="org-comment">%</span>
+  <span class="org-keyword">\@ignorefalse</span>
+  <span class="org-keyword">\begingroup\@endpefalse\reserved@a</span>}
+<span class="org-keyword">\edef\end</span>
+  {<span class="org-keyword">\unexpanded</span>{<span class="org-comment">%</span>
+     <span class="org-keyword">\romannumeral</span>
+       <span class="org-keyword">\ifx\protect\@typeset@protect</span>
+       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1</span>
+         <span class="org-keyword">\expandafter</span>        <span class="org-comment">%2</span>
+       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1</span>
+           <span class="org-keyword">\expandafter</span>         <span class="org-comment">%3 expands the \csname inside \end&lt;space&gt;</span>
+       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1</span>
+         <span class="org-keyword">\expandafter</span>        <span class="org-comment">%2  expands \end&lt;space&gt;</span>
+       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1     expands the \else</span>
+           <span class="org-keyword">\z@</span>
+       <span class="org-keyword">\else</span>
+         <span class="org-keyword">\expandafter\z@\expandafter\protect</span>
+       <span class="org-keyword">\fi</span>
+   }<span class="org-comment">%</span>
+   <span class="org-keyword">\expandafter\noexpand\csname</span> end <span class="org-keyword">\endcsname</span>
+  }
+<span class="org-keyword">\@namedef</span>{end }#1{<span class="org-comment">%</span>
+  <span class="org-keyword">\csname</span> end#1<span class="org-keyword">\endcsname\@checkend</span>{#1}<span class="org-comment">%</span>
+  <span class="org-keyword">\expandafter\endgroup\if@endpe\@doendpe\fi</span>
+  <span class="org-keyword">\if@ignore\@ignorefalse\ignorespaces\fi</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">@checkend</span>#1{<span class="org-keyword">\def\reserved@a</span>{#1}<span class="org-keyword">\ifx</span>
+      <span class="org-keyword">\reserved@a\@currenvir</span> <span class="org-keyword">\else\@badend</span>{#1}<span class="org-keyword">\fi</span>}
+<span class="org-keyword">\let\@currenvline\@empty</span>
+<span class="org-comment-delimiter">% </span><span class="org-comment">...</span>
+<span class="org-comment-delimiter">% </span><span class="org-comment">4907:</span>
+<span class="org-keyword">\def</span>\<span class="org-function-name">@doendpe</span>{<span class="org-keyword">\@endpetrue</span>
+     <span class="org-keyword">\def</span>\<span class="org-function-name">par</span>{<span class="org-keyword">\@restorepar</span>
+              <span class="org-keyword">\clubpenalty\@clubpenalty</span>
+              <span class="org-keyword">\everypar</span>{}<span class="org-keyword">\par\@endpefalse</span>}<span class="org-keyword">\everypar</span>
+               {{<span class="org-keyword">\setbox\z@\lastbox</span>}<span class="org-comment">%</span>
+                <span class="org-keyword">\everypar</span>{}<span class="org-keyword">\@endpefalse</span>}}
+</pre>
+</div>
+</div>
+</div>
 </div>
 
 <div id="outline-container-h-481e8d2b-e5e1-41be-a892-ebba10a94b60" class="outline-3">
-<h3 id="h-481e8d2b-e5e1-41be-a892-ebba10a94b60"><span class="section-number-3">2.2.</span> Equations</h3>
+<h3 id="h-481e8d2b-e5e1-41be-a892-ebba10a94b60"><span class="section-number-3">2.2</span> Equations</h3>
 <div class="outline-text-3" id="text-h-481e8d2b-e5e1-41be-a892-ebba10a94b60">
 <p>
 The implementation is fairly straightforward.
@@ -363,12 +421,12 @@ The implementation is fairly straightforward.
 </div>
 </div>
 <div id="outline-container-h-9003bdc5-57ad-4ef9-aa76-5b45c8f1f8ab" class="outline-2">
-<h2 id="h-9003bdc5-57ad-4ef9-aa76-5b45c8f1f8ab"><span class="section-number-2">3.</span> Math Gallery</h2>
+<h2 id="h-9003bdc5-57ad-4ef9-aa76-5b45c8f1f8ab"><span class="section-number-2">3</span> Math Gallery</h2>
 <div class="outline-text-2" id="text-h-9003bdc5-57ad-4ef9-aa76-5b45c8f1f8ab">
 </div>
 
 <div id="outline-container-h-024d8f89-6eec-4422-8e82-ba3e2e15a117" class="outline-3">
-<h3 id="h-024d8f89-6eec-4422-8e82-ba3e2e15a117"><span class="section-number-3">3.1.</span> Normal Ordering Operators</h3>
+<h3 id="h-024d8f89-6eec-4422-8e82-ba3e2e15a117"><span class="section-number-3">3.1</span> Normal Ordering Operators</h3>
 <div class="outline-text-3" id="text-h-024d8f89-6eec-4422-8e82-ba3e2e15a117">
 <p>
 In Quantum Field Theory (and Vertex Operator Algebras, and related
@@ -379,7 +437,7 @@ at least <a href="https://tex.stackexchange.com/q/214347">once</a> on tex.stacke
 </div>
 
 <div id="outline-container-h-952ca320-c41f-4992-8f2f-03b63e69c307" class="outline-3">
-<h3 id="h-952ca320-c41f-4992-8f2f-03b63e69c307"><span class="section-number-3">3.2.</span> Tractatus Numbering in Plain TeX</h3>
+<h3 id="h-952ca320-c41f-4992-8f2f-03b63e69c307"><span class="section-number-3">3.2</span> Tractatus Numbering in Plain TeX</h3>
 <div class="outline-text-3" id="text-h-952ca320-c41f-4992-8f2f-03b63e69c307">
 <p>
 Someone asked for this in plain TeX, and David Carlisle's <a href="https://tex.stackexchange.com/a/500105/14751">solution</a>
@@ -475,7 +533,7 @@ own personal purposes:
   <span class="org-keyword">\fi\relax</span>
   {<span class="org-keyword">\bf</span><span class="org-bold"><span class="org-keyword">\thezz</span></span><span class="org-bold">\ #2.</span>}<span class="org-keyword">\quad\ignorespaces</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">xN</span>{<span class="org-keyword">\ifx\tmp</span>[<span class="org-keyword">\expandafter\Nmany\else\None\fi</span>}
-<span class="org-keyword">\def</span>\<span class="org-function-name">N</span>{<span class="org-keyword">\futurelet\tmp\xN</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">N</span>{<span class="org-keyword">\medbreak\noindent\ignorespaces\futurelet\tmp\xN</span>}
 
 <span class="org-keyword">\def</span>\<span class="org-function-name">Mone</span>{<span class="org-keyword">\advance\count\zzdepth</span> 1<span class="org-keyword">\relax\theM</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">Mmany</span>[#1]{<span class="org-keyword">\advance\zzdepth</span> by#1
@@ -483,7 +541,7 @@ own personal purposes:
   <span class="org-keyword">\else\count\zzdepth</span> 1
   <span class="org-keyword">\fi\relax\theM</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">xM</span>{<span class="org-keyword">\ifx\tmp</span>[<span class="org-keyword">\expandafter\Mmany\else\Mone\fi</span>}
-<span class="org-keyword">\def</span>\<span class="org-function-name">M</span>{<span class="org-keyword">\futurelet\tmp\xM</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">M</span>{<span class="org-keyword">\medbreak\noindent\ignorespaces\futurelet\tmp\xM</span>}
 
 
 <span class="org-keyword">\M</span>
@@ -532,7 +590,7 @@ Spam and eggs test!
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-02 Tue 15:41.</p>
+<p class="postamble">Last Updated 2021-11-08 Mon 07:21.</p>
 </div>
 </body>
 </html>

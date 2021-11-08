@@ -1,0 +1,420 @@
+#+TITLE: Definitions in Mizar
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-11-08T07:49:30-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Monday November  8, 2021 at  7:49AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-047a8ccd-0114-408c-8e78-12a96609bd82
+:END:
+
+These are some quick notes on Josef Urban's "Translating Mizar for First
+Order Theorem Provers", In /Mathematical Knowledge Management:
+Proceedings of the Second International Conference/ (Eds., A. Asperti,
+B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in
+Computer Science vol 2594, 2003, pp. 203--215.
+
+
+The [[http://wiki.mizar.org/twiki/bin/view/Mizar/MizarSyntax][Mizar Syntax]] might be consulted from time to time. All syntactic
+categories will be written in pseudo-BNF brackets, like so:
+~<category>~. (The Mizar wiki appears to use some variant of EBNF, it
+seems.)
+
+* General Descriptions
+:PROPERTIES:
+:CUSTOM_ID: h-3a6c46b9-1ddf-4bf3-b3a6-61df8423f835
+:END:
+
+** Mizar Language
+:PROPERTIES:
+:CUSTOM_ID: h-e99e01cb-23ee-4780-8f44-1b0127f2c2b9
+:END:
+
+The main parts of a Mizar article are:
+
+1. Definitions
+   - ~<Definitional-Items>~
+   - ~<Function>~
+   - ~<Predicate>~
+   - ~<Mode>~
+   - ~<Structure>~
+   - ~<Attribute-Definition>~
+2. ~<Theorems>~
+3. ~<Schemes>~
+
+*** Attributes
+:PROPERTIES:
+:CUSTOM_ID: h-b3211e1b-db9c-4f65-ac61-4f4635e09703
+:END:
+
+Attributes are predicates handled specially by the system, according to rules defined by the user in ~<Cluster-Registrations>~.
+
+*** Terms
+:PROPERTIES:
+:CUSTOM_ID: h-5ae672f3-988d-478a-bc55-949a091a0934
+:END:
+
+All Mizar terms are typed. There is a largest (default) type called ~set~ or ~Any~.
+
+All other types have one or more mother types.
+
+Types of variables are given either in global ~<Reservations>~ or local ~<Loci-Definitions>~ or inside quantified formulas.
+
+Types of other terms are computed according to ~<Functor-Definitions>~.
+
+Types can have arguments (i.e., be parametrized) in Mizar, e.g., ~Element of X~ or ~Function of NAT, REAL~ are legal types with one or two aguments, respectively.
+
+*References*
+
+- F. Wiedijk,\\
+  "Mizar's Soft Type System."\\
+  In: K. Schneider & J. Brandt (eds.), _Theorem Proving in Higher Order Logics 2007_, LNCS **4732**, 383-399, 2007 [[http://www.cs.ru.nl/F.Wiedijk/mizar/miztype.pdf][pdf]].\\
+  Discusses how Mizar handles types atop set theory.
+
+*** Type Translation
+:PROPERTIES:
+:CUSTOM_ID: h-99bf5b98-2250-49bd-9a0b-ef9a2c721af6
+:END:
+
+Type translation is the largest part of the first order translation. There are two basic approaches to type translation:
+
+1. Types can be thought of as set-theoretic classes
+2. Types can be thought of as predicates; thus ~set(X)~ is true for any
+   ~X~, ~Integer(X)~ is true iff ~X~ is an integer, and ~Element(X,Y)~
+   is true iff ~X~ is an element of ~Y~.
+
+** Syntactic Levels
+:PROPERTIES:
+:CUSTOM_ID: h-69eb70b7-71c4-499a-970f-1d0278a7ba97
+:END:
+
+Constructors are the real, unambiguous functions, predicates, types, and
+attributes to which the patterns are translated before any checking
+takes place.
+
+Patterns are mapped to the constructors; they accomodate the need for
+having different symbols for the same constructor or vice-versa.
+
+The process, mapping patterns to constructors, is done separately for
+each Mizar article depending on its ~<Environment-Declarations>~. It is
+usually quite nontrivial.
+
+(I suppose this is somewhat analogous to a macro system?)
+
+** First Order Formats, Outline of Translation
+:PROPERTIES:
+:CUSTOM_ID: h-afd51419-9f5f-4d56-8059-8c545235ca10
+:END:
+
+The possible choices were TPTP, DFG (for SPASS), and Otter formatting. Urban went with DFG for SPASS.
+
+The basic approach to translation was the following:
+
+0. The Mizar Parser and Analyzer translated Mizar articles to the
+   constructor level
+1. Absolute (i.e., context independent) names are given to all
+   constructors
+2. Definitions of constructors translate usually to several first-order
+   formulas
+   - We have to translate both the type hierarchy information given in
+     the definition, and the actual ~<Definiens>~
+3. Sometimes additional properties of the defined constructor are stated
+   inside the definition (e.g., commutativity, transitivity, etc.).
+   - They are also translated into corresponding first-order formulas.
+4. All formulas are relativized with respect to the typed variables
+   occurring in them; so ~for x being Real holds x-x = 0~ translates to
+   ~Real(x) implies x-x=0~
+
+* Translations of Mizar Definitions
+:PROPERTIES:
+:CUSTOM_ID: h-b82c3de9-2b8e-4674-a8bc-a5b895f75f68
+:END:
+
+** Mode Definitions
+:PROPERTIES:
+:CUSTOM_ID: h-93786a76-990f-4302-b6b9-e0d8101b1665
+:END:
+
+The [[http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Mode-Definition][syntactic structure]] of ~<Mode-Definition>~ is:
+
+#+begin_example
+<Mode-Definition> =
+	"mode" <Mode-Pattern> ( [ <Specification> ] [ "means" <Definiens> ] ";"
+<Correctness-Conditions> | "is" <Type-Expression> ";" ) { <Mode-Property> } .
+
+<Mode-Pattern> = <Mode-Symbol> [ "of" <Loci> ] .
+<Mode-Symbol> = <Symbol> | "set"
+
+<Loci> = <Locus> { "," <Locus> }
+<Locus> = <Variable-Identifier>
+#+end_example
+
+An example of this might be:
+
+#+begin_src mizar
+definition let X;
+  mode Element of X means
+  :Def2: it in X if X is non empty
+    otherwise it is empty;
+  existency by BOOLE:def 1;
+  consistency;
+end;
+#+end_src
+
+- We have the ~<Loci-Declaration>~ be the first statement after the
+  definition, i.e., the "~let X;~" is such a declaration. It declares
+  the variables occurring in the definition.
+- The ~<Specification>~ part is missing for this example. (If it were
+  present, it gives the "mother type" for the newly defined mode. If
+  not, the largest type ~set~ is used as the mother type.)
+- The ~<Definiens>~ after the keyword ~means~ consists of an optional
+  ~<Label-Identifier>~ and either (a) a simple sentence, or (b) several
+  sentences separated by the keywords ~if~ and ~otherwise~. The latter
+  condition (~<Conditional-Definiens>~) is used for "per cases"
+  definitions.
+  - In our example, the ~<Conditional-Definiens>~ separates the case
+    when the mode argument ~X~ is non-empty from the case when it is
+    empty.
+    - For the first case states, for any ~it~ (special variable used in
+      definitions) being of type ~Element of X~ means that ~it in X~
+    - The second case, in the degenerate case when ~X~ is empty, being
+      of the type ~Element of X~ means to be empty too.
+- ~<Correctness-Conditions>~ in our example is given by the ~existence~
+  and ~consistency~ conditions.
+  - The ~existence~ condition states the extension of the defined type
+    is non-empty
+  - The ~consistency~ condition states the disjunction of all the cases
+    into which the definition was split, is true.
+
+(Note, ~Element of~ transforms a given set into a "soft type".)
+
+Types in Mizar may be translated as predicates. So ~n~-ary types become
+~n+1~-ary predicates. So, the Mizar type qualification ~X is Element of
+Y~ will be translated as ~m1_subset_1(X,Y)~.
+
+The definiens translates as ~m1_subset_1(X,Y) iff ( (not(empty(Y)) and
+in(X,Y)) or (empty(X) and empty(Y)) )~.
+
+The existence condition translates to: ~forall([Y], exists([X],
+m1_subset_1(X,Y)))~
+
+Another couple examples, from [[http://www.mizar.org/version/current/mml/binop_1.miz][~binop_1.miz~]]:
+
+#+begin_example
+definition
+  let A be set; :: loci-declaration
+  :: defines a unary operation on A
+  mode UnOp of A is Function of A,A;
+  :: defines a binary operation on A, note that [:A,A:] is the Cartesian product of A with A
+  mode BinOp of A is Function of [:A,A:],A;
+end;
+#+end_example
+
+** Predicate and Attribute Definitions
+:PROPERTIES:
+:CUSTOM_ID: h-4a4a21b9-71fb-49ee-9a1f-6dded027c808
+:END:
+
+The [[http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predicate-Definition][syntactic structure]] to a ~<Predicate-Definition>~ is:
+
+#+begin_src ebnf
+<Predicate-Definition> =
+  "pred" <Predicate-Pattern> [ "means" <Definiens> ] ";" <Correctness-Conditions> { <Predicate-Property> } .
+#+end_src
+
+*** Example 
+:PROPERTIES:
+:CUSTOM_ID: h-f048d47c-ccaf-4522-899a-8cd3bbec0cfc
+:END:
+
+An example given:
+
+#+begin_example
+definition let X,Y:
+  pred X c= Y means
+:: TARSKI:def 3
+   x in X implies x in Y;
+  reflexivity;
+end;
+#+end_example
+
+We have the ~<Loci-Declaration>~ right after the definition, it is
+specifically ~let X,Y;~ indicating we have two sets ~X~ and ~Y~.
+
+Then we have the ~<Predicate-Pattern>~ for our example be ~X c= Y~.
+
+The ~<Definiens>~ is "~x in Y implies x in Y~".
+
+The ~<Predicate-Property>~ is states simply as ~reflexivity;~.
+
+The ~<Correctness-Conditions>~ occur only in redefinitions of
+predicates, which we will discuss later.
+
+So this definition creates both a pattern and a constructor.
+
+*** Translation
+:PROPERTIES:
+:CUSTOM_ID: h-0918eb83-8a7c-4b8d-a58f-4e9bd98527ff
+:END:
+
+The ~<Definiens>~ formula is translated as equivalence:
+~r1_tarski(X,Y) iff (x in X implies x in Y)~.
+
+The ~<Predicate-Property>~ can be symmetry, connectedness, reflexivity,
+or irreflexivity. We could add a corresponding theorem for each
+property, e.g., proving ~r1_tarski(X,X)~.
+
+*** Attributes
+:PROPERTIES:
+:CUSTOM_ID: h-84b71f04-d53d-46ac-996d-ffac36c314e1
+:END:
+
+Attributes are very similar to predicates. They are used to restrict a
+type to a subtype. They are /adjectives/ which can be assembled together
+(e.g., ~finite non empty set~ uses the adjectives ~finite~ and ~non
+empty~ --- ~finite~ and ~empty~ are attributes, ~non empty~ is the
+negation of ~empty~). The [[http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Attribute-Definition][syntax]] for it is:
+
+#+begin_src ebnf
+<Attribute-Definition> =
+  "attr" <Attribute-Pattern> "means" <Definiens> ";" <Correctness-Conditions> .
+#+end_src
+
+Here's an example:
+
+#+begin_example
+definition let i be number;
+ attr i is even means
+  ex j being Integer st i = 2*j;
+end;
+#+end_example
+
+- We have the ~<Loci-Definition>~ be "~let i be number~"
+- The ~<Attribute-Pattern>~ is here "~i is even~" --- ~is~ is a keyword, ~even~ is the attribute we are defining.
+- The ~<Definiens>~ is "~ex j being Integer st i = 2*j~"
+
+*Example 2.* From
+[[https://fbc.pionier.net.pl/details/nnTX0Rl][Formalization of Fundamental Theorem of Finite Abelian Groups in Mizar]] (by Kazuhisa Nakasho,
+Hiroyuki Okazaki, Hiroshi Yamazaki, and Yasunari Shidama) discusses the
+formalization of groups in Mizar. The definition of a group appears in
+[[http://www.mizar.org/version/current/mml/group_1.miz][~group_1.miz~]] by first introducing attributes on the notion of a magma
+(recall, a magma consists of a set equipped with some [not necessarily
+associative] law of composition). Mizar refers to a ~multMagma~ as a
+magma with a single law of composition.
+
+#+begin_example
+definition
+  let IT be multMagma;
+
+:: definition 1: unital
+  attr IT is unital means
+  ex e being Element of IT st for h being
+  Element of IT holds h * e = h & e * h = h;
+
+:: definition 2: group-like
+  attr IT is Group-like means
+  :Def2:
+  ex e being Element of IT st for h being
+Element of IT holds h * e = h & e * h = h & ex g being Element of IT st h * g =
+  e & g * h = e;
+
+:: definition 3: associative
+  attr IT is associative means
+  :Def3:
+  for x,y,z being Element of IT holds (x*y )*z = x*(y*z);
+end;
+#+end_example
+
+This is really 3 attributes:
+1. A magma is defined to be "unital" if there is an element ~e~ such
+   that for any element ~h~ of the magma, ~eh = he = h~.
+2. A magma is group-like if there is a unit (with respect to the law of
+   composition), and inverses exist.
+3. A magma is called associative if for any elements ~x~, ~y~, and ~z~
+   we have ~(xy)z = x(yz)~.
+
+** Functor Definitions
+:PROPERTIES:
+:CUSTOM_ID: h-6177f78e-3a2b-4783-88be-c6cdc907e665
+:END:
+
+Functions must define the types of their arguments and the type of their
+result. Several ~<Functor-Properties>~ (like ~commutativity~) can be
+associated with them. The [[http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Functor-Definition][syntax]] is:
+
+#+begin_example
+<Functor-Definition> =
+ "func" <Functor-Pattern> [ <Specification> ] [ ( "means" | "equals" ) <Definiens> ] ";"
+ <Correctness-Conditions> { <Functor-Property> } .
+
+<Specification> = "->" <Type-Expression>
+#+end_example
+
+The example given:
+
+#+begin_example
+definition let x be real number;
+  func -x -> real number means :Def1: x + it = 0;
+  existence by AXIOMS:19;
+  uniqueness by Th10;
+#+end_example
+
+Lets analyze this definition.
+
+- The ~<Loci-Declaration>~ declares a variable ~x~ for the type ~number~
+  with the adjective ~real~
+  - The type ~number~ is now just a convenient synonym for the larget
+    type ~set~, and ~real~ is also defined in the same Mizar article
+    ~arytm~.
+- The ~<Functor-Pattern>~ is ~-x~ here
+- The ~<Specification>~ is ~-> real number~, which tells us the result
+  type of the function (a real number).
+- The ~<Definiens>~ here is ~:Def1: x + it = 0~.
+- The ~<Correctness-Condition>~, we have 2 of them which the system
+  always checks:
+  - "~existence~" states there exists an object (of the desired type
+    ~real number~) conforming to the ~<Definiens>~
+  - "~uniqueness~" says it is unique (proven, in fact, by a previous
+    theorem, ~Th10~)
+
+The definition creates one new pattern, and one new constructor. 
+
+#+begin_remark
+Defining a "morphism" requires some involved work with cluster
+registrations, it's not as simple as defining a new function. See, e.g.,
+how group morphisms are defined in
+[[http://www.mizar.org/version/current/mml/group_6.miz][~group_6.miz~]].
+#+end_remark
+
+** Structures
+:PROPERTIES:
+:CUSTOM_ID: h-ffc5ae5c-4648-48b9-b614-c57b6ad51c58
+:END:
+
+From [[http://www.mizar.org/version/current/mml/algstr_0.miz][~algstr_0.miz~]], we have:
+
+#+begin_example
+:: Multiplicative structures
+definition
+  struct (1-sorted) multMagma (# carrier -> set, multF -> BinOp of the carrier
+  #);
+end;
+
+:: multiplication is later defined as:
+:: 
+:: definition
+::   let M be multMagma;
+::   let x,y be Element of M;
+::   func x*y -> Element of M equals
+::   (the multF of M).(x,y);
+::   coherence;
+:: end;
+#+end_example
