@@ -58,6 +58,57 @@ one needs to redefine ~\bye~ to be something like:
 \makeatother
 #+end_src
 
+*** What LaTeX does
+:PROPERTIES:
+:CUSTOM_ID: h-d37b46ee-efb8-4b81-8c1c-0afc91010dbb
+:END:
+
+In ~latex.ltx~ around lines 4400, we find
+
+#+begin_src tex
+\DeclareRobustCommand\begin[1]{%
+  \@ifundefined{#1}%
+    {\def\reserved@a{\@latex@error{Environment #1 undefined}\@eha}}%
+    {\def\reserved@a{\def\@currenvir{#1}%
+     \edef\@currenvline{\on@line}%
+     \csname #1\endcsname}}%
+  \@ignorefalse
+  \begingroup\@endpefalse\reserved@a}
+\edef\end
+  {\unexpanded{%
+     \romannumeral
+       \ifx\protect\@typeset@protect
+       \expandafter       %1
+         \expandafter        %2
+       \expandafter       %1
+           \expandafter         %3 expands the \csname inside \end<space>
+       \expandafter       %1
+         \expandafter        %2  expands \end<space>
+       \expandafter       %1     expands the \else
+           \z@
+       \else
+         \expandafter\z@\expandafter\protect
+       \fi
+   }%
+   \expandafter\noexpand\csname end \endcsname
+  }
+\@namedef{end }#1{%
+  \csname end#1\endcsname\@checkend{#1}%
+  \expandafter\endgroup\if@endpe\@doendpe\fi
+  \if@ignore\@ignorefalse\ignorespaces\fi}
+\def\@checkend#1{\def\reserved@a{#1}\ifx
+      \reserved@a\@currenvir \else\@badend{#1}\fi}
+\let\@currenvline\@empty
+% ...
+% 4907:
+\def\@doendpe{\@endpetrue
+     \def\par{\@restorepar
+              \clubpenalty\@clubpenalty
+              \everypar{}\par\@endpefalse}\everypar
+               {{\setbox\z@\lastbox}%
+                \everypar{}\@endpefalse}}
+#+end_src
+
 ** Equations
 :PROPERTIES:
 :CUSTOM_ID: h-481e8d2b-e5e1-41be-a892-ebba10a94b60

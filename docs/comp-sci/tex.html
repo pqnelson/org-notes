@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-10-24 Sun 11:57 -->
+<!-- 2021-11-02 Tue 18:42 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TeX Notes</title>
@@ -251,6 +251,7 @@
 <li><a href="#h-9003bdc5-57ad-4ef9-aa76-5b45c8f1f8ab">3. Math Gallery</a>
 <ul>
 <li><a href="#h-024d8f89-6eec-4422-8e82-ba3e2e15a117">3.1. Normal Ordering Operators</a></li>
+<li><a href="#h-952ca320-c41f-4992-8f2f-03b63e69c307">3.2. Tractatus Numbering in Plain TeX</a></li>
 </ul>
 </li>
 </ul>
@@ -372,13 +373,166 @@ The implementation is fairly straightforward.
 <p>
 In Quantum Field Theory (and Vertex Operator Algebras, and related
 subjects), we need normal ordering of operators. This has been discussed
-at least <a href="https://tex.stackexchange.com/q/214347">once</a> on tex.stackexchange, and the answers are quite good.</p>
+at least <a href="https://tex.stackexchange.com/q/214347">once</a> on tex.stackexchange, and the answers are quite good.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-952ca320-c41f-4992-8f2f-03b63e69c307" class="outline-3">
+<h3 id="h-952ca320-c41f-4992-8f2f-03b63e69c307"><span class="section-number-3">3.2.</span> Tractatus Numbering in Plain TeX</h3>
+<div class="outline-text-3" id="text-h-952ca320-c41f-4992-8f2f-03b63e69c307">
+<p>
+Someone asked for this in plain TeX, and David Carlisle's <a href="https://tex.stackexchange.com/a/500105/14751">solution</a>
+fits my needs perfectly.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-tex"><span class="org-keyword">\newcount\zzdepth</span>
+<span class="org-keyword">\newcount\zza</span>
+<span class="org-keyword">\edef\zzbase</span>{<span class="org-keyword">\the\allocationnumber</span>}
+<span class="org-keyword">\zzdepth\allocationnumber</span>
+<span class="org-keyword">\newcount\zzb</span>
+<span class="org-keyword">\newcount\zzc</span>
+<span class="org-keyword">\newcount\zzd</span>
+
+<span class="org-keyword">\def</span>\<span class="org-function-name">thezz</span>{{<span class="org-comment">%</span>
+<span class="org-keyword">\ifnum\zzdepth</span>&gt;<span class="org-keyword">\zzbase\relax</span>
+<span class="org-keyword">\advance\zzdepth</span>-1 <span class="org-comment">%</span>
+<span class="org-keyword">\expandafter\thezz</span>
+<span class="org-keyword">\fi</span>
+}<span class="org-keyword">\the\count\zzdepth</span>.<span class="org-comment">%</span>
+}
+
+<span class="org-keyword">\everypar</span>{{<span class="org-keyword">\bf</span><span class="org-bold"><span class="org-keyword">\thezz</span></span>} }
+
+
+
+<span class="org-keyword">\def</span>\<span class="org-function-name">on</span>{<span class="org-keyword">\advance\count\zzdepth</span> 1<span class="org-keyword">\relax</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">eatstar</span>*{}
+<span class="org-keyword">\def</span>\<span class="org-function-name">down</span>{<span class="org-keyword">\futurelet\tmp\xxdown</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">xxdown</span>{<span class="org-comment">%</span>
+<span class="org-keyword">\ifx*\tmp</span>
+<span class="org-keyword">\advance\zzdepth</span> 1 <span class="org-keyword">\count\zzdepth</span> 0<span class="org-keyword">\relax</span>
+<span class="org-keyword">\expandafter\eatstar</span>
+<span class="org-keyword">\else</span>
+<span class="org-keyword">\advance\zzdepth</span> 1 <span class="org-keyword">\count\zzdepth</span> 1<span class="org-keyword">\relax</span>
+<span class="org-keyword">\fi</span>}
+
+<span class="org-keyword">\def</span>\<span class="org-function-name">up</span>{<span class="org-keyword">\advance\zzdepth</span> -1 <span class="org-keyword">\advance\count\zzdepth</span> 1<span class="org-keyword">\relax</span>}
+
+<span class="org-keyword">\on</span>
+This is the first paragraph, paragraph number 1.
+
+<span class="org-keyword">\on</span>
+This is paragraph number 2.
+
+<span class="org-keyword">\down</span>
+This is paragraph number 2.1
+
+<span class="org-keyword">\down*</span>
+This is 2.10
+
+<span class="org-keyword">\up</span>
+This is 2.2
+
+<span class="org-keyword">\down</span>
+This is 2.2.1
+
+<span class="org-keyword">\up\up</span>
+This is 3
+
+<span class="org-keyword">\bye</span>
+</pre>
+</div>
+
+<p>
+I liked this, but wanted to hack something together more suitable for my
+own personal purposes:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-tex"><span class="org-keyword">\newcount\zzdepth</span>
+<span class="org-keyword">\newcount\zza</span>
+<span class="org-keyword">\edef\zzbase</span>{<span class="org-keyword">\the\allocationnumber</span>}
+<span class="org-keyword">\zzdepth\allocationnumber</span>
+<span class="org-keyword">\newcount\zzb</span>
+<span class="org-keyword">\newcount\zzc</span>
+<span class="org-keyword">\newcount\zzd</span>
+
+<span class="org-keyword">\def</span>\<span class="org-function-name">thezz</span>{{<span class="org-comment">%</span>
+<span class="org-keyword">\ifnum\zzdepth</span>&gt;<span class="org-keyword">\zzbase\relax</span>
+<span class="org-keyword">\advance\zzdepth</span>-1 <span class="org-comment">%</span>
+<span class="org-keyword">\expandafter\thezz</span>
+<span class="org-keyword">\fi</span>
+}<span class="org-keyword">\the\count\zzdepth</span>.<span class="org-comment">%</span>
+}
+<span class="org-keyword">\def</span>\<span class="org-function-name">theM</span>{{<span class="org-keyword">\bf</span><span class="org-bold"><span class="org-keyword">\thezz</span></span>}<span class="org-keyword">\quad\ignorespaces</span>}
+
+<span class="org-keyword">\def</span>\<span class="org-function-name">None</span>#1{<span class="org-keyword">\advance\count\zzdepth</span> 1<span class="org-keyword">\relax\theM</span>{<span class="org-keyword">\bf</span><span class="org-bold">#1.</span>}<span class="org-keyword">\quad\ignorespaces</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">Nmany</span>[#1]#2{<span class="org-keyword">\advance\zzdepth</span> by#1
+  <span class="org-keyword">\ifnum</span>#1&lt;0<span class="org-keyword">\advance\count\zzdepth</span> 1
+  <span class="org-keyword">\else\count\zzdepth</span> 1
+  <span class="org-keyword">\fi\relax</span>
+  {<span class="org-keyword">\bf</span><span class="org-bold"><span class="org-keyword">\thezz</span></span><span class="org-bold">\ #2.</span>}<span class="org-keyword">\quad\ignorespaces</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">xN</span>{<span class="org-keyword">\ifx\tmp</span>[<span class="org-keyword">\expandafter\Nmany\else\None\fi</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">N</span>{<span class="org-keyword">\futurelet\tmp\xN</span>}
+
+<span class="org-keyword">\def</span>\<span class="org-function-name">Mone</span>{<span class="org-keyword">\advance\count\zzdepth</span> 1<span class="org-keyword">\relax\theM</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">Mmany</span>[#1]{<span class="org-keyword">\advance\zzdepth</span> by#1
+  <span class="org-keyword">\ifnum</span>#1&lt;0<span class="org-keyword">\advance\count\zzdepth</span> 1
+  <span class="org-keyword">\else\count\zzdepth</span> 1
+  <span class="org-keyword">\fi\relax\theM</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">xM</span>{<span class="org-keyword">\ifx\tmp</span>[<span class="org-keyword">\expandafter\Mmany\else\Mone\fi</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">M</span>{<span class="org-keyword">\futurelet\tmp\xM</span>}
+
+
+<span class="org-keyword">\M</span>
+Paragraph 1, reporting!
+
+<span class="org-keyword">\M</span>
+Paragraph 2, alert!
+
+<span class="org-keyword">\N</span>[1]{Theorem}
+{<span class="org-keyword">\it</span><span class="org-italic"> Paragraph {2.1} should be present.</span>}
+
+<span class="org-keyword">\M</span>
+This is the first paragraph, paragraph number 1.
+
+<span class="org-keyword">\M</span>
+This is paragraph number 2.
+
+<span class="org-keyword">\M</span>[1]
+This is paragraph number 2.1
+
+<span class="org-keyword">\M</span>[1]
+This is 2.10
+
+<span class="org-keyword">\M</span>[-1]
+This is 2.3.2
+
+<span class="org-keyword">\M</span>[1]
+This is 2.2.1
+
+<span class="org-keyword">\M</span>[2]
+This is, uh, 2.2.1.1.1?
+
+<span class="org-keyword">\M</span>[-1]
+Wait, what does this do?
+
+<span class="org-keyword">\M</span>[-4]
+This is 3
+
+Spam and eggs test!
+
+<span class="org-keyword">\bye</span>
+</pre>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-10-24 Sun 10:23.</p>
+<p class="postamble">Last Updated 2021-11-02 Tue 15:41.</p>
 </div>
 </body>
 </html>
