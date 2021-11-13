@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-07-06 Tue 21:41 -->
+<!-- 2021-11-13 Sat 13:49 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raspberry Pi</title>
@@ -246,6 +246,7 @@
 <li><a href="#h-b0d187d2-f502-4a62-9dd4-a6fd994a903a">3. Debian Infrastructure</a>
 <ul>
 <li><a href="#h-75c9966a-5592-4ae4-a025-80e0e6c34f6a">3.1. Optimizing for my local computer</a></li>
+<li><a href="#h-4cb12e4d-ab7f-466c-b7b5-d69daec934b8">3.2. Upgrading to Bullseye</a></li>
 </ul>
 </li>
 <li><a href="#h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f">4. Installing Emacs</a>
@@ -292,7 +293,7 @@ Lisp tools on it.
 </p>
 
 <p>
-(Apparently I have a Raspberry Pi 4B.)
+(Apparently I have a Raspberry Pi 2.)
 </p>
 </div>
 </div>
@@ -335,6 +336,47 @@ there's only so little room for things on the Pi, I decided to install
 apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 <code>sudo apt-build install ...</code> instead of apt-get.
 </p>
+</div>
+</div>
+
+<div id="outline-container-h-4cb12e4d-ab7f-466c-b7b5-d69daec934b8" class="outline-3">
+<h3 id="h-4cb12e4d-ab7f-466c-b7b5-d69daec934b8"><span class="section-number-3">3.2.</span> Upgrading to Bullseye</h3>
+<div class="outline-text-3" id="text-h-4cb12e4d-ab7f-466c-b7b5-d69daec934b8">
+<p>
+I didn't want to start from scratch, so I simply did the following:
+</p>
+
+<pre class="example" id="orgf2c0f0c">
+~$ cd /etc/apt/
+/etc/apt$ sudo cp sources.list sources.list.bak
+/etc/apt$ sudo nano sources.list
+</pre>
+
+<p>
+Then I made <code>sources.list</code> look like (replacing all instances of
+"buster" by "bullseye"):
+</p>
+
+<pre class="example" id="org2edc7e7">
+# sources.list
+deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
+</pre>
+
+<p>
+I saved it, closed nano, then ran the commands:
+</p>
+
+<pre class="example" id="org97d3508">
+/etc/apt$ sudo apt update
+...
+/etc/apt$ sudo apt upgrade -y
+...
+/etc/apt$ sudo apt dist-upgrade -y
+...
+/etc/apt$ sudo apt autoclean
+...
+/etc/apt$ sudo reboot
+</pre>
 </div>
 </div>
 </div>
@@ -580,6 +622,20 @@ I may want to consider looking at other window managers (ahem, <i>window</i> sho
 <div id="outline-container-h-fa7f411e-d0be-4c94-8277-87cabddb3838" class="outline-3">
 <h3 id="h-fa7f411e-d0be-4c94-8277-87cabddb3838"><span class="section-number-3">7.2.</span> FVWM</h3>
 <div class="outline-text-3" id="text-h-fa7f411e-d0be-4c94-8277-87cabddb3838">
+<p>
+I have decided to install FVWM, which can be done with
+<code>sudo apt-get install xserver-xorg xinit fvwm xterm</code>
+</p>
+
+<p>
+Whenever I log in, I have to manually start FVWM by the command <code>startx</code>.
+</p>
+
+<p>
+As far as customizing FVWM, well, I have yet to do much in that
+department yet.
+</p>
+
 <ul class="org-ul">
 <li><a href="https://wiki.archlinux.org/title/FVWM">Arch Linux Wiki page</a></li>
 </ul>
@@ -600,7 +656,7 @@ I may want to consider looking at other window managers (ahem, <i>window</i> sho
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-06 Tue 20:13.</p>
+<p class="postamble">Last Updated 2021-11-13 Sat 12:36.</p>
 </div>
 </body>
 </html>
