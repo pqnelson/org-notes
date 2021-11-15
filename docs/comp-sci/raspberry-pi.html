@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-11-13 Sat 13:49 -->
+<!-- 2021-11-14 Sun 16:36 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raspberry Pi</title>
@@ -261,21 +261,24 @@
 <li><a href="#h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e">5.1.1. Making <code>armcl</code> global</a></li>
 </ul>
 </li>
-<li><a href="#h-caf05a1b-6f16-4430-a62b-200f4c5bd753">5.2. Adding Quicklisp</a></li>
+<li><a href="#h-35bc094e-a63f-4ba0-9b30-6d6582bf9869">5.2. SBCL</a></li>
+<li><a href="#h-caf05a1b-6f16-4430-a62b-200f4c5bd753">5.3. Adding Quicklisp</a></li>
 </ul>
 </li>
-<li><a href="#h-3b62ead8-4526-46b2-a922-92053432e1c3">6. Stumpwm</a>
+<li><a href="#h-69ecc133-c067-40e8-a9ba-bc0589a99914">6. LaTeX</a></li>
+<li><a href="#h-3b62ead8-4526-46b2-a922-92053432e1c3">7. Stumpwm</a>
 <ul>
-<li><a href="#h-c596939f-a681-4092-9c95-a4245ff3b73b">6.1. Dependencies</a></li>
+<li><a href="#h-c596939f-a681-4092-9c95-a4245ff3b73b">7.1. Dependencies</a></li>
 </ul>
 </li>
-<li><a href="#h-a66006a4-533e-4994-be5f-307174039327">7. Window Managers</a>
+<li><a href="#h-a66006a4-533e-4994-be5f-307174039327">8. Window Managers</a>
 <ul>
-<li><a href="#h-0aed8294-f790-4e82-bf2c-5707990dd55f">7.1. TWM</a></li>
-<li><a href="#h-fa7f411e-d0be-4c94-8277-87cabddb3838">7.2. FVWM</a></li>
+<li><a href="#h-0aed8294-f790-4e82-bf2c-5707990dd55f">8.1. TWM</a></li>
+<li><a href="#h-fa7f411e-d0be-4c94-8277-87cabddb3838">8.2. FVWM</a></li>
+<li><a href="#h-717e12d7-08bc-4320-a5e2-60782ef467b7">8.3. Feh wallpaper</a></li>
 </ul>
 </li>
-<li><a href="#h-88c07655-f971-4a20-b7f9-3f75d70adacd">8. Other Links</a></li>
+<li><a href="#h-88c07655-f971-4a20-b7f9-3f75d70adacd">9. Other Links</a></li>
 </ul>
 </div>
 </div>
@@ -346,7 +349,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="orgf2c0f0c">
+<pre class="example" id="org420e1aa">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -357,7 +360,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="org2edc7e7">
+<pre class="example" id="orgff4cd04">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -366,7 +369,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="org97d3508">
+<pre class="example" id="orgbe80401">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -540,8 +543,18 @@ This let me run armcl for any user.
 </div>
 </div>
 
+<div id="outline-container-h-35bc094e-a63f-4ba0-9b30-6d6582bf9869" class="outline-3">
+<h3 id="h-35bc094e-a63f-4ba0-9b30-6d6582bf9869"><span class="section-number-3">5.2.</span> SBCL</h3>
+<div class="outline-text-3" id="text-h-35bc094e-a63f-4ba0-9b30-6d6582bf9869">
+<p>
+Now, Raspberry Pi offers SBCL 2.1.9, which installs without problem.
+Wonderful! I don't need to stress over compiling CCL properly.
+</p>
+</div>
+</div>
+
 <div id="outline-container-h-caf05a1b-6f16-4430-a62b-200f4c5bd753" class="outline-3">
-<h3 id="h-caf05a1b-6f16-4430-a62b-200f4c5bd753"><span class="section-number-3">5.2.</span> Adding Quicklisp</h3>
+<h3 id="h-caf05a1b-6f16-4430-a62b-200f4c5bd753"><span class="section-number-3">5.3.</span> Adding Quicklisp</h3>
 <div class="outline-text-3" id="text-h-caf05a1b-6f16-4430-a62b-200f4c5bd753">
 <p>
 We get quicklisp:
@@ -579,12 +592,24 @@ default, you could just add a <code>(load-quicklisp)</code> line to the
 </div>
 </div>
 
+<div id="outline-container-h-69ecc133-c067-40e8-a9ba-bc0589a99914" class="outline-2">
+<h2 id="h-69ecc133-c067-40e8-a9ba-bc0589a99914"><span class="section-number-2">6.</span> LaTeX</h2>
+<div class="outline-text-2" id="text-h-69ecc133-c067-40e8-a9ba-bc0589a99914">
+<ul class="org-ul">
+<li>Installing <code>texlive-base</code> will install TeX, pdfTeX, cweb, metapost, and
+a few other basic TeX packages.</li>
+<li><code>texlive-latex-base</code> installs LaTeX</li>
+</ul>
+</div>
+</div>
+
+
 <div id="outline-container-h-3b62ead8-4526-46b2-a922-92053432e1c3" class="outline-2">
-<h2 id="h-3b62ead8-4526-46b2-a922-92053432e1c3"><span class="section-number-2">6.</span> Stumpwm</h2>
+<h2 id="h-3b62ead8-4526-46b2-a922-92053432e1c3"><span class="section-number-2">7.</span> Stumpwm</h2>
 <div class="outline-text-2" id="text-h-3b62ead8-4526-46b2-a922-92053432e1c3">
 </div>
 <div id="outline-container-h-c596939f-a681-4092-9c95-a4245ff3b73b" class="outline-3">
-<h3 id="h-c596939f-a681-4092-9c95-a4245ff3b73b"><span class="section-number-3">6.1.</span> Dependencies</h3>
+<h3 id="h-c596939f-a681-4092-9c95-a4245ff3b73b"><span class="section-number-3">7.1.</span> Dependencies</h3>
 <div class="outline-text-3" id="text-h-c596939f-a681-4092-9c95-a4245ff3b73b">
 <p>
 Trying to run <code>sudo apt-get build-dep stumpwm</code> will install a number of
@@ -595,7 +620,7 @@ common lisp dependencies, which quicklisp would automatically handle.
 </div>
 
 <div id="outline-container-h-a66006a4-533e-4994-be5f-307174039327" class="outline-2">
-<h2 id="h-a66006a4-533e-4994-be5f-307174039327"><span class="section-number-2">7.</span> Window Managers</h2>
+<h2 id="h-a66006a4-533e-4994-be5f-307174039327"><span class="section-number-2">8.</span> Window Managers</h2>
 <div class="outline-text-2" id="text-h-a66006a4-533e-4994-be5f-307174039327">
 <p>
 I may want to consider looking at other window managers (ahem, <i>window</i> shopping?).
@@ -610,7 +635,7 @@ I may want to consider looking at other window managers (ahem, <i>window</i> sho
 </div>
 
 <div id="outline-container-h-0aed8294-f790-4e82-bf2c-5707990dd55f" class="outline-3">
-<h3 id="h-0aed8294-f790-4e82-bf2c-5707990dd55f"><span class="section-number-3">7.1.</span> TWM</h3>
+<h3 id="h-0aed8294-f790-4e82-bf2c-5707990dd55f"><span class="section-number-3">8.1.</span> TWM</h3>
 <div class="outline-text-3" id="text-h-0aed8294-f790-4e82-bf2c-5707990dd55f">
 <ul class="org-ul">
 <li><a href="https://wiki.archlinux.org/title/twm">Arch Linux Wiki page</a></li>
@@ -620,7 +645,7 @@ I may want to consider looking at other window managers (ahem, <i>window</i> sho
 </div>
 
 <div id="outline-container-h-fa7f411e-d0be-4c94-8277-87cabddb3838" class="outline-3">
-<h3 id="h-fa7f411e-d0be-4c94-8277-87cabddb3838"><span class="section-number-3">7.2.</span> FVWM</h3>
+<h3 id="h-fa7f411e-d0be-4c94-8277-87cabddb3838"><span class="section-number-3">8.2.</span> FVWM</h3>
 <div class="outline-text-3" id="text-h-fa7f411e-d0be-4c94-8277-87cabddb3838">
 <p>
 I have decided to install FVWM, which can be done with
@@ -641,9 +666,44 @@ department yet.
 </ul>
 </div>
 </div>
+<div id="outline-container-h-717e12d7-08bc-4320-a5e2-60782ef467b7" class="outline-3">
+<h3 id="h-717e12d7-08bc-4320-a5e2-60782ef467b7"><span class="section-number-3">8.3.</span> Feh wallpaper</h3>
+<div class="outline-text-3" id="text-h-717e12d7-08bc-4320-a5e2-60782ef467b7">
+<p>
+I am using a script
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span class="org-comment-delimiter">#</span><span class="org-comment">!/usr/local/bin/</span><span class="org-keyword">bash</span>
+
+sleep 10
+
+<span class="org-keyword">while</span> true; <span class="org-keyword">do</span>
+
+feh --no-fehbg -F -r --bg-max -z /home/alex/Pictures/Wallpaper &amp;&amp; sleep 5 || <span class="org-keyword">exit</span>
+</pre>
 </div>
+
+
+
+<p>
+AddToFunc InitFunction
+</p>
+<ul class="org-ul">
+<li>I exec <i>home/alex</i>.fvwm/bg.sh</li>
+</ul>
+
+<p>
+AddToFunc RestartFunction
+</p>
+<ul class="org-ul">
+<li>I exec <i>home/alex</i>.fvwm/bg.sh</li>
+</ul>
+</div>
+</div>
+</div>
+
 <div id="outline-container-h-88c07655-f971-4a20-b7f9-3f75d70adacd" class="outline-2">
-<h2 id="h-88c07655-f971-4a20-b7f9-3f75d70adacd"><span class="section-number-2">8.</span> Other Links</h2>
+<h2 id="h-88c07655-f971-4a20-b7f9-3f75d70adacd"><span class="section-number-2">9.</span> Other Links</h2>
 <div class="outline-text-2" id="text-h-88c07655-f971-4a20-b7f9-3f75d70adacd">
 <ul class="org-ul">
 <li><a href="http://informatimago.com/articles/raspberrypi/ccl-sur-qemu.html">CCL on RPi</a> (French)</li>
@@ -656,7 +716,7 @@ department yet.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-13 Sat 12:36.</p>
+<p class="postamble">Last Updated 2021-11-14 Sun 16:35.</p>
 </div>
 </body>
 </html>

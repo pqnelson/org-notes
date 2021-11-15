@@ -228,6 +228,14 @@ I also ran
 
 This let me run armcl for any user.
 
+** SBCL
+:PROPERTIES:
+:CUSTOM_ID: h-35bc094e-a63f-4ba0-9b30-6d6582bf9869
+:END:
+
+Now, Raspberry Pi offers SBCL 2.1.9, which installs without problem.
+Wonderful! I don't need to stress over compiling CCL properly.
+
 ** Adding Quicklisp
 :PROPERTIES:
 :CUSTOM_ID: h-caf05a1b-6f16-4430-a62b-200f4c5bd753
@@ -260,6 +268,16 @@ following content:
 call =(load-quicklisp)= when you need/want it. If you want it loaded by
 default, you could just add a =(load-quicklisp)= line to the
 =~/.ccl-init.lisp= file.
+
+* LaTeX
+:PROPERTIES:
+:CUSTOM_ID: h-69ecc133-c067-40e8-a9ba-bc0589a99914
+:END:
+
+- Installing ~texlive-base~ will install TeX, pdfTeX, cweb, metapost, and
+  a few other basic TeX packages.
+- ~texlive-latex-base~ installs LaTeX
+
 
 * Stumpwm
 :PROPERTIES:
@@ -307,6 +325,30 @@ As far as customizing FVWM, well, I have yet to do much in that
 department yet.
 
 - [[https://wiki.archlinux.org/title/FVWM][Arch Linux Wiki page]]
+** Feh wallpaper
+:PROPERTIES:
+:CUSTOM_ID: h-717e12d7-08bc-4320-a5e2-60782ef467b7
+:END:
+
+I am using a script
+#+begin_src bash
+#!/usr/local/bin/bash
+
+sleep 10
+
+while true; do
+
+feh --no-fehbg -F -r --bg-max -z /home/alex/Pictures/Wallpaper && sleep 5 || exit
+#+end_src
+
+
+
+AddToFunc InitFunction
++ I exec /home/alex/.fvwm/bg.sh
+
+AddToFunc RestartFunction
++ I exec /home/alex/.fvwm/bg.sh
+
 * Other Links
 :PROPERTIES:
 :CUSTOM_ID: h-88c07655-f971-4a20-b7f9-3f75d70adacd
