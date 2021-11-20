@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-11-20 Sat 10:41 -->
+<!-- 2021-11-20 Sat 12:17 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>On Kernel Size</title>
@@ -320,8 +320,10 @@ is approximately 441 lines of code.
 <div class="outline-text-2" id="text-h-bb3c318e-1f27-4cde-a517-2b476e0b15b8">
 <p>
 If we use a <a href="https://en.wikipedia.org/wiki/Binomial_distribution">Binomial distributed</a> random variable
-\(B\sim\mathrm{Bin}(N,p_{bug})\), and look at finding an \(N\) such that
-\(\Pr(B\leq 3\sigma)\geq 0.5\), then we find \(N\approx 533\).
+\(B\sim\mathrm{Bin}(N,p_{bug})\), and look at finding the greatest number
+of lines of code \(N\) such that the probability of finding no more than
+\(3\sigma\) bugs is \(\Pr(B\leq 3\sigma)\geq 0.5\), then we find \(N\approx 533\).
+The R code which let me solve this by brute force:
 </p>
 
 <div class="org-src-container">
@@ -345,12 +347,30 @@ guess(533)
 
 <p>
 This <code>guess</code> is not a monotonic function, but 533 seems to be the
-greatest value of <code>n</code> such that <code>guess(n) &gt;= 0.5</code>.</p>
+greatest value of <code>n</code> such that <code>guess(n) &gt;= 0.5</code>.
+</p>
+
+<p>
+If we wanted to be more certain, we could modify the code:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-r">guess &lt;- function(n, k=3) { pbinom(round(k*sd_bug*sqrt(n)), n, p_bug)}
+guess(1283, k=5)
+# [1] 0.5000607
+guess(883, k=4)
+# [1] 0.5001064
+guess(283, k=2)
+# [1] 0.5005881
+guess(133, k=1)
+# [1] 0.5018235
+</pre>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-20 Sat 10:40.</p>
+<p class="postamble">Last Updated 2021-11-20 Sat 10:48.</p>
 </div>
 </body>
 </html>
