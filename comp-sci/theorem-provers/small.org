@@ -46,3 +46,49 @@ For the figures given, we have
 
 Thus the upper-bound on a program to be a candidate for being "bug free"
 is approximately 441 lines of code.
+
+* Observations
+:PROPERTIES:
+:CUSTOM_ID: h-bb3c318e-1f27-4cde-a517-2b476e0b15b8
+:END:
+
+If we use a [[https://en.wikipedia.org/wiki/Binomial_distribution][Binomial distributed]] random variable
+$B\sim\mathrm{Bin}(N,p_{bug})$, and look at finding the greatest number
+of lines of code $N$ such that the probability of finding no more than
+$3\sigma$ bugs is $\Pr(B\leq 3\sigma)\geq 0.5$, then we find $N\approx 533$.
+The R code which let me solve this by brute force:
+
+#+begin_src r
+p_bug <- 0.02
+q_bug <- 1 - p_bug
+
+sd_bug <- sqrt(p_bug*q_bug) # sigma = sd_bug*sqrt(n)
+
+# `guess` computes the likelihood L(n) = Pr(B <= 3*sigma | n)
+# of no more than `3*sigma` bugs. We are trying to find the greatest
+# `n` such that `guess(n) >= 0.5`; empirically this seems to be
+# 533, and fluctuates around a decreasing trend.
+guess <- function(n) { pbinom(round(3*sd_bug*sqrt(n)), n, p_bug)}
+
+guess(441)
+# [1] 0.6113548
+guess(533)
+# [1] 0.5002271
+#+end_src
+
+This ~guess~ is not a monotonic function, but 533 seems to be the
+greatest value of ~n~ such that ~guess(n) >= 0.5~.
+
+If we wanted to be more certain, we could modify the code:
+
+#+begin_src r
+guess <- function(n, k=3) { pbinom(round(k*sd_bug*sqrt(n)), n, p_bug)}
+guess(1283, k=5)
+# [1] 0.5000607
+guess(883, k=4)
+# [1] 0.5001064
+guess(283, k=2)
+# [1] 0.5005881
+guess(133, k=1)
+# [1] 0.5018235
+#+end_src

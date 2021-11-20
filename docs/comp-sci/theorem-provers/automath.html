@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-07-11 Sun 20:35 -->
+<!-- 2021-11-20 Sat 10:36 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Automath</title>
@@ -244,8 +244,9 @@
 <li><a href="#h-dd38ce5b-94f5-4c8b-8c6b-c84a6cbc91e1">1. Introduction</a></li>
 <li><a href="#h-0310fe71-5442-47c9-9665-a69fee68b8ec">2. Expressions</a>
 <ul>
-<li><a href="#h-d1315b98-5921-4b87-bb9a-8930e362a4fe">2.1. Terms, Types, Kinds</a></li>
-<li><a href="#h-f030f1fd-6994-4e53-9c90-ba2590ababbf">2.2. Comments</a></li>
+<li><a href="#h-af6d8dbd-1125-4b8a-bc54-5658fb760ae8">2.1. Order of Evaluation</a></li>
+<li><a href="#h-d1315b98-5921-4b87-bb9a-8930e362a4fe">2.2. Terms, Types, Kinds</a></li>
+<li><a href="#h-f030f1fd-6994-4e53-9c90-ba2590ababbf">2.3. Comments</a></li>
 </ul>
 </li>
 <li><a href="#h-bd13716b-85fb-49fb-aa9f-cb9ce920a0ca">3. Lines</a>
@@ -308,8 +309,19 @@ caveat that if <code>d</code> is an abbreviation with <code>n&gt;k</code> parame
 </p>
 </div>
 
+<div id="outline-container-h-af6d8dbd-1125-4b8a-bc54-5658fb760ae8" class="outline-3">
+<h3 id="h-af6d8dbd-1125-4b8a-bc54-5658fb760ae8"><span class="section-number-3">2.1.</span> Order of Evaluation</h3>
+<div class="outline-text-3" id="text-h-af6d8dbd-1125-4b8a-bc54-5658fb760ae8">
+<p>
+Note that if we encounter an expression like <code>&lt;t&gt;f(e_1, ..., e_n)</code>, then
+we first evaluate <code>f(e_1, ..., e_n)</code> and then apply the result as the
+"rator" to an application with "rand" <code>t</code>.
+</p>
+</div>
+</div>
+
 <div id="outline-container-h-d1315b98-5921-4b87-bb9a-8930e362a4fe" class="outline-3">
-<h3 id="h-d1315b98-5921-4b87-bb9a-8930e362a4fe"><span class="section-number-3">2.1.</span> Terms, Types, Kinds</h3>
+<h3 id="h-d1315b98-5921-4b87-bb9a-8930e362a4fe"><span class="section-number-3">2.2.</span> Terms, Types, Kinds</h3>
 <div class="outline-text-3" id="text-h-d1315b98-5921-4b87-bb9a-8930e362a4fe">
 <p>
 The jargon used by de Bruijn and the Automath community is that:
@@ -326,7 +338,7 @@ call them "terms" nowadays)</li>
 </div>
 
 <div id="outline-container-h-f030f1fd-6994-4e53-9c90-ba2590ababbf" class="outline-3">
-<h3 id="h-f030f1fd-6994-4e53-9c90-ba2590ababbf"><span class="section-number-3">2.2.</span> Comments</h3>
+<h3 id="h-f030f1fd-6994-4e53-9c90-ba2590ababbf"><span class="section-number-3">2.3.</span> Comments</h3>
 <div class="outline-text-3" id="text-h-f030f1fd-6994-4e53-9c90-ba2590ababbf">
 <p>
 The only current implementation for Automath is Freek Wiedijk's
@@ -373,6 +385,11 @@ sometimes (I'm still figuring out <i>when</i> we can).
 <li>We can use <code>;</code> instead of <code>:</code> for the typing declaration at the end of
 the line</li>
 </ul>
+
+<p>
+Note to self: the modern syntax for lines, as used in Coq (and friends),
+is something more like <code>&lt;context&gt; &lt;turnstile&gt; &lt;identifier&gt; : &lt;expr&gt; := ...</code>
+</p>
 </div>
 
 <div id="outline-container-h-b5abaff3-85ff-4170-97d0-1cc0910e8376" class="outline-3">
@@ -395,7 +412,7 @@ the context to be empty by just writing <code>&lt;turnstile&gt;</code>.
 Consider the following (adapted from Freek Wiedijk's formalization of
 <a href="http://www.cs.ru.nl/~freek/zfc-etc/holl.aut">HOL Light's logic</a>):
 </p>
-<pre class="example" id="orgce7713d">
+<pre class="example" id="orgcf9a281">
   * type : TYPE := PRIM    # sets the context to be initial empty context
   * bool : type := PRIM
   * A : type := ---        # sets the context to be A
@@ -426,14 +443,14 @@ context ending at <code>A</code>, creating a new context <code>A:type, B:type</c
 <p>
 The kernel interprets a line of the form
 </p>
-<pre class="example" id="orgb6ce300">
+<pre class="example" id="org32d2d9c">
 a * [x:T] b := ... : T'
 </pre>
 
 <p>
 as two lines:
 </p>
-<pre class="example" id="org5814ca8">
+<pre class="example" id="orgfd17bc1">
 a * x := --- : T
 x * b := ... : T'
 </pre>
@@ -456,7 +473,7 @@ have a proposition be a 2-expression ("type") of the form <code>p : PROP</code>.
 predicate would parametrize this by a "term":
 </p>
 
-<pre class="example" id="org25499d9">
+<pre class="example" id="orgedd0e1d">
    * T : TYPE := ---
  T * [x:T]predicate : [x:T]PROP := PN
 </pre>
@@ -470,7 +487,7 @@ But is <code>[x:T]PROP</code> a valid expression? De Bruijn calls such a thing a
 <p>
 Quantifiers can be written down easily as:
 </p>
-<pre class="example" id="org9287c13">
+<pre class="example" id="org07c6837">
 T * [p:[z:T]PROP] forall : PROP := p
   * [a:PROP][b:PROP] imp:PROP := [x:a]b
   * false : PROP := PRIM
@@ -534,7 +551,7 @@ extensions".<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-11 Sun 13:41.</p>
+<p class="postamble">Last Updated 2021-11-20 Sat 09:40.</p>
 </div>
 </body>
 </html>

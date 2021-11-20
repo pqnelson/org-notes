@@ -46,6 +46,15 @@ caveat that if ~d~ is an abbreviation with ~n>k~ parameters, then
 ~d(c_1, ..., c_k)~ fixes the last ~k~ parameters (~x_(n-k)=c_1~, ...,
 ~x_n=c_k~).
 
+** Order of Evaluation
+:PROPERTIES:
+:CUSTOM_ID: h-af6d8dbd-1125-4b8a-bc54-5658fb760ae8
+:END:
+
+Note that if we encounter an expression like ~<t>f(e_1, ..., e_n)~, then
+we first evaluate ~f(e_1, ..., e_n)~ and then apply the result as the
+"rator" to an application with "rand" ~t~.
+
 ** Terms, Types, Kinds
 :PROPERTIES:
 :CUSTOM_ID: h-d1315b98-5921-4b87-bb9a-8930e362a4fe
@@ -96,6 +105,9 @@ sometimes (I'm still figuring out /when/ we can).
 - ~<EB>~ can be ~---~, ~EB~, ~'eb'~
 - We can use ~;~ instead of ~:~ for the typing declaration at the end of
   the line
+
+Note to self: the modern syntax for lines, as used in Coq (and friends),
+is something more like ~<context> <turnstile> <identifier> : <expr> := ...~
 
 ** Contexts
 :PROPERTIES:

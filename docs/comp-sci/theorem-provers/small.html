@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-09-18 Sat 20:24 -->
+<!-- 2021-11-20 Sat 10:41 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>On Kernel Size</title>
@@ -259,6 +259,14 @@
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
 <h1 class="title">On Kernel Size</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-bb3c318e-1f27-4cde-a517-2b476e0b15b8">1. Observations</a></li>
+</ul>
+</div>
+</div>
 <p>
 <b>Puzzle:</b> How small should a proof assistant's kernel be, for it to be
  considered "bug free"?
@@ -304,10 +312,45 @@ For the figures given, we have
 
 <p>
 Thus the upper-bound on a program to be a candidate for being "bug free"
-is approximately 441 lines of code.</p>
+is approximately 441 lines of code.
+</p>
+
+<div id="outline-container-h-bb3c318e-1f27-4cde-a517-2b476e0b15b8" class="outline-2">
+<h2 id="h-bb3c318e-1f27-4cde-a517-2b476e0b15b8"><span class="section-number-2">1.</span> Observations</h2>
+<div class="outline-text-2" id="text-h-bb3c318e-1f27-4cde-a517-2b476e0b15b8">
+<p>
+If we use a <a href="https://en.wikipedia.org/wiki/Binomial_distribution">Binomial distributed</a> random variable
+\(B\sim\mathrm{Bin}(N,p_{bug})\), and look at finding an \(N\) such that
+\(\Pr(B\leq 3\sigma)\geq 0.5\), then we find \(N\approx 533\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-r">p_bug &lt;- 0.02
+q_bug &lt;- 1 - p_bug
+
+sd_bug &lt;- sqrt(p_bug*q_bug) # sigma = sd_bug*sqrt(n)
+
+# `guess` computes the likelihood L(n) = Pr(B &lt;= 3*sigma | n)
+# of no more than `3*sigma` bugs. We are trying to find the greatest
+# `n` such that `guess(n) &gt;= 0.5`; empirically this seems to be
+# 533, and fluctuates around a decreasing trend.
+guess &lt;- function(n) { pbinom(round(3*sd_bug*sqrt(n)), n, p_bug)}
+
+guess(441)
+# [1] 0.6113548
+guess(533)
+# [1] 0.5002271
+</pre>
+</div>
+
+<p>
+This <code>guess</code> is not a monotonic function, but 533 seems to be the
+greatest value of <code>n</code> such that <code>guess(n) &gt;= 0.5</code>.</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-09-18 Sat 20:23.</p>
+<p class="postamble">Last Updated 2021-11-20 Sat 10:40.</p>
 </div>
 </body>
 </html>
