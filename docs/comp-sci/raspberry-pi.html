@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-11-14 Sun 16:53 -->
+<!-- 2021-11-20 Sat 10:36 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raspberry Pi</title>
@@ -251,7 +251,8 @@
 </li>
 <li><a href="#h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f">4. Installing Emacs</a>
 <ul>
-<li><a href="#h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c">4.1. Improving Startup Time</a></li>
+<li><a href="#h-505fbdb9-12a4-46d8-9daf-46229887468f">4.1. Attempting Configuration</a></li>
+<li><a href="#h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c">4.2. Improving Startup Time</a></li>
 </ul>
 </li>
 <li><a href="#h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9">5. Installing Common Lisp</a>
@@ -349,7 +350,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="orgb9b248d">
+<pre class="example" id="org9bba29f">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -360,7 +361,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="org8acb7d6">
+<pre class="example" id="org6776975">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -369,7 +370,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="org1c41a6a">
+<pre class="example" id="org5121e48">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -436,8 +437,19 @@ error saying Emacs won't compile with <code>-ffinite-math-only</code>).
 </p>
 </div>
 
+<div id="outline-container-h-505fbdb9-12a4-46d8-9daf-46229887468f" class="outline-3">
+<h3 id="h-505fbdb9-12a4-46d8-9daf-46229887468f"><span class="section-number-3">4.1.</span> Attempting Configuration</h3>
+<div class="outline-text-3" id="text-h-505fbdb9-12a4-46d8-9daf-46229887468f">
+<pre class="example" id="org4b196cf">
+~/src/emacs/$ git clean -dxf
+~/src/emacs/$ ./autogen.sh
+~/src/emacs/$ ./configure --with-m17n-flt --with-modules --with-json --with-threads --with-included-regex --with-compress-install CFLAGS="-Ofast -mtune=native -mcpu=native -marm"
+</pre>
+</div>
+</div>
+
 <div id="outline-container-h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c" class="outline-3">
-<h3 id="h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c"><span class="section-number-3">4.1.</span> Improving Startup Time</h3>
+<h3 id="h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c"><span class="section-number-3">4.2.</span> Improving Startup Time</h3>
 <div class="outline-text-3" id="text-h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c">
 <p>
 I noticed the startup time was rather slow. The <code>(emacs-init-time)</code>
@@ -716,7 +728,7 @@ AddToFunc RestartFunction
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-14 Sun 16:52.</p>
+<p class="postamble">Last Updated 2021-11-14 Sun 17:01.</p>
 </div>
 </body>
 </html>

@@ -141,6 +141,17 @@ If you configure with ~-Ofast~ you need to also include
 ~-fno-finite-math-only~ too (or else when you run ~make~, you'll get an
 error saying Emacs won't compile with ~-ffinite-math-only~).
 
+** Attempting Configuration
+:PROPERTIES:
+:CUSTOM_ID: h-505fbdb9-12a4-46d8-9daf-46229887468f
+:END:
+
+#+begin_example
+~/src/emacs/$ git clean -dxf
+~/src/emacs/$ ./autogen.sh
+~/src/emacs/$ ./configure --with-m17n-flt --with-modules --with-json --with-threads --with-included-regex --with-compress-install CFLAGS="-Ofast -mtune=native -mcpu=native -marm"
+#+end_example
+
 ** Improving Startup Time
 :PROPERTIES:
 :CUSTOM_ID: h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c
