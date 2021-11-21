@@ -4,7 +4,7 @@
 <!-- 2021-11-21 Sun 10:41 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Topics - Theorem Provers</title>
+<title>Mizar</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -232,22 +232,77 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../theorem-provers.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Topics - Theorem Provers</h1>
-<ul class="org-ul">
-<li><a href="automath.html">Automath</a>, one of the first "modern" proof assistants</li>
-<li><a href="soft-types.html">Soft Type Systems</a></li>
-<li><a href="small.html">On Kernel Size</a>, or why anything beyond 441 lines of code should be
-considered "too big" to be considered "small".</li>
-<li><a href="mizar.html">Mizar</a>, a lovely proof assistant</li>
-<li><a href="mizar-definitions.html">Definitions in Mizar</a> some notes</li>
+<h1 class="title">Mizar</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-db11b193-c42a-415b-b960-c4efc7dacd50">1. Installing on Raspberry Pi</a></li>
+<li><a href="#h-5b2a23b4-8625-4b20-a0b0-a13c66678638">2. References</a></li>
 </ul>
 </div>
+</div>
+
+<div id="outline-container-h-db11b193-c42a-415b-b960-c4efc7dacd50" class="outline-2">
+<h2 id="h-db11b193-c42a-415b-b960-c4efc7dacd50"><span class="section-number-2">1</span> Installing on Raspberry Pi</h2>
+<div class="outline-text-2" id="text-h-db11b193-c42a-415b-b960-c4efc7dacd50">
+<p>
+This was surprisingly simple. I usually keep source code related stuff
+in <code>~/src/</code>, so here's the bash commands that got me cooking:
+</p>
+
+<pre class="example" id="org8bdf39e">
+alex@pi:~$ cd src
+alex@pi:~/src/$ mkdir mizar
+alex@pi:~/src/$ cd mizar
+alex@pi:~/src/mizar/$ wget http://mizar.uwb.edu.pl/~softadm/pub/system/arm-linux/mizar-8.1.09_5.59.1363-arm-linux.tar
+alex@pi:~/src/mizar/$ tar -xvf mizar-8.1.09_5.59.1363-arm-linux.tar
+README
+install.sh
+mizbin.tar.gz
+mizdoc.tar.gz
+mizshare.tar.gz
+
+alex@pi:~/src/mizar$ ls
+
+install.sh                            mizbin.tar.gz  mizshare.tar.gz
+mizar-8.1.09_5.59.1363-arm-linux.tar  mizdoc.tar.gz  README
+
+alex@pi:~/src/mizar$ sudo ./install.sh --default
+...
+</pre>
+
+<p>
+Then I added one line of code to my <code>~/.bash_profile</code>:
+</p>
+
+<pre class="example" id="org610e806">
+# at the end of ~/.bash_profile
+MIZFILES=/usr/local/share/mizar
+</pre>
+
+<p>
+And, <i>voilà</i>, once we've <code>source ~/.bash_profile</code> we'll be able to start
+proving in no time.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-5b2a23b4-8625-4b20-a0b0-a13c66678638" class="outline-2">
+<h2 id="h-5b2a23b4-8625-4b20-a0b0-a13c66678638"><span class="section-number-2">2</span> References</h2>
+<div class="outline-text-2" id="text-h-5b2a23b4-8625-4b20-a0b0-a13c66678638">
+<ul class="org-ul">
+<li>Freek Wiedijk's <a href="http://mizar.org/project/mizman.pdf">Write a Mizar Article in 9 Easy Steps</a></li>
+</ul>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-21 Sun 10:36.</p>
+<p class="postamble">Last Updated 2021-11-21 Sun 10:40.</p>
 </div>
 </body>
 </html>

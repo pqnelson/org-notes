@@ -1,0 +1,60 @@
+#+TITLE: Mizar
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-11-21T10:30:09-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday November 21, 2021 at 10:30AM
+
+* Installing on Raspberry Pi
+:PROPERTIES:
+:CUSTOM_ID: h-db11b193-c42a-415b-b960-c4efc7dacd50
+:END:
+
+This was surprisingly simple. I usually keep source code related stuff
+in =~/src/=, so here's the bash commands that got me cooking:
+
+#+begin_example
+alex@pi:~$ cd src
+alex@pi:~/src/$ mkdir mizar
+alex@pi:~/src/$ cd mizar
+alex@pi:~/src/mizar/$ wget http://mizar.uwb.edu.pl/~softadm/pub/system/arm-linux/mizar-8.1.09_5.59.1363-arm-linux.tar
+alex@pi:~/src/mizar/$ tar -xvf mizar-8.1.09_5.59.1363-arm-linux.tar
+README
+install.sh
+mizbin.tar.gz
+mizdoc.tar.gz
+mizshare.tar.gz
+
+alex@pi:~/src/mizar$ ls
+
+install.sh                            mizbin.tar.gz  mizshare.tar.gz
+mizar-8.1.09_5.59.1363-arm-linux.tar  mizdoc.tar.gz  README
+
+alex@pi:~/src/mizar$ sudo ./install.sh --default
+...
+#+end_example
+
+Then I added one line of code to my =~/.bash_profile=:
+
+#+begin_example
+# at the end of ~/.bash_profile
+MIZFILES=/usr/local/share/mizar
+#+end_example
+
+And, /voilà/, once we've =source ~/.bash_profile= we'll be able to start
+proving in no time.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-5b2a23b4-8625-4b20-a0b0-a13c66678638
+:END:
+
+- Freek Wiedijk's [[http://mizar.org/project/mizman.pdf][Write a Mizar Article in 9 Easy Steps]]
+
+  
