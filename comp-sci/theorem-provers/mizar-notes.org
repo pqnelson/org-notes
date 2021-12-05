@@ -1,0 +1,138 @@
+#+TITLE: Mizar Notes
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-12-04T11:36:26-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday December  4, 2021 at 11:36AM
+
+* Useful Definitions
+:PROPERTIES:
+:CUSTOM_ID: h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7
+:END:
+
+- ~Element of X~ is defined in [[http://www.mizar.org/version/current/html/subset_1.html][~subset_1.miz~]] , lines 67 /et seq/.
+- ~Subset of X~ is defined in [[http://www.mizar.org/version/current/html/subset_1.html][~subset_1.miz~]] (line 99), but it just means
+  ~Element of bool X~; and ~bool X~ is defined in [[http://www.mizar.org/version/current/html/zfmisc_1.html][~zfmisc_1.miz~]]
+  (line 71) as ~bool X -> set means Z in it iff Z c= X~ (and ~c=~ is the
+  subset operator, defined in [[http://mizar.org/version/current/html/tarski.html][~tarski.miz~]], as we would expect its
+  meaning $X\subseteq Y\iff (\forall x, x\in X\implies x\in Y)$)
+
+** Group Theory
+:PROPERTIES:
+:CUSTOM_ID: h-9f5cf940-9a00-4b52-886d-f414fb02838d
+:END:
+
+- Nilpotent groups are discussed in  [[http://mizar.org/version/current/html/grnilp_1.html][~grnilp_1.miz~]]
+- Solvable groups discussed in  [[http://mizar.org/version/current/html/grsolv_1.html][~grsolv_1.miz~]]
+- Some Properties of $p$-Groups and Commutative $p$-Groups  [[http://mizar.org/version/current/html/groupp_1.html][~groupp_1.miz~]]
+- Cayley's theorem proven in [[http://mizar.org/version/current/html/cayley.html][~cayley.miz~]]
+  - Symmetric group on a set $X$ is defined on line 145 of [[http://mizar.org/version/current/html/cayley.html][~cayley.miz~]]
+- A lot of properties proved in [[http://mizar.org/version/current/html/group_8.html][~group_8.miz~]]
+- Jordon-Holder theorem in [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]]
+
+*** Definitions
+:PROPERTIES:
+:CUSTOM_ID: h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7
+:END:
+- Inverse operator is denoted by double quotes, so ~x"~ denotes $x^{-1}$
+  as defined in [[http://mizar.org/version/current/html/group_1.html][~group_1.miz~]] line 210 (~func h" -> Element of G means h * it = 1_G & it * h = 1_G;~)
+  - This is also extended to, for a group $G$, subsets $A\subset G$
+    we'd have ~A"~ be the collection of ~g"~ for ~g in A~, i.e.,
+    $A^{-1}=\{g^{-1}|g\in A\}$; see line 57 of [[http://mizar.org/version/current/html/group_2.html][~group_2.miz~]]
+    #+begin_example
+let G be Group;
+let A be Subset of G;
+func A " -> Subset of G equals :: GROUP_2:def 1
+{ (g ") where g is Element of G : g in A } ;
+    #+end_example
+- the mode definition ~Subgroup of G~, line 853 of  [[http://mizar.org/version/current/html/group_2.html][~group_2.miz~]]; for
+  some reason, if $H\lt G$, then ~carr(H)~ is defined as the subset of the
+  underlying set of $G$ equal to the set underlying $H$
+- If $H_{1}\lt G$ and $H_{2}\lt G$, then $H_{1}\cap H_{2}$ is defined on line
+  1563 of [[http://mizar.org/version/current/html/group_2.html][~group_2.miz~]]
+- The trivial subgroup of $G$ is denoted ~(1).G~, defined on line 1258
+  of [[http://mizar.org/version/current/html/group_2.html][~group_2.miz~]] as
+  #+begin_example
+  func (1).G -> strict Subgroup of G means
+  :Def7:
+  the carrier of it = {1_G};
+  #+end_example
+  - "strict" is a weird meta-term (c.f., [[http://mizar.uwb.edu.pl/forum/archive/0701/msg00008.html][discussion]]),
+    #+begin_quote
+"strict" doesn't have its own definition as it is a special (in a way "meta" attribute) - it means that a term which has a structure type <Theta> has exactly the same selectors (fields) as introduced in the definition of the type <Theta>, so in your case only the selectors of a doubleLoopStr - any extension to that would break the "strictness". So you may think of a vector space as of a group, but it's not a "strict" group.
+    #+end_quote
+  - "strict" for subgroup is on line 1011 of [[http://mizar.org/version/current/html/group_2.html][~group_2.miz~]]; it's a
+    registration of a cluster. I believe it refers to being a proper
+    subgroup.
+
+- ~(Omega).G~ (line of [[http://mizar.org/version/current/html/group_2.html][~group_2.miz~]]) seems to be the other trivial subgroup of $G$, i.e., $G$ itself
+  - This seems to be following notation introduced in  [[http://mizar.org/version/current/html/rlsub_1.html][~rlsub_1.miz~]],
+    line 764; a comment before it notes this notation is used for
+    improper subspaces
+- Left cosets are defined on line 2448 of [[http://mizar.org/version/current/html/group_2.html][~group_2.miz~]] (right cosets
+  are defined on line 2468)
+- The index of a subgroup $H\lt G$ is defined as the cardinality of left
+  cosets of $H$  on line 2789 of [[http://mizar.org/version/current/html/group_2.html][~group_2.miz~]]
+
+- Conjugation of $a$ by $b$ (both elements of $G$) is denoted
+  ~a |^ b~, defined on lines 299--300 of [[http://mizar.org/version/current/html/group_3.html][~group_3.miz~]]
+  - This is extended to subsets $A$ and $B$ of $G$, ~A |^ B~ is the
+    collection of conjugating elements of $A$ by elements of $B$
+    ~func A |^ B -> Subset of G equals {g |^ h : g in A & h in B};~
+  - We also have ~g |^ A~ and ~A |^ g~ for conjugating an element by
+    members of a subset, and conjugating a subset by an element
+- Conjugate subgroup to $H\lt G$ is defined lines 897 /et seq/ of
+  [[http://mizar.org/version/current/html/group_3.html][~group_3.miz~]] as ~H |^ a~ (conjugate subgroup of a finite group is
+  itself finite, as registration on line 1068 notes)
+- ~a,b are_conjugated~ defined on line 1270 of [[http://mizar.org/version/current/html/group_3.html][~group_3.miz~]] if there is a $g\in G$ such
+  that ~a = b |^ g~ (and two subsets are conjugated, defined on line
+  1523; for two subgroups on line 1738)
+- Conjugacy class of $a\in G$ is defined as the subset of $G$ given by
+  ~a |^ carr (Omega).G~ around line 1367 of [[http://mizar.org/version/current/html/group_3.html][~group_3.miz~]] (and the
+  conjugacy class of a subset of $G$ is defined around line 1615; the
+  conjugacy class for a subgroup defined on line 1810)
+- A normal subgroup is defined on line 1956 of [[http://mizar.org/version/current/html/group_3.html][~group_3.miz~]] as
+  ~for a holds IT |^ a = the multMagma of IT~ and then it is registered
+  as ~strict normal~
+- The normalizer for a subset $A\subset G$ is defined on line 2419 of [[http://mizar.org/version/current/html/group_3.html][~group_3.miz~]]
+  as ~func Normalizer A -> strict Subgroup of G means :Def14: the carrier of it = {h : A |^ h = A};~
+  (normalizer of a subgroup is defined on line 2638)
+- If $A$ is a subset of a group $G$, the ~gr A~ seems to be the smallest
+  subgroup containing $A$
+- Frattini subgroup is tricky. Relevant code starts around 1371 of  [[http://mizar.org/version/current/html/group_4.html][~group_4.miz~]]
+  #+begin_example
+::$N Frattini subgroup
+  func Phi(G) -> strict Subgroup of G means
+  :Def7:
+  the carrier of it = meet{A
+where A is Subset of G : ex H being strict Subgroup of G st A = the carrier of
+H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
+  it = the multMagma of G;
+  #+end_example
+- The notation $H_{1}\wedge H_{2}$ for the smallest group containing
+  both $H_{1}$ and $H_{2}$ (defined line 1877 [[http://mizar.org/version/current/html/group_4.html][~group_4.miz~]]) it is given
+  the name ~SubJoin~ on line 2636; dually, the submeet is defined on
+  line 2680
+- Lattice of subgroups defined line 2795 of [[http://mizar.org/version/current/html/group_4.html][~group_4.miz~]]
+- Commutator of group elements line 331 of [[http://mizar.org/version/current/html/group_5.html][~group_5.miz~]]; ~commutators(A,B)~ for
+  subsets of $G$ on line 964; ~commutators(H1,H2)~ of subgroups defined on line 1091;
+  and ~commutators G~ is defined as the commutator of the underlying set
+  of $G$ with itself
+- A triple $[a,b,c]=[[a,b],c]$ line 662 of [[http://mizar.org/version/current/html/group_5.html][~group_5.miz~]]
+- the smallest group containing ~commutators(A,B)~ is defined as ~[.A,B.]~
+  on line 1262; and similarly for subgroups ~[.H1,H2.]~ defined on line 1297
+- the derived group is define on line 1578 of [[http://mizar.org/version/current/html/group_5.html][~group_5.miz~]]
+- the center of $G$ is defined on line 1775 of [[http://mizar.org/version/current/html/group_5.html][~group_5.miz~]]
+-
+
+* Random
+:PROPERTIES:
+:CUSTOM_ID: h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89
+:END:
+- Cayley-Dickson construction in [[http://mizar.org/version/current/html/cayldick.html][~cayldick.miz~]]
