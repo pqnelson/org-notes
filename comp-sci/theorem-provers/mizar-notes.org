@@ -97,6 +97,7 @@ func A " -> Subset of G equals :: GROUP_2:def 1
   ~a |^ carr (Omega).G~ around line 1367 of [[http://mizar.org/version/current/html/group_3.html][~group_3.miz~]] (and the
   conjugacy class of a subset of $G$ is defined around line 1615; the
   conjugacy class for a subgroup defined on line 1810)
+  - ~conjugate_Classes G~ defined line 1131 of [[http://mizar.org/version/current/html/weddwit.html][~weddwit.miz~]]
 - A normal subgroup is defined on line 1956 of [[http://mizar.org/version/current/html/group_3.html][~group_3.miz~]] as
   ~for a holds IT |^ a = the multMagma of IT~ and then it is registered
   as ~strict normal~
@@ -129,6 +130,11 @@ H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
   on line 1262; and similarly for subgroups ~[.H1,H2.]~ defined on line 1297
 - the derived group is define on line 1578 of [[http://mizar.org/version/current/html/group_5.html][~group_5.miz~]]
 - the center of $G$ is defined on line 1775 of [[http://mizar.org/version/current/html/group_5.html][~group_5.miz~]]
+  as a strict subgroup of $G$ consisting of ~{a : for b holds a * b = b * a};~
+  - The Centralizer of an element $a\in G$ is defined line 739 of
+    [[http://mizar.org/version/current/html/weddwit.html][~weddwit.miz~]]
+  - The center for a skew-field $R$ is defined on line 1508 of [[http://mizar.org/version/current/html/weddwit.html][~weddwit.miz~,]]
+    and the centralizer for an element of $R$ is defined on line 1978
 - a group $G$ is "simple" if ~IT is not trivial~ and there is no
   nontrivial normal subgroup $H\triangleleft G$ (i.e., $H\neq 1$ and
   $H\neq G$) line 998 of [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]]
@@ -155,3 +161,54 @@ H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
 :CUSTOM_ID: h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89
 :END:
 - Cayley-Dickson construction in [[http://mizar.org/version/current/html/cayldick.html][~cayldick.miz~]]
+
+
+* Lessons Learned
+:PROPERTIES:
+:CUSTOM_ID: h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09
+:END:
+
+** Vocabulary Files
+:PROPERTIES:
+:CUSTOM_ID: h-c0226382-31df-4572-891b-e9ae20a09b98
+:END:
+
+When defining new terms, well, we should get started by doing something
+like:
+
+#+begin_example
+user@computer:~/$ mkdir -p work/first-article/
+user@computer:~/$ cd work/first-article/
+user@computer:~/work/first-article/$ mkdir DICT
+user@computer:~/work/first-article/$ mkdir TEXT
+user@computer:~/work/first-article/$ mkdir PREL
+#+end_example
+
+Now for a "Hello World" type Mizar file: just create a new predicate
+~foobar~. We do this by creating ~first-article/DICT/TMP.voc~ and
+sticking one line in it:
+
+#+begin_example
+Rfoobar
+#+end_example
+
+Then in ~first-article/TEXT/TMP.miz~ we would have:
+
+#+begin_example
+environ
+vocabularies TMP; :: this is important! Without it, you get an error
+
+
+begin
+
+definition
+  let a,b be set;
+  pred a,b foobar means
+  :Def1:
+  a = b;
+end;
+#+end_example
+
+Without the ~vocabularies TMP;~ line, you'll get a "301: Predicate
+symbol expected" error, basically Mizar telling you that you forgot to
+include ~foobar~ as a predicate in your vocabulary file.
