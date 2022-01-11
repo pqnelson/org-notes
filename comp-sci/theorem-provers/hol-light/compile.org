@@ -11,6 +11,98 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 # Created Tuesday January 11, 2022 at 12:02PM
 
+* OPAM
+:PROPERTIES:
+:CUSTOM_ID: h-c4e6f09e-d81f-4265-a808-d19c8167a1ea
+:END:
+
+On a Raspberry Pi, simply install OCaml using ~sudo apt install ocaml~.
+
+Then clone and build OPAM:
+
+#+begin_example
+alex@rpi:~/$ cd src
+alex@rpi:~/src/$ git clone https://github.com/ocaml/opam
+...
+alex@rpi:~/src/$ cd OPAM
+alex@rpi:~/src/OPAM/$ ./configure
+alex@rpi:~/src/OPAM/$ make lib-ext
+alex@rpi:~/src/OPAM/$ make
+alex@rpi:~/src/OPAM/$ sudo make install
+#+end_example
+
+Before we finish, we need to also install bubblewrap...because...reasons...
+
+#+begin_example
+alex@rpi:~/src/OPAM/$ sudo apt install bubblewrap
+alex@rpi:~/src/OPAM/$ cd ~
+alex@rpi:~/$ opam init
+
+[default] Initialised
+
+<><> Required setup - please read <><><><><><><><><><><><><><><><><><><><><><><>
+
+  In normal operation, opam only alters files within ~/.opam.
+
+  However, to best integrate with your system, some environment variables
+  should be set. If you allow it to, this initialisation step will update
+  your bash configuration by adding the following line to ~/.bash_profile:
+
+    test -r /home/alex/.opam/opam-init/init.sh && . /home/alex/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+
+  Otherwise, every time you want to access your opam installation, you will
+  need to run:
+
+    eval $(opam env)
+
+  You can always re-run this setup with 'opam init' later.
+
+Do you want opam to modify ~/.bash_profile? [N/y/f]
+(default is 'no', use 'f' to choose a different file) y                                                           
+
+User configuration:
+  Updating ~/.bash_profile.
+[NOTE] Make sure that ~/.bash_profile is well sourced in your ~/.bashrc.
+
+
+<><> Creating initial switch 'default' (invariant ["ocaml" {>= "4.05.0"}] - initially with ocaml-system) 
+
+<><> Installing new switch packages <><><><><><><><><><><><><><><><><><><><><><>
+Switch invariant: ["ocaml" {>= "4.05.0"}]
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+∗ installed base-bigarray.base
+∗ installed base-threads.base
+∗ installed base-unix.base
+∗ installed ocaml-system.4.11.1
+∗ installed ocaml-config.1
+∗ installed ocaml.4.11.1
+Done.
+# Run eval $(opam env --switch=default) to update the current shell environment
+alex@raspberrypi:~$
+#+end_example
+
+Now we build the infrastructure necessary to play with HOL Light (this
+will take about an hour in the following state):
+
+#+begin_example
+alex@raspberrypi:~$ opam switch create 4.05.0
+
+<><> Installing new switch packages <><><><><><><><><><><><><><><><><><><><><><>
+Switch invariant: ["ocaml-base-compiler" {= "4.05.0"} | "ocaml-system" {= "4.05.0"}]
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+∗ installed base-bigarray.base
+∗ installed base-threads.base
+∗ installed base-unix.base
+⬇ retrieved ocaml-base-compiler.4.05.0  (https://opam.ocaml.org/cache)
+Processing 13/18: [ocaml-base-compiler: make world]
+#+end_example
+
+* HOL Light
+:PROPERTIES:
+:CUSTOM_ID: h-6467e267-dbcd-494e-b403-9446923a786e
+:END:
 Clone HOL Light from github:
 
 #+begin_example

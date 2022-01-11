@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-12-05 Sun 09:56 -->
+<!-- 2022-01-11 Tue 13:17 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mizar Notes</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -273,12 +273,17 @@
 </ul>
 </li>
 <li><a href="#h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89">2. Random</a></li>
+<li><a href="#h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09">3. Lessons Learned</a>
+<ul>
+<li><a href="#h-c0226382-31df-4572-891b-e9ae20a09b98">3.1. Vocabulary Files</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7" class="outline-2">
-<h2 id="h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7"><span class="section-number-2">1.</span> Useful Definitions</h2>
+<h2 id="h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7"><span class="section-number-2">1</span> Useful Definitions</h2>
 <div class="outline-text-2" id="text-h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7">
 <ul class="org-ul">
 <li><code>Element of X</code> is defined in <a href="http://www.mizar.org/version/current/html/subset_1.html"><code>subset_1.miz</code></a> , lines 67 <i>et seq</i>.</li>
@@ -291,7 +296,7 @@ meaning \(X\subseteq Y\iff (\forall x, x\in X\implies x\in Y)\))</li>
 </div>
 
 <div id="outline-container-h-9f5cf940-9a00-4b52-886d-f414fb02838d" class="outline-3">
-<h3 id="h-9f5cf940-9a00-4b52-886d-f414fb02838d"><span class="section-number-3">1.1.</span> Group Theory</h3>
+<h3 id="h-9f5cf940-9a00-4b52-886d-f414fb02838d"><span class="section-number-3">1.1</span> Group Theory</h3>
 <div class="outline-text-3" id="text-h-9f5cf940-9a00-4b52-886d-f414fb02838d">
 <ul class="org-ul">
 <li>Nilpotent groups are discussed in  <a href="http://mizar.org/version/current/html/grnilp_1.html"><code>grnilp_1.miz</code></a></li>
@@ -307,7 +312,7 @@ meaning \(X\subseteq Y\iff (\forall x, x\in X\implies x\in Y)\))</li>
 </div>
 
 <div id="outline-container-h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7" class="outline-4">
-<h4 id="h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7"><span class="section-number-4">1.1.1.</span> Definitions</h4>
+<h4 id="h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7"><span class="section-number-4">1.1.1</span> Definitions</h4>
 <div class="outline-text-4" id="text-h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7">
 <ul class="org-ul">
 <li>Inverse operator is denoted by double quotes, so <code>x"</code> denotes \(x^{-1}\)
@@ -318,7 +323,7 @@ This is also extended to, for a group \(G\), subsets \(A\subset G\)
 we'd have <code>A"</code> be the collection of <code>g"</code> for <code>g in A</code>, i.e.,
 \(A^{-1}=\{g^{-1}|g\in A\}\); see line 57 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>
 </p>
-<pre class="example" id="orge32ec67">
+<pre class="example" id="org1e9f6ad">
 let G be Group;
 let A be Subset of G;
 func A " -&gt; Subset of G equals :: GROUP_2:def 1
@@ -334,7 +339,7 @@ underlying set of \(G\) equal to the set underlying \(H\)</li>
 The trivial subgroup of \(G\) is denoted <code>(1).G</code>, defined on line 1258
 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> as
 </p>
-<pre class="example" id="orgbba9c1b">
+<pre class="example" id="orgd3086dc">
   func (1).G -&gt; strict Subgroup of G means
   :Def7:
   the carrier of it = {1_G};
@@ -382,7 +387,10 @@ that <code>a = b |^ g</code> (and two subsets are conjugated, defined on line
 <li>Conjugacy class of \(a\in G\) is defined as the subset of \(G\) given by
 <code>a |^ carr (Omega).G</code> around line 1367 of <a href="http://mizar.org/version/current/html/group_3.html"><code>group_3.miz</code></a> (and the
 conjugacy class of a subset of \(G\) is defined around line 1615; the
-conjugacy class for a subgroup defined on line 1810)</li>
+conjugacy class for a subgroup defined on line 1810)
+<ul class="org-ul">
+<li><code>conjugate_Classes G</code> defined line 1131 of <a href="http://mizar.org/version/current/html/weddwit.html"><code>weddwit.miz</code></a></li>
+</ul></li>
 <li>A normal subgroup is defined on line 1956 of <a href="http://mizar.org/version/current/html/group_3.html"><code>group_3.miz</code></a> as
 <code>for a holds IT |^ a = the multMagma of IT</code> and then it is registered
 as <code>strict normal</code></li>
@@ -394,7 +402,7 @@ subgroup containing \(A\)</li>
 <li><p>
 Frattini subgroup is tricky. Relevant code starts around 1371 of  <a href="http://mizar.org/version/current/html/group_4.html"><code>group_4.miz</code></a>
 </p>
-<pre class="example" id="org2573205">
+<pre class="example" id="org1aa5888">
 ::$N Frattini subgroup
   func Phi(G) -&gt; strict Subgroup of G means
   :Def7:
@@ -416,7 +424,14 @@ of \(G\) with itself</li>
 <li>the smallest group containing <code>commutators(A,B)</code> is defined as <code>[.A,B.]</code>
 on line 1262; and similarly for subgroups <code>[.H1,H2.]</code> defined on line 1297</li>
 <li>the derived group is define on line 1578 of <a href="http://mizar.org/version/current/html/group_5.html"><code>group_5.miz</code></a></li>
-<li>the center of \(G\) is defined on line 1775 of <a href="http://mizar.org/version/current/html/group_5.html"><code>group_5.miz</code></a></li>
+<li>the center of \(G\) is defined on line 1775 of <a href="http://mizar.org/version/current/html/group_5.html"><code>group_5.miz</code></a>
+as a strict subgroup of \(G\) consisting of <code>{a : for b holds a * b = b * a};</code>
+<ul class="org-ul">
+<li>The Centralizer of an element \(a\in G\) is defined line 739 of
+<a href="http://mizar.org/version/current/html/weddwit.html"><code>weddwit.miz</code></a></li>
+<li>The center for a skew-field \(R\) is defined on line 1508 of <a href="http://mizar.org/version/current/html/weddwit.html"><code>weddwit.miz</code>,</a>
+and the centralizer for an element of \(R\) is defined on line 1978</li>
+</ul></li>
 <li>a group \(G\) is "simple" if <code>IT is not trivial</code> and there is no
 nontrivial normal subgroup \(H\triangleleft G\) (i.e., \(H\neq 1\) and
 \(H\neq G\)) line 998 of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.miz</code></a></li>
@@ -444,16 +459,76 @@ of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.mi
 </div>
 
 <div id="outline-container-h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89" class="outline-2">
-<h2 id="h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89"><span class="section-number-2">2.</span> Random</h2>
+<h2 id="h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89"><span class="section-number-2">2</span> Random</h2>
 <div class="outline-text-2" id="text-h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89">
 <ul class="org-ul">
 <li>Cayley-Dickson construction in <a href="http://mizar.org/version/current/html/cayldick.html"><code>cayldick.miz</code></a></li>
 </ul>
 </div>
 </div>
+
+
+<div id="outline-container-h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09" class="outline-2">
+<h2 id="h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09"><span class="section-number-2">3</span> Lessons Learned</h2>
+<div class="outline-text-2" id="text-h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09">
+</div>
+
+<div id="outline-container-h-c0226382-31df-4572-891b-e9ae20a09b98" class="outline-3">
+<h3 id="h-c0226382-31df-4572-891b-e9ae20a09b98"><span class="section-number-3">3.1</span> Vocabulary Files</h3>
+<div class="outline-text-3" id="text-h-c0226382-31df-4572-891b-e9ae20a09b98">
+<p>
+When defining new terms, well, we should get started by doing something
+like:
+</p>
+
+<pre class="example" id="orge694e80">
+user@computer:~/$ mkdir -p work/first-article/
+user@computer:~/$ cd work/first-article/
+user@computer:~/work/first-article/$ mkdir DICT
+user@computer:~/work/first-article/$ mkdir TEXT
+user@computer:~/work/first-article/$ mkdir PREL
+</pre>
+
+<p>
+Now for a "Hello World" type Mizar file: just create a new predicate
+<code>foobar</code>. We do this by creating <code>first-article/DICT/TMP.voc</code> and
+sticking one line in it:
+</p>
+
+<pre class="example" id="orgd3e213f">
+Rfoobar
+</pre>
+
+<p>
+Then in <code>first-article/TEXT/TMP.miz</code> we would have:
+</p>
+
+<pre class="example" id="org3686b5a">
+environ
+vocabularies TMP; :: this is important! Without it, you get an error
+
+
+begin
+
+definition
+  let a,b be set;
+  pred a,b foobar means
+  :Def1:
+  a = b;
+end;
+</pre>
+
+<p>
+Without the <code>vocabularies TMP;</code> line, you'll get a "301: Predicate
+symbol expected" error, basically Mizar telling you that you forgot to
+include <code>foobar</code> as a predicate in your vocabulary file.
+</p>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-12-05 Sun 09:55.</p>
+<p class="postamble">Last Updated 2022-01-11 Tue 13:11.</p>
 </div>
 </body>
 </html>

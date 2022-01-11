@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-11 Tue 12:09 -->
+<!-- 2022-01-11 Tue 14:20 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Compiling HOL Light</title>
@@ -237,11 +237,120 @@
  <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content">
 <h1 class="title">Compiling HOL Light</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-c4e6f09e-d81f-4265-a808-d19c8167a1ea">1. OPAM</a></li>
+<li><a href="#h-6467e267-dbcd-494e-b403-9446923a786e">2. HOL Light</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-c4e6f09e-d81f-4265-a808-d19c8167a1ea" class="outline-2">
+<h2 id="h-c4e6f09e-d81f-4265-a808-d19c8167a1ea"><span class="section-number-2">1</span> OPAM</h2>
+<div class="outline-text-2" id="text-h-c4e6f09e-d81f-4265-a808-d19c8167a1ea">
+<p>
+On a Raspberry Pi, simply install OCaml using <code>sudo apt install ocaml</code>.
+</p>
+
+<p>
+Then clone and build OPAM:
+</p>
+
+<pre class="example" id="orgf5c5f37">
+alex@rpi:~/$ cd src
+alex@rpi:~/src/$ git clone https://github.com/ocaml/opam
+...
+alex@rpi:~/src/$ cd OPAM
+alex@rpi:~/src/OPAM/$ ./configure
+alex@rpi:~/src/OPAM/$ make lib-ext
+alex@rpi:~/src/OPAM/$ make
+alex@rpi:~/src/OPAM/$ sudo make install
+</pre>
+
+<p>
+Before we finish, we need to also install bubblewrap&#x2026;because&#x2026;reasons&#x2026;
+</p>
+
+<pre class="example" id="org072e28c">
+alex@rpi:~/src/OPAM/$ sudo apt install bubblewrap
+alex@rpi:~/src/OPAM/$ cd ~
+alex@rpi:~/$ opam init
+
+[default] Initialised
+
+&lt;&gt;&lt;&gt; Required setup - please read &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+
+  In normal operation, opam only alters files within ~/.opam.
+
+  However, to best integrate with your system, some environment variables
+  should be set. If you allow it to, this initialisation step will update
+  your bash configuration by adding the following line to ~/.bash_profile:
+
+    test -r /home/alex/.opam/opam-init/init.sh &amp;&amp; . /home/alex/.opam/opam-init/init.sh &gt; /dev/null 2&gt; /dev/null || true
+
+  Otherwise, every time you want to access your opam installation, you will
+  need to run:
+
+    eval $(opam env)
+
+  You can always re-run this setup with 'opam init' later.
+
+Do you want opam to modify ~/.bash_profile? [N/y/f]
+(default is 'no', use 'f' to choose a different file) y                                                           
+
+User configuration:
+  Updating ~/.bash_profile.
+[NOTE] Make sure that ~/.bash_profile is well sourced in your ~/.bashrc.
+
+
+&lt;&gt;&lt;&gt; Creating initial switch 'default' (invariant ["ocaml" {&gt;= "4.05.0"}] - initially with ocaml-system) 
+
+&lt;&gt;&lt;&gt; Installing new switch packages &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+Switch invariant: ["ocaml" {&gt;= "4.05.0"}]
+
+&lt;&gt;&lt;&gt; Processing actions &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+∗ installed base-bigarray.base
+∗ installed base-threads.base
+∗ installed base-unix.base
+∗ installed ocaml-system.4.11.1
+∗ installed ocaml-config.1
+∗ installed ocaml.4.11.1
+Done.
+# Run eval $(opam env --switch=default) to update the current shell environment
+alex@raspberrypi:~$
+</pre>
+
+<p>
+Now we build the infrastructure necessary to play with HOL Light (this
+will take about an hour in the following state):
+</p>
+
+<pre class="example" id="org7bb9e4c">
+alex@raspberrypi:~$ opam switch create 4.05.0
+
+&lt;&gt;&lt;&gt; Installing new switch packages &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+Switch invariant: ["ocaml-base-compiler" {= "4.05.0"} | "ocaml-system" {= "4.05.0"}]
+
+&lt;&gt;&lt;&gt; Processing actions &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+∗ installed base-bigarray.base
+∗ installed base-threads.base
+∗ installed base-unix.base
+⬇ retrieved ocaml-base-compiler.4.05.0  (https://opam.ocaml.org/cache)
+Processing 13/18: [ocaml-base-compiler: make world]
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-6467e267-dbcd-494e-b403-9446923a786e" class="outline-2">
+<h2 id="h-6467e267-dbcd-494e-b403-9446923a786e"><span class="section-number-2">2</span> HOL Light</h2>
+<div class="outline-text-2" id="text-h-6467e267-dbcd-494e-b403-9446923a786e">
 <p>
 Clone HOL Light from github:
 </p>
 
-<pre class="example" id="org03f3b85">
+<pre class="example" id="org5829e7c">
 alex@box:~/src/$ git clone https://github.com/jrh13/hol-light
 Cloning into 'hol-light'...
 remote: Enumerating objects: 8310, done.
@@ -265,7 +374,7 @@ The trippy thing is we need to use OPAM to use the "correct" version of
 OCaml (c.f., <a href="https://github.com/jrh13/hol-light/issues/64#issuecomment-894131933">Github Issue</a>), the following bash commands should work:
 </p>
 
-<pre class="example" id="orgd0ea500">
+<pre class="example" id="org0a979ba">
 opam switch create 4.05.0
 eval $(opam env)
 opam pin add camlp5 7.08
@@ -278,7 +387,7 @@ on <code>Processing 7/12: [ocaml-base-compiler ...]</code>, but that's because
 it's building the OCaml compiler from scratch; be patient!):
 </p>
 
-<pre class="example" id="org2dc8fa9">
+<pre class="example" id="orgc27b4b9">
 alex@box:~/src/hol-light/$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Gathering sources &gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -332,7 +441,7 @@ This may not work, since OPAM may install camlp5 to
 <code>$HOME/.opam/4.05.0/lib/camlp5</code>; in which case, we need to also:
 </p>
 
-<pre class="example" id="orgea41a8c">
+<pre class="example" id="org7ee02b2">
 alex@box:~/src/hol-light/$ export CAMLP5LIB=$HOME/.opam/4.05.0/lib/camlp5
 </pre>
 
@@ -340,7 +449,7 @@ alex@box:~/src/hol-light/$ export CAMLP5LIB=$HOME/.opam/4.05.0/lib/camlp5
 Now we can do the following:
 </p>
 
-<pre class="example" id="orga43b230">
+<pre class="example" id="org02761b5">
 alex@box:~/src/hol-light/$ ocaml -I `camlp5 -where` camlp5o.cma
 
         OCaml version 4.05.0
@@ -361,7 +470,7 @@ error, which is just confusing and cryptic.)
 Now we can simply <code>#use "hol.ml";;</code> to get:
 </p>
 
-<pre class="example" id="orgb0cfbc0">
+<pre class="example" id="org473642f">
 # #use "hol.ml";;
 ...
 ...
@@ -382,8 +491,10 @@ You can go get a cup of tea or coffee, because it will take a minute or
 two for everything to load. I suspect there's some way I could combine
 all this into a small bash script.</p>
 </div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-11 Tue 12:04.</p>
+<p class="postamble">Last Updated 2022-01-11 Tue 14:18.</p>
 </div>
 </body>
 </html>
