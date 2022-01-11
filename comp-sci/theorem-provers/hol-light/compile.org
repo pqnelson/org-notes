@@ -1,0 +1,140 @@
+#+TITLE: Compiling HOL Light
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-01-11T12:02:26-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Tuesday January 11, 2022 at 12:02PM
+
+Clone HOL Light from github:
+
+#+begin_example
+alex@box:~/src/$ git clone https://github.com/jrh13/hol-light
+Cloning into 'hol-light'...
+remote: Enumerating objects: 8310, done.
+remote: Counting objects: 100% (768/768), done.
+remote: Compressing objects: 100% (704/704), done.
+remote: Total 8310 (delta 137), reused 147 (delta 63), pack-reused 7542
+Receiving objects: 100% (8310/8310), 27.50 MiB | 5.38 MiB/s, done.
+Resolving deltas: 100% (5585/5585), done.
+
+alex@box:~/src/$ cd hol-light
+alex@box:~/src/hol-light/$ 
+#+end_example
+
+We will need OPAM. If you're on a Raspberry pi, see [[https://dannywillems.github.io/2016/06/22/ocaml-raspberry-pi.html][OCaml on Raspberry Pi]]
+for help.
+
+The trippy thing is we need to use OPAM to use the "correct" version of
+OCaml (c.f., [[https://github.com/jrh13/hol-light/issues/64#issuecomment-894131933][Github Issue]]), the following bash commands should work:
+
+#+begin_example
+opam switch create 4.05.0
+eval $(opam env)
+opam pin add camlp5 7.08
+opam install num camlp5
+#+end_example
+
+So you will see something like the following (it may appear to "hang"
+on ~Processing 7/12: [ocaml-base-compiler ...]~, but that's because
+it's building the OCaml compiler from scratch; be patient!):
+
+#+begin_example
+alex@box:~/src/hol-light/$ opam switch create 4.05.0
+
+<><> Gathering sources ><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+[ocaml-base-compiler.4.05.0] found in cache
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+∗ installed base-bigarray.base
+∗ installed base-threads.base
+∗ installed base-unix.base
+∗ installed ocaml-base-compiler.4.05.0
+∗ installed ocaml-config.1
+∗ installed ocaml.4.05.0
+Done.
+# Run eval $(opam env) to update the current shell environment
+
+alex@box:~/src/hol-light/$ eval $(opam env)
+alex@box:~/src/hol-light/$ opam pin add camlp5 7.08
+camlp5 is now pinned to version 7.08
+
+The following actions will be performed:
+  ∗ install camlp5 7.08*
+Do you want to continue? [Y/n] y
+
+<><> Gathering sources ><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+[camlp5.7.08] found in cache
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+∗ installed camlp5.7.08
+Done.
+
+alex@box:~/src/hol-light/$ opam install num camlp5
+[NOTE] Package camlp5 is already installed (current version is 7.10).
+The following actions will be performed:
+  ∗ install base-num base [required by num]
+  ∗ install num      0
+===== ∗ 2 =====
+Do you want to continue? [Y/n] y
+
+<><> Gathering sources ><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+∗ installed base-num.base
+∗ installed num.0
+Done.
+
+alex@box:~/src/hol-light/$ 
+#+end_example
+
+This may not work, since OPAM may install camlp5 to
+=$HOME/.opam/4.05.0/lib/camlp5=; in which case, we need to also:
+
+#+begin_example
+alex@box:~/src/hol-light/$ export CAMLP5LIB=$HOME/.opam/4.05.0/lib/camlp5
+#+end_example
+
+Now we can do the following:
+
+#+begin_example
+alex@box:~/src/hol-light/$ ocaml -I `camlp5 -where` camlp5o.cma
+
+        OCaml version 4.05.0
+
+	Camlp5 parsing version 7.08
+
+# 
+#+end_example
+
+(This is because camlp5 isn't adequately included, for reasons I do not
+pretend to understand, but I am thankful for the solution from
+[[https://github.com/jrh13/hol-light/issues/29][here]]. Without doing this, we will get ~Cannot find file camlp5o.cam.~
+error, which is just confusing and cryptic.)
+
+Now we can simply ~#use "hol.ml";;~ to get:
+
+#+begin_example
+# #use "hol.ml";;
+...
+...
+...
+val search : term list -> (string * thm) list = <fun>
+- : unit = ()
+File "help.ml" already loaded
+- : unit = ()
+- : unit = ()
+- : unit = ()
+	Camlp5 parsing version 7.08
+
+# 
+#+end_example
+
+You can go get a cup of tea or coffee, because it will take a minute or
+two for everything to load. I suspect there's some way I could combine
+all this into a small bash script.

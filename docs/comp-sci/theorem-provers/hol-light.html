@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-11 Tue 12:09 -->
+<!-- 2022-01-11 Tue 12:53 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mizar</title>
+<title>HOL Light</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -236,73 +236,95 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Mizar</h1>
+<h1 class="title">HOL Light</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#h-db11b193-c42a-415b-b960-c4efc7dacd50">1. Installing on Raspberry Pi</a></li>
-<li><a href="#h-5b2a23b4-8625-4b20-a0b0-a13c66678638">2. References</a></li>
+<li><a href="#h-b8966ca2-18ec-43d5-8343-19fe27ae5f15">1. Obtaining and Compiling</a></li>
+<li><a href="#h-fccbb336-8af3-4f4a-8fcc-b08a2ac071ce">2. References</a>
+<ul>
+<li><a href="#h-4253cf49-5f6a-42f8-83fb-fd8dfbc7c005">2.1. Neat Applications of HOL Light</a></li>
+<li><a href="#h-5e7ea3c6-32ef-48d7-b64f-512e41f8b520">2.2. Papers about implementation details</a></li>
+<li><a href="#h-2cfc3dcf-a386-420a-bcc5-c063e36fe47f">2.3. Other related references</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
-
-<div id="outline-container-h-db11b193-c42a-415b-b960-c4efc7dacd50" class="outline-2">
-<h2 id="h-db11b193-c42a-415b-b960-c4efc7dacd50"><span class="section-number-2">1</span> Installing on Raspberry Pi</h2>
-<div class="outline-text-2" id="text-h-db11b193-c42a-415b-b960-c4efc7dacd50">
 <p>
-This was surprisingly simple. I usually keep source code related stuff
-in <code>~/src/</code>, so here's the bash commands that got me cooking:
+I've been thinking about implementing a HOL kernel in Standard ML, just
+for fun. HOL Light has an implementation in a <a href="https://github.com/jrh13/hol-light/blob/master/fusion.ml">tiny kernel</a> about 396
+lines long (excluding 128 blank lines and 148 comment lines, as of git
+commit <code>970121c</code> on Sep 12, 2016).
 </p>
 
-<pre class="example" id="org964c57e">
-alex@pi:~$ cd src
-alex@pi:~/src/$ mkdir mizar
-alex@pi:~/src/$ cd mizar
-alex@pi:~/src/mizar/$ wget http://mizar.uwb.edu.pl/~softadm/pub/system/arm-linux/mizar-8.1.09_5.59.1363-arm-linux.tar
-alex@pi:~/src/mizar/$ tar -xvf mizar-8.1.09_5.59.1363-arm-linux.tar
-README
-install.sh
-mizbin.tar.gz
-mizdoc.tar.gz
-mizshare.tar.gz
-
-alex@pi:~/src/mizar$ ls
-
-install.sh                            mizbin.tar.gz  mizshare.tar.gz
-mizar-8.1.09_5.59.1363-arm-linux.tar  mizdoc.tar.gz  README
-
-alex@pi:~/src/mizar$ sudo ./install.sh --default
-...
-</pre>
-
-<p>
-Then I added one line of code to my <code>~/.bash_profile</code>:
-</p>
-
-<pre class="example" id="org0dfe26a">
-# at the end of ~/.bash_profile
-MIZFILES=/usr/local/share/mizar
-</pre>
-
-<p>
-And, <i>voilà</i>, once we've <code>source ~/.bash_profile</code> we'll be able to start
-proving in no time.
-</p>
-</div>
-</div>
-
-<div id="outline-container-h-5b2a23b4-8625-4b20-a0b0-a13c66678638" class="outline-2">
-<h2 id="h-5b2a23b4-8625-4b20-a0b0-a13c66678638"><span class="section-number-2">2</span> References</h2>
-<div class="outline-text-2" id="text-h-5b2a23b4-8625-4b20-a0b0-a13c66678638">
+<div id="outline-container-h-b8966ca2-18ec-43d5-8343-19fe27ae5f15" class="outline-2">
+<h2 id="h-b8966ca2-18ec-43d5-8343-19fe27ae5f15"><span class="section-number-2">1</span> Obtaining and Compiling</h2>
+<div class="outline-text-2" id="text-h-b8966ca2-18ec-43d5-8343-19fe27ae5f15">
 <ul class="org-ul">
-<li>Freek Wiedijk's <a href="http://mizar.org/project/mizman.pdf">Write a Mizar Article in 9 Easy Steps</a></li>
+<li><a href="hol-light/compile.html">Compiling HOL Light</a> has some gotchas</li>
 </ul>
+</div>
+</div>
+
+<div id="outline-container-h-fccbb336-8af3-4f4a-8fcc-b08a2ac071ce" class="outline-2">
+<h2 id="h-fccbb336-8af3-4f4a-8fcc-b08a2ac071ce"><span class="section-number-2">2</span> References</h2>
+<div class="outline-text-2" id="text-h-fccbb336-8af3-4f4a-8fcc-b08a2ac071ce">
+<ul class="org-ul">
+<li>HOL Light Reference (<a href="https://www.cl.cam.ac.uk/~jrh13/hol-light/reference.pdf">PDF</a>, <a href="https://www.cl.cam.ac.uk/~jrh13/hol-light/reference.html">HTML</a>)</li>
+<li>John Harrison, <a href="https://www.cl.cam.ac.uk/~jrh13/hol-light/tutorial_220.pdf">Tutorial</a> for version 220 (although dated, still useful).</li>
+<li>Felix Breuer,
+<a href="http://blog.felixbreuer.net/2012/06/11/hol.html">Formal proof - first steps with HOL Light</a>; blog post dated June 11, 2012.</li>
+</ul>
+</div>
+
+<div id="outline-container-h-4253cf49-5f6a-42f8-83fb-fd8dfbc7c005" class="outline-3">
+<h3 id="h-4253cf49-5f6a-42f8-83fb-fd8dfbc7c005"><span class="section-number-3">2.1</span> Neat Applications of HOL Light</h3>
+<div class="outline-text-3" id="text-h-4253cf49-5f6a-42f8-83fb-fd8dfbc7c005">
+<ul class="org-ul">
+<li>O. Kunčar,<br>
+"Reconstruction of the Mizar Type System in the HOL Light System".<br>
+<a href="https://www21.in.tum.de/~kuncar/documents/kuncar-wds10.pdf">PDF</a>, 6 pages.</li>
+<li>Petros Papapanagiotou and Jacques Fleuriot,<br>
+"Object-Level Reasoning with Logics Encoded in HOL Light".<br>
+<a href="https://arxiv.org/abs/2101.03808">arXiv:2101.03808</a>, 17 pages</li>
+<li>Lawrence C. Paulson,<br>
+"Formalising Mathematics in Simple Type Theory".<br>
+<a href="https://arxiv.org/abs/1804.07860">arXiv:1804.07860</a>, 17 pages.</li>
+<li>Adnan Rashid and Osman Hasan,<br>
+"Formalization of Lerch's Theorem using HOL Light".<br>
+<a href="https://arxiv.org/abs/1806.03049">arXiv:1806.03049</a>, 30 pages.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-5e7ea3c6-32ef-48d7-b64f-512e41f8b520" class="outline-3">
+<h3 id="h-5e7ea3c6-32ef-48d7-b64f-512e41f8b520"><span class="section-number-3">2.2</span> Papers about implementation details</h3>
+<div class="outline-text-3" id="text-h-5e7ea3c6-32ef-48d7-b64f-512e41f8b520">
+<ul class="org-ul">
+<li>Freek Wiedijk,<br>
+"Stateless HOL".<br>
+<a href="https://arxiv.org/abs/1103.3322">arXiv:1103.3322</a>, 15 pages.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-2cfc3dcf-a386-420a-bcc5-c063e36fe47f" class="outline-3">
+<h3 id="h-2cfc3dcf-a386-420a-bcc5-c063e36fe47f"><span class="section-number-3">2.3</span> Other related references</h3>
+<div class="outline-text-3" id="text-h-2cfc3dcf-a386-420a-bcc5-c063e36fe47f">
+<ul class="org-ul">
+<li>Ben Lynn, <a href="https://crypto.stanford.edu/~blynn/compiler/Hol.html">Let there be HOL Light</a> for a code golf implementation of HOL Light</li>
+<li>Magnus O. Myreen, Scott Owens, and Ramana Kumar,<br>
+"Steps Towards Verified Implementations of HOL Light".<br>
+<a href="https://cakeml.org/itp13.pdf">PDF</a>, 6 pages, published in <i>Proc. ITP 2013</i>, pp.490&#x2013;495.</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-21 Sun 10:40.</p>
+<p class="postamble">Last Updated 2022-01-11 Tue 12:52.</p>
 </div>
 </body>
 </html>

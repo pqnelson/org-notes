@@ -4,7 +4,7 @@
 <!-- 2022-01-11 Tue 12:09 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mizar</title>
+<title>Compiling HOL Light</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -206,7 +206,7 @@
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
-<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -234,75 +234,156 @@
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
- <a accesskey="H" href="../../index.html"> HOME </a>
+ <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Mizar</h1>
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#h-db11b193-c42a-415b-b960-c4efc7dacd50">1. Installing on Raspberry Pi</a></li>
-<li><a href="#h-5b2a23b4-8625-4b20-a0b0-a13c66678638">2. References</a></li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-h-db11b193-c42a-415b-b960-c4efc7dacd50" class="outline-2">
-<h2 id="h-db11b193-c42a-415b-b960-c4efc7dacd50"><span class="section-number-2">1</span> Installing on Raspberry Pi</h2>
-<div class="outline-text-2" id="text-h-db11b193-c42a-415b-b960-c4efc7dacd50">
+<h1 class="title">Compiling HOL Light</h1>
 <p>
-This was surprisingly simple. I usually keep source code related stuff
-in <code>~/src/</code>, so here's the bash commands that got me cooking:
+Clone HOL Light from github:
 </p>
 
-<pre class="example" id="org964c57e">
-alex@pi:~$ cd src
-alex@pi:~/src/$ mkdir mizar
-alex@pi:~/src/$ cd mizar
-alex@pi:~/src/mizar/$ wget http://mizar.uwb.edu.pl/~softadm/pub/system/arm-linux/mizar-8.1.09_5.59.1363-arm-linux.tar
-alex@pi:~/src/mizar/$ tar -xvf mizar-8.1.09_5.59.1363-arm-linux.tar
-README
-install.sh
-mizbin.tar.gz
-mizdoc.tar.gz
-mizshare.tar.gz
+<pre class="example" id="org03f3b85">
+alex@box:~/src/$ git clone https://github.com/jrh13/hol-light
+Cloning into 'hol-light'...
+remote: Enumerating objects: 8310, done.
+remote: Counting objects: 100% (768/768), done.
+remote: Compressing objects: 100% (704/704), done.
+remote: Total 8310 (delta 137), reused 147 (delta 63), pack-reused 7542
+Receiving objects: 100% (8310/8310), 27.50 MiB | 5.38 MiB/s, done.
+Resolving deltas: 100% (5585/5585), done.
 
-alex@pi:~/src/mizar$ ls
+alex@box:~/src/$ cd hol-light
+alex@box:~/src/hol-light/$ 
+</pre>
 
-install.sh                            mizbin.tar.gz  mizshare.tar.gz
-mizar-8.1.09_5.59.1363-arm-linux.tar  mizdoc.tar.gz  README
+<p>
+We will need OPAM. If you're on a Raspberry pi, see <a href="https://dannywillems.github.io/2016/06/22/ocaml-raspberry-pi.html">OCaml on Raspberry Pi</a>
+for help.
+</p>
 
-alex@pi:~/src/mizar$ sudo ./install.sh --default
+<p>
+The trippy thing is we need to use OPAM to use the "correct" version of
+OCaml (c.f., <a href="https://github.com/jrh13/hol-light/issues/64#issuecomment-894131933">Github Issue</a>), the following bash commands should work:
+</p>
+
+<pre class="example" id="orgd0ea500">
+opam switch create 4.05.0
+eval $(opam env)
+opam pin add camlp5 7.08
+opam install num camlp5
+</pre>
+
+<p>
+So you will see something like the following (it may appear to "hang"
+on <code>Processing 7/12: [ocaml-base-compiler ...]</code>, but that's because
+it's building the OCaml compiler from scratch; be patient!):
+</p>
+
+<pre class="example" id="org2dc8fa9">
+alex@box:~/src/hol-light/$ opam switch create 4.05.0
+
+&lt;&gt;&lt;&gt; Gathering sources &gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+[ocaml-base-compiler.4.05.0] found in cache
+
+&lt;&gt;&lt;&gt; Processing actions &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+∗ installed base-bigarray.base
+∗ installed base-threads.base
+∗ installed base-unix.base
+∗ installed ocaml-base-compiler.4.05.0
+∗ installed ocaml-config.1
+∗ installed ocaml.4.05.0
+Done.
+# Run eval $(opam env) to update the current shell environment
+
+alex@box:~/src/hol-light/$ eval $(opam env)
+alex@box:~/src/hol-light/$ opam pin add camlp5 7.08
+camlp5 is now pinned to version 7.08
+
+The following actions will be performed:
+  ∗ install camlp5 7.08*
+Do you want to continue? [Y/n] y
+
+&lt;&gt;&lt;&gt; Gathering sources &gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+[camlp5.7.08] found in cache
+
+&lt;&gt;&lt;&gt; Processing actions &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+∗ installed camlp5.7.08
+Done.
+
+alex@box:~/src/hol-light/$ opam install num camlp5
+[NOTE] Package camlp5 is already installed (current version is 7.10).
+The following actions will be performed:
+  ∗ install base-num base [required by num]
+  ∗ install num      0
+===== ∗ 2 =====
+Do you want to continue? [Y/n] y
+
+&lt;&gt;&lt;&gt; Gathering sources &gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+
+&lt;&gt;&lt;&gt; Processing actions &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
+∗ installed base-num.base
+∗ installed num.0
+Done.
+
+alex@box:~/src/hol-light/$ 
+</pre>
+
+<p>
+This may not work, since OPAM may install camlp5 to
+<code>$HOME/.opam/4.05.0/lib/camlp5</code>; in which case, we need to also:
+</p>
+
+<pre class="example" id="orgea41a8c">
+alex@box:~/src/hol-light/$ export CAMLP5LIB=$HOME/.opam/4.05.0/lib/camlp5
+</pre>
+
+<p>
+Now we can do the following:
+</p>
+
+<pre class="example" id="orga43b230">
+alex@box:~/src/hol-light/$ ocaml -I `camlp5 -where` camlp5o.cma
+
+        OCaml version 4.05.0
+
+	Camlp5 parsing version 7.08
+
+# 
+</pre>
+
+<p>
+(This is because camlp5 isn't adequately included, for reasons I do not
+pretend to understand, but I am thankful for the solution from
+<a href="https://github.com/jrh13/hol-light/issues/29">here</a>. Without doing this, we will get <code>Cannot find file camlp5o.cam.</code>
+error, which is just confusing and cryptic.)
+</p>
+
+<p>
+Now we can simply <code>#use "hol.ml";;</code> to get:
+</p>
+
+<pre class="example" id="orgb0cfbc0">
+# #use "hol.ml";;
 ...
+...
+...
+val search : term list -&gt; (string * thm) list = &lt;fun&gt;
+- : unit = ()
+File "help.ml" already loaded
+- : unit = ()
+- : unit = ()
+- : unit = ()
+	Camlp5 parsing version 7.08
+
+# 
 </pre>
 
 <p>
-Then I added one line of code to my <code>~/.bash_profile</code>:
-</p>
-
-<pre class="example" id="org0dfe26a">
-# at the end of ~/.bash_profile
-MIZFILES=/usr/local/share/mizar
-</pre>
-
-<p>
-And, <i>voilà</i>, once we've <code>source ~/.bash_profile</code> we'll be able to start
-proving in no time.
-</p>
-</div>
-</div>
-
-<div id="outline-container-h-5b2a23b4-8625-4b20-a0b0-a13c66678638" class="outline-2">
-<h2 id="h-5b2a23b4-8625-4b20-a0b0-a13c66678638"><span class="section-number-2">2</span> References</h2>
-<div class="outline-text-2" id="text-h-5b2a23b4-8625-4b20-a0b0-a13c66678638">
-<ul class="org-ul">
-<li>Freek Wiedijk's <a href="http://mizar.org/project/mizman.pdf">Write a Mizar Article in 9 Easy Steps</a></li>
-</ul>
-</div>
-</div>
+You can go get a cup of tea or coffee, because it will take a minute or
+two for everything to load. I suspect there's some way I could combine
+all this into a small bash script.</p>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-21 Sun 10:40.</p>
+<p class="postamble">Last Updated 2022-01-11 Tue 12:04.</p>
 </div>
 </body>
 </html>

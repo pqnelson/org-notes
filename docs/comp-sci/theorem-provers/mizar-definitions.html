@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-11-08 Mon 08:06 -->
+<!-- 2022-01-11 Tue 12:09 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Definitions in Mizar</title>
@@ -456,7 +456,7 @@ occurring in them; so <code>for x being Real holds x-x = 0</code> translates to
 The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Mode-Definition">syntactic structure</a> of <code>&lt;Mode-Definition&gt;</code> is:
 </p>
 
-<pre class="example" id="orgd4711f3">
+<pre class="example" id="orgdab2254">
 &lt;Mode-Definition&gt; =
 	"mode" &lt;Mode-Pattern&gt; ( [ &lt;Specification&gt; ] [ "means" &lt;Definiens&gt; ] ";"
 &lt;Correctness-Conditions&gt; | "is" &lt;Type-Expression&gt; ";" ) { &lt;Mode-Property&gt; } .
@@ -473,13 +473,13 @@ An example of this might be:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar">definition let X;
-  mode Element of X means
-  :Def2: it in X if X is non empty
-    otherwise it is empty;
-  existency by BOOLE:def 1;
-  consistency;
-end;
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span> <span class="org-mizar-skeleton">let</span> X;
+  <span class="org-mizar-normal">mode</span> Element <span class="org-mizar-normal">of</span> X <span class="org-mizar-normal">means</span>
+  :Def2: <span class="org-mizar-normal">it</span> in X <span class="org-mizar-normal">if</span> X <span class="org-mizar-normal">is</span> non empty
+    <span class="org-mizar-normal">otherwise</span> <span class="org-mizar-normal">it</span> <span class="org-mizar-normal">is</span> empty;
+  existency<span class="org-type"> by BOOLE:def 1</span>;
+  <span class="org-mizar-normal">consistency</span>;
+<span class="org-mizar-block">end</span>;
 </pre>
 </div>
 
@@ -540,7 +540,7 @@ m1_subset_1(X,Y)))</code>
 Another couple examples, from <a href="http://www.mizar.org/version/current/mml/binop_1.miz"><code>binop_1.miz</code></a>:
 </p>
 
-<pre class="example" id="org5c06d32">
+<pre class="example" id="org2dde098">
 definition
   let A be set; :: loci-declaration
   :: defines a unary operation on A
@@ -573,7 +573,7 @@ The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predic
 An example given:
 </p>
 
-<pre class="example" id="orgc2be017">
+<pre class="example" id="org1c65acb">
 definition let X,Y:
   pred X c= Y means
 :: TARSKI:def 3
@@ -647,7 +647,7 @@ negation of <code>empty</code>). The <a href="http://wiki.mizar.org/twiki/pub/Mi
 Here's an example:
 </p>
 
-<pre class="example" id="orgb35242a">
+<pre class="example" id="org9b1c102">
 definition let i be number;
  attr i is even means
   ex j being Integer st i = 2*j;
@@ -671,7 +671,7 @@ associative] law of composition). Mizar refers to a <code>multMagma</code> as a
 magma with a single law of composition.
 </p>
 
-<pre class="example" id="org6624886">
+<pre class="example" id="orgba1af11">
 definition
   let IT be multMagma;
 
@@ -718,7 +718,7 @@ result. Several <code>&lt;Functor-Properties&gt;</code> (like <code>commutativit
 associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Functor-Definition">syntax</a> is:
 </p>
 
-<pre class="example" id="org7a15486">
+<pre class="example" id="orgdda1f4b">
 &lt;Functor-Definition&gt; =
  "func" &lt;Functor-Pattern&gt; [ &lt;Specification&gt; ] [ ( "means" | "equals" ) &lt;Definiens&gt; ] ";"
  &lt;Correctness-Conditions&gt; { &lt;Functor-Property&gt; } .
@@ -730,7 +730,7 @@ associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSy
 The example given:
 </p>
 
-<pre class="example" id="org9e595c5">
+<pre class="example" id="org0e9b8ed">
 definition let x be real number;
   func -x -&gt; real number means :Def1: x + it = 0;
   existence by AXIOMS:19;
@@ -767,7 +767,7 @@ theorem, <code>Th10</code>)</li>
 The definition creates one new pattern, and one new constructor. 
 </p>
 
-<div class="remark" id="org20bf1b5">
+<div class="remark" id="orgb1489b2">
 <p>
 Defining a "morphism" requires some involved work with cluster
 registrations, it's not as simple as defining a new function. See, e.g.,
@@ -786,7 +786,7 @@ how group morphisms are defined in
 From <a href="http://www.mizar.org/version/current/mml/algstr_0.miz"><code>algstr_0.miz</code></a>, we have:
 </p>
 
-<pre class="example" id="org20095c0">
+<pre class="example" id="org8a5f5ca">
 :: Multiplicative structures
 definition
   struct (1-sorted) multMagma (# carrier -&gt; set, multF -&gt; BinOp of the carrier
