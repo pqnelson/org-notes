@@ -185,14 +185,17 @@ Done.
 alex@box:~/src/hol-light/$ 
 #+end_example
 
-This may not work, since OPAM may install camlp5 to
-=$HOME/.opam/4.05.0/lib/camlp5=; in which case, we need to also:
+Now, the next step is to run ~make~.
+*It is crucial to run ~make~ before loading hol into an OCaml repl.*
 
 #+begin_example
-alex@box:~/src/hol-light/$ export CAMLP5LIB=$HOME/.opam/4.05.0/lib/camlp5
+alex@box:~/src/hol-light/$ make
+...
 #+end_example
 
-Now we can do the following:
+Now we can do the following: open up ocaml, specifically telling it to
+include camlp5, and then tell it to ~#use "hol.ml";;~ (yes, both
+semicolons are necessary).
 
 #+begin_example
 alex@box:~/src/hol-light/$ ocaml -I `camlp5 -where` camlp5o.cma
@@ -230,3 +233,6 @@ File "help.ml" already loaded
 You can go get a cup of tea or coffee, because it will take a minute or
 two for everything to load. I suspect there's some way I could combine
 all this into a small bash script.
+
+*Caution:* on Raspberry Pi, you can expect to have about 250MB of RAM
+used just by starting HOL Light in this manner.
