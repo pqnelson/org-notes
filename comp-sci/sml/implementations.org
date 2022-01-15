@@ -1,0 +1,70 @@
+#+TITLE: Implementations - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-01-15T12:22:45-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday January 15, 2022 at 12:22PM
+
+This is just a cursory "How to build [SML implementation] on Raspberry
+Pi" post.
+
+* Poly/ML
+:PROPERTIES:
+:CUSTOM_ID: h-542dda25-92a9-4242-981a-326396c9d891
+:END:
+
+This seems to work fine. If you have a 32-bit ARM computer, then it will
+simply compile bytecode, which will run considerably slower. The basic
+steps [[https://www.polyml.org/download.html][seems to be:]]
+
+#+begin_example
+~/src/$ git clone https://github.com/polyml/polyml.git
+~/src/polyml/$ cd polyml
+~/src/polyml/$ ./configure
+~/src/polyml/$ make
+~/src/polyml/$ sudo make install
+#+end_example
+
+It may be worth considering upgrading to a Raspberry Pi 3B+ or 4, since
+Apple has transitioned to 64-bit ARM (we will end up piggie-backing off
+opensource projects transitioning to support 64-bit ARM).
+
+* MLton
+:PROPERTIES:
+:CUSTOM_ID: h-a474e941-9a4f-45e9-bf6c-0434934dfe24
+:END:
+
+This needs an existing SML compiler for the bootstrap process.
+
+I think ~make polyml-mlton~ may work as well.
+
+I have tried ~make MLTON_COMPILE_ARGS="-codegen c" all~.
+
+- [[http://mlton.org/RunningOnARM][Running on ARM]] MLton wiki
+- [[http://www.mlton.org/pipermail/mlton-devel/2007-June/029877.html][Re: Cross compile on ARM successful]] MLton mailing list thread
+
+* SML/NJ
+:PROPERTIES:
+:CUSTOM_ID: h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515
+:END:
+
+Doesn't support 32-bit ARM, and intends to support 64-bit ARM in the
+next release (2022.1), so it's impossible at the moment (as of January 15,
+2022).
+
+This is yet another incentive to upgrade to a 64-bit Raspberry Pi...
+
+* MLKit
+:PROPERTIES:
+:CUSTOM_ID: h-8bee04cc-0008-4a29-af61-8d0d0203aeb3
+:END:
+
+Only supports x86 and Javascript, so I couldn't get it working on my
+Raspberry Pi. Formerly, MLKit had a bytecode interpreter, but this was
+removed to support Javascript.
