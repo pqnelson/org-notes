@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2022-01-15 Sat 10:41 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coding Conventions - SML</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Coding Conventions - SML</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-fe015f46-6801-4e5e-a6aa-1f6aeb7dc65a">1. Naming Conventions</a>
+<ul>
+<li><a href="#h-19504090-721d-4f6e-bf1a-cc4c1940a035">1.1. Prefixes</a></li>
+<li><a href="#h-d8689044-b165-4069-8b53-7b5f2fddf21e">1.2. Cases (snake, upper, title, Pascal, etc.)</a>
+<ul>
+<li><a href="#h-d305e136-4b04-45ad-9fad-d82c22375688">1.2.1. Modules, Signatures, Functors</a></li>
+<li><a href="#h-93ad4aa3-c86a-46c6-8df4-5944cfaa4273">1.2.2. Filenames</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-89f8964b-2046-4ee5-a8b5-623ee1f3b9a9">2. Compiling</a>
+<ul>
+<li><a href="#h-3dd47efe-fdf8-45df-b39e-b41eee18ea53">2.1. Build Scripts: Using the Standard Library</a></li>
+</ul>
+</li>
+<li><a href="#h-6c79786c-5df0-4aaf-b11c-07f184281145">3. Typesetting in LaTeX</a></li>
+<li><a href="#h-25fbcb9f-dbf8-45c5-bbe6-f03945faf3f0">4. Emacs</a></li>
+<li><a href="#h-a062557d-975e-4cda-bb33-b20872ecc00c">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-fe015f46-6801-4e5e-a6aa-1f6aeb7dc65a" class="outline-2">
+<h2 id="h-fe015f46-6801-4e5e-a6aa-1f6aeb7dc65a"><span class="section-number-2">1</span> Naming Conventions</h2>
+<div class="outline-text-2" id="text-h-fe015f46-6801-4e5e-a6aa-1f6aeb7dc65a">
+</div>
+
+<div id="outline-container-h-19504090-721d-4f6e-bf1a-cc4c1940a035" class="outline-3">
+<h3 id="h-19504090-721d-4f6e-bf1a-cc4c1940a035"><span class="section-number-3">1.1</span> Prefixes</h3>
+<div class="outline-text-3" id="text-h-19504090-721d-4f6e-bf1a-cc4c1940a035">
+<ul class="org-ul">
+<li><code>is</code> prefixes predicates, e.g., <code>isNegative</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-d8689044-b165-4069-8b53-7b5f2fddf21e" class="outline-3">
+<h3 id="h-d8689044-b165-4069-8b53-7b5f2fddf21e"><span class="section-number-3">1.2</span> Cases (snake, upper, title, Pascal, etc.)</h3>
+<div class="outline-text-3" id="text-h-d8689044-b165-4069-8b53-7b5f2fddf21e">
+<p>
+Chris Okasaki uses the following conventions:
+</p>
+
+<ul class="org-ul">
+<li>User-defined types (and type constructors) are written in <code>PascalCase</code></li>
+<li>Datatype constructors in algebraic datatypes are written using <code>PascalCase</code></li>
+<li>Function names use <code>camelCase</code></li>
+<li>Variable names use <code>snake_case</code></li>
+</ul>
+</div>
+
+<div id="outline-container-h-d305e136-4b04-45ad-9fad-d82c22375688" class="outline-4">
+<h4 id="h-d305e136-4b04-45ad-9fad-d82c22375688"><span class="section-number-4">1.2.1</span> Modules, Signatures, Functors</h4>
+<div class="outline-text-4" id="text-h-d305e136-4b04-45ad-9fad-d82c22375688">
+<ul class="org-ul">
+<li>Signatures are written <code>SCREAMING_SNAKE_CASE</code></li>
+<li>Functors are written in <code>PascalCase</code></li>
+<li>Structures are written in <code>PascalCase</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-93ad4aa3-c86a-46c6-8df4-5944cfaa4273" class="outline-4">
+<h4 id="h-93ad4aa3-c86a-46c6-8df4-5944cfaa4273"><span class="section-number-4">1.2.2</span> Filenames</h4>
+<div class="outline-text-4" id="text-h-93ad4aa3-c86a-46c6-8df4-5944cfaa4273">
+<ul class="org-ul">
+<li>Functors are in <code>functor-name.fun</code> or <code>functor-name.sml</code></li>
+<li>Signatures are in <code>signature-name.sig</code></li>
+<li>Structures are in <code>structure-name.sml</code></li>
+<li>Everything else (i.e., the default situation): <code>file-name.sml</code></li>
+</ul>
+
+<p>
+Only MLton separates out functors into <code>functor-name.fun</code>
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-89f8964b-2046-4ee5-a8b5-623ee1f3b9a9" class="outline-2">
+<h2 id="h-89f8964b-2046-4ee5-a8b5-623ee1f3b9a9"><span class="section-number-2">2</span> Compiling</h2>
+<div class="outline-text-2" id="text-h-89f8964b-2046-4ee5-a8b5-623ee1f3b9a9">
+<p>
+This is unpleasant, since each compiler has its own conventions. And it
+seems only Poly/ML really runs on a Raspberry Pi.
+</p>
+
+<p>
+Poly/ML expects a <code>fun main () = ...</code> somewhere. When compiled, Poly/ML
+will interpret the <code>main()</code> function as the entry point.
+</p>
+
+<p>
+For MLton, I believe, it will only run a function if it's executed. That
+is to say, we need to have <code>val _ = main();</code> somewhere, if we want MLton
+to execute <code>main()</code>. But Poly/ML doesn't like this, and won't compile
+it happily.
+</p>
+
+<p>
+If we want to support compiling with <i>both</i> Poly/ML <i>and</i> MLton, we need
+to also have <code>main.sml</code> file which consists of a single line: 
+</p>
+
+<pre class="example" id="org1c6bb10">
+(* main.sml *)
+
+val _ = main ();
+</pre>
+
+<p>
+MLton will compile everything, including <code>main.sml</code>, while Poly/ML will
+just omit <code>main.sml</code> from compilation.
+</p>
+</div>
+
+<div id="outline-container-h-3dd47efe-fdf8-45df-b39e-b41eee18ea53" class="outline-3">
+<h3 id="h-3dd47efe-fdf8-45df-b39e-b41eee18ea53"><span class="section-number-3">2.1</span> Build Scripts: Using the Standard Library</h3>
+<div class="outline-text-3" id="text-h-3dd47efe-fdf8-45df-b39e-b41eee18ea53">
+<p>
+We need to tell the SML compiler to include the SML standard basis
+library. Each compiler has its own way to do this.
+</p>
+
+<p>
+MLton has <code>.mlb</code> basis files to guide compilation, but "basis files" are
+unique/idiosyncratic to MLton. (MLKit supports <code>.mlb</code> files, but only a
+fragment of MLton's syntax is supported.)
+</p>
+
+<p>
+Poly/ML has build scripts (e.g., <a href="https://github.com/cannam/sml-buildscripts/blob/master/polybuild">polybuild</a>).
+</p>
+
+<p>
+SML/NJ has its own compilation manager (the aptly named "Compilation
+Manager") which examines <code>.cm</code> files to guide compilation.
+</p>
+
+<p>
+HaMLet does not seem to have any build script (well, it's an
+interpreter, so you'd need to <code>use</code> files).
+</p>
+
+<p>
+I won't pretend to understand Moscow ML's build process.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-6c79786c-5df0-4aaf-b11c-07f184281145" class="outline-2">
+<h2 id="h-6c79786c-5df0-4aaf-b11c-07f184281145"><span class="section-number-2">3</span> Typesetting in LaTeX</h2>
+<div class="outline-text-2" id="text-h-6c79786c-5df0-4aaf-b11c-07f184281145">
+<p>
+The following is what Chris Okasaki does in his book, <i>Purely Functional Data Structures</i>,
+and it works well.
+</p>
+
+<p>
+<b>Reserved keywords</b> (like <code>of</code>, <code>struct</code>, <code>fun</code>, <code>let</code>, <code>in</code>, <code>val</code>,
+etc.) are written in <b>bold</b>.
+</p>
+
+<p>
+<b>Datatype constructors</b> are written in <b>small-caps.</b>
+</p>
+
+<p>
+<b>Signatures</b> are typeset by:
+</p>
+<ul class="org-ul">
+<li>Step 1: convert <code>SCREAMING_SNAKE_CASE</code> into Pascal snake case <code>Screaming_Snake_Case</code></li>
+<li>Step 2: delete underscores, converting <code>Screaming_Snake_Case</code> into <code>ScreamingSnakeCase</code></li>
+<li>Step 3: typeset the result of step 2 in small-caps.</li>
+</ul>
+
+<p>
+<b>Type variables</b> (the <code>'a</code> in declarations like <code>datatype 'a Foo</code>),
+including the apostrophe, are converted to lowercase Greek counterparts 
+(so we would get: "<b>datatype</b> \(\alpha\) Foo").
+</p>
+
+<p>
+<b>Comments</b> are italicized or slanted.
+</p>
+
+<p>
+<b>Everything else</b> seems to be typeset "as expected".
+</p>
+
+<p>
+A kludge which accomplishes the typesetting for signatures (the only
+downside is that I need to <i>manually</i> add signature names to the
+<code>morekeywords={[2]...}</code> parameter):
+</p>
+
+<pre class="example" id="orgf2ebe10">
+\documentclass{article}
+\usepackage{mfirstuc}
+\makeatletter
+
+
+% I need to do something like
+% https://tex.stackexchange.com/a/448770/14751
+% to transform the "\lst@um_" back to "_"
+
+\def\@Screaming@Snake@To@Pascal@Case#1\_#2\end@Screaming@Snake@To@Pascal@Case{%
+  \makefirstuc{\MakeLowercase{#1}}%
+\ifx#2\@empty\else\ignorespaces\@Screaming@Snake@To@Pascal@Case#2\end@Screaming@Snake@To@Pascal@Case\fi}
+
+\newcommand\ScreamingSnakeToPascalCase[1]{%
+  \ifx\@empty#1\else{\normalfont\scshape\@Screaming@Snake@To@Pascal@Case#1\_\@empty\end@Screaming@Snake@To@Pascal@Case}\fi}
+
+% https://tex.stackexchange.com/questions/439396/listings-highlight-a-prefixed-keyword-starting-with-a-single-quote
+\makeatother
+
+\usepackage{listings}
+
+\makeatletter
+
+\def\@setlststyle{%
+  \unskip\edef\lt@temp{\unskip\noexpand\ScreamingSnakeToPascalCase{\expandafter\the\lst@token\unskip\relax\unskip}}%
+  \unskip\global\lst@token=\expandafter{\lt@temp}%
+  \unskip\the\lst@token
+}
+
+\begingroup
+\catcode`\_=11
+
+\gdef\scsty#1{
+  \unskip\edef\lsttokens{\the\lst@token}
+  \unskip\global\lst@token={}
+  \unskip\expandafter\replaceUM\lsttokens\noexpand\lst@um_\relax\@end
+  \unskip\unskip\@setlststyle
+}
+
+\gdef\appendall#1\@endAppend{\unskip
+  \global\lst@token=\expandafter{\the\lst@token#1}
+}
+\gdef\replaceUM#1\lst@um_#2\@end{\unskip
+  \if\relax\detokenize{#1}\relax
+  \else
+    \ifx\relax#2
+      \appendall#1\@endAppend
+    \else
+      \appendall#1\_\@endAppend
+      \replaceUM#2\@end
+    \fi
+  \fi
+}
+\endgroup
+
+\makeatother
+
+\def\haskWildcard{\kern0.06em \vbox{\hrule width .5em}}
+\lstset{
+  columns=flexible,
+  alsoletter={_},
+  basicstyle = {\ttfamily},
+  keywordstyle = [2]\scsty,
+  morekeywords = [2]{SOME,NONE,GREATER,EQUAL,LESS,STRETCH_GOAL},
+  keywordstyle = {\bfseries\sffamily},
+  morekeywords={abstype,and,andalso,as,case,do,datatype,else,end,%
+       eqtype,exception,fn,fun,functor,handle,if,in,include,infix,%
+       infixr,let,local,nonfix,of,op,open,orelse,raise,rec,sharing,sig,%
+       signature,struct,structure,then,type,val,with,withtype,while},%
+   sensitive,%
+   morecomment=[n]{(*}{*)},%
+   morestring=[d]",
+   literate={JOB}{{\ttfamily\scshape Job}}3 {'a}{{$\alpha$}}1 {'b}{{$\beta$}}1
+               {\ o\ }{{$\circ$}}3 {+}{{$+$}}1 {/}{{$/$}}1 {*}{{$*$}}1 {=}{{$=$\ }}1
+               {&gt;}{{$&gt;$}}1 {&lt;}{{$&lt;$}}1
+               {\\\\}{{\char`\\\char`\\}}1
+               {-&gt;}{{$\rightarrow$}}2 {&gt;=}{{$\geq$}}2 {&lt;-}{{$\leftarrow$}}2
+               {|}{{$\mid$\ }}1 {\ _}{{\ \haskWildcard}}2  
+}
+\begin{document}
+
+
+\begin{lstlisting}
+signature STRETCH_GOAL = sig
+  val will_work : bool;
+  val issued : bool option;
+end;
+
+fun giveRaise (SOME true) = true
+  | giveRaise _ = false;
+\end{lstlisting}
+\end{document}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-25fbcb9f-dbf8-45c5-bbe6-f03945faf3f0" class="outline-2">
+<h2 id="h-25fbcb9f-dbf8-45c5-bbe6-f03945faf3f0"><span class="section-number-2">4</span> Emacs</h2>
+<div class="outline-text-2" id="text-h-25fbcb9f-dbf8-45c5-bbe6-f03945faf3f0">
+<p>
+SML-mode provides all the functionality we need. Just add to the
+<code>init.el</code> file:
+</p>
+
+<pre class="example" id="orgda93769">
+(use-package sml-mode
+  :ensure t
+  :defer t)
+(add-to-list 'auto-mode-alist '("\\.\\(sml\\|sig\\|fun\\)\\'" . sml-mode))
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-a062557d-975e-4cda-bb33-b20872ecc00c" class="outline-2">
+<h2 id="h-a062557d-975e-4cda-bb33-b20872ecc00c"><span class="section-number-2">5</span> References</h2>
+<div class="outline-text-2" id="text-h-a062557d-975e-4cda-bb33-b20872ecc00c">
+<ul class="org-ul">
+<li><a href="https://thebreakfastpost.com/2016/06/11/naming-conventions-in-standard-ml/">Naming conventions in Standard ML</a>, The Breakfast Post (blogpost)</li>
+<li><a href="https://thebreakfastpost.com/2015/06/10/standard-ml-and-how-im-compiling-it/">Standard ML and how I'm compiling it</a>, The Breakfast Post (blogpost)</li>
+<li><a href="https://isabelle.in.tum.de/dist/library/Doc/Implementation/ML.html">Theory ML</a>, Isabelle's coding conventions</li>
+<li><a href="https://github.com/jez/symbol">Symbol</a> attempts to provide a minimal build tool for Standard ML</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2022-01-14 Fri 11:30.</p>
+</div>
+</body>
+</html>

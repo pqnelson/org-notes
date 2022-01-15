@@ -1,0 +1,259 @@
+#+TITLE: Coding Conventions - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-01-13T09:43:00-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Thursday January 13, 2022 at  9:43AM
+
+* Naming Conventions
+:PROPERTIES:
+:CUSTOM_ID: h-fe015f46-6801-4e5e-a6aa-1f6aeb7dc65a
+:END:
+
+** Prefixes
+:PROPERTIES:
+:CUSTOM_ID: h-19504090-721d-4f6e-bf1a-cc4c1940a035
+:END:
+
+- ~is~ prefixes predicates, e.g., ~isNegative~
+
+** Cases (snake, upper, title, Pascal, etc.)
+:PROPERTIES:
+:CUSTOM_ID: h-d8689044-b165-4069-8b53-7b5f2fddf21e
+:END:
+
+Chris Okasaki uses the following conventions:
+
+- User-defined types (and type constructors) are written in ~PascalCase~
+- Datatype constructors in algebraic datatypes are written using ~PascalCase~
+- Function names use ~camelCase~
+- Variable names use ~snake_case~
+  
+*** Modules, Signatures, Functors
+:PROPERTIES:
+:CUSTOM_ID: h-d305e136-4b04-45ad-9fad-d82c22375688
+:END:
+
+- Signatures are written ~SCREAMING_SNAKE_CASE~
+- Functors are written in ~PascalCase~
+- Structures are written in ~PascalCase~
+
+*** Filenames
+:PROPERTIES:
+:CUSTOM_ID: h-93ad4aa3-c86a-46c6-8df4-5944cfaa4273
+:END:
+
+- Functors are in ~functor-name.fun~ or ~functor-name.sml~
+- Signatures are in ~signature-name.sig~
+- Structures are in ~structure-name.sml~
+- Everything else (i.e., the default situation): ~file-name.sml~
+
+Only MLton separates out functors into ~functor-name.fun~
+
+* Compiling
+:PROPERTIES:
+:CUSTOM_ID: h-89f8964b-2046-4ee5-a8b5-623ee1f3b9a9
+:END:
+
+This is unpleasant, since each compiler has its own conventions. And it
+seems only Poly/ML really runs on a Raspberry Pi.
+
+Poly/ML expects a ~fun main () = ...~ somewhere. When compiled, Poly/ML
+will interpret the ~main()~ function as the entry point.
+
+For MLton, I believe, it will only run a function if it's executed. That
+is to say, we need to have ~val _ = main();~ somewhere, if we want MLton
+to execute ~main()~. But Poly/ML doesn't like this, and won't compile
+it happily.
+
+If we want to support compiling with /both/ Poly/ML /and/ MLton, we need
+to also have ~main.sml~ file which consists of a single line: 
+
+#+begin_example
+(* main.sml *)
+
+val _ = main ();
+#+end_example
+
+MLton will compile everything, including ~main.sml~, while Poly/ML will
+just omit ~main.sml~ from compilation.
+
+** Build Scripts: Using the Standard Library
+:PROPERTIES:
+:CUSTOM_ID: h-3dd47efe-fdf8-45df-b39e-b41eee18ea53
+:END:
+
+We need to tell the SML compiler to include the SML standard basis
+library. Each compiler has its own way to do this.
+
+MLton has ~.mlb~ basis files to guide compilation, but "basis files" are
+unique/idiosyncratic to MLton. (MLKit supports ~.mlb~ files, but only a
+fragment of MLton's syntax is supported.)
+
+Poly/ML has build scripts (e.g., [[https://github.com/cannam/sml-buildscripts/blob/master/polybuild][polybuild]]).
+
+SML/NJ has its own compilation manager (the aptly named "Compilation
+Manager") which examines ~.cm~ files to guide compilation.
+
+HaMLet does not seem to have any build script (well, it's an
+interpreter, so you'd need to ~use~ files).
+
+I won't pretend to understand Moscow ML's build process.
+
+* Typesetting in LaTeX
+:PROPERTIES:
+:CUSTOM_ID: h-6c79786c-5df0-4aaf-b11c-07f184281145
+:END:
+
+The following is what Chris Okasaki does in his book, /Purely Functional Data Structures/,
+and it works well.
+
+*Reserved keywords* (like ~of~, ~struct~, ~fun~, ~let~, ~in~, ~val~,
+etc.) are written in *bold*.
+
+*Datatype constructors* are written in *small-caps.*
+
+*Signatures* are typeset by:
+- Step 1: convert ~SCREAMING_SNAKE_CASE~ into Pascal snake case ~Screaming_Snake_Case~
+- Step 2: delete underscores, converting ~Screaming_Snake_Case~ into ~ScreamingSnakeCase~
+- Step 3: typeset the result of step 2 in small-caps.
+
+*Type variables* (the ~'a~ in declarations like ~datatype 'a Foo~),
+including the apostrophe, are converted to lowercase Greek counterparts 
+(so we would get: "*datatype* $\alpha$ Foo").
+
+*Comments* are italicized or slanted.
+
+*Everything else* seems to be typeset "as expected".
+
+A kludge which accomplishes the typesetting for signatures (the only
+downside is that I need to /manually/ add signature names to the
+~morekeywords={[2]...}~ parameter):
+
+#+begin_example
+\documentclass{article}
+\usepackage{mfirstuc}
+\makeatletter
+
+
+% I need to do something like
+% https://tex.stackexchange.com/a/448770/14751
+% to transform the "\lst@um_" back to "_"
+
+\def\@Screaming@Snake@To@Pascal@Case#1\_#2\end@Screaming@Snake@To@Pascal@Case{%
+  \makefirstuc{\MakeLowercase{#1}}%
+\ifx#2\@empty\else\ignorespaces\@Screaming@Snake@To@Pascal@Case#2\end@Screaming@Snake@To@Pascal@Case\fi}
+
+\newcommand\ScreamingSnakeToPascalCase[1]{%
+  \ifx\@empty#1\else{\normalfont\scshape\@Screaming@Snake@To@Pascal@Case#1\_\@empty\end@Screaming@Snake@To@Pascal@Case}\fi}
+
+% https://tex.stackexchange.com/questions/439396/listings-highlight-a-prefixed-keyword-starting-with-a-single-quote
+\makeatother
+
+\usepackage{listings}
+
+\makeatletter
+
+\def\@setlststyle{%
+  \unskip\edef\lt@temp{\unskip\noexpand\ScreamingSnakeToPascalCase{\expandafter\the\lst@token\unskip\relax\unskip}}%
+  \unskip\global\lst@token=\expandafter{\lt@temp}%
+  \unskip\the\lst@token
+}
+
+\begingroup
+\catcode`\_=11
+
+\gdef\scsty#1{
+  \unskip\edef\lsttokens{\the\lst@token}
+  \unskip\global\lst@token={}
+  \unskip\expandafter\replaceUM\lsttokens\noexpand\lst@um_\relax\@end
+  \unskip\unskip\@setlststyle
+}
+
+\gdef\appendall#1\@endAppend{\unskip
+  \global\lst@token=\expandafter{\the\lst@token#1}
+}
+\gdef\replaceUM#1\lst@um_#2\@end{\unskip
+  \if\relax\detokenize{#1}\relax
+  \else
+    \ifx\relax#2
+      \appendall#1\@endAppend
+    \else
+      \appendall#1\_\@endAppend
+      \replaceUM#2\@end
+    \fi
+  \fi
+}
+\endgroup
+
+\makeatother
+
+\def\haskWildcard{\kern0.06em \vbox{\hrule width .5em}}
+\lstset{
+  columns=flexible,
+  alsoletter={_},
+  basicstyle = {\ttfamily},
+  keywordstyle = [2]\scsty,
+  morekeywords = [2]{SOME,NONE,GREATER,EQUAL,LESS,STRETCH_GOAL},
+  keywordstyle = {\bfseries\sffamily},
+  morekeywords={abstype,and,andalso,as,case,do,datatype,else,end,%
+       eqtype,exception,fn,fun,functor,handle,if,in,include,infix,%
+       infixr,let,local,nonfix,of,op,open,orelse,raise,rec,sharing,sig,%
+       signature,struct,structure,then,type,val,with,withtype,while},%
+   sensitive,%
+   morecomment=[n]{(*}{*)},%
+   morestring=[d]",
+   literate={JOB}{{\ttfamily\scshape Job}}3 {'a}{{$\alpha$}}1 {'b}{{$\beta$}}1
+               {\ o\ }{{$\circ$}}3 {+}{{$+$}}1 {/}{{$/$}}1 {*}{{$*$}}1 {=}{{$=$\ }}1
+               {>}{{$>$}}1 {<}{{$<$}}1
+               {\\\\}{{\char`\\\char`\\}}1
+               {->}{{$\rightarrow$}}2 {>=}{{$\geq$}}2 {<-}{{$\leftarrow$}}2
+               {|}{{$\mid$\ }}1 {\ _}{{\ \haskWildcard}}2  
+}
+\begin{document}
+
+
+\begin{lstlisting}
+signature STRETCH_GOAL = sig
+  val will_work : bool;
+  val issued : bool option;
+end;
+
+fun giveRaise (SOME true) = true
+  | giveRaise _ = false;
+\end{lstlisting}
+\end{document}
+#+end_example
+
+* Emacs
+:PROPERTIES:
+:CUSTOM_ID: h-25fbcb9f-dbf8-45c5-bbe6-f03945faf3f0
+:END:
+
+SML-mode provides all the functionality we need. Just add to the
+~init.el~ file:
+
+#+begin_example
+(use-package sml-mode
+  :ensure t
+  :defer t)
+(add-to-list 'auto-mode-alist '("\\.\\(sml\\|sig\\|fun\\)\\'" . sml-mode))
+#+end_example
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-a062557d-975e-4cda-bb33-b20872ecc00c
+:END:
+
+- [[https://thebreakfastpost.com/2016/06/11/naming-conventions-in-standard-ml/][Naming conventions in Standard ML]], The Breakfast Post (blogpost)
+- [[https://thebreakfastpost.com/2015/06/10/standard-ml-and-how-im-compiling-it/][Standard ML and how I'm compiling it]], The Breakfast Post (blogpost)
+- [[https://isabelle.in.tum.de/dist/library/Doc/Implementation/ML.html][Theory ML]], Isabelle's coding conventions
+- [[https://github.com/jez/symbol][Symbol]] attempts to provide a minimal build tool for Standard ML
+
+  
