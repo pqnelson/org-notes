@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-16 Sun 11:58 -->
+<!-- 2022-01-16 Sun 12:05 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>XUnit Framework - SML</title>
@@ -487,7 +487,7 @@ microseconds instead.
 Now we could run this on the example tests by doing something like:
 </p>
 
-<pre class="example" id="org6976873">
+<pre class="example" id="org6979c74">
 val ex_results = run_test ex_tests;
 
 report_results ex_results;
@@ -562,7 +562,7 @@ summing over the summaries of its constituents.
 Now we could check the summary of our toy test suite:
 </p>
 
-<pre class="example" id="org22ac542">
+<pre class="example" id="org3f1a5a9">
 summarize ex_results;
 
 (* SML/NJ produces:
@@ -583,7 +583,7 @@ test suite be contained in its own file. So I would love to write
 something like:
 </p>
 
-<pre class="example" id="org06b6dcc">
+<pre class="example" id="org02a4a6f">
 suite "FooBarTests";
 
 test "BaazTest1" fn () =&gt; (* ... *);
@@ -696,7 +696,7 @@ The output for a test suite which has no errors or failures would
 consist of two lines:
 </p>
 
-<pre class="example" id="orgc1cd77a">
+<pre class="example" id="org8f9cbcd">
 Running &lt;file path&gt;
 Tests run: &lt;number&gt;, Failures: &lt;number&gt;, Errors: &lt;number&gt;, Skipped: &lt;number&gt;, Time elapsed: &lt;interval s - in &lt;file path&gt;
 </pre>
@@ -726,11 +726,11 @@ package this together in <code>JUnitTt</code>, a structure writing to the termin
         (print (<span class="org-string">"Running "</span>^name^<span class="org-string">"\n"</span>);
          app report results;
          print (concat [<span class="org-string">"Tests run: "</span>, Int.toString (count_tests_run summary),
-                        <span class="org-string">" "</span>,
+                        <span class="org-string">", "</span>,
                         <span class="org-string">"Failures: "</span>, Int.toString (#fail summary),
-                        <span class="org-string">" "</span>,
+                        <span class="org-string">", "</span>,
                         <span class="org-string">"Errors: "</span>, Int.toString (#errors summary),
-                        <span class="org-string">" "</span>,
+                        <span class="org-string">", "</span>,
                         <span class="org-comment-delimiter">(* </span><span class="org-comment">"Skipped: ", #skipped summary, " ", </span><span class="org-comment-delimiter">*)</span>
                         <span class="org-string">"Time elapsed: "</span>, intervalToString dt,
                         <span class="org-string">" - in "</span>, name,
@@ -745,11 +745,11 @@ Now we can run this on our example test results, which will produce
 something like the following:
 </p>
 
-<pre class="example" id="org7da6d96">
+<pre class="example" id="org803dfeb">
 - JUnitTt.report ex_results;
 Running Arithmetic Tests
 Arithmetic test 2 FAIL: 1+1=3
-Tests run: 2 Failures: 1 Errors: 0 Time elapsed: 0.000 - in Arithmetic Tests
+Tests run: 2, Failures: 1, Errors: 0, Time elapsed: 0.000 - in Arithmetic Tests
 val it = () : JUnitTt.t
 </pre>
 </div>
@@ -762,12 +762,13 @@ val it = () : JUnitTt.t
 This is just to have a Jenkins-compatible artifact, so I could have a
 continuous integration framework test whatever I'm working on (at least,
 in theory). The best summary of JUnit's schema seems to be found <a href="https://llg.cubic.org/docs/junit/">here</a>.
-</p>
+Actually, with our work done so far, this amounts to be just an exercise
+in writing some SML code.</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-16 Sun 11:58.</p>
+<p class="postamble">Last Updated 2022-01-16 Sun 12:04.</p>
 </div>
 </body>
 </html>

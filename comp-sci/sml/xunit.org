@@ -405,11 +405,11 @@ structure JUnitTt : REPORTER = struct
         (print ("Running "^name^"\n");
          app report results;
          print (concat ["Tests run: ", Int.toString (count_tests_run summary),
-                        " ",
+                        ", ",
                         "Failures: ", Int.toString (#fail summary),
-                        " ",
+                        ", ",
                         "Errors: ", Int.toString (#errors summary),
-                        " ",
+                        ", ",
                         (* "Skipped: ", #skipped summary, " ", *)
                         "Time elapsed: ", intervalToString dt,
                         " - in ", name,
@@ -425,7 +425,7 @@ something like the following:
 - JUnitTt.report ex_results;
 Running Arithmetic Tests
 Arithmetic test 2 FAIL: 1+1=3
-Tests run: 2 Failures: 1 Errors: 0 Time elapsed: 0.000 - in Arithmetic Tests
+Tests run: 2, Failures: 1, Errors: 0, Time elapsed: 0.000 - in Arithmetic Tests
 val it = () : JUnitTt.t
 #+end_example
 
@@ -437,3 +437,5 @@ val it = () : JUnitTt.t
 This is just to have a Jenkins-compatible artifact, so I could have a
 continuous integration framework test whatever I'm working on (at least,
 in theory). The best summary of JUnit's schema seems to be found [[https://llg.cubic.org/docs/junit/][here]].
+Actually, with our work done so far, this amounts to be just an exercise
+in writing some SML code.
