@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-11-20 Sat 10:36 -->
+<!-- 2022-01-16 Sun 10:53 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raspberry Pi</title>
@@ -279,7 +279,8 @@
 <li><a href="#h-717e12d7-08bc-4320-a5e2-60782ef467b7">8.3. Feh wallpaper</a></li>
 </ul>
 </li>
-<li><a href="#h-88c07655-f971-4a20-b7f9-3f75d70adacd">9. Other Links</a></li>
+<li><a href="#h-70ef8113-f25f-4e98-96eb-f65586aa779a">9. Temperature Checking</a></li>
+<li><a href="#h-88c07655-f971-4a20-b7f9-3f75d70adacd">10. Other Links</a></li>
 </ul>
 </div>
 </div>
@@ -350,7 +351,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="org9bba29f">
+<pre class="example" id="org9bde902">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -361,7 +362,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="org6776975">
+<pre class="example" id="orge416d25">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -370,7 +371,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="org5121e48">
+<pre class="example" id="orgd2992f9">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -440,7 +441,7 @@ error saying Emacs won't compile with <code>-ffinite-math-only</code>).
 <div id="outline-container-h-505fbdb9-12a4-46d8-9daf-46229887468f" class="outline-3">
 <h3 id="h-505fbdb9-12a4-46d8-9daf-46229887468f"><span class="section-number-3">4.1.</span> Attempting Configuration</h3>
 <div class="outline-text-3" id="text-h-505fbdb9-12a4-46d8-9daf-46229887468f">
-<pre class="example" id="org4b196cf">
+<pre class="example" id="org4b3c74c">
 ~/src/emacs/$ git clean -dxf
 ~/src/emacs/$ ./autogen.sh
 ~/src/emacs/$ ./configure --with-m17n-flt --with-modules --with-json --with-threads --with-included-regex --with-compress-install CFLAGS="-Ofast -mtune=native -mcpu=native -marm"
@@ -714,8 +715,27 @@ AddToFunc RestartFunction
 </div>
 </div>
 
+<div id="outline-container-h-70ef8113-f25f-4e98-96eb-f65586aa779a" class="outline-2">
+<h2 id="h-70ef8113-f25f-4e98-96eb-f65586aa779a"><span class="section-number-2">9.</span> Temperature Checking</h2>
+<div class="outline-text-2" id="text-h-70ef8113-f25f-4e98-96eb-f65586aa779a">
+<p>
+For my Raspberry Pi 2, I can check the temperature by running the
+command <code>/opt/vc/bin/vcgencmd measure_temp</code>. I've stuck this into a
+script:
+</p>
+
+<pre class="example" id="orgeda2f03">
+#!/bin/bash
+
+# ~/temperature.sh
+
+/opt/vc/bin/vcgencmd measure_temp
+</pre>
+</div>
+</div>
+
 <div id="outline-container-h-88c07655-f971-4a20-b7f9-3f75d70adacd" class="outline-2">
-<h2 id="h-88c07655-f971-4a20-b7f9-3f75d70adacd"><span class="section-number-2">9.</span> Other Links</h2>
+<h2 id="h-88c07655-f971-4a20-b7f9-3f75d70adacd"><span class="section-number-2">10.</span> Other Links</h2>
 <div class="outline-text-2" id="text-h-88c07655-f971-4a20-b7f9-3f75d70adacd">
 <ul class="org-ul">
 <li><a href="http://informatimago.com/articles/raspberrypi/ccl-sur-qemu.html">CCL on RPi</a> (French)</li>
@@ -728,7 +748,7 @@ AddToFunc RestartFunction
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-14 Sun 17:01.</p>
+<p class="postamble">Last Updated 2022-01-15 Sat 15:01.</p>
 </div>
 </body>
 </html>
