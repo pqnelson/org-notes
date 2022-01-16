@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2022-01-16 Sun 11:58 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XUnit Framework - SML</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">XUnit Framework - SML</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4">1. Overview</a></li>
+<li><a href="#h-303d6523-5b1b-4c46-8586-fc19dd362eeb">2. First Draft</a></li>
+<li><a href="#h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b">3. Refactoring Test Results and Test Reporting</a></li>
+<li><a href="#h-6c77fd79-b060-4a5b-971b-0f99b3736c54">4. Summarize results</a></li>
+<li><a href="#h-b341cf44-e93f-418f-b0d4-2bc8dcba2674">5. Quality of life helper functions</a></li>
+<li><a href="#h-a7123449-f3a8-4555-8ad2-416c6423d04d">6. Reporter Module</a></li>
+<li><a href="#h-2bb3e70c-7422-4378-aa81-43996c8bfdff">7. XML Output</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4" class="outline-2">
+<h2 id="h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4"><span class="section-number-2">1.</span> Overview</h2>
+<div class="outline-text-2" id="text-h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4">
+<p>
+I'm going to try to iteratively construct an xUnit testing framework in
+Standard ML, just to get acquainted with programming in Standard ML.
+</p>
+
+<p>
+We will have one <b>test suite</b> per file, which consists of many <b>test cases</b>
+(or just "tests"). A test case consists of one or more <b>assertions</b>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-303d6523-5b1b-4c46-8586-fc19dd362eeb" class="outline-2">
+<h2 id="h-303d6523-5b1b-4c46-8586-fc19dd362eeb"><span class="section-number-2">2.</span> First Draft</h2>
+<div class="outline-text-2" id="text-h-303d6523-5b1b-4c46-8586-fc19dd362eeb">
+<p>
+We will just have an <code>assert</code> function which reports failure by means of
+raising an <code>AssertionFailure</code> exception. Since Standard ML is not lazy,
+we need to make an <code>assert</code> function checks if a given condition has
+been satisfied and, if not, raises an <code>AssertionFailure</code> exception with
+a user-given message for details.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">exception</span> AssertionFailure <span class="org-keyword">of</span> string;
+
+<span class="org-keyword">datatype</span> <span class="org-type-def">Assertion</span> = Assert <span class="org-keyword">of</span> string*bool;
+
+<span class="org-keyword">fun</span> <span class="org-function-name">assert</span> (msg : string) (is_success : bool) : unit =
+    <span class="org-keyword">if</span> is_success <span class="org-keyword">then</span> () <span class="org-keyword">else</span> <span class="org-keyword">raise</span> AssertionFailure msg;
+</pre>
+</div>
+
+<p>
+Now for <code>Test</code>, which is a composite pattern of test cases. A test case
+has a name encoded as a string, and a function which encodes the various
+assertions.
+</p>
+
+<p>
+A <code>TestSuite</code> is just a list of <code>Test</code> instances, with some name (also
+encoded as a string).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Test</span> = TestCase <span class="org-keyword">of</span> string*(unit -&gt; unit)
+              | TestSuite <span class="org-keyword">of</span> string*(Test list);
+</pre>
+</div>
+
+<p>
+Great, now we need to run through the tests.
+</p>
+
+<p>
+For test cases, <code>TestCase (name, assertion)</code>, we call <code>assertion()</code> then
+handle any exceptions raised. There are two types of exceptions we
+expect: first, <code>AssertionFailure</code> exceptions reflect an assert failed;
+second, any other exceptions that may occur which the user did not
+adequately handle.
+</p>
+
+<p>
+For <code>TestSuite</code> instances, we simply call <code>run</code> recursively on its
+tests.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">run</span> (TestCase (name, assertion))
+    = (assertion()
+       <span class="org-keyword">handle</span> AssertionFailure msg =&gt; print (concat [<span class="org-string">"Test "</span>,
+                                                     name,
+                                                     <span class="org-string">" failed: "</span>,
+                                                     msg])
+            | e =&gt; print (concat [<span class="org-string">"Unhandled exception in test"</span>,
+                                  name,
+                                  <span class="org-string">": "</span>,
+                                  exnMessage e]))
+  | run (TestSuite (name, tests)) = app run tests;
+</pre>
+</div>
+
+<p>
+Now we could leave it here, and we have a nifty little testing
+framework. But I'd like to add two convenience functions to make writing
+test cases (and test suites) a little easier.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">test</span> (name:string) (assertion:unit -&gt; unit) : Test =
+    TestCase (name, assertion);
+
+<span class="org-keyword">fun</span> <span class="org-function-name">suite</span> (name:string) (tests : Test list) : Test=
+    TestSuite (name, tests);
+</pre>
+</div>
+
+<p>
+Now we could run this on some example tests:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">ex_tests</span> = suite <span class="org-string">"Arithmetic Tests"</span>
+                     [test <span class="org-string">"Arithmetic test 1"</span> (<span class="org-keyword">fn</span> () =&gt; assert <span class="org-string">"1+1=2"</span> (1+1=2)),
+                      test <span class="org-string">"Arithmetic test 2"</span> (<span class="org-keyword">fn</span> () =&gt; assert <span class="org-string">"1+1=3"</span> (1+1=3))];
+
+run ex_tests;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b" class="outline-2">
+<h2 id="h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b"><span class="section-number-2">3.</span> Refactoring Test Results and Test Reporting</h2>
+<div class="outline-text-2" id="text-h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b">
+<p>
+Now, xUnit testing wants to produce an "artifact" from running through
+the tests which reports the results. We did this by simply having <code>run</code>
+print whether the test succeeded, failed, or had an unexpected exception
+raised.
+</p>
+
+<p>
+A better approach would be to create a <code>TestResult</code> datatype, have
+<code>run : Test -&gt; TestResult</code>, and introduce a new function
+<code>report : TestResult -&gt; unit</code> which produces some kind of artifact.
+</p>
+
+<p>
+We have a <code>TestResult</code> keep track of the <code>TestOutcome</code> and some metadata (like
+the amount of time it took to execute the test). Like the <code>Test</code>
+datatype, the <code>TestResult</code> is a composite pattern (since we want to keep
+track of possibly nested test suites).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">Extend the framework to handle printing test outcomes. </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">datatype</span> <span class="org-type-def">TestOutcome</span> = TestSuccess
+                     | TestFail <span class="org-keyword">of</span> string
+                     | TestException <span class="org-keyword">of</span> exn;
+
+<span class="org-keyword">datatype</span> <span class="org-type-def">TestResult</span> = ResultCase <span class="org-keyword">of</span> string*Time.time*TestOutcome
+                    | ResultSuite <span class="org-keyword">of</span> string*Time.time*(TestResult list);
+</pre>
+</div>
+
+<p>
+We can now modify our <code>run</code> function to produce a <code>TestResult</code> instance.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">run_test</span> (test : Test) : TestResult =
+<span class="org-keyword">let</span>
+  <span class="org-keyword">val</span> <span class="org-variable-name">start</span> = Time.now()
+<span class="org-keyword">in</span>
+  <span class="org-keyword">case</span> test <span class="org-keyword">of</span>
+      (TestCase (case_name, assertion)) =&gt;
+      ((assertion();
+        ResultCase (case_name, (Time.-)(Time.now(), start), TestSuccess))
+       <span class="org-keyword">handle</span> AssertionFailure msg =&gt; ResultCase (case_name,
+                                                  (Time.-)(Time.now(), start),
+                                                  TestFail msg)
+            | e =&gt; ResultCase (case_name,
+                               (Time.-)(Time.now(), start),
+                               TestException e))
+    | (TestSuite (suite_name, tests)) =&gt;
+      (<span class="org-keyword">let</span>
+          <span class="org-keyword">val</span> <span class="org-variable-name">results</span> = map run_test tests
+          <span class="org-keyword">val</span> <span class="org-variable-name">dt</span> = (Time.-)(Time.now(), start)
+      <span class="org-keyword">in</span>
+          ResultSuite (suite_name, dt, results)
+      <span class="org-keyword">end</span>)
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Now the first stab to report these results will be simply to print them
+to the screen. Superficially, this will appear no different than before.
+Later, we can abstract away reporting to a <code>signature REPORTER</code>, and
+have different formats and reports implemented accordingly.
+</p>
+
+<p>
+We will modify our printed output a little to include the number of
+seconds it took to execute the test (and the suite). For our toy test
+suite, this will be so fast it will probably print "0.000" seconds. If
+we want to know <i>exactly</i> how long the test took, we could print the
+microseconds instead.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">`Time.fmt n interval` will produce a string representation of the</span>
+<span class="org-comment">number of seconds in the interval, to `n` digits after the decimal</span>
+<span class="org-comment">point. </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">intervalToString</span> (dt : Time.time) : string =
+    Time.fmt 3 dt;
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">(LargeInt.toString (Time.toMicroseconds dt))^"ms"; </span><span class="org-comment-delimiter">*)</span>
+
+<span class="org-comment-delimiter">(* </span><span class="org-comment">Print the results to the terminal </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">report_results</span> (ResultCase (name,dt,outcome)) =
+    (<span class="org-keyword">case</span> outcome <span class="org-keyword">of</span>
+         TestSuccess =&gt; print (concat [<span class="org-string">"Test "</span>,
+                                       name,
+                                       <span class="org-string">" ("</span>,
+                                       intervalToString dt,
+                                       <span class="org-string">")"</span>,
+                                       <span class="org-string">": SUCCESS\n"</span>])
+       | (TestFail msg) =&gt; print (concat [<span class="org-string">"Test "</span>,
+                                          name,
+                                          <span class="org-string">" ("</span>,
+                                          intervalToString dt,
+                                          <span class="org-string">"): FAIL -- "</span>,
+                                          msg,
+                                          <span class="org-string">"\n"</span>])
+       | (TestException e) =&gt; print (concat [<span class="org-string">"Test "</span>,
+                                             name,
+                                             <span class="org-string">" ("</span>,
+                                             intervalToString dt,
+                                             <span class="org-string">"): UNHANDLED EXCEPTION "</span>,
+                                             exnMessage e,
+                                             <span class="org-string">"\n"</span>]))
+  | report_results (ResultSuite (name,dt,outcomes)) =
+    (print (concat [<span class="org-string">"Suite "</span>, name, <span class="org-string">" ("</span>, intervalToString dt, <span class="org-string">")\n"</span>]);
+     app report_results outcomes);
+</pre>
+</div>
+
+<p>
+Now we could run this on the example tests by doing something like:
+</p>
+
+<pre class="example" id="org6976873">
+val ex_results = run_test ex_tests;
+
+report_results ex_results;
+
+(* Prints:
+
+Suite Arithmetic Tests (0.000)
+Test Arithmetic test 1 (0.000): SUCCESS
+Test Arithmetic test 2 (0.000): FAIL -- 1+1=3
+*)
+</pre>
+
+<p>
+So far, so good!
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-6c77fd79-b060-4a5b-971b-0f99b3736c54" class="outline-2">
+<h2 id="h-6c77fd79-b060-4a5b-971b-0f99b3736c54"><span class="section-number-2">4.</span> Summarize results</h2>
+<div class="outline-text-2" id="text-h-6c77fd79-b060-4a5b-971b-0f99b3736c54">
+<p>
+It's not terribly useful to print out every test case which succeeds,
+since that clutters up the screen. We will then only print out failures,
+and produce a one line summary of the number of tests run, the number of
+failures, and the number of unhandled errors. We will simply use a
+record type to track the number of successes, failures, and errors.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">ResultSummary</span> = {success : int, fail : int, errors : int};
+
+<span class="org-keyword">val</span> <span class="org-variable-name">no_results</span> = {success=0, fail=0, errors=0};
+</pre>
+</div>
+
+<p>
+Now, we could create a function which transforms a <code>Test</code> into a
+<code>ResultSummary</code>, but we need to collapse them into a single summary
+instance. Towards this end, we have a <code>merge_summaries</code> function which
+will be used to fold them all together.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">merge_summaries</span> (({success=s1, fail=f1, errors=e1},
+                     {success=s2, fail=f2, errors=e2}) : ResultSummary*ResultSummary)
+    : ResultSummary
+    = {success = s1+s2,
+       fail = f1 + f2,
+       errors = e1 + e2};
+</pre>
+</div>
+
+<p>
+Now we summarize each <code>TestCase</code> by its outcome, and <code>TestSuite</code> by
+summing over the summaries of its constituents.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">summarize : TestRest -&gt; ResultSummary </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">summarize</span> (ResultCase (_, _, outcome)) =
+    (<span class="org-keyword">case</span> outcome <span class="org-keyword">of</span>
+         TestSuccess =&gt; {success=1, fail=0, errors=0}
+       | (TestFail _) =&gt; {success=0, fail=1, errors=0}
+       | (TestException _) =&gt; {success=0, fail=0, errors=1})
+  | summarize (ResultSuite (_, _, outcomes)) =
+    foldl merge_summaries no_results (map summarize outcomes);
+</pre>
+</div>
+
+<p>
+Now we could check the summary of our toy test suite:
+</p>
+
+<pre class="example" id="org22ac542">
+summarize ex_results;
+
+(* SML/NJ produces:
+
+val it = {errors=0,fail=1,success=1} : {errors:int, fail:int, success:int}
+*)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-b341cf44-e93f-418f-b0d4-2bc8dcba2674" class="outline-2">
+<h2 id="h-b341cf44-e93f-418f-b0d4-2bc8dcba2674"><span class="section-number-2">5.</span> Quality of life helper functions</h2>
+<div class="outline-text-2" id="text-h-b341cf44-e93f-418f-b0d4-2bc8dcba2674">
+<p>
+Right now, it's rather tedious to write a test suite. The conventions
+I'm loosely following (xUnit, influenced by elements of JUnit) has each
+test suite be contained in its own file. So I would love to write
+something like:
+</p>
+
+<pre class="example" id="org06b6dcc">
+suite "FooBarTests";
+
+test "BaazTest1" fn () =&gt; (* ... *);
+
+test "BaazTest2" fn () =&gt; (* ... *);
+
+(* etc. *)
+</pre>
+
+<p>
+I'd like the library to simply accumulate the test cases as they are
+defined into the current test suite. This requires side effects,
+specifically uses <code>ref</code> instances.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">current_suite</span> : (string*(Test list)) ref = ref (<span class="org-string">""</span>, []);
+<span class="org-keyword">val</span> <span class="org-variable-name">all_suites</span> : (Test list) ref = ref [];
+</pre>
+</div>
+
+<p>
+The test runner will simply iterate through <code>all_suites</code> to produce a
+corresponding list of test results, which will be iteratively processed
+by a reporter.
+</p>
+
+<p>
+Now, we revisit our <code>suite</code> and <code>test</code> functions, to make them behave as
+we would like. Specifically, our <code>suite</code> function will append whatever
+the <code>current_suite</code>'s contents are to <code>all_suites</code> (after storing them
+in a <code>TestSuite</code> instance). I'm not sure if I will need <code>suite</code> to do
+anything else, so I will place this procedure to append the current
+suite to the running list of all suites in a helper function:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">append_suite</span> (name : string) =
+    <span class="org-keyword">let</span>
+        <span class="org-keyword">val</span> (name, tests) = !current_suite
+    <span class="org-keyword">in</span>
+        all_suites := (TestSuite (name, tests)) :: (!all_suites);
+        current_suite := (name, [])
+    <span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Now, we have our redefinition for <code>suite</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">suite</span> (name : string) =
+    append_suite(name);
+</pre>
+</div>
+
+<p>
+The <code>test</code> will update <code>current_suite</code> to add a new <code>TestCase</code> to its
+list of tests.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">test</span> (name : string) (assertion : unit -&gt; unit) : unit =
+    <span class="org-keyword">let</span>
+        <span class="org-keyword">val</span> (suite_name, tests) = !current_suite
+    <span class="org-keyword">in</span>
+        current_suite := (suite_name, (TestCase (name, assertion))::tests)
+    <span class="org-keyword">end</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-a7123449-f3a8-4555-8ad2-416c6423d04d" class="outline-2">
+<h2 id="h-a7123449-f3a8-4555-8ad2-416c6423d04d"><span class="section-number-2">6.</span> Reporter Module</h2>
+<div class="outline-text-2" id="text-h-a7123449-f3a8-4555-8ad2-416c6423d04d">
+<p>
+We can now refactor the reporter routines into their own modules. The
+first example of this will be a terse summary of failed tests and a
+summary of each test suite's results.
+</p>
+
+<p>
+First, we abstract away the signature we'd expect for a reporter. It has
+a single function, <code>report</code>, which will produce an artifact for a given
+test result. Sometimes we just print a summary of the results to the
+screen, in which case the artifact has type <code>unit</code>. Other times, we may
+produce an XML snippet for each test suite, which are then written to a
+file.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">REPORTER</span> = <span class="org-keyword">sig</span>
+    <span class="org-keyword">type</span> <span class="org-type-def">t</span>; <span class="org-comment-delimiter">(* </span><span class="org-comment">type of the artifact produced </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">report</span> : TestResult -&gt; t;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+We will begin with a summary of the test results along the lines of
+JUnit, namely just printing if a test case has failed or experienced an
+error, then print a summary of the test suite. These can be done in two
+helper functions, but I'm lazy, so I'm going to write it all at once.
+</p>
+
+<p>
+The output for a test suite which has no errors or failures would
+consist of two lines:
+</p>
+
+<pre class="example" id="orgc1cd77a">
+Running &lt;file path&gt;
+Tests run: &lt;number&gt;, Failures: &lt;number&gt;, Errors: &lt;number&gt;, Skipped: &lt;number&gt;, Time elapsed: &lt;interval s - in &lt;file path&gt;
+</pre>
+
+<p>
+For now, I will simply use the test suite name instead of the path. We
+package this together in <code>JUnitTt</code>, a structure writing to the terminal
+(hence the <code>Tt</code> suffix) a summary imitating JUnit's output.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">count_tests_run</span> ({success=s1, fail=f1, errors=e1} : ResultSummary)
+    = s1 + f1 + e1;
+
+<span class="org-keyword">structure</span> <span class="org-module-def">JUnitTt</span> : REPORTER = <span class="org-keyword">struct</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">t</span> = unit;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">report</span> (ResultCase (name, dt, outcome)) =
+      (<span class="org-keyword">case</span> outcome <span class="org-keyword">of</span>
+           (TestFail msg) =&gt; print (name^<span class="org-string">" FAIL: "</span>^msg^<span class="org-string">"\n"</span>)
+         | (TestException e) =&gt; print (name^<span class="org-string">" ERROR: "</span>^(exnMessage e)^<span class="org-string">"\n"</span>)
+         | _ =&gt; ())
+  | report (r <span class="org-keyword">as</span> (ResultSuite (name, dt, results))) =
+    <span class="org-keyword">let</span>
+        <span class="org-keyword">val</span> <span class="org-variable-name">summary</span> = summarize r
+    <span class="org-keyword">in</span>
+        (print (<span class="org-string">"Running "</span>^name^<span class="org-string">"\n"</span>);
+         app report results;
+         print (concat [<span class="org-string">"Tests run: "</span>, Int.toString (count_tests_run summary),
+                        <span class="org-string">" "</span>,
+                        <span class="org-string">"Failures: "</span>, Int.toString (#fail summary),
+                        <span class="org-string">" "</span>,
+                        <span class="org-string">"Errors: "</span>, Int.toString (#errors summary),
+                        <span class="org-string">" "</span>,
+                        <span class="org-comment-delimiter">(* </span><span class="org-comment">"Skipped: ", #skipped summary, " ", </span><span class="org-comment-delimiter">*)</span>
+                        <span class="org-string">"Time elapsed: "</span>, intervalToString dt,
+                        <span class="org-string">" - in "</span>, name,
+                        <span class="org-string">"\n"</span>]))
+    <span class="org-keyword">end</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Now we can run this on our example test results, which will produce
+something like the following:
+</p>
+
+<pre class="example" id="org7da6d96">
+- JUnitTt.report ex_results;
+Running Arithmetic Tests
+Arithmetic test 2 FAIL: 1+1=3
+Tests run: 2 Failures: 1 Errors: 0 Time elapsed: 0.000 - in Arithmetic Tests
+val it = () : JUnitTt.t
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-2bb3e70c-7422-4378-aa81-43996c8bfdff" class="outline-2">
+<h2 id="h-2bb3e70c-7422-4378-aa81-43996c8bfdff"><span class="section-number-2">7.</span> XML Output</h2>
+<div class="outline-text-2" id="text-h-2bb3e70c-7422-4378-aa81-43996c8bfdff">
+<p>
+This is just to have a Jenkins-compatible artifact, so I could have a
+continuous integration framework test whatever I'm working on (at least,
+in theory). The best summary of JUnit's schema seems to be found <a href="https://llg.cubic.org/docs/junit/">here</a>.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2022-01-16 Sun 11:58.</p>
+</div>
+</body>
+</html>

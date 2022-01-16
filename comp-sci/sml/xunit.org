@@ -1,0 +1,439 @@
+#+TITLE: XUnit Framework - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-01-16T10:36:59-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday January 16, 2022 at 10:36AM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4
+:END:
+
+I'm going to try to iteratively construct an xUnit testing framework in
+Standard ML, just to get acquainted with programming in Standard ML.
+
+We will have one *test suite* per file, which consists of many *test cases*
+(or just "tests"). A test case consists of one or more *assertions*.
+
+* First Draft
+:PROPERTIES:
+:CUSTOM_ID: h-303d6523-5b1b-4c46-8586-fc19dd362eeb
+:END:
+
+We will just have an ~assert~ function which reports failure by means of
+raising an ~AssertionFailure~ exception. Since Standard ML is not lazy,
+we need to make an ~assert~ function checks if a given condition has
+been satisfied and, if not, raises an ~AssertionFailure~ exception with
+a user-given message for details.
+
+#+begin_src sml
+exception AssertionFailure of string;
+
+datatype Assertion = Assert of string*bool;
+
+fun assert (msg : string) (is_success : bool) : unit =
+    if is_success then () else raise AssertionFailure msg;
+#+end_src
+
+Now for ~Test~, which is a composite pattern of test cases. A test case
+has a name encoded as a string, and a function which encodes the various
+assertions.
+
+A ~TestSuite~ is just a list of ~Test~ instances, with some name (also
+encoded as a string).
+
+#+begin_src sml
+datatype Test = TestCase of string*(unit -> unit)
+              | TestSuite of string*(Test list);
+#+end_src
+
+Great, now we need to run through the tests.
+
+For test cases, ~TestCase (name, assertion)~, we call ~assertion()~ then
+handle any exceptions raised. There are two types of exceptions we
+expect: first, ~AssertionFailure~ exceptions reflect an assert failed;
+second, any other exceptions that may occur which the user did not
+adequately handle.
+
+For ~TestSuite~ instances, we simply call ~run~ recursively on its
+tests.
+
+#+begin_src sml
+fun run (TestCase (name, assertion))
+    = (assertion()
+       handle AssertionFailure msg => print (concat ["Test ",
+                                                     name,
+                                                     " failed: ",
+                                                     msg])
+            | e => print (concat ["Unhandled exception in test",
+                                  name,
+                                  ": ",
+                                  exnMessage e]))
+  | run (TestSuite (name, tests)) = app run tests;
+#+end_src
+
+Now we could leave it here, and we have a nifty little testing
+framework. But I'd like to add two convenience functions to make writing
+test cases (and test suites) a little easier.
+
+#+begin_src sml
+fun test (name:string) (assertion:unit -> unit) : Test =
+    TestCase (name, assertion);
+
+fun suite (name:string) (tests : Test list) : Test=
+    TestSuite (name, tests);
+#+end_src
+
+Now we could run this on some example tests:
+
+#+begin_src sml
+val ex_tests = suite "Arithmetic Tests"
+                     [test "Arithmetic test 1" (fn () => assert "1+1=2" (1+1=2)),
+                      test "Arithmetic test 2" (fn () => assert "1+1=3" (1+1=3))];
+
+run ex_tests;
+#+end_src
+
+* Refactoring Test Results and Test Reporting
+:PROPERTIES:
+:CUSTOM_ID: h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b
+:END:
+
+Now, xUnit testing wants to produce an "artifact" from running through
+the tests which reports the results. We did this by simply having ~run~
+print whether the test succeeded, failed, or had an unexpected exception
+raised.
+
+A better approach would be to create a ~TestResult~ datatype, have
+~run : Test -> TestResult~, and introduce a new function
+~report : TestResult -> unit~ which produces some kind of artifact.
+
+We have a ~TestResult~ keep track of the ~TestOutcome~ and some metadata (like
+the amount of time it took to execute the test). Like the ~Test~
+datatype, the ~TestResult~ is a composite pattern (since we want to keep
+track of possibly nested test suites).
+
+#+begin_src sml
+(* Extend the framework to handle printing test outcomes. *)
+datatype TestOutcome = TestSuccess
+                     | TestFail of string
+                     | TestException of exn;
+
+datatype TestResult = ResultCase of string*Time.time*TestOutcome
+                    | ResultSuite of string*Time.time*(TestResult list);
+#+end_src
+
+We can now modify our ~run~ function to produce a ~TestResult~ instance.
+
+#+begin_src sml
+fun run_test (test : Test) : TestResult =
+let
+  val start = Time.now()
+in
+  case test of
+      (TestCase (case_name, assertion)) =>
+      ((assertion();
+        ResultCase (case_name, (Time.-)(Time.now(), start), TestSuccess))
+       handle AssertionFailure msg => ResultCase (case_name,
+                                                  (Time.-)(Time.now(), start),
+                                                  TestFail msg)
+            | e => ResultCase (case_name,
+                               (Time.-)(Time.now(), start),
+                               TestException e))
+    | (TestSuite (suite_name, tests)) =>
+      (let
+          val results = map run_test tests
+          val dt = (Time.-)(Time.now(), start)
+      in
+          ResultSuite (suite_name, dt, results)
+      end)
+end;
+#+end_src
+
+Now the first stab to report these results will be simply to print them
+to the screen. Superficially, this will appear no different than before.
+Later, we can abstract away reporting to a ~signature REPORTER~, and
+have different formats and reports implemented accordingly.
+
+We will modify our printed output a little to include the number of
+seconds it took to execute the test (and the suite). For our toy test
+suite, this will be so fast it will probably print "0.000" seconds. If
+we want to know /exactly/ how long the test took, we could print the
+microseconds instead.
+
+#+begin_src sml
+(* `Time.fmt n interval` will produce a string representation of the
+number of seconds in the interval, to `n` digits after the decimal
+point. *)
+fun intervalToString (dt : Time.time) : string =
+    Time.fmt 3 dt;
+    (* (LargeInt.toString (Time.toMicroseconds dt))^"ms"; *)
+
+(* Print the results to the terminal *)
+fun report_results (ResultCase (name,dt,outcome)) =
+    (case outcome of
+         TestSuccess => print (concat ["Test ",
+                                       name,
+                                       " (",
+                                       intervalToString dt,
+                                       ")",
+                                       ": SUCCESS\n"])
+       | (TestFail msg) => print (concat ["Test ",
+                                          name,
+                                          " (",
+                                          intervalToString dt,
+                                          "): FAIL -- ",
+                                          msg,
+                                          "\n"])
+       | (TestException e) => print (concat ["Test ",
+                                             name,
+                                             " (",
+                                             intervalToString dt,
+                                             "): UNHANDLED EXCEPTION ",
+                                             exnMessage e,
+                                             "\n"]))
+  | report_results (ResultSuite (name,dt,outcomes)) =
+    (print (concat ["Suite ", name, " (", intervalToString dt, ")\n"]);
+     app report_results outcomes);
+#+end_src
+
+Now we could run this on the example tests by doing something like:
+
+#+begin_example
+val ex_results = run_test ex_tests;
+
+report_results ex_results;
+
+(* Prints:
+
+Suite Arithmetic Tests (0.000)
+Test Arithmetic test 1 (0.000): SUCCESS
+Test Arithmetic test 2 (0.000): FAIL -- 1+1=3
+*)
+#+end_example
+
+So far, so good!
+
+* Summarize results
+:PROPERTIES:
+:CUSTOM_ID: h-6c77fd79-b060-4a5b-971b-0f99b3736c54
+:END:
+
+It's not terribly useful to print out every test case which succeeds,
+since that clutters up the screen. We will then only print out failures,
+and produce a one line summary of the number of tests run, the number of
+failures, and the number of unhandled errors. We will simply use a
+record type to track the number of successes, failures, and errors.
+
+#+begin_src sml
+type ResultSummary = {success : int, fail : int, errors : int};
+
+val no_results = {success=0, fail=0, errors=0};
+#+end_src
+
+Now, we could create a function which transforms a ~Test~ into a
+~ResultSummary~, but we need to collapse them into a single summary
+instance. Towards this end, we have a ~merge_summaries~ function which
+will be used to fold them all together.
+
+#+begin_src sml
+fun merge_summaries (({success=s1, fail=f1, errors=e1},
+                     {success=s2, fail=f2, errors=e2}) : ResultSummary*ResultSummary)
+    : ResultSummary
+    = {success = s1+s2,
+       fail = f1 + f2,
+       errors = e1 + e2};
+#+end_src
+
+Now we summarize each ~TestCase~ by its outcome, and ~TestSuite~ by
+summing over the summaries of its constituents.
+
+#+begin_src sml
+(* summarize : TestRest -> ResultSummary *)
+fun summarize (ResultCase (_, _, outcome)) =
+    (case outcome of
+         TestSuccess => {success=1, fail=0, errors=0}
+       | (TestFail _) => {success=0, fail=1, errors=0}
+       | (TestException _) => {success=0, fail=0, errors=1})
+  | summarize (ResultSuite (_, _, outcomes)) =
+    foldl merge_summaries no_results (map summarize outcomes);
+#+end_src
+
+Now we could check the summary of our toy test suite:
+
+#+begin_example
+summarize ex_results;
+
+(* SML/NJ produces:
+
+val it = {errors=0,fail=1,success=1} : {errors:int, fail:int, success:int}
+*)
+#+end_example
+
+* Quality of life helper functions
+:PROPERTIES:
+:CUSTOM_ID: h-b341cf44-e93f-418f-b0d4-2bc8dcba2674
+:END:
+
+Right now, it's rather tedious to write a test suite. The conventions
+I'm loosely following (xUnit, influenced by elements of JUnit) has each
+test suite be contained in its own file. So I would love to write
+something like:
+
+#+begin_example
+suite "FooBarTests";
+
+test "BaazTest1" fn () => (* ... *);
+
+test "BaazTest2" fn () => (* ... *);
+
+(* etc. *)
+#+end_example
+
+I'd like the library to simply accumulate the test cases as they are
+defined into the current test suite. This requires side effects,
+specifically uses ~ref~ instances.
+
+#+begin_src sml
+val current_suite : (string*(Test list)) ref = ref ("", []);
+val all_suites : (Test list) ref = ref [];
+#+end_src
+
+The test runner will simply iterate through ~all_suites~ to produce a
+corresponding list of test results, which will be iteratively processed
+by a reporter.
+
+Now, we revisit our ~suite~ and ~test~ functions, to make them behave as
+we would like. Specifically, our ~suite~ function will append whatever
+the ~current_suite~'s contents are to ~all_suites~ (after storing them
+in a ~TestSuite~ instance). I'm not sure if I will need ~suite~ to do
+anything else, so I will place this procedure to append the current
+suite to the running list of all suites in a helper function:
+
+#+begin_src sml
+fun append_suite (name : string) =
+    let
+        val (name, tests) = !current_suite
+    in
+        all_suites := (TestSuite (name, tests)) :: (!all_suites);
+        current_suite := (name, [])
+    end;
+#+end_src
+
+Now, we have our redefinition for ~suite~:
+
+#+begin_src sml
+fun suite (name : string) =
+    append_suite(name);
+#+end_src
+
+The ~test~ will update ~current_suite~ to add a new ~TestCase~ to its
+list of tests.
+
+#+begin_src sml
+fun test (name : string) (assertion : unit -> unit) : unit =
+    let
+        val (suite_name, tests) = !current_suite
+    in
+        current_suite := (suite_name, (TestCase (name, assertion))::tests)
+    end;
+#+end_src
+
+* Reporter Module
+:PROPERTIES:
+:CUSTOM_ID: h-a7123449-f3a8-4555-8ad2-416c6423d04d
+:END:
+
+We can now refactor the reporter routines into their own modules. The
+first example of this will be a terse summary of failed tests and a
+summary of each test suite's results.
+
+First, we abstract away the signature we'd expect for a reporter. It has
+a single function, ~report~, which will produce an artifact for a given
+test result. Sometimes we just print a summary of the results to the
+screen, in which case the artifact has type ~unit~. Other times, we may
+produce an XML snippet for each test suite, which are then written to a
+file.
+
+#+begin_src sml
+signature REPORTER = sig
+    type t; (* type of the artifact produced *)
+    val report : TestResult -> t;
+end;
+#+end_src
+
+We will begin with a summary of the test results along the lines of
+JUnit, namely just printing if a test case has failed or experienced an
+error, then print a summary of the test suite. These can be done in two
+helper functions, but I'm lazy, so I'm going to write it all at once.
+
+The output for a test suite which has no errors or failures would
+consist of two lines:
+
+#+begin_example
+Running <file path>
+Tests run: <number>, Failures: <number>, Errors: <number>, Skipped: <number>, Time elapsed: <interval s - in <file path>
+#+end_example
+
+For now, I will simply use the test suite name instead of the path. We
+package this together in ~JUnitTt~, a structure writing to the terminal
+(hence the ~Tt~ suffix) a summary imitating JUnit's output.
+
+#+begin_src sml
+fun count_tests_run ({success=s1, fail=f1, errors=e1} : ResultSummary)
+    = s1 + f1 + e1;
+
+structure JUnitTt : REPORTER = struct
+  type t = unit;
+
+  fun report (ResultCase (name, dt, outcome)) =
+      (case outcome of
+           (TestFail msg) => print (name^" FAIL: "^msg^"\n")
+         | (TestException e) => print (name^" ERROR: "^(exnMessage e)^"\n")
+         | _ => ())
+  | report (r as (ResultSuite (name, dt, results))) =
+    let
+        val summary = summarize r
+    in
+        (print ("Running "^name^"\n");
+         app report results;
+         print (concat ["Tests run: ", Int.toString (count_tests_run summary),
+                        " ",
+                        "Failures: ", Int.toString (#fail summary),
+                        " ",
+                        "Errors: ", Int.toString (#errors summary),
+                        " ",
+                        (* "Skipped: ", #skipped summary, " ", *)
+                        "Time elapsed: ", intervalToString dt,
+                        " - in ", name,
+                        "\n"]))
+    end
+end;
+#+end_src
+
+Now we can run this on our example test results, which will produce
+something like the following:
+
+#+begin_example
+- JUnitTt.report ex_results;
+Running Arithmetic Tests
+Arithmetic test 2 FAIL: 1+1=3
+Tests run: 2 Failures: 1 Errors: 0 Time elapsed: 0.000 - in Arithmetic Tests
+val it = () : JUnitTt.t
+#+end_example
+
+* XML Output
+:PROPERTIES:
+:CUSTOM_ID: h-2bb3e70c-7422-4378-aa81-43996c8bfdff
+:END:
+
+This is just to have a Jenkins-compatible artifact, so I could have a
+continuous integration framework test whatever I'm working on (at least,
+in theory). The best summary of JUnit's schema seems to be found [[https://llg.cubic.org/docs/junit/][here]].
