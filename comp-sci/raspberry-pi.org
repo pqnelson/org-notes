@@ -126,7 +126,10 @@ the =dev= version of the libraries:
 ...
 ~/src/emacs/$ sudo apt-get install libm17n-dev libgif-dev libxpm-dev libtiff5-dev
 ...
-~/src/emacs/$ sudo apt-get install libpng-dev gnutls-dev texinfo
+~/src/emacs/$ sudo apt-get install libpng-dev gnutls-dev texinfo libjansson-dev
+...
+~/src/emacs/$ sudo apt-get install build-essential libx11-dev libjpeg-dev libpng-dev libgif-dev libxaw-dev libncurses-dev libgnutls28-dev 
+...
 #+end_example
 
 Now for the configuration
@@ -360,6 +363,16 @@ AddToFunc InitFunction
 AddToFunc RestartFunction
 + I exec /home/alex/.fvwm/bg.sh
 
+** URXVT Terminal
+:PROPERTIES:
+:CUSTOM_ID: h-42f8cb5f-78d3-4c5b-9aed-9471a4249dfa
+:END:
+
+Instead of ~xterm~, one could instead install ~rxvt-unicode~ which is
+very nift.
+
+- [[https://opensource.com/article/19/10/why-use-rxvt-terminal][Why use RXVT Terminal]]
+
 * Temperature Checking
 :PROPERTIES:
 :CUSTOM_ID: h-70ef8113-f25f-4e98-96eb-f65586aa779a
@@ -376,6 +389,39 @@ script:
 
 /opt/vc/bin/vcgencmd measure_temp
 #+end_example
+
+* Mizar
+:PROPERTIES:
+:CUSTOM_ID: h-547100f8-09b9-4160-ae84-9e2fea00aba5
+:END:
+
+I couldn't get Mizar working on my Raspberry Pi 2, but it works on
+Raspberry Pi 4B. Get the latest version [[http://mizar.uwb.edu.pl/system/index.html#download][here]] for Linux (ARM).
+
+#+begin_example
+~/src/$ mkdir mizar
+~/src/$ cd mizar
+~/src/mizar/$ wget mizar-<version>-arm-linux.tar
+...
+~/src/mizar/$ tar -xvf mizar-...-linux.tar
+...
+~/src/mizar/$ sudo ./install.sh
+...
+#+end_example
+
+* Run 64-bit mode
+:PROPERTIES:
+:CUSTOM_ID: h-cd1194c0-4b09-4fd9-810c-044b646f78f9
+:END:
+
+To make Raspberry Pi 4 run in 64-bit mode, add the following line to the
+bottom of your ~/boot/config.txt~:
+
+#+begin_example
+arm_64bit=1
+#+end_example
+
+- [[https://www.raspberrypi.com/documentation/computers/config_txt.html][Confix.txt documentation]]
 
 * Other Links
 :PROPERTIES:

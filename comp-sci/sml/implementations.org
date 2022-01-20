@@ -51,6 +51,21 @@ I have tried ~make MLTON_COMPILE_ARGS="-codegen c" all~.
 - [[http://mlton.org/RunningOnARM][Running on ARM]] MLton wiki
 - [[http://www.mlton.org/pipermail/mlton-devel/2007-June/029877.html][Re: Cross compile on ARM successful]] MLton mailing list thread
 
+** On Raspberry Pi
+:PROPERTIES:
+:CUSTOM_ID: h-c96a1a4f-8997-4297-b4a6-4d2446fac78d
+:END:
+
+This is actually harder than I realized to get this working on a
+Raspberry pi 4. What I ended up doing is modifying my
+~/etc/apt/sources.list~ to include a Debian repo, then I was able to
+~sudo apt install mlton~. (There is some trickiness here, with
+[[https://ccm.net/faq/809-debian-apt-get-no-pubkey-gpg-error][pubkey errors]].) I then used this to compile MLton from scratch.
+
+Another caveat is that this will run into problems if your
+~/boot/config.txt~ includes the line specifying it to run in 64-bit
+mode. 
+
 * SML/NJ
 :PROPERTIES:
 :CUSTOM_ID: h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515
