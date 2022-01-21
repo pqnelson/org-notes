@@ -439,3 +439,38 @@ continuous integration framework test whatever I'm working on (at least,
 in theory). The best summary of JUnit's schema seems to be found [[https://llg.cubic.org/docs/junit/][here]].
 Actually, with our work done so far, this amounts to be just an exercise
 in writing some SML code.
+
+* Test Discovery
+:PROPERTIES:
+:CUSTOM_ID: h-fbfa4c45-7cfd-4022-beea-f3b0eb05d944
+:END:
+
+Ideally, my project should look like:
+
+#+begin_example
+├── src
+│   ├── main.sml
+│   └── foo.sml
+├── test
+│   ├── xunit.sml
+│   ├── runner.sml
+│   ├── main.sml
+│   └── foo-test.sml
+└── README.md
+#+end_example
+
+That is to say, the tests reside in their own directory, separate from
+the source code being tested. We would like to have ~runner.sml~ iterate
+through the files and subdirectories, execute the tests and suites
+defined.
+
+(The reason we have separate ~main.sml~ files is because of how
+idiosyncratic each SML compiler is, and we want to support Poly/ML and
+MLton.)
+
+Writing code for test discovery may be a bit tricky. I think the fact of
+the matter is that we'll need to add each test suite to the build file,
+and automatically use the relative path as the test suite's name. This
+would involve using [[https://smlfamily.github.io/Basis/os-file-sys.html][~OS.FileSys~]] and possibly [[https://smlfamily.github.io/Basis/os-path.html][~OS.Path~]], and revising
+our ~suite~ method to take no arguments (since it would be inferred
+automatically).
