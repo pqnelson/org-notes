@@ -155,6 +155,13 @@ error saying Emacs won't compile with ~-ffinite-math-only~).
 ~/src/emacs/$ ./configure --with-m17n-flt --with-modules --with-json --with-threads --with-included-regex --with-compress-install CFLAGS="-Ofast -mtune=native -mcpu=native -marm"
 #+end_example
 
+I also need to make sure I have ~libncurses-dev~ installed and,
+depending on the configuration choices:
+
+- ~--with-x-toolkit=motif~ requires ~libmotif-dev~
+- ~--with-x-toolkit=lucid~ requires ~libxaw7-dev~ being installed
+- ~--with-xft~ requires installing ~libxft-dev~
+
 ** Improving Startup Time
 :PROPERTIES:
 :CUSTOM_ID: h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c

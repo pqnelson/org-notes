@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-16 Sun 10:53 -->
+<!-- 2022-01-20 Thu 18:33 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raspberry Pi</title>
@@ -277,10 +277,13 @@
 <li><a href="#h-0aed8294-f790-4e82-bf2c-5707990dd55f">8.1. TWM</a></li>
 <li><a href="#h-fa7f411e-d0be-4c94-8277-87cabddb3838">8.2. FVWM</a></li>
 <li><a href="#h-717e12d7-08bc-4320-a5e2-60782ef467b7">8.3. Feh wallpaper</a></li>
+<li><a href="#h-42f8cb5f-78d3-4c5b-9aed-9471a4249dfa">8.4. URXVT Terminal</a></li>
 </ul>
 </li>
 <li><a href="#h-70ef8113-f25f-4e98-96eb-f65586aa779a">9. Temperature Checking</a></li>
-<li><a href="#h-88c07655-f971-4a20-b7f9-3f75d70adacd">10. Other Links</a></li>
+<li><a href="#h-547100f8-09b9-4160-ae84-9e2fea00aba5">10. Mizar</a></li>
+<li><a href="#h-cd1194c0-4b09-4fd9-810c-044b646f78f9">11. Run 64-bit mode</a></li>
+<li><a href="#h-88c07655-f971-4a20-b7f9-3f75d70adacd">12. Other Links</a></li>
 </ul>
 </div>
 </div>
@@ -351,7 +354,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="org9bde902">
+<pre class="example" id="org58805d0">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -362,7 +365,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="orge416d25">
+<pre class="example" id="org9427374">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -371,7 +374,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="orgd2992f9">
+<pre class="example" id="orgfcf5df2">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -419,7 +422,10 @@ the <code>dev</code> version of the libraries:
 ...
 ~/src/emacs/$ sudo apt-get install libm17n-dev libgif-dev libxpm-dev libtiff5-dev
 ...
-~/src/emacs/$ sudo apt-get install libpng-dev gnutls-dev texinfo
+~/src/emacs/$ sudo apt-get install libpng-dev gnutls-dev texinfo libjansson-dev
+...
+~/src/emacs/$ sudo apt-get install build-essential libx11-dev libjpeg-dev libpng-dev libgif-dev libxaw-dev libncurses-dev libgnutls28-dev
+...
 </pre>
 
 <p>
@@ -441,11 +447,22 @@ error saying Emacs won't compile with <code>-ffinite-math-only</code>).
 <div id="outline-container-h-505fbdb9-12a4-46d8-9daf-46229887468f" class="outline-3">
 <h3 id="h-505fbdb9-12a4-46d8-9daf-46229887468f"><span class="section-number-3">4.1.</span> Attempting Configuration</h3>
 <div class="outline-text-3" id="text-h-505fbdb9-12a4-46d8-9daf-46229887468f">
-<pre class="example" id="org4b3c74c">
+<pre class="example" id="orgcfe20f7">
 ~/src/emacs/$ git clean -dxf
 ~/src/emacs/$ ./autogen.sh
 ~/src/emacs/$ ./configure --with-m17n-flt --with-modules --with-json --with-threads --with-included-regex --with-compress-install CFLAGS="-Ofast -mtune=native -mcpu=native -marm"
 </pre>
+
+<p>
+I also need to make sure I have <code>libncurses-dev</code> installed and,
+depending on the configuration choices:
+</p>
+
+<ul class="org-ul">
+<li><code>--with-x-toolkit=motif</code> requires <code>libmotif-dev</code></li>
+<li><code>--with-x-toolkit=lucid</code> requires <code>libxaw7-dev</code> being installed</li>
+<li><code>--with-xft</code> requires installing <code>libxft-dev</code></li>
+</ul>
 </div>
 </div>
 
@@ -713,6 +730,20 @@ AddToFunc RestartFunction
 </ul>
 </div>
 </div>
+
+<div id="outline-container-h-42f8cb5f-78d3-4c5b-9aed-9471a4249dfa" class="outline-3">
+<h3 id="h-42f8cb5f-78d3-4c5b-9aed-9471a4249dfa"><span class="section-number-3">8.4.</span> URXVT Terminal</h3>
+<div class="outline-text-3" id="text-h-42f8cb5f-78d3-4c5b-9aed-9471a4249dfa">
+<p>
+Instead of <code>xterm</code>, one could instead install <code>rxvt-unicode</code> which is
+very nift.
+</p>
+
+<ul class="org-ul">
+<li><a href="https://opensource.com/article/19/10/why-use-rxvt-terminal">Why use RXVT Terminal</a></li>
+</ul>
+</div>
+</div>
 </div>
 
 <div id="outline-container-h-70ef8113-f25f-4e98-96eb-f65586aa779a" class="outline-2">
@@ -724,7 +755,7 @@ command <code>/opt/vc/bin/vcgencmd measure_temp</code>. I've stuck this into a
 script:
 </p>
 
-<pre class="example" id="orgeda2f03">
+<pre class="example" id="org398002d">
 #!/bin/bash
 
 # ~/temperature.sh
@@ -734,8 +765,69 @@ script:
 </div>
 </div>
 
+<div id="outline-container-h-547100f8-09b9-4160-ae84-9e2fea00aba5" class="outline-2">
+<h2 id="h-547100f8-09b9-4160-ae84-9e2fea00aba5"><span class="section-number-2">10.</span> Mizar</h2>
+<div class="outline-text-2" id="text-h-547100f8-09b9-4160-ae84-9e2fea00aba5">
+<p>
+I couldn't get Mizar working on my Raspberry Pi 2, but it works on
+Raspberry Pi 4B. Get the latest version <a href="http://mizar.uwb.edu.pl/system/index.html#download">here</a> for Linux (ARM).
+</p>
+
+<pre class="example" id="org2eaecd5">
+~/src/$ mkdir mizar
+~/src/$ cd mizar
+~/src/mizar/$ wget mizar-&lt;version&gt;-arm-linux.tar
+...
+~/src/mizar/$ tar -xvf mizar-...-linux.tar
+...
+~/src/mizar/$ sudo ./install.sh
+...
+</pre>
+
+<p>
+When I try running, say, <code>mizf</code> on 32-bit mode, I get errors:
+</p>
+
+<pre class="example" id="org880b508">
+alex@raspberrypi:~/src/mizar-playground $ mizf text/char.miz
+Illegal instruction
+Illegal instruction
+Illegal instruction
+alex@raspberrypi:~/src/mizar-playground $
+</pre>
+
+<p>
+In 64-bit mode, I get errors:
+</p>
+<pre class="example" id="org270be17">
+alex@raspberrypi:~/src/mizar-playground $ mizf text/char
+/usr/local/bin/mizf: 8: makeenv: Exec format error
+/usr/local/bin/mizf: 13: errflag: Exec format error
+/usr/local/bin/mizf: 14: addfmsg: Exec format erro
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-cd1194c0-4b09-4fd9-810c-044b646f78f9" class="outline-2">
+<h2 id="h-cd1194c0-4b09-4fd9-810c-044b646f78f9"><span class="section-number-2">11.</span> Run 64-bit mode</h2>
+<div class="outline-text-2" id="text-h-cd1194c0-4b09-4fd9-810c-044b646f78f9">
+<p>
+To make Raspberry Pi 4 run in 64-bit mode, add the following line to the
+bottom of your <code>/boot/config.txt</code>:
+</p>
+
+<pre class="example" id="orgb91f0ec">
+arm_64bit=1
+</pre>
+
+<ul class="org-ul">
+<li><a href="https://www.raspberrypi.com/documentation/computers/config_txt.html">Confix.txt documentation</a></li>
+</ul>
+</div>
+</div>
+
 <div id="outline-container-h-88c07655-f971-4a20-b7f9-3f75d70adacd" class="outline-2">
-<h2 id="h-88c07655-f971-4a20-b7f9-3f75d70adacd"><span class="section-number-2">10.</span> Other Links</h2>
+<h2 id="h-88c07655-f971-4a20-b7f9-3f75d70adacd"><span class="section-number-2">12.</span> Other Links</h2>
 <div class="outline-text-2" id="text-h-88c07655-f971-4a20-b7f9-3f75d70adacd">
 <ul class="org-ul">
 <li><a href="http://informatimago.com/articles/raspberrypi/ccl-sur-qemu.html">CCL on RPi</a> (French)</li>
@@ -748,7 +840,7 @@ script:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-15 Sat 15:01.</p>
+<p class="postamble">Last Updated 2022-01-20 Thu 18:31.</p>
 </div>
 </body>
 </html>

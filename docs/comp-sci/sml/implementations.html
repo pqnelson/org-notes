@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-18 Tue 08:49 -->
+<!-- 2022-01-20 Thu 18:33 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Implementations - SML</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -242,7 +242,11 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#h-542dda25-92a9-4242-981a-326396c9d891">1. Poly/ML</a></li>
-<li><a href="#h-a474e941-9a4f-45e9-bf6c-0434934dfe24">2. MLton</a></li>
+<li><a href="#h-a474e941-9a4f-45e9-bf6c-0434934dfe24">2. MLton</a>
+<ul>
+<li><a href="#h-c96a1a4f-8997-4297-b4a6-4d2446fac78d">2.1. On Raspberry Pi</a></li>
+</ul>
+</li>
 <li><a href="#h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515">3. SML/NJ</a></li>
 <li><a href="#h-8bee04cc-0008-4a29-af61-8d0d0203aeb3">4. MLKit</a></li>
 </ul>
@@ -254,7 +258,7 @@ Pi" post.
 </p>
 
 <div id="outline-container-h-542dda25-92a9-4242-981a-326396c9d891" class="outline-2">
-<h2 id="h-542dda25-92a9-4242-981a-326396c9d891"><span class="section-number-2">1</span> Poly/ML</h2>
+<h2 id="h-542dda25-92a9-4242-981a-326396c9d891"><span class="section-number-2">1.</span> Poly/ML</h2>
 <div class="outline-text-2" id="text-h-542dda25-92a9-4242-981a-326396c9d891">
 <p>
 This seems to work fine. If you have a 32-bit ARM computer, then it will
@@ -262,7 +266,7 @@ simply compile bytecode, which will run considerably slower. The basic
 steps <a href="https://www.polyml.org/download.html">seems to be:</a>
 </p>
 
-<pre class="example" id="orgc5e7b8f">
+<pre class="example" id="org25e7d88">
 ~/src/$ git clone https://github.com/polyml/polyml.git
 ~/src/polyml/$ cd polyml
 ~/src/polyml/$ ./configure
@@ -279,7 +283,7 @@ opensource projects transitioning to support 64-bit ARM).
 </div>
 
 <div id="outline-container-h-a474e941-9a4f-45e9-bf6c-0434934dfe24" class="outline-2">
-<h2 id="h-a474e941-9a4f-45e9-bf6c-0434934dfe24"><span class="section-number-2">2</span> MLton</h2>
+<h2 id="h-a474e941-9a4f-45e9-bf6c-0434934dfe24"><span class="section-number-2">2.</span> MLton</h2>
 <div class="outline-text-2" id="text-h-a474e941-9a4f-45e9-bf6c-0434934dfe24">
 <p>
 This needs an existing SML compiler for the bootstrap process.
@@ -300,10 +304,29 @@ I have tried <code>make MLTON_COMPILE_ARGS="-codegen c" all</code>.
 <li><a href="http://www.mlton.org/pipermail/mlton-devel/2007-June/029877.html">Re: Cross compile on ARM successful</a> MLton mailing list thread</li>
 </ul>
 </div>
+
+<div id="outline-container-h-c96a1a4f-8997-4297-b4a6-4d2446fac78d" class="outline-3">
+<h3 id="h-c96a1a4f-8997-4297-b4a6-4d2446fac78d"><span class="section-number-3">2.1.</span> On Raspberry Pi</h3>
+<div class="outline-text-3" id="text-h-c96a1a4f-8997-4297-b4a6-4d2446fac78d">
+<p>
+This is actually harder than I realized to get this working on a
+Raspberry pi 4. What I ended up doing is modifying my
+<code>/etc/apt/sources.list</code> to include a Debian repo, then I was able to
+<code>sudo apt install mlton</code>. (There is some trickiness here, with
+<a href="https://ccm.net/faq/809-debian-apt-get-no-pubkey-gpg-error">pubkey errors</a>.) I then used this to compile MLton from scratch.
+</p>
+
+<p>
+Another caveat is that this will run into problems if your
+<code>/boot/config.txt</code> includes the line specifying it to run in 64-bit
+mode.
+</p>
+</div>
+</div>
 </div>
 
 <div id="outline-container-h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515" class="outline-2">
-<h2 id="h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515"><span class="section-number-2">3</span> SML/NJ</h2>
+<h2 id="h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515"><span class="section-number-2">3.</span> SML/NJ</h2>
 <div class="outline-text-2" id="text-h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515">
 <p>
 Doesn't support 32-bit ARM, and intends to support 64-bit ARM in the
@@ -322,7 +345,7 @@ This is yet another incentive to upgrade to a 64-bit Raspberry Pi&#x2026;
 </div>
 
 <div id="outline-container-h-8bee04cc-0008-4a29-af61-8d0d0203aeb3" class="outline-2">
-<h2 id="h-8bee04cc-0008-4a29-af61-8d0d0203aeb3"><span class="section-number-2">4</span> MLKit</h2>
+<h2 id="h-8bee04cc-0008-4a29-af61-8d0d0203aeb3"><span class="section-number-2">4.</span> MLKit</h2>
 <div class="outline-text-2" id="text-h-8bee04cc-0008-4a29-af61-8d0d0203aeb3">
 <p>
 Only supports x86 and Javascript, so I couldn't get it working on my
@@ -337,7 +360,7 @@ removed to support Javascript.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-18 Tue 08:49.</p>
+<p class="postamble">Last Updated 2022-01-20 Thu 18:31.</p>
 </div>
 </body>
 </html>
