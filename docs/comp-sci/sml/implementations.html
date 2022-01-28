@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-20 Thu 18:33 -->
+<!-- 2022-01-28 Fri 09:23 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Implementations - SML</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -244,7 +244,11 @@
 <li><a href="#h-542dda25-92a9-4242-981a-326396c9d891">1. Poly/ML</a></li>
 <li><a href="#h-a474e941-9a4f-45e9-bf6c-0434934dfe24">2. MLton</a>
 <ul>
-<li><a href="#h-c96a1a4f-8997-4297-b4a6-4d2446fac78d">2.1. On Raspberry Pi</a></li>
+<li><a href="#h-c96a1a4f-8997-4297-b4a6-4d2446fac78d">2.1. On Raspberry Pi</a>
+<ul>
+<li><a href="#h-d3cc257f-9ad7-4953-9db1-abbed247e1f7">2.1.1. Remote Compiling</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515">3. SML/NJ</a></li>
@@ -258,7 +262,7 @@ Pi" post.
 </p>
 
 <div id="outline-container-h-542dda25-92a9-4242-981a-326396c9d891" class="outline-2">
-<h2 id="h-542dda25-92a9-4242-981a-326396c9d891"><span class="section-number-2">1.</span> Poly/ML</h2>
+<h2 id="h-542dda25-92a9-4242-981a-326396c9d891"><span class="section-number-2">1</span> Poly/ML</h2>
 <div class="outline-text-2" id="text-h-542dda25-92a9-4242-981a-326396c9d891">
 <p>
 This seems to work fine. If you have a 32-bit ARM computer, then it will
@@ -266,11 +270,12 @@ simply compile bytecode, which will run considerably slower. The basic
 steps <a href="https://www.polyml.org/download.html">seems to be:</a>
 </p>
 
-<pre class="example" id="org25e7d88">
+<pre class="example" id="org79147bb">
 ~/src/$ git clone https://github.com/polyml/polyml.git
 ~/src/polyml/$ cd polyml
 ~/src/polyml/$ ./configure
 ~/src/polyml/$ make
+~/src/polyml/$ make compiler
 ~/src/polyml/$ sudo make install
 </pre>
 
@@ -279,22 +284,66 @@ It may be worth considering upgrading to a Raspberry Pi 3B+ or 4, since
 Apple has transitioned to 64-bit ARM (we will end up piggie-backing off
 opensource projects transitioning to support 64-bit ARM).
 </p>
+
+<p>
+Note: since commit <code>15c840d4</code>, the ARM64 performance has improved
+drastically.
+</p>
+
+<ul class="org-ul">
+<li><a href="https://github.com/polyml/polyml">Github page</a> for Poly/ML</li>
+</ul>
 </div>
 </div>
 
 <div id="outline-container-h-a474e941-9a4f-45e9-bf6c-0434934dfe24" class="outline-2">
-<h2 id="h-a474e941-9a4f-45e9-bf6c-0434934dfe24"><span class="section-number-2">2.</span> MLton</h2>
+<h2 id="h-a474e941-9a4f-45e9-bf6c-0434934dfe24"><span class="section-number-2">2</span> MLton</h2>
 <div class="outline-text-2" id="text-h-a474e941-9a4f-45e9-bf6c-0434934dfe24">
 <p>
 This needs an existing SML compiler for the bootstrap process.
 </p>
 
 <p>
-I think <code>make polyml-mlton</code> may work as well.
+I think <code>make polyml-mlton</code> may work as well. Although the <code>make bootstrap-polyml</code>
+command may be the intended command.
 </p>
 
 <p>
-I have tried <code>make MLTON_COMPILE_ARGS="-codegen c" all</code>.
+I have tried <code>make MLTON_COMPILE_ARGS="-codegen c" all</code>. I think
+<code>-codegen llvm</code> may produce better results?
+</p>
+
+<p>
+It seems a better approach may be to cross-compile MLton on another
+computer. Basically, on my x64 machine with 12GB of RAM, I ran the
+following:
+</p>
+
+<pre class="example" id="orgfd849b5">
+alex@x64:~/src/$ git clone https://github.com/mlton/mlton
+alex@x64:~/src/$ cd mlton
+alex@x64:~/src/mlton/$ make
+...
+alex@x64:~/src/mlton/$ make REMOTE_MACHINE=alex@raspberry.local remote-bootstrap
+...
+</pre>
+
+<p>
+If you do this, you might want to have your pubkey on your Raspberry Pi,
+otherwise you'll end up logging in several dozen times over the course
+of an hour or so. But it works! (I learned about this <code>REMOTE_MACHINE</code>
+trick from <a href="https://github.com/MLton/mlton/issues/438">github issues</a>.)
+</p>
+
+<p>
+Well, right now, it breaks on the <code>$(MAKE) remote--make-all</code> step for me
+(c.f., <a href="https://github.com/MLton/mlton/issues/438#issuecomment-849623610">steps</a> in the remote build process).
+</p>
+
+<p>
+In fact, you might want to run <code>scp ~/.ssh/id_rsa.pub alex@raspberrypi.local:.ssh/authorized_keys</code>
+to avoid signing in repeatedly. And if you don't have an RSA key, you
+might want to follow <a href="http://web.archive.org/web/20160404025901/http://jaybyjayfresh.com/2009/02/04/logging-in-without-a-password-certificates-ssh/">these instructions</a>.
 </p>
 
 <ul class="org-ul">
@@ -306,7 +355,7 @@ I have tried <code>make MLTON_COMPILE_ARGS="-codegen c" all</code>.
 </div>
 
 <div id="outline-container-h-c96a1a4f-8997-4297-b4a6-4d2446fac78d" class="outline-3">
-<h3 id="h-c96a1a4f-8997-4297-b4a6-4d2446fac78d"><span class="section-number-3">2.1.</span> On Raspberry Pi</h3>
+<h3 id="h-c96a1a4f-8997-4297-b4a6-4d2446fac78d"><span class="section-number-3">2.1</span> On Raspberry Pi</h3>
 <div class="outline-text-3" id="text-h-c96a1a4f-8997-4297-b4a6-4d2446fac78d">
 <p>
 This is actually harder than I realized to get this working on a
@@ -319,14 +368,44 @@ Raspberry pi 4. What I ended up doing is modifying my
 <p>
 Another caveat is that this will run into problems if your
 <code>/boot/config.txt</code> includes the line specifying it to run in 64-bit
-mode.
+mode. In fact, this borked my installation, and I had to reinstall
+Raspbian lite.
 </p>
+</div>
+
+<div id="outline-container-h-d3cc257f-9ad7-4953-9db1-abbed247e1f7" class="outline-4">
+<h4 id="h-d3cc257f-9ad7-4953-9db1-abbed247e1f7"><span class="section-number-4">2.1.1</span> Remote Compiling</h4>
+<div class="outline-text-4" id="text-h-d3cc257f-9ad7-4953-9db1-abbed247e1f7">
+<p>
+The exact failure is during the <code>remote--make-all</code> step:
+</p>
+
+<pre class="example" id="org19fb550">
+Compiling mlton
+"/tmp/mlton-20210117.153942-gb1f1f0f09/boot/bin/mlton" \
+	@MLton ram-slop 0.7  gc-summary -- \
+	 -verbose 2 	\
+	-target self -output mlton-compile			\
+	mlton-stubs.mlb
+MLton 20210117.153942-gb1f1f0f09 starting
+   Compile SML starting
+      frontend starting
+         parseAndElaborate starting
+make[2]: Leaving directory '/tmp/mlton-20210117.153942-gb1f1f0f09/mlton'
+Segmentation fault
+make[2]: *** [Makefile:72: mlton-compile] Error 139
+make[1]: Leaving directory '/tmp/mlton-20210117.153942-gb1f1f0f09'
+make[1]: *** [Makefile:75: compiler] Error 2
+make: *** [Makefile:19: all] Error 2
+make: *** [Makefile:666: remote--make-all] Error 2
+</pre>
+</div>
 </div>
 </div>
 </div>
 
 <div id="outline-container-h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515" class="outline-2">
-<h2 id="h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515"><span class="section-number-2">3.</span> SML/NJ</h2>
+<h2 id="h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515"><span class="section-number-2">3</span> SML/NJ</h2>
 <div class="outline-text-2" id="text-h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515">
 <p>
 Doesn't support 32-bit ARM, and intends to support 64-bit ARM in the
@@ -345,7 +424,7 @@ This is yet another incentive to upgrade to a 64-bit Raspberry Pi&#x2026;
 </div>
 
 <div id="outline-container-h-8bee04cc-0008-4a29-af61-8d0d0203aeb3" class="outline-2">
-<h2 id="h-8bee04cc-0008-4a29-af61-8d0d0203aeb3"><span class="section-number-2">4.</span> MLKit</h2>
+<h2 id="h-8bee04cc-0008-4a29-af61-8d0d0203aeb3"><span class="section-number-2">4</span> MLKit</h2>
 <div class="outline-text-2" id="text-h-8bee04cc-0008-4a29-af61-8d0d0203aeb3">
 <p>
 Only supports x86 and Javascript, so I couldn't get it working on my
@@ -360,7 +439,7 @@ removed to support Javascript.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-20 Thu 18:31.</p>
+<p class="postamble">Last Updated 2022-01-28 Fri 09:13.</p>
 </div>
 </body>
 </html>

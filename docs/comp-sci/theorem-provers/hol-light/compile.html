@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-20 Thu 18:33 -->
+<!-- 2022-01-26 Wed 09:25 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Compiling HOL Light</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -248,7 +248,7 @@
 </div>
 
 <div id="outline-container-h-c4e6f09e-d81f-4265-a808-d19c8167a1ea" class="outline-2">
-<h2 id="h-c4e6f09e-d81f-4265-a808-d19c8167a1ea"><span class="section-number-2">1.</span> OPAM</h2>
+<h2 id="h-c4e6f09e-d81f-4265-a808-d19c8167a1ea"><span class="section-number-2">1</span> OPAM</h2>
 <div class="outline-text-2" id="text-h-c4e6f09e-d81f-4265-a808-d19c8167a1ea">
 <p>
 <b>CAUTION:</b> You will run into problems if you have <code>arm_64=1</code> in your
@@ -264,7 +264,7 @@ On a Raspberry Pi, simply install OCaml using <code>sudo apt install ocaml</code
 Then clone and build OPAM:
 </p>
 
-<pre class="example" id="org4950b81">
+<pre class="example" id="org3ef8c43">
 alex@rpi:~/$ cd src
 alex@rpi:~/src/$ git clone https://github.com/ocaml/opam
 ...
@@ -279,7 +279,7 @@ alex@rpi:~/src/OPAM/$ sudo make install
 Before we finish, we need to also install bubblewrap&#x2026;because&#x2026;reasons&#x2026;
 </p>
 
-<pre class="example" id="org595ef44">
+<pre class="example" id="org384a5dd">
 alex@rpi:~/src/OPAM/$ sudo apt install bubblewrap
 alex@rpi:~/src/OPAM/$ cd ~
 alex@rpi:~/$ opam init
@@ -304,14 +304,14 @@ alex@rpi:~/$ opam init
   You can always re-run this setup with 'opam init' later.
 
 Do you want opam to modify ~/.bash_profile? [N/y/f]
-(default is 'no', use 'f' to choose a different file) y
+(default is 'no', use 'f' to choose a different file) y                                                           
 
 User configuration:
   Updating ~/.bash_profile.
 [NOTE] Make sure that ~/.bash_profile is well sourced in your ~/.bashrc.
 
 
-&lt;&gt;&lt;&gt; Creating initial switch 'default' (invariant ["ocaml" {&gt;= "4.05.0"}] - initially with ocaml-system)
+&lt;&gt;&lt;&gt; Creating initial switch 'default' (invariant ["ocaml" {&gt;= "4.05.0"}] - initially with ocaml-system) 
 
 &lt;&gt;&lt;&gt; Installing new switch packages &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
 Switch invariant: ["ocaml" {&gt;= "4.05.0"}]
@@ -339,7 +339,7 @@ Now we build the infrastructure necessary to play with HOL Light (this
 will take about an hour in the following state):
 </p>
 
-<pre class="example" id="orgcba934f">
+<pre class="example" id="orge190359">
 alex@raspberrypi:~$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Installing new switch packages &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -363,13 +363,13 @@ Processing 13/18: [ocaml-base-compiler: make world]
 </div>
 
 <div id="outline-container-h-6467e267-dbcd-494e-b403-9446923a786e" class="outline-2">
-<h2 id="h-6467e267-dbcd-494e-b403-9446923a786e"><span class="section-number-2">2.</span> HOL Light</h2>
+<h2 id="h-6467e267-dbcd-494e-b403-9446923a786e"><span class="section-number-2">2</span> HOL Light</h2>
 <div class="outline-text-2" id="text-h-6467e267-dbcd-494e-b403-9446923a786e">
 <p>
 Clone HOL Light from github:
 </p>
 
-<pre class="example" id="orga82ce39">
+<pre class="example" id="org92e1d93">
 alex@box:~/src/$ git clone https://github.com/jrh13/hol-light
 Cloning into 'hol-light'...
 remote: Enumerating objects: 8310, done.
@@ -380,7 +380,7 @@ Receiving objects: 100% (8310/8310), 27.50 MiB | 5.38 MiB/s, done.
 Resolving deltas: 100% (5585/5585), done.
 
 alex@box:~/src/$ cd hol-light
-alex@box:~/src/hol-light/$
+alex@box:~/src/hol-light/$ 
 </pre>
 
 <p>
@@ -393,7 +393,7 @@ The trippy thing is we need to use OPAM to use the "correct" version of
 OCaml (c.f., <a href="https://github.com/jrh13/hol-light/issues/64#issuecomment-894131933">Github Issue</a>), the following bash commands should work:
 </p>
 
-<pre class="example" id="orgf501a6e">
+<pre class="example" id="org58f1394">
 opam switch create 4.05.0
 eval $(opam env)
 opam pin add camlp5 7.08
@@ -413,7 +413,7 @@ on <code>Processing 7/12: [ocaml-base-compiler ...]</code>, but that's because
 it's building the OCaml compiler from scratch; be patient!):
 </p>
 
-<pre class="example" id="org99fa212">
+<pre class="example" id="org1aa504e">
 alex@box:~/src/hol-light/$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Gathering sources &gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -459,7 +459,7 @@ Do you want to continue? [Y/n] y
 ∗ installed num.0
 Done.
 
-alex@box:~/src/hol-light/$
+alex@box:~/src/hol-light/$ 
 </pre>
 
 <p>
@@ -467,7 +467,7 @@ Now, the next step is to run <code>make</code>.
 <b>It is crucial to run <code>make</code> before loading hol into an OCaml repl.</b>
 </p>
 
-<pre class="example" id="org856c29e">
+<pre class="example" id="orge7105eb">
 alex@box:~/src/hol-light/$ make
 ...
 </pre>
@@ -478,14 +478,14 @@ include camlp5, and then tell it to <code>#use "hol.ml";;</code> (yes, both
 semicolons are necessary).
 </p>
 
-<pre class="example" id="org49fba08">
+<pre class="example" id="org1d21f65">
 alex@box:~/src/hol-light/$ ocaml -I `camlp5 -where` camlp5o.cma
 
         OCaml version 4.05.0
 
 	Camlp5 parsing version 7.08
 
-#
+# 
 </pre>
 
 <p>
@@ -499,7 +499,7 @@ error, which is just confusing and cryptic.)
 Now we can simply <code>#use "hol.ml";;</code> to get:
 </p>
 
-<pre class="example" id="orgfe44ff7">
+<pre class="example" id="org208bbe0">
 # #use "hol.ml";;
 ...
 ...
@@ -512,7 +512,7 @@ File "help.ml" already loaded
 - : unit = ()
 	Camlp5 parsing version 7.08
 
-#
+# 
 </pre>
 
 <p>
@@ -528,7 +528,7 @@ used just by starting HOL Light in this manner.</p>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-20 Thu 18:31.</p>
+<p class="postamble">Last Updated 2022-01-20 Thu 12:01.</p>
 </div>
 </body>
 </html>

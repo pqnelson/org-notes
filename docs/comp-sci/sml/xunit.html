@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-20 Thu 18:33 -->
+<!-- 2022-01-27 Thu 14:57 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>XUnit Framework - SML</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -254,7 +254,7 @@
 </div>
 
 <div id="outline-container-h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4" class="outline-2">
-<h2 id="h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4"><span class="section-number-2">1.</span> Overview</h2>
+<h2 id="h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4"><span class="section-number-2">1</span> Overview</h2>
 <div class="outline-text-2" id="text-h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4">
 <p>
 I'm going to try to iteratively construct an xUnit testing framework in
@@ -269,7 +269,7 @@ We will have one <b>test suite</b> per file, which consists of many <b>test case
 </div>
 
 <div id="outline-container-h-303d6523-5b1b-4c46-8586-fc19dd362eeb" class="outline-2">
-<h2 id="h-303d6523-5b1b-4c46-8586-fc19dd362eeb"><span class="section-number-2">2.</span> First Draft</h2>
+<h2 id="h-303d6523-5b1b-4c46-8586-fc19dd362eeb"><span class="section-number-2">2</span> First Draft</h2>
 <div class="outline-text-2" id="text-h-303d6523-5b1b-4c46-8586-fc19dd362eeb">
 <p>
 We will just have an <code>assert</code> function which reports failure by means of
@@ -369,7 +369,7 @@ run ex_tests;
 </div>
 
 <div id="outline-container-h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b" class="outline-2">
-<h2 id="h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b"><span class="section-number-2">3.</span> Refactoring Test Results and Test Reporting</h2>
+<h2 id="h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b"><span class="section-number-2">3</span> Refactoring Test Results and Test Reporting</h2>
 <div class="outline-text-2" id="text-h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b">
 <p>
 Now, xUnit testing wants to produce an "artifact" from running through
@@ -488,7 +488,7 @@ microseconds instead.
 Now we could run this on the example tests by doing something like:
 </p>
 
-<pre class="example" id="org4b633a6">
+<pre class="example" id="org4ba734d">
 val ex_results = run_test ex_tests;
 
 report_results ex_results;
@@ -508,7 +508,7 @@ So far, so good!
 </div>
 
 <div id="outline-container-h-6c77fd79-b060-4a5b-971b-0f99b3736c54" class="outline-2">
-<h2 id="h-6c77fd79-b060-4a5b-971b-0f99b3736c54"><span class="section-number-2">4.</span> Summarize results</h2>
+<h2 id="h-6c77fd79-b060-4a5b-971b-0f99b3736c54"><span class="section-number-2">4</span> Summarize results</h2>
 <div class="outline-text-2" id="text-h-6c77fd79-b060-4a5b-971b-0f99b3736c54">
 <p>
 It's not terribly useful to print out every test case which succeeds,
@@ -563,7 +563,7 @@ summing over the summaries of its constituents.
 Now we could check the summary of our toy test suite:
 </p>
 
-<pre class="example" id="orgaa8bafc">
+<pre class="example" id="orgf12632c">
 summarize ex_results;
 
 (* SML/NJ produces:
@@ -575,7 +575,7 @@ val it = {errors=0,fail=1,success=1} : {errors:int, fail:int, success:int}
 </div>
 
 <div id="outline-container-h-b341cf44-e93f-418f-b0d4-2bc8dcba2674" class="outline-2">
-<h2 id="h-b341cf44-e93f-418f-b0d4-2bc8dcba2674"><span class="section-number-2">5.</span> Quality of life helper functions</h2>
+<h2 id="h-b341cf44-e93f-418f-b0d4-2bc8dcba2674"><span class="section-number-2">5</span> Quality of life helper functions</h2>
 <div class="outline-text-2" id="text-h-b341cf44-e93f-418f-b0d4-2bc8dcba2674">
 <p>
 Right now, it's rather tedious to write a test suite. The conventions
@@ -584,7 +584,7 @@ test suite be contained in its own file. So I would love to write
 something like:
 </p>
 
-<pre class="example" id="orgc477be2">
+<pre class="example" id="org0b85cc1">
 suite "FooBarTests";
 
 test "BaazTest1" fn () =&gt; (* ... *);
@@ -660,7 +660,7 @@ list of tests.
 </div>
 
 <div id="outline-container-h-a7123449-f3a8-4555-8ad2-416c6423d04d" class="outline-2">
-<h2 id="h-a7123449-f3a8-4555-8ad2-416c6423d04d"><span class="section-number-2">6.</span> Reporter Module</h2>
+<h2 id="h-a7123449-f3a8-4555-8ad2-416c6423d04d"><span class="section-number-2">6</span> Reporter Module</h2>
 <div class="outline-text-2" id="text-h-a7123449-f3a8-4555-8ad2-416c6423d04d">
 <p>
 We can now refactor the reporter routines into their own modules. The
@@ -697,7 +697,7 @@ The output for a test suite which has no errors or failures would
 consist of two lines:
 </p>
 
-<pre class="example" id="org453924d">
+<pre class="example" id="org97ce93c">
 Running &lt;file path&gt;
 Tests run: &lt;number&gt;, Failures: &lt;number&gt;, Errors: &lt;number&gt;, Skipped: &lt;number&gt;, Time elapsed: &lt;interval s - in &lt;file path&gt;
 </pre>
@@ -746,7 +746,7 @@ Now we can run this on our example test results, which will produce
 something like the following:
 </p>
 
-<pre class="example" id="org375afaf">
+<pre class="example" id="org4ac2fe0">
 - JUnitTt.report ex_results;
 Running Arithmetic Tests
 Arithmetic test 2 FAIL: 1+1=3
@@ -757,7 +757,7 @@ val it = () : JUnitTt.t
 </div>
 
 <div id="outline-container-h-2bb3e70c-7422-4378-aa81-43996c8bfdff" class="outline-2">
-<h2 id="h-2bb3e70c-7422-4378-aa81-43996c8bfdff"><span class="section-number-2">7.</span> XML Output</h2>
+<h2 id="h-2bb3e70c-7422-4378-aa81-43996c8bfdff"><span class="section-number-2">7</span> XML Output</h2>
 <div class="outline-text-2" id="text-h-2bb3e70c-7422-4378-aa81-43996c8bfdff">
 <p>
 This is just to have a Jenkins-compatible artifact, so I could have a
@@ -766,17 +766,106 @@ in theory). The best summary of JUnit's schema seems to be found <a href="https:
 Actually, with our work done so far, this amounts to be just an exercise
 in writing some SML code.
 </p>
+
+<p>
+Schematically, the XML output from JUnit looks like:
+</p>
+
+<pre class="example" id="org70d304b">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- a description of the JUnit XML format and how Jenkins parses it. See also junit.xsd --&gt;
+
+&lt;!-- if only a single testsuite element is present, the testsuites
+     element can be omitted. All attributes are optional. --&gt;
+&lt;testsuites disabled="" &lt;!-- total number of disabled tests from all testsuites. --&gt;
+            errors=""   &lt;!-- total number of tests with error result from all testsuites. --&gt;
+            failures="" &lt;!-- total number of failed tests from all testsuites. --&gt;
+            name=""
+            tests=""    &lt;!-- total number of tests from all testsuites. Some software may expect to only see the number of successful tests from all testsuites though. --&gt;
+            time=""     &lt;!-- time in seconds to execute all test suites. --&gt;
+	    &gt;
+  &lt;!-- testsuite can appear multiple times, if contained in a testsuites element.
+       It can also be the root element. --&gt;
+  &lt;testsuite name=""      &lt;!-- Full (class) name of the test for non-aggregated testsuite documents.
+                               Class name without the package for aggregated testsuites documents. Required --&gt;
+         tests=""     &lt;!-- The total number of tests in the suite, required. --&gt;
+         disabled=""  &lt;!-- the total number of disabled tests in the suite. optional --&gt;
+         errors=""    &lt;!-- The total number of tests in the suite that errored. An errored test is one that had an unanticipated problem,
+                           for example an unchecked throwable; or a problem with the implementation of the test. optional --&gt;
+         failures=""  &lt;!-- The total number of tests in the suite that failed. A failure is a test which the code has explicitly failed
+                           by using the mechanisms for that purpose. e.g., via an assertEquals. optional --&gt;
+         hostname=""  &lt;!-- Host on which the tests were executed. 'localhost' should be used if the hostname cannot be determined. optional --&gt;
+         id=""        &lt;!-- Starts at 0 for the first testsuite and is incremented by 1 for each following testsuite --&gt;
+         package=""   &lt;!-- Derived from testsuite/@name in the non-aggregated documents. optional --&gt;
+         skipped=""   &lt;!-- The total number of skipped tests. optional --&gt;
+         time=""      &lt;!-- Time taken (in seconds) to execute the tests in the suite. optional --&gt;
+         timestamp="" &lt;!-- when the test was executed in ISO 8601 format (2014-01-21T16:17:18). Timezone may not be specified. optional --&gt;
+         &gt;
+
+    &lt;!-- Properties (e.g., environment settings) set during test
+     execution. The properties element can appear 0 or once. --&gt;
+    &lt;properties&gt;
+      &lt;!-- property can appear multiple times. The name and value attributres are required. --&gt;
+      &lt;property name="" value=""/&gt;
+    &lt;/properties&gt;
+
+    &lt;!-- testcase can appear multiple times, see /testsuites/testsuite@tests --&gt;
+    &lt;testcase name=""       &lt;!-- Name of the test method, required. --&gt;
+          assertions="" &lt;!-- number of assertions in the test case. optional --&gt;
+          classname=""  &lt;!-- Full class name for the class the test method is in. required --&gt;
+          status=""
+          time=""       &lt;!-- Time taken (in seconds) to execute the test. optional --&gt;
+          &gt;
+
+      &lt;!-- If the test was not executed or failed, you can specify one
+           the skipped, error or failure elements. --&gt;
+
+      &lt;!-- skipped can appear 0 or once. optional --&gt;
+      &lt;skipped/&gt;
+
+      &lt;!-- Indicates that the test errored. An errored test is one
+           that had an unanticipated problem. For example an unchecked
+           throwable or a problem with the implementation of the
+           test. Contains as a text node relevant data for the error,
+           for example a stack trace. optional --&gt;
+      &lt;error message="" &lt;!-- The error message. e.g., if a java exception is thrown, the return value of getMessage() --&gt;
+         type=""    &lt;!-- The type of error that occured. e.g., if a java execption is thrown the full class name of the exception. --&gt;
+         &gt;&lt;/error&gt;
+
+      &lt;!-- Indicates that the test failed. A failure is a test which
+       the code has explicitly failed by using the mechanisms for
+       that purpose. For example via an assertEquals. Contains as
+       a text node relevant data for the failure, e.g., a stack
+       trace. optional --&gt;
+      &lt;failure message="" &lt;!-- The message specified in the assert. --&gt;
+           type=""    &lt;!-- The type of the assert. --&gt;
+           &gt;&lt;/failure&gt;
+
+      &lt;!-- Data that was written to standard out while the test was executed. optional --&gt;
+      &lt;system-out&gt;&lt;/system-out&gt;
+
+      &lt;!-- Data that was written to standard error while the test was executed. optional --&gt;
+      &lt;system-err&gt;&lt;/system-err&gt;
+    &lt;/testcase&gt;
+
+    &lt;!-- Data that was written to standard out while the test suite was executed. optional --&gt;
+    &lt;system-out&gt;&lt;/system-out&gt;
+    &lt;!-- Data that was written to standard error while the test suite was executed. optional --&gt;
+    &lt;system-err&gt;&lt;/system-err&gt;
+  &lt;/testsuite&gt;
+&lt;/testsuites&gt;
+</pre>
 </div>
 </div>
 
 <div id="outline-container-h-fbfa4c45-7cfd-4022-beea-f3b0eb05d944" class="outline-2">
-<h2 id="h-fbfa4c45-7cfd-4022-beea-f3b0eb05d944"><span class="section-number-2">8.</span> Test Discovery</h2>
+<h2 id="h-fbfa4c45-7cfd-4022-beea-f3b0eb05d944"><span class="section-number-2">8</span> Test Discovery</h2>
 <div class="outline-text-2" id="text-h-fbfa4c45-7cfd-4022-beea-f3b0eb05d944">
 <p>
 Ideally, my project should look like:
 </p>
 
-<pre class="example" id="orgc5e48ee">
+<pre class="example" id="org624a7e0">
 ├── src
 │   ├── main.sml
 │   └── foo.sml
@@ -802,18 +891,22 @@ MLton.)
 </p>
 
 <p>
-Writing code for test discovery may be a bit tricky. I think the fact of
-the matter is that we'll need to add each test suite to the build file,
-and automatically use the relative path as the test suite's name. This
-would involve using <a href="https://smlfamily.github.io/Basis/os-file-sys.html"><code>OS.FileSys</code></a> and possibly <a href="https://smlfamily.github.io/Basis/os-path.html"><code>OS.Path</code></a>, and revising
-our <code>suite</code> method to take no arguments (since it would be inferred
-automatically).
+<del>Writing code for test discovery may be a bit tricky. I think the fact of the matter is that we'll need to add each test suite to the build file, and automatically use the relative path as the test suite's name. This would involve using <a href="https://smlfamily.github.io/Basis/os-file-sys.html"><code>OS.FileSys</code></a> and possibly <a href="https://smlfamily.github.io/Basis/os-path.html"><code>OS.Path</code></a>, and revising
+our <code>suite</code> method to take no arguments (since it would be inferred automatically).</del>
 </p>
+
+<p>
+We can make test discovery done "by hand" using whatever build process,
+and the functions <code>suite</code> and <code>test</code>. The test runner will then iterate
+through the test suites (which are loaded into <code>all_suites</code>), and
+execute them. Thus test discovery boils down to maintaining a list of
+files to compile in the <code>Makefile</code> (or equivalent) in the
+<code>project/test/</code> subdirectory.</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-20 Thu 18:31.</p>
+<p class="postamble">Last Updated 2022-01-26 Wed 12:30.</p>
 </div>
 </body>
 </html>

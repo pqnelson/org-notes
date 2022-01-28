@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-11 Tue 12:09 -->
+<!-- 2022-01-28 Fri 13:12 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Automath</title>
@@ -412,7 +412,7 @@ the context to be empty by just writing <code>&lt;turnstile&gt;</code>.
 Consider the following (adapted from Freek Wiedijk's formalization of
 <a href="http://www.cs.ru.nl/~freek/zfc-etc/holl.aut">HOL Light's logic</a>):
 </p>
-<pre class="example" id="orge6f8175">
+<pre class="example" id="org86bdda3">
   * type : TYPE := PRIM    # sets the context to be initial empty context
   * bool : type := PRIM
   * A : type := ---        # sets the context to be A
@@ -443,14 +443,14 @@ context ending at <code>A</code>, creating a new context <code>A:type, B:type</c
 <p>
 The kernel interprets a line of the form
 </p>
-<pre class="example" id="orgc02be42">
+<pre class="example" id="org177edc7">
 a * [x:T] b := ... : T'
 </pre>
 
 <p>
 as two lines:
 </p>
-<pre class="example" id="orgde1124a">
+<pre class="example" id="orgfe5b924">
 a * x := --- : T
 x * b := ... : T'
 </pre>
@@ -473,7 +473,7 @@ have a proposition be a 2-expression ("type") of the form <code>p : PROP</code>.
 predicate would parametrize this by a "term":
 </p>
 
-<pre class="example" id="org9a99749">
+<pre class="example" id="org09b081b">
    * T : TYPE := ---
  T * [x:T]predicate : [x:T]PROP := PN
 </pre>
@@ -487,7 +487,7 @@ But is <code>[x:T]PROP</code> a valid expression? De Bruijn calls such a thing a
 <p>
 Quantifiers can be written down easily as:
 </p>
-<pre class="example" id="org83c6608">
+<pre class="example" id="orgb9f46e5">
 T * [p:[z:T]PROP] forall : PROP := p
   * [a:PROP][b:PROP] imp:PROP := [x:a]b
   * false : PROP := PRIM
@@ -542,7 +542,7 @@ Bruijn's team.</li>
 <li>N.G. de Bruijn,<br>
 "The mathematical language AUTOMATH, its usage and some of its
 extensions".<br>
-<a href="https://www.win.tue.nl/automath/archive/webversion/aut002/aut002.html">Eprint</a>, dated December 1968</li>
+<a href="https://www.win.tue.nl/automath/archive/webversion/aut002/aut002.html">Eprint</a>, dated December 1968; <a href="http://alexandria.tue.nl/repository/freearticles/597618.pdf">Eprint 2</a></li>
 <li>N.G. de Bruijn,<br>
 "AUTOMATH, a language for mathematics".<br>
 <a href="https://www.win.tue.nl/automath/archive/webversion/aut001/aut001.html">Eprint</a>, T.H. Report 66-WSK-05, dated November 1968</li>
@@ -551,7 +551,7 @@ extensions".<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-21 Sun 10:29.</p>
+<p class="postamble">Last Updated 2022-01-28 Fri 11:47.</p>
 </div>
 </body>
 </html>

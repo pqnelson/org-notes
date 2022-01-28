@@ -28,12 +28,18 @@ steps [[https://www.polyml.org/download.html][seems to be:]]
 ~/src/polyml/$ cd polyml
 ~/src/polyml/$ ./configure
 ~/src/polyml/$ make
+~/src/polyml/$ make compiler
 ~/src/polyml/$ sudo make install
 #+end_example
 
 It may be worth considering upgrading to a Raspberry Pi 3B+ or 4, since
 Apple has transitioned to 64-bit ARM (we will end up piggie-backing off
 opensource projects transitioning to support 64-bit ARM).
+
+Note: since commit ~15c840d4~, the ARM64 performance has improved
+drastically.
+
+- [[https://github.com/polyml/polyml][Github page]] for Poly/ML
 
 * MLton
 :PROPERTIES:
@@ -42,9 +48,36 @@ opensource projects transitioning to support 64-bit ARM).
 
 This needs an existing SML compiler for the bootstrap process.
 
-I think ~make polyml-mlton~ may work as well.
+I think ~make polyml-mlton~ may work as well. Although the ~make bootstrap-polyml~
+command may be the intended command.
 
-I have tried ~make MLTON_COMPILE_ARGS="-codegen c" all~.
+I have tried ~make MLTON_COMPILE_ARGS="-codegen c" all~. I think
+~-codegen llvm~ may produce better results?
+
+It seems a better approach may be to cross-compile MLton on another
+computer. Basically, on my x64 machine with 12GB of RAM, I ran the
+following:
+
+#+begin_example
+alex@x64:~/src/$ git clone https://github.com/mlton/mlton
+alex@x64:~/src/$ cd mlton
+alex@x64:~/src/mlton/$ make
+...
+alex@x64:~/src/mlton/$ make REMOTE_MACHINE=alex@raspberry.local remote-bootstrap
+...
+#+end_example
+
+If you do this, you might want to have your pubkey on your Raspberry Pi,
+otherwise you'll end up logging in several dozen times over the course
+of an hour or so. But it works! (I learned about this ~REMOTE_MACHINE~
+trick from [[https://github.com/MLton/mlton/issues/438][github issues]].)
+
+Well, right now, it breaks on the ~$(MAKE) remote--make-all~ step for me
+(c.f., [[https://github.com/MLton/mlton/issues/438#issuecomment-849623610][steps]] in the remote build process).
+
+In fact, you might want to run =scp ~/.ssh/id_rsa.pub alex@raspberrypi.local:.ssh/authorized_keys=
+to avoid signing in repeatedly. And if you don't have an RSA key, you
+might want to follow [[http://web.archive.org/web/20160404025901/http://jaybyjayfresh.com/2009/02/04/logging-in-without-a-password-certificates-ssh/][these instructions]].
 
 - [[http://mlton.org/Home][Home page]]
 - [[https://github.com/MLton/mlton][Github page]]
@@ -64,7 +97,35 @@ Raspberry pi 4. What I ended up doing is modifying my
 
 Another caveat is that this will run into problems if your
 ~/boot/config.txt~ includes the line specifying it to run in 64-bit
-mode. 
+mode. In fact, this borked my installation, and I had to reinstall
+Raspbian lite.
+
+*** Remote Compiling
+:PROPERTIES:
+:CUSTOM_ID: h-d3cc257f-9ad7-4953-9db1-abbed247e1f7
+:END:
+
+The exact failure is during the ~remote--make-all~ step:
+
+#+begin_example
+Compiling mlton
+"/tmp/mlton-20210117.153942-gb1f1f0f09/boot/bin/mlton" \
+	@MLton ram-slop 0.7  gc-summary -- \
+	 -verbose 2 	\
+	-target self -output mlton-compile			\
+	mlton-stubs.mlb
+MLton 20210117.153942-gb1f1f0f09 starting
+   Compile SML starting
+      frontend starting
+         parseAndElaborate starting
+make[2]: Leaving directory '/tmp/mlton-20210117.153942-gb1f1f0f09/mlton'
+Segmentation fault
+make[2]: *** [Makefile:72: mlton-compile] Error 139
+make[1]: Leaving directory '/tmp/mlton-20210117.153942-gb1f1f0f09'
+make[1]: *** [Makefile:75: compiler] Error 2
+make: *** [Makefile:19: all] Error 2
+make: *** [Makefile:666: remote--make-all] Error 2
+#+end_example
 
 * SML/NJ
 :PROPERTIES:

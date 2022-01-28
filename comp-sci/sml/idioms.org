@@ -1,0 +1,58 @@
+#+TITLE: Idioms - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-01-26T10:11:41-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Wednesday January 26, 2022 at 10:11AM
+
+These are idioms gleaned from reading some random Standard ML programs.
+
+* Using ~type t~ in Signatures
+:PROPERTIES:
+:CUSTOM_ID: h-151fd75d-61bd-4eb2-b962-3724940c7e31
+:END:
+
+When encoding a data type as a signature, for example a ~signature SET~,
+use ~type t~ to specify the data type.
+
+Example:
+
+#+begin_src sml
+signature SET =
+sig
+    type 'a t;
+    val empty : 'a t;
+    val insert : 'a -> 'a t -> 'a t;
+    val null : 'a t -> bool;
+    val member : 'a -> 'a t -> bool;
+    val map : ('a -> 'b) -> 'a t -> 'b t;
+end;
+
+structure TreeSet : SET =
+struct
+    datatype 'a t = E | T of int*'a*('a t)*('a t);
+
+    val empty = E;
+
+    fun insert x E = (* ... *)
+      | insert x (T (n, v, l, r)) = (* ... *);
+
+    fun null E = true
+      | null _ = false;
+
+    fun member _ E = false
+      | x (T (_, v, l, r)) = (* ... *);
+
+    fun map _ E = E
+      | map f (T (_, x, l, r)) = (* ... *);
+end;
+
+(* mySet : TreeSet.t *)
+mySet = TreeSet.empty;
+#+end_src

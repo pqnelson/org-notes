@@ -128,6 +128,42 @@ area(1.0);
 What do you think will be produced? Well, when ~area~ was defined, ~pi~
 was bound to ~3.14159~, so ~area(1.0)~ evaluates to ~3.14159*1.0*1.0~.
 
+*** Documentation
+:PROPERTIES:
+:CUSTOM_ID: h-4fa948ec-e9d3-4f8f-a823-694cf27673f4
+:END:
+
+Carnegie-Mellon's CS15-150 course recommends the following style for
+writing functions:
+
+1. Write a comment which starts with the type annotation of the
+   function, e.g., ~split : 'a list -> ('a list)*('a list)~
+2. The next line in the comment should be ~REQUIRES: <assumption>~
+   - Each assumption lives in its own ~REQUIRES~ line
+   - If there are no assumptions, then write ~REQUIRES: true~
+3. The next line in the comment should be ~ENSURES: <property about result>~;
+   this ends the /necessary/ parts of the comment.
+   - For case-based results, the ~ENSURES:~ statement will resemble
+     something like the example below.
+4. Then the code for the function implementation
+5. Then add some unit tests for the function, to make sure it works as
+   intended. 
+
+#+begin_src sml
+(* select : int -> int
+   REQUIRES: true
+   ENSURES: select(x) returns
+                      0 if x = 1,
+                      x if x < 1,
+                      and x*x if x > 1.
+*)
+fun select (x:int):int =
+    (case (square x, x > 0) of
+         (1, true) => 0
+       | (_, false) => x
+       | (sqr, _) => sqr)
+#+end_src
+
 ** Expressions
 :PROPERTIES:
 :CUSTOM_ID: h-5334a3b3-dce4-4839-8355-3f0e5787381b

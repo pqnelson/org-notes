@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-26 Wed 11:44 -->
+<!-- 2022-01-26 Wed 11:27 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Standard ML - Topics</title>
+<title>Idioms - SML</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -232,32 +232,74 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../sml.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Standard ML - Topics</h1>
-<ul class="org-ul">
-<li><a href="monadology.html">Monadology</a> on how to implement monads in Standard ML</li>
-<li><a href="equational-reasoning.html">Equational Reasoning</a> in Standard ML</li>
-<li><a href="dollar-sign.html">Application Operator</a> - Haskell's <code>$</code> in Standard ML</li>
-<li><a href="coding-conventions.html">Coding Conventions</a></li>
-<li><a href="idioms.html">Idioms</a> for Standard ML</li>
-<li><a href="implementations.html">Implementations</a> of Standard ML, and how to compile them</li>
-<li><a href="xunit.html">xUnit Framework</a> implementation in Standard ML</li>
-</ul>
-
-<p>
-<b>Elsewhere:</b>
-</p>
-
-<ul class="org-ul">
-<li><a href="http://www.macs.hw.ac.uk/ultra/skalpel/html/sml.html">The Standard ML Programming Language</a> page from ULTRA group (at Heriot
-Watt University)</li>
+<h1 class="title">Idioms - SML</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-151fd75d-61bd-4eb2-b962-3724940c7e31">1. Using <code>type t</code> in Signatures</a></li>
 </ul>
 </div>
+</div>
+<p>
+These are idioms gleaned from reading some random Standard ML programs.
+</p>
+
+<div id="outline-container-h-151fd75d-61bd-4eb2-b962-3724940c7e31" class="outline-2">
+<h2 id="h-151fd75d-61bd-4eb2-b962-3724940c7e31"><span class="section-number-2">1</span> Using <code>type t</code> in Signatures</h2>
+<div class="outline-text-2" id="text-h-151fd75d-61bd-4eb2-b962-3724940c7e31">
+<p>
+When encoding a data type as a signature, for example a <code>signature SET</code>,
+use <code>type t</code> to specify the data type.
+</p>
+
+<p>
+Example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">SET</span> =
+<span class="org-keyword">sig</span>
+    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>;
+    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t;
+    <span class="org-keyword">val</span> <span class="org-variable-name">insert</span> : 'a -&gt; 'a t -&gt; 'a t;
+    <span class="org-keyword">val</span> <span class="org-variable-name">null</span> : 'a t -&gt; bool;
+    <span class="org-keyword">val</span> <span class="org-variable-name">member</span> : 'a -&gt; 'a t -&gt; bool;
+    <span class="org-keyword">val</span> <span class="org-variable-name">map</span> : ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">structure</span> <span class="org-module-def">TreeSet</span> : SET =
+<span class="org-keyword">struct</span>
+    <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int*'a*('a t)*('a t);
+
+    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = E;
+
+    <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = <span class="org-comment-delimiter">(* </span><span class="org-comment">... </span><span class="org-comment-delimiter">*)</span>
+      | insert x (T (n, v, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">... </span><span class="org-comment-delimiter">*)</span>;
+
+    <span class="org-keyword">fun</span> <span class="org-function-name">null</span> E = true
+      | null _ = false;
+
+    <span class="org-keyword">fun</span> <span class="org-function-name">member</span> _ E = false
+      | x (T (_, v, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">... </span><span class="org-comment-delimiter">*)</span>;
+
+    <span class="org-keyword">fun</span> <span class="org-function-name">map</span> _ E = E
+      | map f (T (_, x, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">... </span><span class="org-comment-delimiter">*)</span>;
+<span class="org-keyword">end</span>;
+
+<span class="org-comment-delimiter">(* </span><span class="org-comment">mySet : TreeSet.t </span><span class="org-comment-delimiter">*)</span>
+mySet = TreeSet.empty;
+</pre>
+</div>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-26 Wed 11:41.</p>
+<p class="postamble">Last Updated 2022-01-26 Wed 10:16.</p>
 </div>
 </body>
 </html>
