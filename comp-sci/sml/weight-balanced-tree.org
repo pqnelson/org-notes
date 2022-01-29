@@ -31,6 +31,7 @@ Henceforth, we will take the size of the tree to be its weight. In
 pidgin Standard ML:
 
 #+begin_src sml
+(* pidgin code *)
 datatype 'a WBTree = E
        | T of int*'a*('a WBTree)*('a WBTree);
 #+end_src
@@ -38,6 +39,11 @@ datatype 'a WBTree = E
 This doesn't quite work since we want to have a ~compare:'a*'a -> order~
 function given. But SML's module system let's us guarantee this by
 making ~WBTree~ a functor parametrized by an ~ORDERED~ module.
+
+** Ordered Elements
+:PROPERTIES:
+:CUSTOM_ID: h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b
+:END:
 
 Following Haskell's [[https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-Ord.html#t:Ord][~Data.Ord~]] signature, we will provide a similar
 ~ORD~ signature. Usually it suffices to just define a ~compare~
@@ -82,6 +88,11 @@ struct
 end;
 #+end_src
 
+** Initial Functor
+:PROPERTIES:
+:CUSTOM_ID: h-3aafa167-010e-4967-9a53-33ee50444f24
+:END:
+
 Then a weight-balanced tree:
 
 #+begin_src sml
@@ -98,6 +109,11 @@ struct
    (* more to come *)
 end;
 #+end_src
+
+** "Balanced" part of "Weight-Balanced Tree"
+:PROPERTIES:
+:CUSTOM_ID: h-2cd10aca-84b8-4cc0-b667-001e969d5738
+:END:
 
 #+begin_definition
 We say a weight-balanced tree (n, x, L, R) is {{{dfn(Balanced)}}} if:
@@ -153,6 +169,38 @@ end;
 *Convention:* values found in the left subtree are /less than/ the value
 of the root node, and values found in the right subtree are /greater than/
 the value of the root node. (End of convention)
+
+Suppose we had a tree of integers. Let us try maintaining our convention
+with the implementation:
+
+#+begin_src sml
+fun insert x E = singleton x
+  | insert x (t as T (sz, v, l, r)) =
+    case compare(x,v) of
+       LESS => T (sz+1, v, insert x l, r)
+     | EQUAL => t
+     | GREATER T(sz + 1, v, l, insert x r);
+#+end_src
+
+This obeys our convention: every element of the right subtree is greater
+than the root of the subtree, and every element of the left subtree is
+less than the root of the subtree. But what happens with
+~foldr (fn (x,tree) => insert x tree) E [1,2,3,4,5]~? Well, we get
+~T(5,1,E, T(4,2,E, T(3,3,E, T(2,4,E, T(1, 5, E, E)))))~. Or, graphically:
+
+#+CAPTION: Naive insertion of ~[1,2,3,4,5]~ into an empty tree.
+[[../../img/tree-2.png]]
+
+This is just a linked list with extra baggage! How can we fix this
+situation?
+
+Well, the astute reader will note our ~insert~ function does not check
+if the subtrees are balanced. Why on Earth would anyone expect the
+result to be a balanced tree?
+
+#+CAPTION: Left and right rotations of tree.
+[[../../img/tree-1.png]]
+
 
 
 

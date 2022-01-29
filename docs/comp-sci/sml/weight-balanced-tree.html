@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-23 Sun 13:47 -->
+<!-- 2022-01-29 Sat 14:04 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Weight-Balanced Tree - SML</title>
@@ -241,7 +241,13 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6">1. Introduction</a></li>
+<li><a href="#h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6">1. Introduction</a>
+<ul>
+<li><a href="#h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b">1.1. Ordered Elements</a></li>
+<li><a href="#h-3aafa167-010e-4967-9a53-33ee50444f24">1.2. Initial Functor</a></li>
+<li><a href="#h-2cd10aca-84b8-4cc0-b667-001e969d5738">1.3. "Balanced" part of "Weight-Balanced Tree"</a></li>
+</ul>
+</li>
 <li><a href="#h-e6ca4f2a-c3b3-4a42-9eda-846b020acfdf">2. Inserting a new value</a></li>
 <li><a href="#h-a3213d67-b211-41d1-baea-406a81802cfe">3. References</a></li>
 </ul>
@@ -257,7 +263,7 @@ maps. But their implementation is rather tricky. So I thought I would
 write some notes about them.
 </p>
 
-<div class="definition" id="org8ddb8d4">
+<div class="definition" id="org0cec384">
 <p>
 A <dfn>Weight-balanced tree</dfn> is either
 </p>
@@ -275,7 +281,8 @@ pidgin Standard ML:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> 'a <span class="org-type-def">WBTree</span> = E
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">pidgin code </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">datatype</span> 'a <span class="org-type-def">WBTree</span> = E
        | T <span class="org-keyword">of</span> int*'a*('a WBTree)*('a WBTree);
 </pre>
 </div>
@@ -285,7 +292,11 @@ This doesn't quite work since we want to have a <code>compare:'a*'a -&gt; order<
 function given. But SML's module system let's us guarantee this by
 making <code>WBTree</code> a functor parametrized by an <code>ORDERED</code> module.
 </p>
+</div>
 
+<div id="outline-container-h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b" class="outline-3">
+<h3 id="h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b"><span class="section-number-3">1.1.</span> Ordered Elements</h3>
+<div class="outline-text-3" id="text-h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b">
 <p>
 Following Haskell's <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-Ord.html#t:Ord"><code>Data.Ord</code></a> signature, we will provide a similar
 <code>ORD</code> signature. Usually it suffices to just define a <code>compare</code>
@@ -317,7 +328,7 @@ signature, and then an <code>Ord</code> functor to construct a module with the
     <span class="org-keyword">val</span> <span class="org-variable-name">min</span> : t*t -&gt; t;
 <span class="org-keyword">end</span>;
 
-<span class="org-keyword">functor</span> <span class="org-module-def">Ord</span>(Ordered : COMPARABLE) : ORD <span class="org-keyword">with</span> <span class="org-keyword">type</span> <span class="org-type-def">Ordered.t</span> = ORD.t =
+<span class="org-keyword">functor</span> <span class="org-module-def">Ord</span>(Ordered : COMPARABLE) : ORD <span class="org-keyword">with</span> <span class="org-keyword">type</span> <span class="org-type-def">t</span> = Ordered.t =
 <span class="org-keyword">struct</span>
     <span class="org-keyword">type</span> <span class="org-type-def">t</span> = Ordered.t;
     <span class="org-keyword">val</span> <span class="org-variable-name">compare</span> = Ordered.compare;
@@ -331,7 +342,12 @@ signature, and then an <code>Ord</code> functor to construct a module with the
 <span class="org-keyword">end</span>;
 </pre>
 </div>
+</div>
+</div>
 
+<div id="outline-container-h-3aafa167-010e-4967-9a53-33ee50444f24" class="outline-3">
+<h3 id="h-3aafa167-010e-4967-9a53-33ee50444f24"><span class="section-number-3">1.2.</span> Initial Functor</h3>
+<div class="outline-text-3" id="text-h-3aafa167-010e-4967-9a53-33ee50444f24">
 <p>
 Then a weight-balanced tree:
 </p>
@@ -351,8 +367,13 @@ Then a weight-balanced tree:
 <span class="org-keyword">end</span>;
 </pre>
 </div>
+</div>
+</div>
 
-<div class="definition" id="org4bf2e2d">
+<div id="outline-container-h-2cd10aca-84b8-4cc0-b667-001e969d5738" class="outline-3">
+<h3 id="h-2cd10aca-84b8-4cc0-b667-001e969d5738"><span class="section-number-3">1.3.</span> "Balanced" part of "Weight-Balanced Tree"</h3>
+<div class="outline-text-3" id="text-h-2cd10aca-84b8-4cc0-b667-001e969d5738">
+<div class="definition" id="orgb028971">
 <p>
 We say a weight-balanced tree (n, x, L, R) is <dfn>Balanced</dfn> if:
 </p>
@@ -375,7 +396,7 @@ When <code>Delta</code> is 3 and <code>L</code> = 5, then <code>15 &gt; R &gt;= 
 for the sizes for the right subtree.
 </p>
 
-<div class="remark" id="org1ddee74">
+<div class="remark" id="orge6a13d9">
 <p>
 There is some slight variation in the definition of a WBT being
 balanced. For example, Hirai and Yamamoto define it as
@@ -414,12 +435,67 @@ We could implement this predicate in Standard ML as:
 </div>
 </div>
 </div>
+</div>
 
 <div id="outline-container-h-e6ca4f2a-c3b3-4a42-9eda-846b020acfdf" class="outline-2">
 <h2 id="h-e6ca4f2a-c3b3-4a42-9eda-846b020acfdf"><span class="section-number-2">2.</span> Inserting a new value</h2>
 <div class="outline-text-2" id="text-h-e6ca4f2a-c3b3-4a42-9eda-846b020acfdf">
+<p>
+<b>Convention:</b> values found in the left subtree are <i>less than</i> the value
+of the root node, and values found in the right subtree are <i>greater than</i>
+the value of the root node. (End of convention)
+</p>
+
+<p>
+Suppose we had a tree of integers. Let us try maintaining our convention
+with the implementation:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
+  | insert x (t <span class="org-keyword">as</span> T (sz, v, l, r)) =
+    <span class="org-keyword">case</span> compare(x,v) <span class="org-keyword">of</span>
+       LESS =&gt; T (sz+1, v, insert x l, r)
+     | EQUAL =&gt; t
+     | GREATER T(sz + 1, v, l, insert x r);
+</pre>
+</div>
+
+<p>
+This obeys our convention: every element of the right subtree is greater
+than the root of the subtree, and every element of the left subtree is
+less than the root of the subtree. But what happens with
+<code>foldr (fn (x,tree) =&gt; insert x tree) E [1,2,3,4,5]</code>? Well, we get
+<code>T(5,1,E, T(4,2,E, T(3,3,E, T(2,4,E, T(1, 5, E, E)))))</code>. Or, graphically:
+</p>
+
+
+<div id="orge25198c" class="figure">
+<p><img src="../../img/tree-2.png" alt="tree-2.png">
+</p>
+<p><span class="figure-number">Figure 1: </span>Naive insertion of <code>[1,2,3,4,5]</code> into an empty tree.</p>
+</div>
+
+<p>
+This is just a linked list with extra baggage! How can we fix this
+situation?
+</p>
+
+<p>
+Well, the astute reader will note our <code>insert</code> function does not check
+if the subtrees are balanced. Why on Earth would anyone expect the
+result to be a balanced tree?
+</p>
+
+
+<div id="org80cb7b4" class="figure">
+<p><img src="../../img/tree-1.png" alt="tree-1.png">
+</p>
+<p><span class="figure-number">Figure 2: </span>Left and right rotations of tree.</p>
 </div>
 </div>
+</div>
+
 
 
 
@@ -443,7 +519,7 @@ In <i>J. of Func. Progr.</i> <b>3</b> no.4 (1993) pp.553&#x2013;561,
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-23 Sun 13:46.</p>
+<p class="postamble">Last Updated 2022-01-29 Sat 14:02.</p>
 </div>
 </body>
 </html>
