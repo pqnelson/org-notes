@@ -1,0 +1,174 @@
+#+TITLE: Weight-Balanced Tree - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-01-23T09:43:03-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday January 23, 2022 at  9:43AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6
+:END:
+
+Haskell uses [[https://en.wikipedia.org/wiki/Weight-balanced_tree][Weight-balanced trees]] in their implementations of sets and
+maps. But their implementation is rather tricky. So I thought I would
+write some notes about them.
+
+#+begin_definition
+A {{{dfn(Weight-balanced tree)}}} is either
+
+1. the empty tree
+2. a branch encoded as a tuple (weight, node value, left subtree, right subtree).
+#+end_definition
+
+Henceforth, we will take the size of the tree to be its weight. In
+pidgin Standard ML:
+
+#+begin_src sml
+datatype 'a WBTree = E
+       | T of int*'a*('a WBTree)*('a WBTree);
+#+end_src
+
+This doesn't quite work since we want to have a ~compare:'a*'a -> order~
+function given. But SML's module system let's us guarantee this by
+making ~WBTree~ a functor parametrized by an ~ORDERED~ module.
+
+Following Haskell's [[https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-Ord.html#t:Ord][~Data.Ord~]] signature, we will provide a similar
+~ORD~ signature. Usually it suffices to just define a ~compare~
+function, then "fill in the gaps"; we thus define a ~COMPARABLE~
+signature, and then an ~Ord~ functor to construct a module with the
+~ORD~ signature.
+
+#+begin_src sml
+(* ord.sig *)
+
+(* minimal signature which is fleshed out in a functor *)
+signature COMPARABLE =
+sig
+    type t;
+    val compare : t*t -> order;
+end;
+
+signature ORD =
+sig
+    type t;
+    val compare : t*t -> order;
+    val gt : t*t -> bool;
+    val eq : t*t -> bool;
+    val lt : t*t -> bool;
+    val geq : t*t -> bool;
+    val leq : t*t -> bool;
+    val max : t*t -> t;
+    val min : t*t -> t;
+end;
+
+functor Ord(Ordered : COMPARABLE) : ORD with type t = Ordered.t =
+struct
+    type t = Ordered.t;
+    val compare = Ordered.compare;
+    fun gt (x,y) = compare (x,y) = GREATER;
+    fun eq (x,y) = compare (x,y) = EQUAL;
+    fun lt (x,y) = compare (x,y) = LESS;
+    fun geq (x,y) = not (lt (x,y));
+    fun leq (x,y) = not (gt (x,y));
+    fun max (x,y) = if lt(x,y) then y else x;
+    fun min (x,y) = if lt(x,y) then x else y;
+end;
+#+end_src
+
+Then a weight-balanced tree:
+
+#+begin_src sml
+(* wbtree.fun *)
+functor WBTree(Node : ORD) =
+struct
+   datatype t = E | T of int*Node.t*t*t;
+
+   val empty = E;
+   fun singleton (v : Node.t) = T (1, v, E, E);
+
+   fun size E = 0
+     | size (T (n, _, _, _)) = n;
+   (* more to come *)
+end;
+#+end_src
+
+#+begin_definition
+We say a weight-balanced tree (n, x, L, R) is {{{dfn(Balanced)}}} if:
+- When the subtrees L and R are both non-empty:
+  ~Delta*(size(L)) > size(R)~ and ~Delta*size(R) > size(L)~;
+- If either subtree is empty, the other is either a singleton or empty.
+#+end_definition
+
+The use of ~Delta~ allows some "wiggle room" in determining if a tree is
+balanced. For example, when ~Delta~ is 2, and ~L~ = 5, then ~10 > R >= 3~
+is the acceptable range of sizes for the right subtree.
+
+When ~Delta~ is 3 and ~L~ = 5, then ~15 > R >= 2~ is an acceptable range
+for the sizes for the right subtree.
+
+#+begin_remark
+There is some slight variation in the definition of a WBT being
+balanced. For example, Hirai and Yamamoto define it as
+~Delta*(size(R) + 1) >= size(L) + 1~ and
+~Delta*(size(L) + 1) >= size(R) + 1~. This is a slightly more generous
+condition; instead of ~Delta*size(L) > size(R) >= ceiling(size(L)/Delta)~,
+we would allow ~Delta*size(L) + (Delta - 1) >= size(R) >= ceiling(size(L)/Delta) - 1~.
+#+end_remark
+
+We could implement this predicate in Standard ML as:
+
+#+begin_src sml
+(* wbtree.fun *)
+functor WBTree(Node : ORD) =
+struct
+   datatype t = E | T of int*Node.t*t*t;
+
+   val empty = E;
+   fun singleton (v : Node.t) = T (1, v, E, E);
+
+   fun size E = 0
+     | size (T (n, _, _, _)) = n;
+
+   val delta : int = 3;
+   fun isBalanced E = true
+     | isBalanced (T (_, _, l, r)) = delta*(1 + (size l)) >= 1 + size r andalso
+                                     delta*(1 + (size r)) >= 1 + size l andalso
+                                     isBalanced l andalso isBalanced r;
+   (* more to come *)
+end;
+#+end_src
+
+* Inserting a new value
+:PROPERTIES:
+:CUSTOM_ID: h-e6ca4f2a-c3b3-4a42-9eda-846b020acfdf
+:END:
+
+*Convention:* values found in the left subtree are /less than/ the value
+of the root node, and values found in the right subtree are /greater than/
+the value of the root node. (End of convention)
+
+
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-a3213d67-b211-41d1-baea-406a81802cfe
+:END:
+
+- Stephen Adams,\\
+  "Functional Pearls: Efficient sets --- a balancing act".\\
+  In /J. of Func. Progr./ *3* no.4 (1993) pp.553--561,
+  [[https://www.cambridge.org/core/journals/journal-of-functional-programming/article/functional-pearls-efficient-setsa-balancing-act/0CAA1C189B4F7C15CE9B8C02D0D4B54E][Eprint]]
+- Yoichi Hirai and Kazuhiko Yamamoto,\\
+  "Balancing weight-balanced trees" (PDF).\\
+  /Journal of Functional Programming/ *21* no.3 (2011): 287.
+  [[https://yoichihirai.com/bst.pdf][PDF]]
+- Lukas Barth and Dorothea Wagner,\\
+  "Engineering Top-Down Weight-Balanced Trees".\\
+  {{{arXiv(1910.07849)}}}, 14 pages.

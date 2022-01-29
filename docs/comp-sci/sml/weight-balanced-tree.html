@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2022-01-23 Sun 13:47 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weight-Balanced Tree - SML</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Weight-Balanced Tree - SML</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6">1. Introduction</a></li>
+<li><a href="#h-e6ca4f2a-c3b3-4a42-9eda-846b020acfdf">2. Inserting a new value</a></li>
+<li><a href="#h-a3213d67-b211-41d1-baea-406a81802cfe">3. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6" class="outline-2">
+<h2 id="h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6">
+<p>
+Haskell uses <a href="https://en.wikipedia.org/wiki/Weight-balanced_tree">Weight-balanced trees</a> in their implementations of sets and
+maps. But their implementation is rather tricky. So I thought I would
+write some notes about them.
+</p>
+
+<div class="definition" id="org8ddb8d4">
+<p>
+A <dfn>Weight-balanced tree</dfn> is either
+</p>
+
+<ol class="org-ol">
+<li>the empty tree</li>
+<li>a branch encoded as a tuple (weight, node value, left subtree, right subtree).</li>
+</ol>
+
+</div>
+
+<p>
+Henceforth, we will take the size of the tree to be its weight. In
+pidgin Standard ML:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> 'a <span class="org-type-def">WBTree</span> = E
+       | T <span class="org-keyword">of</span> int*'a*('a WBTree)*('a WBTree);
+</pre>
+</div>
+
+<p>
+This doesn't quite work since we want to have a <code>compare:'a*'a -&gt; order</code>
+function given. But SML's module system let's us guarantee this by
+making <code>WBTree</code> a functor parametrized by an <code>ORDERED</code> module.
+</p>
+
+<p>
+Following Haskell's <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-Ord.html#t:Ord"><code>Data.Ord</code></a> signature, we will provide a similar
+<code>ORD</code> signature. Usually it suffices to just define a <code>compare</code>
+function, then "fill in the gaps"; we thus define a <code>COMPARABLE</code>
+signature, and then an <code>Ord</code> functor to construct a module with the
+<code>ORD</code> signature.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig </span><span class="org-comment-delimiter">*)</span>
+
+<span class="org-comment-delimiter">(* </span><span class="org-comment">minimal signature which is fleshed out in a functor </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">signature</span> <span class="org-interface-def">COMPARABLE</span> =
+<span class="org-keyword">sig</span>
+    <span class="org-keyword">type</span> <span class="org-type-def">t</span>;
+    <span class="org-keyword">val</span> <span class="org-variable-name">compare</span> : t*t -&gt; order;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">signature</span> <span class="org-interface-def">ORD</span> =
+<span class="org-keyword">sig</span>
+    <span class="org-keyword">type</span> <span class="org-type-def">t</span>;
+    <span class="org-keyword">val</span> <span class="org-variable-name">compare</span> : t*t -&gt; order;
+    <span class="org-keyword">val</span> <span class="org-variable-name">gt</span> : t*t -&gt; bool;
+    <span class="org-keyword">val</span> <span class="org-variable-name">eq</span> : t*t -&gt; bool;
+    <span class="org-keyword">val</span> <span class="org-variable-name">lt</span> : t*t -&gt; bool;
+    <span class="org-keyword">val</span> <span class="org-variable-name">geq</span> : t*t -&gt; bool;
+    <span class="org-keyword">val</span> <span class="org-variable-name">leq</span> : t*t -&gt; bool;
+    <span class="org-keyword">val</span> <span class="org-variable-name">max</span> : t*t -&gt; t;
+    <span class="org-keyword">val</span> <span class="org-variable-name">min</span> : t*t -&gt; t;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">functor</span> <span class="org-module-def">Ord</span>(Ordered : COMPARABLE) : ORD <span class="org-keyword">with</span> <span class="org-keyword">type</span> <span class="org-type-def">Ordered.t</span> = ORD.t =
+<span class="org-keyword">struct</span>
+    <span class="org-keyword">type</span> <span class="org-type-def">t</span> = Ordered.t;
+    <span class="org-keyword">val</span> <span class="org-variable-name">compare</span> = Ordered.compare;
+    <span class="org-keyword">fun</span> <span class="org-function-name">gt</span> (x,y) = compare (x,y) = GREATER;
+    <span class="org-keyword">fun</span> <span class="org-function-name">eq</span> (x,y) = compare (x,y) = EQUAL;
+    <span class="org-keyword">fun</span> <span class="org-function-name">lt</span> (x,y) = compare (x,y) = LESS;
+    <span class="org-keyword">fun</span> <span class="org-function-name">geq</span> (x,y) = not (lt (x,y));
+    <span class="org-keyword">fun</span> <span class="org-function-name">leq</span> (x,y) = not (gt (x,y));
+    <span class="org-keyword">fun</span> <span class="org-function-name">max</span> (x,y) = <span class="org-keyword">if</span> lt(x,y) <span class="org-keyword">then</span> y <span class="org-keyword">else</span> x;
+    <span class="org-keyword">fun</span> <span class="org-function-name">min</span> (x,y) = <span class="org-keyword">if</span> lt(x,y) <span class="org-keyword">then</span> x <span class="org-keyword">else</span> y;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Then a weight-balanced tree:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
+<span class="org-keyword">struct</span>
+   <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int*Node.t*t*t;
+
+   <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = E;
+   <span class="org-keyword">fun</span> <span class="org-function-name">singleton</span> (v : Node.t) = T (1, v, E, E);
+
+   <span class="org-keyword">fun</span> <span class="org-function-name">size</span> E = 0
+     | size (T (n, _, _, _)) = n;
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<div class="definition" id="org4bf2e2d">
+<p>
+We say a weight-balanced tree (n, x, L, R) is <dfn>Balanced</dfn> if:
+</p>
+<ul class="org-ul">
+<li>When the subtrees L and R are both non-empty:
+<code>Delta*(size(L)) &gt; size(R)</code> and <code>Delta*size(R) &gt; size(L)</code>;</li>
+<li>If either subtree is empty, the other is either a singleton or empty.</li>
+</ul>
+
+</div>
+
+<p>
+The use of <code>Delta</code> allows some "wiggle room" in determining if a tree is
+balanced. For example, when <code>Delta</code> is 2, and <code>L</code> = 5, then <code>10 &gt; R &gt;= 3</code>
+is the acceptable range of sizes for the right subtree.
+</p>
+
+<p>
+When <code>Delta</code> is 3 and <code>L</code> = 5, then <code>15 &gt; R &gt;= 2</code> is an acceptable range
+for the sizes for the right subtree.
+</p>
+
+<div class="remark" id="org1ddee74">
+<p>
+There is some slight variation in the definition of a WBT being
+balanced. For example, Hirai and Yamamoto define it as
+<code>Delta*(size(R) + 1) &gt;= size(L) + 1</code> and
+<code>Delta*(size(L) + 1) &gt;= size(R) + 1</code>. This is a slightly more generous
+condition; instead of <code>Delta*size(L) &gt; size(R) &gt;= ceiling(size(L)/Delta)</code>,
+we would allow <code>Delta*size(L) + (Delta - 1) &gt;= size(R) &gt;= ceiling(size(L)/Delta) - 1</code>.
+</p>
+
+</div>
+
+<p>
+We could implement this predicate in Standard ML as:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
+<span class="org-keyword">struct</span>
+   <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int*Node.t*t*t;
+
+   <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = E;
+   <span class="org-keyword">fun</span> <span class="org-function-name">singleton</span> (v : Node.t) = T (1, v, E, E);
+
+   <span class="org-keyword">fun</span> <span class="org-function-name">size</span> E = 0
+     | size (T (n, _, _, _)) = n;
+
+   <span class="org-keyword">val</span> <span class="org-variable-name">delta</span> : int = 3;
+   <span class="org-keyword">fun</span> <span class="org-function-name">isBalanced</span> E = true
+     | isBalanced (T (_, _, l, r)) = delta*(1 + (size l)) &gt;= 1 + size r <span class="org-keyword">andalso</span>
+                                     delta*(1 + (size r)) &gt;= 1 + size l <span class="org-keyword">andalso</span>
+                                     isBalanced l <span class="org-keyword">andalso</span> isBalanced r;
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-e6ca4f2a-c3b3-4a42-9eda-846b020acfdf" class="outline-2">
+<h2 id="h-e6ca4f2a-c3b3-4a42-9eda-846b020acfdf"><span class="section-number-2">2.</span> Inserting a new value</h2>
+<div class="outline-text-2" id="text-h-e6ca4f2a-c3b3-4a42-9eda-846b020acfdf">
+</div>
+</div>
+
+
+
+<div id="outline-container-h-a3213d67-b211-41d1-baea-406a81802cfe" class="outline-2">
+<h2 id="h-a3213d67-b211-41d1-baea-406a81802cfe"><span class="section-number-2">3.</span> References</h2>
+<div class="outline-text-2" id="text-h-a3213d67-b211-41d1-baea-406a81802cfe">
+<ul class="org-ul">
+<li>Stephen Adams,<br>
+"Functional Pearls: Efficient sets &#x2014; a balancing act".<br>
+In <i>J. of Func. Progr.</i> <b>3</b> no.4 (1993) pp.553&#x2013;561,
+<a href="https://www.cambridge.org/core/journals/journal-of-functional-programming/article/functional-pearls-efficient-setsa-balancing-act/0CAA1C189B4F7C15CE9B8C02D0D4B54E">Eprint</a></li>
+<li>Yoichi Hirai and Kazuhiko Yamamoto,<br>
+"Balancing weight-balanced trees" (PDF).<br>
+<i>Journal of Functional Programming</i> <b>21</b> no.3 (2011): 287.
+<a href="https://yoichihirai.com/bst.pdf">PDF</a></li>
+<li>Lukas Barth and Dorothea Wagner,<br>
+"Engineering Top-Down Weight-Balanced Trees".<br>
+<a href="https://arxiv.org/abs/1910.07849">arXiv:1910.07849</a>, 14 pages.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2022-01-23 Sun 13:46.</p>
+</div>
+</body>
+</html>
