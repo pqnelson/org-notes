@@ -93,6 +93,14 @@ end;
 :CUSTOM_ID: h-3aafa167-010e-4967-9a53-33ee50444f24
 :END:
 
+We also want a "smart constructor" which will automatically track the
+size of the tree. This seems silly, but it saves a lot of concern later on.
+
+#+begin_src sml
+(* bin : Node.t -> t -> t -> t *)
+fun bin x l r = T (1 + size l + size r, x, l, r);
+#+end_src
+
 Then a weight-balanced tree:
 
 #+begin_src sml
@@ -106,6 +114,8 @@ struct
 
    fun size E = 0
      | size (T (n, _, _, _)) = n;
+
+   fun bin x l r = T (1 + size l + size r, x, l, r);
    (* more to come *)
 end;
 #+end_src
@@ -174,6 +184,7 @@ Suppose we had a tree of integers. Let us try maintaining our convention
 with the implementation:
 
 #+begin_src sml
+(* first attempt *)
 fun insert x E = singleton x
   | insert x (t as T (sz, v, l, r)) =
     case compare(x,v) of
@@ -198,11 +209,236 @@ Well, the astute reader will note our ~insert~ function does not check
 if the subtrees are balanced. Why on Earth would anyone expect the
 result to be a balanced tree?
 
-#+CAPTION: Left and right rotations of tree.
+We can remedy this by balancing the tree after inserting:
+
+#+begin_src sml
+(* insert : Node.t -> t -> t *)
+fun insert x E = singleton x
+  | insert x (tree as T (sz, v, l, r)) =
+    case compare(x,v) of
+       LESS => balanceL v (insert x l) r)
+     | EQUAL => tree
+     | GREATER => balanceR v l  (insert x r);
+#+end_src
+
+We call ~balanceL~ when inserting a new element into the left subtree
+(or deleting something from the right subtree), which amounts to:
+
+- check if the tree would be balanced
+  - if so, then just construct the tree
+  - otherwise rotate left "by some amount".
+
+This is a classic trick with binary trees: rotations to rebalance them.
+Tree rotation can graphically visualized as:
+
+#+CAPTION: Single left and single right rotations of tree with $x < a < y < b < z$.
 [[../../img/tree-1.png]]
 
+The implementation of this, albeit unoptimized:
 
+#+begin_src sml
+(* balanceL : Node.t -> t -> t -> t *)
+fun balanceL x l r = if isBalanced l r then T(1 + size l + size r, x, l, r)
+                     else rotateL x l r;
+#+end_src
 
+Now it's just a matter to code up left rotations, right? Well, we also
+have /double/ rotations. A {{{dfn(double left rotation)}}} moves a
+"pivot" node "from the left" by two positions. Graphically:
+
+#+CAPTION: Double left rotation of tree with $x < a < y < b < z$.
+[[../../img/tree-3.png]]
+
+This is done first by performing a "local right" rotation:
+
+#+CAPTION: "Local right" rotation of tree with $x < a < y < b < z$.
+[[../../img/tree-4.png]]
+
+Then a "global left" rotation yields the result. We can similarly
+construct a {{{dfn(double right rotation)}}} as moving a "pivot" node
+"from the right" by two positions.
+
+#+begin_src sml
+(* rotateL : Node.t -> t -> t -> t *)
+fun rotateL x l (r as (T (_,_,rl,rr))) =
+    if isSingle rl rr then singleL x l r
+    else doubleL x l r
+  | rotateL _ _ _ = raise "rotateL";
+
+fun singleL x l (T (_, v, rl, rr)) = bin y (bin x l rl) rr
+  | singleL _ _ _ = raise "singleL";
+
+fun doubleL x l (T (_, y, (T (_, z, rll, rlr)), rr))
+    = bin z (bin x l rll) (bin y rlr rr)
+  | doubleL _ _ _ = raise "doubleL";
+#+end_src
+
+But what is the condition for ~isSingle~? Basically, if the ratio of the
+size of the left subtree to the size of the right subtree is less than
+the ~Gamma~ parameter. For us, we name ~Gamma~ something more relevant,
+~ratio~, and this condition becomes:
+
+#+begin_src sml
+(* isSingle : t -> t -> bool *)
+fun isSingle l r = (size l + 1) < ratio*(size r + 1);
+#+end_src
+
+Thanks to the work of Hirai and Yamamoto, we know that ~delta = 3~ and
+~ratio = 2~ are the only integer solutions, so we pick those values.
+We combine these functions together, and our functor so far becomes:
+
+#+begin_src sml
+(* wbtree.fun *)
+functor WBTree(Node : ORD) =
+struct
+   datatype t = E | T of int*Node.t*t*t;
+
+   val empty = E;
+   fun singleton (v : Node.t) = T (1, v, E, E);
+
+   fun size E = 0
+     | size (T (n, _, _, _)) = n;
+
+   fun bin x l r = T(1 + size l + size r, x, l, r);
+
+   (* laziness *)
+   val compare = Node.compare;
+
+   val ratio : int = 2;
+   val delta : int = 3;
+
+   (* isBalanced : t -> t -> bool *)
+   fun isBalanced l r = delta*(size l + 1) >= (size r + 1);
+
+   fun balanced E = true
+     | balanced (T (_, _, l, r)) = isBalanced l r andalso
+                                   isBalanced r l andalso
+                                   balanced l andalso balanced r;
+
+   (* Helper functions to ensure the tree isBalanced *)
+   fun balanceL x l r = if isBalanced l r then bin x l r
+                        else rotateL x l r;
+
+   fun isSingle a b = (size a + 1) < gamma*(size b + 1);
+
+   fun rotateL x l (r as (T (_,_,rl,rr))) =
+       if isSingle rl rr then singleL x l r
+       else doubleL x l r
+     | rotateL _ _ _ = raise (Fail "rotateL");
+
+   fun singleL x l (T (_, v, rl, rr)) = bin y (bin x l rl) rr
+     | singleL _ _ _ = raise (Fail "singleL");
+
+   fun doubleL x l (T (_, y, (T (_, z, rll, rlr)), rr))
+       = bin z (bin x l rll) (bin y rlr rr)
+     | doubleL _ _ _ = raise (Fail "doubleL");
+
+   fun balanceR x l r = if isBalanced r l then bin x l r
+                        else rotateR x l r;
+
+   fun rotateR x (l as (T (_,_,ll,lr))) r =
+       if isSingle ll lr then singleR x l r
+       else doubleR x l r
+     | rotateL _ _ _ = raise (Fail "rotateR");
+
+   fun singleR x (T (_, v, ll, lr)) r = bin y ll (bin x lr r)
+     | singleR _ _ _ = raise (Fail "singleR");
+
+   fun doubleR z (T (_, x, ll, (T (_, y, lrl, lrr)))) r
+       = bin y (bin x ll lrl) (bin z lrr r)
+     | doubleR _ _ _ = raise (Fail "doubleR");
+
+   (* insert : Node.t -> t -> t *)
+   fun insert x E = singleton x
+     | insert x (tree as T (sz, v, l, r)) =
+       (case compare(x,v) of
+           LESS => balanceL v (insert x l) r
+         | EQUAL => tree
+         | GREATER => balanceR v l  (insert x r));
+   (* more to come *)
+end;
+#+end_src
+
+#+begin_exercise
+Assume ~l~ and ~r~ are balanced trees, and ~x~ is a value such that it
+lies between the subtrees.
+
+1. Prove ~balanceL x l r~ produces a balanced tree.
+2. Prove ~balanceR x l r~ produces a balanced tree.
+#+end_exercise
+
+* Deleting an Element
+:PROPERTIES:
+:CUSTOM_ID: h-56f9e2fa-fedd-409c-9212-d511f7d42620
+:END:
+
+When deleting an element from a weight-balanced tree, we just need to do
+the mirror image of an insertion (e.g., when deleting a value from the
+left subtree, we need to invoke ~balanceR~). The only tricky bit is what
+happens when we want to delete the value /at/ the root of the tree. Uh,
+well, we'll just brush that problem into another function which will
+~glue~ the subtrees into a new weight-balanced tree.
+
+#+begin_src sml
+(* delete : Node.t -> t -> t *)
+fun delete _ E = E
+  | delete x (tree as T (_, y, l, r)) =
+    (case compare (x,y) of
+         LESS => balanceR y (delete x l) r
+       | EQUAL => glue l r
+       | GREATER => balanceL y l (delete x r));
+#+end_src
+
+Now, how do we ~glue~ two weight-balanced trees together? There are some
+simple cases: if ~l~ is empty, just return the right subtree; if ~r~ is
+empty, return the left subtree.
+
+When both ~l~ and ~r~ are non-empty, we have two cases:
+1. ~size l > size r~, then we merge ~r~ into the right subtree of ~l~
+   and invoke ~balanceR~ to produce a balanced tree;
+2. otherwise, we merge ~l~ into the left subtree of ~r~ and invoke
+   ~balanceL~ to produce a balanced tree.
+
+#+begin_src sml
+fun glue E r = r
+  | glue l E = l
+  | glue (l as T(sl,xl,ll,lr)) (r as T(sr,xr,lr,rr))
+    = if sl > sr then (case maxView xl ll lr of
+                           SOME (m, l') => balanceR m l' r
+                         | _ => raise (Fail "glue sl > sr"))
+      else (case minView xr lr rr of
+                SOME (m, r') => balanceL m l r'
+              | _ => raise (Fail "glue sl <= sr"));
+#+end_src
+
+We can get the maximum element of a tree, plus a version of the tree
+with that element /removed/. How? Simply plumb the right subtree:
+
+#+begin_src sml
+fun maxViewSure x l E = (x, l)
+  | maxView x l (T (_, xr, lr, rr)) =
+    (case maxViewSure xr lr rr of
+         (m, r') => (m, balanceL x l r'));
+
+fun maxView E = NONE
+  | maxView (T (_, x, l, r)) = SOME (maxViewSure x l r);
+#+end_src
+
+Similarly, the minimum element of the tree, and a version of the tree
+with that element surgically removed:
+
+#+begin_src sml
+fun minViewSure x E r = (x, r)
+  | minView x (T (_, xl, ll, lr)) r =
+    (case minViewSure xl ll lr of
+         (m, l') => (m, balanceR x l' r));
+
+fun minView E = NONE
+  | minView (T (_, x, l, r)) = SOME (minViewSure x l r);
+#+end_src
+
+Great, now we have the ability to insert and delete elements from our
+weight-balanced tree.
 
 * References
 :PROPERTIES:

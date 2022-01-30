@@ -1,5 +1,7 @@
 outputformat := "png";
 outputtemplate := "%j-%c.%o";
+color yellow; yellow := red + green;
+
 beginfig(0);
   % pair z[];
   numeric u; u := 1pc;
@@ -126,4 +128,179 @@ beginfig(2);
   draw unitsquare scaled u shifted(9u,-10u);
   draw (8u+2u,-8u-u)--(8u+u,-8u-2u);
 endfig;
+beginfig(3);
+  hppp := 0.50;
+  vppp := 0.50;
+  % pair z[];
+  numeric u; u := 1pc;
+  z[0] = (0,0);        % a
+  z[1] = (2u,-2u);     % c
+  z[2] = (0,-4u);      % b
+  z[3] = (-2u, -2.5u); % x
+  z[4] = (-2u, -6.5u); % y_{0}
+  z[5] = (2u,-6.5u);   % y_{1}
+  z[6] = (4u, -4.5u);  % z
+  color lightpurple; lightpurple := 0.5[white, 0.5[red,blue]]; % a
+  color lightred; lightred := 0.75[red,white]; % x & z
+  color lightgreen; lightgreen := 0.5[white,green]; % b
+  color lightblue; lightblue := 0.25[white,blue]; % x
+  color lightyellow; lightyellow := 0.5[white,yellow]; % y_{0}
+  color lightorange; lightorange := 0.5[white, 0.5[red,yellow]]; % c
+  path triangle;
+  triangle = u*(cosd(-30),sind(-30)) -- (0,u) -- u*(cosd(210),sind(210)) -- cycle;
+  fill fullcircle scaled u shifted z0 withcolor lightpurple;
+  fill fullcircle scaled u shifted z2 withcolor lightgreen;
+  fill fullcircle scaled u shifted z1 withcolor lightorange;
+  fill triangle shifted z3 withcolor lightred;
+  fill triangle shifted z4 withcolor lightblue;
+  fill triangle shifted z5 withcolor lightyellow;
+  fill triangle shifted z6 withcolor lightred;
+  label(btex $a$ etex, z[0]);
+  label(btex $c$ etex, z[1]);
+  label(btex $b$ etex, z[2]);
+  label(btex $x$ etex, z[3]);
+  label(btex $y_{0}$ etex, z[4]);
+  label(btex $y_{1}$ etex, z[5]);
+  label(btex $z$ etex, z[6]);
+  draw fullcircle scaled u shifted z0;
+  draw fullcircle scaled u shifted z1;
+  draw fullcircle scaled u shifted z2;
+  draw triangle shifted z3;
+  draw triangle shifted z4;
+  draw triangle shifted z5;
+  draw triangle shifted z6;
+  draw (z0 + .5u*(cosd(45),-sind(45))) -- (z1 + .5u*(-cosd(45),sind(45)));
+  draw (z1 - .5u*(cosd(45),sind(45))) -- (z2 + .5u*(cosd(45),sind(45)));
+  draw (z0 - u*(2.0/sqrt(41.0),2.5/sqrt(41.0))) -- (z3 + u*(0,1));
+  draw (z2 - u*(2.0/sqrt(41.0), 2.5/sqrt(41.0))) -- (z4 + u*(0,1));
+  draw (z2 + u*(2.0/sqrt(41.0),-2.5/sqrt(41.0))) -- (z5 + u*(0,1));
+  draw (z1 + u*(2.0/sqrt(41.0),-2.5/sqrt(41.0))) -- (z6 + u*(0,1));
+
+  z[7] = (13u,-2u);        % a
+  z[8] = (19u,-2u);     % c
+  z[9] = (16u,0);      % b
+  z[10] = (11u, -4.5u); % x
+  z[11] = (15u, -4.5u); % y_{0}
+  z[12] = (17u,-4.5u);   % y_{1}
+  z[13] = (21u, -4.5u);  % z
+  fill fullcircle scaled u shifted z7 withcolor lightpurple;
+  fill fullcircle scaled u shifted z9 withcolor lightgreen;
+  fill fullcircle scaled u shifted z8 withcolor lightorange;
+  fill triangle shifted z10 withcolor lightred;
+  fill triangle shifted z11 withcolor lightblue;
+  fill triangle shifted z12 withcolor lightyellow;
+  fill triangle shifted z13 withcolor lightred;
+  label(btex $a$ etex, z[7]);
+  label(btex $c$ etex, z[8]);
+  label(btex $b$ etex, z[9]);
+  label(btex $x$ etex, z[10]);
+  label(btex $y_{0}$ etex, z[11]);
+  label(btex $y_{1}$ etex, z[12]);
+  label(btex $z$ etex, z[13]);
+  draw fullcircle scaled u shifted z7;
+  draw fullcircle scaled u shifted z8;
+  draw fullcircle scaled u shifted z9;
+  draw triangle shifted z10;
+  draw triangle shifted z11;
+  draw triangle shifted z12;
+  draw triangle shifted z13;
+  draw (z9 + .5u*(cosd(45),-sind(45))) -- (z8 + .5u*(-cosd(45),sind(45)));
+  draw (z9 - .5u*(cosd(45),sind(45))) -- (z7 + .5u*(cosd(45),sind(45)));
+  draw (z7 - u*(2.0/sqrt(41.0),2.5/sqrt(41.0))) -- (z10 + u*(0,1));
+  draw (z7 + u*(2.0/sqrt(41.0),-2.5/sqrt(41.0))) -- (z11 + u*(0,1));
+  draw (z8 - u*(2.0/sqrt(41.0),2.5/sqrt(41.0))) -- (z12 + u*(0,1));
+  draw (z8 + u*(2.0/sqrt(41.0),-2.5/sqrt(41.0))) -- (z13 + u*(0,1));
+
+  drawarrow (5u,-2u)--(10u,-2u) withpen pencircle scaled 1.2;
+  label.top(btex Double Left etex, (7.5u,-2u));
+endfig;
+
+beginfig(4);
+  hppp := 0.50;
+  vppp := 0.50;
+  % pair z[];
+  numeric u; u := 1pc;
+  z[0] = (0,0);        % a
+  z[1] = (2u,-2u);     % c
+  z[2] = (0,-4u);      % b
+  z[3] = (-2u, -2.5u); % x
+  z[4] = (-2u, -6.5u); % y_{0}
+  z[5] = (2u,-6.5u);   % y_{1}
+  z[6] = (4u, -4.5u);  % z
+  color lightpurple; lightpurple := 0.5[white, 0.5[red,blue]]; % a
+  color lightred; lightred := 0.75[red,white]; % x & z
+  color lightgreen; lightgreen := 0.5[white,green]; % b
+  color lightblue; lightblue := 0.25[white,blue]; % x
+  color lightyellow; lightyellow := 0.5[white,yellow]; % y_{0}
+  color lightorange; lightorange := 0.5[white, 0.5[red,yellow]]; % c
+  path triangle;
+  triangle = u*(cosd(-30),sind(-30)) -- (0,u) -- u*(cosd(210),sind(210)) -- cycle;
+  fill fullcircle scaled u shifted z0 withcolor lightpurple;
+  fill fullcircle scaled u shifted z2 withcolor lightgreen;
+  fill fullcircle scaled u shifted z1 withcolor lightorange;
+  fill triangle shifted z3 withcolor lightred;
+  fill triangle shifted z4 withcolor lightblue;
+  fill triangle shifted z5 withcolor lightyellow;
+  fill triangle shifted z6 withcolor lightred;
+  label(btex $a$ etex, z[0]);
+  label(btex $c$ etex, z[1]);
+  label(btex $b$ etex, z[2]);
+  label(btex $x$ etex, z[3]);
+  label(btex $y_{0}$ etex, z[4]);
+  label(btex $y_{1}$ etex, z[5]);
+  label(btex $z$ etex, z[6]);
+  draw fullcircle scaled u shifted z0;
+  draw fullcircle scaled u shifted z1;
+  draw fullcircle scaled u shifted z2;
+  draw triangle shifted z3;
+  draw triangle shifted z4;
+  draw triangle shifted z5;
+  draw triangle shifted z6;
+  draw (z0 + .5u*(cosd(45),-sind(45))) -- (z1 + .5u*(-cosd(45),sind(45)));
+  draw (z1 - .5u*(cosd(45),sind(45))) -- (z2 + .5u*(cosd(45),sind(45)));
+  draw (z0 - u*(2.0/sqrt(41.0),2.5/sqrt(41.0))) -- (z3 + u*(0,1));
+  draw (z2 - u*(2.0/sqrt(41.0), 2.5/sqrt(41.0))) -- (z4 + u*(0,1));
+  draw (z2 + u*(2.0/sqrt(41.0),-2.5/sqrt(41.0))) -- (z5 + u*(0,1));
+  draw (z1 + u*(2.0/sqrt(41.0),-2.5/sqrt(41.0))) -- (z6 + u*(0,1));
+
+  z[7] = (13u,0u);        % a
+  z[8] = (17u,-4u);     % c
+  z[9] = (15u,-2u);      % b
+  z[10] = (11u, -2.5u); % x
+  z[11] = (13u, -4.5u); % y_{0}
+  z[12] = (15u, -6.5u);   % y_{1}
+  z[13] = (19u, -6.5u);  % z
+  fill fullcircle scaled u shifted z7 withcolor lightpurple;
+  fill fullcircle scaled u shifted z9 withcolor lightgreen;
+  fill fullcircle scaled u shifted z8 withcolor lightorange;
+  fill triangle shifted z10 withcolor lightred;
+  fill triangle shifted z11 withcolor lightblue;
+  fill triangle shifted z12 withcolor lightyellow;
+  fill triangle shifted z13 withcolor lightred;
+  label(btex $a$ etex, z[7]);
+  label(btex $c$ etex, z[8]);
+  label(btex $b$ etex, z[9]);
+  label(btex $x$ etex, z[10]);
+  label(btex $y_{0}$ etex, z[11]);
+  label(btex $y_{1}$ etex, z[12]);
+  label(btex $z$ etex, z[13]);
+  draw fullcircle scaled u shifted z7;
+  draw fullcircle scaled u shifted z8;
+  draw fullcircle scaled u shifted z9;
+  draw triangle shifted z10;
+  draw triangle shifted z11;
+  draw triangle shifted z12;
+  draw triangle shifted z13;
+  draw (z7 + .5u*(cosd(45),-sind(45))) -- (z9 + .5u*(-cosd(45),sind(45)));
+  draw (z9 + .5u*(cosd(45),-sind(45))) -- (z8 + .5u*(-cosd(45),sind(45)));
+  draw (z7 - u*(2.0/sqrt(41.0),2.5/sqrt(41.0))) -- (z10 + u*(0,1));
+  draw (z9 - u*(2.0/sqrt(41.0),2.5/sqrt(41.0))) -- (z11 + u*(0,1));
+  draw (z8 - u*(2.0/sqrt(41.0),2.5/sqrt(41.0))) -- (z12 + u*(0,1));
+  draw (z8 + u*(2.0/sqrt(41.0),-2.5/sqrt(41.0))) -- (z13 + u*(0,1));
+
+  drawarrow (5u,-2u)--(10u,-2u) withpen pencircle scaled 1.2;
+  label.top(btex Local Right etex, (7.5u,-2u));
+endfig;
+
+
 end;
