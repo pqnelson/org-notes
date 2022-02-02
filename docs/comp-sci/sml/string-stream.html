@@ -4,7 +4,7 @@
 <!-- 2022-02-02 Wed 15:09 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Implementations - SML</title>
+<title>StringStream - SML</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -236,210 +236,120 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Implementations - SML</h1>
+<h1 class="title">StringStream - SML</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#h-542dda25-92a9-4242-981a-326396c9d891">1. Poly/ML</a></li>
-<li><a href="#h-a474e941-9a4f-45e9-bf6c-0434934dfe24">2. MLton</a>
-<ul>
-<li><a href="#h-c96a1a4f-8997-4297-b4a6-4d2446fac78d">2.1. On Raspberry Pi</a>
-<ul>
-<li><a href="#h-d3cc257f-9ad7-4953-9db1-abbed247e1f7">2.1.1. Remote Compiling</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515">3. SML/NJ</a></li>
-<li><a href="#h-8bee04cc-0008-4a29-af61-8d0d0203aeb3">4. MLKit</a></li>
-</ul>
-</div>
-</div>
-<p>
-This is just a cursory "How to build [SML implementation] on Raspberry
-Pi" post.
-</p>
-
-<div id="outline-container-h-542dda25-92a9-4242-981a-326396c9d891" class="outline-2">
-<h2 id="h-542dda25-92a9-4242-981a-326396c9d891"><span class="section-number-2">1</span> Poly/ML</h2>
-<div class="outline-text-2" id="text-h-542dda25-92a9-4242-981a-326396c9d891">
-<p>
-This seems to work fine. If you have a 32-bit ARM computer, then it will
-simply compile bytecode, which will run considerably slower. The basic
-steps <a href="https://www.polyml.org/download.html">seems to be:</a>
-</p>
-
-<pre class="example" id="org2eb4494">
-~/src/$ git clone https://github.com/polyml/polyml.git
-~/src/polyml/$ cd polyml
-~/src/polyml/$ ./configure
-~/src/polyml/$ make
-~/src/polyml/$ make compiler
-~/src/polyml/$ sudo make install
-</pre>
-
-<p>
-It may be worth considering upgrading to a Raspberry Pi 3B+ or 4, since
-Apple has transitioned to 64-bit ARM (we will end up piggie-backing off
-opensource projects transitioning to support 64-bit ARM).
-</p>
-
-<p>
-Note: since commit <code>15c840d4</code>, the ARM64 performance has improved
-drastically.
-</p>
-
-<ul class="org-ul">
-<li><a href="https://github.com/polyml/polyml">Github page</a> for Poly/ML</li>
+<li><a href="#h-e4bbaadc-b46b-4d44-b5bb-a2177a7a5318">1. Introduction</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-h-a474e941-9a4f-45e9-bf6c-0434934dfe24" class="outline-2">
-<h2 id="h-a474e941-9a4f-45e9-bf6c-0434934dfe24"><span class="section-number-2">2</span> MLton</h2>
-<div class="outline-text-2" id="text-h-a474e941-9a4f-45e9-bf6c-0434934dfe24">
+<div id="outline-container-h-e4bbaadc-b46b-4d44-b5bb-a2177a7a5318" class="outline-2">
+<h2 id="h-e4bbaadc-b46b-4d44-b5bb-a2177a7a5318"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-e4bbaadc-b46b-4d44-b5bb-a2177a7a5318">
 <p>
-This needs an existing SML compiler for the bootstrap process.
+I found myself looking for something analogous to Java's <code>StringStream</code>,
+when writing things out.
 </p>
 
 <p>
-I think <code>make polyml-mlton</code> may work as well. Although the <code>make bootstrap-polyml</code>
-command may be the intended command.
+First, we need to construct a <code>TextPrimIO.writer</code> for the
+stream, which will just write to a <code>string ref</code> buffer.
 </p>
 
 <p>
-I have tried <code>make MLTON_COMPILE_ARGS="-codegen c" all</code>. I think
-<code>-codegen llvm</code> may produce better results?
+On SML/NJ, it seems that only <code>writeVec'</code> is needed for an unbuffered
+string stream. I should really test this on other implementations&#x2026;
 </p>
 
-<p>
-It seems a better approach may be to cross-compile MLton on another
-computer. Basically, on my x64 machine with 12GB of RAM, I ran the
-following:
-</p>
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(*</span>
+<span class="org-comment">Creates a string writer, which writes to the supplied string buffer.</span>
 
-<pre class="example" id="org240ef90">
-alex@x64:~/src/$ git clone https://github.com/mlton/mlton
-alex@x64:~/src/$ cd mlton
-alex@x64:~/src/mlton/$ make
-...
-alex@x64:~/src/mlton/$ make REMOTE_MACHINE=alex@raspberry.local remote-bootstrap
-...
-</pre>
-
-<p>
-If you do this, you might want to have your pubkey on your Raspberry Pi,
-otherwise you'll end up logging in several dozen times over the course
-of an hour or so. But it works! (I learned about this <code>REMOTE_MACHINE</code>
-trick from <a href="https://github.com/MLton/mlton/issues/438">github issues</a>.)
-</p>
-
-<p>
-Well, right now, it breaks on the <code>$(MAKE) remote--make-all</code> step for me
-(c.f., <a href="https://github.com/MLton/mlton/issues/438#issuecomment-849623610">steps</a> in the remote build process).
-</p>
-
-<p>
-In fact, you might want to run <code>scp ~/.ssh/id_rsa.pub alex@raspberrypi.local:.ssh/authorized_keys</code>
-to avoid signing in repeatedly. And if you don't have an RSA key, you
-might want to follow <a href="http://web.archive.org/web/20160404025901/http://jaybyjayfresh.com/2009/02/04/logging-in-without-a-password-certificates-ssh/">these instructions</a>.
-</p>
-
-<ul class="org-ul">
-<li><a href="http://mlton.org/Home">Home page</a></li>
-<li><a href="https://github.com/MLton/mlton">Github page</a></li>
-<li><a href="http://mlton.org/RunningOnARM">Running on ARM</a> MLton wiki</li>
-<li><a href="http://www.mlton.org/pipermail/mlton-devel/2007-June/029877.html">Re: Cross compile on ARM successful</a> MLton mailing list thread</li>
-</ul>
-</div>
-
-<div id="outline-container-h-c96a1a4f-8997-4297-b4a6-4d2446fac78d" class="outline-3">
-<h3 id="h-c96a1a4f-8997-4297-b4a6-4d2446fac78d"><span class="section-number-3">2.1</span> On Raspberry Pi</h3>
-<div class="outline-text-3" id="text-h-c96a1a4f-8997-4297-b4a6-4d2446fac78d">
-<p>
-This is actually harder than I realized to get this working on a
-Raspberry pi 4. What I ended up doing is modifying my
-<code>/etc/apt/sources.list</code> to include a Debian repo, then I was able to
-<code>sudo apt install mlton</code>. (There is some trickiness here, with
-<a href="https://ccm.net/faq/809-debian-apt-get-no-pubkey-gpg-error">pubkey errors</a>.) I then used this to compile MLton from scratch.
-</p>
-
-<p>
-Another caveat is that this will run into problems if your
-<code>/boot/config.txt</code> includes the line specifying it to run in 64-bit
-mode. In fact, this borked my installation, and I had to reinstall
-Raspbian lite.
-</p>
-</div>
-
-<div id="outline-container-h-d3cc257f-9ad7-4953-9db1-abbed247e1f7" class="outline-4">
-<h4 id="h-d3cc257f-9ad7-4953-9db1-abbed247e1f7"><span class="section-number-4">2.1.1</span> Remote Compiling</h4>
-<div class="outline-text-4" id="text-h-d3cc257f-9ad7-4953-9db1-abbed247e1f7">
-<p>
-The exact failure is during the <code>remote--make-all</code> step:
-</p>
-
-<pre class="example" id="org9d7fac0">
-Compiling mlton
-"/tmp/mlton-20210117.153942-gb1f1f0f09/boot/bin/mlton" \
-	@MLton ram-slop 0.7  gc-summary -- \
-	 -verbose 2 	\
-	-target self -output mlton-compile			\
-	mlton-stubs.mlb
-MLton 20210117.153942-gb1f1f0f09 starting
-   Compile SML starting
-      frontend starting
-         parseAndElaborate starting
-make[2]: Leaving directory '/tmp/mlton-20210117.153942-gb1f1f0f09/mlton'
-Segmentation fault
-make[2]: *** [Makefile:72: mlton-compile] Error 139
-make[1]: Leaving directory '/tmp/mlton-20210117.153942-gb1f1f0f09'
-make[1]: *** [Makefile:75: compiler] Error 2
-make: *** [Makefile:19: all] Error 2
-make: *** [Makefile:666: remote--make-all] Error 2
+<span class="org-comment">@TODO: implement the {@code writeArr} for {@code CharArray.array}</span>
+<span class="org-comment">       {@see https://smlfamily.github.io/Basis/mono-array-slice.html#MONO_ARRAY_SLICE:SIG:SPEC}</span>
+<span class="org-comment">       and {@link https://smlfamily.github.io/Basis/mono-array.html#MONO_ARRAY:SIG:SPEC}</span>
+<span class="org-comment">@see: https://smlfamily.github.io/Basis/prim-io.html#SIG:PRIM_IO.writer:TY</span>
+<span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">fun</span> stringWriter(buffer : string ref) : TextPrimIO.writer =
+    <span class="org-keyword">let</span>
+        <span class="org-comment-delimiter">(* </span><span class="org-comment">For reasons I do not fully understand, these functions must</span>
+<span class="org-comment">           return the number of chars written to the stream. </span><span class="org-comment-delimiter">*)</span>
+        <span class="org-keyword">fun</span> <span class="org-function-name">writeVec'</span> (v : TextPrimIO.vector_slice)
+            = (buffer := (!buffer)^(CharVectorSlice.vector v);
+              (CharVectorSlice.length v))
+        <span class="org-keyword">fun</span> <span class="org-function-name">writeArr'</span> (arr : TextPrimIO.array_slice)
+            = (print(<span class="org-string">"Trying to write a array slice of length "</span>^Int.toString(CharArraySlice.length arr));
+               buffer:=(!buffer)^(CharArraySlice.vector arr);
+                                 (CharArraySlice.length arr))
+        <span class="org-keyword">fun</span> <span class="org-function-name">writeVecNB'</span> (v : TextPrimIO.vector_slice)
+            = (buffer := (!buffer)^(CharVectorSlice.vector v);
+               SOME (CharVectorSlice.length v))
+        <span class="org-keyword">fun</span> <span class="org-function-name">writeArrNB'</span> (arr : TextPrimIO.array_slice) = (buffer:=(!buffer)^(CharArraySlice.vector arr);
+                                 SOME (CharArraySlice.length arr))
+        <span class="org-keyword">fun</span> <span class="org-function-name">closing</span> () = print (<span class="org-string">"Trying to close string stream?!?!?\n\n"</span>)
+    <span class="org-keyword">in</span>
+        TextPrimIO.WR{
+            name = <span class="org-string">"&lt;string&gt;"</span>,
+            chunkSize = 1,
+            writeVec = SOME writeVec',
+            writeArr = SOME writeArr',
+            writeVecNB = SOME writeVecNB',
+            writeArrNB = SOME writeArrNB',
+            block = NONE,
+            canOutput = NONE,
+            getPos = NONE,
+            setPos = NONE,
+            endPos = NONE,
+            verifyPos = NONE,
+            close = closing,
+            ioDesc = NONE}
+      <span class="org-keyword">end</span>;
 </pre>
 </div>
-</div>
-</div>
-</div>
-
-<div id="outline-container-h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515" class="outline-2">
-<h2 id="h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515"><span class="section-number-2">3</span> SML/NJ</h2>
-<div class="outline-text-2" id="text-h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515">
-<p>
-Doesn't support 32-bit ARM, and intends to support 64-bit ARM in the
-next release (2022.1), so it's impossible at the moment (as of January 15,
-2022).
-</p>
 
 <p>
-This is yet another incentive to upgrade to a 64-bit Raspberry Pi&#x2026;
+We have a smart constructor for a "string stream" from a "string
+writer":
 </p>
 
-<ul class="org-ul">
-<li><a href="https://www.smlnj.org/">SML/NJ Homepage</a></li>
-</ul>
-</div>
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> stringStream(buffer : string ref) =
+    <span class="org-keyword">let</span>
+        <span class="org-keyword">val</span> <span class="org-variable-name">writer</span> : TextIO.StreamIO.writer = stringWriter(buffer)
+    <span class="org-keyword">in</span>
+        TextIO.StreamIO.mkOutstream(writer, IO.NO_BUF)
+    <span class="org-keyword">end</span>;
+</pre>
 </div>
 
-<div id="outline-container-h-8bee04cc-0008-4a29-af61-8d0d0203aeb3" class="outline-2">
-<h2 id="h-8bee04cc-0008-4a29-af61-8d0d0203aeb3"><span class="section-number-2">4</span> MLKit</h2>
-<div class="outline-text-2" id="text-h-8bee04cc-0008-4a29-af61-8d0d0203aeb3">
 <p>
-Only supports x86 and Javascript, so I couldn't get it working on my
-Raspberry Pi. Formerly, MLKit had a bytecode interpreter, but this was
-removed to support Javascript.
+Now we can show an example usage:
 </p>
 
-<ul class="org-ul">
-<li><a href="https://github.com/melsman/mlkit">Github page</a></li>
-</ul>
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">b1</span> : string ref = ref <span class="org-string">""</span>;
+<span class="org-keyword">val</span> <span class="org-variable-name">ss1</span> = stringStream(b1);
+
+<span class="org-keyword">fun</span> <span class="org-function-name">ss_print</span> (s : string) =
+    <span class="org-keyword">let</span>
+        <span class="org-keyword">val</span> <span class="org-variable-name">cv</span> : CharVector.vector = s
+    <span class="org-keyword">in</span>
+        TextIO.StreamIO.output(ss1, cv)
+    <span class="org-keyword">end</span>;
+
+ss_print(<span class="org-string">"foobar"</span>);
+    
+<span class="org-comment-delimiter">(* </span><span class="org-comment">then `!b1` evaluates to "foobar" </span><span class="org-comment-delimiter">*)</span>
+</pre>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-28 Fri 09:13.</p>
+<p class="postamble">Last Updated 2022-02-02 Wed 15:09.</p>
 </div>
 </body>
 </html>

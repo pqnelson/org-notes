@@ -1,0 +1,101 @@
+#+TITLE: StringStream - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-02-02T15:05:36-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Wednesday February  2, 2022 at  3:05PM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-e4bbaadc-b46b-4d44-b5bb-a2177a7a5318
+:END:
+
+I found myself looking for something analogous to Java's ~StringStream~,
+when writing things out.
+
+First, we need to construct a ~TextPrimIO.writer~ for the
+stream, which will just write to a ~string ref~ buffer.
+
+On SML/NJ, it seems that only ~writeVec'~ is needed for an unbuffered
+string stream. I should really test this on other implementations...
+
+#+begin_src sml
+(*
+Creates a string writer, which writes to the supplied string buffer.
+
+@TODO: implement the {@code writeArr} for {@code CharArray.array}
+       {@see https://smlfamily.github.io/Basis/mono-array-slice.html#MONO_ARRAY_SLICE:SIG:SPEC}
+       and {@link https://smlfamily.github.io/Basis/mono-array.html#MONO_ARRAY:SIG:SPEC}
+@see: https://smlfamily.github.io/Basis/prim-io.html#SIG:PRIM_IO.writer:TY
+*)
+fun stringWriter(buffer : string ref) : TextPrimIO.writer =
+    let
+        (* For reasons I do not fully understand, these functions must
+           return the number of chars written to the stream. *)
+        fun writeVec' (v : TextPrimIO.vector_slice)
+            = (buffer := (!buffer)^(CharVectorSlice.vector v);
+              (CharVectorSlice.length v))
+        fun writeArr' (arr : TextPrimIO.array_slice)
+            = (print("Trying to write a array slice of length "^Int.toString(CharArraySlice.length arr));
+               buffer:=(!buffer)^(CharArraySlice.vector arr);
+                                 (CharArraySlice.length arr))
+        fun writeVecNB' (v : TextPrimIO.vector_slice)
+            = (buffer := (!buffer)^(CharVectorSlice.vector v);
+               SOME (CharVectorSlice.length v))
+        fun writeArrNB' (arr : TextPrimIO.array_slice) = (buffer:=(!buffer)^(CharArraySlice.vector arr);
+                                 SOME (CharArraySlice.length arr))
+        fun closing () = print ("Trying to close string stream?!?!?\n\n")
+    in
+        TextPrimIO.WR{
+            name = "<string>",
+            chunkSize = 1,
+            writeVec = SOME writeVec',
+            writeArr = SOME writeArr',
+            writeVecNB = SOME writeVecNB',
+            writeArrNB = SOME writeArrNB',
+            block = NONE,
+            canOutput = NONE,
+            getPos = NONE,
+            setPos = NONE,
+            endPos = NONE,
+            verifyPos = NONE,
+            close = closing,
+            ioDesc = NONE}
+      end;
+#+end_src
+
+We have a smart constructor for a "string stream" from a "string
+writer":
+
+#+begin_src sml
+fun stringStream(buffer : string ref) =
+    let
+        val writer : TextIO.StreamIO.writer = stringWriter(buffer)
+    in
+        TextIO.StreamIO.mkOutstream(writer, IO.NO_BUF)
+    end;
+#+end_src
+
+Now we can show an example usage:
+
+#+begin_src sml
+val b1 : string ref = ref "";
+val ss1 = stringStream(b1);
+
+fun ss_print (s : string) =
+    let
+        val cv : CharVector.vector = s
+    in
+        TextIO.StreamIO.output(ss1, cv)
+    end;
+
+ss_print("foobar");
+    
+(* then `!b1` evaluates to "foobar" *)
+#+end_src
