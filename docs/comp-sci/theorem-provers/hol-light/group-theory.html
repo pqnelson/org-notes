@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-03 Thu 17:08 -->
+<!-- 2022-02-03 Thu 17:19 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Group Theory - HOL Light</title>
@@ -325,6 +325,21 @@ right unit laws for the identity element)</li>
 <li>\(\forall x, x\in s\implies [a(n(x),x)=z\land a(x,n(x))=z]\) (the
 inverse element satisfies the obvious property)</li>
 </ol>
+
+<p>
+Also, the <a href="https://github.com/jrh13/hol-light/blob/18cef3b377c1f094fd33e0fbd42bb0e49ec2322f/sets.ml"><code>IN</code></a> predicate is implemented as:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ocaml">let IN = new_definition
+  `!P:A-&gt;bool. !x. x IN P &lt;=&gt; P x`;;
+</pre>
+</div>
+
+<p>
+That is to say, a set is just a predicate, so membership <code>IN</code> a set
+amounts to satisfying the underlying predicate.
+</p>
 </div>
 
 <div id="outline-container-h-42727c50-0e0b-4238-a6e2-6fc35013647a" class="outline-3">
@@ -370,7 +385,7 @@ See also: Rob Arthan's <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC610
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-03 Thu 17:04.</p>
+<p class="postamble">Last Updated 2022-02-03 Thu 17:18.</p>
 </div>
 </body>
 </html>
