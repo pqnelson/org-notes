@@ -5,10 +5,10 @@
 #+LANGUAGE: en
 #+OPTIONS: H:5
 #+HTML_DOCTYPE: html5
-#+INCLUDE: ../../org-macros.org
+#+INCLUDE: ../../../org-macros.org
 #+HTML_LINK_UP: ./index.html
-#+HTML_LINK_HOME: ../../index.html
-#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 # Created Monday November  8, 2021 at  7:49AM
 
 * Introduction
@@ -418,3 +418,19 @@ end;
 ::   coherence;
 :: end;
 #+end_example
+
+This introduces a ~multMagma~ structure, which inherits the ~1-sorted~
+structure. Loosely, structures are analogous to classes (they define new
+types, they have a constructor --- in this case, it's ~multMagma(# X, op #)~,
+and so on). We can access the /fields/ of the structure by writing
+things like ~the multF of M~ to get the ~multF~ field, and ~the carrier~
+to get its underlying set.
+
+(This is a common Mizar idiom, using ~carrier~ as the name of the
+underlying set of a mathematical gadget.)
+
+Our intuition should be that a ~struct~ is how Mizar encodes stuff and
+structure (in the [[http://nlab-pages.s3.us-east-2.amazonaws.com/nlab/show/stuff,+structure,+property][Baez--Dolan sense]]). Indeed, idiomatic Mizar will
+encode a mathematical gadget in this manner, with a ~Gadget-like~
+attribute for a ~GadgetStr~ structure, then we will find a
+~mode Gadget means Gadget-like GadgetStr~ type definition.

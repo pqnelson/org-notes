@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-11 Tue 12:09 -->
+<!-- 2022-02-04 Fri 09:49 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Definitions in Mizar</title>
@@ -206,7 +206,7 @@
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
-<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -234,7 +234,7 @@
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
- <a accesskey="H" href="../../index.html"> HOME </a>
+ <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content">
 <h1 class="title">Definitions in Mizar</h1>
 <div id="table-of-contents">
@@ -456,7 +456,7 @@ occurring in them; so <code>for x being Real holds x-x = 0</code> translates to
 The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Mode-Definition">syntactic structure</a> of <code>&lt;Mode-Definition&gt;</code> is:
 </p>
 
-<pre class="example" id="orgdab2254">
+<pre class="example" id="org4c2dd32">
 &lt;Mode-Definition&gt; =
 	"mode" &lt;Mode-Pattern&gt; ( [ &lt;Specification&gt; ] [ "means" &lt;Definiens&gt; ] ";"
 &lt;Correctness-Conditions&gt; | "is" &lt;Type-Expression&gt; ";" ) { &lt;Mode-Property&gt; } .
@@ -540,7 +540,7 @@ m1_subset_1(X,Y)))</code>
 Another couple examples, from <a href="http://www.mizar.org/version/current/mml/binop_1.miz"><code>binop_1.miz</code></a>:
 </p>
 
-<pre class="example" id="org2dde098">
+<pre class="example" id="org7dec794">
 definition
   let A be set; :: loci-declaration
   :: defines a unary operation on A
@@ -573,7 +573,7 @@ The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predic
 An example given:
 </p>
 
-<pre class="example" id="org1c65acb">
+<pre class="example" id="orged08e80">
 definition let X,Y:
   pred X c= Y means
 :: TARSKI:def 3
@@ -647,7 +647,7 @@ negation of <code>empty</code>). The <a href="http://wiki.mizar.org/twiki/pub/Mi
 Here's an example:
 </p>
 
-<pre class="example" id="org9b1c102">
+<pre class="example" id="org13c5cbf">
 definition let i be number;
  attr i is even means
   ex j being Integer st i = 2*j;
@@ -671,7 +671,7 @@ associative] law of composition). Mizar refers to a <code>multMagma</code> as a
 magma with a single law of composition.
 </p>
 
-<pre class="example" id="orgba1af11">
+<pre class="example" id="org15f1aa6">
 definition
   let IT be multMagma;
 
@@ -718,7 +718,7 @@ result. Several <code>&lt;Functor-Properties&gt;</code> (like <code>commutativit
 associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Functor-Definition">syntax</a> is:
 </p>
 
-<pre class="example" id="orgdda1f4b">
+<pre class="example" id="org616f288">
 &lt;Functor-Definition&gt; =
  "func" &lt;Functor-Pattern&gt; [ &lt;Specification&gt; ] [ ( "means" | "equals" ) &lt;Definiens&gt; ] ";"
  &lt;Correctness-Conditions&gt; { &lt;Functor-Property&gt; } .
@@ -730,7 +730,7 @@ associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSy
 The example given:
 </p>
 
-<pre class="example" id="org0e9b8ed">
+<pre class="example" id="org833f0ae">
 definition let x be real number;
   func -x -&gt; real number means :Def1: x + it = 0;
   existence by AXIOMS:19;
@@ -767,7 +767,7 @@ theorem, <code>Th10</code>)</li>
 The definition creates one new pattern, and one new constructor. 
 </p>
 
-<div class="remark" id="orgb1489b2">
+<div class="remark" id="org3abbc7e">
 <p>
 Defining a "morphism" requires some involved work with cluster
 registrations, it's not as simple as defining a new function. See, e.g.,
@@ -786,7 +786,7 @@ how group morphisms are defined in
 From <a href="http://www.mizar.org/version/current/mml/algstr_0.miz"><code>algstr_0.miz</code></a>, we have:
 </p>
 
-<pre class="example" id="org8a5f5ca">
+<pre class="example" id="orgde2aed5">
 :: Multiplicative structures
 definition
   struct (1-sorted) multMagma (# carrier -&gt; set, multF -&gt; BinOp of the carrier
@@ -803,12 +803,34 @@ end;
 ::   coherence;
 :: end;
 </pre>
+
+<p>
+This introduces a <code>multMagma</code> structure, which inherits the <code>1-sorted</code>
+structure. Loosely, structures are analogous to classes (they define new
+types, they have a constructor &#x2014; in this case, it's <code>multMagma(# X, op #)</code>,
+and so on). We can access the <i>fields</i> of the structure by writing
+things like <code>the multF of M</code> to get the <code>multF</code> field, and <code>the carrier</code>
+to get its underlying set.
+</p>
+
+<p>
+(This is a common Mizar idiom, using <code>carrier</code> as the name of the
+underlying set of a mathematical gadget.)
+</p>
+
+<p>
+Our intuition should be that a <code>struct</code> is how Mizar encodes stuff and
+structure (in the <a href="http://nlab-pages.s3.us-east-2.amazonaws.com/nlab/show/stuff,+structure,+property">Baez&#x2013;Dolan sense</a>). Indeed, idiomatic Mizar will
+encode a mathematical gadget in this manner, with a <code>Gadget-like</code>
+attribute for a <code>GadgetStr</code> structure, then we will find a
+<code>mode Gadget means Gadget-like GadgetStr</code> type definition.
+</p>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-08 Mon 08:06.</p>
+<p class="postamble">Last Updated 2022-02-04 Fri 09:48.</p>
 </div>
 </body>
 </html>
