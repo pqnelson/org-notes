@@ -1,0 +1,92 @@
+#+TITLE: Group Theory - HOL Light
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-01-29T10:32:23-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Saturday January 29, 2022 at 10:32AM
+
+* Implementation
+:PROPERTIES:
+:CUSTOM_ID: h-4605aa94-8886-4ffc-80c0-209e4fa966f4
+:END:
+
+I'm just tracing out the implementation details. We find:
+
+#+begin_src ocaml
+let group_tybij =
+  let eth = prove
+   (`?s (z:A) n a.
+          z IN s /\
+          (!x. x IN s ==> n x IN s) /\
+          (!x y. x IN s /\ y IN s ==> a x y IN s) /\
+          (!x y z. x IN s /\ y IN s /\ z IN s
+                   ==> a x (a y z) = a (a x y) z) /\
+          (!x. x IN s ==> a z x = x /\ a x z = x) /\
+          (!x. x IN s ==> a (n x) x = z /\ a x (n x) = z)`,
+    MAP_EVERY EXISTS_TAC
+     [`{ARB:A}`; `ARB:A`; `(\x. ARB):A->A`; `(\x y. ARB):A->A->A`] THEN
+    REWRITE_TAC[IN_SING] THEN MESON_TAC[]) in
+  new_type_definition "group" ("group","group_operations")
+   (GEN_REWRITE_RULE DEPTH_CONV [EXISTS_UNPAIR_THM] eth);;
+#+end_src
+
+This defines ~"group"~ and ~"group_operations"~.
+
+Let us analyze what-in-Heaven's-name is going on here. The proposition,
+if translated into logic, states $\exists s\exists z{:}A\exists n\exists a.(\dots)$
+where $s$ is the set underlying the group, $z{:}A$ is the identity
+element, $n$ is the group inverse operator, and $a$ is the law of
+composition. The axioms they satisfy are:
+
+1. $z\in s$ (the identity element belongs to the underlying set)
+2. $\forall x, x\in s\implies n(x)\in s$ (every element $x\in s$
+   belonging to the underlying set also has its inverse element $n x$ be
+   a member of $s$)
+3. $\forall x\forall y, x\in s\land y\in s\implies a(x,y)\in s$ (the law
+   of composition maps any $x,y\in s$ to an element $a(x,y)\in s$)
+4. $\forall x\forall y\forall z, x\in s\land y\in s\land z\in s\implies
+   a(x, a(y,z)) = a(a(x,y),z)$ (associativity of the law of composition)
+5. $\forall x, x\in s\implies [a(z,x)=x\land a(x,z)=x]$ (the left and
+   right unit laws for the identity element)
+6. $\forall x, x\in s\implies [a(n(x),x)=z\land a(x,n(x))=z]$ (the
+   inverse element satisfies the obvious property)
+
+** Where is ~new_type_definition~ defined?
+:PROPERTIES:
+:CUSTOM_ID: h-42727c50-0e0b-4238-a6e2-6fc35013647a
+:END:
+
+In [[https://github.com/jrh13/hol-light/blob/d125b0ae73e546a63ed458a7891f4e14ae0409e2/class.ml#L119-L133][class.ml]], we find the implementation of ~new_type_definition~ as:
+
+#+begin_src ocaml
+let the_type_definitions = ref ([]:((string*string*string)*(thm*thm))list);;
+
+let new_type_definition tyname (absname,repname) th =
+  try let th',tth' = assoc (tyname,absname,repname) (!the_type_definitions) in
+      if concl th' <> concl th then failwith "" else
+      (warn true "Benign redefinition of type"; tth')
+  with Failure _ ->
+    let th0 =
+     CONV_RULE (RATOR_CONV (REWR_CONV EXISTS_THM) THENC BETA_CONV) th in
+    let th1,th2 = new_basic_type_definition tyname (absname,repname) th0 in
+    let tth = CONJ (GEN_ALL th1)
+                   (GEN_ALL (CONV_RULE(LAND_CONV (TRY_CONV BETA_CONV)) th2)) in
+    the_type_definitions := ((tyname,absname,repname),(th,tth))::
+                            (!the_type_definitions);
+    tth;;
+#+end_src
+
+See also: Rob Arthan's [[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6109768/][On Definitions of Constants and Types in HOL]].
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-473abd86-2af4-4f98-86cc-f3c2a4815fdf
+:END:
+
+- [[https://github.com/jrh13/hol-light/blob/master/Library/grouptheory.ml][Library/grouptheory.ml]] is where some group theory is done
