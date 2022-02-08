@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-07 Mon 15:15 -->
+<!-- 2022-02-07 Mon 16:46 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Computer Science</title>
+<title>FORTRAN</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -232,65 +232,131 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../index.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Computer Science</h1>
+<h1 class="title">FORTRAN</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-61887ea9-88da-43df-9d23-a5d04c7bb0c3">1. Overview</a></li>
+<li><a href="#h-f4713cbe-d64c-424d-b356-c1aa36a7a9d8">2. Tools</a>
+<ul>
+<li><a href="#h-2e5e2386-a108-4f5d-84b5-2fa635dceb93">2.1. Literate Fortran</a></li>
+<li><a href="#h-936d69ba-efa7-41ad-9594-8a8b1d7d805c">2.2. Unit Testing Frameworks</a></li>
+</ul>
+</li>
+<li><a href="#h-2dd65ecf-064f-408c-80fc-fea932eacea9">3. References</a>
+<ul>
+<li><a href="#h-4e18e195-09ae-45d2-a7d7-dceaafc8a876">3.1. Blogs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 
-<div id="outline-container-h-6a112c05-acf6-43ab-893b-e71f4fa415c3" class="outline-2">
-<h2 id="h-6a112c05-acf6-43ab-893b-e71f4fa415c3">Overview</h2>
-<div class="outline-text-2" id="text-h-6a112c05-acf6-43ab-893b-e71f4fa415c3">
+<div id="outline-container-h-61887ea9-88da-43df-9d23-a5d04c7bb0c3" class="outline-2">
+<h2 id="h-61887ea9-88da-43df-9d23-a5d04c7bb0c3"><span class="section-number-2">1.</span> Overview</h2>
+<div class="outline-text-2" id="text-h-61887ea9-88da-43df-9d23-a5d04c7bb0c3">
 <p>
-Computer science has emerged into a sprawling field. Although I am
-trying to focus on numerical analysis (to think further about
-solving math and physics problems), the entire domain of
-programming and computer science are rather fascinating.
+Fortran is the "gold standard" for numerical computation. Since the F90
+dialect came about, it has evolved from the "assembly doppleganger" to
+something resembling Pascal.
 </p>
 
 <p>
-Right now, I am working my way through the <code>scmutils</code> library used
-in <cite class="book-title">The Structure and Interpretation of Classical Mechanics</cite>.
-As I read through it, I'm thinking about how to implement the
-algorithms in Common Lisp.
+Like Common Lisp, it's case insensitive (unfortunately).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-f4713cbe-d64c-424d-b356-c1aa36a7a9d8" class="outline-2">
+<h2 id="h-f4713cbe-d64c-424d-b356-c1aa36a7a9d8"><span class="section-number-2">2.</span> Tools</h2>
+<div class="outline-text-2" id="text-h-f4713cbe-d64c-424d-b356-c1aa36a7a9d8">
+<p>
+I am specifically trying to <i>not</i> reinvent the wheel. Towards this end,
+I am willing to delegate work to specialized libraries (like LAPACK and
+friends).
+</p>
+</div>
+
+<div id="outline-container-h-2e5e2386-a108-4f5d-84b5-2fa635dceb93" class="outline-3">
+<h3 id="h-2e5e2386-a108-4f5d-84b5-2fa635dceb93"><span class="section-number-3">2.1.</span> Literate Fortran</h3>
+<div class="outline-text-3" id="text-h-2e5e2386-a108-4f5d-84b5-2fa635dceb93">
+<p>
+If I wanted to write a program in Fortran and include the motivation,
+derivation, etc., then a common trick is to use literate programming.
+There are a few toolkits available:
 </p>
 
 <ul class="org-ul">
-<li><a href="apology.html">Apologia</a> on various random conventional choices I've been forced
-to make</li>
-<li><a href="numerical-analysis.html">Numerical Analysis</a> (<a href="numerical-analysis/index.html">topics</a>) for all my computational needs</li>
-<li><a href="literate-programming.html">Literate Programming</a> is one method to programming, as espoused by
-Donald Knuth</li>
-<li><a href="theorem-provers.html">On Theorem Provers</a> (<a href="theorem-provers/index.html">topics</a>)</li>
-<li><a href="abstract-machines.html">Abstract Machines</a> (<a href="abstract-machines/index.html">topics</a>) as virtual machines for functional programming
-languages, began originally as pen-and-paper models of computer hardware
+<li>Noweb, a generic tool for literate programming, which works really
+well with LaTeX, and can produce HTML output. The only disadvantage I
+can think of is it doesn't easily handle syntax highlighting.</li>
+<li><a href="fortran/fweb.html">FWEB</a>, a fork of WEB specifically for Fortran</li>
+<li>Org-mode, which I prefer least</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-936d69ba-efa7-41ad-9594-8a8b1d7d805c" class="outline-3">
+<h3 id="h-936d69ba-efa7-41ad-9594-8a8b1d7d805c"><span class="section-number-3">2.2.</span> Unit Testing Frameworks</h3>
+<div class="outline-text-3" id="text-h-936d69ba-efa7-41ad-9594-8a8b1d7d805c">
+<p>
+There are about <a href="http://fortranwiki.org/fortran/show/Unit+testing+frameworks">a dozen frameworks</a> for unit testing Fortran code.
+One of the tenets of unit testing is to keep reports of test results,
+and the only framework producing an artifact (in the form of a file) is
+FRUIT.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-2dd65ecf-064f-408c-80fc-fea932eacea9" class="outline-2">
+<h2 id="h-2dd65ecf-064f-408c-80fc-fea932eacea9"><span class="section-number-2">3.</span> References</h2>
+<div class="outline-text-2" id="text-h-2dd65ecf-064f-408c-80fc-fea932eacea9">
 <ul class="org-ul">
-<li><a href="abstract-machines/secd.html">SECD Machine</a> the primordial abstract machine which started it all</li>
-<li><a href="abstract-machines/cam.html">Categorical Abstract Machine</a></li>
-</ul></li>
-<li><a href="lisp.html">Lisp</a> (<a href="lisp/index.html">topics</a>) the second-oldest language around, is my preferred language
-for programming most things
+<li><a href="http://fortranwiki.org/fortran/show/HomePage">Fortran Wiki</a></li>
+<li>Best Practices
 <ul class="org-ul">
-<li><a href="lisp/machine.html">Lisp Machine</a> lore (<a href="lisp/machine/index.html">topics</a>), partial history, sketchy and incomplete specifications</li>
-<li><a href="lisp/multiple-dispatch.html">Multiple Dispatch</a> for multimethods, which can be implemented in
-various different ways</li>
-<li><a href="lisp/generic-arithmetic.html">Generic Arithmetic</a> using multimethods for overloading operators</li>
-<li><a href="lisp/mal-2.html">Making a Lisp - Preliminaries</a> with implementing the base types</li>
+<li><a href="https://www.fortran90.org/src/best-practices.html">fortran90.org</a></li>
+<li><a href="https://web.archive.org/web/20101210055225/http://research.metoffice.gov.uk/research/nwp/numerical/fortran90/f90_standards.html">European Standards For Writing and Documenting Exchangeable Fortran 90 Code</a></li>
 </ul></li>
-<li><a href="fortran.html">FORTRAN</a> (<a href="fortran/index.html">topics</a>) the language used for scientific computing and numerical analysis</li>
-<li>Functional languages
+<li>Assertion utilities
 <ul class="org-ul">
-<li><a href="sml.html">Standard ML</a> (<a href="sml/index.html">topics</a>) the first "real" statically-typed functional programming language</li>
-<li><a href="haskell.html">Haskell</a>, the self-proclaimed purely functional programming language</li>
+<li><a href="http://computer-programming-forum.com/49-fortran/2ffdfd8b0b5b5297.htm">assert.h for Fortran</a></li>
+<li><a href="https://stackoverflow.com/q/21724186">Assertions in Fortran</a> (stackoverflow)</li>
 </ul></li>
-<li><a href="raspberry-pi.html">Raspberry Pi log</a> - just documenting what I've done to my RPi</li>
-<li><a href="./tex.html">TeX and LaTeX notes</a></li>
+<li>Object Oriented Fortran
+<ul class="org-ul">
+<li><a href="https://web.archive.org/web/20110709203750/http://www.pgroup.com/lit/articles/insider/v3n1a3.htm">part 1</a>, <a href="https://web.archive.org/web/20131122082418/http://www.pgroup.com/lit/articles/insider/v3n2a2.htm">part 2</a></li>
+</ul></li>
+<li>Damian Rouson, Jim Xia, Xiaofeng Xu,<br>
+<cite class="book-title">Scientific Software Design: The Object-Oriented Way</cite>.<br>
+Cambridge University Press, 2011.
+<ul class="org-ul">
+<li>Discusses a number of interesting design patterns unique to
+scientific computation, like encoding differential operators using
+abstract data types in a manner which is independent of numerical
+schemes (so it's more readable, reusable, stable).</li>
+</ul></li>
+</ul>
+</div>
+
+<div id="outline-container-h-4e18e195-09ae-45d2-a7d7-dceaafc8a876" class="outline-3">
+<h3 id="h-4e18e195-09ae-45d2-a7d7-dceaafc8a876"><span class="section-number-3">3.1.</span> Blogs</h3>
+<div class="outline-text-3" id="text-h-4e18e195-09ae-45d2-a7d7-dceaafc8a876">
+<ul class="org-ul">
+<li><a href="https://degenerateconic.com/">Degenerate Conic</a></li>
 </ul>
 </div>
 </div>
 </div>
+</div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-07 Mon 15:14.</p>
+<p class="postamble">Last Updated 2022-02-07 Mon 16:27.</p>
 </div>
 </body>
 </html>

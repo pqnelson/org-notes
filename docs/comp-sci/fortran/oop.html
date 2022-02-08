@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-07 Mon 15:15 -->
+<!-- 2022-02-07 Mon 16:46 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Computer Science</title>
+<title>OOP - Fortran</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -206,7 +206,7 @@
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
-<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
@@ -232,65 +232,198 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../index.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
- <a accesskey="H" href="../index.html"> HOME </a>
+ <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Computer Science</h1>
+<h1 class="title">OOP - Fortran</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-10f0e026-89b2-4198-84a2-d976447b9c29">1. Introduction</a>
+<ul>
+<li><a href="#h-44f6fdc8-df76-49c9-b6a7-2ca77fe8e874">1.1. Example</a></li>
+<li><a href="#h-6e233a7e-cfa0-4223-b81e-defa204fee0f">1.2. Suggestions</a></li>
+</ul>
+</li>
+<li><a href="#h-fcdb78ab-1759-4d37-b29c-d384b32a41e6">2. Constructors</a>
+<ul>
+<li><a href="#h-4bfc7d66-b7b9-4698-b446-6fbc2acfdf8e">2.1. Custom Constructor</a></li>
+</ul>
+</li>
+<li><a href="#h-9b804fc7-e478-4c73-a8e5-244aff6c331f">3. Binding Methods to a Class</a></li>
+<li><a href="#h-4325448d-5390-4936-9522-3259eb10632a">4. References</a></li>
+</ul>
+</div>
+</div>
 
-<div id="outline-container-h-6a112c05-acf6-43ab-893b-e71f4fa415c3" class="outline-2">
-<h2 id="h-6a112c05-acf6-43ab-893b-e71f4fa415c3">Overview</h2>
-<div class="outline-text-2" id="text-h-6a112c05-acf6-43ab-893b-e71f4fa415c3">
+<div id="outline-container-h-10f0e026-89b2-4198-84a2-d976447b9c29" class="outline-2">
+<h2 id="h-10f0e026-89b2-4198-84a2-d976447b9c29"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-10f0e026-89b2-4198-84a2-d976447b9c29">
 <p>
-Computer science has emerged into a sprawling field. Although I am
-trying to focus on numerical analysis (to think further about
-solving math and physics problems), the entire domain of
-programming and computer science are rather fascinating.
+The basic idea is that "object oriented programming" in Fortran amounts
+to:
 </p>
 
+<ul class="org-ul">
+<li><b>Class</b> approximated by "derived types" in Fortran</li>
+<li><b>Instance</b> is a concrete object allocated in memory</li>
+<li><b>Component</b> or <b>Field</b> is a "slot" in the class</li>
+<li><b>Method</b> is a subroutine or function associated with a field</li>
+</ul>
+</div>
+
+<div id="outline-container-h-44f6fdc8-df76-49c9-b6a7-2ca77fe8e874" class="outline-3">
+<h3 id="h-44f6fdc8-df76-49c9-b6a7-2ca77fe8e874"><span class="section-number-3">1.1.</span> Example</h3>
+<div class="outline-text-3" id="text-h-44f6fdc8-df76-49c9-b6a7-2ca77fe8e874">
 <p>
-Right now, I am working my way through the <code>scmutils</code> library used
-in <cite class="book-title">The Structure and Interpretation of Classical Mechanics</cite>.
-As I read through it, I'm thinking about how to implement the
-algorithms in Common Lisp.
+Here's an example of a class, namely <code>Shape</code>:
 </p>
 
+<div class="org-src-container">
+<pre class="src src-f90"><span class="org-keyword">type</span> <span class="org-function-name">Shape</span>
+   <span class="org-type">integer</span> ::<span class="org-variable-name"> color</span>
+   <span class="org-type">logical</span> ::<span class="org-variable-name"> filled</span>
+   <span class="org-type">integer</span> ::<span class="org-variable-name"> x</span>
+   <span class="org-type">integer</span> ::<span class="org-variable-name"> y</span>
+<span class="org-keyword">end type</span> <span class="org-function-name">Shape</span>
+</pre>
+</div>
+
+<p>
+<b>Caution:</b> fields are public by default in Fortran. To make fields
+private, we could do the following:
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-f90"><span class="org-keyword">type</span> <span class="org-function-name">Shape</span>
+   <span class="org-type">integer</span>, <span class="org-keyword">private</span> ::<span class="org-variable-name"> color</span>
+   <span class="org-type">logical</span>, <span class="org-keyword">protected</span> ::<span class="org-variable-name"> filled</span>
+   <span class="org-type">integer</span> ::<span class="org-variable-name"> x</span>
+   <span class="org-type">integer</span> ::<span class="org-variable-name"> y</span>
+<span class="org-keyword">end type</span> <span class="org-function-name">Shape</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-6e233a7e-cfa0-4223-b81e-defa204fee0f" class="outline-3">
+<h3 id="h-6e233a7e-cfa0-4223-b81e-defa204fee0f"><span class="section-number-3">1.2.</span> Suggestions</h3>
+<div class="outline-text-3" id="text-h-6e233a7e-cfa0-4223-b81e-defa204fee0f">
 <ul class="org-ul">
-<li><a href="apology.html">Apologia</a> on various random conventional choices I've been forced
-to make</li>
-<li><a href="numerical-analysis.html">Numerical Analysis</a> (<a href="numerical-analysis/index.html">topics</a>) for all my computational needs</li>
-<li><a href="literate-programming.html">Literate Programming</a> is one method to programming, as espoused by
-Donald Knuth</li>
-<li><a href="theorem-provers.html">On Theorem Provers</a> (<a href="theorem-provers/index.html">topics</a>)</li>
-<li><a href="abstract-machines.html">Abstract Machines</a> (<a href="abstract-machines/index.html">topics</a>) as virtual machines for functional programming
-languages, began originally as pen-and-paper models of computer hardware
+<li>If writing a class (like <code>Shape</code>), place the code in a module (like
+<code>shape_mod</code>) which is inside its own file (named <code>shape_mod.f90</code>)
 <ul class="org-ul">
-<li><a href="abstract-machines/secd.html">SECD Machine</a> the primordial abstract machine which started it all</li>
-<li><a href="abstract-machines/cam.html">Categorical Abstract Machine</a></li>
+<li>I've come to like writing <code>Shape_class.f90</code> as the file name, and
+<code>module Shape_class</code> for the module name (although I'm certain, I
+will change my mind soon enough)</li>
 </ul></li>
-<li><a href="lisp.html">Lisp</a> (<a href="lisp/index.html">topics</a>) the second-oldest language around, is my preferred language
-for programming most things
+<li>Consider using PascalCase for class names</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-fcdb78ab-1759-4d37-b29c-d384b32a41e6" class="outline-2">
+<h2 id="h-fcdb78ab-1759-4d37-b29c-d384b32a41e6"><span class="section-number-2">2.</span> Constructors</h2>
+<div class="outline-text-2" id="text-h-fcdb78ab-1759-4d37-b29c-d384b32a41e6">
+<p>
+There are a few default constructors provided:
+</p>
+
+<pre class="example" id="org75dce4a">
+Shape(0, .false., 3, 7) ! Initialize with positional arguments
+Shape(x = 5, color = 33, y = 1, filled = .false.) ! keyword arguments
+</pre>
+</div>
+
+<div id="outline-container-h-4bfc7d66-b7b9-4698-b446-6fbc2acfdf8e" class="outline-3">
+<h3 id="h-4bfc7d66-b7b9-4698-b446-6fbc2acfdf8e"><span class="section-number-3">2.1.</span> Custom Constructor</h3>
+<div class="outline-text-3" id="text-h-4bfc7d66-b7b9-4698-b446-6fbc2acfdf8e">
+<p>
+We can override the default constructor to have a smart constructor,
+using Fortran's interfaces.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span class="org-keyword">pure</span> <span class="org-type">type(Shape) </span><span class="org-keyword">function</span> <span class="org-function-name">new_shape</span><span class="org-default">(x, y, color) result(res)</span>
+  <span class="org-type">integer</span>, <span class="org-keyword">intent</span>(in) ::<span class="org-variable-name"> x, y, color</span>
+  res%color = color
+  res%filled = <span class="org-keyword">.true.</span>
+  res%x = x
+  res%y = y
+<span class="org-keyword">end function</span> <span class="org-function-name">new_shape</span>
+</pre>
+</div>
+
+<p>
+We could even do some validation on the inputs provided. But now comes
+the fancy part, where we use an <code>interface</code> to bind <code>Shape</code>'s
+constructor to <code>new_shape(x, y, color)</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span class="org-keyword">interface</span> <span class="org-function-name">Shape</span>
+   <span class="org-keyword">module procedure</span> :: <span class="org-function-name">new_shape</span>
+<span class="org-keyword">end interface</span> <span class="org-function-name">Shape</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-9b804fc7-e478-4c73-a8e5-244aff6c331f" class="outline-2">
+<h2 id="h-9b804fc7-e478-4c73-a8e5-244aff6c331f"><span class="section-number-2">3.</span> Binding Methods to a Class</h2>
+<div class="outline-text-2" id="text-h-9b804fc7-e478-4c73-a8e5-244aff6c331f">
+<p>
+We just need to add a <code>contains</code> to our type declaration, and specify
+we're passing <code>self</code> along as a parameter:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span class="org-keyword">module</span> <span class="org-function-name">Shape_class</span>
+  <span class="org-keyword">implicit</span> <span class="org-type">none</span>
+  <span class="org-keyword">type</span> <span class="org-function-name">Shape</span>
+     <span class="org-type">integer</span> ::<span class="org-variable-name"> color</span>
+     <span class="org-type">logical</span> ::<span class="org-variable-name"> filled</span>
+     <span class="org-type">integer</span> ::<span class="org-variable-name"> x</span>
+     <span class="org-type">integer</span> ::<span class="org-variable-name"> y</span>
+   <span class="org-keyword">contains</span>
+     <span class="org-type">procedure</span>, <span class="org-keyword">pass</span>(self) ::<span class="org-variable-name"> area</span>
+  <span class="org-keyword">end type</span> <span class="org-function-name">Shape</span>
+
+<span class="org-keyword">contains</span>
+  <span class="org-keyword">pure</span> <span class="org-type">integer </span><span class="org-keyword">function</span><span class="org-variable-name"> </span><span class="org-function-name">area</span><span class="org-default">(self)</span>
+    <span class="org-type">type(Shape)</span>, <span class="org-keyword">intent</span>(in) :: <span class="org-variable-name">self</span>
+    area = self%x * self%y
+  <span class="org-keyword">end function</span> <span class="org-function-name">area</span>
+
+<span class="org-keyword">end module</span> <span class="org-function-name">Shape_class</span>
+</pre>
+</div>
+
+<p>
+<b>CAUTION:</b> when doing polymorphism, instead of writing <code>type(Shape)</code>,
+you <b>need</b> to write <code>class(Shape)</code>, so that any children of <code>Shape</code> can
+use <code>area</code>.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-h-4325448d-5390-4936-9522-3259eb10632a" class="outline-2">
+<h2 id="h-4325448d-5390-4936-9522-3259eb10632a"><span class="section-number-2">4.</span> References</h2>
+<div class="outline-text-2" id="text-h-4325448d-5390-4936-9522-3259eb10632a">
 <ul class="org-ul">
-<li><a href="lisp/machine.html">Lisp Machine</a> lore (<a href="lisp/machine/index.html">topics</a>), partial history, sketchy and incomplete specifications</li>
-<li><a href="lisp/multiple-dispatch.html">Multiple Dispatch</a> for multimethods, which can be implemented in
-various different ways</li>
-<li><a href="lisp/generic-arithmetic.html">Generic Arithmetic</a> using multimethods for overloading operators</li>
-<li><a href="lisp/mal-2.html">Making a Lisp - Preliminaries</a> with implementing the base types</li>
-</ul></li>
-<li><a href="fortran.html">FORTRAN</a> (<a href="fortran/index.html">topics</a>) the language used for scientific computing and numerical analysis</li>
-<li>Functional languages
-<ul class="org-ul">
-<li><a href="sml.html">Standard ML</a> (<a href="sml/index.html">topics</a>) the first "real" statically-typed functional programming language</li>
-<li><a href="haskell.html">Haskell</a>, the self-proclaimed purely functional programming language</li>
-</ul></li>
-<li><a href="raspberry-pi.html">Raspberry Pi log</a> - just documenting what I've done to my RPi</li>
-<li><a href="./tex.html">TeX and LaTeX notes</a></li>
+<li>Milan Curcic, <i>Modern Fortran</i>, chapter 8.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-07 Mon 15:14.</p>
+<p class="postamble">Last Updated 2022-02-07 Mon 16:03.</p>
 </div>
 </body>
 </html>

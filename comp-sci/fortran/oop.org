@@ -1,0 +1,147 @@
+#+TITLE: OOP - Fortran
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-02-07T15:11:08-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Monday February  7, 2022 at  3:11PM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-10f0e026-89b2-4198-84a2-d976447b9c29
+:END:
+
+The basic idea is that "object oriented programming" in Fortran amounts
+to:
+
+- *Class* approximated by "derived types" in Fortran
+- *Instance* is a concrete object allocated in memory
+- *Component* or *Field* is a "slot" in the class
+- *Method* is a subroutine or function associated with a field
+
+** Example
+:PROPERTIES:
+:CUSTOM_ID: h-44f6fdc8-df76-49c9-b6a7-2ca77fe8e874
+:END:
+
+Here's an example of a class, namely ~Shape~:
+
+#+begin_src f90
+type Shape
+   integer :: color
+   logical :: filled
+   integer :: x
+   integer :: y
+end type Shape
+#+end_src
+
+*Caution:* fields are public by default in Fortran. To make fields
+private, we could do the following:
+
+
+#+begin_src f90
+type Shape
+   integer, private :: color
+   logical, protected :: filled
+   integer :: x
+   integer :: y
+end type Shape
+#+end_src
+
+** Suggestions
+:PROPERTIES:
+:CUSTOM_ID: h-6e233a7e-cfa0-4223-b81e-defa204fee0f
+:END:
+
+- If writing a class (like ~Shape~), place the code in a module (like
+  ~shape_mod~) which is inside its own file (named ~shape_mod.f90~)
+  - I've come to like writing ~Shape_class.f90~ as the file name, and
+    ~module Shape_class~ for the module name (although I'm certain, I
+    will change my mind soon enough)
+- Consider using PascalCase for class names
+
+* Constructors
+:PROPERTIES:
+:CUSTOM_ID: h-fcdb78ab-1759-4d37-b29c-d384b32a41e6
+:END:
+
+There are a few default constructors provided:
+
+#+begin_example
+Shape(0, .false., 3, 7) ! Initialize with positional arguments
+Shape(x = 5, color = 33, y = 1, filled = .false.) ! keyword arguments
+#+end_example
+
+** Custom Constructor
+:PROPERTIES:
+:CUSTOM_ID: h-4bfc7d66-b7b9-4698-b446-6fbc2acfdf8e
+:END:
+
+We can override the default constructor to have a smart constructor,
+using Fortran's interfaces.
+
+#+begin_src f90
+pure type(Shape) function new_shape(x, y, color) result(res)
+  integer, intent(in) :: x, y, color
+  res%color = color
+  res%filled = .true.
+  res%x = x
+  res%y = y
+end function new_shape
+#+end_src
+
+We could even do some validation on the inputs provided. But now comes
+the fancy part, where we use an ~interface~ to bind ~Shape~'s
+constructor to ~new_shape(x, y, color)~:
+
+#+begin_src f90
+interface Shape
+   module procedure :: new_shape
+end interface Shape
+#+end_src
+
+* Binding Methods to a Class
+:PROPERTIES:
+:CUSTOM_ID: h-9b804fc7-e478-4c73-a8e5-244aff6c331f
+:END:
+
+We just need to add a ~contains~ to our type declaration, and specify
+we're passing ~self~ along as a parameter:
+
+#+begin_src f90
+module Shape_class
+  implicit none
+  type Shape
+     integer :: color
+     logical :: filled
+     integer :: x
+     integer :: y
+   contains
+     procedure, pass(self) :: area
+  end type Shape
+
+contains
+  pure integer function area(self)
+    type(Shape), intent(in) :: self
+    area = self%x * self%y
+  end function area
+
+end module Shape_class
+#+end_src
+
+*CAUTION:* when doing polymorphism, instead of writing ~type(Shape)~,
+you *need* to write ~class(Shape)~, so that any children of ~Shape~ can
+use ~area~.
+
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-4325448d-5390-4936-9522-3259eb10632a
+:END:
+
+- Milan Curcic, /Modern Fortran/, chapter 8.
