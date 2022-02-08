@@ -42,10 +42,12 @@ h1:not(.title) {
     counter-set: section 0;
 }
 h2 {
-    counter-increment: section;
-    counter-set: exercise 0 subsection 0;
     font-size: 1.8em;
     line-height: 1.2;
+}
+div:not(#table-of-contents) > h2 {
+    counter-increment: section;
+    counter-set: exercise 0 subsection 0;
 }
 h3 {
     counter-increment: subsection;
@@ -130,7 +132,7 @@ div.math-example::before {
 
 div.exercise::before {
     counter-increment: exercise;
-    content: "Exercise " counter(subsection) "." counter(exercise) ".";
+    content: "Exercise " counter(section) "." counter(subsection) "." counter(exercise) ".";
     font-style: normal;
     font-weight: bold;
 }
