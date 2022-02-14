@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-14 Mon 11:15 -->
+<!-- 2022-02-14 Mon 11:05 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Group Theory</title>
+<title>Finite Group of Lie Type</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -206,7 +206,7 @@
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
-<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -229,195 +229,27 @@
     /*]]>*///-->
 // @license-end
 </script>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
-</script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
- <a accesskey="H" href="../index.html"> HOME </a>
+ <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Group Theory</h1>
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#h-16cb29fa-d710-45fe-bbfd-74624a830335">1. Symmetries of an Object</a>
-<ul>
-<li><a href="#h-125cc380-7cb2-4b12-bde3-a4376c66cbd8">1.1. Necessary Qualities of a Symmetry</a></li>
-<li><a href="#h-6638c825-c302-4979-a35c-929236617ab9">1.2. A Collection of Symmetries</a></li>
-<li><a href="#h-038397f8-c6ce-4731-8080-ae377d9719d2">1.3. Example: Symmetries of Polynomials</a></li>
-</ul>
-</li>
-<li><a href="#h-e3daf161-ad97-4ded-a7c4-8b0740f76b48">2. Notes to Self</a></li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-h-16cb29fa-d710-45fe-bbfd-74624a830335" class="outline-2">
-<h2 id="h-16cb29fa-d710-45fe-bbfd-74624a830335"><span class="section-number-2">1</span> Symmetries of an Object</h2>
-<div class="outline-text-2" id="text-h-16cb29fa-d710-45fe-bbfd-74624a830335">
+<h1 class="title">Finite Group of Lie Type</h1>
 <p>
-Suppose we have an object (like a regular polygon in a plane). What is a
-"symmetry" of our object?
-</p>
-</div>
-
-<div id="outline-container-h-125cc380-7cb2-4b12-bde3-a4376c66cbd8" class="outline-3">
-<h3 id="h-125cc380-7cb2-4b12-bde3-a4376c66cbd8"><span class="section-number-3">1.1</span> Necessary Qualities of a Symmetry</h3>
-<div class="outline-text-3" id="text-h-125cc380-7cb2-4b12-bde3-a4376c66cbd8">
-<p>
-Presumably it is some kind of transformation. For this to make sense, we
-extend the transformation to the plane. A symmetry should "leave the
-object invariant". What does that mean?
-</p>
-
-<p>
-It is necessary to say the transformation \(f\colon\RR^{2}\to\RR^{2}\)
-leaves our polygon \(P\subset\RR^{2}\) invariant if \(f(P)=P\). So this is
-equivalent to saying \(f\) is surjective. But is this sufficient?
-</p>
-
-<p>
-Well, if \(f\) is surjective, it has a right-inverse
-\(h\colon\RR^{2}\to\RR^{2}\) (which satisfies \((f\circ h)(p)\) for every
-\(p\in P\)). We want this right-inverse to also be a symmetry. Which
-implies \(h\) has a right-inverse, call it \(g\colon\RR^{2}\to\RR^{2}\).
-Then what is \(f\circ h\circ g\)? Well, we find \((f\circ(h\circ g))(x)=f(x)\)
-but also \(((f\circ h)\circ g)(x) = g(x)\) imply \(f=g\). Hence
-<b>every symmetry is an invertible function</b>.
-</p>
-</div>
-</div>
-
-<div id="outline-container-h-6638c825-c302-4979-a35c-929236617ab9" class="outline-3">
-<h3 id="h-6638c825-c302-4979-a35c-929236617ab9"><span class="section-number-3">1.2</span> A Collection of Symmetries</h3>
-<div class="outline-text-3" id="text-h-6638c825-c302-4979-a35c-929236617ab9">
-<p>
-Now, we have described what qualifies as a symmetry of an object,
-suppose we have collected all the symmetries for an object. What happens
-if we compose two symmetries together? I.e., if \(f_{1},f_{2}\colon P\to P\)
-are two symmetries, what about \(f_{2}\circ f_{1}\)? Is that also a
-symmetry or not?
-</p>
-
-<p>
-Well, its inverse is the composition of inverses in reverse order. If
-our collection of symmetries includes the inverse symmetries, then the
-set of symmetries is closed under function composition.
-</p>
-
-<p>
-This gives us grounds for generalizing these qualities into an abstract
-notion of a group.
-</p>
-
-<div class="definition" id="org858e797">
-<p>
-A <dfn>Group</dfn> consists of a set \(G\) equipped with
+Arguably finite group theory has developed in analogy to Lie groups, but
+specifically finite groups of Lie type are&#x2026;vaguely defined.
 </p>
 
 <ul class="org-ul">
-<li>a binary operator \(\mu\colon G\times G\to G\),</li>
-<li>an inverse operator \(\iota\colon G\to G\), and</li>
-<li>an identity element \(e\in G\)</li>
+<li>Jim Humphreys,
+"Definition of 'finite group of Lie type'?"
+<a href="https://mathoverflow.net/q/136880/22457">Mathoverflow thread</a>, July 16, 2013</li>
 </ul>
-
-<p>
-such that
-</p>
-
-<ul class="org-ul">
-<li>Multiplication is associative: \(\mu\circ(\mathrm{id}\times\mu) = \mu\circ(\mu\times\mathrm{id})\)
-so \((\mu\circ(\mathrm{id}\times\mu))(x,y,z) = \mu(x, \mu(y,z))\) is
-equal to \((\mu\circ(\mu\times\mathrm{id}))(x,y,z)=\mu(\mu(x,y),z)\)</li>
-<li>The identity element \(\mu(e,x)=\mu(x,e)=x\)</li>
-<li>The inverse map: \(\mu(\iota(x),x)=\mu(x,\iota(x))=x\).</li>
-</ul>
-
-</div>
-
-<p>
-This mystifies the motivation of studying groups under the shroud of
-abstraction, but we can think about groups in general settings.
-</p>
-</div>
-</div>
-<div id="outline-container-h-038397f8-c6ce-4731-8080-ae377d9719d2" class="outline-3">
-<h3 id="h-038397f8-c6ce-4731-8080-ae377d9719d2"><span class="section-number-3">1.3</span> Example: Symmetries of Polynomials</h3>
-<div class="outline-text-3" id="text-h-038397f8-c6ce-4731-8080-ae377d9719d2">
-<p>
-Thus far we have intuitively pictured symmetries of geometric objects.
-What about symmetries of nongeometric object? Like&#x2026;polynomials.
-</p>
-
-<p>
-The first question we should ask ourselves is: what is a polynomial?
-Like, how do we represent a polynomial? Because our symmetries would act
-on this "encoding".
-</p>
-
-<p>
-We could use the fundamental theorem of algebra to write a polynomial as
-</p>
-
-\begin{equation}
-p(x) = p_{n}x^{n} + \dots + p_{1}x + p_{0} = c(x - r_{1})(\dots)(x - r_{n})
-\end{equation}
-
-<p>
-where \(r_{k}\in\mathbb{C}\) are the roots of the polynomial. One obvious
-symmetry amounts to permuting the roots of the polynomial.
-</p>
-</div>
-</div>
-</div>
-
-<div id="outline-container-h-e3daf161-ad97-4ded-a7c4-8b0740f76b48" class="outline-2">
-<h2 id="h-e3daf161-ad97-4ded-a7c4-8b0740f76b48"><span class="section-number-2">2</span> Notes to Self</h2>
-<div class="outline-text-2" id="text-h-e3daf161-ad97-4ded-a7c4-8b0740f76b48">
-<p>
-If we take our abstract definition of a group, we can define a <a href="category-theory/2-group.html#h-5d6e9364-75e0-4ebc-98de-bc3ddac7601f">"group object"</a>
-internal to any sufficiently nice category. This gives us the
-various different sorts of groups (e.g., a group object internal to the
-category of topological spaces is a topological group, a group object
-internal to the category of manifolds is a [real] Lie group, etc.).
-</p>
-
-<div class="remark" id="org193c136">
-<p>
-The group object internal to <span class="cat">Grp</span> the category of groups is
-itself an Abelian group. This is a corollary of the Eckmann&#x2013;Hilton
-argument.
-</p>
-
-</div>
-</div>
-</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-14 Mon 11:14.</p>
+<p class="postamble">Last Updated 2022-02-14 Mon 11:05.</p>
 </div>
 </body>
 </html>
