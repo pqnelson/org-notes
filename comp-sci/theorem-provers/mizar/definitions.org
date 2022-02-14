@@ -55,22 +55,27 @@ The main parts of a Mizar article are:
 :CUSTOM_ID: h-b3211e1b-db9c-4f65-ac61-4f4635e09703
 :END:
 
-Attributes are predicates handled specially by the system, according to rules defined by the user in ~<Cluster-Registrations>~.
+Attributes are predicates handled specially by the system, according to
+rules defined by the user in ~<Cluster-Registrations>~. 
 
 *** Terms
 :PROPERTIES:
 :CUSTOM_ID: h-5ae672f3-988d-478a-bc55-949a091a0934
 :END:
 
-All Mizar terms are typed. There is a largest (default) type called ~set~ or ~Any~.
+All Mizar terms are typed. There is a largest (default) type called
+~set~ or ~Any~. 
 
 All other types have one or more mother types.
 
-Types of variables are given either in global ~<Reservations>~ or local ~<Loci-Definitions>~ or inside quantified formulas.
+Types of variables are given either in global ~<Reservations>~ or local
+~<Loci-Definitions>~ or inside quantified formulas. 
 
 Types of other terms are computed according to ~<Functor-Definitions>~.
 
-Types can have arguments (i.e., be parametrized) in Mizar, e.g., ~Element of X~ or ~Function of NAT, REAL~ are legal types with one or two aguments, respectively.
+Types can have arguments (i.e., be parametrized) in Mizar, e.g.,
+~Element of X~ or ~Function of NAT, REAL~ are legal types with one or
+two aguments, respectively. 
 
 *References*
 
@@ -84,7 +89,8 @@ Types can have arguments (i.e., be parametrized) in Mizar, e.g., ~Element of X~ 
 :CUSTOM_ID: h-99bf5b98-2250-49bd-9a0b-ef9a2c721af6
 :END:
 
-Type translation is the largest part of the first order translation. There are two basic approaches to type translation:
+Type translation is the largest part of the first order
+translation. There are two basic approaches to type translation: 
 
 1. Types can be thought of as set-theoretic classes
 2. Types can be thought of as predicates; thus ~set(X)~ is true for any
@@ -114,7 +120,8 @@ usually quite nontrivial.
 :CUSTOM_ID: h-afd51419-9f5f-4d56-8059-8c545235ca10
 :END:
 
-The possible choices were TPTP, DFG (for SPASS), and Otter formatting. Urban went with DFG for SPASS.
+The possible choices were TPTP, DFG (for SPASS), and Otter
+formatting. Urban went with DFG for SPASS. 
 
 The basic approach to translation was the following:
 
@@ -346,6 +353,11 @@ This is really 3 attributes:
 :CUSTOM_ID: h-6177f78e-3a2b-4783-88be-c6cdc907e665
 :END:
 
+Functors are parametrized constants in Mizar. For example, if ~G~ is a
+group, then its identity element is ~1_G~ which is parametrized by ~G~.
+The cyclic group $\mathbb{Z}/n\mathbb{Z}$ is ~INT.Group(n)~ parametrized
+by a positive integer ~n~ (this is defined in [[http://mizar.org/version/current/html/gr_cy_1.html][~GR_CY_1:def 5~]]).
+
 Functions must define the types of their arguments and the type of their
 result. Several ~<Functor-Properties>~ (like ~commutativity~) can be
 associated with them. The [[http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Functor-Definition][syntax]] is:
@@ -357,6 +369,9 @@ associated with them. The [[http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/sy
 
 <Specification> = "->" <Type-Expression>
 #+end_example
+
+Mizar demands that every functor be accompanied by a proof of existence
+and uniqueness.
 
 The example given:
 
@@ -399,12 +414,15 @@ how group morphisms are defined in
 :CUSTOM_ID: h-ffc5ae5c-4648-48b9-b614-c57b6ad51c58
 :END:
 
+Intuitively, a structure is a tuple with named components.
+
 From [[http://www.mizar.org/version/current/mml/algstr_0.miz][~algstr_0.miz~]], we have:
 
 #+begin_example
 :: Multiplicative structures
 definition
-  struct (1-sorted) multMagma (# carrier -> set, multF -> BinOp of the carrier
+  struct (1-sorted) multMagma (# carrier -> set,
+                                 multF -> BinOp of the carrier
   #);
 end;
 
@@ -434,3 +452,77 @@ structure (in the [[http://nlab-pages.s3.us-east-2.amazonaws.com/nlab/show/stuff
 encode a mathematical gadget in this manner, with a ~Gadget-like~
 attribute for a ~GadgetStr~ structure, then we will find a
 ~mode Gadget means Gadget-like GadgetStr~ type definition.
+
+Another example of a structure (from [[http://mizar.org/version/current/html/vectsp_1.html#L1][~VECTSP_1~]]), this time using ~over~:
+
+#+begin_example
+:: VECTSP_1
+definition
+  let F be 1-sorted;
+  struct(addLoopStr) ModuleStr over F (#
+      carrier -> set,
+      addF -> BinOp of the carrier,
+      ZeroF -> Element of the carrier,
+      lmult -> Function of [:the carrier of F, the carrier:], the carrier
+  #);
+end;
+#+end_example
+
+For details about structures in Mizar, see:
+
+- Gilbert Lee and Piotr Rudnicki,\\
+  "Alternative aggregates in Mizar."\\
+  In /Towards Mechanized Mathematical Assistants/, pp. 327-341.
+  Springer, Berlin, Heidelberg, 2007.
+  
+** Cluster Registrations
+:PROPERTIES:
+:CUSTOM_ID: h-9c8e9e5d-7e40-4534-a1dc-4241ad763c26
+:END:
+
+There are several types of cluster registrations:
+
+- Existential registration: asserts an attributed type is non empty (and
+  thus permits us to use an attribute as an adjective)
+- Conditional registration: propagates types (for example, every
+  characteristic subgroup is also a normal subgroup; conditional
+  registration makes this association automatic)
+- Functorial registration, another propagation mechanism
+
+For further reading about attributes, see:
+
+- Christoph Schwarzweller,\\
+  "Mizar attributes: A technique to encode mathematical knowledge into
+  type systems."\\
+  /Studies in Logic, Grammar and Rhetoric/ *10*, no. 23 (2007)
+  pp.387--400.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-f661a4d8-6b8f-4770-ae6e-05ffdcb48f35
+:END:
+
+So, just to collate all the citations in one place.
+
+
+- Gilbert Lee and Piotr Rudnicki,\\
+  "Alternative aggregates in Mizar."\\
+  In /Towards Mechanized Mathematical Assistants/, pp. 327-341.
+  Springer, Berlin, Heidelberg, 2007.
+- Christoph Schwarzweller,\\
+  "Mizar attributes: A technique to encode mathematical knowledge into
+  type systems."\\
+  /Studies in Logic, Grammar and Rhetoric/ *10*, no. 23 (2007)
+  pp.387--400.
+- Kazuhisa Nakasho and Hiroyuki Okazaki and Hiroshi Yamazaki and
+  Yasunari Shidama,\\
+  "Formalization of Fundamental Theorem of Finite Abelian Groups in Mizar".\\
+  In /6th Podlasie Conference on Mathematics (6PCM)/ (2014) pp.23--34.
+- Josef Urban,\\
+  "Translating Mizar for First Order Theorem Provers".\\
+  In /Mathematical Knowledge Management: Proceedings of the Second International Conference/ (Eds., A. Asperti,
+  B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in Computer Science vol 2594, 2003, pp. 203--215.
+- F. Wiedijk,\\
+  "Mizar's Soft Type System."\\
+  In: K. Schneider & J. Brandt (eds.), _Theorem Proving in Higher Order Logics 2007_, LNCS **4732**, 383-399, 2007 [[http://www.cs.ru.nl/F.Wiedijk/mizar/miztype.pdf][pdf]].\\
+  Discusses how Mizar handles types atop set theory.
