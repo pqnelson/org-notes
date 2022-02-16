@@ -29,13 +29,30 @@
 :END:
 
 - Nilpotent groups are discussed in  [[http://mizar.org/version/current/html/grnilp_1.html][~grnilp_1.miz~]]
+  - ~the_normal_subgroups_of G~ is defined in ~GRNILP_1:Def1~ as we would
+    expect it
+  - The upper central series is implicit in the definition of
+    ~nilpotent~ in ~Def2~
 - Solvable groups discussed in  [[http://mizar.org/version/current/html/grsolv_1.html][~grsolv_1.miz~]]
+  - ~solvable~ as an attribute is defined as having a subnormal series
+    such that ~F.i ./. F.(i+1)~ is Abelian
 - Some Properties of $p$-Groups and Commutative $p$-Groups  [[http://mizar.org/version/current/html/groupp_1.html][~groupp_1.miz~]]
 - Cayley's theorem proven in [[http://mizar.org/version/current/html/cayley.html][~cayley.miz~]]
   - Symmetric group on a set $X$ is defined on line 145 of [[http://mizar.org/version/current/html/cayley.html][~cayley.miz~]]
+- Product groups are defined in [[http://mizar.org/version/current/html/group_7.html][~group_7~]], but it's difficult to work with
+  - Normal subgroups of product groups discussed further in [[http://mizar.org/version/current/html/group_12.html][~group_12~]]
 - A lot of properties proved in [[http://mizar.org/version/current/html/group_8.html][~group_8.miz~]]
 - Jordon-Holder theorem in [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]]
-
+  - The ~composition_series~ is defined (~GROUP_9:Def28~) as an
+    attribute for a finite sequence of stable subgroups of $G$
+    - The ~CompositionSeries of G~ mode is defined as
+      ~composition_series FinSequence of the_stable_subgroups_of G~
+  - More generally, I expect a subgroup series to be a sequence of
+    subgroups; and if the series starts at $G$, then I should use
+    ~(Omega).G~ instead
+    - ~sequence~ is defined as a mode in ~nat_1~, for any set ~X~ we
+      have ~mode sequence of X is Function of NAT,X~
+      
 *** Definitions
 :PROPERTIES:
 :CUSTOM_ID: h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7
@@ -135,16 +152,23 @@ H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
     [[http://mizar.org/version/current/html/weddwit.html][~weddwit.miz~]]
   - The center for a skew-field $R$ is defined on line 1508 of [[http://mizar.org/version/current/html/weddwit.html][~weddwit.miz~,]]
     and the centralizer for an element of $R$ is defined on line 1978
+- The quotient group $G/N$ is denoted as ~G./.N~ in Mizar, and it is
+  defined on line 505 of [[http://mizar.org/version/current/html/group_6.html][~group_6~]]; the canonical mapping of $N\to G/N$
+  is defined on line 1084 as the ~nat_hom~
+- Group morphisms are defined in [[http://mizar.org/version/current/html/group_6.html][~group_6~]] as multiplicative functions
+  between two groups
+- Two groups $G$ and $H$ ~are_isomorphic~ if there exists a bijective
+  group morphism between them ( [[http://mizar.org/version/current/html/group_6.html][~group_6~]]); 
+- The kernel of a morphism of groups is defined in  [[http://mizar.org/version/current/html/group_6.html][~group_6~]];
+- The isomorphism theorems for groups is also defined in [[http://mizar.org/version/current/html/group_6.html][~group_6~]];
+  - There seems to be a small hack to describe the subgroup $N\leq H\leq G$
+    corresponding to $H/N$ as ~H./.(H,N)`*`~
+  - ~GROUP_6:Th29~ says if ~M~ and ~N~ are normal subgroups of ~G~ such
+    that ~M~ is a subgroup of ~N~, then ~N./.(N,M)`*`~ is a normal
+    Subgroup of ~G./.M~
 - a group $G$ is "simple" if ~IT is not trivial~ and there is no
   nontrivial normal subgroup $H\triangleleft G$ (i.e., $H\neq 1$ and
   $H\neq G$) line 998 of [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]]
-- The quotient group $G/N$ is denoted as ~G./.N~ in Mizar, and it is
-  defined on line 1469 of [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]]; the canonical mapping of $N\to G/N$
-  is defined on line 1759 as the ~nat_hom~
-- Two groups $G$ and $H$ ~are_isomorphic~ if there exists a bijective
-  group morphism between them (line 1693 of [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]])
-- The kernel of a morphism of groups-with-operators is defined on line
-  2137 of [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]]
 - The chunk of text dealing with composition series begins on line 6701
   of [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]] (the ~composition_series~ is defined on line 6708)
 - The Jordan-Holder attribute for composition series of $G$
@@ -156,6 +180,26 @@ H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
 - ~is_Sylow_p-subgroup_of_prime~ defined line 2196 of [[http://mizar.org/version/current/html/group_10.html][~group_10.miz~]]
 - ~the_sylow_p-subgroups_of_prime(p,G)~ defined line 3109 of [[http://mizar.org/version/current/html/group_10.html][~group_10.miz~]]
 
+** Rings and Things
+:PROPERTIES:
+:CUSTOM_ID: h-6896d403-8ec1-42a7-8258-27db9c6662b3
+:END:
+
+- In [[http://mizar.org/version/current/html/polyalg1.html][~polyalg1~]], we have the following definitions
+  - ~Algebra over F~ (which is both a "ring" (~doubleLoopStr~) and a
+    ~ModuleStr~ over F)
+  - ~Subalgebra~
+- In [[http://mizar.org/version/current/html/vectsp_1.html][~vectsp_1~]]:
+  - ~Ring~
+  - ~Skew-Field~
+  - ~Field~
+  - ~ModuleStr~
+  - ~VectSp~
+- In [[http://mizar.org/version/current/html/vectsp_2.html][~vectsp_2~]]:
+  - ~RightModStr~
+  - ~LeftModStr~
+  - ~BiModStr~
+  
 * Random
 :PROPERTIES:
 :CUSTOM_ID: h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89

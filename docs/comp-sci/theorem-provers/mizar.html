@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-04 Fri 10:53 -->
+<!-- 2022-02-16 Wed 15:33 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mizar</title>
@@ -270,6 +270,7 @@
 <li><a href="#h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7">1.1.1. Definitions</a></li>
 </ul>
 </li>
+<li><a href="#h-6896d403-8ec1-42a7-8258-27db9c6662b3">1.2. Rings and Things</a></li>
 </ul>
 </li>
 <li><a href="#h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89">2. Random</a></li>
@@ -301,15 +302,44 @@ meaning \(X\subseteq Y\iff (\forall x, x\in X\implies x\in Y)\))</li>
 <h3 id="h-9f5cf940-9a00-4b52-886d-f414fb02838d"><span class="section-number-3">1.1</span> Group Theory</h3>
 <div class="outline-text-3" id="text-h-9f5cf940-9a00-4b52-886d-f414fb02838d">
 <ul class="org-ul">
-<li>Nilpotent groups are discussed in  <a href="http://mizar.org/version/current/html/grnilp_1.html"><code>grnilp_1.miz</code></a></li>
-<li>Solvable groups discussed in  <a href="http://mizar.org/version/current/html/grsolv_1.html"><code>grsolv_1.miz</code></a></li>
+<li>Nilpotent groups are discussed in  <a href="http://mizar.org/version/current/html/grnilp_1.html"><code>grnilp_1.miz</code></a>
+<ul class="org-ul">
+<li><code>the_normal_subgroups_of G</code> is defined in <code>GRNILP_1:Def1</code> as we would
+expect it</li>
+<li>The upper central series is implicit in the definition of
+<code>nilpotent</code> in <code>Def2</code></li>
+</ul></li>
+<li>Solvable groups discussed in  <a href="http://mizar.org/version/current/html/grsolv_1.html"><code>grsolv_1.miz</code></a>
+<ul class="org-ul">
+<li><code>solvable</code> as an attribute is defined as having a subnormal series
+such that <code>F.i ./. F.(i+1)</code> is Abelian</li>
+</ul></li>
 <li>Some Properties of $p$-Groups and Commutative $p$-Groups  <a href="http://mizar.org/version/current/html/groupp_1.html"><code>groupp_1.miz</code></a></li>
 <li>Cayley's theorem proven in <a href="http://mizar.org/version/current/html/cayley.html"><code>cayley.miz</code></a>
 <ul class="org-ul">
 <li>Symmetric group on a set \(X\) is defined on line 145 of <a href="http://mizar.org/version/current/html/cayley.html"><code>cayley.miz</code></a></li>
 </ul></li>
+<li>Product groups are defined in <a href="http://mizar.org/version/current/html/group_7.html"><code>group_7</code></a>, but it's difficult to work with
+<ul class="org-ul">
+<li>Normal subgroups of product groups discussed further in <a href="http://mizar.org/version/current/html/group_12.html"><code>group_12</code></a></li>
+</ul></li>
 <li>A lot of properties proved in <a href="http://mizar.org/version/current/html/group_8.html"><code>group_8.miz</code></a></li>
-<li>Jordon-Holder theorem in <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.miz</code></a></li>
+<li>Jordon-Holder theorem in <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.miz</code></a>
+<ul class="org-ul">
+<li>The <code>composition_series</code> is defined (<code>GROUP_9:Def28</code>) as an
+attribute for a finite sequence of stable subgroups of \(G\)
+<ul class="org-ul">
+<li>The <code>CompositionSeries of G</code> mode is defined as
+<code>composition_series FinSequence of the_stable_subgroups_of G</code></li>
+</ul></li>
+<li>More generally, I expect a subgroup series to be a sequence of
+subgroups; and if the series starts at \(G\), then I should use
+<code>(Omega).G</code> instead
+<ul class="org-ul">
+<li><code>sequence</code> is defined as a mode in <code>nat_1</code>, for any set <code>X</code> we
+have <code>mode sequence of X is Function of NAT,X</code></li>
+</ul></li>
+</ul></li>
 </ul>
 </div>
 
@@ -325,7 +355,7 @@ This is also extended to, for a group \(G\), subsets \(A\subset G\)
 we'd have <code>A"</code> be the collection of <code>g"</code> for <code>g in A</code>, i.e.,
 \(A^{-1}=\{g^{-1}|g\in A\}\); see line 57 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>
 </p>
-<pre class="example" id="org0c866d5">
+<pre class="example" id="orgdaaae12">
 let G be Group;
 let A be Subset of G;
 func A " -&gt; Subset of G equals :: GROUP_2:def 1
@@ -341,7 +371,7 @@ underlying set of \(G\) equal to the set underlying \(H\)</li>
 The trivial subgroup of \(G\) is denoted <code>(1).G</code>, defined on line 1258
 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> as
 </p>
-<pre class="example" id="orgdcf059b">
+<pre class="example" id="org16d1ccb">
   func (1).G -&gt; strict Subgroup of G means
   :Def7:
   the carrier of it = {1_G};
@@ -404,7 +434,7 @@ subgroup containing \(A\)</li>
 <li><p>
 Frattini subgroup is tricky. Relevant code starts around 1371 of  <a href="http://mizar.org/version/current/html/group_4.html"><code>group_4.miz</code></a>
 </p>
-<pre class="example" id="org3f43965">
+<pre class="example" id="orgadd814e">
 ::$N Frattini subgroup
   func Phi(G) -&gt; strict Subgroup of G means
   :Def7:
@@ -434,16 +464,25 @@ as a strict subgroup of \(G\) consisting of <code>{a : for b holds a * b = b * a
 <li>The center for a skew-field \(R\) is defined on line 1508 of <a href="http://mizar.org/version/current/html/weddwit.html"><code>weddwit.miz</code>,</a>
 and the centralizer for an element of \(R\) is defined on line 1978</li>
 </ul></li>
+<li>The quotient group \(G/N\) is denoted as <code>G./.N</code> in Mizar, and it is
+defined on line 505 of <a href="http://mizar.org/version/current/html/group_6.html"><code>group_6</code></a>; the canonical mapping of \(N\to G/N\)
+is defined on line 1084 as the <code>nat_hom</code></li>
+<li>Group morphisms are defined in <a href="http://mizar.org/version/current/html/group_6.html"><code>group_6</code></a> as multiplicative functions
+between two groups</li>
+<li>Two groups \(G\) and \(H\) <code>are_isomorphic</code> if there exists a bijective
+group morphism between them ( <a href="http://mizar.org/version/current/html/group_6.html"><code>group_6</code></a>);</li>
+<li>The kernel of a morphism of groups is defined in  <a href="http://mizar.org/version/current/html/group_6.html"><code>group_6</code></a>;</li>
+<li>The isomorphism theorems for groups is also defined in <a href="http://mizar.org/version/current/html/group_6.html"><code>group_6</code></a>;
+<ul class="org-ul">
+<li>There seems to be a small hack to describe the subgroup \(N\leq H\leq G\)
+corresponding to \(H/N\) as <code>H./.(H,N)`*`</code></li>
+<li><code>GROUP_6:Th29</code> says if <code>M</code> and <code>N</code> are normal subgroups of <code>G</code> such
+that <code>M</code> is a subgroup of <code>N</code>, then <code>N./.(N,M)`*`</code> is a normal
+Subgroup of <code>G./.M</code></li>
+</ul></li>
 <li>a group \(G\) is "simple" if <code>IT is not trivial</code> and there is no
 nontrivial normal subgroup \(H\triangleleft G\) (i.e., \(H\neq 1\) and
 \(H\neq G\)) line 998 of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.miz</code></a></li>
-<li>The quotient group \(G/N\) is denoted as <code>G./.N</code> in Mizar, and it is
-defined on line 1469 of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.miz</code></a>; the canonical mapping of \(N\to G/N\)
-is defined on line 1759 as the <code>nat_hom</code></li>
-<li>Two groups \(G\) and \(H\) <code>are_isomorphic</code> if there exists a bijective
-group morphism between them (line 1693 of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.miz</code></a>)</li>
-<li>The kernel of a morphism of groups-with-operators is defined on line
-2137 of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.miz</code></a></li>
 <li>The chunk of text dealing with composition series begins on line 6701
 of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.miz</code></a> (the <code>composition_series</code> is defined on line 6708)</li>
 <li>The Jordan-Holder attribute for composition series of \(G\)
@@ -456,6 +495,38 @@ of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.mi
 <li><code>the_sylow_p-subgroups_of_prime(p,G)</code> defined line 3109 of <a href="http://mizar.org/version/current/html/group_10.html"><code>group_10.miz</code></a></li>
 </ul>
 </div>
+</div>
+</div>
+
+<div id="outline-container-h-6896d403-8ec1-42a7-8258-27db9c6662b3" class="outline-3">
+<h3 id="h-6896d403-8ec1-42a7-8258-27db9c6662b3"><span class="section-number-3">1.2</span> Rings and Things</h3>
+<div class="outline-text-3" id="text-h-6896d403-8ec1-42a7-8258-27db9c6662b3">
+<ul class="org-ul">
+<li><a href="http://mizar.org/version/current/html/polynom3.html"><code>polynom3</code></a> defines:
+<ul class="org-ul">
+<li><code>Polynomial of L</code> as <code>AlgSequence of L</code></li>
+</ul></li>
+<li>In <a href="http://mizar.org/version/current/html/polyalg1.html"><code>polyalg1</code></a>, we have the following definitions
+<ul class="org-ul">
+<li><code>Algebra over F</code> (which is both a "ring" (<code>doubleLoopStr</code>) and a
+<code>ModuleStr</code> over F)</li>
+<li><code>Subalgebra</code></li>
+</ul></li>
+<li>In <a href="http://mizar.org/version/current/html/vectsp_1.html"><code>vectsp_1</code></a>:
+<ul class="org-ul">
+<li><code>Ring</code></li>
+<li><code>Skew-Field</code></li>
+<li><code>Field</code></li>
+<li><code>ModuleStr</code></li>
+<li><code>VectSp</code></li>
+</ul></li>
+<li>In <a href="http://mizar.org/version/current/html/vectsp_2.html"><code>vectsp_2</code></a>:
+<ul class="org-ul">
+<li><code>RightModStr</code></li>
+<li><code>LeftModStr</code></li>
+<li><code>BiModStr</code></li>
+</ul></li>
+</ul>
 </div>
 </div>
 </div>
@@ -483,7 +554,7 @@ When defining new terms, well, we should get started by doing something
 like:
 </p>
 
-<pre class="example" id="orgf23045e">
+<pre class="example" id="org4a032eb">
 user@computer:~/$ mkdir -p work/first-article/
 user@computer:~/$ cd work/first-article/
 user@computer:~/work/first-article/$ mkdir DICT
@@ -497,7 +568,7 @@ Now for a "Hello World" type Mizar file: just create a new predicate
 sticking one line in it:
 </p>
 
-<pre class="example" id="org9926a3c">
+<pre class="example" id="orgc4ee8c9">
 Rfoobar
 </pre>
 
@@ -505,7 +576,7 @@ Rfoobar
 Then in <code>first-article/TEXT/TMP.miz</code> we would have:
 </p>
 
-<pre class="example" id="org4c9c7ac">
+<pre class="example" id="org2ec0f08">
 environ
 vocabularies TMP; :: this is important! Without it, you get an error
 
@@ -537,7 +608,7 @@ This was surprisingly simple. I usually keep source code related stuff
 in <code>~/src/</code>, so here's the bash commands that got me cooking:
 </p>
 
-<pre class="example" id="orge985ce7">
+<pre class="example" id="orge77b3b9">
 alex@pi:~$ cd src
 alex@pi:~/src/$ mkdir mizar
 alex@pi:~/src/$ cd mizar
@@ -562,7 +633,7 @@ alex@pi:~/src/mizar$ sudo ./install.sh --default
 Then I added one line of code to my <code>~/.bash_profile</code>:
 </p>
 
-<pre class="example" id="org862ad68">
+<pre class="example" id="orgf3abfd0">
 # at the end of ~/.bash_profile
 MIZFILES=/usr/local/share/mizar
 </pre>
@@ -589,7 +660,7 @@ worth reading</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-04 Fri 10:53.</p>
+<p class="postamble">Last Updated 2022-02-16 Wed 13:24.</p>
 </div>
 </body>
 </html>
