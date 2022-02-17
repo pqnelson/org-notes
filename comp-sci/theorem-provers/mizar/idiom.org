@@ -1,0 +1,40 @@
+#+TITLE: Idiomatic Mizar
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-02-17T08:50:07-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Thursday February 17, 2022 at  8:50AM
+
+* Defining new gadgets
+:PROPERTIES:
+:CUSTOM_ID: h-6c92317d-08d7-4be7-874c-cbeadad70682
+:END:
+
+The idiomatic way to define a new gadget, well, suppose we had our
+definition found in a textbook schematically as:
+
+#+begin_definition
+A {{{dfn(Gadget)}}} consists of /stuff/ equipped with /structure/ such
+that /properties/ hold.
+#+end_definition
+
+We would define a gadget in three steps:
+
+1. Define a ~structure GadgetStr~ consisting of the stuff and structure
+2. Define a ~attr Gadget-like~ which encodes the properties
+3. Define a ~mode Gadget is Gadget-like GadgetStr~
+
+* Proving Equality
+:PROPERTIES:
+:CUSTOM_ID: h-c237f8b0-d62a-4f23-972c-26128f814532
+:END:
+
+Use [[http://mizar.org/version/current/html/xboole_0.html][~xboole_0~]] definition 10 to prove ~X = Y~ by proving ~X c= Y~ and
+~Y c= X~. This is the idiomatic way to prove the claim. Avoid [[http://mizar.org/version/current/html/tarski.html][~TARSKI:2~]]
+if possible.
