@@ -106,3 +106,49 @@ definition
   Centralizer (p-core G) is Subgroup of (p-core G);
 end;
 #+end_src
+
+* Parabolic Subgroup
+:PROPERTIES:
+:CUSTOM_ID: h-03074538-22a6-4bac-869b-a27c2bd4004c
+:END:
+
+#+begin_definition
+Let $G$ be a finite group.
+Any subgroup of $G$ containing a Sylow p-subgroup of $G$ is a
+{{{dfn(parabolic subgroup)}}} of $G$.
+#+end_definition
+
+This defines an attribute "parabolic" for "Subgroup of $G$". We need to
+use the Mizar predicate [[http://mizar.org/version/current/html/group_10.html#R3][~is_Sylow_p-subgroup_of_prime~]] to do the heavy lifting:
+
+#+begin_src mizar
+definition
+  let p be prime Nat;
+  let G be finite Group;
+  let IT be Subgroup of G;
+  attr IT is parabolic means
+  :Def:
+  ex P being Subgroup of G st P is_Sylow_p-subgroup_of_prime p &
+  P is Subgroup of IT;
+end;
+#+end_src
+
+#+begin_definition
+Let $p$ be a prime number, $G$ be a finite group.
+We say $G$ has {{{dfn(parabolic characteristic $p$)}}} if
+every $p$-local parabolic subgroup of $G$ has characteristic $p$.
+#+end_definition
+
+This defines a predicate (whenever a gadget "has ~<property>~", it
+defines a predicate).
+
+#+begin_src mizar
+definition
+  let p be prime Nat;
+  let G be finite Group;
+  pred G has_parabolic_characteristic p means
+  :Def:
+  for H being parabolic Subgroup of G st H is p-local
+  holds H has_characteristic p;
+end;
+#+end_src
