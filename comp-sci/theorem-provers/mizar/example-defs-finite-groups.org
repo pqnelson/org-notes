@@ -1,0 +1,108 @@
+#+TITLE: Example Definitions Finite Groups - Mizar
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-02-19T19:09:20-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Saturday February 19, 2022 at  7:09PM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-3514a396-c340-41d5-97f5-7fe965d4519c
+:END:
+
+This is a collection of definitions I intend to formalize in Mizar. The
+hard part of the formalizations is the proof of existence and uniqueness
+(or other correctness conditions).
+
+* G Has Characteristic p
+:PROPERTIES:
+:CUSTOM_ID: h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8
+:END:
+
+These definitions are taken from {{{arXiv(1906.07216)}}}.
+
+#+begin_definition
+Let $p$ be a prime number, $G$ be a finite group whose order is
+divisible by $p$. A {{{dfn($p$-local subgroup)}}} is one that looks like
+$N_{H}(P)$ where $P$ is a nontrivial $p$-subgroup of $G$.
+#+end_definition
+
+My intuition is that this definition introduces an attribute "$p$-local"
+for subgroups.
+
+#+begin_src mizar
+definition
+  let p be prime Nat;
+  let G be finite Group such that p divides card G;
+  let IT be Subgroup of G;
+  attr IT is p-local means
+  :Def:
+  ex P being non trivial p-group Subgroup of G
+  st the multMagma of IT = Normalizer P;
+end;
+#+end_src
+
+Since subgroup equality is defined only for strict subgroups, we cannot
+say ~IT = Normalizer P~ without making ~IT~ a strict Subgroup of G. (The
+normalizer of a subgroup is defined to be a strict subgroup.) For this
+reason, we needed to check ~the multMagma of IT = Normalizer P~.
+
+#+begin_definition
+Let $p$ be a prime number, $G$ be a finite group, $L\leq G$ be a subgroup.
+We say $K$ {{{dfn(has Characteristic $p$)}}} if
+$C_{G}(O_{p}(L))\leq O_{p}(L)$.
+#+end_definition
+
+This introduces a new predicate, ~has_characteristic p~ for a subgroup.
+
+#+begin_src mizar
+definition
+  let p be prime Nat;
+  let G be Group;
+  let L be Subgroup of G;
+  pred L has_characteristic p means
+  :Def:
+  Centralizer (p-core L) is Subgroup of (p-core L);
+end;
+#+end_src
+
+#+begin_definition
+Let $p$ be a prime number, $G$ be a finite group.
+We say $G$ {{{dfn(has local Characteristic $p$)}}} if
+if for all $p$-local subgroups $L$ of $G$ has characteristic $p$.
+#+end_definition
+
+(A special case when $p = 2$, we just say that $G$ has even
+Characteristic.)
+
+#+begin_src mizar
+definition
+  let p be prime Nat;
+  let G be finite Group;
+  pred G has_local_characteristic p means
+  :Def:
+  for L being Subgroup of G st L is p-local holds L has_characteristic p;
+end;
+#+end_src
+
+From page ix of [[https://users.math.msu.edu/users/meierfra/Preprints/CGP/Structure/structure.pdf][The Local Structure Theorem For Finite Groups With A Large p-Subgroup]]:
+
+#+begin_definition
+A finite group $G$ has {{{dfn(characteristic $p$)}}} if $C_{G}(O_{p}(G))\leq O_{p}(G)$.
+#+end_definition
+
+#+begin_src mizar
+definition
+  let p be prime Nat;
+  let G be finite Group;
+  pred G has_characteristic p means
+  :Def:
+  Centralizer (p-core G) is Subgroup of (p-core G);
+end;
+#+end_src
