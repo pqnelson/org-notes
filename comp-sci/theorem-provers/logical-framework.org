@@ -1,0 +1,123 @@
+#+TITLE: Logical Framework
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-02-20T11:52:50-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Sunday February 20, 2022 at 11:52AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-00377e54-8444-49ae-baa8-e40be87ad7bb
+:END:
+
+The basic idea of a logical framework is that we want to:
+- describe a given logic (from a large class of deductive systems)
+- emulate reasoning within the aforementioned logic
+
+This is all rather vague, since "deductive system" is vague (and if we
+try to make the notion more precise, we tend to omit important systems).
+But a large class of deductive systems may be described in terms of
+judgements and inference rules.
+
+From this perspective, a logical framework is then a metalanguage with
+some prescribed manner to encode a judgement (sometimes denoted using
+the Oxford brackets $[\![J]\!]$ for the encoding of the judgement $J$)
+and inference rules.
+
+If we try to make this more precise, then we commit ourselves to a
+particular foundation (i.e., to a particular logical framework). I'll
+just discuss two particular popular families of logical frameworks.
+
+** Adequacy Theorem
+:PROPERTIES:
+:CUSTOM_ID: h-a0eff2b0-41d2-49e3-8cc2-92df7dfd3398
+:END:
+
+Usually, the critical steps when working with a logical framework
+amounts to:
+
+1. Write down the judgements and inference rules for your "object logic"
+2. Devise an encoding for them in your logical framework
+3. Prove your encoding is adequate (i.e., there is a bijection between
+   the object logic and the encoded version), so that valid proofs using
+   the encoded system corresponds to valid proofs in the "object logic"
+
+This notion of adequacy seems to be introduced by Honsell, Plotkin, and Harper's
+paper "Framework for defining logics". In practice, this amounts to
+producing a so-called {{{dfn(Adequacy Theorem)}}} to prove we have a
+bijection. For an example of this "in the wild", see Harper and Licata's
+[[https://www.cs.cmu.edu/~rwh/papers/mech/jfp07.pdf]["Mechanizing Metatheory in a Logical Framework"]] (viz., \S3).
+
+* Dependent Types
+:PROPERTIES:
+:CUSTOM_ID: h-83f982ca-e53c-4a1d-91f6-17afd7425766
+:END:
+
+Historically, this was the first way logical frameworks emerged,
+specifically in de Bruijn's [[file:automath.org][Automath]]. If we wanted to encode a logic $L$
+in dependent type theory, we start with a judgement in $L$ like
+
+\begin{equation}
+\Gamma\vdash_{L}\varphi
+\end{equation}
+
+We begin by defining primitive notions of the logic in Automath (or the
+dependently-typed lambda calculus) $\bar\Gamma_{L}$, then we have some
+encoding $T(\varphi)$ of the judgement $\varphi$ and an encoding
+$T(\Gamma)$ of the context, and we have now to produce a proof term $p$
+of the encoded judgement-as-type:
+
+\begin{equation}
+\bar\Gamma_{L}, T(\Gamma)\vdash_{LF} p : T(\varphi)
+\end{equation}
+
+Harper, Honsell, and Plotkin make this rigorous in their LF type theory.
+
+* Higher-Order Logic
+:PROPERTIES:
+:CUSTOM_ID: h-b0c1ffaf-6bc0-42eb-9f14-afde1f6bb30d
+:END:
+
+Following Paulson's "Foundation of a Generic Theorem Prover" (see \S3,
+definition 1) we can encode a logic in higher-order logic, where we add
+some primitive definitions to the logical framework $\mathcal{M}$ to get
+$\mathcal{M}_{L}$, a way to encode judgements $J$ as formulas $[\![J]\!]$,
+and inference rules
+
+\begin{equation}
+\frac{J_{1}\quad\dots\quad J_{n}}{J}C
+\end{equation}
+
+with side condition(s) $C$, premises $J_{1}$, ..., $J_{n}$, and
+conclusion $J$, may be encoded as an implication:
+
+\begin{equation}
+[\![C]\!]\implies([\![J_{1}]\!]\implies[\dots\implies([\![J_{n}]\!]\implies [\![J]\!])]).
+\end{equation}
+
+This suffices to provide a framework for encoding any judgement of the
+deductive system, and reasoning within that deductive system.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-0e7d2aae-438c-493c-86cf-1325bbad4910
+:END:
+
+- N. G. de Bruijn,
+  "A survey of the project Automath"
+- R. Harper, F. Honsell and G. Plotkin,\\
+  "A Framework for Defining Logics".\\
+  In /Symposium on Logic in Computer Science/, 1987, pages 194-204;
+  [[https://homepages.inf.ed.ac.uk/gdp/publications/Framework_Def_Log.pdf][Eprint]]
+- Lawrence Paulson,\\
+  "The Foundation of a Generic Theorem Prover".\\
+  {{{arXiv(cs/9301105)}}}, 37 pages.
+- Robert Harper and Daniel R. Licata, \\
+  [[https://www.cs.cmu.edu/~rwh/papers/mech/jfp07.pdf]["Mechanizing Metatheory in a Logical Framework"]].\\
+  /Journal of functional programming/ *17*, no. 4-5 (2007) pp.613--673.

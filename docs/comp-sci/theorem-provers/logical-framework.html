@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-20 Sun 12:01 -->
+<!-- 2022-02-20 Sun 12:28 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Topics - Theorem Provers</title>
+<title>Logical Framework</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -229,55 +229,195 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../theorem-provers.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Topics - Theorem Provers</h1>
-
-<div id="outline-container-h-53f2e291-e3ce-46d3-b75f-8f3ecadf2ba0" class="outline-2">
-<h2 id="h-53f2e291-e3ce-46d3-b75f-8f3ecadf2ba0">Concepts</h2>
-<div class="outline-text-2" id="text-h-53f2e291-e3ce-46d3-b75f-8f3ecadf2ba0">
-<ul class="org-ul">
-<li><a href="soft-types.html">Soft Type Systems</a></li>
-<li><a href="small.html">On Kernel Size</a>, or why anything beyond 441 lines of code should be
-considered "too big" to be considered "small".</li>
-<li><a href="logical-framework.html">Logical Frameworks</a></li>
+<h1 class="title">Logical Framework</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-00377e54-8444-49ae-baa8-e40be87ad7bb">1. Introduction</a>
+<ul>
+<li><a href="#h-a0eff2b0-41d2-49e3-8cc2-92df7dfd3398">1.1. Adequacy Theorem</a></li>
+</ul>
+</li>
+<li><a href="#h-83f982ca-e53c-4a1d-91f6-17afd7425766">2. Dependent Types</a></li>
+<li><a href="#h-b0c1ffaf-6bc0-42eb-9f14-afde1f6bb30d">3. Higher-Order Logic</a></li>
+<li><a href="#h-0e7d2aae-438c-493c-86cf-1325bbad4910">4. References</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-h-59683525-f902-4e25-ba86-bc6fc6e3a1de" class="outline-2">
-<h2 id="h-59683525-f902-4e25-ba86-bc6fc6e3a1de">Specific Proof Assistants</h2>
-<div class="outline-text-2" id="text-h-59683525-f902-4e25-ba86-bc6fc6e3a1de">
+<div id="outline-container-h-00377e54-8444-49ae-baa8-e40be87ad7bb" class="outline-2">
+<h2 id="h-00377e54-8444-49ae-baa8-e40be87ad7bb"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-00377e54-8444-49ae-baa8-e40be87ad7bb">
+<p>
+The basic idea of a logical framework is that we want to:
+</p>
 <ul class="org-ul">
-<li><a href="automath.html">Automath</a>, one of the first "modern" proof assistants</li>
-<li><a href="mizar.html">Mizar</a> (<a href="mizar/index.html">topics</a>) a lovely proof assistant
+<li>describe a given logic (from a large class of deductive systems)</li>
+<li>emulate reasoning within the aforementioned logic</li>
+</ul>
+
+<p>
+This is all rather vague, since "deductive system" is vague (and if we
+try to make the notion more precise, we tend to omit important systems).
+But a large class of deductive systems may be described in terms of
+judgements and inference rules.
+</p>
+
+<p>
+From this perspective, a logical framework is then a metalanguage with
+some prescribed manner to encode a judgement (sometimes denoted using
+the Oxford brackets \([\![J]\!]\) for the encoding of the judgement \(J\))
+and inference rules.
+</p>
+
+<p>
+If we try to make this more precise, then we commit ourselves to a
+particular foundation (i.e., to a particular logical framework). I'll
+just discuss two particular popular families of logical frameworks.
+</p>
+</div>
+
+<div id="outline-container-h-a0eff2b0-41d2-49e3-8cc2-92df7dfd3398" class="outline-3">
+<h3 id="h-a0eff2b0-41d2-49e3-8cc2-92df7dfd3398"><span class="section-number-3">1.1.</span> Adequacy Theorem</h3>
+<div class="outline-text-3" id="text-h-a0eff2b0-41d2-49e3-8cc2-92df7dfd3398">
+<p>
+Usually, the critical steps when working with a logical framework
+amounts to:
+</p>
+
+<ol class="org-ol">
+<li>Write down the judgements and inference rules for your "object logic"</li>
+<li>Devise an encoding for them in your logical framework</li>
+<li>Prove your encoding is adequate (i.e., there is a bijection between
+the object logic and the encoded version), so that valid proofs using
+the encoded system corresponds to valid proofs in the "object logic"</li>
+</ol>
+
+<p>
+This notion of adequacy seems to be introduced by Honsell, Plotkin, and Harper's
+paper "Framework for defining logics". In practice, this amounts to
+producing a so-called <dfn>Adequacy Theorem</dfn> to prove we have a
+bijection. For an example of this "in the wild", see Harper and Licata's
+<a href="https://www.cs.cmu.edu/~rwh/papers/mech/jfp07.pdf">"Mechanizing Metatheory in a Logical Framework"</a> (viz., &sect;3).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-83f982ca-e53c-4a1d-91f6-17afd7425766" class="outline-2">
+<h2 id="h-83f982ca-e53c-4a1d-91f6-17afd7425766"><span class="section-number-2">2.</span> Dependent Types</h2>
+<div class="outline-text-2" id="text-h-83f982ca-e53c-4a1d-91f6-17afd7425766">
+<p>
+Historically, this was the first way logical frameworks emerged,
+specifically in de Bruijn's <a href="automath.html">Automath</a>. If we wanted to encode a logic \(L\)
+in dependent type theory, we start with a judgement in \(L\) like
+</p>
+
+\begin{equation}
+\Gamma\vdash_{L}\varphi
+\end{equation}
+
+<p>
+We begin by defining primitive notions of the logic in Automath (or the
+dependently-typed lambda calculus) \(\bar\Gamma_{L}\), then we have some
+encoding \(T(\varphi)\) of the judgement \(\varphi\) and an encoding
+\(T(\Gamma)\) of the context, and we have now to produce a proof term \(p\)
+of the encoded judgement-as-type:
+</p>
+
+\begin{equation}
+\bar\Gamma_{L}, T(\Gamma)\vdash_{LF} p : T(\varphi)
+\end{equation}
+
+<p>
+Harper, Honsell, and Plotkin make this rigorous in their LF type theory.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-b0c1ffaf-6bc0-42eb-9f14-afde1f6bb30d" class="outline-2">
+<h2 id="h-b0c1ffaf-6bc0-42eb-9f14-afde1f6bb30d"><span class="section-number-2">3.</span> Higher-Order Logic</h2>
+<div class="outline-text-2" id="text-h-b0c1ffaf-6bc0-42eb-9f14-afde1f6bb30d">
+<p>
+Following Paulson's "Foundation of a Generic Theorem Prover" (see &sect;3,
+definition 1) we can encode a logic in higher-order logic, where we add
+some primitive definitions to the logical framework \(\mathcal{M}\) to get
+\(\mathcal{M}_{L}\), a way to encode judgements \(J\) as formulas \([\![J]\!]\),
+and inference rules
+</p>
+
+\begin{equation}
+\frac{J_{1}\quad\dots\quad J_{n}}{J}C
+\end{equation}
+
+<p>
+with side condition(s) \(C\), premises \(J_{1}\), &#x2026;, \(J_{n}\), and
+conclusion \(J\), may be encoded as an implication:
+</p>
+
+\begin{equation}
+[\![C]\!]\implies([\![J_{1}]\!]\implies[\dots\implies([\![J_{n}]\!]\implies [\![J]\!])]).
+\end{equation}
+
+<p>
+This suffices to provide a framework for encoding any judgement of the
+deductive system, and reasoning within that deductive system.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-0e7d2aae-438c-493c-86cf-1325bbad4910" class="outline-2">
+<h2 id="h-0e7d2aae-438c-493c-86cf-1325bbad4910"><span class="section-number-2">4.</span> References</h2>
+<div class="outline-text-2" id="text-h-0e7d2aae-438c-493c-86cf-1325bbad4910">
 <ul class="org-ul">
-<li><a href="mizar/definitions.html">Definitions in Mizar</a> some notes</li>
-<li><a href="mizar/schemes.html">Schemes</a></li>
-<li><a href="mizar/idiom.html">Idiomatic Mizar</a></li>
-<li><a href="mizar/group-theory.html">Group Theory in Mizar</a></li>
-<li><a href="mizar/example-defs-finite-groups.html">Example Definitions</a> in finite group theory</li>
-</ul></li>
-<li><a href="hol-light.html">HOL Light</a> (<a href="hol-light/index.html">topics</a>) for a small and elegant implementation of
-Higher-order logic
-<ul class="org-ul">
-<li><a href="hol-light/compile.html">Compiling HOL Light</a> with a couple "gotchas" on Raspberry Pi (and in general)</li>
-<li><a href="hol-light/definitions.html">Definitions in HOL Light</a></li>
-<li><a href="hol-light/group-theory.html">Group Theory</a> in HOL Light</li>
-</ul></li>
-<li><a href="coq.html">Coq</a></li>
-<li><a href="isabelle.html">Isabelle</a></li>
+<li>N. G. de Bruijn,
+"A survey of the project Automath"</li>
+<li>R. Harper, F. Honsell and G. Plotkin,<br>
+"A Framework for Defining Logics".<br>
+In <i>Symposium on Logic in Computer Science</i>, 1987, pages 194-204;
+<a href="https://homepages.inf.ed.ac.uk/gdp/publications/Framework_Def_Log.pdf">Eprint</a></li>
+<li>Lawrence Paulson,<br>
+"The Foundation of a Generic Theorem Prover".<br>
+<a href="https://arxiv.org/abs/cs/9301105">arXiv:cs/9301105</a>, 37 pages.</li>
+<li>Robert Harper and Daniel R. Licata, <br>
+<a href="https://www.cs.cmu.edu/~rwh/papers/mech/jfp07.pdf">"Mechanizing Metatheory in a Logical Framework"</a>.<br>
+<i>Journal of functional programming</i> <b>17</b>, no. 4-5 (2007) pp.613&#x2013;673.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-20 Sun 11:59.</p>
+<p class="postamble">Last Updated 2022-02-20 Sun 12:27.</p>
 </div>
 </body>
 </html>
