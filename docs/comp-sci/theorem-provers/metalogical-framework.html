@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-22 Tue 12:53 -->
+<!-- 2022-02-23 Wed 12:29 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Metalogical Frameworks</title>
@@ -271,15 +271,21 @@
 <li><a href="#h-af1ef39b-c0e6-488a-9267-82b779dc2972">3.2. Observation: Initial Model</a></li>
 </ul>
 </li>
-<li><a href="#h-6ff11a58-ab6d-42c4-a72f-33a94d50834a">4. Sticky point: Reflection Principles</a>
+<li><a href="#h-6ff11a58-ab6d-42c4-a72f-33a94d50834a">4. Logical Frameworks via Reflection Principles</a>
 <ul>
-<li><a href="#h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c">4.1. Using Institutions</a></li>
+<li><a href="#h-efc8bdff-b813-455e-84b6-279f23e63f0d">4.1. Entailment System</a></li>
+<li><a href="#h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c">4.2. Using Institutions</a></li>
+<li><a href="#h-661b870a-695f-4a1a-938a-c618e52e6780">4.3. Logic = Entailment System + Institution</a></li>
+<li><a href="#h-d0d88680-9d94-454a-bb95-bae2d9545de3">4.4. Relevant Reflection Principles</a></li>
+<li><a href="#h-38b74b13-abc7-4bae-a2d0-272ae22effe7">4.5. Logical Framework</a></li>
 </ul>
 </li>
-<li><a href="#h-ef7b6773-9653-4d89-903b-1e95119c96b9">5. References</a>
+<li><a href="#h-94b822dd-afb8-4a4d-aac5-d6ea941f7e4e">5. Definition of Meta-logical Framework</a></li>
+<li><a href="#h-ef7b6773-9653-4d89-903b-1e95119c96b9">6. References</a>
 <ul>
-<li><a href="#h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b">5.1. Principle of Reflection</a></li>
-<li><a href="#h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15">5.2. Using HOL</a></li>
+<li><a href="#h-61521a7b-80df-40a1-b414-ec4de8bcd51b">6.1. Logic, Entailment Systems, etc.</a></li>
+<li><a href="#h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b">6.2. Principle of Reflection</a></li>
+<li><a href="#h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15">6.3. Using HOL</a></li>
 </ul>
 </li>
 </ul>
@@ -301,7 +307,7 @@ logical framework such that it can prove metatheorems. For example,
 proving <a href="https://en.wikipedia.org/wiki/Cut-elimination_theorem">cut-elimination</a>.
 </p>
 
-<div class="remark" id="orgd33f68b">
+<div class="remark" id="orgf0519b9">
 <p>
 I will often write "meta-logical framework" and "metalogical framework"
 interchangeably.
@@ -314,7 +320,7 @@ interchangeably.
 <div id="outline-container-h-14d91154-6603-46f9-a532-90736863a01b" class="outline-2">
 <h2 id="h-14d91154-6603-46f9-a532-90736863a01b"><span class="section-number-2">2</span> Examples of Meta-Logical</h2>
 <div class="outline-text-2" id="text-h-14d91154-6603-46f9-a532-90736863a01b">
-<div class="math-example" id="orgf4fb304">
+<div class="math-example" id="org193d1c0">
 <p>
 <a href="hol.html">HOL</a> is a meta-logical framework, since it can encode judgements using
 inductive types (thanks to the Tarski-Knaster theorem) and inference
@@ -325,14 +331,14 @@ meta-logical framework.
 
 </div>
 
-<div class="math-example" id="org5bf7282">
+<div class="math-example" id="orga9acc44">
 <p>
 A <b>NON-example</b> is <a href="automath.html">Automath</a>, which is too weak to prove metatheorems.
 </p>
 
 </div>
 
-<div class="math-example" id="org017c163">
+<div class="math-example" id="orgc25bff7">
 <p>
 A mixed example would be <a href="isabelle.html">Isabelle</a> (which is a fragment of intuitionistic
 higher-order logic) alone is insufficient to be a meta-logical framework.
@@ -417,7 +423,7 @@ is necessary.
 </div>
 
 <div id="outline-container-h-6ff11a58-ab6d-42c4-a72f-33a94d50834a" class="outline-2">
-<h2 id="h-6ff11a58-ab6d-42c4-a72f-33a94d50834a"><span class="section-number-2">4</span> Sticky point: Reflection Principles</h2>
+<h2 id="h-6ff11a58-ab6d-42c4-a72f-33a94d50834a"><span class="section-number-2">4</span> Logical Frameworks via Reflection Principles</h2>
 <div class="outline-text-2" id="text-h-6ff11a58-ab6d-42c4-a72f-33a94d50834a">
 <p>
 The criteria which seems to be subject to fierce debate is whether a
@@ -426,53 +432,17 @@ is a relatively "soft" concept (like predicativity).
 </p>
 </div>
 
-<div id="outline-container-h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c" class="outline-3">
-<h3 id="h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c"><span class="section-number-3">4.1</span> Using Institutions</h3>
-<div class="outline-text-3" id="text-h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c">
+<div id="outline-container-h-efc8bdff-b813-455e-84b6-279f23e63f0d" class="outline-3">
+<h3 id="h-efc8bdff-b813-455e-84b6-279f23e63f0d"><span class="section-number-3">4.1</span> Entailment System</h3>
+<div class="outline-text-3" id="text-h-efc8bdff-b813-455e-84b6-279f23e63f0d">
 <p>
-Basin, Clavel, and Meseguer's "Reflective Metalogical Frameworks"
-formalizes model theory using institutions.
+In logic, we have a notion of a "first-order language" built atop the
+logic. The "space of first-order languages" is then generalized as an
+"entailment system", which codifies a notion of <i>provability</i> or
+<i>entailment</i>, is defined as:
 </p>
 
-<div class="definition" id="org594ff9c">
-<p>
-An <dfn>Institution</dfn> consists of
-</p>
-<ul class="org-ul">
-<li>\(\mathbf{Sign}\) a category whose objects are called "signatures"</li>
-</ul>
-<p>
-equipped with
-</p>
-<ul class="org-ul">
-<li>\(sen\colon\mathbf{Sign}\to\mathbf{Set}\) a functor assigning to each
-signature its set of <dfn>$&Sigma;$-sentences</dfn>;</li>
-<li>\(\mathbf{Mod}\colon\mathbf{Sign}\to\mathbf{Cat}^{op}\) is a [contravariant] functor
-that assignts to each signature a category whose objects are called
-<dfn>$&Sigma;$-models</dfn>; and</li>
-<li>a function \(\vDash\) associating to each signature
-\(\Sigma\in\mathbf{Sign}\) a binary relation
-\(\vDash_{\Sigma}\subset\mathrm{Ob}(\mathbf{Mod}(\Sigma))\times sen(\Sigma)\)
-called <dfn>$&Sigma;$-satisfaction</dfn></li>
-</ul>
-
-<p>
-such that
-</p>
-
-<ul class="org-ul">
-<li>the satisfication condition holds: for each \(H\colon\Sigma\to\Sigma'\)
-in \(\mathbf{Sign}\), for each model \(M'\in\mathbf{Mod}(\Sigma')\) and
-every \(\varphi\in sen(\Sigma)\), we have \(M'\vDash_{\Sigma'}sen(H)(\varphi)\iff\mathbf{Mod}(H)(M')\vDash_{\Sigma}\varphi\).</li>
-</ul>
-
-</div>
-
-<p>
-A logic is then described as an "entailment system", defined as:
-</p>
-
-<div class="definition" id="org2d2af88">
+<div class="definition" id="orgc94c9b0">
 <p>
 An <dfn>Entailment System</dfn> consists of
 </p>
@@ -509,39 +479,161 @@ where \(sen(H)(\Gamma)=\{sen(H)(\varphi)\mid\varphi\in\Gamma\}\).</li>
 
 </div>
 
+<div class="remark" id="org1e617d9">
 <p>
-Then the particular notion of reflection can be described as:
-</p>
-
-<div class="definition" id="org5689e9f">
-<p>
-Given an entailment system \(\mathcal{E}\) and a nonempty set of theories
-\(\mathcal{C}\) in it, a theory \(U\) is <dfn>\(\mathcal{C}\) Universal</dfn>
-if there is an injective function (called a "representation function")
-</p>
-\begin{equation}
-\overline{(-\vdash-)}\colon\bigcup_{T\in\mathcal{C}}(\{T\}\times sen(T))\to sen(U)
-\end{equation}
-<p>
-such that for each \(T\in\mathcal{C}\), \(\varphi\in sen(T)\),
-</p>
-\begin{equation}
-T\vdash_{sign(T)}\varphi\iff U\vdash_{sign(U)}\overline{T\vdash\varphi}.
-\end{equation}
-<p>
-If further \(U\in\mathcal{C}\), we call the entailment system \(\mathcal{E}\)
-<dfn>\(\mathcal{C}\) Reflective</dfn>.
-</p>
-
-<p>
-Finally, we define a <dfn>Reflective Logic</dfn> to be a logic whose
-entailment system is \(\mathcal{C}\) reflective for \(\mathcal{C}\) the
-classof all finitely presentable theories in the logic.
+We can meaningfully discuss a notion of <i>proof calculi</i> for entailment
+systems. See &sect;2.3 of "Axiomatizing Reflective Logics and Languages"
+by Manuel G. Clavel &amp; Jose Meseguer (<a href="http://www.csl.sri.com/papers/axiom/">Eprint</a>).
 </p>
 
 </div>
 
-<div class="puzzle" id="orga23c4ec">
+<p>
+Signature morphisms in the underlying category \(\mathbf{Sign}\) may be
+from including a signature \(\Sigma\) into a larger signature \(\Sigma'\),
+or from changing syntax, or something similar.
+</p>
+
+<div class="definition" id="org0f30fe4">
+<p>
+Let \(\mathcal{E}\) be an entailment system. We define its category
+\(\mathbf{Th}\) of <dfn>Theories</dfn> to consist of
+</p>
+
+<dl class="org-dl">
+<dt>objects</dt><dd>pairs \(T = (\Sigma,\Gamma)\) of a signature \(\Sigma\) and
+\(\Gamma\subset sen(\Sigma)\)</dd>
+<dt>morphisms</dt><dd>\(H\colon(\Sigma,\Gamma)\to(\Sigma',\Gamma')\) consists of
+a signature morphism \(H\colon\Sigma\to\Sigma'\) such that if
+\(\varphi\in\Gamma\), then \(\Gamma'\vdash_{\Sigma'}sen(H)(\varphi)\).</dd>
+</dl>
+
+<p>
+There is also the forgetful functor \(sign\colon\mathbf{Th}\to\mathbf{Sign}\),
+and the induced functor \(sen\colon\mathbf{Th}\to\mathbf{Set}\) given by
+\(sen(T)=sen(sign(T))\). 
+</p>
+
+</div>
+
+<div class="remark" id="orgc99ca19">
+<p>
+I believe this means that \(\mathbf{Th}\) is fibred over \(\mathbf{Sign}\).
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c" class="outline-3">
+<h3 id="h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c"><span class="section-number-3">4.2</span> Using Institutions</h3>
+<div class="outline-text-3" id="text-h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c">
+<p>
+Basin, Clavel, and Meseguer's "Reflective Metalogical Frameworks"
+formalizes model theory using institutions. This is a common way to
+formalize <b>model theory</b> beyond first-order logic, and has been used in
+the literature since their introduction in the '70s.
+</p>
+
+<div class="definition" id="org4dbc1aa">
+<p>
+An <dfn>Institution</dfn> consists of
+</p>
+<ul class="org-ul">
+<li>\(\mathbf{Sign}\) a category whose objects are called "signatures"</li>
+</ul>
+<p>
+equipped with
+</p>
+<ul class="org-ul">
+<li>\(sen\colon\mathbf{Sign}\to\mathbf{Set}\) a functor assigning to each
+signature its set of <dfn>$&Sigma;$-sentences</dfn>;</li>
+<li>\(\mathbf{Mod}\colon\mathbf{Sign}\to\mathbf{Cat}^{op}\) is a [contravariant] functor
+that assignts to each signature a category whose objects are called
+<dfn>$&Sigma;$-models</dfn>; and</li>
+<li>a function \(\vDash\) associating to each signature
+\(\Sigma\in\mathbf{Sign}\) a binary relation
+\(\vDash_{\Sigma}\subset\mathrm{Ob}(\mathbf{Mod}(\Sigma))\times sen(\Sigma)\)
+called <dfn>$&Sigma;$-satisfaction</dfn></li>
+</ul>
+
+<p>
+such that
+</p>
+
+<ul class="org-ul">
+<li>the satisfication condition holds: for each \(H\colon\Sigma\to\Sigma'\)
+in \(\mathbf{Sign}\), for each model \(M'\in\mathbf{Mod}(\Sigma')\) and
+every \(\varphi\in sen(\Sigma)\), we have \(M'\vDash_{\Sigma'}sen(H)(\varphi)\iff\mathbf{Mod}(H)(M')\vDash_{\Sigma}\varphi\).</li>
+</ul>
+
+</div>
+
+<div class="remark" id="org78d1c24">
+<p>
+We can also note, if \(T=(\Sigma,\Gamma)\) is a theory, its model category
+\(\mathbf{Mod}(T)\) is the full subcategory of \(\mathbf{Mod}(\Sigma)\)
+determined by the models \(M\in\mathbf{Mod}(\Sigma)\) which satisfy all
+the sentences in \(\Gamma\) &#x2014; i.e., for each \(\varphi\in\Gamma\), we have
+\(M\vDash_{\Sigma}\varphi\).
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-661b870a-695f-4a1a-938a-c618e52e6780" class="outline-3">
+<h3 id="h-661b870a-695f-4a1a-938a-c618e52e6780"><span class="section-number-3">4.3</span> Logic = Entailment System + Institution</h3>
+<div class="outline-text-3" id="text-h-661b870a-695f-4a1a-938a-c618e52e6780">
+<p>
+A logic can now be defined in glorious generality as a <i>sound</i>
+institutionalized entailment system.
+</p>
+
+<div class="definition" id="org3d9393f">
+<p>
+A <dfn>Logic</dfn> consists of
+</p>
+<ul class="org-ul">
+<li>\(\mathbf{Sign}\) a category whose objects are called "signatures"</li>
+</ul>
+
+<p>
+equipped with
+</p>
+<ul class="org-ul">
+<li>\(sen\colon\mathbf{Sign}\to\mathbf{Set}\) a functor associating to each
+signature \(\Sigma\) a corresponding set of $&Sigma;$-sentences</li>
+<li>\(\vdash\) a function mapping a signature [object] \(\Sigma\in\mathbf{Sign}\)
+a binary relation
+\(\vdash_{\Sigma}\subset\mathcal{P}(sen(\Sigma))\times sen(\Sigma)\)</li>
+<li>\(\mathbf{Mod}\colon\mathbf{Sign}\to\mathbf{Cat}^{op}\) is a [contravariant] functor
+that assignts to each signature a category whose objects are called
+<dfn>$&Sigma;$-models</dfn>; and</li>
+<li>a function \(\vDash\) associating to each signature
+\(\Sigma\in\mathbf{Sign}\) a binary relation
+\(\vDash_{\Sigma}\subset\mathrm{Ob}(\mathbf{Mod}(\Sigma))\times sen(\Sigma)\)
+called <dfn>$&Sigma;$-satisfaction</dfn></li>
+</ul>
+
+<p>
+such that
+</p>
+
+<ol class="org-ol">
+<li>it forms an entailment system with \((\mathbf{Sign}, sen, \vdash)\)</li>
+<li>it forms an institution with \((\mathbf{Sign}, sen, \mathbf{Mod}, \vDash)\)</li>
+<li>Soundness condition: for each \(\Sigma\in\mathbf{Sign}\),
+\(\Gamma\subset sen(\Sigma)\), and \(\varphi\in sen(\Sigma)\), we have
+\(\Gamma\vdash_{\Sigma}\varphi\implies\Gamma\vDash_{\Sigma}\varphi\),
+where \(\Gamma\vDash_{\Sigma}\varphi\) holds if and only if \(M\vDash_{\Sigma}\varphi\)
+holds for any model \(M\) that satisfies all the sentences in \(\Gamma\).</li>
+</ol>
+
+</div>
+
+
+<div class="puzzle" id="org56eb7c1">
 <p>
 What is the relationship between an entailment system and an
 institution, when we think of \(\vdash_{\Sigma}\) in terms of the
@@ -568,18 +660,156 @@ n-category cafe post <a href="https://golem.ph.utexas.edu/category/2008/11/the_i
 
 </div>
 
+<div class="remark" id="orgda297ae">
 <p>
 Yeah, the more that I think about it, the more I realize <b>Cat</b> is the
 epitome of <a href="https://ncatlab.org/nlab/show/2-topos">2-topos</a>, just as <b>Set</b> is the epitome of a topos. Goguen and
 Burstall's "Institutions: Abstract Model Theory for Specification
 and Programming" suggests this isn't so crazy an idea, after all&#x2026;
 </p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-d0d88680-9d94-454a-bb95-bae2d9545de3" class="outline-3">
+<h3 id="h-d0d88680-9d94-454a-bb95-bae2d9545de3"><span class="section-number-3">4.4</span> Relevant Reflection Principles</h3>
+<div class="outline-text-3" id="text-h-d0d88680-9d94-454a-bb95-bae2d9545de3">
+<p>
+Then the particular notion of reflection can be described as:
+</p>
+
+<div class="definition" id="org5239aba">
+<p>
+Given an entailment system \(\mathcal{E}\) and a nonempty set of theories
+\(\mathcal{C}\) in it, a theory \(U\) is <dfn>\(\mathcal{C}\) Universal</dfn>
+if there is an injective function (called a "representation function")
+</p>
+\begin{equation}
+\overline{(-\vdash-)}\colon\bigcup_{T\in\mathcal{C}}(\{T\}\times sen(T))\to sen(U)
+\end{equation}
+<p>
+such that for each \(T\in\mathcal{C}\), \(\varphi\in sen(T)\),
+</p>
+\begin{equation}
+T\vdash_{sign(T)}\varphi\iff U\vdash_{sign(U)}\overline{T\vdash\varphi}.
+\end{equation}
+<p>
+If further \(U\in\mathcal{C}\), we call the entailment system \(\mathcal{E}\)
+<dfn>\(\mathcal{C}\) Reflective</dfn>.
+</p>
+
+<p>
+Finally, we define a <dfn>Reflective Logic</dfn> to be a logic whose
+entailment system is \(\mathcal{C}\) reflective for \(\mathcal{C}\) the
+classof all finitely presentable theories in the logic.
+</p>
+
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-h-38b74b13-abc7-4bae-a2d0-272ae22effe7" class="outline-3">
+<h3 id="h-38b74b13-abc7-4bae-a2d0-272ae22effe7"><span class="section-number-3">4.5</span> Logical Framework</h3>
+<div class="outline-text-3" id="text-h-38b74b13-abc7-4bae-a2d0-272ae22effe7">
+<p>
+From this perspective, we may thus define a <a href="logical-framework.html">logical framework</a> as:
+</p>
+
+<div class="definition" id="org0850298">
+<p>
+A <dfn>Logical Framework</dfn> consists of
+</p>
+<ul class="org-ul">
+<li>a logic \(\mathcal{L}\)</li>
+<li>a theory \(U\) in the class \(\mathcal{C}\) of finitely presentable
+theories of \(\mathcal{L}\)</li>
+</ul>
+
+<p>
+such that \(U\) is $\mathcal{C}$-universal. 
+</p>
+
+</div>
+
+<div class="remark" id="org0816d85">
+<p>
+This observation seems to have also been made in &sect;3 of
+"Axiomatizing Reflective Logics and Languages"
+by Manuel G. Clavel &amp; Jose Meseguer (<a href="http://www.csl.sri.com/papers/axiom/">Eprint</a>). In particular, what <i>we</i>
+would typically refer to as a "logical framework", they denote by the
+universal theory \(U\).
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-94b822dd-afb8-4a4d-aac5-d6ea941f7e4e" class="outline-2">
+<h2 id="h-94b822dd-afb8-4a4d-aac5-d6ea941f7e4e"><span class="section-number-2">5</span> Definition of Meta-logical Framework</h2>
+<div class="outline-text-2" id="text-h-94b822dd-afb8-4a4d-aac5-d6ea941f7e4e">
+<p>
+Let me give a "morally right" definition, which fails to be rigorous:
+</p>
+
+<div class="definition" id="orga4a9cc6">
+<p>
+A <dfn>Meta-logical framework</dfn> consists of a logical framework
+\((\mathcal{L}, \mathcal{C}, U)\) equipped with
+</p>
+
+<ul class="org-ul">
+<li>a super logic \(\mathcal{S}\) containing \(\mathcal{L}\subset\mathcal{S}\)</li>
+</ul>
+
+<p>
+such that
+</p>
+
+<ol class="org-ol">
+<li>Super-nice super-logic: the logic \(\mathcal{S}\) is "suitably nice"
+(has Tarskian semantics and admits universal &amp; existential quantification).</li>
+<li>Initiality: for each theory \(T\in\mathcal{C}\), there exists an
+initial model \(\mathcal{I}(T)\in\mathbf{Mod}(T)\).</li>
+<li>Inductive proofs: for each theory \(T\in\mathcal{C}\), there is an
+extension \(U\subset Ind(U)\) in \(\mathcal{S}\) such that
+we can do inductive proofs with \(Ind(U)\) concerning
+the metatheory of any \(T\).</li>
+</ol>
+
+</div>
+
+<div class="remark" id="orgc04b894">
+<p>
+It's not clear exactly <i>how</i> super-nice the superlogic has to be; is
+there soemthing <i>weaker</i> than having Tarskian semantics?
+</p>
+
+</div>
+
+<div class="remark" id="org807f1f7">
+<p>
+Also, it's unclear <i>when</i> will a logic \(\mathcal{L}\) have a superlogic
+\(\mathcal{S}\) which has Tarskian semantics and admits quantifiers.
+</p>
+
+</div>
+
+<div class="puzzle" id="org4769c9d">
+<p>
+Can we reformulate this notion of a metalogical framework within the more
+familiar judgements and inference rules setting?
+</p>
+
 </div>
 </div>
 </div>
 
 <div id="outline-container-h-ef7b6773-9653-4d89-903b-1e95119c96b9" class="outline-2">
-<h2 id="h-ef7b6773-9653-4d89-903b-1e95119c96b9"><span class="section-number-2">5</span> References</h2>
+<h2 id="h-ef7b6773-9653-4d89-903b-1e95119c96b9"><span class="section-number-2">6</span> References</h2>
 <div class="outline-text-2" id="text-h-ef7b6773-9653-4d89-903b-1e95119c96b9">
 <ul class="org-ul">
 <li>David A. Basin and Robert L. Constable,<br>
@@ -601,8 +831,21 @@ pp. 55-80. Springer, Berlin, Heidelberg, 2000.</li>
 </ul>
 </div>
 
+<div id="outline-container-h-61521a7b-80df-40a1-b414-ec4de8bcd51b" class="outline-3">
+<h3 id="h-61521a7b-80df-40a1-b414-ec4de8bcd51b"><span class="section-number-3">6.1</span> Logic, Entailment Systems, etc.</h3>
+<div class="outline-text-3" id="text-h-61521a7b-80df-40a1-b414-ec4de8bcd51b">
+<ul class="org-ul">
+<li>J Meseguer,<br>
+"General logics".<br>
+In <i>Logic Colloquium'87</i> (H.-D. Ebbinghaus et al., Eds.)
+North-Holland, Amsterdam, The Netherlands, 275&#x2013;329.
+<a href="https://apps.dtic.mil/sti/pdfs/ADA219469.pdf">Eprint</a></li>
+</ul>
+</div>
+</div>
+
 <div id="outline-container-h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b" class="outline-3">
-<h3 id="h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b"><span class="section-number-3">5.1</span> Principle of Reflection</h3>
+<h3 id="h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b"><span class="section-number-3">6.2</span> Principle of Reflection</h3>
 <div class="outline-text-3" id="text-h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b">
 <ul class="org-ul">
 <li>Manuel Clavel and José Meseguer,<br>
@@ -619,7 +862,7 @@ Research Centre, 1995.
 </div>
 
 <div id="outline-container-h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15" class="outline-3">
-<h3 id="h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15"><span class="section-number-3">5.2</span> Using HOL</h3>
+<h3 id="h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15"><span class="section-number-3">6.3</span> Using HOL</h3>
 <div class="outline-text-3" id="text-h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15">
 <ul class="org-ul">
 <li>Petros Papapanagiotou and Jacques Fleuriot,<br>
@@ -631,7 +874,7 @@ Research Centre, 1995.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-22 Tue 12:53.</p>
+<p class="postamble">Last Updated 2022-02-23 Wed 12:29.</p>
 </div>
 </body>
 </html>

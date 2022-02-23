@@ -109,7 +109,7 @@ semantics, which would be equivalent to this "initial model"
 condition. Thus it seems unavoidable that the "initial model" condition
 is necessary.
 
-* Sticky point: Reflection Principles
+* Logical Frameworks via Reflection Principles
 :PROPERTIES:
 :CUSTOM_ID: h-6ff11a58-ab6d-42c4-a72f-33a94d50834a
 :END:
@@ -118,36 +118,15 @@ The criteria which seems to be subject to fierce debate is whether a
 meta-logical framework obeys reflection principles or not. "Reflection"
 is a relatively "soft" concept (like predicativity).
 
-** Using Institutions
+** Entailment System
 :PROPERTIES:
-:CUSTOM_ID: h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c
+:CUSTOM_ID: h-efc8bdff-b813-455e-84b6-279f23e63f0d
 :END:
 
-Basin, Clavel, and Meseguer's "Reflective Metalogical Frameworks"
-formalizes model theory using institutions.
-
-#+begin_definition
-An {{{dfn(Institution)}}} consists of
-- $\mathbf{Sign}$ a category whose objects are called "signatures"
-equipped with
-- $sen\colon\mathbf{Sign}\to\mathbf{Set}$ a functor assigning to each
-  signature its set of {{{dfn($\Sigma$-sentences)}}};
-- $\mathbf{Mod}\colon\mathbf{Sign}\to\mathbf{Cat}^{op}$ is a [contravariant] functor
-  that assignts to each signature a category whose objects are called
-  {{{dfn($\Sigma$-models)}}}; and
-- a function $\vDash$ associating to each signature
-  $\Sigma\in\mathbf{Sign}$ a binary relation
-  $\vDash_{\Sigma}\subset\mathrm{Ob}(\mathbf{Mod}(\Sigma))\times sen(\Sigma)$
-  called {{{dfn($\Sigma$-satisfaction)}}}
-
-such that
-
-- the satisfication condition holds: for each $H\colon\Sigma\to\Sigma'$
-  in $\mathbf{Sign}$, for each model $M'\in\mathbf{Mod}(\Sigma')$ and
-  every $\varphi\in sen(\Sigma)$, we have $M'\vDash_{\Sigma'}sen(H)(\varphi)\iff\mathbf{Mod}(H)(M')\vDash_{\Sigma}\varphi$.
-#+end_definition
-
-A logic is then described as an "entailment system", defined as:
+In logic, we have a notion of a "first-order language" built atop the
+logic. The "space of first-order languages" is then generalized as an
+"entailment system", which codifies a notion of /provability/ or
+/entailment/, is defined as:
 
 #+begin_definition
 An {{{dfn(Entailment System)}}} consists of
@@ -173,26 +152,111 @@ such that
    where $sen(H)(\Gamma)=\{sen(H)(\varphi)\mid\varphi\in\Gamma\}$.
 #+end_definition
 
-Then the particular notion of reflection can be described as:
+#+begin_remark
+We can meaningfully discuss a notion of /proof calculi/ for entailment
+systems. See \S2.3 of "Axiomatizing Reflective Logics and Languages"
+by Manuel G. Clavel & Jose Meseguer ([[http://www.csl.sri.com/papers/axiom/][Eprint]]).
+#+end_remark
+
+Signature morphisms in the underlying category $\mathbf{Sign}$ may be
+from including a signature $\Sigma$ into a larger signature $\Sigma'$,
+or from changing syntax, or something similar.
 
 #+begin_definition
-Given an entailment system $\mathcal{E}$ and a nonempty set of theories
-$\mathcal{C}$ in it, a theory $U$ is {{{dfn($\mathcal{C}$ Universal)}}}
-if there is an injective function (called a "representation function")
-\begin{equation}
-\overline{(-\vdash-)}\colon\bigcup_{T\in\mathcal{C}}(\{T\}\times sen(T))\to sen(U)
-\end{equation}
-such that for each $T\in\mathcal{C}$, $\varphi\in sen(T)$,
-\begin{equation}
-T\vdash_{sign(T)}\varphi\iff U\vdash_{sign(U)}\overline{T\vdash\varphi}.
-\end{equation}
-If further $U\in\mathcal{C}$, we call the entailment system $\mathcal{E}$
-{{{dfn($\mathcal{C}$ Reflective)}}}.
+Let $\mathcal{E}$ be an entailment system. We define its category
+$\mathbf{Th}$ of {{{dfn(Theories)}}} to consist of
 
-Finally, we define a {{{dfn(Reflective Logic)}}} to be a logic whose
-entailment system is $\mathcal{C}$ reflective for $\mathcal{C}$ the
-classof all finitely presentable theories in the logic.
+- objects :: pairs $T = (\Sigma,\Gamma)$ of a signature $\Sigma$ and
+  $\Gamma\subset sen(\Sigma)$
+- morphisms :: $H\colon(\Sigma,\Gamma)\to(\Sigma',\Gamma')$ consists of
+  a signature morphism $H\colon\Sigma\to\Sigma'$ such that if
+  $\varphi\in\Gamma$, then $\Gamma'\vdash_{\Sigma'}sen(H)(\varphi)$.
+
+There is also the forgetful functor $sign\colon\mathbf{Th}\to\mathbf{Sign}$,
+and the induced functor $sen\colon\mathbf{Th}\to\mathbf{Set}$ given by
+$sen(T)=sen(sign(T))$. 
 #+end_definition
+
+#+begin_remark
+I believe this means that $\mathbf{Th}$ is fibred over $\mathbf{Sign}$.
+#+end_remark
+
+** Using Institutions
+:PROPERTIES:
+:CUSTOM_ID: h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c
+:END:
+
+Basin, Clavel, and Meseguer's "Reflective Metalogical Frameworks"
+formalizes model theory using institutions. This is a common way to
+formalize *model theory* beyond first-order logic, and has been used in
+the literature since their introduction in the '70s.
+
+#+begin_definition
+An {{{dfn(Institution)}}} consists of
+- $\mathbf{Sign}$ a category whose objects are called "signatures"
+equipped with
+- $sen\colon\mathbf{Sign}\to\mathbf{Set}$ a functor assigning to each
+  signature its set of {{{dfn($\Sigma$-sentences)}}};
+- $\mathbf{Mod}\colon\mathbf{Sign}\to\mathbf{Cat}^{op}$ is a [contravariant] functor
+  that assignts to each signature a category whose objects are called
+  {{{dfn($\Sigma$-models)}}}; and
+- a function $\vDash$ associating to each signature
+  $\Sigma\in\mathbf{Sign}$ a binary relation
+  $\vDash_{\Sigma}\subset\mathrm{Ob}(\mathbf{Mod}(\Sigma))\times sen(\Sigma)$
+  called {{{dfn($\Sigma$-satisfaction)}}}
+
+such that
+
+- the satisfication condition holds: for each $H\colon\Sigma\to\Sigma'$
+  in $\mathbf{Sign}$, for each model $M'\in\mathbf{Mod}(\Sigma')$ and
+  every $\varphi\in sen(\Sigma)$, we have $M'\vDash_{\Sigma'}sen(H)(\varphi)\iff\mathbf{Mod}(H)(M')\vDash_{\Sigma}\varphi$.
+#+end_definition
+
+#+begin_remark
+We can also note, if $T=(\Sigma,\Gamma)$ is a theory, its model category
+$\mathbf{Mod}(T)$ is the full subcategory of $\mathbf{Mod}(\Sigma)$
+determined by the models $M\in\mathbf{Mod}(\Sigma)$ which satisfy all
+the sentences in $\Gamma$ --- i.e., for each $\varphi\in\Gamma$, we have
+$M\vDash_{\Sigma}\varphi$.
+#+end_remark
+
+** Logic = Entailment System + Institution
+:PROPERTIES:
+:CUSTOM_ID: h-661b870a-695f-4a1a-938a-c618e52e6780
+:END:
+
+A logic can now be defined in glorious generality as a /sound/
+institutionalized entailment system.
+
+#+begin_definition
+A {{{dfn(Logic)}}} consists of
+- $\mathbf{Sign}$ a category whose objects are called "signatures"
+
+equipped with
+- $sen\colon\mathbf{Sign}\to\mathbf{Set}$ a functor associating to each
+  signature $\Sigma$ a corresponding set of $\Sigma$-sentences
+- $\vdash$ a function mapping a signature [object] $\Sigma\in\mathbf{Sign}$
+  a binary relation
+  $\vdash_{\Sigma}\subset\mathcal{P}(sen(\Sigma))\times sen(\Sigma)$
+- $\mathbf{Mod}\colon\mathbf{Sign}\to\mathbf{Cat}^{op}$ is a [contravariant] functor
+  that assignts to each signature a category whose objects are called
+  {{{dfn($\Sigma$-models)}}}; and
+- a function $\vDash$ associating to each signature
+  $\Sigma\in\mathbf{Sign}$ a binary relation
+  $\vDash_{\Sigma}\subset\mathrm{Ob}(\mathbf{Mod}(\Sigma))\times sen(\Sigma)$
+  called {{{dfn($\Sigma$-satisfaction)}}}
+
+such that
+
+1. it forms an entailment system with $(\mathbf{Sign}, sen, \vdash)$
+2. it forms an institution with $(\mathbf{Sign}, sen, \mathbf{Mod}, \vDash)$
+3. Soundness condition: for each $\Sigma\in\mathbf{Sign}$,
+   $\Gamma\subset sen(\Sigma)$, and $\varphi\in sen(\Sigma)$, we have
+   $\Gamma\vdash_{\Sigma}\varphi\implies\Gamma\vDash_{\Sigma}\varphi$,
+   where $\Gamma\vDash_{\Sigma}\varphi$ holds if and only if $M\vDash_{\Sigma}\varphi$
+   holds for any model $M$ that satisfies all the sentences in $\Gamma$.
+#+end_definition
+
 
 #+begin_puzzle
 What is the relationship between an entailment system and an
@@ -214,10 +278,104 @@ category)...because *Cat* is a [[http://128.2.67.219/michaelshulman/show/Heyting
 n-category cafe post [[https://golem.ph.utexas.edu/category/2008/11/the_internal_language_of_a_2to.html][The Internal Language of a 2-Topos]].
 #+end_puzzle
 
+#+begin_remark
 Yeah, the more that I think about it, the more I realize *Cat* is the
 epitome of [[https://ncatlab.org/nlab/show/2-topos][2-topos]], just as *Set* is the epitome of a topos. Goguen and
 Burstall's "Institutions: Abstract Model Theory for Specification
 and Programming" suggests this isn't so crazy an idea, after all...
+#+end_remark
+
+** Relevant Reflection Principles
+:PROPERTIES:
+:CUSTOM_ID: h-d0d88680-9d94-454a-bb95-bae2d9545de3
+:END:
+
+Then the particular notion of reflection can be described as:
+
+#+begin_definition
+Given an entailment system $\mathcal{E}$ and a nonempty set of theories
+$\mathcal{C}$ in it, a theory $U$ is {{{dfn($\mathcal{C}$ Universal)}}}
+if there is an injective function (called a "representation function")
+\begin{equation}
+\overline{(-\vdash-)}\colon\bigcup_{T\in\mathcal{C}}(\{T\}\times sen(T))\to sen(U)
+\end{equation}
+such that for each $T\in\mathcal{C}$, $\varphi\in sen(T)$,
+\begin{equation}
+T\vdash_{sign(T)}\varphi\iff U\vdash_{sign(U)}\overline{T\vdash\varphi}.
+\end{equation}
+If further $U\in\mathcal{C}$, we call the entailment system $\mathcal{E}$
+{{{dfn($\mathcal{C}$ Reflective)}}}.
+
+Finally, we define a {{{dfn(Reflective Logic)}}} to be a logic whose
+entailment system is $\mathcal{C}$ reflective for $\mathcal{C}$ the
+classof all finitely presentable theories in the logic.
+#+end_definition
+
+
+
+** Logical Framework
+:PROPERTIES:
+:CUSTOM_ID: h-38b74b13-abc7-4bae-a2d0-272ae22effe7
+:END:
+
+From this perspective, we may thus define a [[file:logical-framework.org][logical framework]] as:
+
+#+begin_definition
+A {{{dfn(Logical Framework)}}} consists of
+- a logic $\mathcal{L}$
+- a theory $U$ in the class $\mathcal{C}$ of finitely presentable
+  theories of $\mathcal{L}$ 
+
+such that $U$ is $\mathcal{C}$-universal. 
+#+end_definition
+
+#+begin_remark
+This observation seems to have also been made in \S3 of
+"Axiomatizing Reflective Logics and Languages"
+by Manuel G. Clavel & Jose Meseguer ([[http://www.csl.sri.com/papers/axiom/][Eprint]]). In particular, what /we/
+would typically refer to as a "logical framework", they denote by the
+universal theory $U$.
+#+end_remark
+
+* Definition of Meta-logical Framework
+:PROPERTIES:
+:CUSTOM_ID: h-94b822dd-afb8-4a4d-aac5-d6ea941f7e4e
+:END:
+
+Let me give a "morally right" definition, which fails to be rigorous:
+
+#+begin_definition
+A {{{dfn(Meta-logical framework)}}} consists of a logical framework
+$(\mathcal{L}, \mathcal{C}, U)$ equipped with
+
+- a super logic $\mathcal{S}$ containing $\mathcal{L}\subset\mathcal{S}$
+  
+such that
+
+1. Super-nice super-logic: the logic $\mathcal{S}$ is "suitably nice"
+   (has Tarskian semantics and admits universal & existential quantification).
+2. Initiality: for each theory $T\in\mathcal{C}$, there exists an
+   initial model $\mathcal{I}(T)\in\mathbf{Mod}(T)$.
+3. Inductive proofs: for each theory $T\in\mathcal{C}$, there is an
+   extension $U\subset Ind(U)$ in $\mathcal{S}$ such that
+   we can do inductive proofs with $Ind(U)$ concerning
+   the metatheory of any $T$.
+#+end_definition
+
+#+begin_remark
+It's not clear exactly /how/ super-nice the superlogic has to be; is
+there soemthing /weaker/ than having Tarskian semantics?
+#+end_remark
+
+#+begin_remark
+Also, it's unclear /when/ will a logic $\mathcal{L}$ have a superlogic
+$\mathcal{S}$ which has Tarskian semantics and admits quantifiers.
+#+end_remark
+
+#+begin_puzzle
+Can we reformulate this notion of a metalogical framework within the more
+familiar judgements and inference rules setting?
+#+end_puzzle
 
 * References
 :PROPERTIES:
@@ -238,7 +396,18 @@ and Programming" suggests this isn't so crazy an idea, after all...
   "Rewriting logic as a metalogical framework".\\
   In /International Conference on Foundations of Software Technology and Theoretical Computer Science/,
   pp. 55-80. Springer, Berlin, Heidelberg, 2000.
-    
+
+** Logic, Entailment Systems, etc.
+:PROPERTIES:
+:CUSTOM_ID: h-61521a7b-80df-40a1-b414-ec4de8bcd51b
+:END:
+
+- J Meseguer,\\
+  "General logics".\\
+  In /Logic Colloquium'87/ (H.-D. Ebbinghaus et al., Eds.)
+  North-Holland, Amsterdam, The Netherlands, 275--329.
+  [[https://apps.dtic.mil/sti/pdfs/ADA219469.pdf][Eprint]]
+
 ** Principle of Reflection
 :PROPERTIES:
 :CUSTOM_ID: h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b
