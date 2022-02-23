@@ -1,0 +1,263 @@
+#+TITLE: Metalogical Frameworks
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-02-22T08:28:50-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Tuesday February 22, 2022 at  8:28AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-c20c0cca-8159-4f41-b3ae-be1561e5c6f7
+:END:
+
+Whereas a [[file:logical-framework.org][Logical Framework]] is used to encode a logic so we can emulate
+reasoning within it, a {{{dfn(Metalogical Framework)}}} encodes a logic
+so we can prove metatheorems concerning it.
+
+In particular a metalogical framework /consists of/ an underlying
+logical framework such that it can prove metatheorems. For example,
+proving [[https://en.wikipedia.org/wiki/Cut-elimination_theorem][cut-elimination]].
+
+#+begin_remark
+I will often write "meta-logical framework" and "metalogical framework"
+interchangeably.
+#+end_remark
+
+* Examples of Meta-Logical
+:PROPERTIES:
+:CUSTOM_ID: h-14d91154-6603-46f9-a532-90736863a01b
+:END:
+
+#+begin_math-example
+[[file:hol.org][HOL]] is a meta-logical framework, since it can encode judgements using
+inductive types (thanks to the Tarski-Knaster theorem) and inference
+rules using implication. We can then state metatheorems in a
+straightforward manner using induction. This suffices to make HOL a
+meta-logical framework.
+#+end_math-example
+
+#+begin_math-example
+A *NON-example* is [[file:automath.org][Automath]], which is too weak to prove metatheorems.
+#+end_math-example
+
+#+begin_math-example
+A mixed example would be [[file:isabelle.org][Isabelle]] (which is a fragment of intuitionistic
+higher-order logic) alone is insufficient to be a meta-logical framework.
+But Isabelle/HOL */is/* a meta-logical framework, since HOL is a
+meta-logical framework.
+#+end_math-example
+
+* Defining Metalogical Frameworks 
+:PROPERTIES:
+:CUSTOM_ID: h-1819d180-7116-45f0-a85d-7df7ed5dbadd
+:END:
+
+We can transform any logical framework into a meta-logical framework by
+encoding a meta-logical framework into our given logical framework. This
+is precisely what [[file:isabelle.org][Isabelle]] did with [[file:hol.org][HOL]].
+
+But viewed category theoretically, this would suggest that a
+meta-logical framework consists of a logical framework equipped with
+some extra structure (and possibly extra properties), wouldn't it?
+
+Clavel and Meseguer have stressed the importance of reflection
+principles in establishing a deductive system is a metalogical
+framework. (For more about reflection principles, see John Harrison's
+review, especially \S\S3 /et seq/.)
+
+** Observation: Weakly Constructive
+:PROPERTIES:
+:CUSTOM_ID: h-6892ab2e-77b7-454f-a41d-191def13f067
+:END:
+
+It seems that all meta-logical frameworks are "weakly constructive"
+(see, e.g., section 5.3 of [[https://www.cl.cam.ac.uk/~jrh13/hol-light/manual-1.1.pdf][HOL Light's manual]]). Basin and Constable
+argued in their paper defining metalogical frameworks that a deductive
+system needs to be "suitable constructive or computational" for it to be
+even a candidate as a meta-logical framework.
+
+However, this property ("weakly constructive") may be accidental and
+inessential. It is unclear to me at present.
+
+** Observation: Initial Model
+:PROPERTIES:
+:CUSTOM_ID: h-af1ef39b-c0e6-488a-9267-82b779dc2972
+:END:
+
+Basin, Clavel, and Meseguer argue in "Reflective Metalogical
+Frameworks":
+
+#+begin_quote
+A logic's syntax and proofs are inductively built from syntax and proof
+constructors. A logical framework and a metalogical framework can share
+these as a common basis. However, [...], for a metalogical framework the
+representation must additionally preserve the inductive nature of the
+syntax and proof constructors. Model-theoretically, this means that a
+formalization in the metalogic should have an /initial model/, which
+corresponds to the syntax and proofs of the formalized object logic.
+#+end_quote
+
+This is admittedly persuasive...at least, I cannot imagine reasoning
+about a logic without an inductive representation of its syntax and
+semantics, which would be equivalent to this "initial model"
+condition. Thus it seems unavoidable that the "initial model" condition
+is necessary.
+
+* Sticky point: Reflection Principles
+:PROPERTIES:
+:CUSTOM_ID: h-6ff11a58-ab6d-42c4-a72f-33a94d50834a
+:END:
+
+The criteria which seems to be subject to fierce debate is whether a
+meta-logical framework obeys reflection principles or not. "Reflection"
+is a relatively "soft" concept (like predicativity).
+
+** Using Institutions
+:PROPERTIES:
+:CUSTOM_ID: h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c
+:END:
+
+Basin, Clavel, and Meseguer's "Reflective Metalogical Frameworks"
+formalizes model theory using institutions.
+
+#+begin_definition
+An {{{dfn(Institution)}}} consists of
+- $\mathbf{Sign}$ a category whose objects are called "signatures"
+equipped with
+- $sen\colon\mathbf{Sign}\to\mathbf{Set}$ a functor assigning to each
+  signature its set of {{{dfn($\Sigma$-sentences)}}};
+- $\mathbf{Mod}\colon\mathbf{Sign}\to\mathbf{Cat}^{op}$ is a [contravariant] functor
+  that assignts to each signature a category whose objects are called
+  {{{dfn($\Sigma$-models)}}}; and
+- a function $\vDash$ associating to each signature
+  $\Sigma\in\mathbf{Sign}$ a binary relation
+  $\vDash_{\Sigma}\subset\mathrm{Ob}(\mathbf{Mod}(\Sigma))\times sen(\Sigma)$
+  called {{{dfn($\Sigma$-satisfaction)}}}
+
+such that
+
+- the satisfication condition holds: for each $H\colon\Sigma\to\Sigma'$
+  in $\mathbf{Sign}$, for each model $M'\in\mathbf{Mod}(\Sigma')$ and
+  every $\varphi\in sen(\Sigma)$, we have $M'\vDash_{\Sigma'}sen(H)(\varphi)\iff\mathbf{Mod}(H)(M')\vDash_{\Sigma}\varphi$.
+#+end_definition
+
+A logic is then described as an "entailment system", defined as:
+
+#+begin_definition
+An {{{dfn(Entailment System)}}} consists of
+- $\mathbf{Sign}$ a category of signatures
+
+equipped with
+- $sen\colon\mathbf{Sign}\to\mathbf{Set}$ a functor associating to each
+  signature $\Sigma$ a corresponding set of $\Sigma$-sentences
+- $\vdash$ a function mapping a signature [object] $\Sigma\in\mathbf{Sign}$
+  a binary relation
+  $\vdash_{\Sigma}\subset\mathcal{P}(sen(\Sigma))\times sen(\Sigma)$
+
+such that
+
+1. Reflexivity: for any $\varphi\in sen(\Sigma)$, $\{\varphi\}\vdash_{\Sigma}\varphi$
+2. Monotonicity: if $\Gamma\vdash_{\Sigma}\varphi$ and
+   $\Gamma\subset\Gamma'$, then $\Gamma'\vdash_{\Sigma}\varphi$
+3. Transitivity: if $\Gamma\vdash_{\Sigma}\varphi_{j}$ for all $j\in I$,
+   and $\Gamma\cup\{\varphi_{j}\mid j\in J\}\vdash_{\Sigma}\psi$,
+   then $\Gamma\vdash_{\Sigma}\psi$,
+4. $\vdash$ translation: if $\Gamma\vdash_{\Sigma}\varphi$, then for any
+   $H\colon\Sigma\to\Sigma'$ in $\mathbf{Sign}$, $sen(H)(\Gamma)\vdash_{\Sigma'}sen(H)(\varphi)$,
+   where $sen(H)(\Gamma)=\{sen(H)(\varphi)\mid\varphi\in\Gamma\}$.
+#+end_definition
+
+Then the particular notion of reflection can be described as:
+
+#+begin_definition
+Given an entailment system $\mathcal{E}$ and a nonempty set of theories
+$\mathcal{C}$ in it, a theory $U$ is {{{dfn($\mathcal{C}$ Universal)}}}
+if there is an injective function (called a "representation function")
+\begin{equation}
+\overline{(-\vdash-)}\colon\bigcup_{T\in\mathcal{C}}(\{T\}\times sen(T))\to sen(U)
+\end{equation}
+such that for each $T\in\mathcal{C}$, $\varphi\in sen(T)$,
+\begin{equation}
+T\vdash_{sign(T)}\varphi\iff U\vdash_{sign(U)}\overline{T\vdash\varphi}.
+\end{equation}
+If further $U\in\mathcal{C}$, we call the entailment system $\mathcal{E}$
+{{{dfn($\mathcal{C}$ Reflective)}}}.
+
+Finally, we define a {{{dfn(Reflective Logic)}}} to be a logic whose
+entailment system is $\mathcal{C}$ reflective for $\mathcal{C}$ the
+classof all finitely presentable theories in the logic.
+#+end_definition
+
+#+begin_puzzle
+What is the relationship between an entailment system and an
+institution, when we think of $\vdash_{\Sigma}$ in terms of the
+contravariant powerset functor $\mathcal{P}\colon\mathbf{Set}^{op}\to\mathbf{Bool}$
+associating to each set a complete atomic Boolean algebra? (c.f., [[https://ncatlab.org/nlab/show/Set#OppositeCategory][nlab]].)
+Is this what HOL does?
+
+That is to say, with HOL, we think of $\mathbf{Mod}$ as a categorified
+[[https://ncatlab.org/nlab/show/power+object][power object]] of $sent(\Sigma)$? So then $\vdash_{\Sigma}$ and $\vDash_{\Sigma}$ 
+coincide?
+
+Further, if we categorify our definitions to use [[https://ncatlab.org/nlab/show/internal+relation][internal relations]], 
+is this an avenue to relate HOL as metalogical framework to the proposed
+definition? Well, it looks like there may be more to this than just idle
+speculation, if we think of a Boolean algebra as "part" of a Boolean
+category, then work with the constructive version (i.e., a Heyting
+category)...because *Cat* is a [[http://128.2.67.219/michaelshulman/show/Heyting+2-category][Heyting 2-Category]]. See also the
+n-category cafe post [[https://golem.ph.utexas.edu/category/2008/11/the_internal_language_of_a_2to.html][The Internal Language of a 2-Topos]].
+#+end_puzzle
+
+Yeah, the more that I think about it, the more I realize *Cat* is the
+epitome of [[https://ncatlab.org/nlab/show/2-topos][2-topos]], just as *Set* is the epitome of a topos. Goguen and
+Burstall's "Institutions: Abstract Model Theory for Specification
+and Programming" suggests this isn't so crazy an idea, after all...
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-ef7b6773-9653-4d89-903b-1e95119c96b9
+:END:
+
+- David A. Basin and Robert L. Constable,\\
+  "Metalogical frameworks".\\
+  /Logical Environments/ (1993) pp.1--29.
+  [[https://ecommons.cornell.edu/handle/1813/7075][Eprint]]
+  + This seems to be the first paper which invented the term
+    "metalogical framework".
+- D. Basin, and M. Clavel, and J. Meseguer,\\
+  "Reflective metalogical frameworks".\\
+  /ACM Transactions on Computational Logic/ *5*, no.3 (2004) pp.528--576.
+  [[https://people.inf.ethz.ch/basin/pubs/rmf.pdf][Eprint]]
+- David Basin and Manuel Clavel and José Meseguer,\\
+  "Rewriting logic as a metalogical framework".\\
+  In /International Conference on Foundations of Software Technology and Theoretical Computer Science/,
+  pp. 55-80. Springer, Berlin, Heidelberg, 2000.
+    
+** Principle of Reflection
+:PROPERTIES:
+:CUSTOM_ID: h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b
+:END:
+- Manuel Clavel and José Meseguer,\\
+  "Axiomatizing reflective logics and languages".\\
+  In /Proceedings of Reflection/, vol. 96, pp. 263-288. 1996;
+  [[http://www.csl.sri.com/papers/axiom/][Eprint]]
+- John Harrison,\\
+  "Metatheory and Reflection in Theorem Proving: A Survey and Critique".\\
+  Technical Report CRC-053, SRI International Cambridge Computer Science
+  Research Centre, 1995.
+  [[https://www.cl.cam.ac.uk/~jrh13/papers/reflect.html][Eprint]]
+
+** Using HOL
+:PROPERTIES:
+:CUSTOM_ID: h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15
+:END:
+
+- Petros Papapanagiotou and Jacques Fleuriot,\\
+  "Object-Level Reasoning with Logics Encoded in HOL Light".\\
+  {{{arXiv(2101.03808)}}}, 17 pages.

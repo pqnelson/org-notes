@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2022-02-22 Tue 12:53 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metalogical Frameworks</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Metalogical Frameworks</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-c20c0cca-8159-4f41-b3ae-be1561e5c6f7">1. Introduction</a></li>
+<li><a href="#h-14d91154-6603-46f9-a532-90736863a01b">2. Examples of Meta-Logical</a></li>
+<li><a href="#h-1819d180-7116-45f0-a85d-7df7ed5dbadd">3. Defining Metalogical Frameworks</a>
+<ul>
+<li><a href="#h-6892ab2e-77b7-454f-a41d-191def13f067">3.1. Observation: Weakly Constructive</a></li>
+<li><a href="#h-af1ef39b-c0e6-488a-9267-82b779dc2972">3.2. Observation: Initial Model</a></li>
+</ul>
+</li>
+<li><a href="#h-6ff11a58-ab6d-42c4-a72f-33a94d50834a">4. Sticky point: Reflection Principles</a>
+<ul>
+<li><a href="#h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c">4.1. Using Institutions</a></li>
+</ul>
+</li>
+<li><a href="#h-ef7b6773-9653-4d89-903b-1e95119c96b9">5. References</a>
+<ul>
+<li><a href="#h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b">5.1. Principle of Reflection</a></li>
+<li><a href="#h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15">5.2. Using HOL</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-c20c0cca-8159-4f41-b3ae-be1561e5c6f7" class="outline-2">
+<h2 id="h-c20c0cca-8159-4f41-b3ae-be1561e5c6f7"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-c20c0cca-8159-4f41-b3ae-be1561e5c6f7">
+<p>
+Whereas a <a href="logical-framework.html">Logical Framework</a> is used to encode a logic so we can emulate
+reasoning within it, a <dfn>Metalogical Framework</dfn> encodes a logic
+so we can prove metatheorems concerning it.
+</p>
+
+<p>
+In particular a metalogical framework <i>consists of</i> an underlying
+logical framework such that it can prove metatheorems. For example,
+proving <a href="https://en.wikipedia.org/wiki/Cut-elimination_theorem">cut-elimination</a>.
+</p>
+
+<div class="remark" id="orgd33f68b">
+<p>
+I will often write "meta-logical framework" and "metalogical framework"
+interchangeably.
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-14d91154-6603-46f9-a532-90736863a01b" class="outline-2">
+<h2 id="h-14d91154-6603-46f9-a532-90736863a01b"><span class="section-number-2">2</span> Examples of Meta-Logical</h2>
+<div class="outline-text-2" id="text-h-14d91154-6603-46f9-a532-90736863a01b">
+<div class="math-example" id="orgf4fb304">
+<p>
+<a href="hol.html">HOL</a> is a meta-logical framework, since it can encode judgements using
+inductive types (thanks to the Tarski-Knaster theorem) and inference
+rules using implication. We can then state metatheorems in a
+straightforward manner using induction. This suffices to make HOL a
+meta-logical framework.
+</p>
+
+</div>
+
+<div class="math-example" id="org5bf7282">
+<p>
+A <b>NON-example</b> is <a href="automath.html">Automath</a>, which is too weak to prove metatheorems.
+</p>
+
+</div>
+
+<div class="math-example" id="org017c163">
+<p>
+A mixed example would be <a href="isabelle.html">Isabelle</a> (which is a fragment of intuitionistic
+higher-order logic) alone is insufficient to be a meta-logical framework.
+But Isabelle/HOL <b><i>is</i></b> a meta-logical framework, since HOL is a
+meta-logical framework.
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-1819d180-7116-45f0-a85d-7df7ed5dbadd" class="outline-2">
+<h2 id="h-1819d180-7116-45f0-a85d-7df7ed5dbadd"><span class="section-number-2">3</span> Defining Metalogical Frameworks</h2>
+<div class="outline-text-2" id="text-h-1819d180-7116-45f0-a85d-7df7ed5dbadd">
+<p>
+We can transform any logical framework into a meta-logical framework by
+encoding a meta-logical framework into our given logical framework. This
+is precisely what <a href="isabelle.html">Isabelle</a> did with <a href="hol.html">HOL</a>.
+</p>
+
+<p>
+But viewed category theoretically, this would suggest that a
+meta-logical framework consists of a logical framework equipped with
+some extra structure (and possibly extra properties), wouldn't it?
+</p>
+
+<p>
+Clavel and Meseguer have stressed the importance of reflection
+principles in establishing a deductive system is a metalogical
+framework. (For more about reflection principles, see John Harrison's
+review, especially &sect;&sect;3 <i>et seq</i>.)
+</p>
+</div>
+
+<div id="outline-container-h-6892ab2e-77b7-454f-a41d-191def13f067" class="outline-3">
+<h3 id="h-6892ab2e-77b7-454f-a41d-191def13f067"><span class="section-number-3">3.1</span> Observation: Weakly Constructive</h3>
+<div class="outline-text-3" id="text-h-6892ab2e-77b7-454f-a41d-191def13f067">
+<p>
+It seems that all meta-logical frameworks are "weakly constructive"
+(see, e.g., section 5.3 of <a href="https://www.cl.cam.ac.uk/~jrh13/hol-light/manual-1.1.pdf">HOL Light's manual</a>). Basin and Constable
+argued in their paper defining metalogical frameworks that a deductive
+system needs to be "suitable constructive or computational" for it to be
+even a candidate as a meta-logical framework.
+</p>
+
+<p>
+However, this property ("weakly constructive") may be accidental and
+inessential. It is unclear to me at present.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-af1ef39b-c0e6-488a-9267-82b779dc2972" class="outline-3">
+<h3 id="h-af1ef39b-c0e6-488a-9267-82b779dc2972"><span class="section-number-3">3.2</span> Observation: Initial Model</h3>
+<div class="outline-text-3" id="text-h-af1ef39b-c0e6-488a-9267-82b779dc2972">
+<p>
+Basin, Clavel, and Meseguer argue in "Reflective Metalogical
+Frameworks":
+</p>
+
+<blockquote>
+<p>
+A logic's syntax and proofs are inductively built from syntax and proof
+constructors. A logical framework and a metalogical framework can share
+these as a common basis. However, [&#x2026;], for a metalogical framework the
+representation must additionally preserve the inductive nature of the
+syntax and proof constructors. Model-theoretically, this means that a
+formalization in the metalogic should have an <i>initial model</i>, which
+corresponds to the syntax and proofs of the formalized object logic.
+</p>
+</blockquote>
+
+<p>
+This is admittedly persuasive&#x2026;at least, I cannot imagine reasoning
+about a logic without an inductive representation of its syntax and
+semantics, which would be equivalent to this "initial model"
+condition. Thus it seems unavoidable that the "initial model" condition
+is necessary.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-6ff11a58-ab6d-42c4-a72f-33a94d50834a" class="outline-2">
+<h2 id="h-6ff11a58-ab6d-42c4-a72f-33a94d50834a"><span class="section-number-2">4</span> Sticky point: Reflection Principles</h2>
+<div class="outline-text-2" id="text-h-6ff11a58-ab6d-42c4-a72f-33a94d50834a">
+<p>
+The criteria which seems to be subject to fierce debate is whether a
+meta-logical framework obeys reflection principles or not. "Reflection"
+is a relatively "soft" concept (like predicativity).
+</p>
+</div>
+
+<div id="outline-container-h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c" class="outline-3">
+<h3 id="h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c"><span class="section-number-3">4.1</span> Using Institutions</h3>
+<div class="outline-text-3" id="text-h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c">
+<p>
+Basin, Clavel, and Meseguer's "Reflective Metalogical Frameworks"
+formalizes model theory using institutions.
+</p>
+
+<div class="definition" id="org594ff9c">
+<p>
+An <dfn>Institution</dfn> consists of
+</p>
+<ul class="org-ul">
+<li>\(\mathbf{Sign}\) a category whose objects are called "signatures"</li>
+</ul>
+<p>
+equipped with
+</p>
+<ul class="org-ul">
+<li>\(sen\colon\mathbf{Sign}\to\mathbf{Set}\) a functor assigning to each
+signature its set of <dfn>$&Sigma;$-sentences</dfn>;</li>
+<li>\(\mathbf{Mod}\colon\mathbf{Sign}\to\mathbf{Cat}^{op}\) is a [contravariant] functor
+that assignts to each signature a category whose objects are called
+<dfn>$&Sigma;$-models</dfn>; and</li>
+<li>a function \(\vDash\) associating to each signature
+\(\Sigma\in\mathbf{Sign}\) a binary relation
+\(\vDash_{\Sigma}\subset\mathrm{Ob}(\mathbf{Mod}(\Sigma))\times sen(\Sigma)\)
+called <dfn>$&Sigma;$-satisfaction</dfn></li>
+</ul>
+
+<p>
+such that
+</p>
+
+<ul class="org-ul">
+<li>the satisfication condition holds: for each \(H\colon\Sigma\to\Sigma'\)
+in \(\mathbf{Sign}\), for each model \(M'\in\mathbf{Mod}(\Sigma')\) and
+every \(\varphi\in sen(\Sigma)\), we have \(M'\vDash_{\Sigma'}sen(H)(\varphi)\iff\mathbf{Mod}(H)(M')\vDash_{\Sigma}\varphi\).</li>
+</ul>
+
+</div>
+
+<p>
+A logic is then described as an "entailment system", defined as:
+</p>
+
+<div class="definition" id="org2d2af88">
+<p>
+An <dfn>Entailment System</dfn> consists of
+</p>
+<ul class="org-ul">
+<li>\(\mathbf{Sign}\) a category of signatures</li>
+</ul>
+
+<p>
+equipped with
+</p>
+<ul class="org-ul">
+<li>\(sen\colon\mathbf{Sign}\to\mathbf{Set}\) a functor associating to each
+signature \(\Sigma\) a corresponding set of $&Sigma;$-sentences</li>
+<li>\(\vdash\) a function mapping a signature [object] \(\Sigma\in\mathbf{Sign}\)
+a binary relation
+\(\vdash_{\Sigma}\subset\mathcal{P}(sen(\Sigma))\times sen(\Sigma)\)</li>
+</ul>
+
+<p>
+such that
+</p>
+
+<ol class="org-ol">
+<li>Reflexivity: for any \(\varphi\in sen(\Sigma)\), \(\{\varphi\}\vdash_{\Sigma}\varphi\)</li>
+<li>Monotonicity: if \(\Gamma\vdash_{\Sigma}\varphi\) and
+\(\Gamma\subset\Gamma'\), then \(\Gamma'\vdash_{\Sigma}\varphi\)</li>
+<li>Transitivity: if \(\Gamma\vdash_{\Sigma}\varphi_{j}\) for all \(j\in I\),
+and \(\Gamma\cup\{\varphi_{j}\mid j\in J\}\vdash_{\Sigma}\psi\),
+then \(\Gamma\vdash_{\Sigma}\psi\),</li>
+<li>\(\vdash\) translation: if \(\Gamma\vdash_{\Sigma}\varphi\), then for any
+\(H\colon\Sigma\to\Sigma'\) in \(\mathbf{Sign}\), \(sen(H)(\Gamma)\vdash_{\Sigma'}sen(H)(\varphi)\),
+where \(sen(H)(\Gamma)=\{sen(H)(\varphi)\mid\varphi\in\Gamma\}\).</li>
+</ol>
+
+</div>
+
+<p>
+Then the particular notion of reflection can be described as:
+</p>
+
+<div class="definition" id="org5689e9f">
+<p>
+Given an entailment system \(\mathcal{E}\) and a nonempty set of theories
+\(\mathcal{C}\) in it, a theory \(U\) is <dfn>\(\mathcal{C}\) Universal</dfn>
+if there is an injective function (called a "representation function")
+</p>
+\begin{equation}
+\overline{(-\vdash-)}\colon\bigcup_{T\in\mathcal{C}}(\{T\}\times sen(T))\to sen(U)
+\end{equation}
+<p>
+such that for each \(T\in\mathcal{C}\), \(\varphi\in sen(T)\),
+</p>
+\begin{equation}
+T\vdash_{sign(T)}\varphi\iff U\vdash_{sign(U)}\overline{T\vdash\varphi}.
+\end{equation}
+<p>
+If further \(U\in\mathcal{C}\), we call the entailment system \(\mathcal{E}\)
+<dfn>\(\mathcal{C}\) Reflective</dfn>.
+</p>
+
+<p>
+Finally, we define a <dfn>Reflective Logic</dfn> to be a logic whose
+entailment system is \(\mathcal{C}\) reflective for \(\mathcal{C}\) the
+classof all finitely presentable theories in the logic.
+</p>
+
+</div>
+
+<div class="puzzle" id="orga23c4ec">
+<p>
+What is the relationship between an entailment system and an
+institution, when we think of \(\vdash_{\Sigma}\) in terms of the
+contravariant powerset functor \(\mathcal{P}\colon\mathbf{Set}^{op}\to\mathbf{Bool}\)
+associating to each set a complete atomic Boolean algebra? (c.f., <a href="https://ncatlab.org/nlab/show/Set#OppositeCategory">nlab</a>.)
+Is this what HOL does?
+</p>
+
+<p>
+That is to say, with HOL, we think of \(\mathbf{Mod}\) as a categorified
+<a href="https://ncatlab.org/nlab/show/power+object">power object</a> of \(sent(\Sigma)\)? So then \(\vdash_{\Sigma}\) and \(\vDash_{\Sigma}\) 
+coincide?
+</p>
+
+<p>
+Further, if we categorify our definitions to use <a href="https://ncatlab.org/nlab/show/internal+relation">internal relations</a>, 
+is this an avenue to relate HOL as metalogical framework to the proposed
+definition? Well, it looks like there may be more to this than just idle
+speculation, if we think of a Boolean algebra as "part" of a Boolean
+category, then work with the constructive version (i.e., a Heyting
+category)&#x2026;because <b>Cat</b> is a <a href="http://128.2.67.219/michaelshulman/show/Heyting+2-category">Heyting 2-Category</a>. See also the
+n-category cafe post <a href="https://golem.ph.utexas.edu/category/2008/11/the_internal_language_of_a_2to.html">The Internal Language of a 2-Topos</a>.
+</p>
+
+</div>
+
+<p>
+Yeah, the more that I think about it, the more I realize <b>Cat</b> is the
+epitome of <a href="https://ncatlab.org/nlab/show/2-topos">2-topos</a>, just as <b>Set</b> is the epitome of a topos. Goguen and
+Burstall's "Institutions: Abstract Model Theory for Specification
+and Programming" suggests this isn't so crazy an idea, after all&#x2026;
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-ef7b6773-9653-4d89-903b-1e95119c96b9" class="outline-2">
+<h2 id="h-ef7b6773-9653-4d89-903b-1e95119c96b9"><span class="section-number-2">5</span> References</h2>
+<div class="outline-text-2" id="text-h-ef7b6773-9653-4d89-903b-1e95119c96b9">
+<ul class="org-ul">
+<li>David A. Basin and Robert L. Constable,<br>
+"Metalogical frameworks".<br>
+<i>Logical Environments</i> (1993) pp.1&#x2013;29.
+<a href="https://ecommons.cornell.edu/handle/1813/7075">Eprint</a>
+<ul class="org-ul">
+<li>This seems to be the first paper which invented the term
+"metalogical framework".</li>
+</ul></li>
+<li>D. Basin, and M. Clavel, and J. Meseguer,<br>
+"Reflective metalogical frameworks".<br>
+<i>ACM Transactions on Computational Logic</i> <b>5</b>, no.3 (2004) pp.528&#x2013;576.
+<a href="https://people.inf.ethz.ch/basin/pubs/rmf.pdf">Eprint</a></li>
+<li>David Basin and Manuel Clavel and José Meseguer,<br>
+"Rewriting logic as a metalogical framework".<br>
+In <i>International Conference on Foundations of Software Technology and Theoretical Computer Science</i>,
+pp. 55-80. Springer, Berlin, Heidelberg, 2000.</li>
+</ul>
+</div>
+
+<div id="outline-container-h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b" class="outline-3">
+<h3 id="h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b"><span class="section-number-3">5.1</span> Principle of Reflection</h3>
+<div class="outline-text-3" id="text-h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b">
+<ul class="org-ul">
+<li>Manuel Clavel and José Meseguer,<br>
+"Axiomatizing reflective logics and languages".<br>
+In <i>Proceedings of Reflection</i>, vol. 96, pp. 263-288. 1996;
+<a href="http://www.csl.sri.com/papers/axiom/">Eprint</a></li>
+<li>John Harrison,<br>
+"Metatheory and Reflection in Theorem Proving: A Survey and Critique".<br>
+Technical Report CRC-053, SRI International Cambridge Computer Science
+Research Centre, 1995.
+<a href="https://www.cl.cam.ac.uk/~jrh13/papers/reflect.html">Eprint</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15" class="outline-3">
+<h3 id="h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15"><span class="section-number-3">5.2</span> Using HOL</h3>
+<div class="outline-text-3" id="text-h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15">
+<ul class="org-ul">
+<li>Petros Papapanagiotou and Jacques Fleuriot,<br>
+"Object-Level Reasoning with Logics Encoded in HOL Light".<br>
+<a href="https://arxiv.org/abs/2101.03808">arXiv:2101.03808</a>, 17 pages.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2022-02-22 Tue 12:53.</p>
+</div>
+</body>
+</html>
