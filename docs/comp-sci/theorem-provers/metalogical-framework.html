@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-23 Wed 12:29 -->
+<!-- 2022-02-25 Fri 12:35 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Metalogical Frameworks</title>
@@ -307,7 +307,7 @@ logical framework such that it can prove metatheorems. For example,
 proving <a href="https://en.wikipedia.org/wiki/Cut-elimination_theorem">cut-elimination</a>.
 </p>
 
-<div class="remark" id="orgf0519b9">
+<div class="remark" id="org26bf628">
 <p>
 I will often write "meta-logical framework" and "metalogical framework"
 interchangeably.
@@ -320,7 +320,7 @@ interchangeably.
 <div id="outline-container-h-14d91154-6603-46f9-a532-90736863a01b" class="outline-2">
 <h2 id="h-14d91154-6603-46f9-a532-90736863a01b"><span class="section-number-2">2</span> Examples of Meta-Logical</h2>
 <div class="outline-text-2" id="text-h-14d91154-6603-46f9-a532-90736863a01b">
-<div class="math-example" id="org193d1c0">
+<div class="math-example" id="org4239546">
 <p>
 <a href="hol.html">HOL</a> is a meta-logical framework, since it can encode judgements using
 inductive types (thanks to the Tarski-Knaster theorem) and inference
@@ -331,14 +331,14 @@ meta-logical framework.
 
 </div>
 
-<div class="math-example" id="orga9acc44">
+<div class="math-example" id="org2c38c39">
 <p>
 A <b>NON-example</b> is <a href="automath.html">Automath</a>, which is too weak to prove metatheorems.
 </p>
 
 </div>
 
-<div class="math-example" id="orgc25bff7">
+<div class="math-example" id="org674f97f">
 <p>
 A mixed example would be <a href="isabelle.html">Isabelle</a> (which is a fragment of intuitionistic
 higher-order logic) alone is insufficient to be a meta-logical framework.
@@ -442,7 +442,7 @@ logic. The "space of first-order languages" is then generalized as an
 <i>entailment</i>, is defined as:
 </p>
 
-<div class="definition" id="orgc94c9b0">
+<div class="definition" id="org2cbe29f">
 <p>
 An <dfn>Entailment System</dfn> consists of
 </p>
@@ -479,7 +479,7 @@ where \(sen(H)(\Gamma)=\{sen(H)(\varphi)\mid\varphi\in\Gamma\}\).</li>
 
 </div>
 
-<div class="remark" id="org1e617d9">
+<div class="remark" id="org20fc01a">
 <p>
 We can meaningfully discuss a notion of <i>proof calculi</i> for entailment
 systems. See &sect;2.3 of "Axiomatizing Reflective Logics and Languages"
@@ -494,7 +494,7 @@ from including a signature \(\Sigma\) into a larger signature \(\Sigma'\),
 or from changing syntax, or something similar.
 </p>
 
-<div class="definition" id="org0f30fe4">
+<div class="definition" id="org83e0b04">
 <p>
 Let \(\mathcal{E}\) be an entailment system. We define its category
 \(\mathbf{Th}\) of <dfn>Theories</dfn> to consist of
@@ -516,7 +516,7 @@ and the induced functor \(sen\colon\mathbf{Th}\to\mathbf{Set}\) given by
 
 </div>
 
-<div class="remark" id="orgc99ca19">
+<div class="remark" id="orgf931e5f">
 <p>
 I believe this means that \(\mathbf{Th}\) is fibred over \(\mathbf{Sign}\).
 </p>
@@ -535,7 +535,7 @@ formalize <b>model theory</b> beyond first-order logic, and has been used in
 the literature since their introduction in the '70s.
 </p>
 
-<div class="definition" id="org4dbc1aa">
+<div class="definition" id="orgc5622de">
 <p>
 An <dfn>Institution</dfn> consists of
 </p>
@@ -569,13 +569,23 @@ every \(\varphi\in sen(\Sigma)\), we have \(M'\vDash_{\Sigma'}sen(H)(\varphi)\if
 
 </div>
 
-<div class="remark" id="org78d1c24">
+<div class="remark" id="org34c358d">
 <p>
 We can also note, if \(T=(\Sigma,\Gamma)\) is a theory, its model category
 \(\mathbf{Mod}(T)\) is the full subcategory of \(\mathbf{Mod}(\Sigma)\)
 determined by the models \(M\in\mathbf{Mod}(\Sigma)\) which satisfy all
 the sentences in \(\Gamma\) &#x2014; i.e., for each \(\varphi\in\Gamma\), we have
 \(M\vDash_{\Sigma}\varphi\).
+</p>
+
+</div>
+
+<div class="theorem" id="orgd0c93d5">
+<p>
+Given an institution \(I\), we may construct an entailment system \(I^{+}\)
+where we construct the relation: \(\Gamma\vdash_{\Sigma}\varphi\) if and
+only if \(M\vDash_{\Sigma}\varphi\) for every \(M\in\mathbf{Mod}(T)\) for
+\(T=(\Sigma,\Gamma)\).
 </p>
 
 </div>
@@ -590,7 +600,7 @@ A logic can now be defined in glorious generality as a <i>sound</i>
 institutionalized entailment system.
 </p>
 
-<div class="definition" id="org3d9393f">
+<div class="definition" id="org22418ae">
 <p>
 A <dfn>Logic</dfn> consists of
 </p>
@@ -632,40 +642,11 @@ holds for any model \(M\) that satisfies all the sentences in \(\Gamma\).</li>
 
 </div>
 
-
-<div class="puzzle" id="org56eb7c1">
+<div class="theorem" id="orga96a519">
 <p>
-What is the relationship between an entailment system and an
-institution, when we think of \(\vdash_{\Sigma}\) in terms of the
-contravariant powerset functor \(\mathcal{P}\colon\mathbf{Set}^{op}\to\mathbf{Bool}\)
-associating to each set a complete atomic Boolean algebra? (c.f., <a href="https://ncatlab.org/nlab/show/Set#OppositeCategory">nlab</a>.)
-Is this what HOL does?
-</p>
-
-<p>
-That is to say, with HOL, we think of \(\mathbf{Mod}\) as a categorified
-<a href="https://ncatlab.org/nlab/show/power+object">power object</a> of \(sent(\Sigma)\)? So then \(\vdash_{\Sigma}\) and \(\vDash_{\Sigma}\) 
-coincide?
-</p>
-
-<p>
-Further, if we categorify our definitions to use <a href="https://ncatlab.org/nlab/show/internal+relation">internal relations</a>, 
-is this an avenue to relate HOL as metalogical framework to the proposed
-definition? Well, it looks like there may be more to this than just idle
-speculation, if we think of a Boolean algebra as "part" of a Boolean
-category, then work with the constructive version (i.e., a Heyting
-category)&#x2026;because <b>Cat</b> is a <a href="http://128.2.67.219/michaelshulman/show/Heyting+2-category">Heyting 2-Category</a>. See also the
-n-category cafe post <a href="https://golem.ph.utexas.edu/category/2008/11/the_internal_language_of_a_2to.html">The Internal Language of a 2-Topos</a>.
-</p>
-
-</div>
-
-<div class="remark" id="orgda297ae">
-<p>
-Yeah, the more that I think about it, the more I realize <b>Cat</b> is the
-epitome of <a href="https://ncatlab.org/nlab/show/2-topos">2-topos</a>, just as <b>Set</b> is the epitome of a topos. Goguen and
-Burstall's "Institutions: Abstract Model Theory for Specification
-and Programming" suggests this isn't so crazy an idea, after all&#x2026;
+Given an institution \(I\), we can construct an entailment system \(I^{+}\)
+and together these form a logic, which is denoted \(I^{\dagger}\) (or, by
+an abuse of notation, use a superscript "plus"&#x2026;which is more common).
 </p>
 
 </div>
@@ -679,7 +660,7 @@ and Programming" suggests this isn't so crazy an idea, after all&#x2026;
 Then the particular notion of reflection can be described as:
 </p>
 
-<div class="definition" id="org5239aba">
+<div class="definition" id="orgb9f5c2c">
 <p>
 Given an entailment system \(\mathcal{E}\) and a nonempty set of theories
 \(\mathcal{C}\) in it, a theory \(U\) is <dfn>\(\mathcal{C}\) Universal</dfn>
@@ -718,7 +699,7 @@ classof all finitely presentable theories in the logic.
 From this perspective, we may thus define a <a href="logical-framework.html">logical framework</a> as:
 </p>
 
-<div class="definition" id="org0850298">
+<div class="definition" id="orgf832e18">
 <p>
 A <dfn>Logical Framework</dfn> consists of
 </p>
@@ -734,7 +715,7 @@ such that \(U\) is $\mathcal{C}$-universal.
 
 </div>
 
-<div class="remark" id="org0816d85">
+<div class="remark" id="org44b8f51">
 <p>
 This observation seems to have also been made in &sect;3 of
 "Axiomatizing Reflective Logics and Languages"
@@ -755,7 +736,7 @@ universal theory \(U\).
 Let me give a "morally right" definition, which fails to be rigorous:
 </p>
 
-<div class="definition" id="orga4a9cc6">
+<div class="definition" id="org4ed3f8a">
 <p>
 A <dfn>Meta-logical framework</dfn> consists of a logical framework
 \((\mathcal{L}, \mathcal{C}, U)\) equipped with
@@ -782,7 +763,7 @@ the metatheory of any \(T\).</li>
 
 </div>
 
-<div class="remark" id="orgc04b894">
+<div class="remark" id="org0330a71">
 <p>
 It's not clear exactly <i>how</i> super-nice the superlogic has to be; is
 there soemthing <i>weaker</i> than having Tarskian semantics?
@@ -790,7 +771,7 @@ there soemthing <i>weaker</i> than having Tarskian semantics?
 
 </div>
 
-<div class="remark" id="org807f1f7">
+<div class="remark" id="org777426c">
 <p>
 Also, it's unclear <i>when</i> will a logic \(\mathcal{L}\) have a superlogic
 \(\mathcal{S}\) which has Tarskian semantics and admits quantifiers.
@@ -798,7 +779,7 @@ Also, it's unclear <i>when</i> will a logic \(\mathcal{L}\) have a superlogic
 
 </div>
 
-<div class="puzzle" id="org4769c9d">
+<div class="puzzle" id="org625b85e">
 <p>
 Can we reformulate this notion of a metalogical framework within the more
 familiar judgements and inference rules setting?
@@ -874,7 +855,7 @@ Research Centre, 1995.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-23 Wed 12:29.</p>
+<p class="postamble">Last Updated 2022-02-25 Fri 12:35.</p>
 </div>
 </body>
 </html>

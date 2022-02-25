@@ -220,6 +220,13 @@ the sentences in $\Gamma$ --- i.e., for each $\varphi\in\Gamma$, we have
 $M\vDash_{\Sigma}\varphi$.
 #+end_remark
 
+#+begin_theorem
+Given an institution $I$, we may construct an entailment system $I^{+}$
+where we construct the relation: $\Gamma\vdash_{\Sigma}\varphi$ if and
+only if $M\vDash_{\Sigma}\varphi$ for every $M\in\mathbf{Mod}(T)$ for
+$T=(\Sigma,\Gamma)$.
+#+end_theorem
+
 ** Logic = Entailment System + Institution
 :PROPERTIES:
 :CUSTOM_ID: h-661b870a-695f-4a1a-938a-c618e52e6780
@@ -257,33 +264,12 @@ such that
    holds for any model $M$ that satisfies all the sentences in $\Gamma$.
 #+end_definition
 
-
-#+begin_puzzle
-What is the relationship between an entailment system and an
-institution, when we think of $\vdash_{\Sigma}$ in terms of the
-contravariant powerset functor $\mathcal{P}\colon\mathbf{Set}^{op}\to\mathbf{Bool}$
-associating to each set a complete atomic Boolean algebra? (c.f., [[https://ncatlab.org/nlab/show/Set#OppositeCategory][nlab]].)
-Is this what HOL does?
-
-That is to say, with HOL, we think of $\mathbf{Mod}$ as a categorified
-[[https://ncatlab.org/nlab/show/power+object][power object]] of $sent(\Sigma)$? So then $\vdash_{\Sigma}$ and $\vDash_{\Sigma}$ 
-coincide?
-
-Further, if we categorify our definitions to use [[https://ncatlab.org/nlab/show/internal+relation][internal relations]], 
-is this an avenue to relate HOL as metalogical framework to the proposed
-definition? Well, it looks like there may be more to this than just idle
-speculation, if we think of a Boolean algebra as "part" of a Boolean
-category, then work with the constructive version (i.e., a Heyting
-category)...because *Cat* is a [[http://128.2.67.219/michaelshulman/show/Heyting+2-category][Heyting 2-Category]]. See also the
-n-category cafe post [[https://golem.ph.utexas.edu/category/2008/11/the_internal_language_of_a_2to.html][The Internal Language of a 2-Topos]].
-#+end_puzzle
-
-#+begin_remark
-Yeah, the more that I think about it, the more I realize *Cat* is the
-epitome of [[https://ncatlab.org/nlab/show/2-topos][2-topos]], just as *Set* is the epitome of a topos. Goguen and
-Burstall's "Institutions: Abstract Model Theory for Specification
-and Programming" suggests this isn't so crazy an idea, after all...
-#+end_remark
+#+begin_theorem
+Given an institution $I$, we can construct an entailment system $I^{+}$
+and together these form a logic, which is denoted $I^{\dagger}$ (or, by
+an abuse of notation, use a superscript "plus"...which is more common).
+Furthermore, this logic is complete.
+#+end_theorem
 
 ** Relevant Reflection Principles
 :PROPERTIES:
