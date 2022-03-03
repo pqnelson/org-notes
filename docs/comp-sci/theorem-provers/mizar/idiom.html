@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-17 Thu 08:58 -->
+<!-- 2022-03-03 Thu 11:45 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Idiomatic Mizar</title>
@@ -242,7 +242,12 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#h-6c92317d-08d7-4be7-874c-cbeadad70682">1. Defining new gadgets</a></li>
-<li><a href="#h-c237f8b0-d62a-4f23-972c-26128f814532">2. Proving Equality</a></li>
+<li><a href="#h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29">2. Defining new attributes</a>
+<ul>
+<li><a href="#h-f46be9be-286d-45cd-83ea-970f40340710">2.1. Naming attributes</a></li>
+</ul>
+</li>
+<li><a href="#h-c237f8b0-d62a-4f23-972c-26128f814532">3. Proving Equality</a></li>
 </ul>
 </div>
 </div>
@@ -255,7 +260,7 @@ The idiomatic way to define a new gadget, well, suppose we had our
 definition found in a textbook schematically as:
 </p>
 
-<div class="definition" id="org20cd56b">
+<div class="definition" id="org40d2b40">
 <p>
 A <dfn>Gadget</dfn> consists of <i>stuff</i> equipped with <i>structure</i> such
 that <i>properties</i> hold.
@@ -275,8 +280,43 @@ We would define a gadget in three steps:
 </div>
 </div>
 
+<div id="outline-container-h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29" class="outline-2">
+<h2 id="h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29"><span class="section-number-2">2</span> Defining new attributes</h2>
+<div class="outline-text-2" id="text-h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29">
+<p>
+When defining a new attribute (say, <code>hairy</code>) for a <code>Gadget</code>, we
+schematically define it as:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Gadget;
+  <span class="org-mizar-normal">attr</span> hairy <span class="org-mizar-formula">for</span> IT <span class="org-mizar-normal">means</span>
+  :Def:
+  <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
+
+<p>
+This is a nod towards using <code>it</code> in defining functors and modes.
+</p>
+</div>
+
+<div id="outline-container-h-f46be9be-286d-45cd-83ea-970f40340710" class="outline-3">
+<h3 id="h-f46be9be-286d-45cd-83ea-970f40340710"><span class="section-number-3">2.1</span> Naming attributes</h3>
+<div class="outline-text-3" id="text-h-f46be9be-286d-45cd-83ea-970f40340710">
+<p>
+Use <code>snake_case</code> by default. The only exception that comes to mind is if
+there's an already existing attribute which does not use <code>snake_case</code>
+and we are defining a generalization of it.
+</p>
+</div>
+</div>
+</div>
+
 <div id="outline-container-h-c237f8b0-d62a-4f23-972c-26128f814532" class="outline-2">
-<h2 id="h-c237f8b0-d62a-4f23-972c-26128f814532"><span class="section-number-2">2</span> Proving Equality</h2>
+<h2 id="h-c237f8b0-d62a-4f23-972c-26128f814532"><span class="section-number-2">3</span> Proving Equality</h2>
 <div class="outline-text-2" id="text-h-c237f8b0-d62a-4f23-972c-26128f814532">
 <p>
 Use <a href="http://mizar.org/version/current/html/xboole_0.html"><code>xboole_0</code></a> definition 10 to prove <code>X = Y</code> by proving <code>X c= Y</code> and
@@ -287,7 +327,7 @@ if possible.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-17 Thu 08:55.</p>
+<p class="postamble">Last Updated 2022-03-03 Thu 11:45.</p>
 </div>
 </body>
 </html>

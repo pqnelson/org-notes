@@ -30,6 +30,34 @@ We would define a gadget in three steps:
 2. Define a ~attr Gadget-like~ which encodes the properties
 3. Define a ~mode Gadget is Gadget-like GadgetStr~
 
+* Defining new attributes
+:PROPERTIES:
+:CUSTOM_ID: h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29
+:END:
+
+When defining a new attribute (say, ~hairy~) for a ~Gadget~, we
+schematically define it as:
+
+#+begin_src mizar
+definition
+  let IT be Gadget;
+  attr hairy for IT means
+  :Def:
+  :: ...
+end;
+#+end_src
+
+This is a nod towards using ~it~ in defining functors and modes.
+
+** Naming attributes
+:PROPERTIES:
+:CUSTOM_ID: h-f46be9be-286d-45cd-83ea-970f40340710
+:END:
+
+Use ~snake_case~ by default. The only exception that comes to mind is if
+there's an already existing attribute which does not use ~snake_case~
+and we are defining a generalization of it.
+
 * Proving Equality
 :PROPERTIES:
 :CUSTOM_ID: h-c237f8b0-d62a-4f23-972c-26128f814532

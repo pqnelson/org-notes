@@ -25,6 +25,11 @@ Bourbaki's books may be the best outline/strategy.
 :CUSTOM_ID: h-42b94e81-8319-49c1-ab2d-d8852a381f56
 :END:
 
+** Existing in Mizar
+:PROPERTIES:
+:CUSTOM_ID: h-8e62fe3a-da15-47d4-93a1-9f70d1331b65
+:END:
+
 Mizar's library is /huge/, here's what I could find at a glance that's
 relevant.
 
@@ -48,6 +53,102 @@ relevant.
 - In [[http://mizar.org/version/current/html/ideal_1.html][~ideal_1~]]:
   - [[http://mizar.org/version/current/html/ideal_1.html#V2][~left-ideal~]]
   - [[http://mizar.org/version/current/html/ideal_1.html#V3][~right-ideal~]]
+- [[http://mizar.org/version/current/html/zmodlat1.html][~zmodlat1~]] for lattices
+    
+** Not in Mizar
+:PROPERTIES:
+:CUSTOM_ID: h-7abad33c-acb5-49ce-8243-945872dce09c
+:END:
+
+#+begin_definition
+A vector space $L$ over a field $F$ with an operation $L\times L\to L$,
+denoted $(x,y)\to[x, y]$ called the bracket (or commutator) of $x$ and $y$,
+is called a {{{dfn(Lie Algbra)}}} over $F$ if
+
+1. The bracket is bilinear
+2. $[x,x]=0$ for all $x\in L$
+3. $[x, [y,z]] + [y, [z,x]] + [z, [x,y]] = 0$ for all $x,y,z\in L$.
+#+end_definition
+
+This is the definition given by Humphreys' /Introduction to Lie Algebras and Representation Theory/
+(pg 1, third ed.). It is more narrow than the one Bourbaki gives in
+/Lie Groups and Lie Algebras/ I.1\sect2 Definition 1:
+
+#+begin_definition
+An algebra $\mathfrak{g}$ over a commutative unital [associative] ring
+$K$ is called a {{{dfn(Lie Algebra)}}} over $K$ if its multiplication
+(denoted by $(x,y)\mapsto[x,y]$) satisfies:
+
+1. $[x,x]=0$
+2. $[x, [y,z]] + [y, [z,x]] + [z, [x,y]] = 0$
+
+for all $x,y,z\in\mathfrak{g}$.
+#+end_definition
+
+Bourbaki asserts that the Lie bracket is a bilinear alternating map, but
+it is not adequately justified. "Bilinear" yes, but "alternating"? No,
+not in general: only if the characteristic of $K$ is not 2.
+
+#+begin_remark
+Mizar's notion of an algebra is *almost* good: they demand an algebra be
+unital, but this is not true in general for Lie algebras. Further, since
+~multMagma~ is a distant ancestor of ~AlgebraStr~, this means that an
+infixed ~*~ is provided for multiplication...which we don't
+want. Consequently, it seems that we should define a ~struct LieAlgebraStr~
+which extends ~ModuleStr~.
+#+end_remark
+
+#+begin_src mizar
+:: C.f., LOPBAN_8:5 and LOPBAN_8:6, FUNCT_5:def 1 and FUNCT_5:def 3
+:: and RINGCAT1:def 1
+definition
+  let K be 1-sorted;
+  let L,M,N be ModuleStr over K
+  let IT be Function of [:L,M:],N;
+  attr IT is bilinear means
+  for l being Element of L holds (curry IT).l is linear &
+  for m being Element of M holds (curry' IT).m is linear
+end;
+
+registration
+  let K be 1-sorted;
+  let M be ModuleStr over K;
+  cluster bilinear for BinOp of M;
+  existence
+  proof
+    take IT = the addF of M;
+  end;
+end;
+
+definition
+  let K be 1-sorted;
+  struct (ModuleStr over K) LieAlgebraStr over K
+  (# carrier -> set,
+     addF -> BinOp of the carrier,
+  bracket -> bilinear BinOp of the carrier,
+    ZeroF -> Element of the carrier,
+    lmult -> Function of [:the carrier of K,the carrier:], the carrier #);
+end;
+
+definition
+  let K be 1-sorted;
+  let L be LieAlgebraStr over K;
+  let x,y be Element of L;
+  func [. x, y .] -> Element of L equals
+  (the bracket of L).(x, y);
+  coherence
+  proof
+    thus (the bracket of L).(x, y) is Element of L;
+  end;
+end;
+
+:: RING_3:def 5 defines Char for a Ring
+theorem
+  for K being Ring st Char K <> 2
+  for L being LieAlgebraStr over K
+  for x,y being Element of L
+  holds [. x,y .] = -1 * [. y,x .];
+#+end_src
 
 * References
 :PROPERTIES:

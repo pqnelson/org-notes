@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-21 Mon 15:05 -->
+<!-- 2022-03-03 Thu 13:01 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lie Theory in Mizar</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -229,6 +229,28 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -242,14 +264,19 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e">1. Overview</a></li>
-<li><a href="#h-42b94e81-8319-49c1-ab2d-d8852a381f56">2. Relevant Definitions</a></li>
+<li><a href="#h-42b94e81-8319-49c1-ab2d-d8852a381f56">2. Relevant Definitions</a>
+<ul>
+<li><a href="#h-8e62fe3a-da15-47d4-93a1-9f70d1331b65">2.1. Existing in Mizar</a></li>
+<li><a href="#h-7abad33c-acb5-49ce-8243-945872dce09c">2.2. Not in Mizar</a></li>
+</ul>
+</li>
 <li><a href="#h-d95aeb61-2705-477a-bff1-5af409e21561">3. References</a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e" class="outline-2">
-<h2 id="h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e"><span class="section-number-2">1.</span> Overview</h2>
+<h2 id="h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e"><span class="section-number-2">1</span> Overview</h2>
 <div class="outline-text-2" id="text-h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e">
 <p>
 This is just a placeholder for my thinking about formalizing Lie
@@ -260,8 +287,13 @@ Bourbaki's books may be the best outline/strategy.
 </div>
 
 <div id="outline-container-h-42b94e81-8319-49c1-ab2d-d8852a381f56" class="outline-2">
-<h2 id="h-42b94e81-8319-49c1-ab2d-d8852a381f56"><span class="section-number-2">2.</span> Relevant Definitions</h2>
+<h2 id="h-42b94e81-8319-49c1-ab2d-d8852a381f56"><span class="section-number-2">2</span> Relevant Definitions</h2>
 <div class="outline-text-2" id="text-h-42b94e81-8319-49c1-ab2d-d8852a381f56">
+</div>
+
+<div id="outline-container-h-8e62fe3a-da15-47d4-93a1-9f70d1331b65" class="outline-3">
+<h3 id="h-8e62fe3a-da15-47d4-93a1-9f70d1331b65"><span class="section-number-3">2.1</span> Existing in Mizar</h3>
+<div class="outline-text-3" id="text-h-8e62fe3a-da15-47d4-93a1-9f70d1331b65">
 <p>
 Mizar's library is <i>huge</i>, here's what I could find at a glance that's
 relevant.
@@ -298,12 +330,129 @@ relevant.
 <li><a href="http://mizar.org/version/current/html/ideal_1.html#V2"><code>left-ideal</code></a></li>
 <li><a href="http://mizar.org/version/current/html/ideal_1.html#V3"><code>right-ideal</code></a></li>
 </ul></li>
+<li><a href="http://mizar.org/version/current/html/zmodlat1.html"><code>zmodlat1</code></a> for lattices</li>
 </ul>
 </div>
 </div>
 
+<div id="outline-container-h-7abad33c-acb5-49ce-8243-945872dce09c" class="outline-3">
+<h3 id="h-7abad33c-acb5-49ce-8243-945872dce09c"><span class="section-number-3">2.2</span> Not in Mizar</h3>
+<div class="outline-text-3" id="text-h-7abad33c-acb5-49ce-8243-945872dce09c">
+<div class="definition" id="org1fbddfc">
+<p>
+A vector space \(L\) over a field \(F\) with an operation \(L\times L\to L\),
+denoted \((x,y)\to[x, y]\) called the bracket (or commutator) of \(x\) and \(y\),
+is called a <dfn>Lie Algbra</dfn> over \(F\) if
+</p>
+
+<ol class="org-ol">
+<li>The bracket is bilinear</li>
+<li>\([x,x]=0\) for all \(x\in L\)</li>
+<li>\([x, [y,z]] + [y, [z,x]] + [z, [x,y]] = 0\) for all \(x,y,z\in L\).</li>
+</ol>
+
+</div>
+
+<p>
+This is the definition given by Humphreys' <i>Introduction to Lie Algebras and Representation Theory</i>
+(pg 1, third ed.). It is more narrow than the one Bourbaki gives in
+<i>Lie Groups and Lie Algebras</i> I.1&sect;2 Definition 1:
+</p>
+
+<div class="definition" id="org911d6a5">
+<p>
+An algebra \(\mathfrak{g}\) over a commutative unital [associative] ring
+\(K\) is called a <dfn>Lie Algebra</dfn> over \(K\) if its multiplication
+(denoted by \((x,y)\mapsto[x,y]\)) satisfies:
+</p>
+
+<ol class="org-ol">
+<li>\([x,x]=0\)</li>
+<li>\([x, [y,z]] + [y, [z,x]] + [z, [x,y]] = 0\)</li>
+</ol>
+
+<p>
+for all \(x,y,z\in\mathfrak{g}\).
+</p>
+
+</div>
+
+<p>
+Bourbaki asserts that the Lie bracket is a bilinear alternating map, but
+it is not adequately justified. "Bilinear" yes, but "alternating"? No,
+not in general: only if the characteristic of \(K\) is not 2.
+</p>
+
+<div class="remark" id="org9206c4b">
+<p>
+Mizar's notion of an algebra is <b>almost</b> good: they demand an algebra be
+unital, but this is not true in general for Lie algebras. Further, since
+<code>multMagma</code> is a distant ancestor of <code>AlgebraStr</code>, this means that an
+infixed <code>*</code> is provided for multiplication&#x2026;which we don't
+want. Consequently, it seems that we should define a <code>struct LieAlgebraStr</code>
+which extends <code>ModuleStr</code>.
+</p>
+
+</div>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-comment-delimiter">:: </span><span class="org-comment">C.f., LOPBAN_8:5 and LOPBAN_8:6, FUNCT_5:def 1 and FUNCT_5:def 3</span>
+<span class="org-comment-delimiter">:: </span><span class="org-comment">and RINGCAT1:def 1</span>
+<span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> 1-sorted;
+  <span class="org-mizar-skeleton">let</span> L,M,N <span class="org-mizar-normal">be</span> ModuleStr <span class="org-mizar-normal">over</span> K
+  <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Function <span class="org-mizar-normal">of</span> [:L,M:],N;
+  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> bilinear <span class="org-mizar-normal">means</span>
+  <span class="org-mizar-formula">for</span> l <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> L <span class="org-mizar-formula">holds</span> (curry IT).l <span class="org-mizar-normal">is</span> linear <span class="org-mizar-formula">&amp;</span>
+  <span class="org-mizar-formula">for</span> m <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> M <span class="org-mizar-formula">holds</span> (curry' IT).m <span class="org-mizar-normal">is</span> linear
+<span class="org-mizar-block">end</span>;
+
+<span class="org-mizar-main">registration</span>
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> 1-sorted;
+  <span class="org-mizar-skeleton">let</span> M <span class="org-mizar-normal">be</span> ModuleStr <span class="org-mizar-normal">over</span> K;
+  <span class="org-mizar-normal">cluster</span> bilinear <span class="org-mizar-formula">for</span> BinOp <span class="org-mizar-normal">of</span> M;
+  <span class="org-mizar-normal">existence</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">take</span> IT = the addF <span class="org-mizar-normal">of</span> M;
+  <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+
+<span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> 1-sorted;
+  <span class="org-mizar-normal">struct</span> (ModuleStr <span class="org-mizar-normal">over</span> K) LieAlgebraStr <span class="org-mizar-normal">over</span> K
+  (# carrier -&gt; set,
+     addF -&gt; BinOp <span class="org-mizar-normal">of</span> the carrier,
+  bracket -&gt; bilinear BinOp <span class="org-mizar-normal">of</span> the carrier,
+    ZeroF -&gt; Element <span class="org-mizar-normal">of</span> the carrier,
+    lmult -&gt; Function <span class="org-mizar-normal">of</span> [:the carrier <span class="org-mizar-normal">of</span> K,the carrier:], the carrier #);
+<span class="org-mizar-block">end</span>;
+
+<span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> 1-sorted;
+  <span class="org-mizar-skeleton">let</span> L <span class="org-mizar-normal">be</span> LieAlgebraStr <span class="org-mizar-normal">over</span> K;
+  <span class="org-mizar-skeleton">let</span> x,y <span class="org-mizar-normal">be</span> Element <span class="org-mizar-normal">of</span> L;
+  <span class="org-mizar-normal">func</span> [. x, y .] -&gt; Element <span class="org-mizar-normal">of</span> L <span class="org-mizar-normal">equals</span>
+  (the bracket <span class="org-mizar-normal">of</span> L).(x, y);
+  <span class="org-mizar-normal">coherence</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">thus</span> (the bracket <span class="org-mizar-normal">of</span> L).(x, y) <span class="org-mizar-normal">is</span> Element <span class="org-mizar-normal">of</span> L;
+  <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+
+<span class="org-comment-delimiter">:: </span><span class="org-comment">RING_3:def 5 defines Char for a Ring</span>
+<span class="org-mizar-main">theorem</span>
+  <span class="org-mizar-formula">for</span> K <span class="org-mizar-formula">being</span> Ring <span class="org-mizar-formula">st</span> Char K &lt;&gt; 2
+  <span class="org-mizar-formula">for</span> L <span class="org-mizar-formula">being</span> LieAlgebraStr <span class="org-mizar-normal">over</span> K
+  <span class="org-mizar-formula">for</span> x,y <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> L
+  <span class="org-mizar-formula">holds</span> [. x,y .] = -1 * [. y,x .];
+</pre>
+</div>
+</div>
+</div>
+</div>
+
 <div id="outline-container-h-d95aeb61-2705-477a-bff1-5af409e21561" class="outline-2">
-<h2 id="h-d95aeb61-2705-477a-bff1-5af409e21561"><span class="section-number-2">3.</span> References</h2>
+<h2 id="h-d95aeb61-2705-477a-bff1-5af409e21561"><span class="section-number-2">3</span> References</h2>
 <div class="outline-text-2" id="text-h-d95aeb61-2705-477a-bff1-5af409e21561">
 <ul class="org-ul">
 <li>Oliver Nash,<br>
@@ -323,7 +472,7 @@ Springer, 1987.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-21 Mon 15:03.</p>
+<p class="postamble">Last Updated 2022-03-03 Thu 13:01.</p>
 </div>
 </body>
 </html>
