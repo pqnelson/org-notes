@@ -30,6 +30,15 @@ We would define a gadget in three steps:
 2. Define a ~attr Gadget-like~ which encodes the properties
 3. Define a ~mode Gadget is Gadget-like GadgetStr~
 
+** Naming Conventions
+:PROPERTIES:
+:CUSTOM_ID: h-673f1231-2018-4e88-9e86-2fe7d5af2242
+:END:
+
+- Structures seem to be named using ~PascalCase~
+- Modes appear to also use ~PascalCase~ in general
+- Attributes of the form ~Gadget-like~ use ~PascalCase~ suffixed by ~-like~.
+
 * Defining new attributes
 :PROPERTIES:
 :CUSTOM_ID: h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29
@@ -66,3 +75,21 @@ and we are defining a generalization of it.
 Use [[http://mizar.org/version/current/html/xboole_0.html][~xboole_0~]] definition 10 to prove ~X = Y~ by proving ~X c= Y~ and
 ~Y c= X~. This is the idiomatic way to prove the claim. Avoid [[http://mizar.org/version/current/html/tarski.html][~TARSKI:2~]]
 if possible.
+
+* When in doubt, make it public
+:PROPERTIES:
+:CUSTOM_ID: h-ada80631-141b-4d42-877d-1773d385645e
+:END:
+
+Programmers have the idiom to make code private by default, and for good
+reason.
+
+But in Mizar, it's better to make everything public by default.
+
+- Examples should be public theorems, not private lemmas.
+
+The only exceptions I have found:
+
+- If I have a confusingly long proof of a theorem ~A implies B & C~,
+  I may have a private lemma proving half (~A implies C~, for example).
+  This is just to clarify the proof for myself.

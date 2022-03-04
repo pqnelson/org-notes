@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-25 Fri 12:35 -->
+<!-- 2022-03-04 Fri 10:07 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Definitions in Mizar</title>
@@ -491,7 +491,7 @@ occurring in them; so <code>for x being Real holds x-x = 0</code> translates to
 The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Mode-Definition">syntactic structure</a> of <code>&lt;Mode-Definition&gt;</code> is:
 </p>
 
-<pre class="example" id="orge6bab58">
+<pre class="example" id="org2a5d437">
 &lt;Mode-Definition&gt; =
 	"mode" &lt;Mode-Pattern&gt; ( [ &lt;Specification&gt; ] [ "means" &lt;Definiens&gt; ] ";"
 &lt;Correctness-Conditions&gt; | "is" &lt;Type-Expression&gt; ";" ) { &lt;Mode-Property&gt; } .
@@ -575,7 +575,7 @@ m1_subset_1(X,Y)))</code>
 Another couple examples, from <a href="http://www.mizar.org/version/current/mml/binop_1.miz"><code>binop_1.miz</code></a>:
 </p>
 
-<pre class="example" id="org7669495">
+<pre class="example" id="org5f39ebb">
 definition
   let A be set; :: loci-declaration
   :: defines a unary operation on A
@@ -608,7 +608,7 @@ The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predic
 An example given:
 </p>
 
-<pre class="example" id="orgd5d9fc4">
+<pre class="example" id="orgd812448">
 definition let X,Y:
   pred X c= Y means
 :: TARSKI:def 3
@@ -682,7 +682,7 @@ negation of <code>empty</code>). The <a href="http://wiki.mizar.org/twiki/pub/Mi
 Here's an example:
 </p>
 
-<pre class="example" id="orgb0e78cd">
+<pre class="example" id="org0053f7e">
 definition let i be number;
  attr i is even means
   ex j being Integer st i = 2*j;
@@ -706,7 +706,7 @@ associative] law of composition). Mizar refers to a <code>multMagma</code> as a
 magma with a single law of composition.
 </p>
 
-<pre class="example" id="org379c462">
+<pre class="example" id="org1f2a5da">
 definition
   let IT be multMagma;
 
@@ -760,7 +760,7 @@ result. Several <code>&lt;Functor-Properties&gt;</code> (like <code>commutativit
 associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Functor-Definition">syntax</a> is:
 </p>
 
-<pre class="example" id="org5cc63e3">
+<pre class="example" id="orgd076e9e">
 &lt;Functor-Definition&gt; =
  "func" &lt;Functor-Pattern&gt; [ &lt;Specification&gt; ] [ ( "means" | "equals" ) &lt;Definiens&gt; ] ";"
  &lt;Correctness-Conditions&gt; { &lt;Functor-Property&gt; } .
@@ -777,7 +777,7 @@ and uniqueness.
 The example given:
 </p>
 
-<pre class="example" id="org6d41776">
+<pre class="example" id="org5362df7">
 definition let x be real number;
   func -x -&gt; real number means :Def1: x + it = 0;
   existence by AXIOMS:19;
@@ -814,7 +814,7 @@ theorem, <code>Th10</code>)</li>
 The definition creates one new pattern, and one new constructor. 
 </p>
 
-<div class="remark" id="orgb5e6a6f">
+<div class="remark" id="orgc85fe3f">
 <p>
 Defining a "morphism" requires some involved work with cluster
 registrations, it's not as simple as defining a new function. See, e.g.,
@@ -837,7 +837,7 @@ Intuitively, a structure is a tuple with named components.
 From <a href="http://www.mizar.org/version/current/mml/algstr_0.miz"><code>algstr_0.miz</code></a>, we have:
 </p>
 
-<pre class="example" id="orgd006915">
+<pre class="example" id="org02986db">
 :: Multiplicative structures
 definition
   struct (1-sorted) multMagma (# carrier -&gt; set,
@@ -882,7 +882,7 @@ attribute for a <code>GadgetStr</code> structure, then we will find a
 Another example of a structure (from <a href="http://mizar.org/version/current/html/vectsp_1.html#L1"><code>VECTSP_1</code></a>), this time using <code>over</code>:
 </p>
 
-<pre class="example" id="orgf570836">
+<pre class="example" id="orgd437364">
 :: VECTSP_1
 definition
   let F be 1-sorted;
@@ -968,13 +968,22 @@ B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in Computer Scien
 <li>F. Wiedijk,<br>
 "Mizar's Soft Type System."<br>
 In: K. Schneider &amp; J. Brandt (eds.), <span class="underline">Theorem Proving in Higher Order Logics 2007</span>, LNCS <b><b>4732</b></b>, 383-399, 2007 <a href="http://www.cs.ru.nl/F.Wiedijk/mizar/miztype.pdf">pdf</a>.<br>
-Discusses how Mizar handles types atop set theory.</li>
+<ul class="org-ul">
+<li>Discusses how Mizar handles types atop set theory.</li>
+</ul></li>
+<li>C. Kaliszyk and K. Pąk,<br>
+"Semantics of Mizar as an Isabelle Object Logic".<br>
+<i>J Autom Reasoning</i> <b>63</b> (2019) pp.557&#x2013;595.
+<a href="https://doi.org/10.1007/s10817-018-9479-z">https://doi.org/10.1007/s10817-018-9479-z</a>
+<ul class="org-ul">
+<li>Discusses implementing Mizar in Isabelle, a fascinating exercise</li>
+</ul></li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-25 Fri 10:19.</p>
+<p class="postamble">Last Updated 2022-03-04 Fri 08:54.</p>
 </div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-03-03 Thu 11:45 -->
+<!-- 2022-03-04 Fri 10:07 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Idiomatic Mizar</title>
@@ -241,13 +241,18 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#h-6c92317d-08d7-4be7-874c-cbeadad70682">1. Defining new gadgets</a></li>
+<li><a href="#h-6c92317d-08d7-4be7-874c-cbeadad70682">1. Defining new gadgets</a>
+<ul>
+<li><a href="#h-673f1231-2018-4e88-9e86-2fe7d5af2242">1.1. Naming Conventions</a></li>
+</ul>
+</li>
 <li><a href="#h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29">2. Defining new attributes</a>
 <ul>
 <li><a href="#h-f46be9be-286d-45cd-83ea-970f40340710">2.1. Naming attributes</a></li>
 </ul>
 </li>
 <li><a href="#h-c237f8b0-d62a-4f23-972c-26128f814532">3. Proving Equality</a></li>
+<li><a href="#h-ada80631-141b-4d42-877d-1773d385645e">4. When in doubt, make it public</a></li>
 </ul>
 </div>
 </div>
@@ -260,7 +265,7 @@ The idiomatic way to define a new gadget, well, suppose we had our
 definition found in a textbook schematically as:
 </p>
 
-<div class="definition" id="org40d2b40">
+<div class="definition" id="org5d3f825">
 <p>
 A <dfn>Gadget</dfn> consists of <i>stuff</i> equipped with <i>structure</i> such
 that <i>properties</i> hold.
@@ -277,6 +282,17 @@ We would define a gadget in three steps:
 <li>Define a <code>attr Gadget-like</code> which encodes the properties</li>
 <li>Define a <code>mode Gadget is Gadget-like GadgetStr</code></li>
 </ol>
+</div>
+
+<div id="outline-container-h-673f1231-2018-4e88-9e86-2fe7d5af2242" class="outline-3">
+<h3 id="h-673f1231-2018-4e88-9e86-2fe7d5af2242"><span class="section-number-3">1.1</span> Naming Conventions</h3>
+<div class="outline-text-3" id="text-h-673f1231-2018-4e88-9e86-2fe7d5af2242">
+<ul class="org-ul">
+<li>Structures seem to be named using <code>PascalCase</code></li>
+<li>Modes appear to also use <code>PascalCase</code> in general</li>
+<li>Attributes of the form <code>Gadget-like</code> use <code>PascalCase</code> suffixed by <code>-like</code>.</li>
+</ul>
+</div>
 </div>
 </div>
 
@@ -325,9 +341,37 @@ if possible.
 </p>
 </div>
 </div>
+
+<div id="outline-container-h-ada80631-141b-4d42-877d-1773d385645e" class="outline-2">
+<h2 id="h-ada80631-141b-4d42-877d-1773d385645e"><span class="section-number-2">4</span> When in doubt, make it public</h2>
+<div class="outline-text-2" id="text-h-ada80631-141b-4d42-877d-1773d385645e">
+<p>
+Programmers have the idiom to make code private by default, and for good
+reason.
+</p>
+
+<p>
+But in Mizar, it's better to make everything public by default.
+</p>
+
+<ul class="org-ul">
+<li>Examples should be public theorems, not private lemmas.</li>
+</ul>
+
+<p>
+The only exceptions I have found:
+</p>
+
+<ul class="org-ul">
+<li>If I have a confusingly long proof of a theorem <code>A implies B &amp; C</code>,
+I may have a private lemma proving half (<code>A implies C</code>, for example).
+This is just to clarify the proof for myself.</li>
+</ul>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-03-03 Thu 11:45.</p>
+<p class="postamble">Last Updated 2022-03-04 Fri 08:24.</p>
 </div>
 </body>
 </html>

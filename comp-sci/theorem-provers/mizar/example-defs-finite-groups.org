@@ -371,3 +371,190 @@ theorem
          for y being Element of G
          holds [.g,y.] in (UpperCentralSeries G).n};
 #+end_src
+
+* Matrix Groups
+:PROPERTIES:
+:CUSTOM_ID: h-03dcc477-8208-48d3-92fb-d3284b5e561a
+:END:
+
+** General Linear Group
+:PROPERTIES:
+:CUSTOM_ID: h-edc440ad-dc16-46df-9865-b20fe366520d
+:END:
+
+#+begin_definition
+Let $K$ be a field, $n\in\NN$ be a positive integer.
+The {{{dfn(General Linear Group)}}} denoted $GL(n,K)$ or $GL_{n}(K)$ is
+the group consisting of invertible $n\times n$ matrices over the field
+$K$ using matrix multiplication as the binary operation.
+#+end_definition
+
+#+begin_remark
+We don't really need $K$ to be a field, it could just be an associative
+unital ring\footnote{\url{https://encyclopediaofmath.org/wiki/General_linear_group}}.
+#+end_remark
+
+This is a deceptive example, because it defines a "functor": given a
+specific $n$ and $K$, we get a group. Most of this has been formalized
+in, e.g., [[http://mizar.org/version/current/html/matrix_3.html][~matrix_3~]] and related articles ("invertible" is defined in
+[[http://mizar.org/version/current/html/matrix_6.html#V1][~matrix_6~]]).
+
+Matrix inversion is closed on the set of invertible square matrices, as
+proven in theorem [[http://mizar.org/version/current/html/matrix_6.html#T16][~MATRIX_6:16~]].
+
+Matrix multiplication is closed on the set of invertible square
+matrices, as proven in [[http://mizar.org/version/current/html/matrix_6.html#T45][~MATRIX_6:45~]].
+
+Associativity of matrix multiplication is proven in [[http://mizar.org/version/current/html/matrix_3.html#T33][~MATRIX_3:33~]].
+
+#+begin_src mizar
+definition
+  let n, k, m be Nat;
+  let K be Ring;
+  let A be Matrix of n,k,K;
+  let B be Matrix of width A,m,K;
+  func matrix_mult (A,B) -> Matrix of len A, width B,K equals
+  A*B;
+end;
+
+definition
+  let n be Nat;
+  let K be Field;
+  func GL(n,K) -> Group means
+  (for M being object
+   holds (M is invertible Matrix of n,K) iff (M in it)) &
+  (the multF of it = matrix_mult||(the carrier of it));
+  existence
+  proof end;
+  uniqueness
+  proof end;
+end;
+
+:: MATRIX_3:18 proves (1.(K,n))*A = A
+:: MATRIX_3:19 proves A*(1.(K,n)) = A
+theorem
+  for n being Nat
+  for K being Field
+  holds 1_(GL(n,K)) = 1.(K,n) by GROUP_1:def 4,MATRIX_3:18,19;
+
+theorem
+  for n being Nat
+  for K being Field
+  for M being Element of GL(n,K)
+  holds inverse_op(GL(n,K)).M = M ~ by MATRIX_6:def 4,GROUP_1:def 6;
+#+end_src
+
+** Special Linear Group
+:PROPERTIES:
+:CUSTOM_ID: h-ba74f292-740f-42d2-911a-8309a7f159bc
+:END:
+
+#+begin_definition
+Let $n$ be a positive integer, $K$ be a field.
+The {{{dfn(Special Linear Group)}}} $SL(n,K)$ consists of
+invertible matrices of determinant one, and its binary operation is
+matrix multiplication.
+#+end_definition
+
+The determinant of the identity matrix being unity is proven in theorem
+[[http://mizar.org/version/current/html/matrix_7.html#T16][~MATRIX_7:16~]].
+
+#+begin_src mizar
+definition
+  let n be Nat;
+  let K be Field;
+  func SL(n,K) -> Group means
+  :Def:
+  (for M being invertible Matrix of n,K
+   holds (Det M = 1.K) iff (M in it)) &
+  (the multF of it = matrix_mult||(the carrier of it));
+  existence
+  proof end;
+  uniqueness
+  proof end;
+end;
+
+theorem
+  for n being Nat
+  for K being Field
+  holds SL(n,K) is Subgroup of GL(n,K)
+proof
+  let n be Nat;
+  let K be Field;
+  set UH = the carrier of SL(n,K);
+  set UG = the carrier of GL(n,K);
+  A1: UH c= UG;
+  hence UH c= UG;
+  A2: [:UH,UH:] c= [:UG,UG:] by A1,ZFMISC_1:96;
+  the multF of SL(n,K) = matrix_mult||UH &
+  the multF of GL(n,K) = matrix_mult||UG by GROUP_2:def 5;
+  hence thesis by A2,FUNCT_1:51;
+end;
+#+end_src
+
+** Projective Linear Groups
+:PROPERTIES:
+:CUSTOM_ID: h-e3b101ac-8d30-46c0-a473-3e2b68080eaa
+:END:
+
+We could then define the projective linear groups as:
+
+#+begin_src mizar
+definition
+  let n be Nat;
+  let K be Field;
+  func PGL(n,K) -> Group equals GL(n,K)./.(center GL(n,K));
+  coherence
+  proof
+    thus GL(n,K)./.(center GL(n,K)) is Group;
+  end;
+  func PSL(n,L) -> Group equals SL(n,K)./.(center SL(n,K))
+  coherence
+  proof
+    thus SL(n,K)./.(center SL(n,K)) is Group;
+  end;
+end;
+#+end_src
+
+#+begin_remark
+If we include ~NAT_6~ in our registrations, then we can register
+~positive~ for ~Nat~. Be sure to include ~XCMPLX_0~ in the vocabulary.
+#+end_remark
+
+#+begin_example
+registration
+  cluster positive for Nat;
+  existence
+  proof
+    take 1;
+    thus thesis;
+  end;
+  cluster zero for natural number;
+  existence
+  proof
+    take 0;
+    thus thesis;
+  end;
+  cluster non zero for Nat; :: natural number;
+  existence
+  proof
+    take 1;
+    thus thesis;
+  end;
+end;
+registration
+  cluster non zero -> positive for Nat;
+  coherence
+  proof
+    for x being Nat st x is non zero holds x is positive
+    proof
+      let x be Nat;
+      assume A1: x is non zero;
+      then x <> 0;
+      then x > 0;
+      hence x is positive;
+    end;
+    hence thesis;
+  end;
+end;
+#+end_example
