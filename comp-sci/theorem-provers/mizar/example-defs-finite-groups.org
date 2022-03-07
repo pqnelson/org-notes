@@ -20,6 +20,32 @@ This is a collection of definitions I intend to formalize in Mizar. The
 hard part of the formalizations is the proof of existence and uniqueness
 (or other correctness conditions).
 
+* Extra-special groups
+:PROPERTIES:
+:CUSTOM_ID: h-2f274d71-e96e-4479-8d58-cfc921adb1df
+:END:
+
+Rotman's /Introduction to the Theory of Groups/, 4th ed, defines on page
+124: 
+
+#+begin_definition
+Let $G$ be a finite $p$ -group. We call it {{{dfn(Extra-special)}}}
+if $Z(G)$ is cyclic and $\Phi(G)=Z(G)=G'$.
+#+end_definition
+
+This defines an attribute (hinted by being of the form "We call it ~<hairy>~
+if..."). Its formalization is straightforward.
+
+#+begin_src mizar
+definition
+  let p be prime Nat;
+  let IT be finite p-group Group;
+  attr IT is extra-special means
+  (center IT is cyclic) & (Phi(IT) = center IT) &
+  (center IT = IT`);
+end;
+#+end_src
+
 * G Has Characteristic p
 :PROPERTIES:
 :CUSTOM_ID: h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8
