@@ -163,10 +163,14 @@ struct
      | size (T (n, _, _, _)) = n;
 
    val delta : int = 3;
-   fun isBalanced E = true
-     | isBalanced (T (_, _, l, r)) = delta*(1 + (size l)) >= 1 + size r andalso
-                                     delta*(1 + (size r)) >= 1 + size l andalso
-                                     isBalanced l andalso isBalanced r;
+
+   (* isBalanced : t -> t -> bool *)
+   fun isBalanced l r = delta*(size l + 1) >= (size r + 1);
+
+   fun balanced E = true
+     | balanced (T (_, _, l, r)) = isBalanced l r andalso
+                                   isBalanced r l andalso
+                                   balanced l andalso balanced r;
    (* more to come *)
 end;
 #+end_src
@@ -316,37 +320,37 @@ struct
                                    balanced l andalso balanced r;
 
    (* Helper functions to ensure the tree isBalanced *)
-   fun balanceL x l r = if isBalanced l r then bin x l r
-                        else rotateL x l r;
+   fun isSingle a b = (size a + 1) < ratio*(size b + 1);
 
-   fun isSingle a b = (size a + 1) < gamma*(size b + 1);
-
-   fun rotateL x l (r as (T (_,_,rl,rr))) =
-       if isSingle rl rr then singleL x l r
-       else doubleL x l r
-     | rotateL _ _ _ = raise (Fail "rotateL");
-
-   fun singleL x l (T (_, v, rl, rr)) = bin y (bin x l rl) rr
+   fun singleL x l (T (_, y, rl, rr)) = bin y (bin x l rl) rr
      | singleL _ _ _ = raise (Fail "singleL");
 
    fun doubleL x l (T (_, y, (T (_, z, rll, rlr)), rr))
        = bin z (bin x l rll) (bin y rlr rr)
      | doubleL _ _ _ = raise (Fail "doubleL");
 
-   fun balanceR x l r = if isBalanced r l then bin x l r
-                        else rotateR x l r;
-
-   fun rotateR x (l as (T (_,_,ll,lr))) r =
-       if isSingle ll lr then singleR x l r
-       else doubleR x l r
-     | rotateL _ _ _ = raise (Fail "rotateR");
-
-   fun singleR x (T (_, v, ll, lr)) r = bin y ll (bin x lr r)
+   fun singleR x (T (_, y, ll, lr)) r = bin y ll (bin x lr r)
      | singleR _ _ _ = raise (Fail "singleR");
 
    fun doubleR z (T (_, x, ll, (T (_, y, lrl, lrr)))) r
        = bin y (bin x ll lrl) (bin z lrr r)
      | doubleR _ _ _ = raise (Fail "doubleR");
+
+   fun rotateR x (l as (T (_,_,ll,lr))) r =
+       if isSingle ll lr then singleR x l r
+       else doubleR x l r
+     | rotateR _ _ _ = raise (Fail "rotateR");
+
+   fun rotateL x l (r as (T (_,_,rl,rr))) =
+       if isSingle rl rr then singleL x l r
+       else doubleL x l r
+     | rotateL _ _ _ = raise (Fail "rotateL");
+
+   fun balanceR x l r = if isBalanced r l then bin x l r
+                        else rotateR x l r;
+
+   fun balanceL x l r = if isBalanced l r then bin x l r
+                        else rotateL x l r;
 
    (* insert : Node.t -> t -> t *)
    fun insert x E = singleton x
@@ -456,6 +460,127 @@ we have ~delete x tree~ return the ~tree~ unmodified. [Hint: we cannot
 use equality directly, but we know the size of the tree before and
 after deletion will be the same if and only if they are the same.]
 #+end_exercise
+
+#+begin_src sml
+functor WBTree(Node : ORD) =
+struct
+   datatype t = E | T of int*Node.t*t*t;
+
+   val empty = E;
+   fun singleton (v : Node.t) = T (1, v, E, E);
+
+   fun size E = 0
+     | size (T (n, _, _, _)) = n;
+
+   fun bin x l r = T(1 + size l + size r, x, l, r);
+
+   (* laziness *)
+   val compare = Node.compare;
+
+   val ratio : int = 2;
+   val delta : int = 3;
+
+   (* member : Node.t -> t -> bool *)
+   fun member x E = false
+     | member x (T (_,y,l,r)) = case compare(x,y) of
+                                    EQUAL => true
+                                  | LESS => member x l
+                                  | GREATER => member x r;
+
+   (* isBalanced : t -> t -> bool *)
+   fun isBalanced l r = delta*(size l + 1) >= (size r + 1);
+
+   fun balanced E = true
+     | balanced (T (_, _, l, r)) = isBalanced l r andalso
+                                   isBalanced r l andalso
+                                   balanced l andalso balanced r;
+
+   (* Helper functions to ensure the tree isBalanced *)
+   fun isSingle a b = (size a + 1) < ratio*(size b + 1);
+
+   fun singleL x l (T (_, y, rl, rr)) = bin y (bin x l rl) rr
+     | singleL _ _ _ = raise (Fail "singleL");
+
+   fun doubleL x l (T (_, y, (T (_, z, rll, rlr)), rr))
+       = bin z (bin x l rll) (bin y rlr rr)
+     | doubleL _ _ _ = raise (Fail "doubleL");
+
+   fun singleR x (T (_, y, ll, lr)) r = bin y ll (bin x lr r)
+     | singleR _ _ _ = raise (Fail "singleR");
+
+   fun doubleR z (T (_, x, ll, (T (_, y, lrl, lrr)))) r
+       = bin y (bin x ll lrl) (bin z lrr r)
+     | doubleR _ _ _ = raise (Fail "doubleR");
+
+   fun rotateR x (l as (T (_,_,ll,lr))) r =
+       if isSingle ll lr then singleR x l r
+       else doubleR x l r
+     | rotateR _ _ _ = raise (Fail "rotateR");
+
+   fun rotateL x l (r as (T (_,_,rl,rr))) =
+       if isSingle rl rr then singleL x l r
+       else doubleL x l r
+     | rotateL _ _ _ = raise (Fail "rotateL");
+
+   fun balanceR x l r = if isBalanced r l then bin x l r
+                        else rotateR x l r;
+
+   fun balanceL x l r = if isBalanced l r then bin x l r
+                        else rotateL x l r;
+
+   (* insert : Node.t -> t -> t *)
+   fun insert x E = singleton x
+     | insert x (tree as T (sz, v, l, r)) =
+       (case compare(x,v) of
+           LESS => balanceL v (insert x l) r
+         | EQUAL => tree
+         | GREATER => balanceR v l  (insert x r));
+
+   (** Helper functions for delete **)
+   (* Retrieve the maximal key for the set, and the set stripped
+      of that element. *)
+   fun maxViewSure x l E = (x, l)
+     | maxViewSure x l (T (_, xr, lr, rr)) =
+       (case maxViewSure xr lr rr of
+            (m, r') => (m, balanceL x l r'));
+
+   fun maxView E = NONE
+     | maxView (T (_, x, l, r)) = SOME (maxViewSure x l r);
+
+   fun minViewSure x E r = (x, r)
+     | minViewSure x (T (_, xl, ll, lr)) r =
+       (case minViewSure xl ll lr of
+            (m, l') => (m, balanceR x l' r));
+
+   (* Retrieves the minimal key of the set, and the set is stripped of that
+      element, or `NONE` if passed an empty list. *)
+   fun minView E = NONE
+     | minView (T (_, x, l, r)) = SOME (minViewSure x l r);
+
+   (* Glue two trees together.
+      Assume that `l` and `r` are already balanced with respect to each
+      other. *)
+   fun glue E r = r
+     | glue l E = l
+     | glue (l as T(sl,xl,ll,lr)) (r as T(sr,xr,rl,rr))
+       = if sl > sr then (let val (m, l') = maxViewSure xl ll lr
+                          in balanceR m l' r
+                          end)
+         else let val (m, r') = minViewSure xr rl rr
+              in balanceL m l r'
+              end;
+
+   (* delete : Node.t -> t -> t *)
+   fun delete _ E = E
+     | delete x (tree as T (_, y, l, r)) =
+       (case compare (x,y) of
+            LESS => balanceR y (delete x l) r
+          | EQUAL => glue l r
+          | GREATER => balanceL y l (delete x r));
+
+   (* more to come *)
+end;
+#+end_src
 
 * References
 :PROPERTIES:
