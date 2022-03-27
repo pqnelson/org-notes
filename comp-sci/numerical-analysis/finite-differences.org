@@ -13,17 +13,27 @@
 
 For instabilities arising from finite differences, see Rouson and
 friends "A grid-free abstraction of the Navier-Stokes equation" (2008)
-wherein are "provided amore subtle ex ample inwhich information that
+wherein are "provided a more subtle example inwhich information that
 appeared to have been lost during the discretization process was
 actually missing from the original PDE."
+After reading the paper carefully, it seems Rousson and friends do the
+following:
+
+1. Review a version of the incompressible Navier-Stokes
+   equation. Specifically, one which reduces down to 2 equations in 2
+   unknowns. 
+2. Consider the Fourier spectral method for numerical analysis.
+3. Show the equations from step 1 have problems at wavelength $\vec{k}=0$,
+   which reflects a loss of information.
+4. *Assert* this loss of information occurs in every consistent scheme.
 
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-e0b472f5-872d-4956-8089-71b3dea060da
 :END:
 
-- DWI Rouson, R Rosenberg, X Xu, I Moulitsas, and SC Kassinos (2008b).
+- DWI Rouson, R Rosenberg, X Xu, I Moulitsas, and SC Kassinos,\\
   "A grid-free abstraction of the Navier-Stokes equation in FORTRAN
-  95/2003."
+  95/2003."\\
   /ACM Transactions on Mathematical Software/ *34*, 1 (2008) 33 pages.
   {{{doi(10.1145/1322436.1322438)}}}

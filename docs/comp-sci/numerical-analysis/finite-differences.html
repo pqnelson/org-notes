@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:08 -->
+<!-- 2022-03-25 Fri 11:11 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Finite Difference Schemes</title>
@@ -229,6 +229,28 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -248,18 +270,30 @@
 <p>
 For instabilities arising from finite differences, see Rouson and
 friends "A grid-free abstraction of the Navier-Stokes equation" (2008)
-wherein are "provided amore subtle ex ample inwhich information that
+wherein are "provided a more subtle example inwhich information that
 appeared to have been lost during the discretization process was
 actually missing from the original PDE."
+After reading the paper carefully, it seems Rousson and friends do the
+following:
 </p>
+
+<ol class="org-ol">
+<li>Review a version of the incompressible Navier-Stokes
+equation. Specifically, one which reduces down to 2 equations in 2
+unknowns.</li>
+<li>Consider the Fourier spectral method for numerical analysis.</li>
+<li>Show the equations from step 1 have problems at wavelength \(\vec{k}=0\),
+which reflects a loss of information.</li>
+<li><b>Assert</b> this loss of information occurs in every consistent scheme.</li>
+</ol>
 
 <div id="outline-container-h-e0b472f5-872d-4956-8089-71b3dea060da" class="outline-2">
 <h2 id="h-e0b472f5-872d-4956-8089-71b3dea060da"><span class="section-number-2">1</span> References</h2>
 <div class="outline-text-2" id="text-h-e0b472f5-872d-4956-8089-71b3dea060da">
 <ul class="org-ul">
-<li>DWI Rouson, R Rosenberg, X Xu, I Moulitsas, and SC Kassinos (2008b).
+<li>DWI Rouson, R Rosenberg, X Xu, I Moulitsas, and SC Kassinos,<br>
 "A grid-free abstraction of the Navier-Stokes equation in FORTRAN
-95/2003."
+95/2003."<br>
 <i>ACM Transactions on Mathematical Software</i> <b>34</b>, 1 (2008) 33 pages.
 doi:<a href="https://doi.org/10.1145/1322436.1322438">10.1145/1322436.1322438</a></li>
 </ul>
@@ -267,7 +301,7 @@ doi:<a href="https://doi.org/10.1145/1322436.1322438">10.1145/1322436.1322438</a
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 12:02.</p>
+<p class="postamble">Last Updated 2022-03-25 Fri 11:10.</p>
 </div>
 </body>
 </html>
