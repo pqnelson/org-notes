@@ -4,7 +4,7 @@
 <!-- 2022-04-09 Sat 11:07 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>On Lisp</title>
+<title>Haskell</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -236,147 +236,46 @@
  |
  <a accesskey="H" href="../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">On Lisp</h1>
+<h1 class="title">Haskell</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#h-ad9fb86d-a47b-48b9-8d6c-0fca4e4fc56b">1. Overview</a>
+<li><a href="#h-35f73750-4ad3-4d3c-bdec-429eee81e731">1. References</a>
 <ul>
-<li><a href="#h-baeaf23b-3a71-4edb-ae08-191cbeb66196">1.1. Basic Syntax and Semantics</a></li>
+<li><a href="#h-070ae1ee-843d-41d0-9486-0f04016d6fda">1.1. Type Checking</a></li>
 </ul>
 </li>
-<li><a href="#h-2688428c-9c87-4fd1-811f-042ad31e9735">2. Features</a>
-<ul>
-<li><a href="#h-23453ec5-2aa4-45f4-8f5c-a3fd48c80e2a">2.1. Multiple Dispatching</a></li>
-</ul>
-</li>
-<li><a href="#h-65352819-87b1-4936-85a2-cb312f24ec5b">3. References</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-h-ad9fb86d-a47b-48b9-8d6c-0fca4e4fc56b" class="outline-2">
-<h2 id="h-ad9fb86d-a47b-48b9-8d6c-0fca4e4fc56b"><span class="section-number-2">1.</span> Overview</h2>
-<div class="outline-text-2" id="text-h-ad9fb86d-a47b-48b9-8d6c-0fca4e4fc56b">
-<p>
-Lisp is the second-oldest high level language still used in
-production (Fortran is the oldest). Unlike other languages, we
-should think of Lisp at the level of abstract syntax trees, not
-statements or expressions. This allows us to transcend petty
-differences among languages.
-</p>
-
-<p>
-Basically, if you want to create your own language but do not want
-to be dragged down by writing a parser, then you really want a
-Lisp. This is my own personal interest in Lisp: I want to have a
-language which permits me to do symbolic computation, and I don't
-care about syntax.
-</p>
-
-<p>
-(See also <a href="lisp/index.html">further topics on Lisp</a>.)
-</p>
-</div>
-
-<div id="outline-container-h-baeaf23b-3a71-4edb-ae08-191cbeb66196" class="outline-3">
-<h3 id="h-baeaf23b-3a71-4edb-ae08-191cbeb66196"><span class="section-number-3">1.1.</span> Basic Syntax and Semantics</h3>
-<div class="outline-text-3" id="text-h-baeaf23b-3a71-4edb-ae08-191cbeb66196">
-<p>
-All Lisp dialects share the same basic syntax, namely S-expressions.
-An S-expression is either an <dfn>Atom</dfn> or a <dfn>List</dfn>.
-Lisp atoms are literal values, or symbols. Lists are finite sequences of
-S-expressions surrounded by parentheses <code>(S-1 S-2 ... S-n)</code>. Nested
-lists are permitted.
-</p>
-
-<p>
-We interpret function calls using Polish notation. So instead of
-writing, as we would in C, <code>1 + 2 + 3 + 4</code> we have in Lisp <code>(+ 1 2 3 4)</code>.
-This is evaluated by looking at the first element in the list, <code>+</code>,
-then check if it is a function or a macro. For functions, we evaluate
-the arguments passed to the function, then apply the function to the
-values (i.e., we "call by value"). Macros <i>do not</i> evaluate the
-arguments passed. Instead, macros produce a syntax tree, which is then
-evaluated. This permits us to extend Lisp with new language features.
-</p>
-
-<p>
-The syntax for defining new functions or constants varies depending on
-dialect, but amount to another S-expression:
-</p>
-
+<div id="outline-container-h-35f73750-4ad3-4d3c-bdec-429eee81e731" class="outline-2">
+<h2 id="h-35f73750-4ad3-4d3c-bdec-429eee81e731"><span class="section-number-2">1.</span> References</h2>
+<div class="outline-text-2" id="text-h-35f73750-4ad3-4d3c-bdec-429eee81e731">
 <ul class="org-ul">
-<li>Scheme <code>(define (my-function param-1 ... param-n) ...)</code></li>
-<li>Common Lisp and Emacs Lisp <code>(defun my-function (param-1 ... param-n) ...)</code></li>
-<li>Clojure <code>(defn my-function [param-1 ... param-n] ...)</code></li>
+<li>Ben Lynn's <a href="https://crypto.stanford.edu/~blynn/compiler/socrates.html">notes on Haskell compiler</a></li>
+<li>John Hughes,<br>
+<a href="https://www.cs.ox.ac.uk/publications/publication3788-abstract.html">THE DESIGN AND IMPLEMENTATION OF PROGRAMMING LANGUAGES</a></li>
 </ul>
-
-<p>
-That's basically it. We have an eval/apply loop, S-expressions encode
-data and code, and little else. Consequently, <a href="lisp/mal-2.html">making a Lisp</a> is one of
-the rites of passage in Computer Science.
-</p>
-</div>
-</div>
 </div>
 
 
-<div id="outline-container-h-2688428c-9c87-4fd1-811f-042ad31e9735" class="outline-2">
-<h2 id="h-2688428c-9c87-4fd1-811f-042ad31e9735"><span class="section-number-2">2.</span> Features</h2>
-<div class="outline-text-2" id="text-h-2688428c-9c87-4fd1-811f-042ad31e9735">
-<p>
-You get a language-factory for the cost of Latinized grammar
-<code>(verb subject object)</code>. Once we accept this, we can <i>extend</i> the
-language with whatever feature we want. But there are a few other
-features worth mentioning.
-</p>
-
-<p>
-Object-oriented programming in the C++/Java vein becomes
-<code>(method object additional-param...)</code>. This lets CLOS to shine,
-giving us a far more sophisticated class system than C++ could
-ever produce, thanks to our being not-bogged-down-by-syntax. Well,
-Scheme and Common Lisp enjoy this benefit, Clojure is coupled to Java's
-object-oriented sytem.
-</p>
-
-<p>
-Arguably any language you want to use could be transformed into this
-system, and any "killer feature" is either <i>already</i> in Lisp or easily
-implemented using macros. <i>SICP</i> shows this quite a few times over.
-</p>
-</div>
-
-<div id="outline-container-h-23453ec5-2aa4-45f4-8f5c-a3fd48c80e2a" class="outline-3">
-<h3 id="h-23453ec5-2aa4-45f4-8f5c-a3fd48c80e2a"><span class="section-number-3">2.1.</span> Multiple Dispatching</h3>
-<div class="outline-text-3" id="text-h-23453ec5-2aa4-45f4-8f5c-a3fd48c80e2a">
-<p>
-Common Lisp and Clojure offer <a href="lisp/multiple-dispatch.html">multiple dispatching</a> (Scheme gives you the
-pleasure of implementing it on your own).
-This permits, e.g., <a href="lisp/generic-arithmetic.html">generic arithmetic</a>: we can use <code>*</code> for matrix
-multiplication, scalar multiplication, and the underlying field's
-multiplication operator.
-</p>
-</div>
-</div>
-</div>
-
-<div id="outline-container-h-65352819-87b1-4936-85a2-cb312f24ec5b" class="outline-2">
-<h2 id="h-65352819-87b1-4936-85a2-cb312f24ec5b"><span class="section-number-2">3.</span> References</h2>
-<div class="outline-text-2" id="text-h-65352819-87b1-4936-85a2-cb312f24ec5b">
+<div id="outline-container-h-070ae1ee-843d-41d0-9486-0f04016d6fda" class="outline-3">
+<h3 id="h-070ae1ee-843d-41d0-9486-0f04016d6fda"><span class="section-number-3">1.1.</span> Type Checking</h3>
+<div class="outline-text-3" id="text-h-070ae1ee-843d-41d0-9486-0f04016d6fda">
 <ul class="org-ul">
-<li><a href="http://wiki.c2.com/?LispRoadMap">Lisp Road Map</a>, C2 Wiki</li>
-<li>Steve Losh, <a href="https://stevelosh.com/blog/2018/08/a-road-to-common-lisp/">A Road to Common Lisp</a>. Blogpost August 27, 2018.</li>
-<li><a href="https://twobithistory.org/2018/10/14/lisp.html">How Lisp Became God's Own Programming Language</a>. Two-Bit History,
-published 14 October 2018</li>
+<li>Dimitrios Vytiniotis, Simon Peyton Jones, Tom Schrijvers, Martin Sulzmann,<br>
+"OutsideIn(X): Modular type inference with local assumptions".<br>
+<i>Journal of Functional Programming</i> <b>21</b> (2011) pp. 333&#x2013;412
+<a href="https://www.microsoft.com/en-us/research/publication/outsideinx-modular-type-inference-with-local-assumptions/">Eprint</a></li>
 </ul>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 12:04.</p>
+<p class="postamble">Last Updated 2021-08-09 Mon 18:44.</p>
 </div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:08 -->
+<!-- 2022-04-09 Sat 11:07 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Toy LispKit Compiler</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -259,7 +259,7 @@
 </div>
 
 <div id="outline-container-h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3" class="outline-2">
-<h2 id="h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3"><span class="section-number-2">1</span> Introduction</h2>
+<h2 id="h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3">
 <p>
 Following Peter Henderson's book, I'm going to investigate implementing
@@ -271,7 +271,7 @@ fragment, then I will write the compiler for the Lisp fragment.
 </div>
 
 <div id="outline-container-h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41" class="outline-2">
-<h2 id="h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41"><span class="section-number-2">2</span> Lisp Primitives</h2>
+<h2 id="h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41"><span class="section-number-2">2.</span> Lisp Primitives</h2>
 <div class="outline-text-2" id="text-h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41">
 <p>
 The language will provide the following primitives:
@@ -308,7 +308,7 @@ numeric value of <code>&lt;exp&gt;</code></li>
 </div>
 
 <div id="outline-container-h-5d573b7e-8dcb-4490-9781-ca307200782f" class="outline-2">
-<h2 id="h-5d573b7e-8dcb-4490-9781-ca307200782f"><span class="section-number-2">3</span> Compiling to SECD</h2>
+<h2 id="h-5d573b7e-8dcb-4490-9781-ca307200782f"><span class="section-number-2">3.</span> Compiling to SECD</h2>
 <div class="outline-text-2" id="text-h-5d573b7e-8dcb-4490-9781-ca307200782f">
 <p>
 Let's now examine how to compile Lisp expressions to SECD code. This
@@ -319,7 +319,7 @@ is inductively defined.
 </div>
 
 <div id="outline-container-h-e8d4c07b-1a2b-4398-8ec8-f027194e3471" class="outline-3">
-<h3 id="h-e8d4c07b-1a2b-4398-8ec8-f027194e3471"><span class="section-number-3">3.1</span> Helper Functions</h3>
+<h3 id="h-e8d4c07b-1a2b-4398-8ec8-f027194e3471"><span class="section-number-3">3.1.</span> Helper Functions</h3>
 <div class="outline-text-3" id="text-h-e8d4c07b-1a2b-4398-8ec8-f027194e3471">
 <p>
 We need some helper functions first to make sense of the namelist data
@@ -367,7 +367,7 @@ return the pair <code>(p . q)</code> encoding its position.
 </div>
 
 <div id="outline-container-h-732b7cb4-396b-4469-839e-7a45e8636baa" class="outline-3">
-<h3 id="h-732b7cb4-396b-4469-839e-7a45e8636baa"><span class="section-number-3">3.2</span> Compile SExpression</h3>
+<h3 id="h-732b7cb4-396b-4469-839e-7a45e8636baa"><span class="section-number-3">3.2.</span> Compile SExpression</h3>
 <div class="outline-text-3" id="text-h-732b7cb4-396b-4469-839e-7a45e8636baa">
 <p>
 To compile an S-Expression to SECD code, we have:
@@ -435,7 +435,7 @@ bytecode <code>c</code>
 </div>
 
 <div id="outline-container-h-9a92a2ad-41fc-452d-a0d5-dae117769683" class="outline-4">
-<h4 id="h-9a92a2ad-41fc-452d-a0d5-dae117769683"><span class="section-number-4">3.2.1</span> Compiling Let-expressions</h4>
+<h4 id="h-9a92a2ad-41fc-452d-a0d5-dae117769683"><span class="section-number-4">3.2.1.</span> Compiling Let-expressions</h4>
 <div class="outline-text-4" id="text-h-9a92a2ad-41fc-452d-a0d5-dae117769683">
 <p>
 When compiling <code>(let ((x1 e1) ... (x-n e-n)) body)</code>, we rewrite this as
@@ -470,7 +470,7 @@ We have the ancillary functions when compiling <code>(let ...)</code>.
 </div>
 
 <div id="outline-container-h-8c101aab-be9e-4cb3-82ff-cd053abae6b0" class="outline-2">
-<h2 id="h-8c101aab-be9e-4cb3-82ff-cd053abae6b0"><span class="section-number-2">4</span> References</h2>
+<h2 id="h-8c101aab-be9e-4cb3-82ff-cd053abae6b0"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-8c101aab-be9e-4cb3-82ff-cd053abae6b0">
 <ul class="org-ul">
 <li>P. Henderson,

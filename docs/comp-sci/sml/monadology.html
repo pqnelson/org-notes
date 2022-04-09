@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-02 Wed 15:09 -->
+<!-- 2022-04-09 Sat 11:08 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Monadology</title>
@@ -208,7 +208,7 @@
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
      function CodeHighlightOn(elem, id)
      {
@@ -260,7 +260,7 @@
 </div>
 
 <div id="outline-container-h-fc1853e3-fe90-45e5-b000-ecc1cad4ed65" class="outline-2">
-<h2 id="h-fc1853e3-fe90-45e5-b000-ecc1cad4ed65"><span class="section-number-2">1</span> Overview</h2>
+<h2 id="h-fc1853e3-fe90-45e5-b000-ecc1cad4ed65"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-fc1853e3-fe90-45e5-b000-ecc1cad4ed65">
 <p>
 Monads provide a way to reason about side-effects in an equational way.
@@ -280,7 +280,7 @@ Basically a monad encodes a computation.
 </div>
 
 <div id="outline-container-h-b106ae0d-9e48-4b83-946a-196e0a157a3c" class="outline-2">
-<h2 id="h-b106ae0d-9e48-4b83-946a-196e0a157a3c"><span class="section-number-2">2</span> State Monad</h2>
+<h2 id="h-b106ae0d-9e48-4b83-946a-196e0a157a3c"><span class="section-number-2">2.</span> State Monad</h2>
 <div class="outline-text-2" id="text-h-b106ae0d-9e48-4b83-946a-196e0a157a3c">
 <p>
 The state monad encodes a computation <code>state -&gt; (a, state)</code>.
@@ -310,7 +310,7 @@ The state monad encodes a computation <code>state -&gt; (a, state)</code>.
 </div>
 
 <div id="outline-container-h-ae2fffc8-6678-42d4-ac03-0bf3c39d9b28" class="outline-2">
-<h2 id="h-ae2fffc8-6678-42d4-ac03-0bf3c39d9b28"><span class="section-number-2">3</span> Input Output Monad</h2>
+<h2 id="h-ae2fffc8-6678-42d4-ac03-0bf3c39d9b28"><span class="section-number-2">3.</span> Input Output Monad</h2>
 <div class="outline-text-2" id="text-h-ae2fffc8-6678-42d4-ac03-0bf3c39d9b28">
 <p>
 When writing output, whether logging a program or displaying information
@@ -328,7 +328,7 @@ So <code>type IO a = RealWorld -&gt; (RealWorld, a)</code>?
 </div>
 
 <div id="outline-container-h-08a4f52f-3779-44f3-981f-8d68675beb2c" class="outline-3">
-<h3 id="h-08a4f52f-3779-44f3-981f-8d68675beb2c"><span class="section-number-3">3.1</span> How Haskell Does it&#x2026;</h3>
+<h3 id="h-08a4f52f-3779-44f3-981f-8d68675beb2c"><span class="section-number-3">3.1.</span> How Haskell Does it&#x2026;</h3>
 <div class="outline-text-3" id="text-h-08a4f52f-3779-44f3-981f-8d68675beb2c">
 <p>
 Looking through the GHC source code, it seems that the IO Monad is
@@ -449,7 +449,7 @@ This delegates the heavy lifting to <a href="https://github.com/ghc/ghc/blob/061
 </div>
 
 <div id="outline-container-h-9898e93b-cd74-49f3-95cc-681d75bca8a0" class="outline-3">
-<h3 id="h-9898e93b-cd74-49f3-95cc-681d75bca8a0"><span class="section-number-3">3.2</span> Standard ML Hackery</h3>
+<h3 id="h-9898e93b-cd74-49f3-95cc-681d75bca8a0"><span class="section-number-3">3.2.</span> Standard ML Hackery</h3>
 <div class="outline-text-3" id="text-h-9898e93b-cd74-49f3-95cc-681d75bca8a0">
 <p>
 If I try to do something similar with Standard ML, then I'd guess:
@@ -467,7 +467,7 @@ This typechecks fine, but it doesn't produce what we'd expect. For
 example, in Hamlet:
 </p>
 
-<pre class="example" id="orgb89667b">
+<pre class="example" id="orgafbc959">
 - putStr "foo";
 val it = IO _fn : unit IO
 - print "foo\n";
@@ -479,7 +479,7 @@ val it = () : unit
 </div>
 
 <div id="outline-container-h-e4b4aced-cb78-493a-8c35-a12e1492cf09" class="outline-2">
-<h2 id="h-e4b4aced-cb78-493a-8c35-a12e1492cf09"><span class="section-number-2">4</span> References</h2>
+<h2 id="h-e4b4aced-cb78-493a-8c35-a12e1492cf09"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-e4b4aced-cb78-493a-8c35-a12e1492cf09">
 <ul class="org-ul">
 <li><a href="https://www.cl.cam.ac.uk/teaching//1819/ConceptsPL/lectures.pdf">Slides on Programming Languages</a>, pp. 220 <i>et seq.</i>, discuss Monads in
@@ -507,7 +507,7 @@ for <code>do</code>-notation in Standard ML.)</li>
 </div>
 
 <div id="outline-container-h-cac676fe-d364-4f03-9c2a-4750ce01619d" class="outline-3">
-<h3 id="h-cac676fe-d364-4f03-9c2a-4750ce01619d"><span class="section-number-3">4.1</span> Monads in Haskell</h3>
+<h3 id="h-cac676fe-d364-4f03-9c2a-4750ce01619d"><span class="section-number-3">4.1.</span> Monads in Haskell</h3>
 <div class="outline-text-3" id="text-h-cac676fe-d364-4f03-9c2a-4750ce01619d">
 <ul class="org-ul">
 <li><a href="https://stackoverflow.com/q/39202738/1296973">Compilation of IORef and STRef</a></li>
@@ -537,7 +537,7 @@ In Proceedings of IFL2001.</li>
 
 
 <div id="outline-container-h-9ccaab01-de54-45dd-a3fc-f8c3deab52da" class="outline-3">
-<h3 id="h-9ccaab01-de54-45dd-a3fc-f8c3deab52da"><span class="section-number-3">4.2</span> Monads in Functional Programming (in general)</h3>
+<h3 id="h-9ccaab01-de54-45dd-a3fc-f8c3deab52da"><span class="section-number-3">4.2.</span> Monads in Functional Programming (in general)</h3>
 <div class="outline-text-3" id="text-h-9ccaab01-de54-45dd-a3fc-f8c3deab52da">
 <ul class="org-ul">
 <li>Philip Wadler,<br>
@@ -559,7 +559,7 @@ Equational Reasoning".<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-16 Fri 07:32.</p>
+<p class="postamble">Last Updated 2021-08-09 Mon 18:44.</p>
 </div>
 </body>
 </html>

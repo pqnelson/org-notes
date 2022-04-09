@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-09 Sat 11:07 -->
+<!-- 2022-02-20 Sun 09:46 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>On Lisp</title>
+<title>Example Definitions Finite Groups - Mizar</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -206,7 +206,7 @@
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
-<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
@@ -229,154 +229,152 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
- <a accesskey="H" href="../index.html"> HOME </a>
+ <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">On Lisp</h1>
+<h1 class="title">Example Definitions Finite Groups - Mizar</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#h-ad9fb86d-a47b-48b9-8d6c-0fca4e4fc56b">1. Overview</a>
-<ul>
-<li><a href="#h-baeaf23b-3a71-4edb-ae08-191cbeb66196">1.1. Basic Syntax and Semantics</a></li>
-</ul>
-</li>
-<li><a href="#h-2688428c-9c87-4fd1-811f-042ad31e9735">2. Features</a>
-<ul>
-<li><a href="#h-23453ec5-2aa4-45f4-8f5c-a3fd48c80e2a">2.1. Multiple Dispatching</a></li>
-</ul>
-</li>
-<li><a href="#h-65352819-87b1-4936-85a2-cb312f24ec5b">3. References</a></li>
+<li><a href="#h-3514a396-c340-41d5-97f5-7fe965d4519c">1. Introduction</a></li>
+<li><a href="#h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8">2. G Has Characteristic p</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-h-ad9fb86d-a47b-48b9-8d6c-0fca4e4fc56b" class="outline-2">
-<h2 id="h-ad9fb86d-a47b-48b9-8d6c-0fca4e4fc56b"><span class="section-number-2">1.</span> Overview</h2>
-<div class="outline-text-2" id="text-h-ad9fb86d-a47b-48b9-8d6c-0fca4e4fc56b">
+<div id="outline-container-h-3514a396-c340-41d5-97f5-7fe965d4519c" class="outline-2">
+<h2 id="h-3514a396-c340-41d5-97f5-7fe965d4519c"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-3514a396-c340-41d5-97f5-7fe965d4519c">
 <p>
-Lisp is the second-oldest high level language still used in
-production (Fortran is the oldest). Unlike other languages, we
-should think of Lisp at the level of abstract syntax trees, not
-statements or expressions. This allows us to transcend petty
-differences among languages.
-</p>
-
-<p>
-Basically, if you want to create your own language but do not want
-to be dragged down by writing a parser, then you really want a
-Lisp. This is my own personal interest in Lisp: I want to have a
-language which permits me to do symbolic computation, and I don't
-care about syntax.
-</p>
-
-<p>
-(See also <a href="lisp/index.html">further topics on Lisp</a>.)
-</p>
-</div>
-
-<div id="outline-container-h-baeaf23b-3a71-4edb-ae08-191cbeb66196" class="outline-3">
-<h3 id="h-baeaf23b-3a71-4edb-ae08-191cbeb66196"><span class="section-number-3">1.1.</span> Basic Syntax and Semantics</h3>
-<div class="outline-text-3" id="text-h-baeaf23b-3a71-4edb-ae08-191cbeb66196">
-<p>
-All Lisp dialects share the same basic syntax, namely S-expressions.
-An S-expression is either an <dfn>Atom</dfn> or a <dfn>List</dfn>.
-Lisp atoms are literal values, or symbols. Lists are finite sequences of
-S-expressions surrounded by parentheses <code>(S-1 S-2 ... S-n)</code>. Nested
-lists are permitted.
-</p>
-
-<p>
-We interpret function calls using Polish notation. So instead of
-writing, as we would in C, <code>1 + 2 + 3 + 4</code> we have in Lisp <code>(+ 1 2 3 4)</code>.
-This is evaluated by looking at the first element in the list, <code>+</code>,
-then check if it is a function or a macro. For functions, we evaluate
-the arguments passed to the function, then apply the function to the
-values (i.e., we "call by value"). Macros <i>do not</i> evaluate the
-arguments passed. Instead, macros produce a syntax tree, which is then
-evaluated. This permits us to extend Lisp with new language features.
-</p>
-
-<p>
-The syntax for defining new functions or constants varies depending on
-dialect, but amount to another S-expression:
-</p>
-
-<ul class="org-ul">
-<li>Scheme <code>(define (my-function param-1 ... param-n) ...)</code></li>
-<li>Common Lisp and Emacs Lisp <code>(defun my-function (param-1 ... param-n) ...)</code></li>
-<li>Clojure <code>(defn my-function [param-1 ... param-n] ...)</code></li>
-</ul>
-
-<p>
-That's basically it. We have an eval/apply loop, S-expressions encode
-data and code, and little else. Consequently, <a href="lisp/mal-2.html">making a Lisp</a> is one of
-the rites of passage in Computer Science.
+This is a collection of definitions I intend to formalize in Mizar. The
+hard part of the formalizations is the proof of existence and uniqueness
+(or other correctness conditions).
 </p>
 </div>
 </div>
-</div>
 
-
-<div id="outline-container-h-2688428c-9c87-4fd1-811f-042ad31e9735" class="outline-2">
-<h2 id="h-2688428c-9c87-4fd1-811f-042ad31e9735"><span class="section-number-2">2.</span> Features</h2>
-<div class="outline-text-2" id="text-h-2688428c-9c87-4fd1-811f-042ad31e9735">
+<div id="outline-container-h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8" class="outline-2">
+<h2 id="h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8"><span class="section-number-2">2.</span> G Has Characteristic p</h2>
+<div class="outline-text-2" id="text-h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8">
 <p>
-You get a language-factory for the cost of Latinized grammar
-<code>(verb subject object)</code>. Once we accept this, we can <i>extend</i> the
-language with whatever feature we want. But there are a few other
-features worth mentioning.
+These definitions are taken from <a href="https://arxiv.org/abs/1906.07216">arXiv:1906.07216</a>.
 </p>
 
+<div class="definition" id="org76699c2">
 <p>
-Object-oriented programming in the C++/Java vein becomes
-<code>(method object additional-param...)</code>. This lets CLOS to shine,
-giving us a far more sophisticated class system than C++ could
-ever produce, thanks to our being not-bogged-down-by-syntax. Well,
-Scheme and Common Lisp enjoy this benefit, Clojure is coupled to Java's
-object-oriented sytem.
+Let \(p\) be a prime number, \(G\) be a finite group whose order is
+divisible by \(p\). A <dfn>$p$-local subgroup</dfn> is one that looks like
+\(N_{H}(P)\) where \(P\) is a nontrivial $p$-subgroup of \(G\).
 </p>
 
-<p>
-Arguably any language you want to use could be transformed into this
-system, and any "killer feature" is either <i>already</i> in Lisp or easily
-implemented using macros. <i>SICP</i> shows this quite a few times over.
-</p>
 </div>
 
-<div id="outline-container-h-23453ec5-2aa4-45f4-8f5c-a3fd48c80e2a" class="outline-3">
-<h3 id="h-23453ec5-2aa4-45f4-8f5c-a3fd48c80e2a"><span class="section-number-3">2.1.</span> Multiple Dispatching</h3>
-<div class="outline-text-3" id="text-h-23453ec5-2aa4-45f4-8f5c-a3fd48c80e2a">
 <p>
-Common Lisp and Clojure offer <a href="lisp/multiple-dispatch.html">multiple dispatching</a> (Scheme gives you the
-pleasure of implementing it on your own).
-This permits, e.g., <a href="lisp/generic-arithmetic.html">generic arithmetic</a>: we can use <code>*</code> for matrix
-multiplication, scalar multiplication, and the underlying field's
-multiplication operator.
+My intuition is that this definition introduces an attribute "$p$-local"
+for subgroups.
 </p>
-</div>
-</div>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> p <span class="org-mizar-normal">be</span> prime Nat;
+  <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> finite Group <span class="org-mizar-normal">such</span> <span class="org-mizar-normal">that</span> p divides card G;
+  <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Subgroup <span class="org-mizar-normal">of</span> G;
+  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> p-local <span class="org-mizar-normal">means</span>
+  :Def:
+  <span class="org-mizar-formula">ex</span> P <span class="org-mizar-formula">being</span> non trivial p-group Subgroup <span class="org-mizar-normal">of</span> G
+  <span class="org-mizar-formula">st</span> the multMagma <span class="org-mizar-normal">of</span> IT = Normalizer P;
+<span class="org-mizar-block">end</span>;
+</pre>
 </div>
 
-<div id="outline-container-h-65352819-87b1-4936-85a2-cb312f24ec5b" class="outline-2">
-<h2 id="h-65352819-87b1-4936-85a2-cb312f24ec5b"><span class="section-number-2">3.</span> References</h2>
-<div class="outline-text-2" id="text-h-65352819-87b1-4936-85a2-cb312f24ec5b">
-<ul class="org-ul">
-<li><a href="http://wiki.c2.com/?LispRoadMap">Lisp Road Map</a>, C2 Wiki</li>
-<li>Steve Losh, <a href="https://stevelosh.com/blog/2018/08/a-road-to-common-lisp/">A Road to Common Lisp</a>. Blogpost August 27, 2018.</li>
-<li><a href="https://twobithistory.org/2018/10/14/lisp.html">How Lisp Became God's Own Programming Language</a>. Two-Bit History,
-published 14 October 2018</li>
-</ul>
+<p>
+Since subgroup equality is defined only for strict subgroups, we cannot
+say <code>IT = Normalizer P</code> without making <code>IT</code> a strict Subgroup of G. (The
+normalizer of a subgroup is defined to be a strict subgroup.) For this
+reason, we needed to check <code>the multMagma of IT = Normalizer P</code>.
+</p>
+
+<div class="definition" id="orgfebe8e8">
+<p>
+Let \(p\) be a prime number, \(G\) be a finite group, \(L\leq G\) be a subgroup.
+We say \(K\) <dfn>has Characteristic \(p\)</dfn> if
+\(C_{G}(O_{p}(L))\leq O_{p}(L)\).
+</p>
+
+</div>
+
+<p>
+This introduces a new predicate, <code>has_characteristic p</code> for a subgroup.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> p <span class="org-mizar-normal">be</span> prime Nat;
+  <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> Group;
+  <span class="org-mizar-skeleton">let</span> L <span class="org-mizar-normal">be</span> Subgroup <span class="org-mizar-normal">of</span> G;
+  <span class="org-mizar-normal">pred</span> L has_characteristic p <span class="org-mizar-normal">means</span>
+  :Def:
+  Centralizer (p-core L) <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> (p-core L);
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
+
+<div class="definition" id="org0016032">
+<p>
+Let \(p\) be a prime number, \(G\) be a finite group.
+We say \(G\) <dfn>has local Characteristic \(p\)</dfn> if
+if for all $p$-local subgroups \(L\) of \(G\) has characteristic \(p\).
+</p>
+
+</div>
+
+<p>
+(A special case when \(p = 2\), we just say that \(G\) has even
+Characteristic.)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> p <span class="org-mizar-normal">be</span> prime Nat;
+  <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> finite Group;
+  <span class="org-mizar-normal">pred</span> G has_local_characteristic p <span class="org-mizar-normal">means</span>
+  :Def:
+  <span class="org-mizar-formula">for</span> L <span class="org-mizar-formula">being</span> Subgroup <span class="org-mizar-normal">of</span> G <span class="org-mizar-formula">st</span> L <span class="org-mizar-normal">is</span> p-local <span class="org-mizar-formula">holds</span> L has_characteristic p;
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 12:04.</p>
+<p class="postamble">Last Updated 2022-02-20 Sun 09:44.</p>
 </div>
 </body>
 </html>

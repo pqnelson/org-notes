@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-20 Thu 18:33 -->
+<!-- 2022-04-09 Sat 11:07 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raspberry Pi</title>
@@ -354,7 +354,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="org58805d0">
+<pre class="example" id="org0c24317">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -365,7 +365,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="org9427374">
+<pre class="example" id="org5414d78">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -374,7 +374,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="orgfcf5df2">
+<pre class="example" id="org31dfb3b">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -447,7 +447,7 @@ error saying Emacs won't compile with <code>-ffinite-math-only</code>).
 <div id="outline-container-h-505fbdb9-12a4-46d8-9daf-46229887468f" class="outline-3">
 <h3 id="h-505fbdb9-12a4-46d8-9daf-46229887468f"><span class="section-number-3">4.1.</span> Attempting Configuration</h3>
 <div class="outline-text-3" id="text-h-505fbdb9-12a4-46d8-9daf-46229887468f">
-<pre class="example" id="orgcfe20f7">
+<pre class="example" id="orgbf10f3e">
 ~/src/emacs/$ git clean -dxf
 ~/src/emacs/$ ./autogen.sh
 ~/src/emacs/$ ./configure --with-m17n-flt --with-modules --with-json --with-threads --with-included-regex --with-compress-install CFLAGS="-Ofast -mtune=native -mcpu=native -marm"
@@ -755,7 +755,7 @@ command <code>/opt/vc/bin/vcgencmd measure_temp</code>. I've stuck this into a
 script:
 </p>
 
-<pre class="example" id="org398002d">
+<pre class="example" id="org1de2289">
 #!/bin/bash
 
 # ~/temperature.sh
@@ -773,7 +773,7 @@ I couldn't get Mizar working on my Raspberry Pi 2, but it works on
 Raspberry Pi 4B. Get the latest version <a href="http://mizar.uwb.edu.pl/system/index.html#download">here</a> for Linux (ARM).
 </p>
 
-<pre class="example" id="org2eaecd5">
+<pre class="example" id="org358ae08">
 ~/src/$ mkdir mizar
 ~/src/$ cd mizar
 ~/src/mizar/$ wget mizar-&lt;version&gt;-arm-linux.tar
@@ -788,7 +788,7 @@ Raspberry Pi 4B. Get the latest version <a href="http://mizar.uwb.edu.pl/system/
 When I try running, say, <code>mizf</code> on 32-bit mode, I get errors:
 </p>
 
-<pre class="example" id="org880b508">
+<pre class="example" id="orgdc1f8c0">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char.miz
 Illegal instruction
 Illegal instruction
@@ -799,7 +799,7 @@ alex@raspberrypi:~/src/mizar-playground $
 <p>
 In 64-bit mode, I get errors:
 </p>
-<pre class="example" id="org270be17">
+<pre class="example" id="org66c283d">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char
 /usr/local/bin/mizf: 8: makeenv: Exec format error
 /usr/local/bin/mizf: 13: errflag: Exec format error
@@ -816,7 +816,7 @@ To make Raspberry Pi 4 run in 64-bit mode, add the following line to the
 bottom of your <code>/boot/config.txt</code>:
 </p>
 
-<pre class="example" id="orgb91f0ec">
+<pre class="example" id="org872b258">
 arm_64bit=1
 </pre>
 
