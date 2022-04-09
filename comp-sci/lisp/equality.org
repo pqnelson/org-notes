@@ -1,0 +1,48 @@
+#+TITLE: Equality Testing
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-04-09T11:41:56-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday April  9, 2022 at 11:41AM
+
+There are 5 equality predicates in Common Lisp:
+
+1. [[http://www.lispworks.com/documentation/HyperSpec/Body/f_eq.htm][~eq~]] tests if its arguments point to the same ["identical"] object;
+   - there is no guarantee this works on numbers, e.g., ~(eq 3 3)~ may or
+     may not be true (it's implementation dependent)
+2. [[http://www.lispworks.com/documentation/HyperSpec/Body/f_eql.htm][~eql~]] is like ~eq~ but handles numbers (of the same type) being
+   equal, and characters being equal
+   - ~(eql x y)~ is true when ~(eq x y)~ is true
+   - ~(eql 3 3)~ is true
+   - ~(eql 3 3.0)~ is false because ~3~ and ~3.0~ belong to different types
+   - ~(eql #\A #\A)~ is true
+   - ~(eql #\a #\A)~ is false (because ~eql~ is case-sensitive)
+   - ~(eql "foo" "foo")~ may or may not be true, it depends on the implementation
+3. [[http://www.lispworks.com/documentation/HyperSpec/Body/f_equal.htm][~equal~]] tests if two objects represent "the same" value
+   - For numbers, ~equal~ defers to ~eql~; so ~(equal 3 3.0)~ is false
+     because it evaluates to ~(eql 3 3.0)~
+   - For lists, it checks if the ~car~ are ~equal~, then checks if the
+     ~cdr~ are ~equal~
+   - For arrays, it checks equality using ~eq~ (i.e., they are pointers
+     to the same object)
+   - For objects, it checks equality using ~eq~
+4. [[http://www.lispworks.com/documentation/HyperSpec/Body/f_equalp.htm][~equalp~]] an even more lenient version of ~equal~
+   - Two instances of the same class are tested by recursively checking
+     if each slot are ~equalp~ to each other; *Warning:* this may fail
+     to terminate!
+   - Arrays should be tested using ~equalp~
+5. [[http://www.lispworks.com/documentation/HyperSpec/Body/f_eq_sle.htm#EQ][~=~]] tests if numbers are equal, regardless of type
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-58159f72-2820-42e6-ba5e-a9334322d19a
+:END:
+
+- {{{book-title(Common Lisp: The Language)}}}, chapter 6, section 3
+- Eli Bendersky, [[https://eli.thegreenplace.net/2004/08/08/equality-in-lisp][Equality in Lisp]]. Blog post dated August 8, 2004.

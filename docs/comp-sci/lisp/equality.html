@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-09 Sat 11:10 -->
+<!-- 2022-04-09 Sat 12:05 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Climate Science</title>
+<title>Equality Testing</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -232,36 +232,71 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../index.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Climate Science</h1>
-<ul class="org-ul">
-<li><a href="effective-temperature.html">Effective Temperature of the Earth</a> computation</li>
-<li><a href="solar-constant.html">Solar Constant</a> computation</li>
-<li><a href="earth-albedo.html">Earth's Albedo</a></li>
-<li><a href="energy-balance.html">Energy Balance Models</a></li>
-<li><a href="models-hierarchy.html">Hierarchy of Models</a></li>
-<li><a href="testing-software.html">Testing Software Models of Climate Change</a></li>
+<h1 class="title">Equality Testing</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-58159f72-2820-42e6-ba5e-a9334322d19a">1. References</a></li>
 </ul>
+</div>
+</div>
+<p>
+There are 5 equality predicates in Common Lisp:
+</p>
 
-<div id="outline-container-h-c39bef00-78c4-4cbf-aff3-ad22310a53ab" class="outline-2">
-<h2 id="h-c39bef00-78c4-4cbf-aff3-ad22310a53ab">Stuff to think about</h2>
-<div class="outline-text-2" id="text-h-c39bef00-78c4-4cbf-aff3-ad22310a53ab">
+<ol class="org-ol">
+<li><a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_eq.htm"><code>eq</code></a> tests if its arguments point to the same ["identical"] object;
 <ul class="org-ul">
-<li>Reference to lookup:
-John C. Wyngaard,
-<cite class="book-title">Turbulence in the Atmosphere</cite>.
-Cambridge University Press, 2011</li>
-<li>Note that <a href="https://gmd.copernicus.org/articles/11/3781/2018/gmd-11-3781-2018.pdf">sympl (v. 0.4.0) and climt (v. 0.15.3) – towards a flexible frameworkfor building model hierarchies in Python</a> may be
-an interesting paper worth pondering further&#x2026;</li>
+<li>there is no guarantee this works on numbers, e.g., <code>(eq 3 3)</code> may or
+may not be true (it's implementation dependent)</li>
+</ul></li>
+<li><a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_eql.htm"><code>eql</code></a> is like <code>eq</code> but handles numbers (of the same type) being
+equal, and characters being equal
+<ul class="org-ul">
+<li><code>(eql x y)</code> is true when <code>(eq x y)</code> is true</li>
+<li><code>(eql 3 3)</code> is true</li>
+<li><code>(eql 3 3.0)</code> is false because <code>3</code> and <code>3.0</code> belong to different types</li>
+<li><code>(eql #\A #\A)</code> is true</li>
+<li><code>(eql #\a #\A)</code> is false (because <code>eql</code> is case-sensitive)</li>
+<li><code>(eql "foo" "foo")</code> may or may not be true, it depends on the implementation</li>
+</ul></li>
+<li><a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_equal.htm"><code>equal</code></a> tests if two objects represent "the same" value
+<ul class="org-ul">
+<li>For numbers, <code>equal</code> defers to <code>eql</code>; so <code>(equal 3 3.0)</code> is false
+because it evaluates to <code>(eql 3 3.0)</code></li>
+<li>For lists, it checks if the <code>car</code> are <code>equal</code>, then checks if the
+<code>cdr</code> are <code>equal</code></li>
+<li>For arrays, it checks equality using <code>eq</code> (i.e., they are pointers
+to the same object)</li>
+<li>For objects, it checks equality using <code>eq</code></li>
+</ul></li>
+<li><a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_equalp.htm"><code>equalp</code></a> an even more lenient version of <code>equal</code>
+<ul class="org-ul">
+<li>Two instances of the same class are tested by recursively checking
+if each slot are <code>equalp</code> to each other; <b>Warning:</b> this may fail
+to terminate!</li>
+<li>Arrays should be tested using <code>equalp</code></li>
+</ul></li>
+<li><a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_eq_sle.htm#EQ"><code>=</code></a> tests if numbers are equal, regardless of type</li>
+</ol>
+
+<div id="outline-container-h-58159f72-2820-42e6-ba5e-a9334322d19a" class="outline-2">
+<h2 id="h-58159f72-2820-42e6-ba5e-a9334322d19a"><span class="section-number-2">1.</span> References</h2>
+<div class="outline-text-2" id="text-h-58159f72-2820-42e6-ba5e-a9334322d19a">
+<ul class="org-ul">
+<li><cite class="book-title">Common Lisp: The Language</cite>, chapter 6, section 3</li>
+<li>Eli Bendersky, <a href="https://eli.thegreenplace.net/2004/08/08/equality-in-lisp">Equality in Lisp</a>. Blog post dated August 8, 2004.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-09 Sat 11:09.</p>
+<p class="postamble">Last Updated 2022-04-09 Sat 12:04.</p>
 </div>
 </body>
 </html>
