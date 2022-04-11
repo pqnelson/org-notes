@@ -94,8 +94,12 @@ are (neglecting the viscosity term)
 Here $g\approx 9.8 \mathrm{m}/\mathrm{s}^{2}$ is the Earth's
 gravitational force (treated as a constant).
 The quadratic terms on the left-hand side involving factors of $1/r$
-  are usually called {{{dfn(metric terms)}}}, and those involving factors of
-  $\Omega$ are {{{dfn(Coriolis terms)}}}.
+are usually called {{{dfn(metric terms)}}}, and those involving factors of
+$\Omega$ are {{{dfn(Coriolis terms)}}}. Empirically, the Earth's
+rotation is approximately
+\begin{equation}
+\Omega=7.2921150\times10^{-5}\,\mathrm{rad}\cdot\mathrm{s}^{-1}.
+\end{equation}
 #+end_theorem
 
 #+begin_remark
@@ -116,6 +120,13 @@ just partial derivatives with respect to time $\partial/\partial t$,
 then what are the solutions to /that/ system of PDEs?
 #+end_puzzle
 
+Presumably /one/ family of boundary conditions we could impose would use
+the fact that at "the top" of the atmosphere, we expect:
+- the [[file:solar-constant.org][Solar constant]] or [[file:effective-temperature.org][effective temperature]] of the Earth would be used
+  if we use the ideal gas Law,
+- the density of the atmosphere $\rho(R)=0$,
+- and so on.
+
 * Primitive Equations
 :PROPERTIES:
 :CUSTOM_ID: h-82a5d119-db84-4d64-8282-ff5c57d5e446
@@ -135,6 +146,7 @@ come as a package-deal (i.e., must be taken together or not at all):
    horizontal equations of motion, as well as terms $uw/r$ and $vw/r$
    since they are negligibly small.
 
+#+begin_theorem
 Taken altogether, the Navier-Stokes equations --- with $u$ being the
 atmospheric fluid's velocity North-wards, $v$ is the East-wards
 component, and $w$ is the altitude "outward" component --- simplifies to:
@@ -159,6 +171,7 @@ In this approximation, the material derivative is
   \frac{u}{a\cos(\phi)}\frac{\partial}{\partial\lambda} +
   \frac{v}{a}\frac{\partial}{\partial\phi} + w\frac{\partial}{\partial z}.
 \end{equation}
+#+end_theorem
 
 #+begin_remark
 We have 3 first-order partial differential equations in 5 unknowns (the
@@ -180,6 +193,29 @@ Is there an exact solution to the primitive equations? It seems like, if
 we work in the Lagrange description, there should be a unique solution
 we could find fairly easily?
 #+end_puzzle
+
+#+begin_theorem
+The mass conservation equation for a shallow atmosphere becomes
+\begin{equation}
+  \frac{\partial\rho}{\partial t}
+  + \frac{u}{a\cos(\phi)}\frac{\partial\rho}{\partial\lambda}
+  + \frac{v}{a}\frac{\partial\rho}{\partial\phi}
+  + w\frac{\partial\rho}{\partial z}
+  + \rho\left(\frac{1}{a\cos(\phi)}\frac{\partial u}{\partial\lambda}
+              + \frac{1}{a\cos(\phi)}\frac{\partial(v\cos(\phi))}{\partial\phi}
+              + \frac{\partial w}{\partial z}
+       \right)
+  = 0
+\end{equation}
+or equivalently
+\begin{equation}
+  \frac{\partial\rho}{\partial t}
+  + \frac{1}{a\cos(\phi)}\frac{\partial(u\rho)}{\partial\lambda}
+  + \frac{1}{a\cos(\phi)}\frac{\partial(v\rho\cos(\phi))}{\partial\phi}
+  + \frac{\partial(w\rho)}{\partial z}
+  = 0.
+\end{equation}
+#+end_theorem
 
 #+begin_puzzle
 What is the rigorous "limiting process" relating the solutions of the
