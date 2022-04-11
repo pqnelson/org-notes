@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-09 Sat 11:08 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Compiling HOL Light</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +189,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,39 +206,17 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Compiling HOL Light</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-c4e6f09e-d81f-4265-a808-d19c8167a1ea">1. OPAM</a></li>
 <li><a href="#h-6467e267-dbcd-494e-b403-9446923a786e">2. HOL Light</a></li>
@@ -264,7 +241,7 @@ On a Raspberry Pi, simply install OCaml using <code>sudo apt install ocaml</code
 Then clone and build OPAM:
 </p>
 
-<pre class="example" id="orge5082e3">
+<pre class="example" id="org0fdb6ab">
 alex@rpi:~/$ cd src
 alex@rpi:~/src/$ git clone https://github.com/ocaml/opam
 ...
@@ -279,7 +256,7 @@ alex@rpi:~/src/OPAM/$ sudo make install
 Before we finish, we need to also install bubblewrap&#x2026;because&#x2026;reasons&#x2026;
 </p>
 
-<pre class="example" id="org7b7bea3">
+<pre class="example" id="orgaf0aced">
 alex@rpi:~/src/OPAM/$ sudo apt install bubblewrap
 alex@rpi:~/src/OPAM/$ cd ~
 alex@rpi:~/$ opam init
@@ -304,14 +281,14 @@ alex@rpi:~/$ opam init
   You can always re-run this setup with 'opam init' later.
 
 Do you want opam to modify ~/.bash_profile? [N/y/f]
-(default is 'no', use 'f' to choose a different file) y
+(default is 'no', use 'f' to choose a different file) y                                                           
 
 User configuration:
   Updating ~/.bash_profile.
 [NOTE] Make sure that ~/.bash_profile is well sourced in your ~/.bashrc.
 
 
-&lt;&gt;&lt;&gt; Creating initial switch 'default' (invariant ["ocaml" {&gt;= "4.05.0"}] - initially with ocaml-system)
+&lt;&gt;&lt;&gt; Creating initial switch 'default' (invariant ["ocaml" {&gt;= "4.05.0"}] - initially with ocaml-system) 
 
 &lt;&gt;&lt;&gt; Installing new switch packages &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
 Switch invariant: ["ocaml" {&gt;= "4.05.0"}]
@@ -339,7 +316,7 @@ Now we build the infrastructure necessary to play with HOL Light (this
 will take about an hour in the following state):
 </p>
 
-<pre class="example" id="org502dd97">
+<pre class="example" id="orgcf52b7f">
 alex@raspberrypi:~$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Installing new switch packages &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -369,7 +346,7 @@ Processing 13/18: [ocaml-base-compiler: make world]
 Clone HOL Light from github:
 </p>
 
-<pre class="example" id="org4b3d3fc">
+<pre class="example" id="org56f7623">
 alex@box:~/src/$ git clone https://github.com/jrh13/hol-light
 Cloning into 'hol-light'...
 remote: Enumerating objects: 8310, done.
@@ -380,7 +357,7 @@ Receiving objects: 100% (8310/8310), 27.50 MiB | 5.38 MiB/s, done.
 Resolving deltas: 100% (5585/5585), done.
 
 alex@box:~/src/$ cd hol-light
-alex@box:~/src/hol-light/$
+alex@box:~/src/hol-light/$ 
 </pre>
 
 <p>
@@ -393,7 +370,7 @@ The trippy thing is we need to use OPAM to use the "correct" version of
 OCaml (c.f., <a href="https://github.com/jrh13/hol-light/issues/64#issuecomment-894131933">Github Issue</a>), the following bash commands should work:
 </p>
 
-<pre class="example" id="orgcf1f425">
+<pre class="example" id="orgb0ae1f2">
 opam switch create 4.05.0
 eval $(opam env)
 opam pin add camlp5 7.08
@@ -413,7 +390,7 @@ on <code>Processing 7/12: [ocaml-base-compiler ...]</code>, but that's because
 it's building the OCaml compiler from scratch; be patient!):
 </p>
 
-<pre class="example" id="org2c3733c">
+<pre class="example" id="org7fcc0fa">
 alex@box:~/src/hol-light/$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Gathering sources &gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -459,7 +436,7 @@ Do you want to continue? [Y/n] y
 ∗ installed num.0
 Done.
 
-alex@box:~/src/hol-light/$
+alex@box:~/src/hol-light/$ 
 </pre>
 
 <p>
@@ -467,7 +444,7 @@ Now, the next step is to run <code>make</code>.
 <b>It is crucial to run <code>make</code> before loading hol into an OCaml repl.</b>
 </p>
 
-<pre class="example" id="orgdbace22">
+<pre class="example" id="org386a2f5">
 alex@box:~/src/hol-light/$ make
 ...
 </pre>
@@ -478,14 +455,14 @@ include camlp5, and then tell it to <code>#use "hol.ml";;</code> (yes, both
 semicolons are necessary).
 </p>
 
-<pre class="example" id="orgad0ca26">
+<pre class="example" id="orgc5e6949">
 alex@box:~/src/hol-light/$ ocaml -I `camlp5 -where` camlp5o.cma
 
         OCaml version 4.05.0
 
 	Camlp5 parsing version 7.08
 
-#
+# 
 </pre>
 
 <p>
@@ -499,7 +476,7 @@ error, which is just confusing and cryptic.)
 Now we can simply <code>#use "hol.ml";;</code> to get:
 </p>
 
-<pre class="example" id="org408d8c5">
+<pre class="example" id="orge6f4fd3">
 # #use "hol.ml";;
 ...
 ...
@@ -512,7 +489,7 @@ File "help.ml" already loaded
 - : unit = ()
 	Camlp5 parsing version 7.08
 
-#
+# 
 </pre>
 
 <p>
@@ -528,7 +505,7 @@ used just by starting HOL Light in this manner.</p>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-20 Thu 18:31.</p>
+<p class="postamble">Last Updated 2022-01-20 Thu 12:01.</p>
 </div>
 </body>
 </html>

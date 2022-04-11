@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:10 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Fluid Dynamics</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +189,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +206,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,19 +226,18 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Fluid Dynamics</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-4bb19901-02ed-4ac2-9e2b-c096dcfc93dc">1. Quickstart, Ideal Fluids</a>
 <ul>
@@ -378,12 +354,12 @@ are made in a section, then reconstructing the proof.
 </p>
 
 <div id="outline-container-h-4bb19901-02ed-4ac2-9e2b-c096dcfc93dc" class="outline-2">
-<h2 id="h-4bb19901-02ed-4ac2-9e2b-c096dcfc93dc"><span class="section-number-2">1</span> Quickstart, Ideal Fluids</h2>
+<h2 id="h-4bb19901-02ed-4ac2-9e2b-c096dcfc93dc"><span class="section-number-2">1.</span> Quickstart, Ideal Fluids</h2>
 <div class="outline-text-2" id="text-h-4bb19901-02ed-4ac2-9e2b-c096dcfc93dc">
 </div>
 
 <div id="outline-container-h-2680c590-c6ea-4a5d-a37f-195fbb6511db" class="outline-3">
-<h3 id="h-2680c590-c6ea-4a5d-a37f-195fbb6511db"><span class="section-number-3">1.1</span> Basic Quantities</h3>
+<h3 id="h-2680c590-c6ea-4a5d-a37f-195fbb6511db"><span class="section-number-3">1.1.</span> Basic Quantities</h3>
 <div class="outline-text-3" id="text-h-2680c590-c6ea-4a5d-a37f-195fbb6511db">
 <p>
 Basically, the idea is to model "infinitesimal parcels" of a fluid,
@@ -405,7 +381,7 @@ We think of the velocity vector as a vector field parametrized by
 time.
 </p>
 
-<div class="remark" id="orgc78307c">
+<div class="remark" id="org5de9d7b">
 <p>
 Landau and Lifshitz note the pressure and density, plus the
 equations of state, determine the thermodynamics properties of the
@@ -416,7 +392,7 @@ fluid (L&amp;L, vol.6, &sect;1).
 </div>
 
 <div id="outline-container-h-9be05b4d-b512-4b2c-9e12-e6f2dc6d52b9" class="outline-4">
-<h4 id="h-9be05b4d-b512-4b2c-9e12-e6f2dc6d52b9"><span class="section-number-4">1.1.1</span> Material Derivative</h4>
+<h4 id="h-9be05b4d-b512-4b2c-9e12-e6f2dc6d52b9"><span class="section-number-4">1.1.1.</span> Material Derivative</h4>
 <div class="outline-text-4" id="text-h-9be05b4d-b512-4b2c-9e12-e6f2dc6d52b9">
 <p>
 A recurring operator we'll use is the <dfn>Material Derivative</dfn>
@@ -432,7 +408,7 @@ We can think of it as translating a time derivative in the frame of a
 given fluid packet to the lab frame.
 </p>
 
-<div class="exercise" id="org10dd85c">
+<div class="exercise" id="org65f514c">
 <p>
 Prove that the material derivative is linear
 </p>
@@ -443,7 +419,7 @@ Prove that the material derivative is linear
 
 </div>
 
-<div class="exercise" id="org2ebadd2">
+<div class="exercise" id="org59b2f29">
 <p>
 Prove that the material derivative obeys the Leibniz rule
 </p>
@@ -454,7 +430,7 @@ Prove that the material derivative obeys the Leibniz rule
 
 </div>
 
-<div class="exercise" id="org1ab3d16">
+<div class="exercise" id="orgdde9dc8">
 <p>
 Prove that the material derivative obeys the chain rule
 </p>
@@ -472,7 +448,7 @@ What is \(f'\circ g\) in this case?
 </div>
 
 <div id="outline-container-h-d8004f5b-bb7a-4b7f-9c2e-904749c51c58" class="outline-4">
-<h4 id="h-d8004f5b-bb7a-4b7f-9c2e-904749c51c58"><span class="section-number-4">1.1.2</span> Continuity Equation</h4>
+<h4 id="h-d8004f5b-bb7a-4b7f-9c2e-904749c51c58"><span class="section-number-4">1.1.2.</span> Continuity Equation</h4>
 <div class="outline-text-4" id="text-h-d8004f5b-bb7a-4b7f-9c2e-904749c51c58">
 <p>
 The conservation of mass induces the <dfn>Continuity Equation</dfn>:
@@ -486,7 +462,7 @@ The conservation of mass induces the <dfn>Continuity Equation</dfn>:
 </div>
 
 <div id="outline-container-h-308304dd-9812-439a-8ccf-22ab7c88b12b" class="outline-3">
-<h3 id="h-308304dd-9812-439a-8ccf-22ab7c88b12b"><span class="section-number-3">1.2</span> Euler's equations</h3>
+<h3 id="h-308304dd-9812-439a-8ccf-22ab7c88b12b"><span class="section-number-3">1.2.</span> Euler's equations</h3>
 <div class="outline-text-3" id="text-h-308304dd-9812-439a-8ccf-22ab7c88b12b">
 <p>
 From Newton's second law, we have \(\rho \,\D\vec{v}/\D t = -\vec\nabla p\).
@@ -502,7 +478,7 @@ We also add the force of gravity \(\rho \vec{g}\) to get
  = \frac{-1}{\rho}\vec\nabla p + \vec{g}.
 \end{equation}
 
-<div class="remark" id="org504c3ed">
+<div class="remark" id="org6315ec6">
 <p>
 We often we will write Euler's equations as
 </p>
@@ -516,7 +492,7 @@ We often we will write Euler's equations as
 </div>
 
 <div id="outline-container-h-81b5bfc6-53ac-4500-b672-bf1458fae3f6" class="outline-4">
-<h4 id="h-81b5bfc6-53ac-4500-b672-bf1458fae3f6"><span class="section-number-4">1.2.1</span> Adiabatic Fluids</h4>
+<h4 id="h-81b5bfc6-53ac-4500-b672-bf1458fae3f6"><span class="section-number-4">1.2.1.</span> Adiabatic Fluids</h4>
 <div class="outline-text-4" id="text-h-81b5bfc6-53ac-4500-b672-bf1458fae3f6">
 <p>
 Note we didn't consider viscosity in deriving this equation, we
@@ -527,7 +503,7 @@ heat exchange between different parts of the fluid, nor between the
 fluid and its environment.
 </p>
 
-<div class="corollary" id="orgd2f69ae">
+<div class="corollary" id="org31cd990">
 <p>
 This absence of heat exchange between components of the fluid (and
 between the fluid and its environment) implies the motion is
@@ -558,7 +534,7 @@ continuity" for entropy in terms of it:
 \partial_{t}(\rho s) + \vec{\nabla}\cdot(\rho s\vec{v}) = 0.
 \end{equation}
 
-<div class="remark" id="org2d5b9e2">
+<div class="remark" id="org7f5f039">
 <p>
 Edwige Godlewski and Pierre-Arnaud Raviart's <cite class="book-title">Numerical Approximation of Hyperbolic Systems of Conservation Laws</cite>
 (first ed) note (either &sect;2 or &sect;3 of the introductory chapter) that we
@@ -571,7 +547,7 @@ solutions" to the differential equations describing the fluid's motion.
 </div>
 
 <div id="outline-container-h-3d78d0cc-4314-41d0-86cf-bbfae09c920e" class="outline-4">
-<h4 id="h-3d78d0cc-4314-41d0-86cf-bbfae09c920e"><span class="section-number-4">1.2.2</span> Isentropic Fluids</h4>
+<h4 id="h-3d78d0cc-4314-41d0-86cf-bbfae09c920e"><span class="section-number-4">1.2.2.</span> Isentropic Fluids</h4>
 <div class="outline-text-4" id="text-h-3d78d0cc-4314-41d0-86cf-bbfae09c920e">
 <p>
 If, "as usually happens", the entropy is constant throughout the
@@ -589,7 +565,7 @@ and L&amp;L usually does so. In this case, such a motion is said to be
 <dfn>Isentropic</dfn>.
 </p>
 
-<div class="puzzle" id="org5ea97f4">
+<div class="puzzle" id="orga7c22ed">
 <p>
 When will entropy <b>not</b> be constant throughout the fluid at some moment
 in time?
@@ -597,7 +573,7 @@ in time?
 
 </div>
 
-<div class="theorem" id="org2fbd11f">
+<div class="theorem" id="org7a46116">
 <p>
 The Euler equations of motion for an isentropic fluid may be
 rewritten as
@@ -613,7 +589,7 @@ which involves only the velocity.
 
 </div>
 
-<div class="remark" id="org7c5efe2">
+<div class="remark" id="org3bc06b2">
 <p>
 This derivation of Euler's equations, and isentropic stuff,
 comes from L&amp;L, vol.6, &sect;2.
@@ -621,7 +597,7 @@ comes from L&amp;L, vol.6, &sect;2.
 
 </div>
 
-<div class="remark" id="org717b314">
+<div class="remark" id="org54523fe">
 <p>
 Isentropic flow occurs when the change in flow variables is small and
 gradual. The ideal fluid is an example of this. (C.f., <a href="https://www.grc.nasa.gov/www/BGH/isentrop.html">NASA</a>)
@@ -632,7 +608,7 @@ gradual. The ideal fluid is an example of this. (C.f., <a href="https://www.grc.
 </div>
 
 <div id="outline-container-h-b2e77a92-2fcf-4c98-86b2-c1987cdd9fb7" class="outline-4">
-<h4 id="h-b2e77a92-2fcf-4c98-86b2-c1987cdd9fb7"><span class="section-number-4">1.2.3</span> Boundary Conditions for Euler's Equation</h4>
+<h4 id="h-b2e77a92-2fcf-4c98-86b2-c1987cdd9fb7"><span class="section-number-4">1.2.3.</span> Boundary Conditions for Euler's Equation</h4>
 <div class="outline-text-4" id="text-h-b2e77a92-2fcf-4c98-86b2-c1987cdd9fb7">
 <p>
 This requires some boundary condition. For an ideal fluid, this
@@ -656,7 +632,7 @@ The next steps are to study this equation when the fluid is at rest
 and when \(\partial_{t}\vec{v}=0\) is constant (Bernoulli's law).
 </p>
 
-<div class="remark" id="orgc05d89f">
+<div class="remark" id="orgb75f3b9">
 <p>
 See also later discussions of boundary conditions <a href="#h-ea1b79a9-b3cb-465a-ac40-b5c897c0fe8e">(&sect;10)</a>.
 </p>
@@ -667,7 +643,7 @@ See also later discussions of boundary conditions <a href="#h-ea1b79a9-b3cb-465a
 </div>
 
 <div id="outline-container-h-d23ea602-23b9-4658-ba71-4be314ea8137" class="outline-3">
-<h3 id="h-d23ea602-23b9-4658-ba71-4be314ea8137"><span class="section-number-3">1.3</span> Hydrostatics</h3>
+<h3 id="h-d23ea602-23b9-4658-ba71-4be314ea8137"><span class="section-number-3">1.3.</span> Hydrostatics</h3>
 <div class="outline-text-3" id="text-h-d23ea602-23b9-4658-ba71-4be314ea8137">
 <p>
 Consider a fluid at rest in a uniform gravitational field. Then
@@ -682,7 +658,7 @@ Euler's equation takes the form
 This equation describes the mechanical equilibrium of the fluid.
 </p>
 
-<div class="definition" id="org7008786">
+<div class="definition" id="orge1d949c">
 <p>
 We say a fluid is in <dfn>Mechanical Equilibrium</dfn> if it
 exhibits no macroscopic motion. (L&amp;L, vol.6, &sect;4 &#x2014; note: L&amp;L never
@@ -691,7 +667,7 @@ actually define this term throughout their 10-volume series)
 
 </div>
 
-<div class="remark" id="orgc393c56">
+<div class="remark" id="org1ebb276">
 <p>
 If there are no external forces, then this equation becomes
 \(\vec{\nabla}p=0\) or equivalently \(p = \mbox{constant}\). The
@@ -702,7 +678,7 @@ pressure is the same everywhere in the fluid.
 </div>
 
 <div id="outline-container-h-fa416a33-5128-4d95-9657-0ce9b8bf9fd8" class="outline-4">
-<h4 id="h-fa416a33-5128-4d95-9657-0ce9b8bf9fd8"><span class="section-number-4">1.3.1</span> Case: Constant Density</h4>
+<h4 id="h-fa416a33-5128-4d95-9657-0ce9b8bf9fd8"><span class="section-number-4">1.3.1.</span> Case: Constant Density</h4>
 <div class="outline-text-4" id="text-h-fa416a33-5128-4d95-9657-0ce9b8bf9fd8">
 <p>
 When we have \(\rho\) be constant throughout the fluid, we can solve
@@ -719,7 +695,7 @@ and
 </p>
 
 \begin{equation}
-\partial_{z} = -\rho g.
+\partial_{z}p = -\rho g.
 \end{equation}
 
 <p>
@@ -750,7 +726,7 @@ is constant.
 </div>
 
 <div id="outline-container-h-8a037418-389b-4119-8fbe-c174d9048ec3" class="outline-4">
-<h4 id="h-8a037418-389b-4119-8fbe-c174d9048ec3"><span class="section-number-4">1.3.2</span> Nonconstant Densities in Thermal Equilibrium</h4>
+<h4 id="h-8a037418-389b-4119-8fbe-c174d9048ec3"><span class="section-number-4">1.3.2.</span> Nonconstant Densities in Thermal Equilibrium</h4>
 <div class="outline-text-4" id="text-h-8a037418-389b-4119-8fbe-c174d9048ec3">
 <p>
 When our fluid is a gas, or we have large amounts of our liquid,
@@ -818,7 +794,7 @@ or equivalently
 \Phi + gz = \mbox{constant}.
 \end{equation}
 
-<div class="remark" id="org4dda589">
+<div class="remark" id="org5d56a9a">
 <p>
 Does this make sense? Well, \(\Phi + gz = \mbox{constant}\) is known
 to be the condition for thermodynamic equilirium of a system in an
@@ -833,7 +809,7 @@ that's good.
 </div>
 
 <div id="outline-container-h-421673a2-2ecb-4253-a137-56e870368735" class="outline-4">
-<h4 id="h-421673a2-2ecb-4253-a137-56e870368735"><span class="section-number-4">1.3.3</span> Consequence of Hydrostatic Condition: Mechanical Equilibrium Criteria</h4>
+<h4 id="h-421673a2-2ecb-4253-a137-56e870368735"><span class="section-number-4">1.3.3.</span> Consequence of Hydrostatic Condition: Mechanical Equilibrium Criteria</h4>
 <div class="outline-text-4" id="text-h-421673a2-2ecb-4253-a137-56e870368735">
 <p>
 Particularly useful for me, when considering a fluid like the
@@ -868,7 +844,7 @@ impossible. (Thus this fact is useful in contrapositive form, too.)
 </div>
 
 <div id="outline-container-h-e113ec1f-2f85-4f23-9d5b-192afb8e19e6" class="outline-4">
-<h4 id="h-e113ec1f-2f85-4f23-9d5b-192afb8e19e6"><span class="section-number-4">1.3.4</span> For a large mass of self-gravitating Fluid</h4>
+<h4 id="h-e113ec1f-2f85-4f23-9d5b-192afb8e19e6"><span class="section-number-4">1.3.4.</span> For a large mass of self-gravitating Fluid</h4>
 <div class="outline-text-4" id="text-h-e113ec1f-2f85-4f23-9d5b-192afb8e19e6">
 <p>
 When we have a large mass of fluid, say a star, whose separate
@@ -926,11 +902,11 @@ Again, this fails to hold for a rotating body (like the Earth).
 </div>
 
 <div id="outline-container-h-0b6c9531-1af9-4148-bea9-eff3f018d078" class="outline-3">
-<h3 id="h-0b6c9531-1af9-4148-bea9-eff3f018d078"><span class="section-number-3">1.4</span> On the "Absence of Convection" Condition</h3>
+<h3 id="h-0b6c9531-1af9-4148-bea9-eff3f018d078"><span class="section-number-3">1.4.</span> On the "Absence of Convection" Condition</h3>
 <div class="outline-text-3" id="text-h-0b6c9531-1af9-4148-bea9-eff3f018d078">
 <p>
 We've concluded from our discussion of hydrostatics that a fluid
-can be in <a href="#org7008786">mechanical equilibrium</a> (i.e., exhibit no macroscopic motion)
+can be in <a href="#orge1d949c">mechanical equilibrium</a> (i.e., exhibit no macroscopic motion)
 without being in thermodynamic equilibrium. The hydrostatic
 equation can be satisfied even if the temperature is not constant
 throughout the fluid.
@@ -953,14 +929,14 @@ of convection".
 </div>
 
 <div id="outline-container-h-f91663d5-bb56-4b55-9011-65735f4f9c75" class="outline-3">
-<h3 id="h-f91663d5-bb56-4b55-9011-65735f4f9c75"><span class="section-number-3">1.5</span> Bernoulli's Equation</h3>
+<h3 id="h-f91663d5-bb56-4b55-9011-65735f4f9c75"><span class="section-number-3">1.5.</span> Bernoulli's Equation</h3>
 <div class="outline-text-3" id="text-h-f91663d5-bb56-4b55-9011-65735f4f9c75">
 </div>
 
 <div id="outline-container-h-43e69ae5-52f4-4782-8841-1dc1474fe653" class="outline-4">
-<h4 id="h-43e69ae5-52f4-4782-8841-1dc1474fe653"><span class="section-number-4">1.5.1</span> Steady Flows</h4>
+<h4 id="h-43e69ae5-52f4-4782-8841-1dc1474fe653"><span class="section-number-4">1.5.1.</span> Steady Flows</h4>
 <div class="outline-text-4" id="text-h-43e69ae5-52f4-4782-8841-1dc1474fe653">
-<div class="definition" id="org99dd7be">
+<div class="definition" id="org6a82be5">
 <p>
 By <dfn>Steady Flow</dfn>, we mean one in which the velocity is
 constant in time at any point occupied in the fluid. I.e.,
@@ -970,7 +946,7 @@ constant in time at any point occupied in the fluid. I.e.,
 </div>
 
 <p>
-In a steady flow, the <a href="#org2fbd11f">isentropic Euler equations</a> becomes
+In a steady flow, the <a href="#org7a46116">isentropic Euler equations</a> becomes
 </p>
 
 \begin{equation}
@@ -980,7 +956,7 @@ In a steady flow, the <a href="#org2fbd11f">isentropic Euler equations</a> becom
 </div>
 
 <div id="outline-container-h-a762e348-8739-4b6a-8cc7-a61385076cf1" class="outline-4">
-<h4 id="h-a762e348-8739-4b6a-8cc7-a61385076cf1"><span class="section-number-4">1.5.2</span> Streamlines</h4>
+<h4 id="h-a762e348-8739-4b6a-8cc7-a61385076cf1"><span class="section-number-4">1.5.2.</span> Streamlines</h4>
 <div class="outline-text-4" id="text-h-a762e348-8739-4b6a-8cc7-a61385076cf1">
 <p>
 Streamlines are lines such that the tangent to a streamline at any
@@ -992,7 +968,7 @@ determined by the system of differential equations
 \frac{\D x}{v_{x}} = \frac{\D y}{v_{y}} = \frac{\D z}{v_{z}}.
 \end{equation}
 
-<div class="remark" id="org4a3af97">
+<div class="remark" id="org0c8a225">
 <p>
 This can be phrased differently, as the integral curve of the velocity
 vector fields, i.e., as
@@ -1031,7 +1007,7 @@ concept?
 </div>
 
 <div id="outline-container-h-dee39312-83c9-4330-9f38-113d1a5ea4af" class="outline-4">
-<h4 id="h-dee39312-83c9-4330-9f38-113d1a5ea4af"><span class="section-number-4">1.5.3</span> Bernoulli's Equation Derivation</h4>
+<h4 id="h-dee39312-83c9-4330-9f38-113d1a5ea4af"><span class="section-number-4">1.5.3.</span> Bernoulli's Equation Derivation</h4>
 <div class="outline-text-4" id="text-h-dee39312-83c9-4330-9f38-113d1a5ea4af">
 <p>
 Taking the equation for steady flows, then forming the scalar
@@ -1078,7 +1054,7 @@ different streamlines.
 </div>
 
 <div id="outline-container-h-3d9fcefc-9350-4212-8d57-82ec8ecde748" class="outline-4">
-<h4 id="h-3d9fcefc-9350-4212-8d57-82ec8ecde748"><span class="section-number-4">1.5.4</span> In a Gravitational Field</h4>
+<h4 id="h-3d9fcefc-9350-4212-8d57-82ec8ecde748"><span class="section-number-4">1.5.4.</span> In a Gravitational Field</h4>
 <div class="outline-text-4" id="text-h-3d9fcefc-9350-4212-8d57-82ec8ecde748">
 <p>
 So, if our fluid flows in a gravitational field, the acceleration
@@ -1118,12 +1094,12 @@ Hence Bernoulli's equation states that along a streamline we have
 </div>
 
 <div id="outline-container-h-91c79dfc-92e9-4a46-b4e5-0b3d3d6b5675" class="outline-3">
-<h3 id="h-91c79dfc-92e9-4a46-b4e5-0b3d3d6b5675"><span class="section-number-3">1.6</span> Energy Flux</h3>
+<h3 id="h-91c79dfc-92e9-4a46-b4e5-0b3d3d6b5675"><span class="section-number-3">1.6.</span> Energy Flux</h3>
 <div class="outline-text-3" id="text-h-91c79dfc-92e9-4a46-b4e5-0b3d3d6b5675">
 </div>
 
 <div id="outline-container-h-cb372104-e823-4ecc-9cd4-1525649bcbf6" class="outline-4">
-<h4 id="h-cb372104-e823-4ecc-9cd4-1525649bcbf6"><span class="section-number-4">1.6.1</span> Energy per unit volume</h4>
+<h4 id="h-cb372104-e823-4ecc-9cd4-1525649bcbf6"><span class="section-number-4">1.6.1.</span> Energy per unit volume</h4>
 <div class="outline-text-4" id="text-h-cb372104-e823-4ecc-9cd4-1525649bcbf6">
 <p>
 For our fluid, the energy per unit volume of fluid is
@@ -1139,9 +1115,9 @@ respect to time.
 </div>
 
 <div id="outline-container-h-129ff822-8040-4c0f-9c45-91bdf6fdef5c" class="outline-4">
-<h4 id="h-129ff822-8040-4c0f-9c45-91bdf6fdef5c"><span class="section-number-4">1.6.2</span> Conservation Equation</h4>
+<h4 id="h-129ff822-8040-4c0f-9c45-91bdf6fdef5c"><span class="section-number-4">1.6.2.</span> Conservation Equation</h4>
 <div class="outline-text-4" id="text-h-129ff822-8040-4c0f-9c45-91bdf6fdef5c">
-<div class="theorem" id="orgdaeb1d2">
+<div class="theorem" id="org5ba6e3f">
 <p>
 Assuming an adiabatic fluid, the conservation of energy implies
 </p>
@@ -1172,7 +1148,7 @@ The right-hand side can be rewritten to give the final result.
 </div>
 
 <div id="outline-container-h-c15b2ec7-1741-42e0-bfd7-23bff5bdee21" class="outline-5">
-<h5 id="h-c15b2ec7-1741-42e0-bfd7-23bff5bdee21"><span class="section-number-5">1.6.2.1</span> Change of Kinetic Energy with respect to Time</h5>
+<h5 id="h-c15b2ec7-1741-42e0-bfd7-23bff5bdee21"><span class="section-number-5">1.6.2.1.</span> Change of Kinetic Energy with respect to Time</h5>
 <div class="outline-text-5" id="text-h-c15b2ec7-1741-42e0-bfd7-23bff5bdee21">
 <p>
 To compute this quantity, we begin by considering the kinetic energy term
@@ -1226,7 +1202,7 @@ thus obtaining
 </div>
 
 <div id="outline-container-h-90051c4c-f92f-47d9-bfa9-a99d07b7ac33" class="outline-5">
-<h5 id="h-90051c4c-f92f-47d9-bfa9-a99d07b7ac33"><span class="section-number-5">1.6.2.2</span> Change of Internal Energy with respect to Time</h5>
+<h5 id="h-90051c4c-f92f-47d9-bfa9-a99d07b7ac33"><span class="section-number-5">1.6.2.2.</span> Change of Internal Energy with respect to Time</h5>
 <div class="outline-text-5" id="text-h-90051c4c-f92f-47d9-bfa9-a99d07b7ac33">
 <p>
 Now we compute \(\partial_{t}(\rho\varepsilon)\), we use the
@@ -1261,7 +1237,7 @@ Thus (using the general adiabatic equation of motion)
 </div>
 
 <div id="outline-container-h-33a8c5d1-4a69-4ac2-9ee1-b3009e615492" class="outline-4">
-<h4 id="h-33a8c5d1-4a69-4ac2-9ee1-b3009e615492"><span class="section-number-4">1.6.3</span> Meaning of the Conservation Equation</h4>
+<h4 id="h-33a8c5d1-4a69-4ac2-9ee1-b3009e615492"><span class="section-number-4">1.6.3.</span> Meaning of the Conservation Equation</h4>
 <div class="outline-text-4" id="text-h-33a8c5d1-4a69-4ac2-9ee1-b3009e615492">
 <p>
 We have an abstract equation we assert is correct through a long
@@ -1293,7 +1269,7 @@ through unit area perpendicular to the direction of the
 velocity. Nifty.</li>
 </ul>
 
-<div class="remark" id="orgeb75d24">
+<div class="remark" id="org142f8bd">
 <p>
 The expression \(\rho\vec{v}(w + v^{2}/2)\) shows any unit mass of
 fluid carries with it during its motion an amount of energy \(w+v^{2}/2\).
@@ -1321,7 +1297,7 @@ surface.
 </div>
 
 <div id="outline-container-h-9fd2fcc8-f97f-485b-831e-a11bc1c494e5" class="outline-3">
-<h3 id="h-9fd2fcc8-f97f-485b-831e-a11bc1c494e5"><span class="section-number-3">1.7</span> Momentum Flux</h3>
+<h3 id="h-9fd2fcc8-f97f-485b-831e-a11bc1c494e5"><span class="section-number-3">1.7.</span> Momentum Flux</h3>
 <div class="outline-text-3" id="text-h-9fd2fcc8-f97f-485b-831e-a11bc1c494e5">
 <p>
 (<b>Note:</b> the "correct" indices would be \(\Pi^{ik}\). And this is the
@@ -1330,7 +1306,7 @@ stress-energy tensor's spatial components, for a perfect fluid.)
 </div>
 
 <div id="outline-container-h-efc4782c-5383-49f7-9126-170419ddf6bd" class="outline-4">
-<h4 id="h-efc4782c-5383-49f7-9126-170419ddf6bd"><span class="section-number-4">1.7.1</span> Derivation of Momentum Flux Density Tensor</h4>
+<h4 id="h-efc4782c-5383-49f7-9126-170419ddf6bd"><span class="section-number-4">1.7.1.</span> Derivation of Momentum Flux Density Tensor</h4>
 <div class="outline-text-4" id="text-h-efc4782c-5383-49f7-9126-170419ddf6bd">
 <p>
 The momentum of unit volume is \(\rho\vec{v}\). What is its rate of
@@ -1417,7 +1393,7 @@ symmetric tensor.
 </div>
 
 <div id="outline-container-h-86a918b4-1ddb-447b-a38b-1e31200d473d" class="outline-5">
-<h5 id="h-86a918b4-1ddb-447b-a38b-1e31200d473d"><span class="section-number-5">1.7.1.1</span> Momentum Flux Density Tensor</h5>
+<h5 id="h-86a918b4-1ddb-447b-a38b-1e31200d473d"><span class="section-number-5">1.7.1.1.</span> Momentum Flux Density Tensor</h5>
 <div class="outline-text-5" id="text-h-86a918b4-1ddb-447b-a38b-1e31200d473d">
 <p>
 We define the tensor \(\Pi_{ik}\) as the <dfn>Momentum Flux Density Tensor</dfn>:
@@ -1431,7 +1407,7 @@ We define the tensor \(\Pi_{ik}\) as the <dfn>Momentum Flux Density Tensor</dfn>
 </div>
 
 <div id="outline-container-h-27bf06c0-7a90-448c-a1cd-b5b8db3a4b05" class="outline-4">
-<h4 id="h-27bf06c0-7a90-448c-a1cd-b5b8db3a4b05"><span class="section-number-4">1.7.2</span> Its interpretation</h4>
+<h4 id="h-27bf06c0-7a90-448c-a1cd-b5b8db3a4b05"><span class="section-number-4">1.7.2.</span> Its interpretation</h4>
 <div class="outline-text-4" id="text-h-27bf06c0-7a90-448c-a1cd-b5b8db3a4b05">
 <p>
 We grasp the meaning of the momentum flux density tensor by looking
@@ -1484,9 +1460,9 @@ or in vector form
 </div>
 
 <div id="outline-container-h-f1ffae11-a494-4ffc-b204-e5f632bcb061" class="outline-3">
-<h3 id="h-f1ffae11-a494-4ffc-b204-e5f632bcb061"><span class="section-number-3">1.8</span> Conservation of Circulation</h3>
+<h3 id="h-f1ffae11-a494-4ffc-b204-e5f632bcb061"><span class="section-number-3">1.8.</span> Conservation of Circulation</h3>
 <div class="outline-text-3" id="text-h-f1ffae11-a494-4ffc-b204-e5f632bcb061">
-<div class="definition" id="org89fe538">
+<div class="definition" id="orgb20166d">
 <p>
 The integral
 </p>
@@ -1502,7 +1478,7 @@ around that contour.
 
 </div>
 
-<div class="theorem" id="org715c4e7">
+<div class="theorem" id="orgf1f14a4">
 <p>
 In an ideal fluid, the velocity circulation round a closed "fluid"
 contour is constant in time.
@@ -1510,7 +1486,7 @@ contour is constant in time.
 
 </div>
 
-<div class="proof" id="orgfa69479">
+<div class="proof" id="orgc39a2dd">
 <p>
 We compute the time-derivative of the velocity circulation
 </p>
@@ -1539,7 +1515,7 @@ closed curve vanishes (i.e., is zero). This leaves us
 \end{equation}
 
 <p>
-Using <a href="#org504c3ed">Euler's equations</a>
+Using <a href="#org6315ec6">Euler's equations</a>
 </p>
 
 \begin{equation}
@@ -1578,7 +1554,7 @@ Thus we have Kelvin's theorem.
 
 </div>
 
-<div class="corollary" id="org8463343">
+<div class="corollary" id="org807a3a1">
 <p>
 We have from Kelvin's theorem,
 </p>
@@ -1589,7 +1565,7 @@ We have from Kelvin's theorem,
 
 </div>
 
-<div class="definition" id="org7e823d1">
+<div class="definition" id="org0917947">
 <p>
 We refer to the quantity \(\curl\vec{v}\) (the curl of the
 velocity vector field) as the <dfn>Vorticity</dfn> of the field.
@@ -1602,7 +1578,7 @@ Our intuition should think of the corollary to Kelvin's theorem as
 saying "The vorticity moves with the fluid".
 </p>
 
-<div class="exercise" id="orge1b9021">
+<div class="exercise" id="org4b5673a">
 <p>
 Show: in flows which are not isentropic, any moving particle carries
 with it a constant value of the product \(\rho^{-1}\vec{\nabla}s\cdot\curl\vec{v}\).
@@ -1614,7 +1590,7 @@ with it a constant value of the product \(\rho^{-1}\vec{\nabla}s\cdot\curl\vec{v
 </div>
 
 <div id="outline-container-h-cdc1b5b5-a2a3-4069-ba6e-431fc3b35ca9" class="outline-3">
-<h3 id="h-cdc1b5b5-a2a3-4069-ba6e-431fc3b35ca9"><span class="section-number-3">1.9</span> Potential Flow</h3>
+<h3 id="h-cdc1b5b5-a2a3-4069-ba6e-431fc3b35ca9"><span class="section-number-3">1.9.</span> Potential Flow</h3>
 <div class="outline-text-3" id="text-h-cdc1b5b5-a2a3-4069-ba6e-431fc3b35ca9">
 <p>
 <b>Case 1: Steady Flow.</b> Consider a steady flowing fluid.
@@ -1633,7 +1609,7 @@ trajectory of a fluid parcel. (This is because streamlines do not
 coincide with trajectories in non-steady flowing fluids.)
 </p>
 
-<div class="puzzle" id="orgaf80d0c">
+<div class="puzzle" id="org866f2cb">
 <p>
 Observe we are assuming we can always draw a closed contour around
 every point of a streamline. Is this a valid assumption to make?
@@ -1641,7 +1617,7 @@ every point of a streamline. Is this a valid assumption to make?
 
 </div>
 
-<div class="definition" id="org3f5d118">
+<div class="definition" id="org018fe18">
 <p>
 A flow for which \(\curl\vec{v}=0\) for every point in the
 flow is called a <dfn>Potential Flow</dfn> or
@@ -1653,7 +1629,7 @@ flow is called a <dfn>Potential Flow</dfn> or
 </div>
 
 <div id="outline-container-h-19fba6e3-045e-4e20-96a9-b5ea8af8053b" class="outline-4">
-<h4 id="h-19fba6e3-045e-4e20-96a9-b5ea8af8053b"><span class="section-number-4">1.9.1</span> Tenative Results for Non-Steady Flows</h4>
+<h4 id="h-19fba6e3-045e-4e20-96a9-b5ea8af8053b"><span class="section-number-4">1.9.1.</span> Tenative Results for Non-Steady Flows</h4>
 <div class="outline-text-4" id="text-h-19fba6e3-045e-4e20-96a9-b5ea8af8053b">
 <p>
 We may be excited and hope to base several arguments upon this
@@ -1680,14 +1656,14 @@ then there is potential flow at all subsequent instants. (In
 particular, any flow for which the fluid is initially at rest must
 be a potential flow.)</li>
 <li>This is in accordance with the fact if \(\curl\vec{v}=0\),
-then the <a href="#org2fbd11f">isentropic Euler equations</a> hold automatically.</li>
+then the <a href="#org7a46116">isentropic Euler equations</a> hold automatically.</li>
 </ul></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-h-3304e13d-177b-4819-81fa-d019453b3727" class="outline-4">
-<h4 id="h-3304e13d-177b-4819-81fa-d019453b3727"><span class="section-number-4">1.9.2</span> Limited Validity of these "Results"</h4>
+<h4 id="h-3304e13d-177b-4819-81fa-d019453b3727"><span class="section-number-4">1.9.2.</span> Limited Validity of these "Results"</h4>
 <div class="outline-text-4" id="text-h-3304e13d-177b-4819-81fa-d019453b3727">
 <p>
 Alas, these conclusions are of limited validity. Why? The proof given
@@ -1713,7 +1689,7 @@ nonzero.)
 </p>
 
 
-<div id="orge404b8a" class="figure">
+<div id="org3b617ca" class="figure">
 <p><img src="../../img/fluid-0.png" alt="fluid-0.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>An example of surfaces of discontinuity.</p>
@@ -1750,7 +1726,7 @@ body. Nifty.
 </div>
 
 <div id="outline-container-h-6ee8eea0-890f-4c6c-bab4-086a68d7dbf8" class="outline-4">
-<h4 id="h-6ee8eea0-890f-4c6c-bab4-086a68d7dbf8"><span class="section-number-4">1.9.3</span> Another Case of Potential Flow</h4>
+<h4 id="h-6ee8eea0-890f-4c6c-bab4-086a68d7dbf8"><span class="section-number-4">1.9.3.</span> Another Case of Potential Flow</h4>
 <div class="outline-text-4" id="text-h-6ee8eea0-890f-4c6c-bab4-086a68d7dbf8">
 <p>
 Another important case of potential flow occurs for small oscillations
@@ -1809,7 +1785,7 @@ flow, to first approximation.</li>
 </div>
 
 <div id="outline-container-h-16a92fc7-d1c1-440b-9f6f-4a9720a841d7" class="outline-4">
-<h4 id="h-16a92fc7-d1c1-440b-9f6f-4a9720a841d7"><span class="section-number-4">1.9.4</span> General Properties of Potential Flow</h4>
+<h4 id="h-16a92fc7-d1c1-440b-9f6f-4a9720a841d7"><span class="section-number-4">1.9.4.</span> General Properties of Potential Flow</h4>
 <div class="outline-text-4" id="text-h-16a92fc7-d1c1-440b-9f6f-4a9720a841d7">
 <ul class="org-ul">
 <li>Only isentropic flow can be potential flow (otherwise, for
@@ -1868,7 +1844,7 @@ potential flow.</li>
 </ul></li>
 </ul>
 
-<div class="remark" id="org4b95d01">
+<div class="remark" id="org69d95bf">
 <p>
 The velocity potential \(\phi\) was first introduced by Euler. Thank God
 Laplace invented his equation, or else we'd have yet another Euler's
@@ -1881,9 +1857,9 @@ equation.
 </div>
 
 <div id="outline-container-h-1df74f1c-c899-4563-903a-0222e0b5b8bf" class="outline-3">
-<h3 id="h-1df74f1c-c899-4563-903a-0222e0b5b8bf"><span class="section-number-3">1.10</span> Incompressible Fluids</h3>
+<h3 id="h-1df74f1c-c899-4563-903a-0222e0b5b8bf"><span class="section-number-3">1.10.</span> Incompressible Fluids</h3>
 <div class="outline-text-3" id="text-h-1df74f1c-c899-4563-903a-0222e0b5b8bf">
-<div class="definition" id="org96fd05f">
+<div class="definition" id="org35d6c8b">
 <p>
 Many cases, for the flow of liquids (and sometimes for gases), their
 density may be supposed invariable (i.e., constant throughout the volume
@@ -1920,7 +1896,7 @@ Now <i>that</i> is simple.
 </div>
 
 <div id="outline-container-h-61bb5314-dfbe-40af-9aa9-b581e5d0a565" class="outline-4">
-<h4 id="h-61bb5314-dfbe-40af-9aa9-b581e5d0a565"><span class="section-number-4">1.10.1</span> Equations of Motion</h4>
+<h4 id="h-61bb5314-dfbe-40af-9aa9-b581e5d0a565"><span class="section-number-4">1.10.1.</span> Equations of Motion</h4>
 <div class="outline-text-4" id="text-h-61bb5314-dfbe-40af-9aa9-b581e5d0a565">
 <p>
 The equations of motion take advantage of the identity
@@ -1946,7 +1922,7 @@ We don't need isentropy, we have the same equations of motion though.
 </div>
 
 <div id="outline-container-h-85d95f7d-ee09-4a35-9582-f8a964fbc8b1" class="outline-4">
-<h4 id="h-85d95f7d-ee09-4a35-9582-f8a964fbc8b1"><span class="section-number-4">1.10.2</span> Bernoulli's Equation</h4>
+<h4 id="h-85d95f7d-ee09-4a35-9582-f8a964fbc8b1"><span class="section-number-4">1.10.2.</span> Bernoulli's Equation</h4>
 <div class="outline-text-4" id="text-h-85d95f7d-ee09-4a35-9582-f8a964fbc8b1">
 <p>
 Bernoulli's equation simplifies for an incompressible fluid. We simply
@@ -1960,7 +1936,7 @@ replace the heat function \(w\) by \(p/\rho\):
 </div>
 
 <div id="outline-container-h-d44c6085-7d1c-4afc-bce4-23e1cb141eb8" class="outline-4">
-<h4 id="h-d44c6085-7d1c-4afc-bce4-23e1cb141eb8"><span class="section-number-4">1.10.3</span> Energy Flux</h4>
+<h4 id="h-d44c6085-7d1c-4afc-bce4-23e1cb141eb8"><span class="section-number-4">1.10.3.</span> Energy Flux</h4>
 <div class="outline-text-4" id="text-h-d44c6085-7d1c-4afc-bce4-23e1cb141eb8">
 <p>
 For an incompressible fluid, we also write \(p/\rho\) in place of \(w\) for
@@ -1974,7 +1950,7 @@ the energy flux as
 </div>
 
 <div id="outline-container-h-ea1b79a9-b3cb-465a-ac40-b5c897c0fe8e" class="outline-4">
-<h4 id="h-ea1b79a9-b3cb-465a-ac40-b5c897c0fe8e"><span class="section-number-4">1.10.4</span> Back to the Equations of motion</h4>
+<h4 id="h-ea1b79a9-b3cb-465a-ac40-b5c897c0fe8e"><span class="section-number-4">1.10.4.</span> Back to the Equations of motion</h4>
 <div class="outline-text-4" id="text-h-ea1b79a9-b3cb-465a-ac40-b5c897c0fe8e">
 <p>
 Did you notice that the equations of motion are satisfied if
@@ -2014,7 +1990,7 @@ is a given function of coordinates and time at the boundaries.
 </div>
 
 <div id="outline-container-h-efcbf264-c6fb-41a3-9aed-a7034abd1f44" class="outline-4">
-<h4 id="h-efcbf264-c6fb-41a3-9aed-a7034abd1f44"><span class="section-number-4">1.10.5</span> Irrotational ("Potential") Flow</h4>
+<h4 id="h-efcbf264-c6fb-41a3-9aed-a7034abd1f44"><span class="section-number-4">1.10.5.</span> Irrotational ("Potential") Flow</h4>
 <div class="outline-text-4" id="text-h-efcbf264-c6fb-41a3-9aed-a7034abd1f44">
 <p>
 For potential flow, the velocity is related to the pressure by results
@@ -2043,7 +2019,7 @@ the velocity of the moving body.
 </div>
 
 <div id="outline-container-h-f94d399e-b7bc-43b4-b248-148d540b5157" class="outline-4">
-<h4 id="h-f94d399e-b7bc-43b4-b248-148d540b5157"><span class="section-number-4">1.10.6</span> Stagnation Point</h4>
+<h4 id="h-f94d399e-b7bc-43b4-b248-148d540b5157"><span class="section-number-4">1.10.6.</span> Stagnation Point</h4>
 <div class="outline-text-4" id="text-h-f94d399e-b7bc-43b4-b248-148d540b5157">
 <p>
 Consider a fluid flowing past a body, as diagrammed in the next figure.
@@ -2062,7 +2038,7 @@ p_{\text{max}} = p_{0} + \frac{\rho u^{2}}{2}.
 \end{equation}
 
 
-<div id="org3156fe2" class="figure">
+<div id="org18bb878" class="figure">
 <p><img src="../../img/fluid-1.png" alt="fluid-1.png">
 </p>
 <p><span class="figure-number">Figure 2: </span>An example of a stagnation point \(S\).</p>
@@ -2071,9 +2047,9 @@ p_{\text{max}} = p_{0} + \frac{\rho u^{2}}{2}.
 </div>
 
 <div id="outline-container-h-6e70c7d3-4d07-4b3f-ae83-a13566fe504f" class="outline-4">
-<h4 id="h-6e70c7d3-4d07-4b3f-ae83-a13566fe504f"><span class="section-number-4">1.10.7</span> Planar Flow for Incompressible Fluids of Constant Density</h4>
+<h4 id="h-6e70c7d3-4d07-4b3f-ae83-a13566fe504f"><span class="section-number-4">1.10.7.</span> Planar Flow for Incompressible Fluids of Constant Density</h4>
 <div class="outline-text-4" id="text-h-6e70c7d3-4d07-4b3f-ae83-a13566fe504f">
-<div class="definition" id="orgce84bd8">
+<div class="definition" id="org7409f73">
 <p>
 If the velocity distribution in a moving fluid depends on only two
 coordinates (say, \(x\) and \(y\)), and if the velocity is everywhere
@@ -2109,7 +2085,7 @@ The equation of continuity is satisfied automatically, if we write the
 velocity in this manner (prove this to yourself).
 </p>
 
-<div class="remark" id="orgb645eb9">
+<div class="remark" id="orgb98d9e5">
 <p>
 The critical property for the existence of stream functions is that we
 are working with 2-dimensional problems, <b>not</b> that we're working in a
@@ -2161,7 +2137,7 @@ back in calculus?).
 </div>
 
 <div id="outline-container-h-d329223b-aa65-43fa-894e-2442e19b7c7a" class="outline-4">
-<h4 id="h-d329223b-aa65-43fa-894e-2442e19b7c7a"><span class="section-number-4">1.10.8</span> Mass Flux Across a curve</h4>
+<h4 id="h-d329223b-aa65-43fa-894e-2442e19b7c7a"><span class="section-number-4">1.10.8.</span> Mass Flux Across a curve</h4>
 <div class="outline-text-4" id="text-h-d329223b-aa65-43fa-894e-2442e19b7c7a">
 <p>
 If we draw a curve between two points \(A\) and \(B\) in the \(xy\)-plane,
@@ -2187,7 +2163,7 @@ Q = \rho(\psi_{B} - \psi_{A}).
 </div>
 
 <div id="outline-container-h-0ab44558-3f8e-4f8e-8774-f3c624d84bea" class="outline-4">
-<h4 id="h-0ab44558-3f8e-4f8e-8774-f3c624d84bea"><span class="section-number-4">1.10.9</span> Methods of Solving Two-Dimensional Irrotational Flow</h4>
+<h4 id="h-0ab44558-3f8e-4f8e-8774-f3c624d84bea"><span class="section-number-4">1.10.9.</span> Methods of Solving Two-Dimensional Irrotational Flow</h4>
 <div class="outline-text-4" id="text-h-0ab44558-3f8e-4f8e-8774-f3c624d84bea">
 <p>
 We can use complex analysis to solve a lot of problems of
@@ -2276,7 +2252,7 @@ all the residues are in this case purely imaginary.
 </div>
 
 <div id="outline-container-h-1a23bded-5ad1-44a4-80b1-b7f5cc880298" class="outline-4">
-<h4 id="h-1a23bded-5ad1-44a4-80b1-b7f5cc880298"><span class="section-number-4">1.10.10</span> &#x2026;and when <i>is</i> the Fluid Incompressible?</h4>
+<h4 id="h-1a23bded-5ad1-44a4-80b1-b7f5cc880298"><span class="section-number-4">1.10.10.</span> &#x2026;and when <i>is</i> the Fluid Incompressible?</h4>
 <div class="outline-text-4" id="text-h-1a23bded-5ad1-44a4-80b1-b7f5cc880298">
 <p>
 Let us consider the conditions which the fluid may be regarded as
@@ -2336,7 +2312,7 @@ interactions in the fluid may be regarded as instantaneous.</li>
 are fulfilled, the fluid may be regarded as incompressible.</li>
 </ul>
 
-<div class="exercise" id="orgf0c3d4e">
+<div class="exercise" id="org5425864">
 <p>
 Determine the shape of the surface of an incompressible fluid subject to
 a gravitational field, contained in a cylindrical vessel which rotates
@@ -2345,7 +2321,7 @@ about its (vertical) axis with a constant angular velocity \(\Omega\).
 
 </div>
 
-<div class="exercise" id="org18406cf">
+<div class="exercise" id="org37176b3">
 <p>
 A sphere, with radius \(R\), moves with velocity \(\vec{u}\) in an
 incompressible ideal fluid. Determine the potential flow of the fluid
@@ -2354,7 +2330,7 @@ past the sphere.
 
 </div>
 
-<div class="exercise" id="orgfa36000">
+<div class="exercise" id="org427a51d">
 <p>
 The same as the previous problem, but for an infinite cylinder moving
 perpendicular to its axis. (The solution for more general problems may
@@ -2367,7 +2343,7 @@ republished its sixth edition.)
 
 </div>
 
-<div class="exercise" id="org8be7302">
+<div class="exercise" id="orge39014d">
 <p>
 Determine the potential flow of an incompressible ideal fluid in an
 ellipsoidal vessel rotating about a principal axis with angular velocity
@@ -2376,21 +2352,21 @@ ellipsoidal vessel rotating about a principal axis with angular velocity
 
 </div>
 
-<div class="exercise" id="org9c6498f">
+<div class="exercise" id="org5daf4c0">
 <p>
 Determine the flow near a stagnation point.
 </p>
 
 </div>
 
-<div class="exercise" id="org083c1c2">
+<div class="exercise" id="org7e90309">
 <p>
 Determine the potential flow near an angle formed by two intersecting planes.
 </p>
 
 </div>
 
-<div class="exercise" id="org7edb35a">
+<div class="exercise" id="org7b5ebed">
 <p>
 A spherical hole with radius \(a\) suddenly forms in an incompressible
 fluid filling all space. Determine the time taken for the hole to be
@@ -2402,7 +2378,7 @@ L. Rayleigh, "On the pressure developed in a liquid during the collapse of a sph
 
 </div>
 
-<div class="exercise" id="org254c1aa">
+<div class="exercise" id="org916f54a">
 <p>
 A sphere immersed in an incompressible fluid expands according to a
 given law \(R=R(t)\). Determine the fluid pressure at the surface of the sphere.
@@ -2410,7 +2386,7 @@ given law \(R=R(t)\). Determine the fluid pressure at the surface of the sphere.
 
 </div>
 
-<div class="exercise" id="org51872fc">
+<div class="exercise" id="orgac40b75">
 <p>
 Determine the form of a jet emerging from an infinitely long slit in a
 plane wall.
@@ -2422,7 +2398,7 @@ plane wall.
 </div>
 
 <div id="outline-container-h-5229ac06-e5f4-420e-94c3-b40ab819b95b" class="outline-3">
-<h3 id="h-5229ac06-e5f4-420e-94c3-b40ab819b95b"><span class="section-number-3">1.11</span> Drag force in potential flow past a body</h3>
+<h3 id="h-5229ac06-e5f4-420e-94c3-b40ab819b95b"><span class="section-number-3">1.11.</span> Drag force in potential flow past a body</h3>
 <div class="outline-text-3" id="text-h-5229ac06-e5f4-420e-94c3-b40ab819b95b">
 <p>
 Consider the problem of irrotational flow of an incompressible ideal
@@ -2448,7 +2424,7 @@ coordinate system moves with the body.
 </div>
 
 <div id="outline-container-h-f516488b-5f01-4d11-9bfd-b9e38aaa37b8" class="outline-4">
-<h4 id="h-f516488b-5f01-4d11-9bfd-b9e38aaa37b8"><span class="section-number-4">1.11.1</span> General Solution</h4>
+<h4 id="h-f516488b-5f01-4d11-9bfd-b9e38aaa37b8"><span class="section-number-4">1.11.1.</span> General Solution</h4>
 <div class="outline-text-4" id="text-h-f516488b-5f01-4d11-9bfd-b9e38aaa37b8">
 <p>
 The general form of Laplace's equation is
@@ -2462,14 +2438,14 @@ The general form of Laplace's equation is
 where \(a\), \(\vec{A}\) are independent of coordinates.
 </p>
 
-<div class="proposition" id="org3b3cf75">
+<div class="proposition" id="orgf0d26dd">
 <p>
 The constant \(a\) must be zero.
 </p>
 
 </div>
 
-<div class="proof" id="org7d49d60">
+<div class="proof" id="orgecf9356">
 <p>
 Suppose \(\phi=-a/r\). Then the velocity is \(\vec{v}=-\vec{\nabla}(a/r)=a\vec{r}/r^{3}\).
 What is the mass flux through some closed surface (say a sphere with
@@ -2511,16 +2487,16 @@ the surface of the moving body.
 </div>
 
 <div id="outline-container-h-8bb1ef72-bb2d-433c-9eac-f792bcbd01d1" class="outline-4">
-<h4 id="h-8bb1ef72-bb2d-433c-9eac-f792bcbd01d1"><span class="section-number-4">1.11.2</span> Total Energy</h4>
+<h4 id="h-8bb1ef72-bb2d-433c-9eac-f792bcbd01d1"><span class="section-number-4">1.11.2.</span> Total Energy</h4>
 <div class="outline-text-4" id="text-h-8bb1ef72-bb2d-433c-9eac-f792bcbd01d1">
-<div class="lemma" id="org7628173">
+<div class="lemma" id="org8f472b5">
 <p>
 The internal energy of an incompressible fluid is constant.
 </p>
 
 </div>
 
-<div class="theorem" id="org2a6b8dd">
+<div class="theorem" id="org10f7761">
 <p>
 The total energy of the fluid is
 </p>
@@ -2537,7 +2513,7 @@ the shape of the body.
 
 </div>
 
-<div class="proof" id="org9894e1c">
+<div class="proof" id="orgbe02d79">
 <ul class="org-ul">
 <li>The total kinetic energy for the fluid is \(\frac{1}{2}\int\rho v^{2}\,\D V\)
 where we integrate over all space <i>outside</i> the body.</li>
@@ -2586,7 +2562,7 @@ expression for the total energy of the fluid
 
 </div>
 
-<div class="remark" id="org9c4656a">
+<div class="remark" id="org6033534">
 <p>
 The integral we must perform in the last step is taken over a sphere,
 and since the integrands are constant, it amounts to multiplying by
@@ -2595,7 +2571,7 @@ and since the integrands are constant, it amounts to multiplying by
 
 </div>
 
-<div class="definition" id="org9c5aff1">
+<div class="definition" id="orgd478294">
 <p>
 We can rewrite the energy \(E\) just computed as a quadratic function of
 the components of \(\vec{u}\) as
@@ -2616,14 +2592,14 @@ those of \(\vec{A}\).
 </div>
 
 <div id="outline-container-h-0d103a30-cc89-456d-9609-f0776b0f923d" class="outline-4">
-<h4 id="h-0d103a30-cc89-456d-9609-f0776b0f923d"><span class="section-number-4">1.11.3</span> D'Alembert's Paradox</h4>
+<h4 id="h-0d103a30-cc89-456d-9609-f0776b0f923d"><span class="section-number-4">1.11.3.</span> D'Alembert's Paradox</h4>
 <div class="outline-text-4" id="text-h-0d103a30-cc89-456d-9609-f0776b0f923d">
 <p>
 We can compute the total momentum \(\vec{P}\) for the fluid from the
 energy. How?
 </p>
 
-<div class="lemma" id="org96a56ce">
+<div class="lemma" id="org23b0b7a">
 <p>
 Observe an infinitesimal change in \(E\) and \(\vec{P}\) are
 related by
@@ -2635,7 +2611,7 @@ related by
 
 </div>
 
-<div class="proof" id="orgbab8226">
+<div class="proof" id="orgd79bd4d">
 <ul class="org-ul">
 <li>Assume the body accelerated by some external force \(\vec{F}\)</li>
 <li>Then the momentum of the fluid will be increased by \(\D\vec{P}\) during
@@ -2650,7 +2626,7 @@ equal to the increase \(\D E\) in the energy of the fluid)</li>
 </div>
 
 <p>
-It follows from the definition of <a href="#org9c5aff1">induced mass tensor</a> that
+It follows from the definition of <a href="#orgd478294">induced mass tensor</a> that
 </p>
 
 \begin{equation}
@@ -2681,7 +2657,7 @@ called the <dfn>Drag Force</dfn> and the perpendicular component is
 called the <dfn>Lift Force</dfn>.
 </p>
 
-<div class="proposition" id="org9c2a42f">
+<div class="proposition" id="orgfdf228e">
 <p>
 (D'Alembert Paradox)
 If it were possible to have potential flow past a body moving uniformly
@@ -2704,32 +2680,32 @@ infinity.
 </div>
 </div>
 <div id="outline-container-h-90547b18-da64-494c-8862-46c04f2b112b" class="outline-4">
-<h4 id="h-90547b18-da64-494c-8862-46c04f2b112b"><span class="section-number-4">1.11.4</span> Converse Problem</h4>
+<h4 id="h-90547b18-da64-494c-8862-46c04f2b112b"><span class="section-number-4">1.11.4.</span> Converse Problem</h4>
 <div class="outline-text-4" id="text-h-90547b18-da64-494c-8862-46c04f2b112b">
 </div>
 </div>
 </div>
 <div id="outline-container-h-47470a16-e081-400a-a38a-2e103d4d1121" class="outline-3">
-<h3 id="h-47470a16-e081-400a-a38a-2e103d4d1121"><span class="section-number-3">1.12</span> Gravity waves</h3>
+<h3 id="h-47470a16-e081-400a-a38a-2e103d4d1121"><span class="section-number-3">1.12.</span> Gravity waves</h3>
 <div class="outline-text-3" id="text-h-47470a16-e081-400a-a38a-2e103d4d1121">
 </div>
 </div>
 
 <div id="outline-container-h-40fca1b7-a6c5-4d5f-b7cd-082bc0a1d6dc" class="outline-3">
-<h3 id="h-40fca1b7-a6c5-4d5f-b7cd-082bc0a1d6dc"><span class="section-number-3">1.13</span> Internal waves in an incompressible fluid</h3>
+<h3 id="h-40fca1b7-a6c5-4d5f-b7cd-082bc0a1d6dc"><span class="section-number-3">1.13.</span> Internal waves in an incompressible fluid</h3>
 <div class="outline-text-3" id="text-h-40fca1b7-a6c5-4d5f-b7cd-082bc0a1d6dc">
 </div>
 </div>
 
 <div id="outline-container-h-a8c09fd8-a1d4-4de0-bc35-36f3bbc54420" class="outline-3">
-<h3 id="h-a8c09fd8-a1d4-4de0-bc35-36f3bbc54420"><span class="section-number-3">1.14</span> Waves in a rotating fluid</h3>
+<h3 id="h-a8c09fd8-a1d4-4de0-bc35-36f3bbc54420"><span class="section-number-3">1.14.</span> Waves in a rotating fluid</h3>
 <div class="outline-text-3" id="text-h-a8c09fd8-a1d4-4de0-bc35-36f3bbc54420">
 </div>
 </div>
 </div>
 
 <div id="outline-container-h-f41a8df9-a033-45ca-adfa-9b69b2ef6f65" class="outline-2">
-<h2 id="h-f41a8df9-a033-45ca-adfa-9b69b2ef6f65"><span class="section-number-2">2</span> References</h2>
+<h2 id="h-f41a8df9-a033-45ca-adfa-9b69b2ef6f65"><span class="section-number-2">2.</span> References</h2>
 <div class="outline-text-2" id="text-h-f41a8df9-a033-45ca-adfa-9b69b2ef6f65">
 <ul class="org-ul">
 <li>Alexandre Chorin, Jerrold Marsden,
@@ -2743,7 +2719,7 @@ This is my primary reference.</li>
 </div>
 
 <div id="outline-container-h-85d92422-3f67-40e8-b90c-ca63188c11f8" class="outline-3">
-<h3 id="h-85d92422-3f67-40e8-b90c-ca63188c11f8"><span class="section-number-3">2.1</span> Syllabi</h3>
+<h3 id="h-85d92422-3f67-40e8-b90c-ca63188c11f8"><span class="section-number-3">2.1.</span> Syllabi</h3>
 <div class="outline-text-3" id="text-h-85d92422-3f67-40e8-b90c-ca63188c11f8">
 <ul class="org-ul">
 <li>MIT
@@ -2800,7 +2776,7 @@ Springer-Verlag, 1988.</li>
 </div>
 
 <div id="outline-container-h-051ce8c7-edbd-4d25-9606-b77dba0f70f1" class="outline-3">
-<h3 id="h-051ce8c7-edbd-4d25-9606-b77dba0f70f1"><span class="section-number-3">2.2</span> Citations from L&amp;L</h3>
+<h3 id="h-051ce8c7-edbd-4d25-9606-b77dba0f70f1"><span class="section-number-3">2.2.</span> Citations from L&amp;L</h3>
 <div class="outline-text-3" id="text-h-051ce8c7-edbd-4d25-9606-b77dba0f70f1">
 <ul class="org-ul">
 <li>W. H. Besant,<br>
@@ -2828,7 +2804,7 @@ John Wiley &amp; Sons (1964) ISBN-13 : 978-0470497050;</li>
 </div>
 
 <div id="outline-container-h-2e4be42e-5c0b-4977-be0c-a0079c92d2d0" class="outline-3">
-<h3 id="h-2e4be42e-5c0b-4977-be0c-a0079c92d2d0"><span class="section-number-3">2.3</span> Recommendations/Lookup</h3>
+<h3 id="h-2e4be42e-5c0b-4977-be0c-a0079c92d2d0"><span class="section-number-3">2.3.</span> Recommendations/Lookup</h3>
 <div class="outline-text-3" id="text-h-2e4be42e-5c0b-4977-be0c-a0079c92d2d0">
 <ul class="org-ul">
 <li>George Batchelor,<br>
@@ -2848,7 +2824,7 @@ AMS Publishers.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 11:57.</p>
+<p class="postamble">Last Updated 2021-11-02 Tue 15:09.</p>
 </div>
 </body>
 </html>

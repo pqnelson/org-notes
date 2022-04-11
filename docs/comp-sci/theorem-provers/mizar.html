@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-17 Thu 08:58 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 2022-04-11 Mon 08:49 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Mizar</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +29,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +40,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +190,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +207,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,19 +227,18 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Mizar</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7">1. Useful Definitions</a>
 <ul>
@@ -281,7 +258,7 @@
 </div>
 
 <div id="outline-container-h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7" class="outline-2">
-<h2 id="h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7"><span class="section-number-2">1</span> Useful Definitions</h2>
+<h2 id="h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7"><span class="section-number-2">1.</span> Useful Definitions</h2>
 <div class="outline-text-2" id="text-h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7">
 <ul class="org-ul">
 <li><code>Element of X</code> is defined in <a href="http://www.mizar.org/version/current/html/subset_1.html"><code>subset_1.miz</code></a> , lines 67 <i>et seq</i>.</li>
@@ -294,7 +271,7 @@ meaning \(X\subseteq Y\iff (\forall x, x\in X\implies x\in Y)\))</li>
 </div>
 
 <div id="outline-container-h-6896d403-8ec1-42a7-8258-27db9c6662b3" class="outline-3">
-<h3 id="h-6896d403-8ec1-42a7-8258-27db9c6662b3"><span class="section-number-3">1.1</span> Rings and Things</h3>
+<h3 id="h-6896d403-8ec1-42a7-8258-27db9c6662b3"><span class="section-number-3">1.1.</span> Rings and Things</h3>
 <div class="outline-text-3" id="text-h-6896d403-8ec1-42a7-8258-27db9c6662b3">
 <ul class="org-ul">
 <li><a href="http://mizar.org/version/current/html/polynom3.html"><code>polynom3</code></a> defines:
@@ -327,7 +304,7 @@ meaning \(X\subseteq Y\iff (\forall x, x\in X\implies x\in Y)\))</li>
 </div>
 
 <div id="outline-container-h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89" class="outline-2">
-<h2 id="h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89"><span class="section-number-2">2</span> Random</h2>
+<h2 id="h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89"><span class="section-number-2">2.</span> Random</h2>
 <div class="outline-text-2" id="text-h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89">
 <ul class="org-ul">
 <li>Cayley-Dickson construction in <a href="http://mizar.org/version/current/html/cayldick.html"><code>cayldick.miz</code></a></li>
@@ -336,19 +313,19 @@ meaning \(X\subseteq Y\iff (\forall x, x\in X\implies x\in Y)\))</li>
 </div>
 
 <div id="outline-container-h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09" class="outline-2">
-<h2 id="h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09"><span class="section-number-2">3</span> Lessons Learned</h2>
+<h2 id="h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09"><span class="section-number-2">3.</span> Lessons Learned</h2>
 <div class="outline-text-2" id="text-h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09">
 </div>
 
 <div id="outline-container-h-c0226382-31df-4572-891b-e9ae20a09b98" class="outline-3">
-<h3 id="h-c0226382-31df-4572-891b-e9ae20a09b98"><span class="section-number-3">3.1</span> Vocabulary Files</h3>
+<h3 id="h-c0226382-31df-4572-891b-e9ae20a09b98"><span class="section-number-3">3.1.</span> Vocabulary Files</h3>
 <div class="outline-text-3" id="text-h-c0226382-31df-4572-891b-e9ae20a09b98">
 <p>
 When defining new terms, well, we should get started by doing something
 like:
 </p>
 
-<pre class="example" id="org6e393fc">
+<pre class="example" id="org869bd0a">
 user@computer:~/$ mkdir -p work/first-article/
 user@computer:~/$ cd work/first-article/
 user@computer:~/work/first-article/$ mkdir DICT
@@ -362,7 +339,7 @@ Now for a "Hello World" type Mizar file: just create a new predicate
 sticking one line in it:
 </p>
 
-<pre class="example" id="org6f2aa76">
+<pre class="example" id="orgcbd4cf9">
 Rfoobar
 </pre>
 
@@ -370,7 +347,7 @@ Rfoobar
 Then in <code>first-article/TEXT/TMP.miz</code> we would have:
 </p>
 
-<pre class="example" id="orgcd72d57">
+<pre class="example" id="org3e3b586">
 environ
 vocabularies TMP; :: this is important! Without it, you get an error
 
@@ -395,14 +372,14 @@ include <code>foobar</code> as a predicate in your vocabulary file.
 </div>
 
 <div id="outline-container-h-db11b193-c42a-415b-b960-c4efc7dacd50" class="outline-2">
-<h2 id="h-db11b193-c42a-415b-b960-c4efc7dacd50"><span class="section-number-2">4</span> Installing on Raspberry Pi</h2>
+<h2 id="h-db11b193-c42a-415b-b960-c4efc7dacd50"><span class="section-number-2">4.</span> Installing on Raspberry Pi</h2>
 <div class="outline-text-2" id="text-h-db11b193-c42a-415b-b960-c4efc7dacd50">
 <p>
 This was surprisingly simple. I usually keep source code related stuff
 in <code>~/src/</code>, so here's the bash commands that got me cooking:
 </p>
 
-<pre class="example" id="org2de37c7">
+<pre class="example" id="org08a8811">
 alex@pi:~$ cd src
 alex@pi:~/src/$ mkdir mizar
 alex@pi:~/src/$ cd mizar
@@ -427,7 +404,7 @@ alex@pi:~/src/mizar$ sudo ./install.sh --default
 Then I added one line of code to my <code>~/.bash_profile</code>:
 </p>
 
-<pre class="example" id="org7e7501c">
+<pre class="example" id="orged1cd1c">
 # at the end of ~/.bash_profile
 MIZFILES=/usr/local/share/mizar
 </pre>
@@ -441,7 +418,7 @@ it working on my Raspberry Pi.
 </div>
 
 <div id="outline-container-h-5b2a23b4-8625-4b20-a0b0-a13c66678638" class="outline-2">
-<h2 id="h-5b2a23b4-8625-4b20-a0b0-a13c66678638"><span class="section-number-2">5</span> References</h2>
+<h2 id="h-5b2a23b4-8625-4b20-a0b0-a13c66678638"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-5b2a23b4-8625-4b20-a0b0-a13c66678638">
 <ul class="org-ul">
 <li>Freek Wiedijk's <a href="http://mizar.org/project/mizman.pdf">Write a Mizar Article in 9 Easy Steps</a></li>

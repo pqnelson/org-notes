@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 18:30 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Categorification</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +189,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +206,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,24 +226,25 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Categorification</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-f2bc58bc-0cd9-4ff4-a0ae-6c503a870c27">1. Examples</a>
 <ul>
 <li><a href="#h-325c10eb-0adc-4cc7-a447-b7400b0465ce">1.1. Stacks as Categorified Sheaves</a></li>
 <li><a href="#h-d33913bd-706c-4ec4-aa9b-3e92ead6f949">1.2. Differential Calculus Categorifies as Goodwillie Calculus</a></li>
+<li><a href="#h-cc9bae83-1051-4940-a1f6-ea2b7da67401">1.3. Categorifying Lie Algebras</a></li>
+<li><a href="#h-ff682019-b62c-434b-97d3-1d5811fdb673">1.4. Number Theory</a></li>
 </ul>
 </li>
 </ul>
@@ -274,12 +252,12 @@
 </div>
 
 <div id="outline-container-h-f2bc58bc-0cd9-4ff4-a0ae-6c503a870c27" class="outline-2">
-<h2 id="h-f2bc58bc-0cd9-4ff4-a0ae-6c503a870c27"><span class="section-number-2">1</span> Examples</h2>
+<h2 id="h-f2bc58bc-0cd9-4ff4-a0ae-6c503a870c27"><span class="section-number-2">1.</span> Examples</h2>
 <div class="outline-text-2" id="text-h-f2bc58bc-0cd9-4ff4-a0ae-6c503a870c27">
 </div>
 
 <div id="outline-container-h-325c10eb-0adc-4cc7-a447-b7400b0465ce" class="outline-3">
-<h3 id="h-325c10eb-0adc-4cc7-a447-b7400b0465ce"><span class="section-number-3">1.1</span> Stacks as Categorified Sheaves</h3>
+<h3 id="h-325c10eb-0adc-4cc7-a447-b7400b0465ce"><span class="section-number-3">1.1.</span> Stacks as Categorified Sheaves</h3>
 <div class="outline-text-3" id="text-h-325c10eb-0adc-4cc7-a447-b7400b0465ce">
 <p>
 An $n$-stack is an $(n+1)$-sheaf.
@@ -300,7 +278,7 @@ We could also consider <a href="https://ncatlab.org/nlab/show/%28n%2C1%29-sheaf"
 </div>
 
 <div id="outline-container-h-d33913bd-706c-4ec4-aa9b-3e92ead6f949" class="outline-3">
-<h3 id="h-d33913bd-706c-4ec4-aa9b-3e92ead6f949"><span class="section-number-3">1.2</span> Differential Calculus Categorifies as Goodwillie Calculus</h3>
+<h3 id="h-d33913bd-706c-4ec4-aa9b-3e92ead6f949"><span class="section-number-3">1.2.</span> Differential Calculus Categorifies as Goodwillie Calculus</h3>
 <div class="outline-text-3" id="text-h-d33913bd-706c-4ec4-aa9b-3e92ead6f949">
 <p>
 The $(&infin;,1)$-categorification of differential calculus is the
@@ -308,10 +286,49 @@ Goodwillie calculus.
 </p>
 </div>
 </div>
+
+<div id="outline-container-h-cc9bae83-1051-4940-a1f6-ea2b7da67401" class="outline-3">
+<h3 id="h-cc9bae83-1051-4940-a1f6-ea2b7da67401"><span class="section-number-3">1.3.</span> Categorifying Lie Algebras</h3>
+<div class="outline-text-3" id="text-h-cc9bae83-1051-4940-a1f6-ea2b7da67401">
+<p>
+Basically, replace the vector spaces underlying Lie algebras with chain
+complexes.
+</p>
+
+<ul class="org-ul">
+<li>Dmitry Roytenberg,
+"On weak Lie 2-algebras".
+<a href="https://arxiv.org/abs/0712.3461">arXiv:0712.3461</a></li>
+<li>Alissa S. Crans,
+"Lie 2-Algebras".
+<a href="https://arxiv.org/abs/math/0409602">arXiv:math/0409602</a>, 119 pages.</li>
+<li>John C. Baez, Alissa S. Crans,
+"Higher-Dimensional Algebra VI: Lie 2-Algebras".
+<a href="https://arxiv.org/abs/math/0307263">arXiv:math/0307263</a>, 50 pages.</li>
+<li>Chengming Bai, Yunhe Sheng, Chenchang Zhu,
+"Lie 2-bialgebras".
+<a href="https://arxiv.org/abs/1109.1344">arXiv:1109.1344</a>, 22 pages.</li>
+<li>Malte Dehling,
+"On weak Lie 3-algebras".
+<a href="https://arxiv.org/abs/1710.11104">arXiv:1710.11104</a>, 39 pages.</li>
+<li><a href="https://golem.ph.utexas.edu/category/2007/02/infinitely_categorified_calcul.html">https://golem.ph.utexas.edu/category/2007/02/infinitely_categorified_calcul.html</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-ff682019-b62c-434b-97d3-1d5811fdb673" class="outline-3">
+<h3 id="h-ff682019-b62c-434b-97d3-1d5811fdb673"><span class="section-number-3">1.4.</span> Number Theory</h3>
+<div class="outline-text-3" id="text-h-ff682019-b62c-434b-97d3-1d5811fdb673">
+<ul class="org-ul">
+<li>Mobius inversion
+<a href="https://golem.ph.utexas.edu/category/2011/05/mbius_inversion_for_categories.html">https://golem.ph.utexas.edu/category/2011/05/mbius_inversion_for_categories.html</a></li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 16:50.</p>
+<p class="postamble">Last Updated 2021-11-08 Mon 07:21.</p>
 </div>
 </body>
 </html>

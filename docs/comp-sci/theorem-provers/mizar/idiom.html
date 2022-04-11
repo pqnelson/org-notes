@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-03-04 Fri 10:07 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 2022-04-11 Mon 08:48 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Idiomatic Mizar</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +29,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +40,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +190,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,39 +207,17 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Idiomatic Mizar</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-6c92317d-08d7-4be7-874c-cbeadad70682">1. Defining new gadgets</a>
 <ul>
@@ -258,14 +236,14 @@
 </div>
 
 <div id="outline-container-h-6c92317d-08d7-4be7-874c-cbeadad70682" class="outline-2">
-<h2 id="h-6c92317d-08d7-4be7-874c-cbeadad70682"><span class="section-number-2">1</span> Defining new gadgets</h2>
+<h2 id="h-6c92317d-08d7-4be7-874c-cbeadad70682"><span class="section-number-2">1.</span> Defining new gadgets</h2>
 <div class="outline-text-2" id="text-h-6c92317d-08d7-4be7-874c-cbeadad70682">
 <p>
 The idiomatic way to define a new gadget, well, suppose we had our
 definition found in a textbook schematically as:
 </p>
 
-<div class="definition" id="org5d3f825">
+<div class="definition" id="orge787e7d">
 <p>
 A <dfn>Gadget</dfn> consists of <i>stuff</i> equipped with <i>structure</i> such
 that <i>properties</i> hold.
@@ -285,7 +263,7 @@ We would define a gadget in three steps:
 </div>
 
 <div id="outline-container-h-673f1231-2018-4e88-9e86-2fe7d5af2242" class="outline-3">
-<h3 id="h-673f1231-2018-4e88-9e86-2fe7d5af2242"><span class="section-number-3">1.1</span> Naming Conventions</h3>
+<h3 id="h-673f1231-2018-4e88-9e86-2fe7d5af2242"><span class="section-number-3">1.1.</span> Naming Conventions</h3>
 <div class="outline-text-3" id="text-h-673f1231-2018-4e88-9e86-2fe7d5af2242">
 <ul class="org-ul">
 <li>Structures seem to be named using <code>PascalCase</code></li>
@@ -297,7 +275,7 @@ We would define a gadget in three steps:
 </div>
 
 <div id="outline-container-h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29" class="outline-2">
-<h2 id="h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29"><span class="section-number-2">2</span> Defining new attributes</h2>
+<h2 id="h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29"><span class="section-number-2">2.</span> Defining new attributes</h2>
 <div class="outline-text-2" id="text-h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29">
 <p>
 When defining a new attribute (say, <code>hairy</code>) for a <code>Gadget</code>, we
@@ -320,7 +298,7 @@ This is a nod towards using <code>it</code> in defining functors and modes.
 </div>
 
 <div id="outline-container-h-f46be9be-286d-45cd-83ea-970f40340710" class="outline-3">
-<h3 id="h-f46be9be-286d-45cd-83ea-970f40340710"><span class="section-number-3">2.1</span> Naming attributes</h3>
+<h3 id="h-f46be9be-286d-45cd-83ea-970f40340710"><span class="section-number-3">2.1.</span> Naming attributes</h3>
 <div class="outline-text-3" id="text-h-f46be9be-286d-45cd-83ea-970f40340710">
 <p>
 Use <code>snake_case</code> by default. The only exception that comes to mind is if
@@ -332,7 +310,7 @@ and we are defining a generalization of it.
 </div>
 
 <div id="outline-container-h-c237f8b0-d62a-4f23-972c-26128f814532" class="outline-2">
-<h2 id="h-c237f8b0-d62a-4f23-972c-26128f814532"><span class="section-number-2">3</span> Proving Equality</h2>
+<h2 id="h-c237f8b0-d62a-4f23-972c-26128f814532"><span class="section-number-2">3.</span> Proving Equality</h2>
 <div class="outline-text-2" id="text-h-c237f8b0-d62a-4f23-972c-26128f814532">
 <p>
 Use <a href="http://mizar.org/version/current/html/xboole_0.html"><code>xboole_0</code></a> definition 10 to prove <code>X = Y</code> by proving <code>X c= Y</code> and
@@ -343,7 +321,7 @@ if possible.
 </div>
 
 <div id="outline-container-h-ada80631-141b-4d42-877d-1773d385645e" class="outline-2">
-<h2 id="h-ada80631-141b-4d42-877d-1773d385645e"><span class="section-number-2">4</span> When in doubt, make it public</h2>
+<h2 id="h-ada80631-141b-4d42-877d-1773d385645e"><span class="section-number-2">4.</span> When in doubt, make it public</h2>
 <div class="outline-text-2" id="text-h-ada80631-141b-4d42-877d-1773d385645e">
 <p>
 Programmers have the idiom to make code private by default, and for good

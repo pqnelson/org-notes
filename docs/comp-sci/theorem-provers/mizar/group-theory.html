@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-17 Thu 09:01 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 2022-04-11 Mon 08:49 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Group Theory in Mizar</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +29,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +40,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +190,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +207,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,19 +227,18 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Group Theory in Mizar</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-2ee11eae-9c96-4924-b78c-f735667f49fd">1. Overview</a></li>
 <li><a href="#h-9f5cf940-9a00-4b52-886d-f414fb02838d">2. Group Theory</a>
@@ -274,7 +251,7 @@
 </div>
 
 <div id="outline-container-h-2ee11eae-9c96-4924-b78c-f735667f49fd" class="outline-2">
-<h2 id="h-2ee11eae-9c96-4924-b78c-f735667f49fd"><span class="section-number-2">1</span> Overview</h2>
+<h2 id="h-2ee11eae-9c96-4924-b78c-f735667f49fd"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-2ee11eae-9c96-4924-b78c-f735667f49fd">
 <p>
 This is just a "map" or "analytical table of contents", of where things
@@ -289,7 +266,7 @@ then it splinters into specialist subjects.
 </div>
 
 <div id="outline-container-h-9f5cf940-9a00-4b52-886d-f414fb02838d" class="outline-2">
-<h2 id="h-9f5cf940-9a00-4b52-886d-f414fb02838d"><span class="section-number-2">2</span> Group Theory</h2>
+<h2 id="h-9f5cf940-9a00-4b52-886d-f414fb02838d"><span class="section-number-2">2.</span> Group Theory</h2>
 <div class="outline-text-2" id="text-h-9f5cf940-9a00-4b52-886d-f414fb02838d">
 <ul class="org-ul">
 <li>Nilpotent groups are discussed in  <a href="http://mizar.org/version/current/html/grnilp_1.html"><code>grnilp_1.miz</code></a>
@@ -334,7 +311,7 @@ have <code>mode sequence of X is Function of NAT,X</code></li>
 </div>
 
 <div id="outline-container-h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7" class="outline-3">
-<h3 id="h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7"><span class="section-number-3">2.1</span> Definitions</h3>
+<h3 id="h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7"><span class="section-number-3">2.1.</span> Definitions</h3>
 <div class="outline-text-3" id="text-h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7">
 <ul class="org-ul">
 <li>Inverse operator is denoted by double quotes, so <code>x"</code> denotes \(x^{-1}\)
@@ -345,7 +322,7 @@ This is also extended to, for a group \(G\), subsets \(A\subset G\)
 we'd have <code>A"</code> be the collection of <code>g"</code> for <code>g in A</code>, i.e.,
 \(A^{-1}=\{g^{-1}|g\in A\}\); see line 57 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>
 </p>
-<pre class="example" id="org21e51b8">
+<pre class="example" id="org7c4d504">
 let G be Group;
 let A be Subset of G;
 func A " -&gt; Subset of G equals :: GROUP_2:def 1
@@ -361,7 +338,7 @@ underlying set of \(G\) equal to the set underlying \(H\)</li>
 The trivial subgroup of \(G\) is denoted <code>(1).G</code>, defined on line 1258
 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> as
 </p>
-<pre class="example" id="org13b116f">
+<pre class="example" id="org9fd3b92">
   func (1).G -&gt; strict Subgroup of G means
   :Def7:
   the carrier of it = {1_G};
@@ -424,7 +401,7 @@ subgroup containing \(A\)</li>
 <li><p>
 Frattini subgroup is tricky. Relevant code starts around 1371 of  <a href="http://mizar.org/version/current/html/group_4.html"><code>group_4.miz</code></a>
 </p>
-<pre class="example" id="orgc7192db">
+<pre class="example" id="org4b8e183">
 ::$N Frattini subgroup
   func Phi(G) -&gt; strict Subgroup of G means
   :Def7:

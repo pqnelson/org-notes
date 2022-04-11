@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-14 Mon 11:15 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 2022-04-11 Mon 08:48 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Group Theory</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +29,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +40,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +190,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +207,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,19 +227,18 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Group Theory</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-16cb29fa-d710-45fe-bbfd-74624a830335">1. Symmetries of an Object</a>
 <ul>
@@ -276,7 +253,7 @@
 </div>
 
 <div id="outline-container-h-16cb29fa-d710-45fe-bbfd-74624a830335" class="outline-2">
-<h2 id="h-16cb29fa-d710-45fe-bbfd-74624a830335"><span class="section-number-2">1</span> Symmetries of an Object</h2>
+<h2 id="h-16cb29fa-d710-45fe-bbfd-74624a830335"><span class="section-number-2">1.</span> Symmetries of an Object</h2>
 <div class="outline-text-2" id="text-h-16cb29fa-d710-45fe-bbfd-74624a830335">
 <p>
 Suppose we have an object (like a regular polygon in a plane). What is a
@@ -285,7 +262,7 @@ Suppose we have an object (like a regular polygon in a plane). What is a
 </div>
 
 <div id="outline-container-h-125cc380-7cb2-4b12-bde3-a4376c66cbd8" class="outline-3">
-<h3 id="h-125cc380-7cb2-4b12-bde3-a4376c66cbd8"><span class="section-number-3">1.1</span> Necessary Qualities of a Symmetry</h3>
+<h3 id="h-125cc380-7cb2-4b12-bde3-a4376c66cbd8"><span class="section-number-3">1.1.</span> Necessary Qualities of a Symmetry</h3>
 <div class="outline-text-3" id="text-h-125cc380-7cb2-4b12-bde3-a4376c66cbd8">
 <p>
 Presumably it is some kind of transformation. For this to make sense, we
@@ -312,7 +289,7 @@ but also \(((f\circ h)\circ g)(x) = g(x)\) imply \(f=g\). Hence
 </div>
 
 <div id="outline-container-h-6638c825-c302-4979-a35c-929236617ab9" class="outline-3">
-<h3 id="h-6638c825-c302-4979-a35c-929236617ab9"><span class="section-number-3">1.2</span> A Collection of Symmetries</h3>
+<h3 id="h-6638c825-c302-4979-a35c-929236617ab9"><span class="section-number-3">1.2.</span> A Collection of Symmetries</h3>
 <div class="outline-text-3" id="text-h-6638c825-c302-4979-a35c-929236617ab9">
 <p>
 Now, we have described what qualifies as a symmetry of an object,
@@ -333,7 +310,7 @@ This gives us grounds for generalizing these qualities into an abstract
 notion of a group.
 </p>
 
-<div class="definition" id="org858e797">
+<div class="definition" id="org0a238a9">
 <p>
 A <dfn>Group</dfn> consists of a set \(G\) equipped with
 </p>
@@ -365,7 +342,7 @@ abstraction, but we can think about groups in general settings.
 </div>
 </div>
 <div id="outline-container-h-038397f8-c6ce-4731-8080-ae377d9719d2" class="outline-3">
-<h3 id="h-038397f8-c6ce-4731-8080-ae377d9719d2"><span class="section-number-3">1.3</span> Example: Symmetries of Polynomials</h3>
+<h3 id="h-038397f8-c6ce-4731-8080-ae377d9719d2"><span class="section-number-3">1.3.</span> Example: Symmetries of Polynomials</h3>
 <div class="outline-text-3" id="text-h-038397f8-c6ce-4731-8080-ae377d9719d2">
 <p>
 Thus far we have intuitively pictured symmetries of geometric objects.
@@ -395,7 +372,7 @@ symmetry amounts to permuting the roots of the polynomial.
 </div>
 
 <div id="outline-container-h-e3daf161-ad97-4ded-a7c4-8b0740f76b48" class="outline-2">
-<h2 id="h-e3daf161-ad97-4ded-a7c4-8b0740f76b48"><span class="section-number-2">2</span> Notes to Self</h2>
+<h2 id="h-e3daf161-ad97-4ded-a7c4-8b0740f76b48"><span class="section-number-2">2.</span> Notes to Self</h2>
 <div class="outline-text-2" id="text-h-e3daf161-ad97-4ded-a7c4-8b0740f76b48">
 <p>
 If we take our abstract definition of a group, we can define a <a href="category-theory/2-group.html#h-5d6e9364-75e0-4ebc-98de-bc3ddac7601f">"group object"</a>
@@ -405,7 +382,7 @@ category of topological spaces is a topological group, a group object
 internal to the category of manifolds is a [real] Lie group, etc.).
 </p>
 
-<div class="remark" id="org193c136">
+<div class="remark" id="orgcbfed70">
 <p>
 The group object internal to <span class="cat">Grp</span> the category of groups is
 itself an Abelian group. This is a corollary of the Eckmann&#x2013;Hilton
@@ -417,7 +394,7 @@ argument.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-14 Mon 11:14.</p>
+<p class="postamble">Last Updated 2022-02-14 Mon 14:50.</p>
 </div>
 </body>
 </html>

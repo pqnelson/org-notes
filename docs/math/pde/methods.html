@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:09 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Methods of Solving PDEs</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +189,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +206,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,19 +226,18 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Methods of Solving PDEs</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-f9fcc069-0b1d-4a4e-9438-80c476b81a00">1. Group Symmetry Methods</a>
 <ul>
@@ -296,12 +272,12 @@ solutions [22–24].
 </blockquote>
 
 <div id="outline-container-h-f9fcc069-0b1d-4a4e-9438-80c476b81a00" class="outline-2">
-<h2 id="h-f9fcc069-0b1d-4a4e-9438-80c476b81a00"><span class="section-number-2">1</span> Group Symmetry Methods</h2>
+<h2 id="h-f9fcc069-0b1d-4a4e-9438-80c476b81a00"><span class="section-number-2">1.</span> Group Symmetry Methods</h2>
 <div class="outline-text-2" id="text-h-f9fcc069-0b1d-4a4e-9438-80c476b81a00">
 </div>
 
 <div id="outline-container-h-07109b40-d0f9-43c8-af78-5b0e1aed7ba9" class="outline-3">
-<h3 id="h-07109b40-d0f9-43c8-af78-5b0e1aed7ba9"><span class="section-number-3">1.1</span> Classical Symmetries</h3>
+<h3 id="h-07109b40-d0f9-43c8-af78-5b0e1aed7ba9"><span class="section-number-3">1.1.</span> Classical Symmetries</h3>
 <div class="outline-text-3" id="text-h-07109b40-d0f9-43c8-af78-5b0e1aed7ba9">
 <ul class="org-ul">
 <li>Ovsiannikov, L.V. <br>
@@ -321,7 +297,7 @@ Kluwer, 1998.</li>
 </div>
 
 <div id="outline-container-h-10abac87-d348-4d33-afd2-f2ca13f2ead4" class="outline-3">
-<h3 id="h-10abac87-d348-4d33-afd2-f2ca13f2ead4"><span class="section-number-3">1.2</span> Nonclassical Symmetry Reduction</h3>
+<h3 id="h-10abac87-d348-4d33-afd2-f2ca13f2ead4"><span class="section-number-3">1.2.</span> Nonclassical Symmetry Reduction</h3>
 <div class="outline-text-3" id="text-h-10abac87-d348-4d33-afd2-f2ca13f2ead4">
 <ul class="org-ul">
 <li>Peter A. Clarkson, Elizabeth L. Mansfield, <br>
@@ -337,7 +313,7 @@ In: <i>CRC Handbook of Lie Group Analysis of Differential Equations</i>, vol.
 </div>
 
 <div id="outline-container-h-bf2360c2-34c8-4826-a3b8-e61811ed61c5" class="outline-3">
-<h3 id="h-bf2360c2-34c8-4826-a3b8-e61811ed61c5"><span class="section-number-3">1.3</span> Approximate Symmetries</h3>
+<h3 id="h-bf2360c2-34c8-4826-a3b8-e61811ed61c5"><span class="section-number-3">1.3.</span> Approximate Symmetries</h3>
 <div class="outline-text-3" id="text-h-bf2360c2-34c8-4826-a3b8-e61811ed61c5">
 <p>
 Also note there is another technique using "approximate symmetries",
@@ -366,7 +342,7 @@ original differential equation.
 </div>
 
 <div id="outline-container-h-82fab9ef-80d3-446d-b9c2-0592f9b69129" class="outline-2">
-<h2 id="h-82fab9ef-80d3-446d-b9c2-0592f9b69129"><span class="section-number-2">2</span> Differential Constraints</h2>
+<h2 id="h-82fab9ef-80d3-446d-b9c2-0592f9b69129"><span class="section-number-2">2.</span> Differential Constraints</h2>
 <div class="outline-text-2" id="text-h-82fab9ef-80d3-446d-b9c2-0592f9b69129">
 <p>
 CRC Handbook of Nonlinear PDEs describe this method as: "The main idea
@@ -384,7 +360,7 @@ simpler (integrable) equation, called a <i>differential constraint</i>."
 </div>
 
 <div id="outline-container-h-82511732-d06f-4171-a4aa-63f6eded2106" class="outline-2">
-<h2 id="h-82511732-d06f-4171-a4aa-63f6eded2106"><span class="section-number-2">3</span> Clarkson-Kruskal method</h2>
+<h2 id="h-82511732-d06f-4171-a4aa-63f6eded2106"><span class="section-number-2">3.</span> Clarkson-Kruskal method</h2>
 <div class="outline-text-2" id="text-h-82511732-d06f-4171-a4aa-63f6eded2106">
 <ul class="org-ul">
 <li>P A Clarkson and M D Kruskal, <br>
@@ -407,7 +383,7 @@ exact solutions to nonlinear PDEs". <br>
 </div>
 
 <div id="outline-container-h-428184a8-896b-4f4a-b3ff-3e545baa634b" class="outline-2">
-<h2 id="h-428184a8-896b-4f4a-b3ff-3e545baa634b"><span class="section-number-2">4</span> Functional Separation of Variables</h2>
+<h2 id="h-428184a8-896b-4f4a-b3ff-3e545baa634b"><span class="section-number-2">4.</span> Functional Separation of Variables</h2>
 <div class="outline-text-2" id="text-h-428184a8-896b-4f4a-b3ff-3e545baa634b">
 <p>
 The basic idea is to solve the problem
@@ -487,7 +463,7 @@ approach, new solutions of diffusion-type equations". <br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 11:59.</p>
+<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
 </div>
 </body>
 </html>

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-03-03 Thu 13:01 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 2022-04-11 Mon 08:48 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Lie Theory in Mizar</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +29,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +40,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +190,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +207,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,19 +227,18 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Lie Theory in Mizar</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e">1. Overview</a></li>
 <li><a href="#h-42b94e81-8319-49c1-ab2d-d8852a381f56">2. Relevant Definitions</a>
@@ -276,7 +253,7 @@
 </div>
 
 <div id="outline-container-h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e" class="outline-2">
-<h2 id="h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e"><span class="section-number-2">1</span> Overview</h2>
+<h2 id="h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e">
 <p>
 This is just a placeholder for my thinking about formalizing Lie
@@ -287,12 +264,12 @@ Bourbaki's books may be the best outline/strategy.
 </div>
 
 <div id="outline-container-h-42b94e81-8319-49c1-ab2d-d8852a381f56" class="outline-2">
-<h2 id="h-42b94e81-8319-49c1-ab2d-d8852a381f56"><span class="section-number-2">2</span> Relevant Definitions</h2>
+<h2 id="h-42b94e81-8319-49c1-ab2d-d8852a381f56"><span class="section-number-2">2.</span> Relevant Definitions</h2>
 <div class="outline-text-2" id="text-h-42b94e81-8319-49c1-ab2d-d8852a381f56">
 </div>
 
 <div id="outline-container-h-8e62fe3a-da15-47d4-93a1-9f70d1331b65" class="outline-3">
-<h3 id="h-8e62fe3a-da15-47d4-93a1-9f70d1331b65"><span class="section-number-3">2.1</span> Existing in Mizar</h3>
+<h3 id="h-8e62fe3a-da15-47d4-93a1-9f70d1331b65"><span class="section-number-3">2.1.</span> Existing in Mizar</h3>
 <div class="outline-text-3" id="text-h-8e62fe3a-da15-47d4-93a1-9f70d1331b65">
 <p>
 Mizar's library is <i>huge</i>, here's what I could find at a glance that's
@@ -336,9 +313,9 @@ relevant.
 </div>
 
 <div id="outline-container-h-7abad33c-acb5-49ce-8243-945872dce09c" class="outline-3">
-<h3 id="h-7abad33c-acb5-49ce-8243-945872dce09c"><span class="section-number-3">2.2</span> Not in Mizar</h3>
+<h3 id="h-7abad33c-acb5-49ce-8243-945872dce09c"><span class="section-number-3">2.2.</span> Not in Mizar</h3>
 <div class="outline-text-3" id="text-h-7abad33c-acb5-49ce-8243-945872dce09c">
-<div class="definition" id="org1fbddfc">
+<div class="definition" id="org698e5bb">
 <p>
 A vector space \(L\) over a field \(F\) with an operation \(L\times L\to L\),
 denoted \((x,y)\to[x, y]\) called the bracket (or commutator) of \(x\) and \(y\),
@@ -359,7 +336,7 @@ This is the definition given by Humphreys' <i>Introduction to Lie Algebras and R
 <i>Lie Groups and Lie Algebras</i> I.1&sect;2 Definition 1:
 </p>
 
-<div class="definition" id="org911d6a5">
+<div class="definition" id="org8357c6d">
 <p>
 An algebra \(\mathfrak{g}\) over a commutative unital [associative] ring
 \(K\) is called a <dfn>Lie Algebra</dfn> over \(K\) if its multiplication
@@ -383,7 +360,7 @@ it is not adequately justified. "Bilinear" yes, but "alternating"? No,
 not in general: only if the characteristic of \(K\) is not 2.
 </p>
 
-<div class="remark" id="org9206c4b">
+<div class="remark" id="org71eb5d9">
 <p>
 Mizar's notion of an algebra is <b>almost</b> good: they demand an algebra be
 unital, but this is not true in general for Lie algebras. Further, since
@@ -452,7 +429,7 @@ which extends <code>ModuleStr</code>.
 </div>
 
 <div id="outline-container-h-d95aeb61-2705-477a-bff1-5af409e21561" class="outline-2">
-<h2 id="h-d95aeb61-2705-477a-bff1-5af409e21561"><span class="section-number-2">3</span> References</h2>
+<h2 id="h-d95aeb61-2705-477a-bff1-5af409e21561"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-d95aeb61-2705-477a-bff1-5af409e21561">
 <ul class="org-ul">
 <li>Oliver Nash,<br>

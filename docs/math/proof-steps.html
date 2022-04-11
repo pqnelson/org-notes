@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 19:03 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Proof Steps</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +189,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +206,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,19 +226,18 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Proof Steps</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-f907a02c-3947-40f7-a89d-ca2e4d86b81f">1. Definition</a>
 <ul>
@@ -304,7 +280,7 @@
 </div>
 
 <div id="outline-container-h-f907a02c-3947-40f7-a89d-ca2e4d86b81f" class="outline-2">
-<h2 id="h-f907a02c-3947-40f7-a89d-ca2e4d86b81f"><span class="section-number-2">1</span> Definition</h2>
+<h2 id="h-f907a02c-3947-40f7-a89d-ca2e4d86b81f"><span class="section-number-2">1.</span> Definition</h2>
 <div class="outline-text-2" id="text-h-f907a02c-3947-40f7-a89d-ca2e4d86b81f">
 <p>
 In formal proof sketches, we can limit our "logical vocabulary" to
@@ -322,7 +298,7 @@ is proven.
 </div>
 
 <div id="outline-container-h-53077d39-c377-4a30-a09c-70f6c158fdbd" class="outline-3">
-<h3 id="h-53077d39-c377-4a30-a09c-70f6c158fdbd"><span class="section-number-3">1.1</span> Formal Grammar</h3>
+<h3 id="h-53077d39-c377-4a30-a09c-70f6c158fdbd"><span class="section-number-3">1.1.</span> Formal Grammar</h3>
 <div class="outline-text-3" id="text-h-53077d39-c377-4a30-a09c-70f6c158fdbd">
 <p>
 Let's consider the formal grammar for formal proof
@@ -380,11 +356,11 @@ Note that justifications allow for nested proofs.
 </div>
 
 <div id="outline-container-h-3c0fc0e4-a5f6-49f4-a913-7585fa0b4358" class="outline-2">
-<h2 id="h-3c0fc0e4-a5f6-49f4-a913-7585fa0b4358"><span class="section-number-2">2</span> Steps</h2>
+<h2 id="h-3c0fc0e4-a5f6-49f4-a913-7585fa0b4358"><span class="section-number-2">2.</span> Steps</h2>
 <div class="outline-text-2" id="text-h-3c0fc0e4-a5f6-49f4-a913-7585fa0b4358">
 </div>
 <div id="outline-container-h-c8be4c51-ce97-433e-97be-ffe4a763c5ed" class="outline-3">
-<h3 id="h-c8be4c51-ce97-433e-97be-ffe4a763c5ed"><span class="section-number-3">2.1</span> <code>let</code> or forall-introduction</h3>
+<h3 id="h-c8be4c51-ce97-433e-97be-ffe4a763c5ed"><span class="section-number-3">2.1.</span> <code>let</code> or forall-introduction</h3>
 <div class="outline-text-3" id="text-h-c8be4c51-ce97-433e-97be-ffe4a763c5ed">
 <p>
 The proof skeleton for this step looks like:
@@ -408,11 +384,11 @@ $&forall;$-introduction:
 </div>
 
 <div id="outline-container-h-292b4f0e-6142-45b3-b1b7-2a89d33c17b1" class="outline-3">
-<h3 id="h-292b4f0e-6142-45b3-b1b7-2a89d33c17b1"><span class="section-number-3">2.2</span> <code>assume</code></h3>
+<h3 id="h-292b4f0e-6142-45b3-b1b7-2a89d33c17b1"><span class="section-number-3">2.2.</span> <code>assume</code></h3>
 <div class="outline-text-3" id="text-h-292b4f0e-6142-45b3-b1b7-2a89d33c17b1">
 </div>
 <div id="outline-container-h-c94efdcd-f2fb-4562-a9ce-702b424476b0" class="outline-4">
-<h4 id="h-c94efdcd-f2fb-4562-a9ce-702b424476b0"><span class="section-number-4">2.2.1</span> implies-intro</h4>
+<h4 id="h-c94efdcd-f2fb-4562-a9ce-702b424476b0"><span class="section-number-4">2.2.1.</span> implies-intro</h4>
 <div class="outline-text-4" id="text-h-c94efdcd-f2fb-4562-a9ce-702b424476b0">
 <p>
 When we want to prove a goal of the form \(A\implies B\), we begin by
@@ -430,7 +406,7 @@ stipulating the hypothesis \(A\) holds. That is to say, we <code>assume</code>
 </div>
 
 <div id="outline-container-h-53117430-d9c1-4395-9d65-fc9c4c76b4b9" class="outline-4">
-<h4 id="h-53117430-d9c1-4395-9d65-fc9c4c76b4b9"><span class="section-number-4">2.2.2</span> not-introduction</h4>
+<h4 id="h-53117430-d9c1-4395-9d65-fc9c4c76b4b9"><span class="section-number-4">2.2.2.</span> not-introduction</h4>
 <div class="outline-text-4" id="text-h-53117430-d9c1-4395-9d65-fc9c4c76b4b9">
 <p>
 We can take advantage of the logical equivalence of \(\neg A\) with
@@ -450,7 +426,7 @@ be wrong, and that \(A\) must be false (i.e., \(\neg A\) is true).
 </div>
 
 <div id="outline-container-h-56f7caee-a8bd-4195-b0a9-6b2a340e8be5" class="outline-4">
-<h4 id="h-56f7caee-a8bd-4195-b0a9-6b2a340e8be5"><span class="section-number-4">2.2.3</span> Reductio ad Absurdum</h4>
+<h4 id="h-56f7caee-a8bd-4195-b0a9-6b2a340e8be5"><span class="section-number-4">2.2.3.</span> Reductio ad Absurdum</h4>
 <div class="outline-text-4" id="text-h-56f7caee-a8bd-4195-b0a9-6b2a340e8be5">
 <p>
 The other way to look at this is, if assuming \(A\) and deriving a
@@ -470,7 +446,7 @@ rule. Usually I write in parentheses "<code>assume</code> \(A\) (for contradicti
 </div>
 
 <div id="outline-container-h-f0c1272f-de5f-4cc9-a977-a8c14a897de1" class="outline-3">
-<h3 id="h-f0c1272f-de5f-4cc9-a977-a8c14a897de1"><span class="section-number-3">2.3</span> <code>thus</code> or and-introduction</h3>
+<h3 id="h-f0c1272f-de5f-4cc9-a977-a8c14a897de1"><span class="section-number-3">2.3.</span> <code>thus</code> or and-introduction</h3>
 <div class="outline-text-3" id="text-h-f0c1272f-de5f-4cc9-a977-a8c14a897de1">
 <p>
 When we have multiple goals we want to prove conjoined together
@@ -502,7 +478,7 @@ proof goal.
 </div>
 
 <div id="outline-container-h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88" class="outline-3">
-<h3 id="h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88"><span class="section-number-3">2.4</span> <code>per cases</code>, or-introduction</h3>
+<h3 id="h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88"><span class="section-number-3">2.4.</span> <code>per cases</code>, or-introduction</h3>
 <div class="outline-text-3" id="text-h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88">
 <p>
 When we want to prove a claim by cases. That is, we have
@@ -539,7 +515,7 @@ for the duration of the block.
 </div>
 
 <div id="outline-container-h-4b92b0ba-c2e7-4b7f-813f-db15f44a4f7c" class="outline-3">
-<h3 id="h-4b92b0ba-c2e7-4b7f-813f-db15f44a4f7c"><span class="section-number-3">2.5</span> <code>consider</code>, exists-elimination</h3>
+<h3 id="h-4b92b0ba-c2e7-4b7f-813f-db15f44a4f7c"><span class="section-number-3">2.5.</span> <code>consider</code>, exists-elimination</h3>
 <div class="outline-text-3" id="text-h-4b92b0ba-c2e7-4b7f-813f-db15f44a4f7c">
 <p>
 If we have proven "\(\exists x, P[x]\)", then we may take a "witness"
@@ -568,7 +544,7 @@ The top-left subgoal is the justification for the proof step.
 </div>
 
 <div id="outline-container-h-0e66da0e-d02c-4dd5-9009-9c31ec4b88b8" class="outline-3">
-<h3 id="h-0e66da0e-d02c-4dd5-9009-9c31ec4b88b8"><span class="section-number-3">2.6</span> <code>take</code>, exists-intro</h3>
+<h3 id="h-0e66da0e-d02c-4dd5-9009-9c31ec4b88b8"><span class="section-number-3">2.6.</span> <code>take</code>, exists-intro</h3>
 <div class="outline-text-3" id="text-h-0e66da0e-d02c-4dd5-9009-9c31ec4b88b8">
 <p>
 When we want to prove a claim of the form "\(\exists x, P[x]\)", the
@@ -594,11 +570,11 @@ In natural deduction, this corresponds to $&exist;$-intro:
 </div>
 
 <div id="outline-container-h-443bfb2e-72f7-4c79-a3a8-90b179608fe8" class="outline-2">
-<h2 id="h-443bfb2e-72f7-4c79-a3a8-90b179608fe8"><span class="section-number-2">3</span> Syntactic Sugar</h2>
+<h2 id="h-443bfb2e-72f7-4c79-a3a8-90b179608fe8"><span class="section-number-2">3.</span> Syntactic Sugar</h2>
 <div class="outline-text-2" id="text-h-443bfb2e-72f7-4c79-a3a8-90b179608fe8">
 </div>
 <div id="outline-container-h-e82eeffb-df96-4f05-ad6f-c9b08e37cafb" class="outline-3">
-<h3 id="h-e82eeffb-df96-4f05-ad6f-c9b08e37cafb"><span class="section-number-3">3.1</span> <code>then</code> prefixes</h3>
+<h3 id="h-e82eeffb-df96-4f05-ad6f-c9b08e37cafb"><span class="section-number-3">3.1.</span> <code>then</code> prefixes</h3>
 <div class="outline-text-3" id="text-h-e82eeffb-df96-4f05-ad6f-c9b08e37cafb">
 <p>
 For steps requiring justification, if we use the previous step as
@@ -618,7 +594,7 @@ reference, namely, the previous step.
 </div>
 
 <div id="outline-container-h-ff7328a3-1ac3-44d8-8421-4fab0875eb35" class="outline-3">
-<h3 id="h-ff7328a3-1ac3-44d8-8421-4fab0875eb35"><span class="section-number-3">3.2</span> <code>hence</code> = <code>then thus</code></h3>
+<h3 id="h-ff7328a3-1ac3-44d8-8421-4fab0875eb35"><span class="section-number-3">3.2.</span> <code>hence</code> = <code>then thus</code></h3>
 <div class="outline-text-3" id="text-h-ff7328a3-1ac3-44d8-8421-4fab0875eb35">
 <p>
 There is some awkwardness to writing "Then thus". Instead, we write
@@ -629,7 +605,7 @@ synonyms.
 </div>
 
 <div id="outline-container-h-98017bb4-159d-4221-97a0-36601629712c" class="outline-3">
-<h3 id="h-98017bb4-159d-4221-97a0-36601629712c"><span class="section-number-3">3.3</span> <code>given = assume + then consider</code></h3>
+<h3 id="h-98017bb4-159d-4221-97a0-36601629712c"><span class="section-number-3">3.3.</span> <code>given = assume + then consider</code></h3>
 <div class="outline-text-3" id="text-h-98017bb4-159d-4221-97a0-36601629712c">
 <p>
 We also routinely write steps of the form
@@ -651,7 +627,7 @@ This is rather wordy. We contract the two steps into one:
 </div>
 
 <div id="outline-container-h-02599ff2-cf14-454a-be44-e46357f1b4bf" class="outline-3">
-<h3 id="h-02599ff2-cf14-454a-be44-e46357f1b4bf"><span class="section-number-3">3.4</span> <code>set</code></h3>
+<h3 id="h-02599ff2-cf14-454a-be44-e46357f1b4bf"><span class="section-number-3">3.4.</span> <code>set</code></h3>
 <div class="outline-text-3" id="text-h-02599ff2-cf14-454a-be44-e46357f1b4bf">
 <p>
 When we've already introduced an identifier (a symbol used for a
@@ -666,7 +642,7 @@ in the proof, we can flag this to the reader by writing:
 </div>
 
 <div id="outline-container-h-6c8990af-64e7-4182-9121-13144eb7f6a9" class="outline-3">
-<h3 id="h-6c8990af-64e7-4182-9121-13144eb7f6a9"><span class="section-number-3">3.5</span> <code>thesis</code> keyword</h3>
+<h3 id="h-6c8990af-64e7-4182-9121-13144eb7f6a9"><span class="section-number-3">3.5.</span> <code>thesis</code> keyword</h3>
 <div class="outline-text-3" id="text-h-6c8990af-64e7-4182-9121-13144eb7f6a9">
 <p>
 When we start a <code>proof</code> environment, the initial goal we're trying
@@ -679,12 +655,12 @@ or <code>hence thesis</code>.
 </div>
 
 <div id="outline-container-h-fd84a1a8-251f-4c22-b557-6c4073e6a86c" class="outline-2">
-<h2 id="h-fd84a1a8-251f-4c22-b557-6c4073e6a86c"><span class="section-number-2">4</span> Conventions</h2>
+<h2 id="h-fd84a1a8-251f-4c22-b557-6c4073e6a86c"><span class="section-number-2">4.</span> Conventions</h2>
 <div class="outline-text-2" id="text-h-fd84a1a8-251f-4c22-b557-6c4073e6a86c">
 </div>
 
 <div id="outline-container-h-aadd0d9c-fcfe-4f2c-a2d2-460e6b7f46a2" class="outline-3">
-<h3 id="h-aadd0d9c-fcfe-4f2c-a2d2-460e6b7f46a2"><span class="section-number-3">4.1</span> Proving \(A \iff B\)</h3>
+<h3 id="h-aadd0d9c-fcfe-4f2c-a2d2-460e6b7f46a2"><span class="section-number-3">4.1.</span> Proving \(A \iff B\)</h3>
 <div class="outline-text-3" id="text-h-aadd0d9c-fcfe-4f2c-a2d2-460e6b7f46a2">
 <p>
 One of the conventions I've adopted is to use the proof skeleton:
@@ -733,7 +709,7 @@ something of the form:
 
 
 <div id="outline-container-h-ec240c62-5e72-4270-b7bf-02c24604b297" class="outline-2">
-<h2 id="h-ec240c62-5e72-4270-b7bf-02c24604b297"><span class="section-number-2">5</span> References</h2>
+<h2 id="h-ec240c62-5e72-4270-b7bf-02c24604b297"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-ec240c62-5e72-4270-b7bf-02c24604b297">
 <p>
 Most of this comes from Freek Wiedijk's work and Mizar.
@@ -754,7 +730,7 @@ See especially section 3. <a href="https://www.cs.ru.nl/F.Wiedijk/pubs/sketches2
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 18:40.</p>
+<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
 </div>
 </body>
 </html>

@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 18:29 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Asymptotic Expansions</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +189,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +206,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,19 +226,18 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Asymptotic Expansions</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-217d9061-6164-475a-8958-eaa84e4f32e2">1. Asymptotic Sequences and Expansions</a></li>
 <li><a href="#h-eff77443-ee66-49a9-9073-ff2c41e68d81">2. Uniqueness of Asymptotic Expansions</a>
@@ -277,7 +253,7 @@
 </div>
 
 <div id="outline-container-h-217d9061-6164-475a-8958-eaa84e4f32e2" class="outline-2">
-<h2 id="h-217d9061-6164-475a-8958-eaa84e4f32e2"><span class="section-number-2">1</span> Asymptotic Sequences and Expansions</h2>
+<h2 id="h-217d9061-6164-475a-8958-eaa84e4f32e2"><span class="section-number-2">1.</span> Asymptotic Sequences and Expansions</h2>
 <div class="outline-text-2" id="text-h-217d9061-6164-475a-8958-eaa84e4f32e2">
 <div id="defn-asymptotic-sequence" class="definition">
 <p>
@@ -349,7 +325,7 @@ S_{n}(x) = \sum^{n}_{j=1}a_{j}\phi_{j}(x)
 </div>
 
 <div id="outline-container-h-eff77443-ee66-49a9-9073-ff2c41e68d81" class="outline-2">
-<h2 id="h-eff77443-ee66-49a9-9073-ff2c41e68d81"><span class="section-number-2">2</span> Uniqueness of Asymptotic Expansions</h2>
+<h2 id="h-eff77443-ee66-49a9-9073-ff2c41e68d81"><span class="section-number-2">2.</span> Uniqueness of Asymptotic Expansions</h2>
 <div class="outline-text-2" id="text-h-eff77443-ee66-49a9-9073-ff2c41e68d81">
 <p>
 Relative to an asymptotic sequence \(\{\phi_{j}(x)\}\) as \(x\to x_{0}\),
@@ -428,7 +404,7 @@ a_{n+1} = \lim_{x\to x_{0}}\frac{f(x) - S_{n}(x)}{\phi_{n+1}(x)}.
 </div>
 
 <div id="outline-container-h-1d1b4c8b-58b3-40fb-a689-8018a9a9363d" class="outline-3">
-<h3 id="h-1d1b4c8b-58b3-40fb-a689-8018a9a9363d"><span class="section-number-3">2.1</span> Non-Uniqueness</h3>
+<h3 id="h-1d1b4c8b-58b3-40fb-a689-8018a9a9363d"><span class="section-number-3">2.1.</span> Non-Uniqueness</h3>
 <div class="outline-text-3" id="text-h-1d1b4c8b-58b3-40fb-a689-8018a9a9363d">
 <p>
 If we have two different asymptotic sequences \(\{\phi_{j}(x)\}\) and
@@ -457,7 +433,7 @@ expansions as \(x\to\infty\).
 </div>
 
 <div id="outline-container-h-a3ce3903-3101-42f5-ba18-02dec031507a" class="outline-2">
-<h2 id="h-a3ce3903-3101-42f5-ba18-02dec031507a"><span class="section-number-2">3</span> Transcendentally Small Terms</h2>
+<h2 id="h-a3ce3903-3101-42f5-ba18-02dec031507a"><span class="section-number-2">3.</span> Transcendentally Small Terms</h2>
 <div class="outline-text-2" id="text-h-a3ce3903-3101-42f5-ba18-02dec031507a">
 <div id="defn-tst" class="definition">
 <p>
@@ -521,7 +497,7 @@ essential singularity at \(\infty\).</li>
 </div>
 
 <div id="outline-container-h-40e4ba4c-630d-4a08-88f1-e6d3433b7ce3" class="outline-2">
-<h2 id="h-40e4ba4c-630d-4a08-88f1-e6d3433b7ce3"><span class="section-number-2">4</span> Arithmetic of Asymptotic Series</h2>
+<h2 id="h-40e4ba4c-630d-4a08-88f1-e6d3433b7ce3"><span class="section-number-2">4.</span> Arithmetic of Asymptotic Series</h2>
 <div class="outline-text-2" id="text-h-40e4ba4c-630d-4a08-88f1-e6d3433b7ce3">
 <p>
 We can add, subtract, multiply, divide, and integrate asymptotic series
@@ -654,7 +630,7 @@ differentiate term-by-term the asymptotic expansion.
 </div>
 
 <div id="outline-container-h-2d66a4c4-9000-44b4-9770-3d39443d5ef4" class="outline-2">
-<h2 id="h-2d66a4c4-9000-44b4-9770-3d39443d5ef4"><span class="section-number-2">5</span> References</h2>
+<h2 id="h-2d66a4c4-9000-44b4-9770-3d39443d5ef4"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-2d66a4c4-9000-44b4-9770-3d39443d5ef4">
 <ul class="org-ul">
 <li>John P. Boyd, <br>
@@ -667,7 +643,7 @@ Hyperasymptotic Series". <br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 18:28.</p>
+<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
 </div>
 </body>
 </html>

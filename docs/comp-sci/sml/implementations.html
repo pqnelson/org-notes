@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-02 Wed 15:09 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementations - SML</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +189,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,39 +206,17 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Implementations - SML</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-542dda25-92a9-4242-981a-326396c9d891">1. Poly/ML</a></li>
 <li><a href="#h-a474e941-9a4f-45e9-bf6c-0434934dfe24">2. MLton</a>
@@ -262,7 +239,7 @@ Pi" post.
 </p>
 
 <div id="outline-container-h-542dda25-92a9-4242-981a-326396c9d891" class="outline-2">
-<h2 id="h-542dda25-92a9-4242-981a-326396c9d891"><span class="section-number-2">1</span> Poly/ML</h2>
+<h2 id="h-542dda25-92a9-4242-981a-326396c9d891"><span class="section-number-2">1.</span> Poly/ML</h2>
 <div class="outline-text-2" id="text-h-542dda25-92a9-4242-981a-326396c9d891">
 <p>
 This seems to work fine. If you have a 32-bit ARM computer, then it will
@@ -270,7 +247,7 @@ simply compile bytecode, which will run considerably slower. The basic
 steps <a href="https://www.polyml.org/download.html">seems to be:</a>
 </p>
 
-<pre class="example" id="org2eb4494">
+<pre class="example" id="orge299896">
 ~/src/$ git clone https://github.com/polyml/polyml.git
 ~/src/polyml/$ cd polyml
 ~/src/polyml/$ ./configure
@@ -297,7 +274,7 @@ drastically.
 </div>
 
 <div id="outline-container-h-a474e941-9a4f-45e9-bf6c-0434934dfe24" class="outline-2">
-<h2 id="h-a474e941-9a4f-45e9-bf6c-0434934dfe24"><span class="section-number-2">2</span> MLton</h2>
+<h2 id="h-a474e941-9a4f-45e9-bf6c-0434934dfe24"><span class="section-number-2">2.</span> MLton</h2>
 <div class="outline-text-2" id="text-h-a474e941-9a4f-45e9-bf6c-0434934dfe24">
 <p>
 This needs an existing SML compiler for the bootstrap process.
@@ -319,7 +296,7 @@ computer. Basically, on my x64 machine with 12GB of RAM, I ran the
 following:
 </p>
 
-<pre class="example" id="org240ef90">
+<pre class="example" id="org33e574c">
 alex@x64:~/src/$ git clone https://github.com/mlton/mlton
 alex@x64:~/src/$ cd mlton
 alex@x64:~/src/mlton/$ make
@@ -355,7 +332,7 @@ might want to follow <a href="http://web.archive.org/web/20160404025901/http://j
 </div>
 
 <div id="outline-container-h-c96a1a4f-8997-4297-b4a6-4d2446fac78d" class="outline-3">
-<h3 id="h-c96a1a4f-8997-4297-b4a6-4d2446fac78d"><span class="section-number-3">2.1</span> On Raspberry Pi</h3>
+<h3 id="h-c96a1a4f-8997-4297-b4a6-4d2446fac78d"><span class="section-number-3">2.1.</span> On Raspberry Pi</h3>
 <div class="outline-text-3" id="text-h-c96a1a4f-8997-4297-b4a6-4d2446fac78d">
 <p>
 This is actually harder than I realized to get this working on a
@@ -374,13 +351,13 @@ Raspbian lite.
 </div>
 
 <div id="outline-container-h-d3cc257f-9ad7-4953-9db1-abbed247e1f7" class="outline-4">
-<h4 id="h-d3cc257f-9ad7-4953-9db1-abbed247e1f7"><span class="section-number-4">2.1.1</span> Remote Compiling</h4>
+<h4 id="h-d3cc257f-9ad7-4953-9db1-abbed247e1f7"><span class="section-number-4">2.1.1.</span> Remote Compiling</h4>
 <div class="outline-text-4" id="text-h-d3cc257f-9ad7-4953-9db1-abbed247e1f7">
 <p>
 The exact failure is during the <code>remote--make-all</code> step:
 </p>
 
-<pre class="example" id="org9d7fac0">
+<pre class="example" id="org6a921dd">
 Compiling mlton
 "/tmp/mlton-20210117.153942-gb1f1f0f09/boot/bin/mlton" \
 	@MLton ram-slop 0.7  gc-summary -- \
@@ -405,7 +382,7 @@ make: *** [Makefile:666: remote--make-all] Error 2
 </div>
 
 <div id="outline-container-h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515" class="outline-2">
-<h2 id="h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515"><span class="section-number-2">3</span> SML/NJ</h2>
+<h2 id="h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515"><span class="section-number-2">3.</span> SML/NJ</h2>
 <div class="outline-text-2" id="text-h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515">
 <p>
 Doesn't support 32-bit ARM, and intends to support 64-bit ARM in the
@@ -424,7 +401,7 @@ This is yet another incentive to upgrade to a 64-bit Raspberry Pi&#x2026;
 </div>
 
 <div id="outline-container-h-8bee04cc-0008-4a29-af61-8d0d0203aeb3" class="outline-2">
-<h2 id="h-8bee04cc-0008-4a29-af61-8d0d0203aeb3"><span class="section-number-2">4</span> MLKit</h2>
+<h2 id="h-8bee04cc-0008-4a29-af61-8d0d0203aeb3"><span class="section-number-2">4.</span> MLKit</h2>
 <div class="outline-text-2" id="text-h-8bee04cc-0008-4a29-af61-8d0d0203aeb3">
 <p>
 Only supports x86 and Javascript, so I couldn't get it working on my

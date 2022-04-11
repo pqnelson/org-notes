@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 12:09 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Category Theory</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +189,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,39 +206,17 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Category Theory</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-e5f7360b-fb8e-42d5-81c1-09ebe76adfed">1. "Overview"</a></li>
 <li><a href="#h-635e48a8-14c9-4acd-80c7-042dac344386">2. Categorification</a></li>
@@ -261,7 +238,7 @@
 </div>
 
 <div id="outline-container-h-e5f7360b-fb8e-42d5-81c1-09ebe76adfed" class="outline-2">
-<h2 id="h-e5f7360b-fb8e-42d5-81c1-09ebe76adfed"><span class="section-number-2">1</span> "Overview"</h2>
+<h2 id="h-e5f7360b-fb8e-42d5-81c1-09ebe76adfed"><span class="section-number-2">1.</span> "Overview"</h2>
 <div class="outline-text-2" id="text-h-e5f7360b-fb8e-42d5-81c1-09ebe76adfed">
 <p>
 I'm not going to pretend to talk about why category theory is useful.
@@ -280,7 +257,7 @@ more).
 </div>
 
 <div id="outline-container-h-635e48a8-14c9-4acd-80c7-042dac344386" class="outline-2">
-<h2 id="h-635e48a8-14c9-4acd-80c7-042dac344386"><span class="section-number-2">2</span> Categorification</h2>
+<h2 id="h-635e48a8-14c9-4acd-80c7-042dac344386"><span class="section-number-2">2.</span> Categorification</h2>
 <div class="outline-text-2" id="text-h-635e48a8-14c9-4acd-80c7-042dac344386">
 <p>
 Categorification is the process of finding category theoretic
@@ -302,7 +279,7 @@ This can be related to the process of <a href="category-theory/internalization.h
 </div>
 
 <div id="outline-container-h-dab505ba-dc33-4821-afd9-a61026f21d21" class="outline-2">
-<h2 id="h-dab505ba-dc33-4821-afd9-a61026f21d21"><span class="section-number-2">3</span> References</h2>
+<h2 id="h-dab505ba-dc33-4821-afd9-a61026f21d21"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-dab505ba-dc33-4821-afd9-a61026f21d21">
 <ul class="org-ul">
 <li>Mac Lane's <cite class="book-title">Category Theory for the Working Mathematician</cite>
@@ -314,7 +291,7 @@ is the standard text.</li>
 </div>
 
 <div id="outline-container-h-0cbb1a17-04c0-43d5-96b0-796a13e41527" class="outline-3">
-<h3 id="h-0cbb1a17-04c0-43d5-96b0-796a13e41527"><span class="section-number-3">3.1</span> Examples of Categorification</h3>
+<h3 id="h-0cbb1a17-04c0-43d5-96b0-796a13e41527"><span class="section-number-3">3.1.</span> Examples of Categorification</h3>
 <div class="outline-text-3" id="text-h-0cbb1a17-04c0-43d5-96b0-796a13e41527">
 <ul class="org-ul">
 <li>John Baez and Michael Shulman,<br>
@@ -336,7 +313,7 @@ Eprint: <a href="https://arxiv.org/abs/math/0602079">arXiv:math/0602079</a> [mat
 </div>
 
 <div id="outline-container-h-fce4a7ed-5719-4013-ad56-03335949fca1" class="outline-4">
-<h4 id="h-fce4a7ed-5719-4013-ad56-03335949fca1"><span class="section-number-4">3.1.1</span> 2-Vector Spaces</h4>
+<h4 id="h-fce4a7ed-5719-4013-ad56-03335949fca1"><span class="section-number-4">3.1.1.</span> 2-Vector Spaces</h4>
 <div class="outline-text-4" id="text-h-fce4a7ed-5719-4013-ad56-03335949fca1">
 <ul class="org-ul">
 <li>John C. Baez and Alissa S. Crans,<br>
@@ -350,7 +327,7 @@ Eprint: <a href="https://arxiv.org/abs/math/0602079">arXiv:math/0602079</a> [mat
 </div>
 
 <div id="outline-container-h-195ba4a7-7c60-4042-8ce2-8cd6a9933c35" class="outline-4">
-<h4 id="h-195ba4a7-7c60-4042-8ce2-8cd6a9933c35"><span class="section-number-4">3.1.2</span> Galois Theory</h4>
+<h4 id="h-195ba4a7-7c60-4042-8ce2-8cd6a9933c35"><span class="section-number-4">3.1.2.</span> Galois Theory</h4>
 <div class="outline-text-4" id="text-h-195ba4a7-7c60-4042-8ce2-8cd6a9933c35">
 <ul class="org-ul">
 <li>Theo Johnson-Freyd,<br>
@@ -364,7 +341,7 @@ Eprint: <a href="https://arxiv.org/abs/math/0602079">arXiv:math/0602079</a> [mat
 </div>
 
 <div id="outline-container-h-a492e195-db18-4872-b961-1c8e864bc279" class="outline-4">
-<h4 id="h-a492e195-db18-4872-b961-1c8e864bc279"><span class="section-number-4">3.1.3</span> Number Theory and Stuff</h4>
+<h4 id="h-a492e195-db18-4872-b961-1c8e864bc279"><span class="section-number-4">3.1.3.</span> Number Theory and Stuff</h4>
 <div class="outline-text-4" id="text-h-a492e195-db18-4872-b961-1c8e864bc279">
 <ul class="org-ul">
 <li>Quoc P. Ho, Penghui Li,
@@ -375,7 +352,7 @@ Eprint: <a href="https://arxiv.org/abs/math/0602079">arXiv:math/0602079</a> [mat
 </div>
 
 <div id="outline-container-h-a2463813-f502-4be1-bbc4-a3c977a5713c" class="outline-4">
-<h4 id="h-a2463813-f502-4be1-bbc4-a3c977a5713c"><span class="section-number-4">3.1.4</span> Polynomials</h4>
+<h4 id="h-a2463813-f502-4be1-bbc4-a3c977a5713c"><span class="section-number-4">3.1.4.</span> Polynomials</h4>
 <div class="outline-text-4" id="text-h-a2463813-f502-4be1-bbc4-a3c977a5713c">
 <ul class="org-ul">
 <li>Syu Kato, Anton Khoroshkin, Ievgen Makedonskyi,
@@ -390,7 +367,7 @@ Eprint: <a href="https://arxiv.org/abs/1101.0293">arXiv:1101.0293</a> [math.QA],
 </div>
 
 <div id="outline-container-h-17051e84-5b54-4288-9f67-67d7bc0848c8" class="outline-3">
-<h3 id="h-17051e84-5b54-4288-9f67-67d7bc0848c8"><span class="section-number-3">3.2</span> Higher Category Theory</h3>
+<h3 id="h-17051e84-5b54-4288-9f67-67d7bc0848c8"><span class="section-number-3">3.2.</span> Higher Category Theory</h3>
 <div class="outline-text-3" id="text-h-17051e84-5b54-4288-9f67-67d7bc0848c8">
 <ul class="org-ul">
 <li>Tom Leinster,
@@ -403,7 +380,7 @@ Eprint: <a href="https://arxiv.org/abs/math/0107188">arXiv:math/0107188</a> [mat
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 12:00.</p>
+<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
 </div>
 </body>
 </html>

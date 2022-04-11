@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 19:03 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Ring of Formal Polynomials</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +189,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +206,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,19 +226,18 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Ring of Formal Polynomials</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-cb1ea035-1b8c-4ccd-a7d5-5fefb74071e5">1. Introduction</a></li>
 <li><a href="#h-20d930e7-8d3b-4360-96e5-3204d34d5696">2. Polynomial Methods</a>
@@ -287,7 +263,7 @@
 </div>
 
 <div id="outline-container-h-cb1ea035-1b8c-4ccd-a7d5-5fefb74071e5" class="outline-2">
-<h2 id="h-cb1ea035-1b8c-4ccd-a7d5-5fefb74071e5"><span class="section-number-2">1</span> Introduction</h2>
+<h2 id="h-cb1ea035-1b8c-4ccd-a7d5-5fefb74071e5"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-cb1ea035-1b8c-4ccd-a7d5-5fefb74071e5">
 <p>
 This is just a review of the theory of formal polynomials over a
@@ -304,7 +280,7 @@ divisor of two polynomials).
 </div>
 
 <div id="outline-container-h-20d930e7-8d3b-4360-96e5-3204d34d5696" class="outline-2">
-<h2 id="h-20d930e7-8d3b-4360-96e5-3204d34d5696"><span class="section-number-2">2</span> Polynomial Methods</h2>
+<h2 id="h-20d930e7-8d3b-4360-96e5-3204d34d5696"><span class="section-number-2">2.</span> Polynomial Methods</h2>
 <div class="outline-text-2" id="text-h-20d930e7-8d3b-4360-96e5-3204d34d5696">
 <p>
 Given some representation of polynomials in a single variable, we review
@@ -345,7 +321,7 @@ the integers \(\nu\colon R\setminus\{0\}\to\mathbb{Z}\)? Or the reals
 </div>
 
 <div id="outline-container-h-3c8e788d-b518-4461-a38d-32a712da0309" class="outline-3">
-<h3 id="h-3c8e788d-b518-4461-a38d-32a712da0309"><span class="section-number-3">2.1</span> Long Division</h3>
+<h3 id="h-3c8e788d-b518-4461-a38d-32a712da0309"><span class="section-number-3">2.1.</span> Long Division</h3>
 <div class="outline-text-3" id="text-h-3c8e788d-b518-4461-a38d-32a712da0309">
 <p>
 We can use a naive long division algorithm.
@@ -393,7 +369,7 @@ this.
 </div>
 
 <div id="outline-container-h-a46c3f92-c5c8-4218-b5b1-0f992b6d96fe" class="outline-3">
-<h3 id="h-a46c3f92-c5c8-4218-b5b1-0f992b6d96fe"><span class="section-number-3">2.2</span> Pseudo-Division</h3>
+<h3 id="h-a46c3f92-c5c8-4218-b5b1-0f992b6d96fe"><span class="section-number-3">2.2.</span> Pseudo-Division</h3>
 <div class="outline-text-3" id="text-h-a46c3f92-c5c8-4218-b5b1-0f992b6d96fe">
 <p>
 When working over an integral domain \(D\), we can't necessarily compute
@@ -433,7 +409,7 @@ denoted \(\mathrm{prem}(A,B)\) by Bronstein.
 </div>
 
 <div id="outline-container-h-1537ef09-adad-4c83-876c-91b8270bcd23" class="outline-3">
-<h3 id="h-1537ef09-adad-4c83-876c-91b8270bcd23"><span class="section-number-3">2.3</span> Euclidean Algorithm</h3>
+<h3 id="h-1537ef09-adad-4c83-876c-91b8270bcd23"><span class="section-number-3">2.3.</span> Euclidean Algorithm</h3>
 <div class="outline-text-3" id="text-h-1537ef09-adad-4c83-876c-91b8270bcd23">
 <p>
 There are several variations of Euclid's algorithm for GCD with polynomials.
@@ -456,7 +432,7 @@ There are several variations of Euclid's algorithm for GCD with polynomials.
 </div>
 
 <div id="outline-container-h-c1978393-3a06-4729-a076-eb6919b03b93" class="outline-4">
-<h4 id="h-c1978393-3a06-4729-a076-eb6919b03b93"><span class="section-number-4">2.3.1</span> Extended Euclidean Algorithm</h4>
+<h4 id="h-c1978393-3a06-4729-a076-eb6919b03b93"><span class="section-number-4">2.3.1.</span> Extended Euclidean Algorithm</h4>
 <div class="outline-text-4" id="text-h-c1978393-3a06-4729-a076-eb6919b03b93">
 <p>
 The "follow your nose" implementation of the extended Euclidean
@@ -492,7 +468,7 @@ algorithm could be implemented quite quickly.
 </div>
 
 <div id="outline-container-h-2b7f76fa-69cc-4289-be25-6cfdbd03cbe9" class="outline-4">
-<h4 id="h-2b7f76fa-69cc-4289-be25-6cfdbd03cbe9"><span class="section-number-4">2.3.2</span> Half-Extended Euclidean</h4>
+<h4 id="h-2b7f76fa-69cc-4289-be25-6cfdbd03cbe9"><span class="section-number-4">2.3.2.</span> Half-Extended Euclidean</h4>
 <div class="outline-text-4" id="text-h-2b7f76fa-69cc-4289-be25-6cfdbd03cbe9">
 <p>
 Alas, if we need only one of the coefficients <code>s</code> or <code>t</code>, we can use a
@@ -522,7 +498,7 @@ variant of the Euclidean algorithm which Bronstein calls the
 </div>
 
 <div id="outline-container-h-85ca51b2-bb65-4f0a-b27a-16d48d61e4c6" class="outline-4">
-<h4 id="h-85ca51b2-bb65-4f0a-b27a-16d48d61e4c6"><span class="section-number-4">2.3.3</span> Euclidean Algorithm</h4>
+<h4 id="h-85ca51b2-bb65-4f0a-b27a-16d48d61e4c6"><span class="section-number-4">2.3.3.</span> Euclidean Algorithm</h4>
 <div class="outline-text-4" id="text-h-85ca51b2-bb65-4f0a-b27a-16d48d61e4c6">
 <p>
 We can use this half-extended Euclidean algorithm for a more efficient
@@ -541,7 +517,7 @@ implementation of Euclid's algorithm.
 </div>
 
 <div id="outline-container-h-63ab8015-e645-4d71-8b37-b6fc9d363f6d" class="outline-4">
-<h4 id="h-63ab8015-e645-4d71-8b37-b6fc9d363f6d"><span class="section-number-4">2.3.4</span> Diophantine version of Extended Euclidean</h4>
+<h4 id="h-63ab8015-e645-4d71-8b37-b6fc9d363f6d"><span class="section-number-4">2.3.4.</span> Diophantine version of Extended Euclidean</h4>
 <div class="outline-text-4" id="text-h-63ab8015-e645-4d71-8b37-b6fc9d363f6d">
 <p>
 We can use the extended Euclidean algorithm to solve Diophantine
@@ -573,7 +549,7 @@ are the unknowns.
 </div>
 
 <div id="outline-container-h-28f779bb-5e95-44fa-b0a6-6010c0dab934" class="outline-4">
-<h4 id="h-28f779bb-5e95-44fa-b0a6-6010c0dab934"><span class="section-number-4">2.3.5</span> Diophantine Half-Extended Euclidean</h4>
+<h4 id="h-28f779bb-5e95-44fa-b0a6-6010c0dab934"><span class="section-number-4">2.3.5.</span> Diophantine Half-Extended Euclidean</h4>
 <div class="outline-text-4" id="text-h-28f779bb-5e95-44fa-b0a6-6010c0dab934">
 <p>
 When we only want the <code>s</code> in the Euclidean domain such that <code>s*a = c</code>
@@ -625,7 +601,7 @@ This gives us a more efficient diophantine extended Euclidean method
 </div>
 
 <div id="outline-container-h-b241a9e1-876e-4de8-b2eb-37b79591e10d" class="outline-4">
-<h4 id="h-b241a9e1-876e-4de8-b2eb-37b79591e10d"><span class="section-number-4">2.3.6</span> Partial Fraction Decomposition</h4>
+<h4 id="h-b241a9e1-876e-4de8-b2eb-37b79591e10d"><span class="section-number-4">2.3.6.</span> Partial Fraction Decomposition</h4>
 <div class="outline-text-4" id="text-h-b241a9e1-876e-4de8-b2eb-37b79591e10d">
 <p>
 We can use Euclidean Algorithm to determine the partial fraction
@@ -656,7 +632,7 @@ irreducible) factors \(\gcd(d_{i},d_{j})=1\) for \(i\neq j\).
 </div>
 
 <div id="outline-container-h-ddaff7e3-7343-42d0-9805-220cf9b68a17" class="outline-4">
-<h4 id="h-ddaff7e3-7343-42d0-9805-220cf9b68a17"><span class="section-number-4">2.3.7</span> Partial Fraction Decomposition with Multiplicity</h4>
+<h4 id="h-ddaff7e3-7343-42d0-9805-220cf9b68a17"><span class="section-number-4">2.3.7.</span> Partial Fraction Decomposition with Multiplicity</h4>
 <div class="outline-text-4" id="text-h-ddaff7e3-7343-42d0-9805-220cf9b68a17">
 <p>
 We explicitly assumed each factor \(d_{i}\) was coprime with each other.
@@ -742,7 +718,7 @@ respect to the factorization \(d = \prod_{i} d_{i}^{e_{i}}\).
 </div>
 
 <div id="outline-container-h-3f8f5f1a-82c6-4d68-8526-ef9bbf45f7c7" class="outline-2">
-<h2 id="h-3f8f5f1a-82c6-4d68-8526-ef9bbf45f7c7"><span class="section-number-2">3</span> References</h2>
+<h2 id="h-3f8f5f1a-82c6-4d68-8526-ef9bbf45f7c7"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-3f8f5f1a-82c6-4d68-8526-ef9bbf45f7c7">
 <ul class="org-ul">
 <li>Manuel Bronstein, <cite class="book-title">Symbolic Integration 1: Transcendental Functions</cite>.
@@ -752,7 +728,7 @@ Springer, second ed., 1996.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 18:59.</p>
+<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
 </div>
 </body>
 </html>

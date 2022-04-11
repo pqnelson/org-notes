@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-04-11 Sun 19:03 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Rings and Things</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -189,7 +189,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,28 +206,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -249,19 +226,18 @@
              }
 });
 </script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Rings and Things</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-a5f46763-8b18-4933-b942-e03c7c95db54">1. Generalization of Number Systems</a>
 <ul>
@@ -300,7 +276,7 @@
 </div>
 
 <div id="outline-container-h-a5f46763-8b18-4933-b942-e03c7c95db54" class="outline-2">
-<h2 id="h-a5f46763-8b18-4933-b942-e03c7c95db54"><span class="section-number-2">1</span> Generalization of Number Systems</h2>
+<h2 id="h-a5f46763-8b18-4933-b942-e03c7c95db54"><span class="section-number-2">1.</span> Generalization of Number Systems</h2>
 <div class="outline-text-2" id="text-h-a5f46763-8b18-4933-b942-e03c7c95db54">
 <p>
 The study of rings generalizes the study of number systems. The
@@ -379,7 +355,7 @@ want to have commutativity for addition.
 </div>
 
 <div id="outline-container-h-03deb5e7-4e53-4c2a-bfd8-fdbcf9ba4078" class="outline-3">
-<h3 id="h-03deb5e7-4e53-4c2a-bfd8-fdbcf9ba4078"><span class="section-number-3">1.1</span> Examples</h3>
+<h3 id="h-03deb5e7-4e53-4c2a-bfd8-fdbcf9ba4078"><span class="section-number-3">1.1.</span> Examples</h3>
 <div class="outline-text-3" id="text-h-03deb5e7-4e53-4c2a-bfd8-fdbcf9ba4078">
 <div id="ex-integers-are-a-ring" class="math-example">
 <p>
@@ -466,7 +442,7 @@ What happens for noncommutative rings \(R\)?
 </div>
 
 <div id="outline-container-h-6b3e4190-1cb1-41dc-960b-24cedee5bb0d" class="outline-3">
-<h3 id="h-6b3e4190-1cb1-41dc-960b-24cedee5bb0d"><span class="section-number-3">1.2</span> Special Elements in a Ring</h3>
+<h3 id="h-6b3e4190-1cb1-41dc-960b-24cedee5bb0d"><span class="section-number-3">1.2.</span> Special Elements in a Ring</h3>
 <div class="outline-text-3" id="text-h-6b3e4190-1cb1-41dc-960b-24cedee5bb0d">
 <div id="defn-nilpotent" class="definition">
 <p>
@@ -491,7 +467,7 @@ if \(r^{2}=r\).
 </div>
 
 <div id="outline-container-h-440ddc6d-4548-4e18-b747-e1f40b0f4f4e" class="outline-3">
-<h3 id="h-440ddc6d-4548-4e18-b747-e1f40b0f4f4e"><span class="section-number-3">1.3</span> Ring Morphisms</h3>
+<h3 id="h-440ddc6d-4548-4e18-b747-e1f40b0f4f4e"><span class="section-number-3">1.3.</span> Ring Morphisms</h3>
 <div class="outline-text-3" id="text-h-440ddc6d-4548-4e18-b747-e1f40b0f4f4e">
 <div id="defn-ring-morphism" class="definition">
 <p>
@@ -573,7 +549,7 @@ A ring isomorphism, like all isomorphisms, tells us when two rings are
 </div>
 
 <div id="outline-container-h-b18f1c1f-bad7-4f83-be69-f4b8e8d9e06a" class="outline-3">
-<h3 id="h-b18f1c1f-bad7-4f83-be69-f4b8e8d9e06a"><span class="section-number-3">1.4</span> Subrings, Adjoining Elements</h3>
+<h3 id="h-b18f1c1f-bad7-4f83-be69-f4b8e8d9e06a"><span class="section-number-3">1.4.</span> Subrings, Adjoining Elements</h3>
 <div class="outline-text-3" id="text-h-b18f1c1f-bad7-4f83-be69-f4b8e8d9e06a">
 <div id="defn-subring" class="definition">
 <p>
@@ -651,7 +627,7 @@ example of \(\ZZ[\sqrt{-5}]\) is thrown around a lot because in that ring,
 </div>
 
 <div id="outline-container-h-e35ff4ad-70ff-422e-8fd3-bc8a0da7bd51" class="outline-3">
-<h3 id="h-e35ff4ad-70ff-422e-8fd3-bc8a0da7bd51"><span class="section-number-3">1.5</span> Ideals</h3>
+<h3 id="h-e35ff4ad-70ff-422e-8fd3-bc8a0da7bd51"><span class="section-number-3">1.5.</span> Ideals</h3>
 <div class="outline-text-3" id="text-h-e35ff4ad-70ff-422e-8fd3-bc8a0da7bd51">
 <div id="defn-kernel" class="definition">
 <p>
@@ -781,7 +757,7 @@ Let \(R\) be a ring, \(I\) an ideal of \(R\). Prove or find a counter-example:
 </div>
 
 <div id="outline-container-h-1fb500b5-9715-4693-8feb-f1fb5db1e16a" class="outline-3">
-<h3 id="h-1fb500b5-9715-4693-8feb-f1fb5db1e16a"><span class="section-number-3">1.6</span> Integral Domain</h3>
+<h3 id="h-1fb500b5-9715-4693-8feb-f1fb5db1e16a"><span class="section-number-3">1.6.</span> Integral Domain</h3>
 <div class="outline-text-3" id="text-h-1fb500b5-9715-4693-8feb-f1fb5db1e16a">
 <div id="defn-integral-domain" class="definition">
 <p>
@@ -856,7 +832,7 @@ The ring \(\ZZ[\sqrt{-5}]\) is an integral domain.
 </div>
 
 <div id="outline-container-h-738b2d99-d841-4742-8dec-4cec26ed04ab" class="outline-4">
-<h4 id="h-738b2d99-d841-4742-8dec-4cec26ed04ab"><span class="section-number-4">1.6.1</span> Factors</h4>
+<h4 id="h-738b2d99-d841-4742-8dec-4cec26ed04ab"><span class="section-number-4">1.6.1.</span> Factors</h4>
 <div class="outline-text-4" id="text-h-738b2d99-d841-4742-8dec-4cec26ed04ab">
 <div id="defn-division" class="definition">
 <p>
@@ -902,10 +878,10 @@ such that \(z=ut\).
 </p>
 
 </div>
-<div class="proof" id="orga2b6695">
+<div class="proof" id="org4470633">
 <ul class="org-ul">
 <li>Assume \(z = \gcd(x,y)\), \(t=\gcd(x,y)\), and \(t\neq z\).</li>
-<li>Then \(t\mid x\) and \(t\mid y\) by <a href="#org3e85ce6">definition of gcd</a>.</li>
+<li>Then \(t\mid x\) and \(t\mid y\) by <a href="#orgce471d8">definition of gcd</a>.</li>
 <li>Then \(t\mid z\) by \(z=\gcd(x,y)\).</li>
 <li>Thus \(z=ut\) for some \(u\in R\).</li>
 </ul>
@@ -922,7 +898,7 @@ some units \(u,v\in R^{*}\).
 
 </div>
 
-<div class="proof" id="org64b8ac8">
+<div class="proof" id="orgb58cc9f">
 <ul class="org-ul">
 <li>Assume \(z = \gcd(x,y)\), \(t=\gcd(x,y)\), and \(t\neq z\).</li>
 <li>Consider \(u\in R\) such that \(z=ut\) by the previous lemma.</li>
@@ -947,7 +923,7 @@ if there is some unit \(u\in R^{*}\) such that \(a=ub\).
 </div>
 
 <div id="outline-container-h-b90357b9-9646-4544-aa00-4059af933f2b" class="outline-4">
-<h4 id="h-b90357b9-9646-4544-aa00-4059af933f2b"><span class="section-number-4">1.6.2</span> Prime, Irreducible Elements</h4>
+<h4 id="h-b90357b9-9646-4544-aa00-4059af933f2b"><span class="section-number-4">1.6.2.</span> Prime, Irreducible Elements</h4>
 <div class="outline-text-4" id="text-h-b90357b9-9646-4544-aa00-4059af933f2b">
 <div id="defn-prime-elt" class="definition">
 <p>
@@ -975,7 +951,7 @@ Then every prime \(p\in R\) is irreducible.
 
 </div>
 
-<div class="proof" id="org28db04c">
+<div class="proof" id="orgd9548d0">
 <ul class="org-ul">
 <li>Let \(p\in R\) be prime.</li>
 <li>Assume \(a,b\in R\) satisfy \(p=ab\).</li>
@@ -1005,7 +981,7 @@ not always true.
 </div>
 
 <div id="outline-container-h-0a367193-227e-413a-ae7d-8a42cfc8bebd" class="outline-3">
-<h3 id="h-0a367193-227e-413a-ae7d-8a42cfc8bebd"><span class="section-number-3">1.7</span> Unique Factorization Domain</h3>
+<h3 id="h-0a367193-227e-413a-ae7d-8a42cfc8bebd"><span class="section-number-3">1.7.</span> Unique Factorization Domain</h3>
 <div class="outline-text-3" id="text-h-0a367193-227e-413a-ae7d-8a42cfc8bebd">
 <div id="defn-ufd" class="definition">
 <p>
@@ -1051,7 +1027,7 @@ If \(R\) is a UFD, then the polynomial ring \(R[x_{1},\dots,x_{n}]\) is a UFD.
 </div>
 
 <div id="outline-container-h-c8386128-fe00-4c69-8489-1e127df235e1" class="outline-3">
-<h3 id="h-c8386128-fe00-4c69-8489-1e127df235e1"><span class="section-number-3">1.8</span> Principal Ideal Domain</h3>
+<h3 id="h-c8386128-fe00-4c69-8489-1e127df235e1"><span class="section-number-3">1.8.</span> Principal Ideal Domain</h3>
 <div class="outline-text-3" id="text-h-c8386128-fe00-4c69-8489-1e127df235e1">
 <div id="defn-principal-ideal" class="definition">
 <p>
@@ -1092,11 +1068,11 @@ If \(R\) is a PID, then \((x,y) = (\gcd(x,y))\) for any \(x,y\in R\).
 </div>
 
 <div id="outline-container-h-d35432ca-44af-42ab-a269-4301147f0ccc" class="outline-2">
-<h2 id="h-d35432ca-44af-42ab-a269-4301147f0ccc"><span class="section-number-2">2</span> Fields</h2>
+<h2 id="h-d35432ca-44af-42ab-a269-4301147f0ccc"><span class="section-number-2">2.</span> Fields</h2>
 <div class="outline-text-2" id="text-h-d35432ca-44af-42ab-a269-4301147f0ccc">
 </div>
 <div id="outline-container-h-30cc20ad-a3a4-4721-9704-fcf9c6e0febb" class="outline-3">
-<h3 id="h-30cc20ad-a3a4-4721-9704-fcf9c6e0febb"><span class="section-number-3">2.1</span> Basic Idea</h3>
+<h3 id="h-30cc20ad-a3a4-4721-9704-fcf9c6e0febb"><span class="section-number-3">2.1.</span> Basic Idea</h3>
 <div class="outline-text-3" id="text-h-30cc20ad-a3a4-4721-9704-fcf9c6e0febb">
 <p>
 We often want to divide by a nonzero number, which requires forming the
@@ -1118,7 +1094,7 @@ take for granted that \(\QQ\), \(\RR\), and \(\CC\) are fields.
 </div>
 
 <div id="outline-container-h-4d677afa-ddc1-45b6-8d3e-aaf25e4c80c7" class="outline-4">
-<h4 id="h-4d677afa-ddc1-45b6-8d3e-aaf25e4c80c7"><span class="section-number-4">2.1.1</span> Field of Fractions</h4>
+<h4 id="h-4d677afa-ddc1-45b6-8d3e-aaf25e4c80c7"><span class="section-number-4">2.1.1.</span> Field of Fractions</h4>
 <div class="outline-text-4" id="text-h-4d677afa-ddc1-45b6-8d3e-aaf25e4c80c7">
 <p>
 Given an <a href="#h-1fb500b5-9715-4693-8feb-f1fb5db1e16a">integral domain</a> \(R\), its field of fractions \(\mathbb{F}\) may be
@@ -1153,7 +1129,7 @@ If \(\mathbb{F}\) is any field, then the field of fractions for
 </div>
 
 <div id="outline-container-h-bd0ee557-d0fe-4143-9ecd-e01300ba426d" class="outline-4">
-<h4 id="h-bd0ee557-d0fe-4143-9ecd-e01300ba426d"><span class="section-number-4">2.1.2</span> Uses, Galois Theory</h4>
+<h4 id="h-bd0ee557-d0fe-4143-9ecd-e01300ba426d"><span class="section-number-4">2.1.2.</span> Uses, Galois Theory</h4>
 <div class="outline-text-4" id="text-h-bd0ee557-d0fe-4143-9ecd-e01300ba426d">
 <p>
 The basic question we want to answer concerns, given a field
@@ -1186,7 +1162,7 @@ field extensions.
 </div>
 
 <div id="outline-container-h-b86f3414-cef0-486c-a961-cb63fa8d0861" class="outline-2">
-<h2 id="h-b86f3414-cef0-486c-a961-cb63fa8d0861"><span class="section-number-2">3</span> References</h2>
+<h2 id="h-b86f3414-cef0-486c-a961-cb63fa8d0861"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-b86f3414-cef0-486c-a961-cb63fa8d0861">
 <ul class="org-ul">
 <li>Manuel Bronstein, <cite class="book-title">Symbolic Integration 1: Transcendental Functions</cite>.
@@ -1205,7 +1181,7 @@ UC Berkeley, Math 113, Summer 2014.</li>
 </div>
 
 <div id="outline-container-h-4b23ee29-7f00-4b12-b5ae-e942d3cb4238" class="outline-3">
-<h3 id="h-4b23ee29-7f00-4b12-b5ae-e942d3cb4238"><span class="section-number-3">3.1</span> Involving Theorem Provers</h3>
+<h3 id="h-4b23ee29-7f00-4b12-b5ae-e942d3cb4238"><span class="section-number-3">3.1.</span> Involving Theorem Provers</h3>
 <div class="outline-text-3" id="text-h-4b23ee29-7f00-4b12-b5ae-e942d3cb4238">
 <ul class="org-ul">
 <li>Piotr Rudnicki, Christoph Schwarzweller, Andrzej Trybulec,
@@ -1218,7 +1194,7 @@ doi:<a href="https://doi.org/10.1006/jsco.2001.0456">10.1006/jsco.2001.0456</a><
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 18:51.</p>
+<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
 </div>
 </body>
 </html>

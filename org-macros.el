@@ -301,3 +301,6 @@ So a typical ID could look like \"Org-4nd91V40HI\"."
    "\n#+HTML_HEAD_EXTRA: <div style=\"display: none\"> \\(\n"
    (prefix-all-lines "#+HTML_HEAD_EXTRA: " body)
    "\n#+HTML_HEAD_EXTRA: \\)</div>\n"))
+
+;; Avoid exporting the time as a comment in HTML files
+(setq org-export-time-stamp-file nil)
