@@ -33,6 +33,58 @@ claiming to be the "alpha and omega" on multiphysics. I never heard of
 the term before stumbling across them by accident.
 #+end_remark
 
+** A Grocery List of Definitions
+:PROPERTIES:
+:CUSTOM_ID: h-10e654a5-ef08-4497-a99e-ca9955be3aa9
+:END:
+
+#+begin_definition
+A {{{dfn(Constituent)}}} $\mathcal{C}$ is characterized by a "model"
+$\mathcal{M}$ which solves its equations of motion on its domain
+$\Gamma$ to calculate its {{{dfn(State)}}} $\mathcal{U}$.
+
+The state is updated using the current model's state /and/ a set of {{{dfn(Input Variables)}}}
+$\mathcal{V}$. The {{{dfn(Output Variables)}}} $\mathcal{W}$ are computed from $\mathcal{U}$
+
+The input and output variables $\mathcal{V}$ and $\mathcal{W}$ are the
+only data connections of a constituent system to the "outside world",
+and are defined on the {{{dfn(Boundary Domain)}}} $\partial\Gamma$ (or
+some subset of it).
+#+end_definition
+
+For example, the Earth's atmosphere has $\Gamma$ be the region between
+the surface of the Earth and the "top of the atmosphere". So usually
+it's the difference between two closed balls
+$\Gamma=B^{3}_{\text{atm}}\setminus B^{3}_{\text{earth}}$. The standard
+mesh for numerically computing finite differences is a
+$64\times128\times26$ grid; this could be taken as the domain for a
+numerical approximation to the Earth's atmosphere.
+
+#+begin_definition
+Two constituents $\mathcal{C}_{i}$ and $\mathcal{C}_{j}$ are
+{{{dfn(Coupled)}}} if
+
+1. Have some common intersection of their domains:
+   $\Gamma_{i}\cap\Gamma_{j}\neq\emptyset$, and
+2. Outputs from one can serve as inputs to the other,
+   in at least one of the following senses:
+   1. One constituent's outputs overlap the other's inputs:
+      $\mathcal{W}_{j}\cap\mathcal{V}_{i}\neq\emptyset$, and/or
+      $\mathcal{V}_{j}\cap\mathcal{W}_{i}\neq\emptyset$; or
+   2. The inputs $\mathcal{V}_{i}$ can be computed from the other's
+      outputs $\mathcal{W}_{j}$ (or $\mathcal{V}_{j}$ can be obtained
+      from $\mathcal{W}_{i}$).
+#+end_definition
+
+We then describe a multiphysics system as a finite collection of
+constituents $\mathcal{C}_{i}$ (where $i=1,\dots,N$), which are usually
+coupled together somehow.
+
+The difficulty stems from time-evolution. For explicit finite difference
+schemes, it's straightforward...usually. But for implicit finite
+difference schemes, it's a nightmare of sharing "the current guess of
+the next iterative state's values".
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-4c9a5e0f-1e17-415c-9c47-360b484928a5
@@ -48,6 +100,13 @@ the term before stumbling across them by accident.
 - J. Walter Larson,\\
   "Ten organising principles for coupling in multiphysics and multiscale models".\\
   /ANZIAM/ *48* (2009) [[https://journal.austms.org.au/ojs/index.php/ANZIAMJ/article/view/138][Eprint]]
+- Gang Lu, Efthimios Kaxiras,\\
+  "Overview of Multiscale Simulations of Materials".\\
+  [[https://boulderschool.yale.edu/sites/default/files/files/lu05.pdf][PDF]], 33 pages.
+- David Keyes and many friends,\\
+  "Multiphysics simulations: Challenges and opportunities".\\
+  /Internat. J. of High Performance Comp. App./ *27*, no.1 (2013) pp.4-83, [[https://journals.sagepub.com/doi/pdf/10.1177/1094342012468181][PDF]]
+
   
 ** In Climate Science
 :PROPERTIES:
