@@ -1,0 +1,202 @@
+#+TITLE: General Circulation Model
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-04-11T09:06:45-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Monday April 11, 2022 at  9:06AM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-6aece749-c320-4df5-aed5-1896af050400
+:END:
+
+Broadly speaking, "the" general circulation model for the atmosphere is
+"just" a "shallow" [[file:../fluid-mechanics/navier-stokes.org][Navier-Stokes fluid]] around a rotating sphere,
+relative to an observe on the sphere.
+
+Typically the viscousity is neglected (since its contribution is on the
+order of $10^{-7}$ compared to dominant effects), so we could extend the
+notion of a general circulation model to include Euler fluids around a
+rotating sphere, relative to an observer on the spehere. At least, John
+Holton describes the negligibility of viscosity in his book
+{{{book-title(An Introduction to Dynamic Meteorology)}}}; it's not the
+defining quality of the atmosphere, anyways.
+
+#+begin_danger
+Most general circulation models work in spherical coordinates, so extra
+care must be taken. For example, the vector Laplacian is defined by the
+identity $\nabla^{2}\mathbf{v} = \vec{\nabla}(\nabla\cdot\mathbf{v})-\nabla\times(\nabla\times\mathbf{v})$
+and not just the sum of squares of partial derivatives.
+#+end_danger
+
+#+begin_remark
+The notation for [[https://en.wikipedia.org/wiki/Spherical_coordinate_system][spherical coordinates]] in Earth Sciences appears to be
+--- *when expressed in radians!* ---
+the $\lambda\in[-\pi,\pi)$ is used for longitude measuring the "azimuthal" angle
+East-West, latitude $\phi\in[-\pi/2,\pi/2]$ measuring the "polar" angle
+North-South with the equator being located at $\phi_{\text{eq}}=0$. This
+needs some correction to account for the Earth being a little "short and
+fat" rather than a perfect sphere, but it's a good approximation. 
+#+end_remark
+
+#+begin_proposition
+We change coordinates to spherical coordinates, taking $\lambda$ to
+describe the longitude (Eastwards angle), $\phi$ the latitude (angular
+distance polewards), and $r$ the radial distance from the center of the
+Earth. In these coordinates, any scalar quantity $Q$ has its
+material derivative be
+\begin{equation}
+  \frac{\mathrm{D}Q}{\mathrm{D} t}
+  = \frac{\partial Q}{\partial t}
+    + \frac{u}{r\cos(\phi)}\frac{\partial Q}{\partial\lambda}
+    + \frac{v}{r}\frac{\partial Q}{\partial\phi}
+    + w\frac{\partial Q}{\partial r}.
+\end{equation}
+#+end_proposition
+
+#+begin_theorem
+  Mass conservation in spherical coordinates is
+  \begin{equation}
+    \frac{\partial\rho}{\partial t}
+    + \frac{1}{r\cos(\phi)}\frac{\partial(u\rho)}{\partial\lambda}
+    + \frac{1}{r\cos(\phi)}\frac{\partial}{\partial\phi}(v\rho\cos(\phi))
+    + \frac{1}{r^{2}}\frac{\partial}{\partial r}(r^{2}w\rho)
+    = 0
+  \end{equation}
+  where we have $\lambda$ be the latitude coordinate, $\phi$ the
+  longitude coordinate, $r$ the vertical/radial coordinate; and
+  $\vec{u}=(u,v,w)$ is the velocity pointing North $u$, East $v$, and
+  outward $w$.
+#+end_theorem
+
+#+begin_theorem
+Momentum conservation in a rotating frame using spherical coordinates
+are (neglecting the viscosity term)
+\begin{equation}
+\frac{\mathrm{D} u}{\mathrm{D} t} -\left(2\Omega + \frac{u}{r\cos(\phi)}\right)(v\sin(\phi)-w\cos(\phi))
+= \frac{-1}{\rho r\cos(\phi)}\frac{\partial p}{\partial\lambda}
+\end{equation}
+\begin{equation}
+\frac{\mathrm{D} v}{\mathrm{D} t} -\left(2\Omega + \frac{u}{r\cos(\phi)}\right)u\sin(\phi)
+= \frac{-1}{\rho r}\frac{\partial p}{\partial\phi}
+\end{equation}
+\begin{equation}
+\frac{\mathrm{D} w}{\mathrm{D} t} - \frac{u^{2}+v^{2}}{r} -
+  2\Omega u\cos(\phi)
+= \frac{-1}{\rho}\frac{\partial p}{\partial r}-g.
+\end{equation}
+Here $g\approx 9.8 \mathrm{m}/\mathrm{s}^{2}$ is the Earth's
+gravitational force (treated as a constant).
+The quadratic terms on the left-hand side involving factors of $1/r$
+  are usually called {{{dfn(metric terms)}}}, and those involving factors of
+  $\Omega$ are {{{dfn(Coriolis terms)}}}.
+#+end_theorem
+
+#+begin_remark
+The "full blown" GCM equations are first-order quasilinear partial
+differential equations. They are under-determined, since we have now 4
+equations for 5 unknowns (the 3 velocity components, the pressure, and
+the density). We need one more equation, and some initial conditions, to
+have a unique solution. 
+#+end_remark
+
+#+begin_puzzle
+(1) What extra equation can we add to this system?
+
+(2) Can we solve these equations exactly?
+
+(3) If we pretend the material derivative $\mathrm{D}/\mathrm{D} t$ are
+just partial derivatives with respect to time $\partial/\partial t$,
+then what are the solutions to /that/ system of PDEs?
+#+end_puzzle
+
+* Primitive Equations
+:PROPERTIES:
+:CUSTOM_ID: h-82a5d119-db84-4d64-8282-ff5c57d5e446
+:END:
+
+There are three simplifications to the equations, the first two of them
+come as a package-deal (i.e., must be taken together or not at all):
+
+1. *Shallow fluid:* $r=a+z$ where $a$ is the radius of the Earth and $z$
+   is the altitude. In this approximation, $z\ll a$, so $1/(a+z)=
+   a^{-1}/(1+z/a)=a^{-1} - a^{-2}z+\dots\approx a^{-1}$.
+   Partial derivatives with respect to $r$ are then taken with
+   respect to $z$;
+2. *Hydrostatic approximation:* the radial component of the Navier-Stokes
+   equation may be approximated as $\partial_{z}p=\rho g$; and
+3. *Traditional approximation:* we can discard the Coriolis terms in the
+   horizontal equations of motion, as well as terms $uw/r$ and $vw/r$
+   since they are negligibly small.
+
+Taken altogether, the Navier-Stokes equations --- with $u$ being the
+atmospheric fluid's velocity North-wards, $v$ is the East-wards
+component, and $w$ is the altitude "outward" component --- simplifies to:
+
+\begin{equation}
+\frac{\mathrm{D} u}{\mathrm{D} t}
+- 2\Omega v\sin(\phi) - \frac{uv}{a}\tan(\phi)
+= \frac{-1}{\rho a\cos(\phi)}\frac{\partial p}{\partial\lambda}
+\end{equation}
+\begin{equation}
+\frac{\mathrm{D} v}{\mathrm{D} t}
+ - 2\Omega u\sin(\phi) - \frac{u^{2}\tan(\phi)}{a}
+= \frac{-1}{\rho a}\frac{\partial p}{\partial\phi}
+\end{equation}
+\begin{equation}
+0 = \frac{-1}{\rho}\frac{\partial p}{\partial z}-g.
+\end{equation}
+
+In this approximation, the material derivative is
+\begin{equation}
+  \frac{\mathrm{D}}{\mathrm{D} t}=\frac{\partial}{\partial t} +
+  \frac{u}{a\cos(\phi)}\frac{\partial}{\partial\lambda} +
+  \frac{v}{a}\frac{\partial}{\partial\phi} + w\frac{\partial}{\partial z}.
+\end{equation}
+
+#+begin_remark
+We have 3 first-order partial differential equations in 5 unknowns (the
+3 components of the atmospheric fluid velocity, the pressure, and the
+denity). We need 2 more equations and initial conditions to have a
+unique solution. At first, it may be tempting to use the ideal gas Law
+for an additional constraint --- after all, the atmosphere is remarkably
+close to an ideal gas. But then we introduce another unknown, the
+temperature.
+
+The ideal gas Law relevant for the atmosphere would be $p=\rho RT$ where
+$R = 287\; \mathrm{J}\cdot\mathrm{kg}^{-1}\cdot\mathrm{K}^{-1}$ is the gas
+constant for dry air, and $T$ is the atmosphere's temperature (another
+unknown scalar function which we need to fix by means of another equation).
+#+end_remark
+
+#+begin_puzzle
+Is there an exact solution to the primitive equations? It seems like, if
+we work in the Lagrange description, there should be a unique solution
+we could find fairly easily?
+#+end_puzzle
+
+#+begin_puzzle
+What is the rigorous "limiting process" relating the solutions of the
+full GCM equations to the solutions to the primitive equations? I sense
+there is some difficult discontinuity here, but it is not at all
+"immediately obvious" at the moment...
+#+end_puzzle
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-3bd2952b-be5e-499e-abfe-d3a46a41e9b7
+:END:
+
+- James R. Holton and Gregory J. Hakim,\\
+  {{{book-title(An Introduction to Dynamic Meteorology)}}}.\\
+  Academic Press, 5th ed., 2012.
+- G. K. Vallis,\\
+  {{{book-title(Atmospheric and Oceanic Fluid Dynamics: Fundamentals and Large-Scale Circulation)}}}.\\
+  Cambridge University Press, 2 ed., 2017.
+  
