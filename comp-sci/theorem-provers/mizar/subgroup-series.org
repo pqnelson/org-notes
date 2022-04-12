@@ -1,0 +1,193 @@
+#+TITLE: Subgroup Series - Mizar
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-04-12T08:26:48-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Tuesday April 12, 2022 at  8:26AM
+
+* Subgroup Series
+:PROPERTIES:
+:CUSTOM_ID: h-e5583d34-8606-4622-bc9a-3b915cb5eb4a
+:END:
+
+I will review the various subgroup series, and --- if they've been
+already defined (implicitly or explicitly) --- their implementation.
+
+** Central Series
+:PROPERTIES:
+:CUSTOM_ID: h-4ecb1fc1-3d39-4555-8a61-3cf134915242
+:END:
+
+The definition of a nilpotent group uses a central series
+$G=Z_{1}\geq Z_{2}\geq\dots\geq Z_{n}=\mathbf{1}$ where
+each $Z_{k}\trianglelefteq G$ and the quotient satisfies
+$Z_{k}/Z_{k+1}\leq Z(G/Z_{k+1})$.
+
+#+begin_src mizar
+definition
+  let IT be Group;
+  attr IT is nilpotent means :Def2: :: GRNILP_1:def 2
+  ex F being FinSequence of the_normal_subgroups_of IT st
+  (len F > 0 & F.1 = (Omega).IT & F.(len F) = (1).IT &
+   (for i being Element of NAT st i in dom F & i+1 in dom F
+    for G1, G2 being strict normal Subgroup of IT
+    st G1 = F.i & G2 = F.(i + 1)
+    holds (G2 is Subgroup of G1 &
+           G1./.((G1,G2)`*`) is Subgroup of
+             center (IT./.G2))));
+end; 
+#+end_src
+
+** Subnormal Series
+:PROPERTIES:
+:CUSTOM_ID: h-193c557d-a853-468a-a56f-ba3d2dfcf3ba
+:END:
+
+A solvable group is defined by having a subnormal series
+$G=N_{1}\trianglerighteq N_{2}\trianglerighteq\dots\trianglerighteq N_{n}=\mathbf{1}$
+--- that is, $N_{j+1}\trianglelefteq N_{j}$ for $j=0,\dots,n-1$ ---
+whose factor groups $N_{k}/N_{k+1}$ are Abelian.
+
+#+begin_src mizar
+definition
+  let IT be Group;
+  attr IT is solvable means :Def1: :: GRSOLV_1:def 1
+  ex F being FinSequence of Subgroups IT st
+  (len F > 0 & F.1 = (Omega).IT & F.(len F) = (1).IT &
+   (for i being Element of NAT st i in dom F & i+1 in dom F
+    for G1, G2 being strict Subgroup of IT
+    st G1 = F.i & G2 = F.(i+1)
+    holds (G2 is strict normal Subgroup of G1 &
+           (for N being normal Subgroup of G1 st N = G2
+            holds G1 ./. N is commutative))));
+end; 
+#+end_src
+
+** Composition Series
+:PROPERTIES:
+:CUSTOM_ID: h-f057b7e7-9fa8-4236-9410-dfac6ff1e4df
+:END:
+
+A famous example of a subgroup series is the composition
+series for a group. Mizar defines it as a subgroup series
+$\mathbf{1}=A_{n}\trianglelefteq\dots\trianglelefteq A_{2}\trianglelefteq A_{1}=G$.
+Although this seems to be using a strange convention, Mizar is following
+Bourbaki's /Algbra/. The more familiar notion of a composition
+series (as a ``maximal'' subnormal series) requires the
+~jordan_holder~ attribute (again, this follows Bourbaki's
+/Algebra/ Definition 10 in I.4.7).
+
+#+begin_src mizar
+:: ALG I.4.7 Definition 9
+definition
+  let O be set;
+  let G be GroupWithOperators of O;
+  let IT be FinSequence of the_stable_subgroups_of G;
+  attr IT is composition_series means
+  :: GROUP_9:def 28
+  IT.1=(Omega).G & IT.(len IT)= (1).G &
+  for i being Nat st i in dom IT & i+1 in dom IT
+  for H1,H2 being StableSubgroup of G
+  st H1=IT.i & H2=IT.(i+1)
+  holds H2 is normal StableSubgroup of H1;
+end;
+#+end_src
+
+** Lower Central Series
+:PROPERTIES:
+:CUSTOM_ID: h-7b9e0126-cb6c-4b44-8ae6-245ce59a4467
+:END:
+
+The lower central series may be defined as
+$G=A_{1}\trianglerighteq A_{2}\trianglerighteq\dots\trianglerighteq A_{n}=\mathbf{1}$,
+where $A_{k+1}=[A_{k},G]=[G,A_{k}]$.
+Mizar implicitly defines this in ~GRNILP1:Th27~
+
+#+begin_src mizar
+theorem :: GRNILP_1:27
+  for G being Group
+  st ex F being FinSequence of the_normal_subgroups_of G
+     st len F > 0 & F.1 = (Omega).G & F.(len F) = (1).G &
+     for i st i in dom F & i+1 in dom F
+     for G1 being strict normal Subgroup of G st G1 = F.i
+     holds [.G1, (Omega).G.] = F.(i+1)
+  holds G is nilpotent
+proof end;
+#+end_src
+
+** Upper Central Series
+:PROPERTIES:
+:CUSTOM_ID: h-a6f950fd-41bb-4c6c-9e3f-2c3828fdec89
+:END:
+
+This is a subgroup series
+$Z^0(G) \leq Z^1(G) \leq Z^2(G) \leq \dots$,
+where $Z^{0}(G)=\mathbf{1}$,
+$Z^1(G) = Z(G)$,
+$Z^2(G)/Z^1(G) = Z(G/Z^1(G))$,
+$Z^3(G)/Z^2(G) = Z(G/Z^2(G))$, and so on. Each $Z^{n}(G)$ is a normal
+subgroup of $G$.
+
+In general, $Z^{n+1}(G)/Z^{n}(G) = Z(G/Z^{n}(G))$ defines the $(n+1)$
+term in the series. Explicitly, we would have
+
+$$ Z^{n+1}(G) = \{x\in G\mid \forall y\in G, [x,y]\in Z^{n}(G)\}. $$
+
+We could thus propose the definition (based on modifying the definition
+~GRNILP_1:def 2~ to use ~NAT_1~ for ~mode sequence of X is Function of NAT,X~):
+
+#+begin_src mizar
+definition
+  let G be Group;
+  func UpperCentralSeries G -> sequence of the_normal_subgroups_of G means
+  :Def:
+  (it.0 = (1).G &
+   (for i being Element of NAT st i in dom it & i+1 in dom it
+    for G1, G2 being strict normal Subgroup of G
+    st G1 = it.i & G2 = it.(i + 1)
+    holds (G1 is Subgroup of G2 &
+           G2./.((G2,G1)`*`) = center (G./.G1))));
+  existence
+  proof
+    thus ex Z being sequence of the_normal_subgroups_of G st
+     (Z.0 = (1).G &
+      (for i being Element of NAT st i in dom Z & i+1 in dom Z
+       for G1, G2 being strict normal Subgroup of G
+       st G1 = Z.i & G2 = Z.(i + 1)
+       holds (G1 is Subgroup of G2 &
+              G2./.((G2,G1)`*`) = center (G./.G1))));
+  end;
+  uniqueness
+  proof
+    defpred P[sequence of the_normal_subgroups_of G] means
+    ($1.0 = (1).G &
+      (for i being Element of NAT st i in dom $1 & i+1 in dom $1
+       for G1, G2 being strict normal Subgroup of G
+       st G1 = $1.i & G2 = $1.(i + 1)
+       holds (G1 is Subgroup of G2 &
+              G2./.((G2,G1)`*`) = center (G./.G1))));
+    for Z1,Z2 being sequence of the_normal_subgroups_of G st
+    P[Z1] & P[Z2] holds Z1=Z2;
+    hence thesis;
+  end;
+end;
+#+end_src
+
+We would then have to prove
+
+#+begin_src mizar
+theorem
+  for G be Group
+  for n be Nat
+  holds the carrier of (UpperCentralSeries G).(n+1) =
+        {g where g is Element of G :
+         for y being Element of G
+         holds [.g,y.] in (UpperCentralSeries G).n};
+#+end_src
+

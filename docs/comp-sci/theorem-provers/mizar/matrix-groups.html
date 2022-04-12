@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Matrix Groups - Mizar</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Matrix Groups - Mizar</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-03dcc477-8208-48d3-92fb-d3284b5e561a">1. Matrix Groups</a>
+<ul>
+<li><a href="#h-edc440ad-dc16-46df-9865-b20fe366520d">1.1. General Linear Group</a></li>
+<li><a href="#h-ba74f292-740f-42d2-911a-8309a7f159bc">1.2. Special Linear Group</a></li>
+<li><a href="#h-e3b101ac-8d30-46c0-a473-3e2b68080eaa">1.3. Projective Linear Groups</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-03dcc477-8208-48d3-92fb-d3284b5e561a" class="outline-2">
+<h2 id="h-03dcc477-8208-48d3-92fb-d3284b5e561a"><span class="section-number-2">1.</span> Matrix Groups</h2>
+<div class="outline-text-2" id="text-h-03dcc477-8208-48d3-92fb-d3284b5e561a">
+</div>
+
+<div id="outline-container-h-edc440ad-dc16-46df-9865-b20fe366520d" class="outline-3">
+<h3 id="h-edc440ad-dc16-46df-9865-b20fe366520d"><span class="section-number-3">1.1.</span> General Linear Group</h3>
+<div class="outline-text-3" id="text-h-edc440ad-dc16-46df-9865-b20fe366520d">
+<div class="definition" id="org7da38ca">
+<p>
+Let \(K\) be a field, \(n\in\NN\) be a positive integer.
+The <dfn>General Linear Group</dfn> denoted \(GL(n,K)\) or \(GL_{n}(K)\) is
+the group consisting of invertible \(n\times n\) matrices over the field
+\(K\) using matrix multiplication as the binary operation.
+</p>
+
+</div>
+
+<div class="remark" id="org56fa6a2">
+<p>
+We don't really need \(K\) to be a field, it could just be an associative
+unital ring\footnote{\url{https://encyclopediaofmath.org/wiki/General_linear_group}}.
+</p>
+
+</div>
+
+<p>
+This is a deceptive example, because it defines a "functor": given a
+specific \(n\) and \(K\), we get a group. Most of this has been formalized
+in, e.g., <a href="http://mizar.org/version/current/html/matrix_3.html"><code>matrix_3</code></a> and related articles ("invertible" is defined in
+<a href="http://mizar.org/version/current/html/matrix_6.html#V1"><code>matrix_6</code></a>).
+</p>
+
+<p>
+Matrix inversion is closed on the set of invertible square matrices, as
+proven in theorem <a href="http://mizar.org/version/current/html/matrix_6.html#T16"><code>MATRIX_6:16</code></a>.
+</p>
+
+<p>
+Matrix multiplication is closed on the set of invertible square
+matrices, as proven in <a href="http://mizar.org/version/current/html/matrix_6.html#T45"><code>MATRIX_6:45</code></a>.
+</p>
+
+<p>
+Associativity of matrix multiplication is proven in <a href="http://mizar.org/version/current/html/matrix_3.html#T33"><code>MATRIX_3:33</code></a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> n, k, m <span class="org-mizar-normal">be</span> Nat;
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> Ring;
+  <span class="org-mizar-skeleton">let</span> A <span class="org-mizar-normal">be</span> Matrix <span class="org-mizar-normal">of</span> n,k,K;
+  <span class="org-mizar-skeleton">let</span> B <span class="org-mizar-normal">be</span> Matrix <span class="org-mizar-normal">of</span> width A,m,K;
+  <span class="org-mizar-normal">func</span> matrix_mult (A,B) -&gt; Matrix <span class="org-mizar-normal">of</span> len A, width B,K <span class="org-mizar-normal">equals</span>
+  A*B;
+<span class="org-mizar-block">end</span>;
+
+<span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> n <span class="org-mizar-normal">be</span> Nat;
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> Field;
+  <span class="org-mizar-normal">func</span> GL(n,K) -&gt; Group <span class="org-mizar-normal">means</span>
+  (<span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> object
+   <span class="org-mizar-formula">holds</span> (M <span class="org-mizar-normal">is</span> invertible Matrix <span class="org-mizar-normal">of</span> n,K) <span class="org-mizar-formula">iff</span> (M in <span class="org-mizar-normal">it</span>)) <span class="org-mizar-formula">&amp;</span>
+  (the multF <span class="org-mizar-normal">of</span> <span class="org-mizar-normal">it</span> = matrix_mult||(the carrier <span class="org-mizar-normal">of</span> <span class="org-mizar-normal">it</span>));
+  <span class="org-mizar-normal">existence</span>
+  <span class="org-mizar-block">proof</span> <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-normal">uniqueness</span>
+  <span class="org-mizar-block">proof</span> <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+
+<span class="org-comment-delimiter">:: </span><span class="org-comment">MATRIX_3:18 proves (1.(K,n))*A = A</span>
+<span class="org-comment-delimiter">:: </span><span class="org-comment">MATRIX_3:19 proves A*(1.(K,n)) = A</span>
+<span class="org-mizar-main">theorem</span>
+  <span class="org-mizar-formula">for</span> n <span class="org-mizar-formula">being</span> Nat
+  <span class="org-mizar-formula">for</span> K <span class="org-mizar-formula">being</span> Field
+  <span class="org-mizar-formula">holds</span> 1_(GL(n,K)) = 1.(K,n)<span class="org-type"> by GROUP_1:def 4,MATRIX_3:18,19</span>;
+
+<span class="org-mizar-main">theorem</span>
+  <span class="org-mizar-formula">for</span> n <span class="org-mizar-formula">being</span> Nat
+  <span class="org-mizar-formula">for</span> K <span class="org-mizar-formula">being</span> Field
+  <span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> GL(n,K)
+  <span class="org-mizar-formula">holds</span> inverse_op(GL(n,K)).M = M ~<span class="org-type"> by MATRIX_6:def 4,GROUP_1:def 6</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-ba74f292-740f-42d2-911a-8309a7f159bc" class="outline-3">
+<h3 id="h-ba74f292-740f-42d2-911a-8309a7f159bc"><span class="section-number-3">1.2.</span> Special Linear Group</h3>
+<div class="outline-text-3" id="text-h-ba74f292-740f-42d2-911a-8309a7f159bc">
+<div class="definition" id="orgbfc136c">
+<p>
+Let \(n\) be a positive integer, \(K\) be a field.
+The <dfn>Special Linear Group</dfn> \(SL(n,K)\) consists of
+invertible matrices of determinant one, and its binary operation is
+matrix multiplication.
+</p>
+
+</div>
+
+<p>
+The determinant of the identity matrix being unity is proven in theorem
+<a href="http://mizar.org/version/current/html/matrix_7.html#T16"><code>MATRIX_7:16</code></a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> n <span class="org-mizar-normal">be</span> Nat;
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> Field;
+  <span class="org-mizar-normal">func</span> SL(n,K) -&gt; Group <span class="org-mizar-normal">means</span>
+  :Def:
+  (<span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> invertible Matrix <span class="org-mizar-normal">of</span> n,K
+   <span class="org-mizar-formula">holds</span> (Det M = 1.K) <span class="org-mizar-formula">iff</span> (M in <span class="org-mizar-normal">it</span>)) <span class="org-mizar-formula">&amp;</span>
+  (the multF <span class="org-mizar-normal">of</span> <span class="org-mizar-normal">it</span> = matrix_mult||(the carrier <span class="org-mizar-normal">of</span> <span class="org-mizar-normal">it</span>));
+  <span class="org-mizar-normal">existence</span>
+  <span class="org-mizar-block">proof</span> <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-normal">uniqueness</span>
+  <span class="org-mizar-block">proof</span> <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+
+<span class="org-mizar-main">theorem</span>
+  <span class="org-mizar-formula">for</span> n <span class="org-mizar-formula">being</span> Nat
+  <span class="org-mizar-formula">for</span> K <span class="org-mizar-formula">being</span> Field
+  <span class="org-mizar-formula">holds</span> SL(n,K) <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> GL(n,K)
+<span class="org-mizar-block">proof</span>
+  <span class="org-mizar-skeleton">let</span> n <span class="org-mizar-normal">be</span> Nat;
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> Field;
+  set UH = the carrier <span class="org-mizar-normal">of</span> SL(n,K);
+  set UG = the carrier <span class="org-mizar-normal">of</span> GL(n,K);
+  A1: UH c= UG;
+  <span class="org-mizar-skeleton">hence</span> UH c= UG;
+  A2: [:UH,UH:] c= [:UG,UG:]<span class="org-type"> by A1,ZFMISC_1:96</span>;
+  the multF <span class="org-mizar-normal">of</span> SL(n,K) = matrix_mult||UH <span class="org-mizar-formula">&amp;</span>
+  the multF <span class="org-mizar-normal">of</span> GL(n,K) = matrix_mult||UG<span class="org-type"> by GROUP_2:def 5</span>;
+  <span class="org-mizar-skeleton">hence</span> <span class="org-mizar-normal">thesis</span><span class="org-type"> by A2,FUNCT_1:51</span>;
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-e3b101ac-8d30-46c0-a473-3e2b68080eaa" class="outline-3">
+<h3 id="h-e3b101ac-8d30-46c0-a473-3e2b68080eaa"><span class="section-number-3">1.3.</span> Projective Linear Groups</h3>
+<div class="outline-text-3" id="text-h-e3b101ac-8d30-46c0-a473-3e2b68080eaa">
+<p>
+We could then define the projective linear groups as:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> n <span class="org-mizar-normal">be</span> Nat;
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> Field;
+  <span class="org-mizar-normal">func</span> PGL(n,K) -&gt; Group <span class="org-mizar-normal">equals</span> GL(n,K)./.(center GL(n,K));
+  <span class="org-mizar-normal">coherence</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">thus</span> GL(n,K)./.(center GL(n,K)) <span class="org-mizar-normal">is</span> Group;
+  <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-normal">func</span> PSL(n,L) -&gt; Group <span class="org-mizar-normal">equals</span> SL(n,K)./.(center SL(n,K))
+  <span class="org-mizar-normal">coherence</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">thus</span> SL(n,K)./.(center SL(n,K)) <span class="org-mizar-normal">is</span> Group;
+  <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
+
+<div class="remark" id="orgf08e9b4">
+<p>
+If we include <code>NAT_6</code> in our registrations, then we can register
+<code>positive</code> for <code>Nat</code>. Be sure to include <code>XCMPLX_0</code> in the vocabulary.
+</p>
+
+</div>
+
+<pre class="example" id="org8d63a13">
+registration
+  cluster positive for Nat;
+  existence
+  proof
+    take 1;
+    thus thesis;
+  end;
+  cluster zero for natural number;
+  existence
+  proof
+    take 0;
+    thus thesis;
+  end;
+  cluster non zero for Nat; :: natural number;
+  existence
+  proof
+    take 1;
+    thus thesis;
+  end;
+end;
+registration
+  cluster non zero -&gt; positive for Nat;
+  coherence
+  proof
+    for x being Nat st x is non zero holds x is positive
+    proof
+      let x be Nat;
+      assume A1: x is non zero;
+      then x &lt;&gt; 0;
+      then x &gt; 0;
+      hence x is positive;
+    end;
+    hence thesis;
+  end;
+end;
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2022-04-12 Tue 08:27.</p>
+</div>
+</body>
+</html>

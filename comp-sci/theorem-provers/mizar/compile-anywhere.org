@@ -1,0 +1,112 @@
+#+TITLE: "Compile Anywhere" - Mizar
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-04-12T08:30:17-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Tuesday April 12, 2022 at  8:30AM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-15e7d5d4-890d-4083-8c22-e935e66b927d
+:END:
+
+Kaliszyk and Pąk have worked on a project over the past decade or so to
+implement an Isabelle/Mizar environment (that is to say, Mizar as an
+object logic inside [[file:../isabelle.org][Isabelle]]). In their paper:
+
+- Cezary Kaliszyk and Karol Pąk,\\
+  "Semantics of Mizar as an Isabelle Object Logic".\\
+  /Journal of Automated Reasoning/ *63*, no.3 (2019) 557–595
+  [[https://project-smart.uibk.ac.at/docs/19/ckkp-jar19.pdf][Eprint]]
+
+They present a "HOL Semantics" for Mizar, as well as a "FOL
+Semantics". This was developed further in:
+
+- Chad E. Brown, Cezary Kaliszyk, and Karol Pak,\\
+  "Higher-order Tarski Grothendieck as a foundation for formal proof".\\
+  In /10th International Conference on Interactive Theorem Proving (ITP 2019)./
+  Schloss Dagstuhl-Leibniz-Zentrum fuer Informatik, 2019.
+  [[http://alioth.uwb.edu.pl/~pakkarol/articles/CBCKKP-ITP2019.pdf][Eprint]]
+
+This picqued my interest, and provoked the following questions:
+
+#+begin_puzzle
+Can we implement a Mizar clone atop HOL Light in a manner faithful to
+Mizar's semantics?
+#+end_puzzle
+
+To clarify this puzzle, we know of three "Mizar modes" for HOL
+Light. But these make writing in HOL Light easier; i.e., the
+formalization is still within the HOL system, rather than within a
+"Mizar-like system". Instead of a quality-of-life library, could we
+re-implement Mizar but with HOL working "under the hood" instead of
+first-order logic...without us ever knowing?
+
+The other question that came to mind was: if we could "swap out" the
+"engine" from first-order logic to higher-order logic, then what would
+be stopping us from "swapping in" any other suitably strong foundations?
+
+#+begin_puzzle
+Can we invent a CIC type theoretic semantics for Mizar?
+#+end_puzzle
+
+* Compile to Types
+:PROPERTIES:
+:CUSTOM_ID: h-dda7177b-15eb-4988-9066-ed9528b63576
+:END:
+
+Let me be more precise in my puzzle. /Of course/ we can "encode"
+Tarski-Grothendieck set theory in Coq (or Lean or whatever), and
+/probably/ we could have a "compiler" read in Mizar articles and emit
+Coq theorems/proofs (albeit horribly inefficiently, perhaps
+exponentially larger than the original proofs). This is *not* what I'm
+asking about.
+
+Could we have Mizar types compile to Coq types, Mizar propositions
+compile to Coq propositions, and so on?
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-d5b4fdae-2e24-4b28-8a7f-51fa52283a48
+:END:
+
+- Cezary Kaliszyk and Karol Pąk,\\
+  "Semantics of Mizar as an Isabelle Object Logic".\\
+  /Journal of Automated Reasoning/ *63*, no.3 (2019) 557–595
+  [[https://project-smart.uibk.ac.at/docs/19/ckkp-jar19.pdf][Eprint]]
+- Chad E. Brown, Cezary Kaliszyk, and Karol Pak,\\
+  "Higher-order Tarski Grothendieck as a foundation for formal proof".\\
+  In /10th International Conference on Interactive Theorem Proving (ITP 2019)./
+  Schloss Dagstuhl-Leibniz-Zentrum fuer Informatik, 2019.
+  [[http://alioth.uwb.edu.pl/~pakkarol/articles/CBCKKP-ITP2019.pdf][Eprint]]
+
+** Mizar Modes
+:PROPERTIES:
+:CUSTOM_ID: h-9cf2ad20-ccf8-48e2-a604-4db214548d1c
+:END:
+
+- For HOL Light
+  1. John Harrison,\\
+     "A Mizar Mode for HOL".\\
+     In /TPHOLs'96/, [[https://www.cl.cam.ac.uk/~jrh13/papers/mizar.html][Eprint]]
+  2. F. Wiedijk,\\
+     "Mizar Light for HOL Light".\\
+     In: Richard Boulton & Paul Jackson (eds.),
+     /Theorem Proving in Higher Order Logics, 14th International Conference, TPHOLs 2001, Edinburgh/,
+     Springer LNCS 2152, 378-393, 2001; [[http://www.cs.ru.nl/F.Wiedijk/mizar/miz.pdf][Eprint]]
+  3. F. Wiedijk,\\
+     "A Synthesis of the Procedural and Declarative Styles of Interactive
+     Theorem Proving".\\
+     /Logical Methods in Computer Science/ *8*,no.1 (2012) 1-26;
+     {{{arXiv(1201.3601)}}}
+- For Coq:
+  1. M. Giero and F. Wiedijk,\\
+     "MMode, a Mizar Mode for the proof assistant Coq".\\
+     Tech.report NIII-R0333, University of Nijmegen, 2003;
+     [[http://www.cs.ru.nl/F.Wiedijk/mmode/mmode.pdf][Eprint]]

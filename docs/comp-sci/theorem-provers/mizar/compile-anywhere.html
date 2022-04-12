@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Topics - Mizar</title>
+<title>"Compile Anywhere" - Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -209,38 +209,160 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../mizar.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Topics - Mizar</h1>
-<ul class="org-ul">
-<li><a href="definitions.html">Definitions in Mizar</a></li>
-<li><a href="schemes.html">Schemes</a></li>
-<li><a href="idiom.html">Idiomatic Mizar</a></li>
-<li><a href="group-theory.html">Group Theory in Mizar</a></li>
-<li>Outlines and sketches of formalizations
-<ul class="org-ul">
-<li><a href="subgroup-series.html">Subgroup Series</a></li>
-<li><a href="matrix-groups.html">Matrix Groups</a></li>
-<li><a href="lie.html">Lie Theory</a></li>
-</ul></li>
-<li><a href="example-defs-finite-groups.html">Example Definitions</a> in Finite Group Theory</li>
-<li><a href="compile-anywhere.html">"Write Once, Compile Anywhere"</a> philosophy of foundations: can Mizar be
-"foundations independent"?</li>
+<h1 class="title">"Compile Anywhere" - Mizar</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-15e7d5d4-890d-4083-8c22-e935e66b927d">1. Overview</a></li>
+<li><a href="#h-dda7177b-15eb-4988-9066-ed9528b63576">2. Compile to Types</a></li>
+<li><a href="#h-d5b4fdae-2e24-4b28-8a7f-51fa52283a48">3. References</a>
+<ul>
+<li><a href="#h-9cf2ad20-ccf8-48e2-a604-4db214548d1c">3.1. Mizar Modes</a></li>
 </ul>
+</li>
+</ul>
+</div>
+</div>
 
-
+<div id="outline-container-h-15e7d5d4-890d-4083-8c22-e935e66b927d" class="outline-2">
+<h2 id="h-15e7d5d4-890d-4083-8c22-e935e66b927d"><span class="section-number-2">1.</span> Overview</h2>
+<div class="outline-text-2" id="text-h-15e7d5d4-890d-4083-8c22-e935e66b927d">
 <p>
-Elsewhere:
+Kaliszyk and Pąk have worked on a project over the past decade or so to
+implement an Isabelle/Mizar environment (that is to say, Mizar as an
+object logic inside <a href="../isabelle.html">Isabelle</a>). In their paper:
 </p>
 
 <ul class="org-ul">
-<li><a href="http://markun.cs.shinshu-u.ac.jp/kiso/projects/proofchecker/mizar/skeletons/toc.html">Skeletons</a> of various statements</li>
+<li>Cezary Kaliszyk and Karol Pąk,<br>
+"Semantics of Mizar as an Isabelle Object Logic".<br>
+<i>Journal of Automated Reasoning</i> <b>63</b>, no.3 (2019) 557–595
+<a href="https://project-smart.uibk.ac.at/docs/19/ckkp-jar19.pdf">Eprint</a></li>
+</ul>
+
+<p>
+They present a "HOL Semantics" for Mizar, as well as a "FOL
+Semantics". This was developed further in:
+</p>
+
+<ul class="org-ul">
+<li>Chad E. Brown, Cezary Kaliszyk, and Karol Pak,<br>
+"Higher-order Tarski Grothendieck as a foundation for formal proof".<br>
+In <i>10th International Conference on Interactive Theorem Proving (ITP 2019).</i>
+Schloss Dagstuhl-Leibniz-Zentrum fuer Informatik, 2019.
+<a href="http://alioth.uwb.edu.pl/~pakkarol/articles/CBCKKP-ITP2019.pdf">Eprint</a></li>
+</ul>
+
+<p>
+This picqued my interest, and provoked the following questions:
+</p>
+
+<div class="puzzle" id="org3c88092">
+<p>
+Can we implement a Mizar clone atop HOL Light in a manner faithful to
+Mizar's semantics?
+</p>
+
+</div>
+
+<p>
+To clarify this puzzle, we know of three "Mizar modes" for HOL
+Light. But these make writing in HOL Light easier; i.e., the
+formalization is still within the HOL system, rather than within a
+"Mizar-like system". Instead of a quality-of-life library, could we
+re-implement Mizar but with HOL working "under the hood" instead of
+first-order logic&#x2026;without us ever knowing?
+</p>
+
+<p>
+The other question that came to mind was: if we could "swap out" the
+"engine" from first-order logic to higher-order logic, then what would
+be stopping us from "swapping in" any other suitably strong foundations?
+</p>
+
+<div class="puzzle" id="orgba097bf">
+<p>
+Can we invent a CIC type theoretic semantics for Mizar?
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-dda7177b-15eb-4988-9066-ed9528b63576" class="outline-2">
+<h2 id="h-dda7177b-15eb-4988-9066-ed9528b63576"><span class="section-number-2">2.</span> Compile to Types</h2>
+<div class="outline-text-2" id="text-h-dda7177b-15eb-4988-9066-ed9528b63576">
+<p>
+Let me be more precise in my puzzle. <i>Of course</i> we can "encode"
+Tarski-Grothendieck set theory in Coq (or Lean or whatever), and
+<i>probably</i> we could have a "compiler" read in Mizar articles and emit
+Coq theorems/proofs (albeit horribly inefficiently, perhaps
+exponentially larger than the original proofs). This is <b>not</b> what I'm
+asking about.
+</p>
+
+<p>
+Could we have Mizar types compile to Coq types, Mizar propositions
+compile to Coq propositions, and so on?
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-d5b4fdae-2e24-4b28-8a7f-51fa52283a48" class="outline-2">
+<h2 id="h-d5b4fdae-2e24-4b28-8a7f-51fa52283a48"><span class="section-number-2">3.</span> References</h2>
+<div class="outline-text-2" id="text-h-d5b4fdae-2e24-4b28-8a7f-51fa52283a48">
+<ul class="org-ul">
+<li>Cezary Kaliszyk and Karol Pąk,<br>
+"Semantics of Mizar as an Isabelle Object Logic".<br>
+<i>Journal of Automated Reasoning</i> <b>63</b>, no.3 (2019) 557–595
+<a href="https://project-smart.uibk.ac.at/docs/19/ckkp-jar19.pdf">Eprint</a></li>
+<li>Chad E. Brown, Cezary Kaliszyk, and Karol Pak,<br>
+"Higher-order Tarski Grothendieck as a foundation for formal proof".<br>
+In <i>10th International Conference on Interactive Theorem Proving (ITP 2019).</i>
+Schloss Dagstuhl-Leibniz-Zentrum fuer Informatik, 2019.
+<a href="http://alioth.uwb.edu.pl/~pakkarol/articles/CBCKKP-ITP2019.pdf">Eprint</a></li>
 </ul>
 </div>
+
+<div id="outline-container-h-9cf2ad20-ccf8-48e2-a604-4db214548d1c" class="outline-3">
+<h3 id="h-9cf2ad20-ccf8-48e2-a604-4db214548d1c"><span class="section-number-3">3.1.</span> Mizar Modes</h3>
+<div class="outline-text-3" id="text-h-9cf2ad20-ccf8-48e2-a604-4db214548d1c">
+<ul class="org-ul">
+<li>For HOL Light
+<ol class="org-ol">
+<li>John Harrison,<br>
+"A Mizar Mode for HOL".<br>
+In <i>TPHOLs'96</i>, <a href="https://www.cl.cam.ac.uk/~jrh13/papers/mizar.html">Eprint</a></li>
+<li>F. Wiedijk,<br>
+"Mizar Light for HOL Light".<br>
+In: Richard Boulton &amp; Paul Jackson (eds.),
+<i>Theorem Proving in Higher Order Logics, 14th International Conference, TPHOLs 2001, Edinburgh</i>,
+Springer LNCS 2152, 378-393, 2001; <a href="http://www.cs.ru.nl/F.Wiedijk/mizar/miz.pdf">Eprint</a></li>
+<li>F. Wiedijk,<br>
+"A Synthesis of the Procedural and Declarative Styles of Interactive
+Theorem Proving".<br>
+<i>Logical Methods in Computer Science</i> <b>8</b>,no.1 (2012) 1-26;
+<a href="https://arxiv.org/abs/1201.3601">arXiv:1201.3601</a></li>
+</ol></li>
+<li>For Coq:
+<ol class="org-ol">
+<li>M. Giero and F. Wiedijk,<br>
+"MMode, a Mizar Mode for the proof assistant Coq".<br>
+Tech.report NIII-R0333, University of Nijmegen, 2003;
+<a href="http://www.cs.ru.nl/F.Wiedijk/mmode/mmode.pdf">Eprint</a></li>
+</ol></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-12 Tue 08:34.</p>
+<p class="postamble">Last Updated 2022-04-12 Tue 08:59.</p>
 </div>
 </body>
 </html>
