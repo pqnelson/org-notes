@@ -210,11 +210,259 @@ definition
   let K,G be Group;
   pred K is_section_of G means :Def:
   ex H being Subgroup of G st
-  ex N being normal Subgroup of N st
+  ex N being normal Subgroup of H st
   K = H./.N;
 end;
 #+end_src
 
+Note: we may need to change the denominator to ~(H,N)`*`~ which will
+"cast" ~N~ as a normal subgroup of ~H~. 
+
 We also have a related notion "$G$ is involved in $K$" means $G$ is
 isomorphic to a section of $K$. This is a transitive relation.
 
+* Exponent of Group
+:PROPERTIES:
+:CUSTOM_ID: h-71ef82c3-d433-4eba-98a8-bac942140338
+:END:
+
+#+begin_definition
+Let $G$ be a group. Its {{{dfn(Exponent)}}} is the least natural number
+$n\in\mathbb{N}$ such that every $g\in G$ satisfies $g^{n}=1_{G}$. If
+there is an element of order 0 in the group, then the exponent of $G$ is
+defined to be 0.
+#+end_definition
+
+#+begin_src mizar
+definition
+  let G be Group;
+  func exponent G -> Nat means
+  :Def:
+  it = 0 if ex g being Element of G st g is being_of_order_0
+  otherwise it > 0 &
+            for g being Element of G
+            holds g |^ it = 1_G &
+                  (for n being Nat st g |^ n = 1_G holds it <= n);
+  
+  existence
+  proof
+    thus (ex g being Element of G st g is being_of_order_0) implies
+    (ex k being Nat st k = 0);
+    thus (for g being Element of G holds not g is being_of_order_0) implies
+    (ex k being Nat st
+     for g being Element of G
+     holds g |^ k = 1_G & (for n being Nat st g |^ n = 1_G holds k <= n));
+  end;
+
+  uniqueness
+  proof
+    defpred P[Element of Nat] means $1 > 0 &
+    for g being Element of G
+    holds g |^ ($1) = 1_G & (for n being Nat st g |^ n = 1_G holds ($1) <= n);
+
+    let k1,k2 be Nat;
+
+    thus (ex g being Element of G st g is being_of_order_0) & k1 = 0 & k2 = 0
+    implies k1 = k2;
+    
+    thus (for g being Element of G holds not g is being_of_order_0) & P[k1] & P[k2]
+    implies k1 = k2;
+  end;
+
+  consistency;
+end;
+#+end_src
+
+* Elementary Abelian Group
+:PROPERTIES:
+:CUSTOM_ID: h-bea1584a-3260-4505-8938-578af0e8d5db
+:END:
+
+Aschbacher's {{{book-title(Finite Group Theory)}}} nicely defines an
+elementary Abelian group right before \S1.13:
+
+#+begin_definition
+Let $p$ be a prime number, we define an {{{dfn(Elementary Abelian $p$ -Group)}}}
+to be an Abelian $p$ -Group of exponent $p$.
+#+end_definition
+
+Luckily, ~groupp_1~ defines [[http://mizar.org/version/current/html/groupp_1.html#V3][~p-commutative-group~]] and which does a lot of
+heavy lifting for us.
+
+#+begin_src mizar
+definition
+  let p be prime Nat;
+  let IT be finite Group;
+  attr IT is p-elementary_Abelian means
+  :Def:
+  IT is p-commutative-group & exponent IT = p;
+end;
+
+:: Kurzweil & Stellmacher, _Theory of Finite Groups_, Thm 5.2.6
+theorem
+  for G being p-elementary_Abelian Group
+  holds Phi(G) is trivial;
+
+:: Kurzweil & Stellmacher, _Theory of Finite Groups_, Thm 5.2.7 (a)
+theorem
+  for P being p-group Group
+  holds P./.Phi(P) is p-elementary_Abelian Group;
+#+end_src
+
+We will also want to define the $p$ rank of a finite group. This would
+be the largest [[http://mizar.org/version/current/html/groupp_1.html#K1][~expon~]] of the ~p-elementary_Abelian~ subgroups of ~G~.
+
+#+begin_definition
+Let $G$ be a group, $p$ be a prime. The {{{dfn($p$ -rank)}}} of $G$ is
+the maximum rank of all elementary Abelian $p$ -subgroups of $G$.
+#+end_definition
+
+This is only really well-defined if $G$ is a finite group whose order is
+divisible by $p$, or if there exists an element whose order is divisible
+by $p$. Since we only really care about the $p$ -rank for *finite*
+groups, we can restrict our definition to finite groups.
+
+#+begin_src mizar
+definition
+  let p be prime Nat;
+  let G be finite Group;
+  func p-rank G means
+  :Def:
+  it > 0 & for E being Subgroup of G
+           st E is p-elementary_Abelian
+           holds expon(E,p) <= it &
+                 (for n being Nat
+                  st n > 0 & expon(E,p) <= n
+                  holds it <= n)
+  if p divides card G
+  otherwise it = 0;
+
+  existence
+  proof
+    defpred P[Nat] means
+    ($1) > 0 & for E being Subgroup of G
+               st E is p-elementary_Abelian
+               holds expon(E,p) <= ($1) &
+                     (for n being Nat st n > 0 & expon(E,p) <= n
+                      holds ($1) <= n);
+    thus p divides card G implies ex k being Nat st P[k];
+    thus not p divides card G implies ex k being Nat st k=0;
+  end;
+
+  uniqueness
+  proof
+    defpred P[Nat] means
+    ($1) > 0 & for E being Subgroup of G
+               st E is p-elementary_Abelian
+               holds expon(E,p) <= ($1) &
+                     (for n being Nat st n > 0 & expon(E,p) <= n
+                      holds ($1) <= n);
+    let k1,k2 be Nat;
+    thus p divides card G & P[k1] & P[k2] holds k1 = k2;
+    thus not (p divides card G) & (k1 = 0) & (k2 = 0) implies k1 = k2;
+  end;
+
+  consistency;
+end;
+
+notation
+  let p be prime Nat, G be finite Group;
+  synonym p-depth G for p-rank G;
+end;
+#+end_src
+
+** Depth of Group
+:PROPERTIES:
+:CUSTOM_ID: h-577c3222-c227-4f29-a1ce-778af705a4b5
+:END:
+
+The depth of a finite group is the largest $p$ -rank of the group for
+any prime $p$.
+
+#+begin_src mizar
+definition
+  let G be finite Group;
+  func depth G -> Nat means
+  for p being prime Nat
+  holds p-rank G <= it & (for n being Nat
+                          st p-rank G <= n
+                          holds it <= n);
+
+  existence
+  proof
+    thus ex k being Nat st
+         for p being prime Nat
+         holds p-rank G <= k &
+               (for n being Nat st p-rank G <= n holds k <= n);
+  end;
+
+  uniqueness
+  proof
+    defpred P[Nat] means for p being prime Nat
+    holds p-rank G <= ($1) & (for n being Nat
+                              st p-rank G <= n
+                              holds ($1) <= n);
+    thus for k1,k2 being Nat st P[k1] & P[k2] holds k1=k2;
+  end;
+end;
+
+theorem
+  for G being trivial Group
+  for p being prime Nat
+  holds p-rank G = 0;
+#+end_src
+
+** Thin and Quasithin groups
+:PROPERTIES:
+:CUSTOM_ID: h-8f7b98d9-997c-4089-8641-56911841c828
+:END:
+
+We can now define thin and quasithin groups. They are defined using the
+maximum $p$ -rank (over all odd prime $p$) for 2-local subgroups of $G$.
+
+#+begin_src mizar
+definition
+  let IT be finite Group;
+  attr IT is thin means
+  :Def:
+  for p being odd prime Nat
+  holds 2-local_p-rank IT <= 1;
+
+  attr IT is quasithin means
+  :Def:
+  for p being odd prime Nat
+  holds 2-local_p-rank IT <= 2;
+
+  attr IT is strongly_quasithin means
+  :Def:
+  for p being odd prime Nat
+  holds p-rank IT <= 2;
+end;
+
+theorem the trivial Group is thin;
+theorem the trivial Group is quasithin;
+
+registration
+  cluster thin finite Group
+  existence
+  proof
+    take the trivial Group;
+    hence thesis;
+  end;
+  
+  cluster quasithin finite Group
+  existence
+  proof
+    take the trivial Group;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster thin -> quasithin finite Group;
+  coherence
+  proof
+    thus for G being finite Group st G is thin holds G is quasithin;
+  end;
+end;
+#+end_src

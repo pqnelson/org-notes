@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:48 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Lie Theory in Mizar</title>
@@ -244,7 +243,12 @@
 <li><a href="#h-42b94e81-8319-49c1-ab2d-d8852a381f56">2. Relevant Definitions</a>
 <ul>
 <li><a href="#h-8e62fe3a-da15-47d4-93a1-9f70d1331b65">2.1. Existing in Mizar</a></li>
-<li><a href="#h-7abad33c-acb5-49ce-8243-945872dce09c">2.2. Not in Mizar</a></li>
+<li><a href="#h-7abad33c-acb5-49ce-8243-945872dce09c">2.2. Not in Mizar</a>
+<ul>
+<li><a href="#h-301cfce8-d249-4697-ab45-f1ba73dd82d9">2.2.1. Differentiable Manifolds</a></li>
+<li><a href="#h-9cb82a62-a811-4a83-ada1-ab7fc5aaf75b">2.2.2. Lie Algebras</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#h-d95aeb61-2705-477a-bff1-5af409e21561">3. References</a></li>
@@ -308,6 +312,15 @@ relevant.
 <li><a href="http://mizar.org/version/current/html/ideal_1.html#V3"><code>right-ideal</code></a></li>
 </ul></li>
 <li><a href="http://mizar.org/version/current/html/zmodlat1.html"><code>zmodlat1</code></a> for lattices</li>
+<li>In <a href="http://mizar.org/version/current/html/mfold_0.html"><code>mfold_0</code></a>, <a href="http://mizar.org/version/current/html/mfold_1.html"><code>mfold_1</code></a>, and <a href="http://mizar.org/version/current/html/mfold_2.html"><code>mfold_2</code></a> &#x2014; topological manifolds have
+been formalized as <a href="http://mizar.org/version/current/html/mfold_0.html#NM1"><code>topological_manifold</code></a> being a non-empty Hausdorff,
+second countable, locally Euclidean topological space.</li>
+<li><a href="http://mizar.org/version/current/html/topgrp_1.html"><code>topgrp_1</code></a> defines the notion of a <a href="http://mizar.org/version/current/html/topgrp_1.html#NM5"><code>TopologicalGroup</code></a> by first
+defining <code>TopGroup</code> (a topological space whose underlying set is
+equipped with a group structure) then defines the properties
+specifying the group structure must be continuous (<code>UnContinuous</code>
+asserts the inverse operator is continuous, <code>BinContinuous</code> asserts
+the binary operator is continuous).</li>
 </ul>
 </div>
 </div>
@@ -315,7 +328,29 @@ relevant.
 <div id="outline-container-h-7abad33c-acb5-49ce-8243-945872dce09c" class="outline-3">
 <h3 id="h-7abad33c-acb5-49ce-8243-945872dce09c"><span class="section-number-3">2.2.</span> Not in Mizar</h3>
 <div class="outline-text-3" id="text-h-7abad33c-acb5-49ce-8243-945872dce09c">
-<div class="definition" id="org698e5bb">
+</div>
+
+<div id="outline-container-h-301cfce8-d249-4697-ab45-f1ba73dd82d9" class="outline-4">
+<h4 id="h-301cfce8-d249-4697-ab45-f1ba73dd82d9"><span class="section-number-4">2.2.1.</span> Differentiable Manifolds</h4>
+<div class="outline-text-4" id="text-h-301cfce8-d249-4697-ab45-f1ba73dd82d9">
+<p>
+It's kinda debatable whether this is needed, because topological groups
+are also Lie groups (<a href="https://en.wikipedia.org/wiki/Hilbert%27s_fifth_problem">Hilbert's fifth problem</a>) thanks to a theorem by
+Andrew Gleason, Deane Montgomery, and Leo Zippin.
+</p>
+
+<p>
+Most books define a Lie group as a real analytic manifold equipped with
+a smooth group structure (a few weaken this to just(!) a \(C^{\infty}\)
+manifold). 
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-9cb82a62-a811-4a83-ada1-ab7fc5aaf75b" class="outline-4">
+<h4 id="h-9cb82a62-a811-4a83-ada1-ab7fc5aaf75b"><span class="section-number-4">2.2.2.</span> Lie Algebras</h4>
+<div class="outline-text-4" id="text-h-9cb82a62-a811-4a83-ada1-ab7fc5aaf75b">
+<div class="definition" id="org06d2056">
 <p>
 A vector space \(L\) over a field \(F\) with an operation \(L\times L\to L\),
 denoted \((x,y)\to[x, y]\) called the bracket (or commutator) of \(x\) and \(y\),
@@ -336,7 +371,7 @@ This is the definition given by Humphreys' <i>Introduction to Lie Algebras and R
 <i>Lie Groups and Lie Algebras</i> I.1&sect;2 Definition 1:
 </p>
 
-<div class="definition" id="org8357c6d">
+<div class="definition" id="orgafb97e9">
 <p>
 An algebra \(\mathfrak{g}\) over a commutative unital [associative] ring
 \(K\) is called a <dfn>Lie Algebra</dfn> over \(K\) if its multiplication
@@ -360,7 +395,7 @@ it is not adequately justified. "Bilinear" yes, but "alternating"? No,
 not in general: only if the characteristic of \(K\) is not 2.
 </p>
 
-<div class="remark" id="org71eb5d9">
+<div class="remark" id="orgd96eb70">
 <p>
 Mizar's notion of an algebra is <b>almost</b> good: they demand an algebra be
 unital, but this is not true in general for Lie algebras. Further, since
@@ -427,6 +462,7 @@ which extends <code>ModuleStr</code>.
 </div>
 </div>
 </div>
+</div>
 
 <div id="outline-container-h-d95aeb61-2705-477a-bff1-5af409e21561" class="outline-2">
 <h2 id="h-d95aeb61-2705-477a-bff1-5af409e21561"><span class="section-number-2">3.</span> References</h2>
@@ -444,12 +480,15 @@ which extends <code>ModuleStr</code>.
 <li>Jean-Pierre Serre,<br>
 <i>Complex semisimple Lie algebras</i>.<br>
 Springer, 1987.</li>
+<li>Jim Humphreys,<br>
+<a href="https://mathoverflow.net/q/136880/22457">Definition of "finite group of Lie type"?</a><br>
+Thread on Math.Overflow</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-03-03 Thu 13:01.</p>
+<p class="postamble">Last Updated 2022-04-14 Thu 11:04.</p>
 </div>
 </body>
 </html>
