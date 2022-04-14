@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Climate Science</title>
+<title>Heat Equation for Atmospheric Dynamics</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -206,44 +206,93 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../index.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Climate Science</h1>
-<ul class="org-ul">
-<li><a href="effective-temperature.html">Effective Temperature of the Earth</a> computation</li>
-<li><a href="solar-constant.html">Solar Constant</a> computation</li>
-<li><a href="earth-albedo.html">Earth's Albedo</a></li>
-<li><a href="energy-balance.html">Energy Balance Models</a></li>
-<li><a href="gcm.html">General Circulation Models</a> form the heart of climate modeling, and
-they're as fascinating as they are fun!
-<ul class="org-ul">
-<li><a href="models-hierarchy.html">Hierarchy of Models</a></li>
-<li><a href="testing-software.html">Testing Software Models of Climate Change</a></li>
-</ul></li>
-<li><a href="atmosphere-heat.html">Heat Equation for Atmospheric Dynamics</a></li>
+<h1 class="title">Heat Equation for Atmospheric Dynamics</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-2acf6524-6528-401d-bec7-1dc426830ce6">1. Overview</a></li>
+<li><a href="#h-e98f5f49-6026-4942-8417-8db77f4749bb">2. References</a></li>
 </ul>
+</div>
+</div>
 
-<div id="outline-container-h-c39bef00-78c4-4cbf-aff3-ad22310a53ab" class="outline-2">
-<h2 id="h-c39bef00-78c4-4cbf-aff3-ad22310a53ab">Stuff to think about</h2>
-<div class="outline-text-2" id="text-h-c39bef00-78c4-4cbf-aff3-ad22310a53ab">
+<div id="outline-container-h-2acf6524-6528-401d-bec7-1dc426830ce6" class="outline-2">
+<h2 id="h-2acf6524-6528-401d-bec7-1dc426830ce6"><span class="section-number-2">1.</span> Overview</h2>
+<div class="outline-text-2" id="text-h-2acf6524-6528-401d-bec7-1dc426830ce6">
+<p>
+J. David Neelin's <cite class="book-title">Climate Change and Climate Modeling</cite>
+give the following description of the equation governing atmospheric
+thermodynamics (it's the heat equation plus a term describing how an air
+parcel's volume increases as it elevates):
+</p>
+
+\begin{equation}
+c_{p}\frac{\mathrm{D}T}{\mathrm{D}t}-\frac{1}{\rho}\frac{\mathrm{D}p}{\mathrm{D}t}
+= Q
+\end{equation}
+
+<p>
+where \(c_{p}\) is the heat capacity of air at constant pressure, and \(Q\)
+is the heating term. For us, the heating term has several contributions
+</p>
+
+\begin{equation}
+Q = Q_{\text{solar}} + Q_{\text{IR}} + Q_{\text{convection}} +
+Q_{\text{mixing}}.
+\end{equation}
+
+<p>
+Beyond this, I'm relatively stumped, to be completely honest.
+This can also be found in, e.g., Vallis's
+<cite class="book-title">Atmospheric and Oceanic Fluid Dynamics</cite>, chapter 1 &sect;6.
+It seems Vallis discusses radiative transfer in chapter 18, but it's&#x2026;a
+bit of work to get to some expression for \(Q\) out of it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-e98f5f49-6026-4942-8417-8db77f4749bb" class="outline-2">
+<h2 id="h-e98f5f49-6026-4942-8417-8db77f4749bb"><span class="section-number-2">2.</span> References</h2>
+<div class="outline-text-2" id="text-h-e98f5f49-6026-4942-8417-8db77f4749bb">
 <ul class="org-ul">
-<li>Reference to lookup:
-John C. Wyngaard,
-<cite class="book-title">Turbulence in the Atmosphere</cite>.
-Cambridge University Press, 2011</li>
-<li>Note that <a href="https://gmd.copernicus.org/articles/11/3781/2018/gmd-11-3781-2018.pdf">sympl (v. 0.4.0) and climt (v. 0.15.3) – towards a flexible frameworkfor building model hierarchies in Python</a> may be
-an interesting paper worth pondering further&#x2026;</li>
+<li>J. David Neelin,<br>
+<cite class="book-title">Climate Change and Climate Modeling</cite>.<br>
+CUP, 2011; see especially &sect;3.3.2 for the heat equation for air.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-12 Tue 10:46.</p>
+<p class="postamble">Last Updated 2022-04-13 Wed 09:48.</p>
 </div>
 </body>
 </html>
