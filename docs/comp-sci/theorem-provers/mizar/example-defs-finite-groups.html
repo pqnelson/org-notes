@@ -241,7 +241,14 @@
 <ul>
 <li><a href="#h-3514a396-c340-41d5-97f5-7fe965d4519c">1. Introduction</a></li>
 <li><a href="#h-2f274d71-e96e-4479-8d58-cfc921adb1df">2. Extra-special groups</a></li>
-<li><a href="#h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8">3. G Has Characteristic p</a></li>
+<li><a href="#h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8">3. G Has Characteristic p</a>
+<ul>
+<li><a href="#h-b6e05185-d9e8-4006-84ea-8a672fa6c0cf">3.1. p-Local Subgroups</a></li>
+<li><a href="#h-653b4943-4209-4ab8-b213-033e920fc4d5">3.2. Subgroup has Characteristic p</a></li>
+<li><a href="#h-d5aaeccc-3c34-456c-973d-54ef0425ec81">3.3. Group has local characteristic p</a></li>
+<li><a href="#h-328dc5eb-90cd-4c55-b09f-39464b5aca19">3.4. Group has characteristic p</a></li>
+</ul>
+</li>
 <li><a href="#h-03074538-22a6-4bac-869b-a27c2bd4004c">4. Parabolic Subgroup</a></li>
 <li><a href="#h-5ae83f58-ed1c-4543-8e5d-a49c61ba6701">5. Finite Group Theory</a>
 <ul>
@@ -251,10 +258,12 @@
 <li><a href="#h-71ef82c3-d433-4eba-98a8-bac942140338">6. Exponent of Group</a></li>
 <li><a href="#h-bea1584a-3260-4505-8938-578af0e8d5db">7. Elementary Abelian Group</a>
 <ul>
-<li><a href="#h-577c3222-c227-4f29-a1ce-778af705a4b5">7.1. Depth of Group</a></li>
-<li><a href="#h-8f7b98d9-997c-4089-8641-56911841c828">7.2. Thin and Quasithin groups</a></li>
+<li><a href="#h-828bcfe4-8a74-441f-bf92-051a2c1c4d24">7.1. p-Rank of a Group</a></li>
+<li><a href="#h-577c3222-c227-4f29-a1ce-778af705a4b5">7.2. Depth of Group</a></li>
+<li><a href="#h-8f7b98d9-997c-4089-8641-56911841c828">7.3. Thin and Quasithin groups</a></li>
 </ul>
 </li>
+<li><a href="#h-90ed0478-53b3-42e6-9dd1-d3733258f9ca">8. Feit-Thompson Odd-Order Theorem</a></li>
 </ul>
 </div>
 </div>
@@ -267,6 +276,11 @@ This is a collection of definitions I intend to formalize in Mizar. The
 hard part of the formalizations is the proof of existence and uniqueness
 (or other correctness conditions).
 </p>
+
+<p>
+We provide the proof skeletons for most of the relevant definitions, but
+do not provide proofs.
+</p>
 </div>
 </div>
 
@@ -278,7 +292,7 @@ Rotman's <i>Introduction to the Theory of Groups</i>, 4th ed, defines on page
 124: 
 </p>
 
-<div class="definition" id="org5f4f44a">
+<div class="definition" id="org0de2e15">
 <p>
 Let \(G\) be a finite \(p\) -group. We call it <dfn>Extra-special</dfn>
 if \(Z(G)\) is cyclic and \(\Phi(G)=Z(G)=G'\).
@@ -287,7 +301,7 @@ if \(Z(G)\) is cyclic and \(\Phi(G)=Z(G)=G'\).
 </div>
 
 <p>
-This defines an attribute (hinted by being of the form "We call it <code>&lt;hairy&gt;</code>
+This defines an attribute (hinted by being of the form "We call it <code>&lt;adjective&gt;</code>
 if&#x2026;"). Its formalization is straightforward.
 </p>
 
@@ -296,6 +310,7 @@ if&#x2026;"). Its formalization is straightforward.
   <span class="org-mizar-skeleton">let</span> p <span class="org-mizar-normal">be</span> prime Nat;
   <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> finite p-group Group;
   <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> extra-special <span class="org-mizar-normal">means</span>
+  :Def:
   (center IT <span class="org-mizar-normal">is</span> cyclic) <span class="org-mizar-formula">&amp;</span> (Phi(IT) = center IT) <span class="org-mizar-formula">&amp;</span>
   (center IT = IT`);
 <span class="org-mizar-block">end</span>;
@@ -310,8 +325,12 @@ if&#x2026;"). Its formalization is straightforward.
 <p>
 These definitions are taken from <a href="https://arxiv.org/abs/1906.07216">arXiv:1906.07216</a>.
 </p>
+</div>
 
-<div class="definition" id="orgee76b25">
+<div id="outline-container-h-b6e05185-d9e8-4006-84ea-8a672fa6c0cf" class="outline-3">
+<h3 id="h-b6e05185-d9e8-4006-84ea-8a672fa6c0cf"><span class="section-number-3">3.1.</span> p-Local Subgroups</h3>
+<div class="outline-text-3" id="text-h-b6e05185-d9e8-4006-84ea-8a672fa6c0cf">
+<div class="definition" id="orgbe26b16">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group whose order is
 divisible by \(p\). A <dfn>$p$-local subgroup</dfn> is one that looks like
@@ -344,8 +363,13 @@ say <code>IT = Normalizer P</code> without making <code>IT</code> a strict Subgr
 normalizer of a subgroup is defined to be a strict subgroup.) For this
 reason, we needed to check <code>the multMagma of IT = Normalizer P</code>.
 </p>
+</div>
+</div>
 
-<div class="definition" id="org0935db9">
+<div id="outline-container-h-653b4943-4209-4ab8-b213-033e920fc4d5" class="outline-3">
+<h3 id="h-653b4943-4209-4ab8-b213-033e920fc4d5"><span class="section-number-3">3.2.</span> Subgroup has Characteristic p</h3>
+<div class="outline-text-3" id="text-h-653b4943-4209-4ab8-b213-033e920fc4d5">
+<div class="definition" id="orgda85558">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group, \(L\leq G\) be a subgroup.
 We say \(L\) <dfn>has Characteristic \(p\)</dfn> if
@@ -369,8 +393,13 @@ This introduces a new predicate, <code>has_characteristic p</code> for a subgrou
 <span class="org-mizar-block">end</span>;
 </pre>
 </div>
+</div>
+</div>
 
-<div class="definition" id="org4a0948d">
+<div id="outline-container-h-d5aaeccc-3c34-456c-973d-54ef0425ec81" class="outline-3">
+<h3 id="h-d5aaeccc-3c34-456c-973d-54ef0425ec81"><span class="section-number-3">3.3.</span> Group has local characteristic p</h3>
+<div class="outline-text-3" id="text-h-d5aaeccc-3c34-456c-973d-54ef0425ec81">
+<div class="definition" id="org045fdd8">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group.
 We say \(G\) <dfn>has local Characteristic \(p\)</dfn> if
@@ -394,17 +423,27 @@ Characteristic.)
 <span class="org-mizar-block">end</span>;
 </pre>
 </div>
+</div>
+</div>
 
+<div id="outline-container-h-328dc5eb-90cd-4c55-b09f-39464b5aca19" class="outline-3">
+<h3 id="h-328dc5eb-90cd-4c55-b09f-39464b5aca19"><span class="section-number-3">3.4.</span> Group has characteristic p</h3>
+<div class="outline-text-3" id="text-h-328dc5eb-90cd-4c55-b09f-39464b5aca19">
 <p>
 From page ix of <a href="https://users.math.msu.edu/users/meierfra/Preprints/CGP/Structure/structure.pdf">The Local Structure Theorem For Finite Groups With A Large p-Subgroup</a>:
 </p>
 
-<div class="definition" id="orge09a9fd">
+<div class="definition" id="org3bdc909">
 <p>
 A finite group \(G\) has <dfn>characteristic \(p\)</dfn> if \(C_{G}(O_{p}(G))\leq O_{p}(G)\).
 </p>
 
 </div>
+
+<p>
+I would interpret this as a predicate (using the general heuristic "has <code>&lt;noun&gt;</code>"
+is a predicate).
+</p>
 
 <div class="org-src-container">
 <pre class="src src-mizar"><span class="org-mizar-main">definition</span>
@@ -414,7 +453,13 @@ A finite group \(G\) has <dfn>characteristic \(p\)</dfn> if \(C_{G}(O_{p}(G))\le
   :Def:
   Centralizer (p-core G) <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> (p-core G);
 <span class="org-mizar-block">end</span>;
+
+<span class="org-mizar-main">notation</span>
+  <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> finite Group;
+  <span class="org-mizar-normal">synonym</span> G has_even_characteristic <span class="org-mizar-formula">for</span> G has_characteristic 2;
+<span class="org-mizar-block">end</span>;
 </pre>
+</div>
 </div>
 </div>
 </div>
@@ -422,7 +467,7 @@ A finite group \(G\) has <dfn>characteristic \(p\)</dfn> if \(C_{G}(O_{p}(G))\le
 <div id="outline-container-h-03074538-22a6-4bac-869b-a27c2bd4004c" class="outline-2">
 <h2 id="h-03074538-22a6-4bac-869b-a27c2bd4004c"><span class="section-number-2">4.</span> Parabolic Subgroup</h2>
 <div class="outline-text-2" id="text-h-03074538-22a6-4bac-869b-a27c2bd4004c">
-<div class="definition" id="org671c36c">
+<div class="definition" id="org1b2b81f">
 <p>
 Let \(G\) be a finite group.
 Any subgroup of \(G\) containing a Sylow p-subgroup of \(G\) is a
@@ -449,7 +494,7 @@ use the Mizar predicate <a href="http://mizar.org/version/current/html/group_10.
 </pre>
 </div>
 
-<div class="definition" id="orged46666">
+<div class="definition" id="org5482eb3">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group.
 We say \(G\) has <dfn>parabolic characteristic \(p\)</dfn> if
@@ -489,7 +534,7 @@ Kurzweill and Stellmacher's <i>Theory of Finite Groups</i> &sect; 1.3 concludes
 with a brief definition in passing:
 </p>
 
-<div class="definition" id="org57ea43c">
+<div class="definition" id="org982ebf6">
 <p>
 Let \(G\) be a group, \(N\trianglelefteq H\leq G\). We call the quotient
 \(H/N\) a <dfn>Section</dfn> of \(G\).
@@ -539,7 +584,7 @@ isomorphic to a section of \(K\). This is a transitive relation.
 <div id="outline-container-h-71ef82c3-d433-4eba-98a8-bac942140338" class="outline-2">
 <h2 id="h-71ef82c3-d433-4eba-98a8-bac942140338"><span class="section-number-2">6.</span> Exponent of Group</h2>
 <div class="outline-text-2" id="text-h-71ef82c3-d433-4eba-98a8-bac942140338">
-<div class="definition" id="org229aac6">
+<div class="definition" id="orgeb960ab">
 <p>
 Let \(G\) be a group. Its <dfn>Exponent</dfn> is the least natural number
 \(n\in\mathbb{N}\) such that every \(g\in G\) satisfies \(g^{n}=1_{G}\). If
@@ -600,7 +645,7 @@ Aschbacher's <cite class="book-title">Finite Group Theory</cite> nicely defines 
 elementary Abelian group right before &sect;1.13:
 </p>
 
-<div class="definition" id="org7d9ba0b">
+<div class="definition" id="org4124cf6">
 <p>
 Let \(p\) be a prime number, we define an <dfn>Elementary Abelian \(p\) -Group</dfn>
 to be an Abelian \(p\) -Group of exponent \(p\).
@@ -638,8 +683,12 @@ heavy lifting for us.
 We will also want to define the \(p\) rank of a finite group. This would
 be the largest <a href="http://mizar.org/version/current/html/groupp_1.html#K1"><code>expon</code></a> of the <code>p-elementary_Abelian</code> subgroups of <code>G</code>.
 </p>
+</div>
 
-<div class="definition" id="orgaa11937">
+<div id="outline-container-h-828bcfe4-8a74-441f-bf92-051a2c1c4d24" class="outline-3">
+<h3 id="h-828bcfe4-8a74-441f-bf92-051a2c1c4d24"><span class="section-number-3">7.1.</span> p-Rank of a Group</h3>
+<div class="outline-text-3" id="text-h-828bcfe4-8a74-441f-bf92-051a2c1c4d24">
+<div class="definition" id="org4b736f2">
 <p>
 Let \(G\) be a group, \(p\) be a prime. The <dfn>\(p\) -rank</dfn> of \(G\) is
 the maximum rank of all elementary Abelian \(p\) -subgroups of \(G\).
@@ -704,13 +753,23 @@ groups, we can restrict our definition to finite groups.
 </pre>
 </div>
 </div>
+</div>
 
 <div id="outline-container-h-577c3222-c227-4f29-a1ce-778af705a4b5" class="outline-3">
-<h3 id="h-577c3222-c227-4f29-a1ce-778af705a4b5"><span class="section-number-3">7.1.</span> Depth of Group</h3>
+<h3 id="h-577c3222-c227-4f29-a1ce-778af705a4b5"><span class="section-number-3">7.2.</span> Depth of Group</h3>
 <div class="outline-text-3" id="text-h-577c3222-c227-4f29-a1ce-778af705a4b5">
+<div class="definition" id="org57898c6">
 <p>
-The depth of a finite group is the largest \(p\) -rank of the group for
-any prime \(p\).
+Let \(G\) be a finite group.
+The <dfn>Depth</dfn> (or <dfn>Rank</dfn>) of \(G\) is the largest \(p\)
+-rank of the group, for all primes \(p\).
+</p>
+
+</div>
+
+<p>
+We will run into a "name collision" in homological algebra, since "rank"
+has a technical meaning there, and we need to use group cohomology later on.
 </p>
 
 <div class="org-src-container">
@@ -750,8 +809,62 @@ any prime \(p\).
 </div>
 
 <div id="outline-container-h-8f7b98d9-997c-4089-8641-56911841c828" class="outline-3">
-<h3 id="h-8f7b98d9-997c-4089-8641-56911841c828"><span class="section-number-3">7.2.</span> Thin and Quasithin groups</h3>
+<h3 id="h-8f7b98d9-997c-4089-8641-56911841c828"><span class="section-number-3">7.3.</span> Thin and Quasithin groups</h3>
 <div class="outline-text-3" id="text-h-8f7b98d9-997c-4089-8641-56911841c828">
+<p>
+There is a way to measure the "size" of a finite group,
+\(e(G)\in\mathbb{N}_{0}\), defined as the largest \(p\) -rank (for odd
+primes \(p\)) among all the 2-local subgroups of \(G\).
+</p>
+
+<ul class="org-ul">
+<li>Aschbacher, in his "Groups of Characteristic 2-Type" refers to \(e(G) = \max\{m_{2,p}(G) : p\mbox{ odd prime}\}\) as the
+<dfn>Rank</dfn> of \(G\).</li>
+<li>Gorenstein's article, "Classification theory of finite simple groups"
+(1980) refers to \(e(G)\) as <dfn>odd 2-local rank</dfn> of \(G\). He also
+notes: "By a theorem of Frobenius, \(G\) has a normal 2-complement if \(e(G) = 0\), so \(e(G)\) is always positive in a simple group."</li>
+</ul>
+
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> finite Group;
+  <span class="org-mizar-normal">func</span> odd_2-local_rank G -&gt; Nat <span class="org-mizar-normal">means</span>
+  <span class="org-mizar-formula">for</span> p <span class="org-mizar-formula">being</span> odd prime Nat
+  <span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> Subgroup <span class="org-mizar-normal">of</span> G
+  <span class="org-mizar-formula">st</span> M <span class="org-mizar-normal">is</span> 2-local
+  <span class="org-mizar-formula">holds</span> p-rank M &lt;= <span class="org-mizar-normal">it</span> <span class="org-mizar-formula">&amp;</span>
+        (<span class="org-mizar-formula">for</span> n <span class="org-mizar-formula">being</span> Nat
+         <span class="org-mizar-formula">st</span> p-rank M &lt;= n
+         <span class="org-mizar-formula">holds</span> <span class="org-mizar-normal">it</span> &lt;= n);
+
+  <span class="org-mizar-normal">existence</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-normal">defpred</span> P[Nat] <span class="org-mizar-normal">means</span> <span class="org-mizar-formula">for</span> p <span class="org-mizar-formula">being</span> odd prime Nat
+                         <span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> Subgroup <span class="org-mizar-normal">of</span> G
+                         <span class="org-mizar-formula">st</span> M <span class="org-mizar-normal">is</span> 2-local
+                         <span class="org-mizar-formula">holds</span> p-rank M &lt;= ($1) <span class="org-mizar-formula">&amp;</span>
+                               (<span class="org-mizar-formula">for</span> n <span class="org-mizar-formula">being</span> Nat
+                                <span class="org-mizar-formula">st</span> p-rank M &lt;= n
+                                <span class="org-mizar-formula">holds</span> ($1) &lt;= n);
+    <span class="org-mizar-skeleton">thus</span> <span class="org-mizar-formula">ex</span> eG <span class="org-mizar-formula">being</span> Nat <span class="org-mizar-formula">st</span> P[eG];
+  <span class="org-mizar-block">end</span>;
+  
+  <span class="org-mizar-normal">uniqueness</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-normal">defpred</span> P[Nat] <span class="org-mizar-normal">means</span> <span class="org-mizar-formula">for</span> p <span class="org-mizar-formula">being</span> odd prime Nat
+                         <span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> Subgroup <span class="org-mizar-normal">of</span> G
+                         <span class="org-mizar-formula">st</span> M <span class="org-mizar-normal">is</span> 2-local
+                         <span class="org-mizar-formula">holds</span> p-rank M &lt;= ($1) <span class="org-mizar-formula">&amp;</span>
+                               (<span class="org-mizar-formula">for</span> n <span class="org-mizar-formula">being</span> Nat
+                                <span class="org-mizar-formula">st</span> p-rank M &lt;= n
+                                <span class="org-mizar-formula">holds</span> ($1) &lt;= n);
+    <span class="org-mizar-skeleton">thus</span> <span class="org-mizar-formula">for</span> k1,k2 <span class="org-mizar-formula">being</span> Nat <span class="org-mizar-formula">st</span> P[k1] <span class="org-mizar-formula">&amp;</span> P[k2] <span class="org-mizar-formula">holds</span> k1=k2;
+  <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
+
 <p>
 We can now define thin and quasithin groups. They are defined using the
 maximum \(p\) -rank (over all odd prime \(p\)) for 2-local subgroups of \(G\).
@@ -762,14 +875,13 @@ maximum \(p\) -rank (over all odd prime \(p\)) for 2-local subgroups of \(G\).
   <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> finite Group;
   <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> thin <span class="org-mizar-normal">means</span>
   :Def:
-  <span class="org-mizar-formula">for</span> p <span class="org-mizar-formula">being</span> odd prime Nat
-  <span class="org-mizar-formula">holds</span> 2-local_p-rank IT &lt;= 1;
+  odd_2-local_rank IT &lt;= 1;
 
   <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> quasithin <span class="org-mizar-normal">means</span>
   :Def:
-  <span class="org-mizar-formula">for</span> p <span class="org-mizar-formula">being</span> odd prime Nat
-  <span class="org-mizar-formula">holds</span> 2-local_p-rank IT &lt;= 2;
+  odd_2-local_rank IT &lt;= 2;
 
+  <span class="org-comment-delimiter">:: </span><span class="org-comment">Aschbacher &amp; Smith, Classification of Quasithin Groups, I, pg 4</span>
   <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> strongly_quasithin <span class="org-mizar-normal">means</span>
   :Def:
   <span class="org-mizar-formula">for</span> p <span class="org-mizar-formula">being</span> odd prime Nat
@@ -807,9 +919,44 @@ maximum \(p\) -rank (over all odd prime \(p\)) for 2-local subgroups of \(G\).
 </div>
 </div>
 </div>
+
+<div id="outline-container-h-90ed0478-53b3-42e6-9dd1-d3733258f9ca" class="outline-2">
+<h2 id="h-90ed0478-53b3-42e6-9dd1-d3733258f9ca"><span class="section-number-2">8.</span> Feit-Thompson Odd-Order Theorem</h2>
+<div class="outline-text-2" id="text-h-90ed0478-53b3-42e6-9dd1-d3733258f9ca">
+<p>
+The statement is quite easy:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">theorem</span>
+  <span class="org-mizar-formula">for</span> G <span class="org-mizar-formula">being</span> finite Group
+  <span class="org-mizar-formula">st</span> card G <span class="org-mizar-normal">is</span> odd
+  <span class="org-mizar-formula">holds</span> G <span class="org-mizar-normal">is</span> solvable;
+</pre>
+</div>
+
+<p>
+The proof has been revised and can be found spanning two books:
+</p>
+
+<ol class="org-ol">
+<li>Helmut Bender and George Glauberman,<br>
+<cite class="book-title">Local Analysis for the Odd Order Theorem</cite>.<br>
+Cambridge University Press, 1995.</li>
+<li>Thomas Peterfalvi,<br>
+<cite class="book-title">Character Theory for the Odd Order Theorem</cite>.<br>
+Cambridge University Press, 2000.</li>
+</ol>
+
+<p>
+The main dependency seems to be the first 7 chapters of I. Martin
+Isaacs's <cite class="book-title">Character Theory of Finite Groups</cite>, which
+Dover has reprinted in 1994.</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-14 Thu 13:17.</p>
+<p class="postamble">Last Updated 2022-04-15 Fri 09:29.</p>
 </div>
 </body>
 </html>

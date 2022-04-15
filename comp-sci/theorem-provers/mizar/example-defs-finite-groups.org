@@ -20,6 +20,9 @@ This is a collection of definitions I intend to formalize in Mizar. The
 hard part of the formalizations is the proof of existence and uniqueness
 (or other correctness conditions).
 
+We provide the proof skeletons for most of the relevant definitions, but
+do not provide proofs.
+
 * Extra-special groups
 :PROPERTIES:
 :CUSTOM_ID: h-2f274d71-e96e-4479-8d58-cfc921adb1df
@@ -33,7 +36,7 @@ Let $G$ be a finite $p$ -group. We call it {{{dfn(Extra-special)}}}
 if $Z(G)$ is cyclic and $\Phi(G)=Z(G)=G'$.
 #+end_definition
 
-This defines an attribute (hinted by being of the form "We call it ~<hairy>~
+This defines an attribute (hinted by being of the form "We call it ~<adjective>~
 if..."). Its formalization is straightforward.
 
 #+begin_src mizar
@@ -41,6 +44,7 @@ definition
   let p be prime Nat;
   let IT be finite p-group Group;
   attr IT is extra-special means
+  :Def:
   (center IT is cyclic) & (Phi(IT) = center IT) &
   (center IT = IT`);
 end;
@@ -52,6 +56,11 @@ end;
 :END:
 
 These definitions are taken from {{{arXiv(1906.07216)}}}.
+
+** p-Local Subgroups
+:PROPERTIES:
+:CUSTOM_ID: h-b6e05185-d9e8-4006-84ea-8a672fa6c0cf
+:END:
 
 #+begin_definition
 Let $p$ be a prime number, $G$ be a finite group whose order is
@@ -79,6 +88,11 @@ say ~IT = Normalizer P~ without making ~IT~ a strict Subgroup of G. (The
 normalizer of a subgroup is defined to be a strict subgroup.) For this
 reason, we needed to check ~the multMagma of IT = Normalizer P~.
 
+** Subgroup has Characteristic p
+:PROPERTIES:
+:CUSTOM_ID: h-653b4943-4209-4ab8-b213-033e920fc4d5
+:END:
+
 #+begin_definition
 Let $p$ be a prime number, $G$ be a finite group, $L\leq G$ be a subgroup.
 We say $L$ {{{dfn(has Characteristic $p$)}}} if
@@ -97,6 +111,11 @@ definition
   Centralizer (p-core L) is Subgroup of (p-core L);
 end;
 #+end_src
+
+** Group has local characteristic p
+:PROPERTIES:
+:CUSTOM_ID: h-d5aaeccc-3c34-456c-973d-54ef0425ec81
+:END:
 
 #+begin_definition
 Let $p$ be a prime number, $G$ be a finite group.
@@ -117,11 +136,19 @@ definition
 end;
 #+end_src
 
+** Group has characteristic p
+:PROPERTIES:
+:CUSTOM_ID: h-328dc5eb-90cd-4c55-b09f-39464b5aca19
+:END:
+
 From page ix of [[https://users.math.msu.edu/users/meierfra/Preprints/CGP/Structure/structure.pdf][The Local Structure Theorem For Finite Groups With A Large p-Subgroup]]:
 
 #+begin_definition
 A finite group $G$ has {{{dfn(characteristic $p$)}}} if $C_{G}(O_{p}(G))\leq O_{p}(G)$.
 #+end_definition
+
+I would interpret this as a predicate (using the general heuristic "has ~<noun>~"
+is a predicate).
 
 #+begin_src mizar
 definition
@@ -130,6 +157,11 @@ definition
   pred G has_characteristic p means
   :Def:
   Centralizer (p-core G) is Subgroup of (p-core G);
+end;
+
+notation
+  let G be finite Group;
+  synonym G has_even_characteristic for G has_characteristic 2;
 end;
 #+end_src
 
@@ -312,6 +344,11 @@ theorem
 We will also want to define the $p$ rank of a finite group. This would
 be the largest [[http://mizar.org/version/current/html/groupp_1.html#K1][~expon~]] of the ~p-elementary_Abelian~ subgroups of ~G~.
 
+** p-Rank of a Group
+:PROPERTIES:
+:CUSTOM_ID: h-828bcfe4-8a74-441f-bf92-051a2c1c4d24
+:END:
+
 #+begin_definition
 Let $G$ be a group, $p$ be a prime. The {{{dfn($p$ -rank)}}} of $G$ is
 the maximum rank of all elementary Abelian $p$ -subgroups of $G$.
@@ -376,8 +413,14 @@ end;
 :CUSTOM_ID: h-577c3222-c227-4f29-a1ce-778af705a4b5
 :END:
 
-The depth of a finite group is the largest $p$ -rank of the group for
-any prime $p$.
+#+begin_definition
+Let $G$ be a finite group.
+The {{{dfn(Depth)}}} (or {{{dfn(Rank)}}}) of $G$ is the largest $p$
+-rank of the group, for all primes $p$.
+#+end_definition
+
+We will run into a "name collision" in homological algebra, since "rank"
+has a technical meaning there, and we need to use group cohomology later on.
 
 #+begin_src mizar
 definition
@@ -417,6 +460,55 @@ theorem
 :CUSTOM_ID: h-8f7b98d9-997c-4089-8641-56911841c828
 :END:
 
+There is a way to measure the "size" of a finite group,
+$e(G)\in\mathbb{N}_{0}$, defined as the largest $p$ -rank (for odd
+primes $p$) among all the 2-local subgroups of $G$.
+
+- Aschbacher, in his "Groups of Characteristic 2-Type" refers to $e(G) = \max\{m_{2,p}(G) : p\mbox{ odd prime}\}$ as the
+  {{{dfn(Rank)}}} of $G$.
+- Gorenstein's article, "Classification theory of finite simple groups"
+  (1980) refers to $e(G)$ as {{{dfn(odd 2-local rank)}}} of $G$. He also
+  notes: "By a theorem of Frobenius, $G$ has a normal 2-complement if $e(G) = 0$, so $e(G)$ is always positive in a simple group."
+
+
+#+begin_src mizar
+definition
+  let G be finite Group;
+  func odd_2-local_rank G -> Nat means
+  for p being odd prime Nat
+  for M being Subgroup of G
+  st M is 2-local
+  holds p-rank M <= it &
+        (for n being Nat
+         st p-rank M <= n
+         holds it <= n);
+
+  existence
+  proof
+    defpred P[Nat] means for p being odd prime Nat
+                         for M being Subgroup of G
+                         st M is 2-local
+                         holds p-rank M <= ($1) &
+                               (for n being Nat
+                                st p-rank M <= n
+                                holds ($1) <= n);
+    thus ex eG being Nat st P[eG];
+  end;
+  
+  uniqueness
+  proof
+    defpred P[Nat] means for p being odd prime Nat
+                         for M being Subgroup of G
+                         st M is 2-local
+                         holds p-rank M <= ($1) &
+                               (for n being Nat
+                                st p-rank M <= n
+                                holds ($1) <= n);
+    thus for k1,k2 being Nat st P[k1] & P[k2] holds k1=k2;
+  end;
+end;
+#+end_src
+
 We can now define thin and quasithin groups. They are defined using the
 maximum $p$ -rank (over all odd prime $p$) for 2-local subgroups of $G$.
 
@@ -425,14 +517,13 @@ definition
   let IT be finite Group;
   attr IT is thin means
   :Def:
-  for p being odd prime Nat
-  holds 2-local_p-rank IT <= 1;
+  odd_2-local_rank IT <= 1;
 
   attr IT is quasithin means
   :Def:
-  for p being odd prime Nat
-  holds 2-local_p-rank IT <= 2;
+  odd_2-local_rank IT <= 2;
 
+  :: Aschbacher & Smith, Classification of Quasithin Groups, I, pg 4
   attr IT is strongly_quasithin means
   :Def:
   for p being odd prime Nat
@@ -466,3 +557,30 @@ registration
   end;
 end;
 #+end_src
+
+* Feit-Thompson Odd-Order Theorem
+:PROPERTIES:
+:CUSTOM_ID: h-90ed0478-53b3-42e6-9dd1-d3733258f9ca
+:END:
+
+The statement is quite easy:
+
+#+begin_src mizar
+theorem
+  for G being finite Group
+  st card G is odd
+  holds G is solvable;
+#+end_src
+
+The proof has been revised and can be found spanning two books:
+
+1. Helmut Bender and George Glauberman,\\
+   {{{book-title(Local Analysis for the Odd Order Theorem)}}}.\\
+   Cambridge University Press, 1995.
+2. Thomas Peterfalvi,\\
+   {{{book-title(Character Theory for the Odd Order Theorem)}}}.\\
+   Cambridge University Press, 2000.
+
+The main dependency seems to be the first 7 chapters of I. Martin
+Isaacs's {{{book-title(Character Theory of Finite Groups)}}}, which
+Dover has reprinted in 1994.
