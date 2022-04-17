@@ -636,3 +636,96 @@ The proof has been revised and can be found spanning two books:
 The main dependency seems to be the first 7 chapters of I. Martin
 Isaacs's {{{book-title(Character Theory of Finite Groups)}}}, which
 Dover has reprinted in 1994.
+
+* Group Extensions
+:PROPERTIES:
+:CUSTOM_ID: h-a6ee7bdb-62b4-45ab-bfe2-f7d29674a3b3
+:END:
+
+#+begin_src mizar
+theorem Th1:
+  for G being Group
+  for H being Subgroup of G
+  ex f being Homomorphism of H,G
+  st (for h being Element of H holds f.h = h) & f is one-to-one &
+  Image f = the multMagma of H;
+::>                          *4
+
+definition
+  let G be Group;
+  mode Extension of G -> Group means :Def:
+  ex A being Group st
+  ex f being Homomorphism of A,it st
+  ex p being Homomorphism of it,G
+  st Image f is Subgroup of Ker p &
+  f is one-to-one & p is onto;
+
+  existence
+  proof
+    thus ex E being Group st
+    ex A being Group st
+    ex f being Homomorphism of A,E st
+    ex p being Homomorphism of E,G
+    st Image f is Subgroup of Ker p &
+    f is one-to-one & p is onto
+    proof
+      take E=G;
+      take A=(1).G;
+      consider f being Homomorphism of A,E such that
+      A1: for g being Element of A holds f.g = g and
+      A2: f is one-to-one and
+      A3: Image f = the multMagma of A
+      by Th1;
+      take f;
+      reconsider p=id G as Homomorphism of E,G by GROUP_6:38;
+      id the carrier of G is onto;
+      then A4: p is onto;
+      (1).(Ker p) = (1).G by GROUP_2:63;
+      then (1).G is Subgroup of Ker p;
+      then Image f is Subgroup of Ker p by A3;
+      hence thesis by A2,A3;
+    end;
+  end;
+end;
+
+definition
+  let G be Group;
+  mode CentralExtension of G -> Group means :Def:
+  ex A being Group st
+  ex f being Homomorphism of A,it st
+  ex p being Homomorphism of it,G
+  st Image f is Subgroup of Ker p & Image f is Subgroup of center it &
+  f is one-to-one & p is onto;
+
+  existence
+  proof
+    thus ex E being Group st
+    ex A being Group st
+    ex f being Homomorphism of A,E st
+    ex p being Homomorphism of E,G
+    st Image f is Subgroup of Ker p &
+    Image f is Subgroup of center E &
+    f is one-to-one & p is onto
+    proof
+      take E=G;
+      take A=(1).G;
+      consider f being Homomorphism of A,E such that
+      A1: for g being Element of A holds f.g = g and
+      A2: f is one-to-one and
+      A3: Image f = the multMagma of A
+      by Th1;
+      take f;
+      reconsider p=id G as Homomorphism of E,G by GROUP_6:38;
+      id the carrier of G is onto;
+      then A4: p is onto;
+      (1).(Ker p) = (1).G by GROUP_2:63;
+      then (1).G is Subgroup of Ker p;
+      then A5: Image f is Subgroup of Ker p by A3;
+      (1).(center E) = (1).G by GROUP_2:63;
+      then (1).G is Subgroup of center E;
+      then Image f is Subgroup of center E by A3;
+      hence thesis by A2,A3,A5;
+    end;
+  end;
+end;
+#+end_src
