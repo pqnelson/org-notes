@@ -29,7 +29,7 @@ do not provide proofs.
 :END:
 
 Rotman's /Introduction to the Theory of Groups/, 4th ed, defines on page
-124: 
+124:
 
 #+begin_definition
 Let $G$ be a finite $p$ -group. We call it {{{dfn(Extra-special)}}}
@@ -73,13 +73,14 @@ for subgroups.
 
 #+begin_src mizar
 definition
-  let p be prime Nat;
+  let p be Nat;
   let G be finite Group such that p divides card G;
   let IT be Subgroup of G;
   attr IT is p-local means
   :Def:
-  ex P being non trivial p-group Subgroup of G
-  st the multMagma of IT = Normalizer P;
+  p is prime &
+  ex P being p-group Subgroup of G
+  st P is non trivial & the multMagma of IT = Normalizer P;
 end;
 #+end_src
 
@@ -87,6 +88,42 @@ Since subgroup equality is defined only for strict subgroups, we cannot
 say ~IT = Normalizer P~ without making ~IT~ a strict Subgroup of G. (The
 normalizer of a subgroup is defined to be a strict subgroup.) For this
 reason, we needed to check ~the multMagma of IT = Normalizer P~.
+
+Also, I am not sure if we /need/ ~p~ to be prime; it's just those are
+the cases we care about.
+
+This also requires the following registrations:
+
+#+begin_src mizar
+registration
+  let G be Group;
+  cluster trivial for Subgroup of G;
+  existence
+  proof
+    take H = (1).G;
+    thus thesis;
+  end;
+  let p be Nat;
+
+  cluster p-group for Subgroup of G;
+  existence
+  proof
+    take H = (1).G;
+    A4: card H = 1 by GROUP_6:11
+              .= p |^ 0 by NEWTON:4;
+    hence thesis by GROUP_10:def 17;
+  end;
+
+  cluster trivial p-group for Subgroup of G;
+  existence
+  proof
+    take H = (1).G;
+    A4: card H = 1 by GROUP_6:11
+              .= p |^ 0 by NEWTON:4;
+    hence thesis by GROUP_10:def 17;
+  end;
+end;
+#+end_src
 
 ** Subgroup has Characteristic p
 :PROPERTIES:
@@ -248,7 +285,7 @@ end;
 #+end_src
 
 Note: we may need to change the denominator to ~(H,N)`*`~ which will
-"cast" ~N~ as a normal subgroup of ~H~. 
+"cast" ~N~ as a normal subgroup of ~H~.
 
 We also have a related notion "$G$ is involved in $K$" means $G$ is
 isomorphic to a section of $K$. This is a transitive relation.
@@ -275,13 +312,13 @@ definition
             for g being Element of G
             holds g |^ it = 1_G &
                   (for n being Nat st g |^ n = 1_G holds it <= n);
-  
+
   existence
   proof
     thus (ex g being Element of G st g is being_of_order_0) implies
     (ex k being Nat st k = 0);
     thus (for g being Element of G holds not g is being_of_order_0) implies
-    (ex k being Nat st
+    (ex k being Nat st k > 0 &
      for g being Element of G
      holds g |^ k = 1_G & (for n being Nat st g |^ n = 1_G holds k <= n));
   end;
@@ -296,7 +333,7 @@ definition
 
     thus (ex g being Element of G st g is being_of_order_0) & k1 = 0 & k2 = 0
     implies k1 = k2;
-    
+
     thus (for g being Element of G holds not g is being_of_order_0) & P[k1] & P[k2]
     implies k1 = k2;
   end;
@@ -494,7 +531,7 @@ definition
                                 holds ($1) <= n);
     thus ex eG being Nat st P[eG];
   end;
-  
+
   uniqueness
   proof
     defpred P[Nat] means for p being odd prime Nat
@@ -505,6 +542,21 @@ definition
                                 st p-rank M <= n
                                 holds ($1) <= n);
     thus for k1,k2 being Nat st P[k1] & P[k2] holds k1=k2;
+  end;
+end;
+#+end_src
+
+This requires the following registration:
+
+#+begin_src mizar
+registration
+  cluster odd for prime Nat;
+  existence
+  proof
+    A1: 3 is prime by PEPIN:41;
+    3 = 2*1+1;
+    then 3 is odd by ABIAN:1;
+    hence thesis by A1,PEPIN:17;
   end;
 end;
 #+end_src
@@ -540,7 +592,7 @@ registration
     take the trivial Group;
     hence thesis;
   end;
-  
+
   cluster quasithin finite Group
   existence
   proof
