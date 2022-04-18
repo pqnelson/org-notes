@@ -264,6 +264,7 @@
 </ul>
 </li>
 <li><a href="#h-90ed0478-53b3-42e6-9dd1-d3733258f9ca">8. Feit-Thompson Odd-Order Theorem</a></li>
+<li><a href="#h-a6ee7bdb-62b4-45ab-bfe2-f7d29674a3b3">9. Group Extensions</a></li>
 </ul>
 </div>
 </div>
@@ -289,10 +290,10 @@ do not provide proofs.
 <div class="outline-text-2" id="text-h-2f274d71-e96e-4479-8d58-cfc921adb1df">
 <p>
 Rotman's <i>Introduction to the Theory of Groups</i>, 4th ed, defines on page
-124: 
+124:
 </p>
 
-<div class="definition" id="org0de2e15">
+<div class="definition" id="orgd239700">
 <p>
 Let \(G\) be a finite \(p\) -group. We call it <dfn>Extra-special</dfn>
 if \(Z(G)\) is cyclic and \(\Phi(G)=Z(G)=G'\).
@@ -330,7 +331,7 @@ These definitions are taken from <a href="https://arxiv.org/abs/1906.07216">arXi
 <div id="outline-container-h-b6e05185-d9e8-4006-84ea-8a672fa6c0cf" class="outline-3">
 <h3 id="h-b6e05185-d9e8-4006-84ea-8a672fa6c0cf"><span class="section-number-3">3.1.</span> p-Local Subgroups</h3>
 <div class="outline-text-3" id="text-h-b6e05185-d9e8-4006-84ea-8a672fa6c0cf">
-<div class="definition" id="orgbe26b16">
+<div class="definition" id="org83b7d80">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group whose order is
 divisible by \(p\). A <dfn>$p$-local subgroup</dfn> is one that looks like
@@ -346,13 +347,14 @@ for subgroups.
 
 <div class="org-src-container">
 <pre class="src src-mizar"><span class="org-mizar-main">definition</span>
-  <span class="org-mizar-skeleton">let</span> p <span class="org-mizar-normal">be</span> prime Nat;
+  <span class="org-mizar-skeleton">let</span> p <span class="org-mizar-normal">be</span> Nat;
   <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> finite Group <span class="org-mizar-normal">such</span> <span class="org-mizar-normal">that</span> p divides card G;
   <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Subgroup <span class="org-mizar-normal">of</span> G;
   <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> p-local <span class="org-mizar-normal">means</span>
   :Def:
-  <span class="org-mizar-formula">ex</span> P <span class="org-mizar-formula">being</span> non trivial p-group Subgroup <span class="org-mizar-normal">of</span> G
-  <span class="org-mizar-formula">st</span> the multMagma <span class="org-mizar-normal">of</span> IT = Normalizer P;
+  p <span class="org-mizar-normal">is</span> prime <span class="org-mizar-formula">&amp;</span>
+  <span class="org-mizar-formula">ex</span> P <span class="org-mizar-formula">being</span> p-group Subgroup <span class="org-mizar-normal">of</span> G
+  <span class="org-mizar-formula">st</span> P <span class="org-mizar-normal">is</span> non trivial <span class="org-mizar-formula">&amp;</span> the multMagma <span class="org-mizar-normal">of</span> IT = Normalizer P;
 <span class="org-mizar-block">end</span>;
 </pre>
 </div>
@@ -363,13 +365,54 @@ say <code>IT = Normalizer P</code> without making <code>IT</code> a strict Subgr
 normalizer of a subgroup is defined to be a strict subgroup.) For this
 reason, we needed to check <code>the multMagma of IT = Normalizer P</code>.
 </p>
+
+<p>
+Also, I am not sure if we <i>need</i> <code>p</code> to be prime; it's just those are
+the cases we care about.
+</p>
+
+<p>
+This also requires the following registrations:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">registration</span>
+  <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> Group;
+  <span class="org-mizar-normal">cluster</span> trivial <span class="org-mizar-formula">for</span> Subgroup <span class="org-mizar-normal">of</span> G;
+  <span class="org-mizar-normal">existence</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">take</span> H = (1).G;
+    <span class="org-mizar-skeleton">thus</span> <span class="org-mizar-normal">thesis</span>;
+  <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-skeleton">let</span> p <span class="org-mizar-normal">be</span> Nat;
+
+  <span class="org-mizar-normal">cluster</span> p-group <span class="org-mizar-formula">for</span> Subgroup <span class="org-mizar-normal">of</span> G;
+  <span class="org-mizar-normal">existence</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">take</span> H = (1).G;
+    A4: card H = 1<span class="org-type"> by GROUP_6:11</span>
+<span class="org-type">              </span>.= p |^ 0<span class="org-type"> by NEWTON:4</span>;
+    <span class="org-mizar-skeleton">hence</span> <span class="org-mizar-normal">thesis</span><span class="org-type"> by GROUP_10:def 17</span>;
+  <span class="org-mizar-block">end</span>;
+
+  <span class="org-mizar-normal">cluster</span> trivial p-group <span class="org-mizar-formula">for</span> Subgroup <span class="org-mizar-normal">of</span> G;
+  <span class="org-mizar-normal">existence</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">take</span> H = (1).G;
+    A4: card H = 1<span class="org-type"> by GROUP_6:11</span>
+<span class="org-type">              </span>.= p |^ 0<span class="org-type"> by NEWTON:4</span>;
+    <span class="org-mizar-skeleton">hence</span> <span class="org-mizar-normal">thesis</span><span class="org-type"> by GROUP_10:def 17</span>;
+  <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
 </div>
 </div>
 
 <div id="outline-container-h-653b4943-4209-4ab8-b213-033e920fc4d5" class="outline-3">
 <h3 id="h-653b4943-4209-4ab8-b213-033e920fc4d5"><span class="section-number-3">3.2.</span> Subgroup has Characteristic p</h3>
 <div class="outline-text-3" id="text-h-653b4943-4209-4ab8-b213-033e920fc4d5">
-<div class="definition" id="orgda85558">
+<div class="definition" id="org5b5400a">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group, \(L\leq G\) be a subgroup.
 We say \(L\) <dfn>has Characteristic \(p\)</dfn> if
@@ -399,7 +442,7 @@ This introduces a new predicate, <code>has_characteristic p</code> for a subgrou
 <div id="outline-container-h-d5aaeccc-3c34-456c-973d-54ef0425ec81" class="outline-3">
 <h3 id="h-d5aaeccc-3c34-456c-973d-54ef0425ec81"><span class="section-number-3">3.3.</span> Group has local characteristic p</h3>
 <div class="outline-text-3" id="text-h-d5aaeccc-3c34-456c-973d-54ef0425ec81">
-<div class="definition" id="org045fdd8">
+<div class="definition" id="org8399c15">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group.
 We say \(G\) <dfn>has local Characteristic \(p\)</dfn> if
@@ -433,7 +476,7 @@ Characteristic.)
 From page ix of <a href="https://users.math.msu.edu/users/meierfra/Preprints/CGP/Structure/structure.pdf">The Local Structure Theorem For Finite Groups With A Large p-Subgroup</a>:
 </p>
 
-<div class="definition" id="org3bdc909">
+<div class="definition" id="org69cf0f8">
 <p>
 A finite group \(G\) has <dfn>characteristic \(p\)</dfn> if \(C_{G}(O_{p}(G))\leq O_{p}(G)\).
 </p>
@@ -467,7 +510,7 @@ is a predicate).
 <div id="outline-container-h-03074538-22a6-4bac-869b-a27c2bd4004c" class="outline-2">
 <h2 id="h-03074538-22a6-4bac-869b-a27c2bd4004c"><span class="section-number-2">4.</span> Parabolic Subgroup</h2>
 <div class="outline-text-2" id="text-h-03074538-22a6-4bac-869b-a27c2bd4004c">
-<div class="definition" id="org1b2b81f">
+<div class="definition" id="orgb4936d1">
 <p>
 Let \(G\) be a finite group.
 Any subgroup of \(G\) containing a Sylow p-subgroup of \(G\) is a
@@ -494,7 +537,7 @@ use the Mizar predicate <a href="http://mizar.org/version/current/html/group_10.
 </pre>
 </div>
 
-<div class="definition" id="org5482eb3">
+<div class="definition" id="org882081c">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group.
 We say \(G\) has <dfn>parabolic characteristic \(p\)</dfn> if
@@ -534,7 +577,7 @@ Kurzweill and Stellmacher's <i>Theory of Finite Groups</i> &sect; 1.3 concludes
 with a brief definition in passing:
 </p>
 
-<div class="definition" id="org982ebf6">
+<div class="definition" id="org7da2ed5">
 <p>
 Let \(G\) be a group, \(N\trianglelefteq H\leq G\). We call the quotient
 \(H/N\) a <dfn>Section</dfn> of \(G\).
@@ -570,7 +613,7 @@ Consequently, we need to define this as a predicate.
 
 <p>
 Note: we may need to change the denominator to <code>(H,N)`*`</code> which will
-"cast" <code>N</code> as a normal subgroup of <code>H</code>. 
+"cast" <code>N</code> as a normal subgroup of <code>H</code>.
 </p>
 
 <p>
@@ -584,7 +627,7 @@ isomorphic to a section of \(K\). This is a transitive relation.
 <div id="outline-container-h-71ef82c3-d433-4eba-98a8-bac942140338" class="outline-2">
 <h2 id="h-71ef82c3-d433-4eba-98a8-bac942140338"><span class="section-number-2">6.</span> Exponent of Group</h2>
 <div class="outline-text-2" id="text-h-71ef82c3-d433-4eba-98a8-bac942140338">
-<div class="definition" id="orgeb960ab">
+<div class="definition" id="org8c3220f">
 <p>
 Let \(G\) be a group. Its <dfn>Exponent</dfn> is the least natural number
 \(n\in\mathbb{N}\) such that every \(g\in G\) satisfies \(g^{n}=1_{G}\). If
@@ -604,13 +647,13 @@ defined to be 0.
             <span class="org-mizar-formula">for</span> g <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> G
             <span class="org-mizar-formula">holds</span> g |^ <span class="org-mizar-normal">it</span> = 1_G <span class="org-mizar-formula">&amp;</span>
                   (<span class="org-mizar-formula">for</span> n <span class="org-mizar-formula">being</span> Nat <span class="org-mizar-formula">st</span> g |^ n = 1_G <span class="org-mizar-formula">holds</span> <span class="org-mizar-normal">it</span> &lt;= n);
-  
+
   <span class="org-mizar-normal">existence</span>
   <span class="org-mizar-block">proof</span>
     <span class="org-mizar-skeleton">thus</span> (<span class="org-mizar-formula">ex</span> g <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> G <span class="org-mizar-formula">st</span> g <span class="org-mizar-normal">is</span> being_of_order_0) <span class="org-mizar-formula">implies</span>
     (<span class="org-mizar-formula">ex</span> k <span class="org-mizar-formula">being</span> Nat <span class="org-mizar-formula">st</span> k = 0);
     <span class="org-mizar-skeleton">thus</span> (<span class="org-mizar-formula">for</span> g <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> G <span class="org-mizar-formula">holds</span> <span class="org-mizar-formula">not</span> g <span class="org-mizar-normal">is</span> being_of_order_0) <span class="org-mizar-formula">implies</span>
-    (<span class="org-mizar-formula">ex</span> k <span class="org-mizar-formula">being</span> Nat <span class="org-mizar-formula">st</span>
+    (<span class="org-mizar-formula">ex</span> k <span class="org-mizar-formula">being</span> Nat <span class="org-mizar-formula">st</span> k &gt; 0 <span class="org-mizar-formula">&amp;</span>
      <span class="org-mizar-formula">for</span> g <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> G
      <span class="org-mizar-formula">holds</span> g |^ k = 1_G <span class="org-mizar-formula">&amp;</span> (<span class="org-mizar-formula">for</span> n <span class="org-mizar-formula">being</span> Nat <span class="org-mizar-formula">st</span> g |^ n = 1_G <span class="org-mizar-formula">holds</span> k &lt;= n));
   <span class="org-mizar-block">end</span>;
@@ -625,7 +668,7 @@ defined to be 0.
 
     <span class="org-mizar-skeleton">thus</span> (<span class="org-mizar-formula">ex</span> g <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> G <span class="org-mizar-formula">st</span> g <span class="org-mizar-normal">is</span> being_of_order_0) <span class="org-mizar-formula">&amp;</span> k1 = 0 <span class="org-mizar-formula">&amp;</span> k2 = 0
     <span class="org-mizar-formula">implies</span> k1 = k2;
-    
+
     <span class="org-mizar-skeleton">thus</span> (<span class="org-mizar-formula">for</span> g <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> G <span class="org-mizar-formula">holds</span> <span class="org-mizar-formula">not</span> g <span class="org-mizar-normal">is</span> being_of_order_0) <span class="org-mizar-formula">&amp;</span> P[k1] <span class="org-mizar-formula">&amp;</span> P[k2]
     <span class="org-mizar-formula">implies</span> k1 = k2;
   <span class="org-mizar-block">end</span>;
@@ -645,7 +688,7 @@ Aschbacher's <cite class="book-title">Finite Group Theory</cite> nicely defines 
 elementary Abelian group right before &sect;1.13:
 </p>
 
-<div class="definition" id="org4124cf6">
+<div class="definition" id="orgb4b7c6c">
 <p>
 Let \(p\) be a prime number, we define an <dfn>Elementary Abelian \(p\) -Group</dfn>
 to be an Abelian \(p\) -Group of exponent \(p\).
@@ -688,7 +731,7 @@ be the largest <a href="http://mizar.org/version/current/html/groupp_1.html#K1">
 <div id="outline-container-h-828bcfe4-8a74-441f-bf92-051a2c1c4d24" class="outline-3">
 <h3 id="h-828bcfe4-8a74-441f-bf92-051a2c1c4d24"><span class="section-number-3">7.1.</span> p-Rank of a Group</h3>
 <div class="outline-text-3" id="text-h-828bcfe4-8a74-441f-bf92-051a2c1c4d24">
-<div class="definition" id="org4b736f2">
+<div class="definition" id="org6d37595">
 <p>
 Let \(G\) be a group, \(p\) be a prime. The <dfn>\(p\) -rank</dfn> of \(G\) is
 the maximum rank of all elementary Abelian \(p\) -subgroups of \(G\).
@@ -758,7 +801,7 @@ groups, we can restrict our definition to finite groups.
 <div id="outline-container-h-577c3222-c227-4f29-a1ce-778af705a4b5" class="outline-3">
 <h3 id="h-577c3222-c227-4f29-a1ce-778af705a4b5"><span class="section-number-3">7.2.</span> Depth of Group</h3>
 <div class="outline-text-3" id="text-h-577c3222-c227-4f29-a1ce-778af705a4b5">
-<div class="definition" id="org57898c6">
+<div class="definition" id="org35f69ce">
 <p>
 Let \(G\) be a finite group.
 The <dfn>Depth</dfn> (or <dfn>Rank</dfn>) of \(G\) is the largest \(p\)
@@ -849,7 +892,7 @@ notes: "By a theorem of Frobenius, \(G\) has a normal 2-complement if \(e(G) = 0
                                 <span class="org-mizar-formula">holds</span> ($1) &lt;= n);
     <span class="org-mizar-skeleton">thus</span> <span class="org-mizar-formula">ex</span> eG <span class="org-mizar-formula">being</span> Nat <span class="org-mizar-formula">st</span> P[eG];
   <span class="org-mizar-block">end</span>;
-  
+
   <span class="org-mizar-normal">uniqueness</span>
   <span class="org-mizar-block">proof</span>
     <span class="org-mizar-normal">defpred</span> P[Nat] <span class="org-mizar-normal">means</span> <span class="org-mizar-formula">for</span> p <span class="org-mizar-formula">being</span> odd prime Nat
@@ -860,6 +903,24 @@ notes: "By a theorem of Frobenius, \(G\) has a normal 2-complement if \(e(G) = 0
                                 <span class="org-mizar-formula">st</span> p-rank M &lt;= n
                                 <span class="org-mizar-formula">holds</span> ($1) &lt;= n);
     <span class="org-mizar-skeleton">thus</span> <span class="org-mizar-formula">for</span> k1,k2 <span class="org-mizar-formula">being</span> Nat <span class="org-mizar-formula">st</span> P[k1] <span class="org-mizar-formula">&amp;</span> P[k2] <span class="org-mizar-formula">holds</span> k1=k2;
+  <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
+
+<p>
+This requires the following registration:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">registration</span>
+  <span class="org-mizar-normal">cluster</span> odd <span class="org-mizar-formula">for</span> prime Nat;
+  <span class="org-mizar-normal">existence</span>
+  <span class="org-mizar-block">proof</span>
+    A1: 3 <span class="org-mizar-normal">is</span> prime<span class="org-type"> by PEPIN:41</span>;
+    3 = 2*1+1;
+    <span class="org-mizar-normal">then</span> 3 <span class="org-mizar-normal">is</span> odd<span class="org-type"> by ABIAN:1</span>;
+    <span class="org-mizar-skeleton">hence</span> <span class="org-mizar-normal">thesis</span><span class="org-type"> by A1,PEPIN:17</span>;
   <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 </pre>
@@ -898,7 +959,7 @@ maximum \(p\) -rank (over all odd prime \(p\)) for 2-local subgroups of \(G\).
     <span class="org-mizar-skeleton">take</span> the trivial Group;
     <span class="org-mizar-skeleton">hence</span> <span class="org-mizar-normal">thesis</span>;
   <span class="org-mizar-block">end</span>;
-  
+
   <span class="org-mizar-normal">cluster</span> quasithin finite Group
   <span class="org-mizar-normal">existence</span>
   <span class="org-mizar-block">proof</span>
@@ -951,12 +1012,107 @@ Cambridge University Press, 2000.</li>
 <p>
 The main dependency seems to be the first 7 chapters of I. Martin
 Isaacs's <cite class="book-title">Character Theory of Finite Groups</cite>, which
-Dover has reprinted in 1994.</p>
+Dover has reprinted in 1994.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-a6ee7bdb-62b4-45ab-bfe2-f7d29674a3b3" class="outline-2">
+<h2 id="h-a6ee7bdb-62b4-45ab-bfe2-f7d29674a3b3"><span class="section-number-2">9.</span> Group Extensions</h2>
+<div class="outline-text-2" id="text-h-a6ee7bdb-62b4-45ab-bfe2-f7d29674a3b3">
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">theorem</span> Th1:
+  <span class="org-mizar-formula">for</span> G <span class="org-mizar-formula">being</span> Group
+  <span class="org-mizar-formula">for</span> H <span class="org-mizar-formula">being</span> Subgroup <span class="org-mizar-normal">of</span> G
+  <span class="org-mizar-formula">ex</span> f <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> H,G
+  <span class="org-mizar-formula">st</span> (<span class="org-mizar-formula">for</span> h <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> H <span class="org-mizar-formula">holds</span> f.h = h) <span class="org-mizar-formula">&amp;</span> f <span class="org-mizar-normal">is</span> one-<span class="org-mizar-normal">to</span>-one <span class="org-mizar-formula">&amp;</span>
+  Image f = the multMagma <span class="org-mizar-normal">of</span> H;
+<span class="org-comment-delimiter">::</span><span class="org-comment">&gt;                          *4</span>
+
+<span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> Group;
+  <span class="org-mizar-normal">mode</span> Extension <span class="org-mizar-normal">of</span> G -&gt; Group <span class="org-mizar-normal">means</span> :Def:
+  <span class="org-mizar-formula">ex</span> A <span class="org-mizar-formula">being</span> Group <span class="org-mizar-formula">st</span>
+  <span class="org-mizar-formula">ex</span> f <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> A,<span class="org-mizar-normal">it</span> <span class="org-mizar-formula">st</span>
+  <span class="org-mizar-formula">ex</span> p <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> <span class="org-mizar-normal">it</span>,G
+  <span class="org-mizar-formula">st</span> Image f <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> Ker p <span class="org-mizar-formula">&amp;</span>
+  f <span class="org-mizar-normal">is</span> one-<span class="org-mizar-normal">to</span>-one <span class="org-mizar-formula">&amp;</span> p <span class="org-mizar-normal">is</span> onto;
+
+  <span class="org-mizar-normal">existence</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">thus</span> <span class="org-mizar-formula">ex</span> E <span class="org-mizar-formula">being</span> Group <span class="org-mizar-formula">st</span>
+    <span class="org-mizar-formula">ex</span> A <span class="org-mizar-formula">being</span> Group <span class="org-mizar-formula">st</span>
+    <span class="org-mizar-formula">ex</span> f <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> A,E <span class="org-mizar-formula">st</span>
+    <span class="org-mizar-formula">ex</span> p <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> E,G
+    <span class="org-mizar-formula">st</span> Image f <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> Ker p <span class="org-mizar-formula">&amp;</span>
+    f <span class="org-mizar-normal">is</span> one-<span class="org-mizar-normal">to</span>-one <span class="org-mizar-formula">&amp;</span> p <span class="org-mizar-normal">is</span> onto
+    <span class="org-mizar-block">proof</span>
+      <span class="org-mizar-skeleton">take</span> E=G;
+      <span class="org-mizar-skeleton">take</span> A=(1).G;
+      <span class="org-mizar-normal">consider</span> f <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> A,E <span class="org-mizar-normal">such</span> <span class="org-mizar-normal">that</span>
+      A1: <span class="org-mizar-formula">for</span> g <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> A <span class="org-mizar-formula">holds</span> f.g = g <span class="org-mizar-normal">and</span>
+      A2: f <span class="org-mizar-normal">is</span> one-<span class="org-mizar-normal">to</span>-one <span class="org-mizar-normal">and</span>
+      A3: Image f = the multMagma <span class="org-mizar-normal">of</span> A
+     <span class="org-type"> by Th1</span>;
+      <span class="org-mizar-skeleton">take</span> f;
+      <span class="org-mizar-normal">reconsider</span> p=id G <span class="org-mizar-normal">as</span> Homomorphism <span class="org-mizar-normal">of</span> E,G<span class="org-type"> by GROUP_6:38</span>;
+      id the carrier <span class="org-mizar-normal">of</span> G <span class="org-mizar-normal">is</span> onto;
+      <span class="org-mizar-normal">then</span> A4: p <span class="org-mizar-normal">is</span> onto;
+      (1).(Ker p) = (1).G<span class="org-type"> by GROUP_2:63</span>;
+      <span class="org-mizar-normal">then</span> (1).G <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> Ker p;
+      <span class="org-mizar-normal">then</span> Image f <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> Ker p<span class="org-type"> by A3</span>;
+      <span class="org-mizar-skeleton">hence</span> <span class="org-mizar-normal">thesis</span><span class="org-type"> by A2,A3</span>;
+    <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+
+<span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> Group;
+  <span class="org-mizar-normal">mode</span> CentralExtension <span class="org-mizar-normal">of</span> G -&gt; Group <span class="org-mizar-normal">means</span> :Def:
+  <span class="org-mizar-formula">ex</span> A <span class="org-mizar-formula">being</span> Group <span class="org-mizar-formula">st</span>
+  <span class="org-mizar-formula">ex</span> f <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> A,<span class="org-mizar-normal">it</span> <span class="org-mizar-formula">st</span>
+  <span class="org-mizar-formula">ex</span> p <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> <span class="org-mizar-normal">it</span>,G
+  <span class="org-mizar-formula">st</span> Image f <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> Ker p <span class="org-mizar-formula">&amp;</span> Image f <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> center <span class="org-mizar-normal">it</span> <span class="org-mizar-formula">&amp;</span>
+  f <span class="org-mizar-normal">is</span> one-<span class="org-mizar-normal">to</span>-one <span class="org-mizar-formula">&amp;</span> p <span class="org-mizar-normal">is</span> onto;
+
+  <span class="org-mizar-normal">existence</span>
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">thus</span> <span class="org-mizar-formula">ex</span> E <span class="org-mizar-formula">being</span> Group <span class="org-mizar-formula">st</span>
+    <span class="org-mizar-formula">ex</span> A <span class="org-mizar-formula">being</span> Group <span class="org-mizar-formula">st</span>
+    <span class="org-mizar-formula">ex</span> f <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> A,E <span class="org-mizar-formula">st</span>
+    <span class="org-mizar-formula">ex</span> p <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> E,G
+    <span class="org-mizar-formula">st</span> Image f <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> Ker p <span class="org-mizar-formula">&amp;</span>
+    Image f <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> center E <span class="org-mizar-formula">&amp;</span>
+    f <span class="org-mizar-normal">is</span> one-<span class="org-mizar-normal">to</span>-one <span class="org-mizar-formula">&amp;</span> p <span class="org-mizar-normal">is</span> onto
+    <span class="org-mizar-block">proof</span>
+      <span class="org-mizar-skeleton">take</span> E=G;
+      <span class="org-mizar-skeleton">take</span> A=(1).G;
+      <span class="org-mizar-normal">consider</span> f <span class="org-mizar-formula">being</span> Homomorphism <span class="org-mizar-normal">of</span> A,E <span class="org-mizar-normal">such</span> <span class="org-mizar-normal">that</span>
+      A1: <span class="org-mizar-formula">for</span> g <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> A <span class="org-mizar-formula">holds</span> f.g = g <span class="org-mizar-normal">and</span>
+      A2: f <span class="org-mizar-normal">is</span> one-<span class="org-mizar-normal">to</span>-one <span class="org-mizar-normal">and</span>
+      A3: Image f = the multMagma <span class="org-mizar-normal">of</span> A
+     <span class="org-type"> by Th1</span>;
+      <span class="org-mizar-skeleton">take</span> f;
+      <span class="org-mizar-normal">reconsider</span> p=id G <span class="org-mizar-normal">as</span> Homomorphism <span class="org-mizar-normal">of</span> E,G<span class="org-type"> by GROUP_6:38</span>;
+      id the carrier <span class="org-mizar-normal">of</span> G <span class="org-mizar-normal">is</span> onto;
+      <span class="org-mizar-normal">then</span> A4: p <span class="org-mizar-normal">is</span> onto;
+      (1).(Ker p) = (1).G<span class="org-type"> by GROUP_2:63</span>;
+      <span class="org-mizar-normal">then</span> (1).G <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> Ker p;
+      <span class="org-mizar-normal">then</span> A5: Image f <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> Ker p<span class="org-type"> by A3</span>;
+      (1).(center E) = (1).G<span class="org-type"> by GROUP_2:63</span>;
+      <span class="org-mizar-normal">then</span> (1).G <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> center E;
+      <span class="org-mizar-normal">then</span> Image f <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> center E<span class="org-type"> by A3</span>;
+      <span class="org-mizar-skeleton">hence</span> <span class="org-mizar-normal">thesis</span><span class="org-type"> by A2,A3,A5</span>;
+    <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-15 Fri 09:29.</p>
+<p class="postamble">Last Updated 2022-04-18 Mon 08:34.</p>
 </div>
 </body>
 </html>
