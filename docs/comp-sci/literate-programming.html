@@ -232,8 +232,9 @@
 <li><a href="#h-981d7f99-032c-4580-883a-9b4df7d0e8b5">4.2. Open Questions</a>
 <ul>
 <li><a href="#h-2c1bf083-d4c3-4a43-add0-2de462546fe3">4.2.1. What <i>is</i> the "Best" Order for Human Understanding?</a></li>
-<li><a href="#h-a49ed96b-653c-43ac-86a9-2635b03b5a5b">4.2.2. Contracts</a></li>
-<li><a href="#h-948bb08f-7ac3-4cb1-b0b0-73a4899d366c">4.2.3. Literate Proofs</a></li>
+<li><a href="#h-64445936-a883-421c-a50a-d79e5307b025">4.2.2. "Explanation"?</a></li>
+<li><a href="#h-a49ed96b-653c-43ac-86a9-2635b03b5a5b">4.2.3. Contracts</a></li>
+<li><a href="#h-948bb08f-7ac3-4cb1-b0b0-73a4899d366c">4.2.4. Literate Proofs</a></li>
 </ul>
 </li>
 </ul>
@@ -510,8 +511,73 @@ into talking to the computer.
 </div>
 </div>
 
+<div id="outline-container-h-64445936-a883-421c-a50a-d79e5307b025" class="outline-4">
+<h4 id="h-64445936-a883-421c-a50a-d79e5307b025"><span class="section-number-4">4.2.2.</span> "Explanation"?</h4>
+<div class="outline-text-4" id="text-h-64445936-a883-421c-a50a-d79e5307b025">
+<p>
+After thinking about it for a bit, I think one could describe
+explanations in programming using the following terminology:
+</p>
+
+<ul class="org-ul">
+<li>A <dfn>Problem</dfn> is what we're trying to solve or implement</li>
+<li>A <dfn>Goal</dfn> translates our problem into some informal
+specification</li>
+<li>A <dfn>Plan</dfn> (or <i>pattern</i>) is a "canned solution" to a goal.</li>
+</ul>
+
+<p>
+An explanation is the dialogue between goals and plans; for example, one
+explanation could begin with articulating a goal, then presents a plan or
+decomposes the goal into several sub-goals.
+</p>
+
+<p>
+There are different levels of discussion. We could discuss:
+</p>
+
+<ul class="org-ul">
+<li>The architecture of the program, as organized into modules or
+components and their relation to each other</li>
+<li>The design of a class, what it abstracts, the methods it contains</li>
+<li>The design of a method or function</li>
+</ul>
+
+<p>
+This is not complete, nor exhaustive. There are levels of discussion
+between architecture and classes (e.g., design patterns could be used to
+organize discussion of several classes).
+</p>
+
+<p>
+<b>But this is not what happens in example literate programs!</b> For
+example, in Knuth's <a href="http://www.literateprogramming.com/adventure.pdf"><code>adventure</code></a> literate program, there are no such
+discussions.
+</p>
+
+<p>
+One of the difficulties for <i>good writing</i> in literate programs is that
+the design should be top-down (in the sense that the modules and
+"important classes" are introduced, their interactions are defined,
+etc.) but the programming should be bottom-up. An example of this style,
+see Bob Nystrom's <a href="https://craftinginterpreters.com/">Crafting Interpreters</a>.
+</p>
+
+<p>
+For more on the "goal-problem" perspective, see:
+</p>
+
+<ul class="org-ul">
+<li>Elliot Soloway,<br>
+"Learning to program = learning to construct mechanisms and explanations".<br>
+<i>Communications of ACM</i> <b>29</b>, no.9 (1986) 850&#x2013;858
+doi:<a href="https://doi.org/10.1145/6592.6594">10.1145/6592.6594</a>.</li>
+</ul>
+</div>
+</div>
+
 <div id="outline-container-h-a49ed96b-653c-43ac-86a9-2635b03b5a5b" class="outline-4">
-<h4 id="h-a49ed96b-653c-43ac-86a9-2635b03b5a5b"><span class="section-number-4">4.2.2.</span> Contracts</h4>
+<h4 id="h-a49ed96b-653c-43ac-86a9-2635b03b5a5b"><span class="section-number-4">4.2.3.</span> Contracts</h4>
 <div class="outline-text-4" id="text-h-a49ed96b-653c-43ac-86a9-2635b03b5a5b">
 <p>
 When I program, I have gotten in the habit of using <code>assert</code>
@@ -529,7 +595,7 @@ Hoare triple annotation.
 </div>
 
 <div id="outline-container-h-948bb08f-7ac3-4cb1-b0b0-73a4899d366c" class="outline-4">
-<h4 id="h-948bb08f-7ac3-4cb1-b0b0-73a4899d366c"><span class="section-number-4">4.2.3.</span> Literate Proofs</h4>
+<h4 id="h-948bb08f-7ac3-4cb1-b0b0-73a4899d366c"><span class="section-number-4">4.2.4.</span> Literate Proofs</h4>
 <div class="outline-text-4" id="text-h-948bb08f-7ac3-4cb1-b0b0-73a4899d366c">
 <p>
 I'm writing a manuscript on implementing theorem provers. For this,
@@ -613,12 +679,16 @@ Specifically the forward on "Reading a Web".</li>
 <li>John Cook,
 <a href="https://www.johndcook.com/blog/2016/07/06/literate-programming-presenting-code-in-human-order/">Literate programming: presenting code in human order</a>,
 6 July 2016 blogpost.</li>
+<li>Elliot Soloway,<br>
+"Learning to program = learning to construct mechanisms and explanations".<br>
+<i>Communications of ACM</i> <b>29</b>, no.9 (1986) 850&#x2013;858
+doi:<a href="https://doi.org/10.1145/6592.6594">10.1145/6592.6594</a>.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-15 Thu 07:47.</p>
+<p class="postamble">Last Updated 2022-04-21 Thu 08:26.</p>
 </div>
 </body>
 </html>

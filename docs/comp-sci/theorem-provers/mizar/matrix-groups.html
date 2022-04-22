@@ -246,6 +246,7 @@
 <li><a href="#h-e3b101ac-8d30-46c0-a473-3e2b68080eaa">1.3. Projective Linear Groups</a></li>
 </ul>
 </li>
+<li><a href="#h-c93435ac-e4a8-44af-a14a-72064c5d693f">2. References</a></li>
 </ul>
 </div>
 </div>
@@ -258,7 +259,7 @@
 <div id="outline-container-h-edc440ad-dc16-46df-9865-b20fe366520d" class="outline-3">
 <h3 id="h-edc440ad-dc16-46df-9865-b20fe366520d"><span class="section-number-3">1.1.</span> General Linear Group</h3>
 <div class="outline-text-3" id="text-h-edc440ad-dc16-46df-9865-b20fe366520d">
-<div class="definition" id="org7da38ca">
+<div class="definition" id="orgbadb0e5">
 <p>
 Let \(K\) be a field, \(n\in\NN\) be a positive integer.
 The <dfn>General Linear Group</dfn> denoted \(GL(n,K)\) or \(GL_{n}(K)\) is
@@ -268,10 +269,10 @@ the group consisting of invertible \(n\times n\) matrices over the field
 
 </div>
 
-<div class="remark" id="org56fa6a2">
+<div class="remark" id="org7968451">
 <p>
 We don't really need \(K\) to be a field, it could just be an associative
-unital ring\footnote{\url{https://encyclopediaofmath.org/wiki/General_linear_group}}.
+unital ring (see the entry in the <a href="https://encyclopediaofmath.org/wiki/General_linear_group"><cite class="book-title">Encyclopedia of Mathematics</cite></a>).
 </p>
 
 </div>
@@ -315,9 +316,22 @@ Associativity of matrix multiplication is proven in <a href="http://mizar.org/ve
    <span class="org-mizar-formula">holds</span> (M <span class="org-mizar-normal">is</span> invertible Matrix <span class="org-mizar-normal">of</span> n,K) <span class="org-mizar-formula">iff</span> (M in <span class="org-mizar-normal">it</span>)) <span class="org-mizar-formula">&amp;</span>
   (the multF <span class="org-mizar-normal">of</span> <span class="org-mizar-normal">it</span> = matrix_mult||(the carrier <span class="org-mizar-normal">of</span> <span class="org-mizar-normal">it</span>));
   <span class="org-mizar-normal">existence</span>
-  <span class="org-mizar-block">proof</span> <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">thus</span> <span class="org-mizar-formula">ex</span> G <span class="org-mizar-formula">being</span> Group <span class="org-mizar-formula">st</span> (<span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> object
+         <span class="org-mizar-formula">holds</span> (M <span class="org-mizar-normal">is</span> invertible Matrix <span class="org-mizar-normal">of</span> n,K) <span class="org-mizar-formula">iff</span> (M in G)) <span class="org-mizar-formula">&amp;</span>
+         (the multF <span class="org-mizar-normal">of</span> G = matrix_mult||(the carrier <span class="org-mizar-normal">of</span> G));
+  <span class="org-mizar-block">end</span>;
   <span class="org-mizar-normal">uniqueness</span>
-  <span class="org-mizar-block">proof</span> <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-normal">defpred</span> P[Group] <span class="org-mizar-normal">means</span> (<span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> object
+    <span class="org-mizar-formula">holds</span> (M <span class="org-mizar-normal">is</span> invertible Matrix <span class="org-mizar-normal">of</span> n,K) <span class="org-mizar-formula">iff</span> (M in $1)) <span class="org-mizar-formula">&amp;</span>
+    (the multF <span class="org-mizar-normal">of</span> $1 = matrix_mult||(the carrier <span class="org-mizar-normal">of</span> $1));
+
+    <span class="org-mizar-skeleton">let</span> G1,G2 <span class="org-mizar-normal">be</span> Group;
+    <span class="org-mizar-skeleton">assume</span> A1: P[G1];
+    <span class="org-mizar-skeleton">assume</span> A2: P[G2];
+    <span class="org-mizar-skeleton">thus</span> G1=G2;
+  <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 
 <span class="org-comment-delimiter">:: </span><span class="org-comment">MATRIX_3:18 proves (1.(K,n))*A = A</span>
@@ -340,7 +354,7 @@ Associativity of matrix multiplication is proven in <a href="http://mizar.org/ve
 <div id="outline-container-h-ba74f292-740f-42d2-911a-8309a7f159bc" class="outline-3">
 <h3 id="h-ba74f292-740f-42d2-911a-8309a7f159bc"><span class="section-number-3">1.2.</span> Special Linear Group</h3>
 <div class="outline-text-3" id="text-h-ba74f292-740f-42d2-911a-8309a7f159bc">
-<div class="definition" id="orgbfc136c">
+<div class="definition" id="org7ea91f3">
 <p>
 Let \(n\) be a positive integer, \(K\) be a field.
 The <dfn>Special Linear Group</dfn> \(SL(n,K)\) consists of
@@ -365,9 +379,23 @@ The determinant of the identity matrix being unity is proven in theorem
    <span class="org-mizar-formula">holds</span> (Det M = 1.K) <span class="org-mizar-formula">iff</span> (M in <span class="org-mizar-normal">it</span>)) <span class="org-mizar-formula">&amp;</span>
   (the multF <span class="org-mizar-normal">of</span> <span class="org-mizar-normal">it</span> = matrix_mult||(the carrier <span class="org-mizar-normal">of</span> <span class="org-mizar-normal">it</span>));
   <span class="org-mizar-normal">existence</span>
-  <span class="org-mizar-block">proof</span> <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-skeleton">thus</span> <span class="org-mizar-formula">ex</span> G <span class="org-mizar-formula">being</span> Group <span class="org-mizar-formula">st</span>
+    (<span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> invertible Matrix <span class="org-mizar-normal">of</span> n,K
+     <span class="org-mizar-formula">holds</span> (Det M = 1.K) <span class="org-mizar-formula">iff</span> (M in G)) <span class="org-mizar-formula">&amp;</span>
+    (the multF <span class="org-mizar-normal">of</span> G = matrix_mult||(the carrier <span class="org-mizar-normal">of</span> G));
+  <span class="org-mizar-block">end</span>;
   <span class="org-mizar-normal">uniqueness</span>
-  <span class="org-mizar-block">proof</span> <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-block">proof</span>
+    <span class="org-mizar-normal">defpred</span> P[Group] <span class="org-mizar-normal">means</span>
+    (<span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> invertible Matrix <span class="org-mizar-normal">of</span> n,K
+     <span class="org-mizar-formula">holds</span> (Det M = 1.K) <span class="org-mizar-formula">iff</span> (M in $1)) <span class="org-mizar-formula">&amp;</span>
+    (the multF <span class="org-mizar-normal">of</span> $1 = matrix_mult||(the carrier <span class="org-mizar-normal">of</span> $1));
+    <span class="org-mizar-skeleton">let</span> G1,G2 <span class="org-mizar-normal">be</span> Group;
+    <span class="org-mizar-skeleton">assume</span> A1: P[G1];
+    <span class="org-mizar-skeleton">assume</span> A2: P[G2];
+    <span class="org-mizar-skeleton">thus</span> G1=G2;
+  <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 
 <span class="org-mizar-main">theorem</span>
@@ -407,6 +435,7 @@ We could then define the projective linear groups as:
   <span class="org-mizar-block">proof</span>
     <span class="org-mizar-skeleton">thus</span> GL(n,K)./.(center GL(n,K)) <span class="org-mizar-normal">is</span> Group;
   <span class="org-mizar-block">end</span>;
+  
   <span class="org-mizar-normal">func</span> PSL(n,L) -&gt; Group <span class="org-mizar-normal">equals</span> SL(n,K)./.(center SL(n,K))
   <span class="org-mizar-normal">coherence</span>
   <span class="org-mizar-block">proof</span>
@@ -416,7 +445,7 @@ We could then define the projective linear groups as:
 </pre>
 </div>
 
-<div class="remark" id="orgf08e9b4">
+<div class="remark" id="orgb69f069">
 <p>
 If we include <code>NAT_6</code> in our registrations, then we can register
 <code>positive</code> for <code>Nat</code>. Be sure to include <code>XCMPLX_0</code> in the vocabulary.
@@ -424,7 +453,7 @@ If we include <code>NAT_6</code> in our registrations, then we can register
 
 </div>
 
-<pre class="example" id="org8d63a13">
+<pre class="example" id="orgae82fd4">
 registration
   cluster positive for Nat;
   existence
@@ -464,9 +493,21 @@ end;
 </div>
 </div>
 </div>
+
+
+<div id="outline-container-h-c93435ac-e4a8-44af-a14a-72064c5d693f" class="outline-2">
+<h2 id="h-c93435ac-e4a8-44af-a14a-72064c5d693f"><span class="section-number-2">2.</span> References</h2>
+<div class="outline-text-2" id="text-h-c93435ac-e4a8-44af-a14a-72064c5d693f">
+<ul class="org-ul">
+<li>Bourbaki, <cite class="book-title">Algebra</cite>;
+ch II &sect;1.2 (pg 195) defines \(\mathbf{GL}(E)\) and II &sect;10.7 (pg. 349)
+defines \(\mathbf{GL}_{n}(A)\) or \(\mathbf{GL}(n,A)\)</li>
+</ul>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-12 Tue 08:27.</p>
+<p class="postamble">Last Updated 2022-04-21 Thu 12:08.</p>
 </div>
 </body>
 </html>

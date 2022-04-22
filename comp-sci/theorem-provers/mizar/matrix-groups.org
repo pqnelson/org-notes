@@ -30,7 +30,7 @@ $K$ using matrix multiplication as the binary operation.
 
 #+begin_remark
 We don't really need $K$ to be a field, it could just be an associative
-unital ring\footnote{\url{https://encyclopediaofmath.org/wiki/General_linear_group}}.
+unital ring (see the entry in the [[https://encyclopediaofmath.org/wiki/General_linear_group][{{{book-title(Encyclopedia of Mathematics)}}}]]).
 #+end_remark
 
 This is a deceptive example, because it defines a "functor": given a
@@ -64,9 +64,22 @@ definition
    holds (M is invertible Matrix of n,K) iff (M in it)) &
   (the multF of it = matrix_mult||(the carrier of it));
   existence
-  proof end;
+  proof
+    thus ex G being Group st (for M being object
+         holds (M is invertible Matrix of n,K) iff (M in G)) &
+         (the multF of G = matrix_mult||(the carrier of G));
+  end;
   uniqueness
-  proof end;
+  proof
+    defpred P[Group] means (for M being object
+    holds (M is invertible Matrix of n,K) iff (M in $1)) &
+    (the multF of $1 = matrix_mult||(the carrier of $1));
+
+    let G1,G2 be Group;
+    assume A1: P[G1];
+    assume A2: P[G2];
+    thus G1=G2;
+  end;
 end;
 
 :: MATRIX_3:18 proves (1.(K,n))*A = A
@@ -108,9 +121,23 @@ definition
    holds (Det M = 1.K) iff (M in it)) &
   (the multF of it = matrix_mult||(the carrier of it));
   existence
-  proof end;
+  proof
+    thus ex G being Group st
+    (for M being invertible Matrix of n,K
+     holds (Det M = 1.K) iff (M in G)) &
+    (the multF of G = matrix_mult||(the carrier of G));
+  end;
   uniqueness
-  proof end;
+  proof
+    defpred P[Group] means
+    (for M being invertible Matrix of n,K
+     holds (Det M = 1.K) iff (M in $1)) &
+    (the multF of $1 = matrix_mult||(the carrier of $1));
+    let G1,G2 be Group;
+    assume A1: P[G1];
+    assume A2: P[G2];
+    thus G1=G2;
+  end;
 end;
 
 theorem
@@ -147,6 +174,7 @@ definition
   proof
     thus GL(n,K)./.(center GL(n,K)) is Group;
   end;
+  
   func PSL(n,L) -> Group equals SL(n,K)./.(center SL(n,K))
   coherence
   proof
@@ -197,3 +225,13 @@ registration
   end;
 end;
 #+end_example
+
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-c93435ac-e4a8-44af-a14a-72064c5d693f
+:END:
+
+- Bourbaki, {{{book-title(Algebra)}}};
+  ch II \S1.2 (pg 195) defines $\mathbf{GL}(E)$ and II \S10.7 (pg. 349)
+  defines $\mathbf{GL}_{n}(A)$ or $\mathbf{GL}(n,A)$

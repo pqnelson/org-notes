@@ -11,11 +11,33 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 # Created Saturday April  3, 2021 at  3:38PM
 
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-6234d0d8-1e6d-450f-9339-48607d4807b8
+:END:
+
+The basic idea of finite difference schemes to numerically approximate
+PDEs is to take your PDE, then transform the partial derivatives into
+finite differences of the exact solution by Taylor expanding, and then
+replace the Taylor expanded terms by the numerical approximations. I'm a
+little sloppy here, but we should also prove /consistency/ (in the sense
+that as the finite differences $\Delta x\to 0$, $\Delta y\to 0$, etc.,
+we recover the exact solution from the numerical approximation).
+
+We should check for stability (possibly comparing results from implicit
+methods like [[https://en.wikipedia.org/wiki/Backward_Euler_method][backward Euler]]).
+
+* Instabilities
+:PROPERTIES:
+:CUSTOM_ID: h-25c0e29d-9129-4c34-83bc-0612c00dcaea
+:END:
+
 For instabilities arising from finite differences, see Rouson and
 friends "A grid-free abstraction of the Navier-Stokes equation" (2008)
 wherein are "provided a more subtle example inwhich information that
 appeared to have been lost during the discretization process was
 actually missing from the original PDE."
+
 After reading the paper carefully, it seems Rousson and friends do the
 following:
 
@@ -37,3 +59,6 @@ following:
   95/2003."\\
   /ACM Transactions on Mathematical Software/ *34*, 1 (2008) 33 pages.
   {{{doi(10.1145/1322436.1322438)}}}
+- J.W. Thomas,\\
+  {{{book-title(Numerical Partial Differential Equations: Finite Difference Methods)}}}.\\
+  Springer, 1995.

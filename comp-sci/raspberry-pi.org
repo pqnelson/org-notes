@@ -162,6 +162,43 @@ depending on the configuration choices:
 - ~--with-x-toolkit=lucid~ requires ~libxaw7-dev~ being installed
 - ~--with-xft~ requires installing ~libxft-dev~
 
+
+*** For Emacs 28
+:PROPERTIES:
+:CUSTOM_ID: h-a901d579-d540-41fe-a551-380de73e0cfd
+:END:
+
+After tinkering around, Emacs 28 came out! Unfortunately, the above
+commands clone exactly the ~emacs-27~ branch, and makes it impossible to
+change to the ~emacs-28~ branch.
+
+#+begin_example
+~/src/ $ git clone https://git.savannah.gnu.org/git/emacs.git
+~/src/ $ cd emacs
+~/src/emacs/ $ git checkout emacs-28
+~/src/emacs/ $ sudo apt install libgccjit-10-dev libharfbuzz-dev
+~/src/emacs/ $ ./configure --with-wide-int --disable-year2038 --with-x-toolkit=lucid --with-gnutls=ifavailable --with-m17n-flt --with-modules --with-json --with-threads --with-compress-install CFLAGS="-O3 -pipe -mtune=native -mcpu=native -marm"
+...
+~/src/emacs/ $ make
+...
+~/src/emacs/ $ 
+#+end_example
+
+I wanted to include the option ~--with-native-compilation~ but it
+creates segmentation faults. For this reason, I ended up leaving it
+off. It could be some issue with the version of the library, or something.
+(Note: if you are using GCC version 10, this will work. If you are using
+version X, you need to install ~libgccjit-X-dev~.)
+
+- ~wide-int~ uses a 60-bit integer instead of a 32-bit integer
+- ~disable-year2038~ deals with [[https://en.wikipedia.org/wiki/Year_2038_problem][Year 2038 problem]], y2k's bigger brother
+- ~modules~ I'm not sure what it does (something something
+  dynamic modules something something), but it's highly recommended
+- ~json~ for native JSON libraries
+- ~threads~ uses pthreads
+- ~compress-install~
+- ~CFLAGS="-O3 -mtune=native -mcpu=native -marm"~ for additional optimizations
+
 ** Improving Startup Time
 :PROPERTIES:
 :CUSTOM_ID: h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c
@@ -256,6 +293,83 @@ This let me run armcl for any user.
 
 Now, Raspberry Pi offers SBCL 2.1.9, which installs without problem.
 Wonderful! I don't need to stress over compiling CCL properly.
+
+*** Compiling SBCL Problems
+:PROPERTIES:
+:CUSTOM_ID: h-f0715bd5-5e1a-436a-b786-850061f4a5fd
+:END:
+
+I run into a problem compiling SBCL from the RPi package, experiencing
+an error (as of git commit ~b430f314c~, date Wed Apr 20 03:46:44 2022 +0300):
+
+#+begin_example
+~/src/sbcl $ sh make.sh
+...
+cc -g -Wall -Wundef -Wsign-compare -Wpointer-arith -O3 -std=gnu99 -fno-pie -I.  -c -o os-common.o os-common.c
+In file included from os-common.c:24:
+genesis/symbol.h: In function 'symbol_package_id':
+genesis/symbol.h:44:72: warning: right shift count >= width of type [-Wshift-count-overflow]
+   44 | nline int symbol_package_id(struct symbol* s) { return s->name >> 48; }
+      |                                                                ^~
+
+In file included from os-common.c:26:
+thread.h: In function 'tls_index_of':
+thread.h:151:25: warning: right shift count >= width of type [-Wshift-count-overflow]
+  151 |   return symbol->header >> 32;
+      |                         ^~
+In file included from os-common.c:85:
+sys_mmap.inc: In function 'sbcl_mmap':
+sys_mmap.inc:26:27: error: 'SYS_mmap' undeclared (first use in this function); did you mean 'SYS_mmap2'?
+   26 |     return (void*)syscall(SYS_mmap, addr, length, prot, flags, fd, offset);
+      |                           ^~~~~~~~
+      |                           SYS_mmap2
+sys_mmap.inc:26:27: note: each undeclared identifier is reported only once for each function it appears in
+In file included from target-os.h:32,
+                 from os.h:59,
+                 from globals.h:19,
+                 from os-common.c:18:
+os-common.c: In function 'os_context_pc':
+target-arch-os.h:13:52: error: 'mcontext_t' has no member named 'pc'
+   13 | #define OS_CONTEXT_PC(context) context->uc_mcontext.pc
+      |                                                    ^
+os-common.c:349:12: note: in expansion of macro 'OS_CONTEXT_PC'
+  349 |     return OS_CONTEXT_PC(context);
+      |            ^~~~~~~~~~~~~
+os-common.c: In function 'set_os_context_pc':
+target-arch-os.h:13:52: error: 'mcontext_t' has no member named 'pc'
+   13 | #define OS_CONTEXT_PC(context) context->uc_mcontext.pc
+      |                                                    ^
+os-common.c:352:5: note: in expansion of macro 'OS_CONTEXT_PC'
+  352 |     OS_CONTEXT_PC(context) = pc;
+      |     ^~~~~~~~~~~~~
+os-common.c: In function 'os_context_pc_addr':
+target-arch-os.h:13:52: error: 'mcontext_t' has no member named 'pc'
+   13 | #define OS_CONTEXT_PC(context) context->uc_mcontext.pc
+      |                                                    ^
+os-common.c:355:38: note: in expansion of macro 'OS_CONTEXT_PC'
+  355 |     return (os_context_register_t*)&(OS_CONTEXT_PC(context));
+      |                                      ^~~~~~~~~~~~~
+In file included from os-common.c:85:
+sys_mmap.inc: In function 'sbcl_mmap':
+sys_mmap.inc:30:1: warning: control reaches end of non-void function [-Wreturn-type]
+   30 | }
+      | ^
+os-common.c: In function 'os_context_pc':
+os-common.c:350:1: warning: control reaches end of non-void function [-Wreturn-type]
+  350 | }
+      | ^
+os-common.c: In function 'os_context_pc_addr':
+os-common.c:356:1: warning: control reaches end of non-void function [-Wreturn-type]
+  356 | }
+      | ^
+make: *** [<builtin>: os-common.o] Error 1
+make: Leaving directory '/home/alex/src/sbcl/src/runtime'
+~/src/sbcl $
+#+end_example
+
+I think this is because I have ~arm_64bit=1~ in my ~/boot/config.txt~?
+If I remove it, I run into other problems (SBCL cannot determine the
+CPU architecture properly).
 
 ** Adding Quicklisp
 :PROPERTIES:
