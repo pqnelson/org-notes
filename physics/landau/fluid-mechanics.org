@@ -1819,6 +1819,61 @@ infinity.
 :CUSTOM_ID: h-90547b18-da64-494c-8862-46c04f2b112b
 :END:
 # 42
+
+#+begin_puzzle
+Suppose the fluid executes some oscillatory motion due to some cause
+external to the body. This motion will set the body in motion, too.
+Derive the equations of motion for the body.
+#+end_puzzle
+
+We assume the velocity of the fluid varies slightly over distances of
+the order of the dimension of the body. Let $\vec{v}$ be the fluid
+velocity at the position of the body would be if the body were absent;
+i.e., $\vec{v}$ is the velocity of the unperturbed flow. By our given
+assumption, $\vec{v}$ may be supposed constant throughout the volume
+occupied by the body. We therefore denote the velocity of the body by
+$\vec{u}$ as before.
+
+We can determine the force acting on the body and setting it in motion
+as follows:
+
+- If the body were wholly carried along with the fluid (so
+  $\vec{u}=\vec{v}$), then the force acting on it would be the same as
+  the force that would be acting on the liquid in the same volume if the
+  body were absent.
+- The momentum of the fluid is $\rho V_{0}\vec{v}$.
+- The force acting on the fluid would therefore be $\rho V_{0}\,\mathrm{d}\vec{v}/\mathrm{d}t$.
+- But in reality, the body is not wholly carried along the fluid: there
+  is a motion of the body relative to the fluid, and due to this the
+  fluid itself acquires some additional motion.
+- The additional momentum of the fluid is $m_{ik}(u^{k}-v^{k})$ since we
+  must now replace $\vec{u}$ by the relative velocity $\vec{u}-\vec{v}$
+  of the body relative to the fluid.
+- The change of this momentum with time results in the appearance of an
+  additional reaction force on the body of $-m_{ik}\,\mathrm{d}(u^{k}-v^{k})/\mathrm{d}t$.
+- Thus the total force on the body is
+  $\rho V_{0}\mathrm{d}v_{i}/\mathrm{d}t - m_{ik}\mathrm{d}(u^{k}-v^{k})/\mathrm{d}t$.
+- We equate this force to the time derivative of the body momentum, thus
+  obtaining the following equation of motion:
+
+\begin{equation}
+\frac{\mathrm{d}}{\mathrm{d}t}(M u_{i}) = \rho V_{0}\frac{\mathrm{d}v_{i}}{\mathrm{d}t} - m_{ik}\frac{\mathrm{d}}{\mathrm{d}t}(u^{k}-v^{k})
+\end{equation}
+
+We integrate both sides with respect to time to obtain:
+
+\begin{equation}
+(M\delta_{ik} + m_{ik})u^{k} = (m_{ik} + \rho V_{0}\delta_{ik})v^{k}.
+\end{equation}
+
+We put the integration constant to zero, since the body's velocity
+$\vec{u}$ must vanish when $\vec{v}$ vanishes.
+
+The relation determines the velocity of the body from that of the fluid.
+
+As a sanity check, if the density of the body is equal to that of the
+fluid (so $M = \rho V_{0}$), we obtain $\vec{u}=\vec{v}$ as we would expect.
+
 ** Gravity waves
 :PROPERTIES:
 :CUSTOM_ID: h-47470a16-e081-400a-a38a-2e103d4d1121
