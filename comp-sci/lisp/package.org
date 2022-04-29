@@ -1,0 +1,91 @@
+#+TITLE: Packages - Lisp
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-04-28T08:34:38-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Thursday April 28, 2022 at  8:34AM
+
+When writing code, it's natural to organize them by modules or
+packages. Common Lisp has packages. Packages are namespaces for symbols.
+
+* Conventions
+:PROPERTIES:
+:CUSTOM_ID: h-80a2a256-dc93-4a29-8ec7-b361f6443607
+:END:
+
+** Use Uninterned Symbols
+:PROPERTIES:
+:CUSTOM_ID: h-e5e5b16c-8daa-4b51-a15d-19a2abb15ccb
+:END:
+
+*Convention:* Use uninterned symbols for package names and exports.
+
+*Rationale:* We do this because, otherwise, we would have the following:
+
+#+begin_example
+[1]> *package*
+#<PACKAGE COMMON-LISP-USER>
+[2]> (defpackage bar)
+#<PACKAGE BAR>
+[3]> (find-symbol "BAR")
+BAR ;
+:INTERNAL
+#+end_example
+
+But using uninterned symbols:
+
+#+begin_example
+;; Uninterned symbols don't cause symbol pollution:
+[4]> (defpackage #:foo)
+#<PACKAGE FOO>
+[5]> (find-symbol "FOO")
+NIL ;
+NIL
+#+end_example
+
+We could use strings, too, but in that case we would have to use
+SCREAMING CASE.
+
+** One Package May Have Many Files
+:PROPERTIES:
+:CUSTOM_ID: h-56dccc70-81c9-4b7b-a46d-3ad9acc3c420
+:END:
+
+*Convention:* One package may have many files.
+
+*Rationale:* Java required 1 class per file, and organized classes into
+packages and subpackages. Many languages copied this convention, and it
+seems to have become a ubiquitous convention.
+
+Common Lisp doesn't quite follow this pattern. But it may be useful to
+have 1 file per class (so as to quickly find relevant code). In that
+case, we would have a package generically look like:
+
+- ~class_1.lisp~
+- ...
+- ~class_N.lisp~
+- ~package.lisp~ lists the ~defpackage~ declarations
+
+Examples of this:
+
+- [[https://github.com/cffi/cffi/blob/master/src/package.lisp][CFFI]]
+- [[https://github.com/quicklisp/quicklisp-client/blob/master/quicklisp/package.lisp][Quicklisp]] for multiple ~defpackage~ declarations
+
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-bda360a0-5aa1-4883-bbea-22a1800320cd
+:END:
+
+- Rainer's [[https://stackoverflow.com/a/45643829/1296973][answer]] about this question
+- [[http://www.lispworks.com/documentation/HyperSpec/Body/11_aa.htm][CLHS on packages]]
+- [[https://lispcookbook.github.io/cl-cookbook/packages.html][CL Cookbook, on packages]]
+  
+  
+  

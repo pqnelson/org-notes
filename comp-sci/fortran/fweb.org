@@ -1,0 +1,101 @@
+#+TITLE: FWEB - Fortran
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2021-07-30T07:29:00-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Friday July 30, 2021 at  7:29AM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-14b2d0de-79be-4c2b-bc55-6e94bf3ac551
+:END:
+
+FWEB is a literate programming tool for Fortran (and Ratfor and
+C/C++). It resembles WEB/cweb in its use of "chunks" (sections). Unlike
+WEB/cweb, it produces LaTeX (instead of plain TeX). One
+must begin with the specification of the programming language used, and
+we may change the language freely as we program. For example, we could
+start with Fortran 90 using ~&~ for line continuations by writing:
+
+#+begin_example
+@n9[-n&]
+#+end_example
+
+Three things happen in this:
+- The ~n9~ specifies it is Fortran-90,
+- the ~[...]~ indicates additional configuration options,
+- the ~-n&~ specifies Fortran will use the ~&~ for line continuations.
+
+* Markup
+:PROPERTIES:
+:CUSTOM_ID: h-34dbdfe6-cbb2-414d-a06d-f5f47732fa19
+:END:
+
+Sections are indicates by writing ~@*~ (a synonym for =@*0=),
+subsections are started by writing ~@*1~, subsubsections are started
+with ~@*2~, and so on. These are weaved into LaTeX ~\section~,
+~\subsection~, ~\subsubsection~, etc., counterparts.
+
+Un-named sections are started by writing ~@~ followed by a space, but in
+practice they typically have their own line.
+
+#+begin_example
+@ INTRODUCTION.
+This is an example of a named section.
+
+@
+This is an un-numbered section.
+#+end_example
+
+** Code Chunks
+:PROPERTIES:
+:CUSTOM_ID: h-bb4663b9-becf-4f6f-86ee-9c445efd9579
+:END:
+
+Code may be started in an un-named section by writing ~@a~, while named
+code chunks are started by something like ~@<Global variables@>=...~
+(just replace the "..." with your code).
+
+** Writing to multiple files
+:PROPERTIES:
+:CUSTOM_ID: h-667c3094-b49f-41e3-a35a-67a84c49f33d
+:END:
+
+If we want to split up code among several files, we can do so with the
+[[https://w3.pppl.gov/~krommes/fweb.html#SEC157][~@O~ macro]] (there is also the ~@o~ macro for "locally open a file"). For
+example:
+
+#+begin_example
+@c
+@* INTRO.
+We assume command-line redirection into \.{test.h} (`\.{-=test.h}').
+
+@d A 1 // This will go into \.{test.h}.
+
+@a
+@<Header material@>@; // Also goes into \.{test.h}.
+@O test.c // Remaining unnamed sections go into \.{test.c}.
+
+@ Header material may be defined as needed throughout the code, but
+with this design it will all go into \.{test.h}.
+
+@<Header material@>=
+
+@<Includes@>@;
+@<Typedefs@>@;
+@<Global variables@>@;
+#+end_example
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-b7a65be1-125b-4583-9813-87a55fdb937e
+:END:
+
+- [[https://www.desy.de/user/projects/LitProg/fweb-faq/top.html][FAQ]] for FWEB (slightly old)
+- [[https://w3.pppl.gov/~krommes/fweb.html][Manual]] for FWEB

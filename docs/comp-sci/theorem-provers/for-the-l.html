@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>FWEB - Fortran</title>
+<title>ForTheL</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -213,130 +213,43 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">FWEB - Fortran</h1>
+<h1 class="title">ForTheL</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-14b2d0de-79be-4c2b-bc55-6e94bf3ac551">1. Overview</a></li>
-<li><a href="#h-34dbdfe6-cbb2-414d-a06d-f5f47732fa19">2. Markup</a>
-<ul>
-<li><a href="#h-bb4663b9-becf-4f6f-86ee-9c445efd9579">2.1. Code Chunks</a></li>
-<li><a href="#h-667c3094-b49f-41e3-a35a-67a84c49f33d">2.2. Writing to multiple files</a></li>
-</ul>
-</li>
-<li><a href="#h-b7a65be1-125b-4583-9813-87a55fdb937e">3. References</a></li>
+<li><a href="#h-2f2ee03b-de99-492f-8f6c-023ec2cd7387">1. Introduction</a></li>
+<li><a href="#h-cffffd3a-a812-4465-833a-fba212db45fa">2. References</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-h-14b2d0de-79be-4c2b-bc55-6e94bf3ac551" class="outline-2">
-<h2 id="h-14b2d0de-79be-4c2b-bc55-6e94bf3ac551"><span class="section-number-2">1.</span> Overview</h2>
-<div class="outline-text-2" id="text-h-14b2d0de-79be-4c2b-bc55-6e94bf3ac551">
+<div id="outline-container-h-2f2ee03b-de99-492f-8f6c-023ec2cd7387" class="outline-2">
+<h2 id="h-2f2ee03b-de99-492f-8f6c-023ec2cd7387"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-2f2ee03b-de99-492f-8f6c-023ec2cd7387">
 <p>
-FWEB is a literate programming tool for Fortran (and Ratfor and
-C/C++). It resembles WEB/cweb in its use of "chunks" (sections). Unlike
-WEB/cweb, it produces LaTeX (instead of plain TeX). One
-must begin with the specification of the programming language used, and
-we may change the language freely as we program. For example, we could
-start with Fortran 90 using <code>&amp;</code> for line continuations by writing:
+Back in the '60s by V. Glushkov, Soviet mathematicians began working on
+formalizing mathematics with computers. Their work continued with
+V. Bodnarchuk and K. Vershinin, introducing rudiments of the "Formal
+Theory Language" (ForTheL) as the input language for "Systems for
+Automatic Deduction" (SAD).
 </p>
+</div>
+</div>
 
-<pre class="example" id="org2e0b115">
-@n9[-n&amp;]
-</pre>
-
-<p>
-Three things happen in this:
-</p>
+<div id="outline-container-h-cffffd3a-a812-4465-833a-fba212db45fa" class="outline-2">
+<h2 id="h-cffffd3a-a812-4465-833a-fba212db45fa"><span class="section-number-2">2.</span> References</h2>
+<div class="outline-text-2" id="text-h-cffffd3a-a812-4465-833a-fba212db45fa">
 <ul class="org-ul">
-<li>The <code>n9</code> specifies it is Fortran-90,</li>
-<li>the <code>[...]</code> indicates additional configuration options,</li>
-<li>the <code>-n&amp;</code> specifies Fortran will use the <code>&amp;</code> for line continuations.</li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-h-34dbdfe6-cbb2-414d-a06d-f5f47732fa19" class="outline-2">
-<h2 id="h-34dbdfe6-cbb2-414d-a06d-f5f47732fa19"><span class="section-number-2">2.</span> Markup</h2>
-<div class="outline-text-2" id="text-h-34dbdfe6-cbb2-414d-a06d-f5f47732fa19">
-<p>
-Sections are indicates by writing <code>@*</code> (a synonym for <code>@*0</code>),
-subsections are started by writing <code>@*1</code>, subsubsections are started
-with <code>@*2</code>, and so on. These are weaved into LaTeX <code>\section</code>,
-<code>\subsection</code>, <code>\subsubsection</code>, etc., counterparts.
-</p>
-
-<p>
-Un-named sections are started by writing <code>@</code> followed by a space, but in
-practice they typically have their own line.
-</p>
-
-<pre class="example" id="orgb25a578">
-@ INTRODUCTION.
-This is an example of a named section.
-
-@
-This is an un-numbered section.
-</pre>
-</div>
-
-<div id="outline-container-h-bb4663b9-becf-4f6f-86ee-9c445efd9579" class="outline-3">
-<h3 id="h-bb4663b9-becf-4f6f-86ee-9c445efd9579"><span class="section-number-3">2.1.</span> Code Chunks</h3>
-<div class="outline-text-3" id="text-h-bb4663b9-becf-4f6f-86ee-9c445efd9579">
-<p>
-Code may be started in an un-named section by writing <code>@a</code>, while named
-code chunks are started by something like <code>@&lt;Global variables@&gt;=...</code>
-(just replace the "&#x2026;" with your code).
-</p>
-</div>
-</div>
-
-<div id="outline-container-h-667c3094-b49f-41e3-a35a-67a84c49f33d" class="outline-3">
-<h3 id="h-667c3094-b49f-41e3-a35a-67a84c49f33d"><span class="section-number-3">2.2.</span> Writing to multiple files</h3>
-<div class="outline-text-3" id="text-h-667c3094-b49f-41e3-a35a-67a84c49f33d">
-<p>
-If we want to split up code among several files, we can do so with the
-<a href="https://w3.pppl.gov/~krommes/fweb.html#SEC157"><code>@O</code> macro</a> (there is also the <code>@o</code> macro for "locally open a file"). For
-example:
-</p>
-
-<pre class="example" id="orgc8c9d61">
-@c
-@* INTRO.
-We assume command-line redirection into \.{test.h} (`\.{-=test.h}').
-
-@d A 1 // This will go into \.{test.h}.
-
-@a
-@&lt;Header material@&gt;@; // Also goes into \.{test.h}.
-@O test.c // Remaining unnamed sections go into \.{test.c}.
-
-@ Header material may be defined as needed throughout the code, but
-with this design it will all go into \.{test.h}.
-
-@&lt;Header material@&gt;=
-
-@&lt;Includes@&gt;@;
-@&lt;Typedefs@&gt;@;
-@&lt;Global variables@&gt;@;
-</pre>
-</div>
-</div>
-</div>
-
-<div id="outline-container-h-b7a65be1-125b-4583-9813-87a55fdb937e" class="outline-2">
-<h2 id="h-b7a65be1-125b-4583-9813-87a55fdb937e"><span class="section-number-2">3.</span> References</h2>
-<div class="outline-text-2" id="text-h-b7a65be1-125b-4583-9813-87a55fdb937e">
-<ul class="org-ul">
-<li><a href="https://www.desy.de/user/projects/LitProg/fweb-faq/top.html">FAQ</a> for FWEB (slightly old)</li>
-<li><a href="https://w3.pppl.gov/~krommes/fweb.html">Manual</a> for FWEB</li>
+<li>Andrei Paskevich,<br>
+"The syntax and semantics of the ForTheL language".<br>
+<a href="file:///home/alex/Downloads/forthel.pdf">Eprint</a> dated December 2007, 70 pages</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-30 Fri 08:36.</p>
+<p class="postamble">Last Updated 2022-04-18 Mon 11:11.</p>
 </div>
 </body>
 </html>
