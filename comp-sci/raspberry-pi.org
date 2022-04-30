@@ -104,7 +104,10 @@ I pulled down Emacs from the git repository:
 #+ATTR_HTML: :id ex-build-emacs
 #+begin_example
 ~/$ cd src
-~/src/$ git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git
+~/src/$ # for just one version without updating to another, run:
+~/src/$ # git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git
+~/src/$ # otherwise, run:
+~/src/$ git clone https://git.savannah.gnu.org/git/emacs.git
 ...
 ~/src/$ cd emacs
 ~/src/emacs/$ sudo apt-get build-dep emacs
@@ -128,7 +131,7 @@ the =dev= version of the libraries:
 ...
 ~/src/emacs/$ sudo apt-get install libpng-dev gnutls-dev texinfo libjansson-dev
 ...
-~/src/emacs/$ sudo apt-get install build-essential libx11-dev libjpeg-dev libpng-dev libgif-dev libxaw-dev libncurses-dev libgnutls28-dev 
+~/src/emacs/$ sudo apt-get install build-essential libx11-dev libjpeg-dev libpng-dev libgif-dev libxaw-dev libncurses-dev libgnutls28-dev
 ...
 #+end_example
 
@@ -149,6 +152,7 @@ error saying Emacs won't compile with ~-ffinite-math-only~).
 :CUSTOM_ID: h-505fbdb9-12a4-46d8-9daf-46229887468f
 :END:
 
+#+ATTR_HTML: :id emacs-attempt-config
 #+begin_example
 ~/src/emacs/$ git clean -dxf
 ~/src/emacs/$ ./autogen.sh
@@ -162,6 +166,19 @@ depending on the configuration choices:
 - ~--with-x-toolkit=lucid~ requires ~libxaw7-dev~ being installed
 - ~--with-xft~ requires installing ~libxft-dev~
 
+*** Installation
+:PROPERTIES:
+:CUSTOM_ID: h-e2365690-7ab7-4a52-859f-efbd835309c8
+:END:
+
+#+ATTR_HTML: :id emacs-install
+#+begin_example
+~/src/emacs/$ make
+...
+~/src/emacs/$ sudo make install
+...
+~/src/emacs/$
+#+end_example
 
 *** For Emacs 28
 :PROPERTIES:
@@ -172,16 +189,17 @@ After tinkering around, Emacs 28 came out! Unfortunately, the above
 commands clone exactly the ~emacs-27~ branch, and makes it impossible to
 change to the ~emacs-28~ branch.
 
+#+ATTR_HTML: :id emacs-28-config
 #+begin_example
 ~/src/ $ git clone https://git.savannah.gnu.org/git/emacs.git
 ~/src/ $ cd emacs
 ~/src/emacs/ $ git checkout emacs-28
 ~/src/emacs/ $ sudo apt install libgccjit-10-dev libharfbuzz-dev
-~/src/emacs/ $ ./configure --with-wide-int --disable-year2038 --with-x-toolkit=lucid --with-gnutls=ifavailable --with-m17n-flt --with-modules --with-json --with-threads --with-compress-install CFLAGS="-O3 -pipe -mtune=native -mcpu=native -marm"
+~/src/emacs/ $ ./configure --with-wide-int --with-x-toolkit=lucid --with-gnutls=ifavailable --with-m17n-flt --with-modules --with-json --with-threads --with-compress-install CFLAGS="-O3 -pipe -mtune=native -mcpu=native -marm"
 ...
 ~/src/emacs/ $ make
 ...
-~/src/emacs/ $ 
+~/src/emacs/ $
 #+end_example
 
 I wanted to include the option ~--with-native-compilation~ but it
@@ -191,7 +209,6 @@ off. It could be some issue with the version of the library, or something.
 version X, you need to install ~libgccjit-X-dev~.)
 
 - ~wide-int~ uses a 60-bit integer instead of a 32-bit integer
-- ~disable-year2038~ deals with [[https://en.wikipedia.org/wiki/Year_2038_problem][Year 2038 problem]], y2k's bigger brother
 - ~modules~ I'm not sure what it does (something something
   dynamic modules something something), but it's highly recommended
 - ~json~ for native JSON libraries
@@ -537,7 +554,7 @@ alex@raspberrypi:~/src/mizar-playground $ mizf text/char.miz
 Illegal instruction
 Illegal instruction
 Illegal instruction
-alex@raspberrypi:~/src/mizar-playground $ 
+alex@raspberrypi:~/src/mizar-playground $
 #+end_example
 
 In 64-bit mode, I get errors:
