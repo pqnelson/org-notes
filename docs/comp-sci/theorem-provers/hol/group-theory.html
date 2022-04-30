@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-30 Sat 08:23 -->
+<!-- 2022-04-30 Sat 08:35 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Topics - Theorem Provers</title>
+<title>Group Theory - HOL</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -206,7 +206,7 @@
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
-<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
@@ -229,58 +229,112 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../theorem-provers.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
- <a accesskey="H" href="../../index.html"> HOME </a>
+ <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Topics - Theorem Provers</h1>
-
-<div id="outline-container-h-53f2e291-e3ce-46d3-b75f-8f3ecadf2ba0" class="outline-2">
-<h2 id="h-53f2e291-e3ce-46d3-b75f-8f3ecadf2ba0">Concepts</h2>
-<div class="outline-text-2" id="text-h-53f2e291-e3ce-46d3-b75f-8f3ecadf2ba0">
-<ul class="org-ul">
-<li><a href="soft-types.html">Soft Type Systems</a></li>
-<li><a href="small.html">On Kernel Size</a>, or why anything beyond 441 lines of code should be
-considered "too big" to be considered "small".</li>
-<li><a href="logical-framework.html">Logical Frameworks</a></li>
-<li><a href="metalogical-framework.html">Meta-logical Frameworks</a></li>
-<li><a href="hol.html">HOL</a> family of provers</li>
+<h1 class="title">Group Theory - HOL</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-0423adfd-9370-4ad8-aaaa-646714e2174b">1. Introduction</a></li>
+<li><a href="#h-4469a8f9-0015-481a-8ca0-944c3145f365">2. References</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-h-59683525-f902-4e25-ba86-bc6fc6e3a1de" class="outline-2">
-<h2 id="h-59683525-f902-4e25-ba86-bc6fc6e3a1de">Specific Proof Assistants</h2>
-<div class="outline-text-2" id="text-h-59683525-f902-4e25-ba86-bc6fc6e3a1de">
+<div id="outline-container-h-0423adfd-9370-4ad8-aaaa-646714e2174b" class="outline-2">
+<h2 id="h-0423adfd-9370-4ad8-aaaa-646714e2174b"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-0423adfd-9370-4ad8-aaaa-646714e2174b">
+<p>
+The basic idea is that set membership \(x\in A\) is modeled by the
+predicate \(\mathtt{InA}[x] := x\in A\). We then blur this distinction,
+and just consider a set to be a HOL term with signature \(A\colon\ast\to\mathrm{bool}\).
+</p>
+
+<p>
+Then a group is a pair \((G,*)\) satisfying a bunch of properties. The
+definition we will formalize is:
+</p>
+
+<div class="definition" id="orgc806375">
+<p>
+A <dfn>Group</dfn> consists of a set \(G\) and a binary operator
+\(\mathtt{prod}\) such that
+</p>
+
+<ol class="org-ol">
+<li>for every pair of elements \(x,y\in G\), the element
+\(\mathtt{prod}~x~y~\in G\) (so \(G\) is closed under \(\mathtt{prod}\))</li>
+<li>For every \(x,y,z\in G\) we have \(\mathtt{prod}~(\mathtt{prod}~x~y)~z=\mathtt{prod}~x~(\mathtt{prod}~y~z)\)</li>
+<li>There exists an element \(e\in G\) such that:
+<ol class="org-ol">
+<li>for every \(x\in G\), we have \(\mathtt{prod}~e~x=x\) (i.e., \(e\) is a
+left identity element for <code>prod</code>)</li>
+<li>For every \(x\in G\), there exists a \(y\in G\) such that
+\(\mathtt{prod}~y~x=e\) (i.e., \(G\) has left inverses with respect to \(e\)).</li>
+</ol></li>
+</ol>
+
+</div>
+
+<p>
+Everything else may be derived from these axioms.
+</p>
+
+<pre class="example" id="org0e21023">
+GROUP-DEF =
+|- !G prod.
+   GROUP(G,prod)=
+   (!x y. G x /\ G y ==&gt; G(prod x y)) /\
+   (!x y z. G x /\ G y /\ G z ==&gt; (prod(prod x y)z = prod x(prod y z ))) /\
+   (?e.
+     G e /\
+     (!x. G x ==&gt; (prod e x = x)) /\
+     (!x. G x ==&gt; (?y. G y /\ (prod y x = e))))
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-4469a8f9-0015-481a-8ca0-944c3145f365" class="outline-2">
+<h2 id="h-4469a8f9-0015-481a-8ca0-944c3145f365"><span class="section-number-2">2.</span> References</h2>
+<div class="outline-text-2" id="text-h-4469a8f9-0015-481a-8ca0-944c3145f365">
 <ul class="org-ul">
-<li><a href="automath.html">Automath</a>, one of the first "modern" proof assistants</li>
-<li><a href="mizar.html">Mizar</a> (<a href="mizar/index.html">topics</a>) a lovely proof assistant
-<ul class="org-ul">
-<li><a href="mizar/definitions.html">Definitions in Mizar</a> some notes</li>
-<li><a href="mizar/schemes.html">Schemes</a></li>
-<li><a href="mizar/idiom.html">Idiomatic Mizar</a></li>
-<li><a href="mizar/group-theory.html">Group Theory in Mizar</a></li>
-<li><a href="mizar/example-defs-finite-groups.html">Example Definitions</a> in finite group theory</li>
-</ul></li>
-<li><a href="hol-light.html">HOL Light</a> (<a href="hol-light/index.html">topics</a>) for a small and elegant implementation of
-Higher-order logic
-<ul class="org-ul">
-<li><a href="hol-light/compile.html">Compiling HOL Light</a> with a couple "gotchas" on Raspberry Pi (and in general)</li>
-<li><a href="hol-light/definitions.html">Definitions in HOL Light</a></li>
-<li><a href="hol-light/group-theory.html">Group Theory</a> in HOL Light</li>
-</ul></li>
-<li><a href="hol.html">HOL</a> (<a href="hol/index.html">topics</a>)</li>
-<li><a href="coq.html">Coq</a></li>
-<li><a href="isabelle.html">Isabelle</a></li>
+<li>Elsa L. Gunter,<br>
+"Doing Algebra in Simple Type Theory".<br>
+U. Pennsylvania, Tech. Report No. MS-CIS-89-38, June 1989. <a href="https://repository.upenn.edu/cgi/viewcontent.cgi?article=1827&amp;context=cis_reports">Eprint</a>, 44 pages.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-30 Sat 08:15.</p>
+<p class="postamble">Last Updated 2022-04-30 Sat 08:33.</p>
 </div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-30 Sat 08:06 -->
+<!-- 2022-04-30 Sat 10:00 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raspberry Pi</title>
@@ -257,7 +257,11 @@
 <li><a href="#h-a901d579-d540-41fe-a551-380de73e0cfd">4.1.2. For Emacs 28</a></li>
 </ul>
 </li>
-<li><a href="#h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c">4.2. Improving Startup Time</a></li>
+<li><a href="#h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c">4.2. Improving Startup Time</a>
+<ul>
+<li><a href="#h-8a85bb78-4f0c-4595-86f8-a7f8c304f80b">4.2.1. Emacs 28</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9">5. Installing Common Lisp</a>
@@ -363,7 +367,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="org83896d9">
+<pre class="example" id="org9f1628c">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -374,7 +378,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="orgdcf7b67">
+<pre class="example" id="org0c352fd">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -383,7 +387,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="orgcb9fbce">
+<pre class="example" id="orgc06ec68">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -562,6 +566,27 @@ seconds. If I further compiled with <code>-Ofast</code>, I get startup time in
 3.713 seconds.
 </p>
 </div>
+
+<div id="outline-container-h-8a85bb78-4f0c-4595-86f8-a7f8c304f80b" class="outline-4">
+<h4 id="h-8a85bb78-4f0c-4595-86f8-a7f8c304f80b"><span class="section-number-4">4.2.1.</span> Emacs 28</h4>
+<div class="outline-text-4" id="text-h-8a85bb78-4f0c-4595-86f8-a7f8c304f80b">
+<p>
+For the configuration given above for Emacs 28, the startup is
+significantly faster. With the options given, but a blank <code>.emacs</code> file,
+I have <code>(emacs-init-time)</code> report <code>"1.252132 seconds"</code>.
+</p>
+
+<p>
+When my <code>./.emacs</code> file just consists of <code>(load-file "~./.emacs.d/init.el")</code>,
+I have <code>(emacs-init-time)</code> report <code>"1.221768 seconds"</code>.
+</p>
+
+<p>
+When I byte-compile my <code>init.el</code> and my <code>./.emacs</code> file just consists of
+<code>(load-file "~./.emacs.d/init.elc")</code>, I have <code>(emacs-init-time)</code> report <code>"1.157587 seconds"</code>.
+</p>
+</div>
+</div>
 </div>
 </div>
 
@@ -656,7 +681,7 @@ I run into a problem compiling SBCL from the RPi package, experiencing
 an error (as of git commit <code>b430f314c</code>, date Wed Apr 20 03:46:44 2022 +0300):
 </p>
 
-<pre class="example" id="orgca9f6b5">
+<pre class="example" id="orge729179">
 ~/src/sbcl $ sh make.sh
 ...
 cc -g -Wall -Wundef -Wsign-compare -Wpointer-arith -O3 -std=gnu99 -fno-pie -I.  -c -o os-common.o os-common.c
@@ -902,7 +927,7 @@ command <code>/opt/vc/bin/vcgencmd measure_temp</code>. I've stuck this into a
 script:
 </p>
 
-<pre class="example" id="orgbcefaf7">
+<pre class="example" id="org30bf5d5">
 #!/bin/bash
 
 # ~/temperature.sh
@@ -920,7 +945,7 @@ I couldn't get Mizar working on my Raspberry Pi 2, but it works on
 Raspberry Pi 4B. Get the latest version <a href="http://mizar.uwb.edu.pl/system/index.html#download">here</a> for Linux (ARM).
 </p>
 
-<pre class="example" id="org6ce53c1">
+<pre class="example" id="org536231a">
 ~/src/$ mkdir mizar
 ~/src/$ cd mizar
 ~/src/mizar/$ wget mizar-&lt;version&gt;-arm-linux.tar
@@ -935,7 +960,7 @@ Raspberry Pi 4B. Get the latest version <a href="http://mizar.uwb.edu.pl/system/
 When I try running, say, <code>mizf</code> on 32-bit mode, I get errors:
 </p>
 
-<pre class="example" id="orgdb8984e">
+<pre class="example" id="orgc89a210">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char.miz
 Illegal instruction
 Illegal instruction
@@ -946,7 +971,7 @@ alex@raspberrypi:~/src/mizar-playground $
 <p>
 In 64-bit mode, I get errors:
 </p>
-<pre class="example" id="orgcecd3dc">
+<pre class="example" id="orgd2ab1d1">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char
 /usr/local/bin/mizf: 8: makeenv: Exec format error
 /usr/local/bin/mizf: 13: errflag: Exec format error
@@ -963,7 +988,7 @@ To make Raspberry Pi 4 run in 64-bit mode, add the following line to the
 bottom of your <code>/boot/config.txt</code>:
 </p>
 
-<pre class="example" id="org7856b8d">
+<pre class="example" id="org0f760b9">
 arm_64bit=1
 </pre>
 
@@ -987,7 +1012,7 @@ arm_64bit=1
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-30 Sat 08:05.</p>
+<p class="postamble">Last Updated 2022-04-30 Sat 09:50.</p>
 </div>
 </body>
 </html>

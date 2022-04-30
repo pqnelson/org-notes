@@ -1,0 +1,61 @@
+#+TITLE: Group Theory - HOL
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-04-30T08:17:07-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Saturday April 30, 2022 at  8:17AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-0423adfd-9370-4ad8-aaaa-646714e2174b
+:END:
+
+The basic idea is that set membership $x\in A$ is modeled by the
+predicate $\mathtt{InA}[x] := x\in A$. We then blur this distinction,
+and just consider a set to be a HOL term with signature $A\colon\ast\to\mathrm{bool}$.
+
+Then a group is a pair $(G,*)$ satisfying a bunch of properties. The
+definition we will formalize is:
+
+#+begin_definition
+A {{{dfn(Group)}}} consists of a set $G$ and a binary operator
+$\mathtt{prod}$ such that
+
+1. for every pair of elements $x,y\in G$, the element
+   $\mathtt{prod}~x~y~\in G$ (so $G$ is closed under $\mathtt{prod}$)
+2. For every $x,y,z\in G$ we have $\mathtt{prod}~(\mathtt{prod}~x~y)~z=\mathtt{prod}~x~(\mathtt{prod}~y~z)$
+3. There exists an element $e\in G$ such that:
+   1. for every $x\in G$, we have $\mathtt{prod}~e~x=x$ (i.e., $e$ is a
+      left identity element for ~prod~)
+   2. For every $x\in G$, there exists a $y\in G$ such that
+      $\mathtt{prod}~y~x=e$ (i.e., $G$ has left inverses with respect to $e$).
+#+end_definition
+
+Everything else may be derived from these axioms.
+
+#+begin_example
+GROUP-DEF =
+|- !G prod.
+   GROUP(G,prod)=
+   (!x y. G x /\ G y ==> G(prod x y)) /\
+   (!x y z. G x /\ G y /\ G z ==> (prod(prod x y)z = prod x(prod y z ))) /\
+   (?e.
+     G e /\
+     (!x. G x ==> (prod e x = x)) /\
+     (!x. G x ==> (?y. G y /\ (prod y x = e))))
+#+end_example
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-4469a8f9-0015-481a-8ca0-944c3145f365
+:END:
+
+- Elsa L. Gunter,\\
+  "Doing Algebra in Simple Type Theory".\\
+  U. Pennsylvania, Tech. Report No. MS-CIS-89-38, June 1989. [[https://repository.upenn.edu/cgi/viewcontent.cgi?article=1827&context=cis_reports][Eprint]], 44 pages.

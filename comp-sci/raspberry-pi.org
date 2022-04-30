@@ -240,6 +240,21 @@ redid the byte-compilation of ~init.el~, I get startup time in 3.67300
 seconds. If I further compiled with =-Ofast=, I get startup time in
 3.713 seconds.
 
+*** Emacs 28
+:PROPERTIES:
+:CUSTOM_ID: h-8a85bb78-4f0c-4595-86f8-a7f8c304f80b
+:END:
+
+For the configuration given above for Emacs 28, the startup is
+significantly faster. With the options given, but a blank ~.emacs~ file,
+I have ~(emacs-init-time)~ report ="1.252132 seconds"=.
+
+When my ~./.emacs~ file just consists of =(load-file "~./.emacs.d/init.el")=,
+I have ~(emacs-init-time)~ report ="1.221768 seconds"=.
+
+When I byte-compile my ~init.el~ and my ~./.emacs~ file just consists of
+=(load-file "~./.emacs.d/init.elc")=, I have ~(emacs-init-time)~ report ="1.157587 seconds"=.
+
 * Installing Common Lisp
 :PROPERTIES:
 :CUSTOM_ID: h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9
