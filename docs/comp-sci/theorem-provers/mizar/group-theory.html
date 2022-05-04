@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Group Theory in Mizar</title>
@@ -244,6 +243,7 @@
 <li><a href="#h-9f5cf940-9a00-4b52-886d-f414fb02838d">2. Group Theory</a>
 <ul>
 <li><a href="#h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7">2.1. Definitions</a></li>
+<li><a href="#h-e33b09d4-26e4-44e8-b68b-31bf539a87b4">2.2. Representation Theory</a></li>
 </ul>
 </li>
 </ul>
@@ -322,7 +322,7 @@ This is also extended to, for a group \(G\), subsets \(A\subset G\)
 we'd have <code>A"</code> be the collection of <code>g"</code> for <code>g in A</code>, i.e.,
 \(A^{-1}=\{g^{-1}|g\in A\}\); see line 57 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>
 </p>
-<pre class="example" id="org7c4d504">
+<pre class="example" id="org6c2e651">
 let G be Group;
 let A be Subset of G;
 func A " -&gt; Subset of G equals :: GROUP_2:def 1
@@ -338,7 +338,7 @@ underlying set of \(G\) equal to the set underlying \(H\)</li>
 The trivial subgroup of \(G\) is denoted <code>(1).G</code>, defined on line 1258
 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> as
 </p>
-<pre class="example" id="org9fd3b92">
+<pre class="example" id="orge72a311">
   func (1).G -&gt; strict Subgroup of G means
   :Def7:
   the carrier of it = {1_G};
@@ -401,7 +401,7 @@ subgroup containing \(A\)</li>
 <li><p>
 Frattini subgroup is tricky. Relevant code starts around 1371 of  <a href="http://mizar.org/version/current/html/group_4.html"><code>group_4.miz</code></a>
 </p>
-<pre class="example" id="org4b8e183">
+<pre class="example" id="orgddab36b">
 ::$N Frattini subgroup
   func Phi(G) -&gt; strict Subgroup of G means
   :Def7:
@@ -463,10 +463,45 @@ of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.mi
 </ul>
 </div>
 </div>
+
+
+
+<div id="outline-container-h-e33b09d4-26e4-44e8-b68b-31bf539a87b4" class="outline-3">
+<h3 id="h-e33b09d4-26e4-44e8-b68b-31bf539a87b4"><span class="section-number-3">2.2.</span> Representation Theory</h3>
+<div class="outline-text-3" id="text-h-e33b09d4-26e4-44e8-b68b-31bf539a87b4">
+<p>
+It seems that the notion of a group action and group representation
+are&#x2026;well, kind of muddled in Mizar.
+</p>
+
+<ul class="org-ul">
+<li><a href="http://mizar.org/version/current/html/funct_2.html#NM5"><code>Action of O,E</code></a> defines how a set <code>O</code> acts on <code>E</code>, it's an
+abbreviation for the type <code>Function of O,(Funcs (E,E))</code>.
+<ul class="org-ul">
+<li>For <code>O</code> being a group, this is really "almost" a
+representation. We'd need to prove it's a homomorphism, in the sense
+that for any <code>g,h in O</code> we would have <code>a.(g*h) = (a.g) * (a.h)</code>.</li>
+<li>This is not a group action, which would be a type
+<code>Function of [:O,E:],E</code> such that for any <code>g,h being Element of O</code>
+and for any <code>e being Element of E</code> we would have
+<code>it.(g,it.(h,e))=it.(g*h,e)</code> as desired.</li>
+</ul></li>
+<li>If we wanted to define a <code>Representation</code> of a group, probably we
+would need to:
+<ol class="org-ol">
+<li>Define an adjective <code>Representation-like</code> on a
+<code>Function of G,(Funcs (E,E))</code> as something like
+<code>for g,h being Element of G holds IT.(g * h) = (IT.g) * (IT.h)</code></li>
+<li>Register <code>Representation-like for Function of G,(Funcs (E,E))</code></li>
+<li>Define a type <code>Representation of G means ex E st it is Representation-like for Function of G,(Funcs (E,E))</code></li>
+</ol></li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-17 Thu 09:00.</p>
+<p class="postamble">Last Updated 2022-05-02 Mon 11:12.</p>
 </div>
 </body>
 </html>

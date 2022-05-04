@@ -22,28 +22,6 @@
   (line 71) as ~bool X -> set means Z in it iff Z c= X~ (and ~c=~ is the
   subset operator, defined in [[http://mizar.org/version/current/html/tarski.html][~tarski.miz~]], as we would expect its
   meaning $X\subseteq Y\iff (\forall x, x\in X\implies x\in Y)$)
-
-** Rings and Things
-:PROPERTIES:
-:CUSTOM_ID: h-6896d403-8ec1-42a7-8258-27db9c6662b3
-:END:
-
-- [[http://mizar.org/version/current/html/polynom3.html][~polynom3~]] defines:
-  - ~Polynomial of L~ as ~AlgSequence of L~
-- In [[http://mizar.org/version/current/html/polyalg1.html][~polyalg1~]], we have the following definitions
-  - ~Algebra over F~ (which is both a "ring" (~doubleLoopStr~) and a
-    ~ModuleStr~ over F)
-  - ~Subalgebra~
-- In [[http://mizar.org/version/current/html/vectsp_1.html][~vectsp_1~]]:
-  - ~Ring~
-  - ~Skew-Field~
-  - ~Field~
-  - ~ModuleStr~
-  - ~VectSp~
-- In [[http://mizar.org/version/current/html/vectsp_2.html][~vectsp_2~]]:
-  - ~RightModStr~
-  - ~LeftModStr~
-  - ~BiModStr~
   
 * Random
 :PROPERTIES:
@@ -140,6 +118,24 @@ MIZFILES=/usr/local/share/mizar
 And, /voilà/, once we've =source ~/.bash_profile= we'll be able to start
 proving in no time. Unfortunately, I still have problems trying to get
 it working on my Raspberry Pi.
+
+* Exporting MIZFILES on Linux
+:PROPERTIES:
+:CUSTOM_ID: h-d045530e-55fb-44e0-af41-03ffc4e5720a
+:END:
+
+On Ubuntu, I noticed it was insufficient to add ~MIZFILES=/usr/local/share/mizar~
+followed by ~export MIZFILES~
+to my ~.bashrc~; instead I needed to add a line to ~/etc/environment~, namely:
+
+#+begin_example
+# in /etc/environment, at the end
+MIZFILES=/usr/local/share/mizar
+#+end_example
+
+After rebooting the computer, emacs expands ~(substitute-in-file-name "$MIZFILES")~
+correctly to ~/usr/local/share/mizar~. This allows me to compile a Mizar
+file in Emacs with ~C-c Ret~.
 
 * References
 :PROPERTIES:

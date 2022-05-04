@@ -179,3 +179,30 @@ H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
 - ~is_Sylow_p-subgroup_of_prime~ defined line 2196 of [[http://mizar.org/version/current/html/group_10.html][~group_10.miz~]]
 - ~the_sylow_p-subgroups_of_prime(p,G)~ defined line 3109 of [[http://mizar.org/version/current/html/group_10.html][~group_10.miz~]]
 
+
+
+** Representation Theory
+:PROPERTIES:
+:CUSTOM_ID: h-e33b09d4-26e4-44e8-b68b-31bf539a87b4
+:END:
+
+It seems that the notion of a group action and group representation
+are...well, kind of muddled in Mizar.
+
+- [[http://mizar.org/version/current/html/funct_2.html#NM5][~Action of O,E~]] defines how a set ~O~ acts on ~E~, it's an
+  abbreviation for the type ~Function of O,(Funcs (E,E))~.
+  - For ~O~ being a group, this is really "almost" a
+    representation. We'd need to prove it's a homomorphism, in the sense
+    that for any ~g,h in O~ we would have ~a.(g*h) = (a.g) * (a.h)~.
+  - This is not a group action, which would be a type
+    ~Function of [:O,E:],E~ such that for any ~g,h being Element of O~
+    and for any ~e being Element of E~ we would have
+    ~it.(g,it.(h,e))=it.(g*h,e)~ as desired.
+- If we wanted to define a ~Representation~ of a group, probably we
+  would need to:
+  1. Define an adjective ~Representation-like~ on a
+     ~Function of G,(Funcs (E,E))~ as something like
+     ~for g,h being Element of G holds IT.(g * h) = (IT.g) * (IT.h)~
+  2. Register ~Representation-like for Function of G,(Funcs (E,E))~
+  3. Define a type ~Representation of G means ex E st it is Representation-like for Function of G,(Funcs (E,E))~
+     
