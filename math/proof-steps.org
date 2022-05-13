@@ -80,7 +80,7 @@ Note that justifications allow for nested proofs.
 :PROPERTIES:
 :CUSTOM_ID: h-3c0fc0e4-a5f6-49f4-a913-7585fa0b4358
 :END:
-** =let= or forall-introduction
+** =let=, forall-introduction
 :PROPERTIES:
 :CUSTOM_ID: h-c8be4c51-ce97-433e-97be-ffe4a763c5ed
 :END:
@@ -159,7 +159,7 @@ rule. Usually I write in parentheses "=assume= $A$ (for contradiction)".
     <prove a contradiction from ¬A>
 #+end_example
 
-** =thus= or and-introduction
+** =thus=, and-introduction
 :PROPERTIES:
 :CUSTOM_ID: h-f0c1272f-de5f-4cc9-a977-a8c14a897de1
 :END:
@@ -186,7 +186,7 @@ proof goal.
     <proof of B>
 #+end_example
 
-** =per cases=, or-introduction
+** =per cases=, or-elimination
 :PROPERTIES:
 :CUSTOM_ID: h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88
 :END:
@@ -362,23 +362,22 @@ One of the conventions I've adopted is to use the proof skeleton:
         assume B;
         <proof of A>
     end
-    hence A iff B;
+    hence thesis;
 #+end_example
 
-This is technically incorrect, it's certainly invalid Mizar. One
-step towards writing correct Mizar would be to instead use
-something of the form:
+This is technically correct, it's certainly valid Mizar. A more verbose
+way would be to do something like:
 
 #+ATTR_HTML: :id iff2
 #+begin_example
 <proof of A iff B> ::=
     <preliminary steps>
-    thus (1) A implies B
+    (1) A implies B
     proof
         assume A;
         <proof of B>
     end;
-    thus (2) B implies A
+    (2) B implies A
     proof
         assume B;
         <proof of A>

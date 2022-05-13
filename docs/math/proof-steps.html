@@ -246,7 +246,7 @@
 </li>
 <li><a href="#h-3c0fc0e4-a5f6-49f4-a913-7585fa0b4358">2. Steps</a>
 <ul>
-<li><a href="#h-c8be4c51-ce97-433e-97be-ffe4a763c5ed">2.1. <code>let</code> or forall-introduction</a></li>
+<li><a href="#h-c8be4c51-ce97-433e-97be-ffe4a763c5ed">2.1. <code>let</code>, forall-introduction</a></li>
 <li><a href="#h-292b4f0e-6142-45b3-b1b7-2a89d33c17b1">2.2. <code>assume</code></a>
 <ul>
 <li><a href="#h-c94efdcd-f2fb-4562-a9ce-702b424476b0">2.2.1. implies-intro</a></li>
@@ -254,8 +254,8 @@
 <li><a href="#h-56f7caee-a8bd-4195-b0a9-6b2a340e8be5">2.2.3. Reductio ad Absurdum</a></li>
 </ul>
 </li>
-<li><a href="#h-f0c1272f-de5f-4cc9-a977-a8c14a897de1">2.3. <code>thus</code> or and-introduction</a></li>
-<li><a href="#h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88">2.4. <code>per cases</code>, or-introduction</a></li>
+<li><a href="#h-f0c1272f-de5f-4cc9-a977-a8c14a897de1">2.3. <code>thus</code>, and-introduction</a></li>
+<li><a href="#h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88">2.4. <code>per cases</code>, or-elimination</a></li>
 <li><a href="#h-4b92b0ba-c2e7-4b7f-813f-db15f44a4f7c">2.5. <code>consider</code>, exists-elimination</a></li>
 <li><a href="#h-0e66da0e-d02c-4dd5-9009-9c31ec4b88b8">2.6. <code>take</code>, exists-intro</a></li>
 </ul>
@@ -360,7 +360,7 @@ Note that justifications allow for nested proofs.
 <div class="outline-text-2" id="text-h-3c0fc0e4-a5f6-49f4-a913-7585fa0b4358">
 </div>
 <div id="outline-container-h-c8be4c51-ce97-433e-97be-ffe4a763c5ed" class="outline-3">
-<h3 id="h-c8be4c51-ce97-433e-97be-ffe4a763c5ed"><span class="section-number-3">2.1.</span> <code>let</code> or forall-introduction</h3>
+<h3 id="h-c8be4c51-ce97-433e-97be-ffe4a763c5ed"><span class="section-number-3">2.1.</span> <code>let</code>, forall-introduction</h3>
 <div class="outline-text-3" id="text-h-c8be4c51-ce97-433e-97be-ffe4a763c5ed">
 <p>
 The proof skeleton for this step looks like:
@@ -446,7 +446,7 @@ rule. Usually I write in parentheses "<code>assume</code> \(A\) (for contradicti
 </div>
 
 <div id="outline-container-h-f0c1272f-de5f-4cc9-a977-a8c14a897de1" class="outline-3">
-<h3 id="h-f0c1272f-de5f-4cc9-a977-a8c14a897de1"><span class="section-number-3">2.3.</span> <code>thus</code> or and-introduction</h3>
+<h3 id="h-f0c1272f-de5f-4cc9-a977-a8c14a897de1"><span class="section-number-3">2.3.</span> <code>thus</code>, and-introduction</h3>
 <div class="outline-text-3" id="text-h-f0c1272f-de5f-4cc9-a977-a8c14a897de1">
 <p>
 When we have multiple goals we want to prove conjoined together
@@ -478,7 +478,7 @@ proof goal.
 </div>
 
 <div id="outline-container-h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88" class="outline-3">
-<h3 id="h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88"><span class="section-number-3">2.4.</span> <code>per cases</code>, or-introduction</h3>
+<h3 id="h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88"><span class="section-number-3">2.4.</span> <code>per cases</code>, or-elimination</h3>
 <div class="outline-text-3" id="text-h-bbde6cf5-e3e4-4d28-b56a-d8a6f1565b88">
 <p>
 When we want to prove a claim by cases. That is, we have
@@ -679,24 +679,23 @@ One of the conventions I've adopted is to use the proof skeleton:
         assume B;
         &lt;proof of A&gt;
     end
-    hence A iff B;
+    hence thesis;
 </pre>
 
 <p>
-This is technically incorrect, it's certainly invalid Mizar. One
-step towards writing correct Mizar would be to instead use
-something of the form:
+This is technically correct, it's certainly valid Mizar. A more verbose
+way would be to do something like:
 </p>
 
 <pre class="example" id="iff2">
 &lt;proof of A iff B&gt; ::=
     &lt;preliminary steps&gt;
-    thus (1) A implies B
+    (1) A implies B
     proof
         assume A;
         &lt;proof of B&gt;
     end;
-    thus (2) B implies A
+    (2) B implies A
     proof
         assume B;
         &lt;proof of A&gt;
@@ -730,7 +729,7 @@ See especially section 3. <a href="https://www.cs.ru.nl/F.Wiedijk/pubs/sketches2
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated 2022-05-13 Fri 08:30.</p>
 </div>
 </body>
 </html>
