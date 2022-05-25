@@ -18,11 +18,58 @@ couple articles in the current MML:
 - [[http://mizar.org/version/current/html/tarski_a.html][~tarski_a~]] for the axiom stating the existence of a Grothendieck
   universe containing a given set
 
+The ZF axioms contained in Mizar:
+
+- Extensionality :: for $X,Y$ being set st\\
+  (for $x$ being object holds ($x\in X \iff x\in Y$))\\
+  holds $X = Y$
+- Union ::  for $X$ being set\\
+  exists $Z$ being set st\\
+  for $x$ being object holds\\
+  ($x\in Z$ iff exists $Y$ being set st ($x\in Y$ & $Y\in X$))
+- Regularity :: for $x_{1}$ being object\\
+  for $X$ being set st $x_{1}\in X$ holds\\
+  exists $Y$ being set st\\
+  ($Y\in X$ & (for $x_{2}$ being object holds ($x_{2}\notin X$ or $x_{2}\notin Y$)))
+- Schema of Replacement ::
+  exists $X$ being set st\\
+  for $x$ being object holds\\
+  ($x\in X$ iff exists $y$ being object st ($y\in F_{1}()$ & $P_{1}[y,x]$))\\
+  *provided*
+  for $x, y, z$ being object st $P_{1}[x,y]$ & $P_{1}[x,z]$ holds $y = z$
+
 #+begin_remark
 The axiom of regularity may look a little strange, but remember: if we
 have $\forall X((\exists x, P[x,X])\implies Q[X])$, then this is
 logically equivalent to $\forall X\forall x(P[x,X]\implies Q[X])$.
 #+end_remark
+
+#+begin_remark
+The axiom schema of specification can be [[https://en.wikipedia.org/wiki/Axiom_schema_of_specification#Relation_to_the_axiom_schema_of_replacement][derived]] from the schema of
+replacement. 
+#+end_remark
+
+The two missing ZF axioms are the axiom of infinity, and the axiom of
+the power set.
+
+
+- Tarski Universe Axiom ::
+  for $N$ being set\\
+  exists $M$ being set st\\
+  ($N\in M$ &\\
+  (for $X$, $Y$ being set st $X\in M$ & $Y\subset X$ holds $Y\in M$) &\\
+  (for $X$ being set st $X\in M$ holds\\
+  \emsp exists $Z$ being set st\\
+  \emsp ($Z \in M$ & (for $Y$ being set st $Y\subset X$ holds $Y\in Z$))) &\\
+   (for $X$ being set holds ($X\not\subset M$, or $X$ and $M$ are equipotent, or $X\in M$)))\\
+
+This gives us the powerset exists (it's the third condition).
+
+The generalized axiom of infinity is derived as [[http://mizar.org/version/current/html/ordinal1.html#T36][~Ordinal_1:Th32~]]. Of
+course, working our way backwards, this uses Theorem [[http://mizar.org/version/current/html/zfmisc_1.html#T112][~ZfMisc_1:112~]]
+which depends on the axiom of the universe.
+
+Thus Tarski-Grothendieck set theory contains ZF set theory's axioms.
 
 These formed the contents of the first article in /Formalized
 Mathematics/:

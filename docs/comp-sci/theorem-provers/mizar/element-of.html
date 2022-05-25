@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Axiomatic Foundations - Mizar</title>
+<title>"Element of" - Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -206,27 +206,6 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -234,102 +213,35 @@
  |
  <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Axiomatic Foundations - Mizar</h1>
-<p>
-The foundations of mathematics used by Mizar is actually formalized in a
-couple articles in the current MML:
-</p>
-
-<ul class="org-ul">
-<li><a href="http://mizar.org/version/current/html/tarski_0.html"><code>tarski_0</code></a> for the ZF axioms used by Mizar</li>
-<li><a href="http://mizar.org/version/current/html/tarski_a.html"><code>tarski_a</code></a> for the axiom stating the existence of a Grothendieck
-universe containing a given set</li>
+<h1 class="title">"Element of" - Mizar</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-ed0f2b1d-bd4d-44d8-ae4a-e63243dcaabb">1. References</a></li>
 </ul>
-
-<p>
-The ZF axioms contained in Mizar:
-</p>
-
-<dl class="org-dl">
-<dt>Extensionality</dt><dd>for \(X,Y\) being set st<br>
-(for \(x\) being object holds (\(x\in X \iff x\in Y\)))<br>
-holds \(X = Y\)</dd>
-<dt>Union</dt><dd>for \(X\) being set<br>
-exists \(Z\) being set st<br>
-for \(x\) being object holds<br>
-(\(x\in Z\) iff exists \(Y\) being set st (\(x\in Y\) &amp; \(Y\in X\)))</dd>
-<dt>Regularity</dt><dd>for \(x_{1}\) being object<br>
-for \(X\) being set st \(x_{1}\in X\) holds<br>
-exists \(Y\) being set st<br>
-(\(Y\in X\) &amp; (for \(x_{2}\) being object holds (\(x_{2}\notin X\) or \(x_{2}\notin Y\))))</dd>
-<dt>Schema of Replacement</dt><dd>exists \(X\) being set st<br>
-for \(x\) being object holds<br>
-(\(x\in X\) iff exists \(y\) being object st (\(y\in F_{1}()\) &amp; \(P_{1}[y,x]\)))<br>
-<b>provided</b>
-for \(x, y, z\) being object st \(P_{1}[x,y]\) &amp; \(P_{1}[x,z]\) holds \(y = z\)</dd>
-</dl>
-
-<div class="remark" id="orgcfe627e">
-<p>
-The axiom of regularity may look a little strange, but remember: if we
-have \(\forall X((\exists x, P[x,X])\implies Q[X])\), then this is
-logically equivalent to \(\forall X\forall x(P[x,X]\implies Q[X])\).
-</p>
-
 </div>
-
-<div class="remark" id="org679a1d7">
-<p>
-The axiom schema of specification can be <a href="https://en.wikipedia.org/wiki/Axiom_schema_of_specification#Relation_to_the_axiom_schema_of_replacement">derived</a> from the schema of
-replacement. 
-</p>
-
 </div>
-
 <p>
-The two missing ZF axioms are the axiom of infinity, and the axiom of
-the power set.
+It's possible to write things like <code>let x be Element of {}</code> in
+Mizar. This isn't a <i>typing</i> error, arguably, since <code>{}</code> is a term whose
+type is <code>set</code>. I believe later on, in the CHECKER, it's treated as it
+(logically) should.
 </p>
 
-
-<dl class="org-dl">
-<dt>Tarski Universe Axiom</dt><dd>for \(N\) being set<br>
-exists \(M\) being set st<br>
-(\(N\in M\) &amp;<br>
-(for \(X\), \(Y\) being set st \(X\in M\) &amp; \(Y\subset X\) holds \(Y\in M\)) &amp;<br>
-(for \(X\) being set st \(X\in M\) holds<br>
-&emsp; exists \(Z\) being set st<br>
-&emsp; (\(Z \in M\) &amp; (for \(Y\) being set st \(Y\subset X\) holds \(Y\in Z\)))) &amp;<br>
- (for \(X\) being set holds (\(X\not\subset M\), or \(X\) and \(M\) are equipotent, or \(X\in M\))))<br></dd>
-</dl>
-
-<p>
-This gives us the powerset exists (it's the third condition).
-</p>
-
-<p>
-The generalized axiom of infinity is derived as <a href="http://mizar.org/version/current/html/ordinal1.html#T36"><code>Ordinal_1:Th32</code></a>. Of
-course, working our way backwards, this uses Theorem <a href="http://mizar.org/version/current/html/zfmisc_1.html#T112"><code>ZfMisc_1:112</code></a>
-which depends on the axiom of the universe.
-</p>
-
-<p>
-Thus Tarski-Grothendieck set theory contains ZF set theory's axioms.
-</p>
-
-<p>
-These formed the contents of the first article in <i>Formalized
-Mathematics</i>:
-</p>
-
+<div id="outline-container-h-ed0f2b1d-bd4d-44d8-ae4a-e63243dcaabb" class="outline-2">
+<h2 id="h-ed0f2b1d-bd4d-44d8-ae4a-e63243dcaabb"><span class="section-number-2">1.</span> References</h2>
+<div class="outline-text-2" id="text-h-ed0f2b1d-bd4d-44d8-ae4a-e63243dcaabb">
 <ul class="org-ul">
-<li>Andrzej Trybulec,<br>
-"Tarski Grothendieck Set Theory".<br>
-<i>Formalized Mathematics</i> <b>1</b>, no.1 (1990) 9&#x2013;11, <a href="http://mizar.org/fm/1990-1/pdf1-1/tarski.pdf">PDF</a>.</li>
+<li><a href="http://mizar.uwb.edu.pl/forum/archive/0609/msg00098.html">Thread on "Possibly empty types"</a></li>
+<li><a href="http://mizar.uwb.edu.pl/forum/archive/0311/msg00037.html">"Weak types"</a></li>
+<li><a href="http://mizar.uwb.edu.pl/forum/archive/0910/msg00009.html">"I am trying to figure out&#x2026;"</a> thread</li>
 </ul>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-05-25 Wed 12:12.</p>
+<p class="postamble">Last Updated 2022-05-25 Wed 11:20.</p>
 </div>
 </body>
 </html>
