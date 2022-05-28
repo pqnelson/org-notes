@@ -1,0 +1,846 @@
+#+TITLE: Notes on Huppert
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-05-21T11:44:02-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5 toc:2
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday May 21, 2022 at 11:44AM
+
+This is just the "theorem statements" and definitions. No proof given,
+since they can be found elsewhere.
+
+It seems the German word /Hilfssatz/ translates to "Lemma".
+
+/Folgerung/ seems to be "Corollary"?
+
+/Bemerkung/ is "remark".
+
+/Satz/ is "proposition" (well, literally "sentence", but it corresponds
+to a "lesser theorem").
+
+* Basics
+:PROPERTIES:
+:CUSTOM_ID: h-8453cd0c-faac-409f-b871-5a079daf8b98
+:END:
+** The Group Axioms
+:PROPERTIES:
+:CUSTOM_ID: h-e99b44eb-c48e-4e35-8307-c3a062b2d800
+:END:
+
+*** Axioms
+:PROPERTIES:
+:CUSTOM_ID: h-704aaf05-84b2-4b4c-a87e-97428d0ee36c
+:END:
+
+The nonempty set $G$ is called a {{{dfn(Group)}}} if it satisfies the
+following:
+
+1. For each pair $(A,B)$ of elements $A,B\in G$, there exists a unique element
+   $C$ of $G$, which we write as $C=AB$. We call $C$ the /product/ of
+   $A$ and $B$.
+2. For every $A,B,C\in G$, we have the product be associative: $(AB)C=A(BC)$.
+3. There is an element $E\in G$ such that $EA=A$ for every $A\in G$.
+4. For every $A\in G$ there is a $B\in G$ such that $BA=E$.
+
+*** Corollary: products of all tuples of a set of group elements
+:PROPERTIES:
+:CUSTOM_ID: h-88f7bca2-2c9f-4881-babf-e777467194f4
+:END:
+
+For any non-empty subsets of a group $G$, we can multiply them together.
+We recursively define the product $P_{k}(-)$ --- if $A_{1}$, $A_{2}$, \dots are elements of
+$G$, and the subscript on $P$ indicates how many elements we're
+multiplying together --- by:
+
+1. $P_{1}(A_{1})= \{A_{1}\}$
+2. $P_{2}(A_{1},A_{2})=\{A_{1}A_{2}\}$
+3. $P_{n}(A_{1},\dots,A_{h})=\{XY\mid X\in P_{k}(A_{1},\dots,A_{k}),
+   Y\in P_{m}(A_{k+1},\dots,A_{k+m}), k+m=n\}$
+
+We usually write $A_{1}\cdots A_{k}$ for $P_{k}(A_{1},\dots,A_{k})$.
+
+*** Corollary: existence of right inverse, identity element, inverse law
+:PROPERTIES:
+:CUSTOM_ID: h-a0fa1517-c651-4693-87c8-9ebbfd45e83a
+:END:
+
+1. $E$ is the identity element of the group $G$, so $AE=A$ for each
+   $A\in G$
+2. If $BA=E$, then $AB=E$
+3. If $AX=AY$ or $XA=YA$, then $X=Y$.
+
+*** Corollary
+:PROPERTIES:
+:CUSTOM_ID: h-73ac7d0a-0de2-4abe-be8b-b5a46249be19
+:END:
+
+If $G$ is a group, suppose $A,B\in G$, then there exists an element
+$X\in G$ such that $AX=B$. There also exists an element $Y\in G$ such
+that $YA=B$.
+
+*** Corollary: inverse is idempotent, inverse of products
+:PROPERTIES:
+:CUSTOM_ID: h-5e43fa8c-806b-421e-ade0-e28d99fc96db
+:END:
+
+1. For any $A\in G$ there is a unique element $X\in G$ such that $AX=XA=E$.
+   We call $X$ the inverse element of $A$ and denote $X=A^{-1}$.
+2. We have for any $A,B\in G$ the inverse of their product
+   $(AB)^{-1}=B^{-1}A^{-1}$ and $(A^{-1})^{-1}=A$.
+
+*** Definition: power of group element
+:PROPERTIES:
+:CUSTOM_ID: h-4db6575e-f769-4d8d-8040-540f4ea69256
+:END:
+
+We can define the $n^{\text{th}}$ power of a group element $A\in G$ by
+$A^{0}=E$, $A^{n+1}=A^{n}A$ if $n\gt 0$, and $A^{-n}=(A^{n})^{-1}$. We
+also have $A^{m+n}=A^{m}A^{n}$ for any $m,n\in\mathbb{Z}$.
+
+*** Definition: Order of Group
+:PROPERTIES:
+:CUSTOM_ID: h-ef973ab0-8bfb-4675-bcb4-bee978838160
+:END:
+
+We denote, for any set $M$, its cardinality by $|M|$. Then we define the
+{{{dfn(Order)}}} of a group $G$ to be the cardinality of its underlying
+set, and denote it by $|G|$.
+
+*** Definition: Group isomorphism
+:PROPERTIES:
+:CUSTOM_ID: h-1bce340b-9b94-49e0-b65f-2b7f78025390
+:END:
+
+Two groups, $G_{1}$ and $G_{2}$, are called isomorphic if there are
+there is a one-to-one mapping $\pi$ from $G_{1}$ to $G_{2}$
+
+$\pi(gh) = \pi(g)\pi(h)$
+
+for all elements $g$ and $h$ from $G_{1}$. We then write $G_{1}\cong G_{2}$. Group
+isomorphism is obviously an equivalence relation.
+
+By {{{dfn(Group Property)}}} we understand a property
+which if $G$ has it, then every group isomorphic to $G$ also has the property.
+
+*** Corollary: Isomorphisms preserve identity element and inverses
+:PROPERTIES:
+:CUSTOM_ID: h-d8f28fcc-1815-4ae7-8068-c0f8d1205f12
+:END:
+
+If $\pi\colon G_{1}\to G_{2}$ is an isomorphism and $E_{1}\in G_{1}$ and
+$E_{2}\in G_{2}$ are identity element, then $\pi(E_{1})=E_{2}$.
+
+Further, for any $g\in G_{1}$ we have $\pi(g^{-1})=[\pi(g)]^{-1}$.
+
+*** Definition: Abelian Group
+:PROPERTIES:
+:CUSTOM_ID: h-74b9e9f7-7512-4adf-8d1f-c8f006869080
+:END:
+
+The group $G$ is called {{{dfn(Abelian)}}} (or also /commutative/),
+if $AB = BA$ for all elements $A$ and $B$ from $G$. Then each
+product $A_{1}\dots A_{n}$ with $A_{i}\in G$ independent of the
+arrangement of the $A_{i}.
+
+** Subgroups
+:PROPERTIES:
+:CUSTOM_ID: h-87333076-41f1-44f8-8721-4e73e6ccdf6f
+:END:
+
+*** Definition
+:PROPERTIES:
+:CUSTOM_ID: h-64445783-8682-45c5-80ed-933c9f85081f
+:END:
+
+We call a subset $U\subset G$ a {{{dfn(Subgroup)}}} of $G$ if it is
+closed under $G$'s binary operator:
+
+For any $u_{1}$, $u_{2}\in U$ we have $u_{1}u_{2}\in U$; for any $u\in
+U$, we have $u^{-1}\in U$. We also have $E\in U$, but this follows by
+combining these two conditions together.
+
+We write $U\leq G$ to indicate $U$ is a subgroup of $G$. If $U\neq G$,
+then we write $U\lt G$.
+
+Every group $G$ has a subgroup $\mathbf{1}=\{E\}$ consisting of only the
+identity element. We call $\mathbf{1}$ the {{{dfn(Trivial Subgroup)}}}
+of $G$.
+
+*** Corollary
+:PROPERTIES:
+:CUSTOM_ID: h-a7987416-4736-41cd-ba0f-039115842280
+:END:
+
+If $U$ is a finite subset of the group $G$, and if for any
+$u_{1}$, $u_{2}$, from $U$ we also have $u_{1}u_{2}\in U$,
+then $U$ is a subgroup of $G$.
+
+*** Proposition: intersection of subgroups form a subgroup
+:PROPERTIES:
+:CUSTOM_ID: h-c68c9124-0f89-4845-a035-7c9f5fc42c51
+:END:
+
+If $U_{i}$ is a family of subgroups of $G$ indexed by $i\in I$,
+then $\bigcap_{i\in I}U_{i}$ is a subgroup of $G$.
+
+*** Definition: subgroup generated by a subset
+:PROPERTIES:
+:CUSTOM_ID: h-d012307d-d241-41cf-ada7-8901beedf270
+:END:
+
+Let $M$ be a subset of a group $G$. We denote by $\langle M\rangle$ the
+intersection of all subgroups of $G$ which contain $M$. Obviously
+$\langle M\rangle$ is the smallest subgroup of $G$ containing $M$.
+
+If we write $M^{-1}=\{g^{-1}\mid g\in M\}$, then we can write
+
+\begin{equation}
+\langle M\rangle = \{ e,\; x_{1}\dots x_{s}\mid x_{j}\in M\cup M^{-1}, 1\leq j\leq s, s\in\mathbb{N}\}.
+\end{equation}
+
+If $M=\{A,B,\dots\}$, then we can write $\langle M\rangle=\langle A,B,\dots\rangle$.
+
+If $G=\langle M\rangle$, then we call $M$ a set of {{{dfn(Generating Set)}}}
+for $G$.
+
+We call a group generated by a single element {{{dfn(Cyclic)}}}.
+If we always write $A^{0}=E$, then $\langle A\rangle$ consists of the
+elements $A^{m}$ with $m=0,\pm1,\pm2,\dots$ which are not necessarily
+all different.
+
+*** Proposition: Multiply a subset by group element, left cosets
+:PROPERTIES:
+:CUSTOM_ID: h-9ab0f0c3-cd41-4530-ac95-9bf3df607347
+:END:
+
+If $U\leq G$ is a subgroup, then $gU=\{gu\mid u\in U\}$ for any $g\in G$
+which we call {{{dfn(Left Cosets)}}} of $U$ in $G$. For any $g,h\in G$
+we have either $gU\cap hU=\emptyset$ or $gU=hU$.
+
+The group $G$ is the disjoint union of all different left cosets $gU$.
+
+If the set $\mathcal{R}$ contains exactly one element from each left
+coset of $U$, then we call $\mathcal{R}$ a system of {{{dfn(Left Coset
+Representatives)}}} of $U$ in $G$.
+
+The decomposition
+\begin{equation}
+G = \bigcup_{R\in \mathcal{R}} RU
+\end{equation}
+we call the "decomposition of $G$ into left cosets by $U$".
+
+All cosets of $U$ have the same cardinality $|U|$. We call the
+cardinality $|\mathcal{R}|$ the {{{dfn(Index)}}} of $U$ in $G$ and write
+$[G:U]$.
+
+*** Proposition: Right cosets, factoring decomposition
+:PROPERTIES:
+:CUSTOM_ID: h-b064cd35-cc87-431b-b4e9-51d8c2a5c3e8
+:END:
+
+1. Let $U$ be a subgroup of $G$. If $G=\bigcup_{R\in\mathcal{R}}UR$ is
+   the decomposition of $G$ into right cosets of $U$, then
+   $G=\bigcup_{R\in\mathcal{R}}R^{-1}U$ is a decomposition into left
+   cosets of $U$. (Specifically, we don't have between distinguish a
+   left and right index of $U$ in $G$.)
+2. If $G=\bigcup_{R\in \mathcal{R}}UR$ is a decomposition of $G$ into
+   right cosets of the subgroup $U$, and $U=\bigcup_{S\in\mathcal{S}}BS$ is a
+   decomposition of $U$ by $B$, then $G=\bigcup_{S\in\mathcal{S},R\in \mathcal{R}} BSR$ is the decomposition of $G$ into right-cosets of
+   $B$. In particular, $[G:B] = [G:U][U:B]$.
+
+
+*** Lagrange's Theorem
+:PROPERTIES:
+:CUSTOM_ID: h-9492837d-e706-479e-a64a-505d563fa05b
+:END:
+
+Let $G$ be a finite group, let $H\leq G$ be a subgroup. Then
+$|G|=|H|[G:H]$. In particular, the order and index of a subgroup of a
+finite group always divide the group's order.
+
+*** Definition: Order of element, exponent of group
+:PROPERTIES:
+:CUSTOM_ID: h-6c7e08bd-d4f9-4021-9ae9-f2e7e6512294
+:END:
+
+Let $g$ be an element of group $G$. The smallest number $n\in\NN$ with
+$g^{n}=E$ we call the {{{dfn(Order)}}} of $g$, denoted $o(g)$.
+If there is no such number, then $o(g)=\infty$.
+
+The least common multiple of the orders of all elements $g\in G$ is the
+{{{dfn(Exponent)}}} of $G$, and denote this by $\exp(G)$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-8ca37550-9242-4fe8-bb8a-9ac652d7ada5
+:END:
+
+Let G be a group. Let $g\in G$ with $o(g) = n\lt\infty$. Then:
+
+1. $n|m$ follows from $g^{m} = E$.
+2. $\langle g\rangle = \{E, g, g^{2}, \dots, g^{n-1}\}$ and
+   $\langle g\rangle = o(g) = n$.
+   In particular, $o(g)$ divides $|G|$ for finite $G$.
+3. If k is an integer rational number, then $o(g^{k}) = n/(n,k)$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-9733f1a5-14db-43e0-96bd-c0be59cf5135
+:END:
+
+Every group of prime order is cyclic.
+
+(This is only the first in a long line of theorems where we derive
+information about $G$ from prime
+factorizations of $|G|$.)
+
+*** Definition: Multiplying subsets
+:PROPERTIES:
+:CUSTOM_ID: h-37a9ae10-db64-47ff-bdaa-e1ba71512c2f
+:END:
+
+If $A$ and $B$ are subsets of the group $G$, then we set
+$AB=\{ab\mid a\in A,b\in B\}$.
+
+*** Lemma
+:PROPERTIES:
+:CUSTOM_ID: h-0dec1ad8-7dcc-4798-bfa8-4f4141921e31
+:END:
+
+1. If $A = \bigcup_{R\in \mathcal{R}} R(A\cap B)$ is the coset decomposition from A to $A\cap B$,
+   then $AB = \bigcup_{R\in \mathcal{R}} RB$ is a disjoint
+   decomposition of the set $AB$. In particular, if $A$ and $B$ are finite,
+   then $|AB|=|A||B|/|A\cap B|$.
+2. $AB$ is a subgroup of $G$ if and only if $AB = BA$.
+3. (Dedehind identity) $A\leq C\leq G$ and $C\subset AB$, then it
+   follows that $C=AB\cap C=A(B\cap C)$.
+
+
+*** Lemma
+:PROPERTIES:
+:CUSTOM_ID: h-2c3b1285-7697-4464-8f9c-0f28c0405e56
+:END:
+
+Let $A$ and $B$ be subgroups of $G$ of finite
+Index. Then:
+
+1. $[G: A\cap B] \leq [G : A][G : B]$.
+2. If $[G: A]$ and $[G: B]$ are divisors, then $[G:A\cap B]=[G:A][G:B]$.
+   If $G$ is finite, then $G = AB$.
+
+
+*** Lemma: Conjugation by Element
+:PROPERTIES:
+:CUSTOM_ID: h-eb8ccf50-688d-44f2-b5b2-6bb89e393664
+:END:
+
+If $a$ and $g$ are elements of $G$, then we let $g^{a}=a^{-1}ga$.
+We call the mapping $g\to g^{a}$ the transformation with $a$. then
+the following rules apply:
+
+- (1) $g^{ab}=(g^{a})^{b}$.
+- (2) $(gh)^{a}=g^{a}h^{a}$
+- (3) $(g^{a})^{-1} = (g^{-1})^{a}$
+
+We also define $g^{a+b}$ by $g^{a+b}=g^{a}g^{b}$. However, it should be noted
+that then i. a. $g^{a+b}\neq g^{b+a}$ because the elements $g^{a}$ and $g^{b}$ are not
+necessary interchangeable. But the following always applies:
+
+- (4) $g^{ab+ac} = (g^{a})^{b+c}$ and
+- (5) $g^{ba + ca} = (g^{b+c})^{a}$.
+
+*** Definition: Conjugating a subset, subgroup
+:PROPERTIES:
+:CUSTOM_ID: h-c6a9a205-731a-4c41-97ae-e615125125bc
+:END:
+
+If $M$ is a nonempty subset of $G$ and $g\in G$,
+so we set $M^{g} = \{m^{g}\mid m\in M\}$.
+We call the sets $M^{g}$ the conjugates of $M$ in $G$.
+
+If $U$ is a subgroup of $G$, then $U^{g}$ is a subgroup of $G$ isomorphic to $U$:
+The group property of $U^{g}$ follows from 2.14 (2) and (3).
+The mapping $\pi$ from $U$ to $U^{g}$ with $\pi(u)= u^{g}$, which is divided by $\alpha$ with
+$\alpha(u^{g}) = (u^{g})^{g^{-1}}$ is reversed, by 2.14 (2) there is an
+isomorphism from $U$ to $U^{g}$.
+
+*** Proposition: Conjugacy classes, the Class Equation
+:PROPERTIES:
+:CUSTOM_ID: h-774e5b95-b7df-4985-86bf-d2729ccb8f44
+:END:
+
+Let $M=\{m\}$ be a set of one element. Then we call the set $\{m^{g}\mid g\in G\}$
+of elements conjugate to $m$ in $G$ the {{{dfn(Conjugacy Class)}}} $m$ in $G$.
+The conjugacy classes are equivalence classes for the following
+equivalence relation:
+
+Let $x\sim y$ if there is a $g\in G$ such that $x^{g} = y$. If $G$ is
+finite, then the partition into conjugacy classes yields a disjoint decomposition
+$G = \bigcup^{h}_{i}R_{i}$
+and the equation
+\begin{equation}
+|G| = \sum^{h}_{i=1}|R_{i}|\quad\mbox{(so-called class equation)}
+\end{equation}
+where the $R_{i}$ are the different conjugacy classes of $G$.
+We call the number $h$ of conjugacy classes the {{{dfn(Class Number of
+$G$)}}}.
+
+*** Definition: Normalizer, Centralizer, Center
+:PROPERTIES:
+:CUSTOM_ID: h-1dba1a8e-07d9-42c8-8364-2c5a138af76e
+:END:
+
+1. Let $M$ be a subset of $G$. Then we call $N_{G}(M) = \{g|g\in G, M^{g}=M\}$
+   the {{{dfn(Normalizer)}}} of $M$ in $G$. Obviously $N_{G}(M)$ is a subgroup
+   by $G$. If $U$ is a subgroup of $G$, then $U\leq N_{G}(U)$ holds. Apparently is
+   $N_{G}(M^{X} = N_{G}(M)^{X}$ for all $X\in G$.
+2. The set $C_{G}(M) = \{g\mid g\in G, gm=mg\mbox{ for all }m\in M\}$
+   is called the {{{dfn(Centralizer)}}} of $M$ in $G$. $C_{G}(M)$ is also a subgroup
+   of $G$, and obviously $C_{G}(M)\leq N_{G}(M)$ holds. If $U$ is an
+   Abelian subgroup of $G$, then we have $U\leq C_{G}(U)$.
+3. We set $C_{G}(G) = Z(G)$ and call this the {{{dfn(Center)}}} of G.
+   So the center $Z(G)$ of $G$ consists of those elements
+   of $G$, which commute with every element of $G$.
+
+*** Proposition: Number of Conjugacy Classes
+:PROPERTIES:
+:CUSTOM_ID: h-9e20e311-07f3-4751-870a-7563e813cec3
+:END:
+
+The index $[G:N_{G}(M)]$ is the number of distinct conjugacy classes of
+$M$ in $G$.
+
+*** Proposition: Double Cosets Partition $G$
+:PROPERTIES:
+:CUSTOM_ID: h-97e72420-0692-43b8-8568-7521bc51569d
+:END:
+
+Let $U$ and $B$ be subgroups of $G$. We call
+$U g B = \{ugv\mid u\in U, v\in B\}$ (with $g\in G$)
+{{{dfn(Double Cosets)}}} of $U$,
+$B$ in $G$.
+
+From $U g B\cap U h B\neq\emptyset$ it follows $UgB = UhB$.
+So the double cosets yield a disjoint decomposition of $G$.
+If $G$ is finite, then
+
+$$G=\bigcup^{n}_{i}Ug_{i}B\quad\mbox{(disjoint)}$$
+
+and
+
+$$|G| = \sum^{n}_{i=1}\frac{|U||B|}{|U^{g_{i}}\cap B|}.$$
+
+*** Proposition: Subgroups of Cyclic Group
+:PROPERTIES:
+:CUSTOM_ID: h-8265e1a5-18e1-4704-b7f4-966a1c19fd79
+:END:
+
+Let $G = \langle g\rangle$ be a cyclic group of order $o(g)$. Then
+there is exactly one subgroup of order $d$ for each factor $d$ of $o(g)$
+of $G$, namely $\langle g^{k}\rangle$ with $k = o(g)/d$.
+
+** Normal Subgroups, Quotient Groups, and Group Morphisms
+:PROPERTIES:
+:CUSTOM_ID: h-67822d89-f033-4b7d-89ef-66b8bb89e06a
+:END:
+
+*** Definition
+:PROPERTIES:
+:CUSTOM_ID: h-352c2fdd-3d41-44ff-8721-211e29497b91
+:END:
+
+The subgroup $N$ of $G$ is called a {{{dfn(Normal Subgroup)}}} of $G$ (often also
+called normal subgroup or invariant subgroup) if
+$N^{g}\leq N$ holds for all $g$ from $G$. We then write $N\trianglelefteq G$
+or $N\triangleleft G$, if $N$ differs from $G$. Every group $G$ owns the
+trivial normal subgroup $G$ and $\mathbf{1}$.
+
+If $G$ has only the normal subgroups $\mathbf{1}$ and $G$, then we call
+$G$ a {{{dfn(Simple)}}} group. Obviously every group of prime order is
+simple.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-5a442315-05ac-415d-89bd-9b2fda7d0df8
+:END:
+
+Let $N$ be a subgroup of $G$. Then the following are equivalent:
+1. $N\trianglelefteq G$.
+2. $N^{g} = N$ for all $g\in G$.
+3. $gN=Ng$ for all $g\in G$.
+4. Every left coset of $N$ is a right coset of $N$.
+
+*** Remark
+:PROPERTIES:
+:CUSTOM_ID: h-19159c74-9d00-4be4-9a0d-53c7b014067a
+:END:
+
+If $N$ is a subgroup of $G$ with $[G : N] = 2$, then
+$N\triangleleft G$.
+
+*** Proposition: Cosets of $N$ form group iff $N$ is normal subgroup
+:PROPERTIES:
+:CUSTOM_ID: h-3bdf8108-d845-4c7c-bebd-ffea9aba34e1
+:END:
+
+
+We have $(gN)(hN)=gh N$ on the set of left cosets of subgroup $N$ of $G$
+be well-defined multiplication operator precisely when $N$ is normal in $G$.
+
+When equipped with this multiplication, the cosets of $N$ form a group.
+
+*** Definition: Quotient Group
+:PROPERTIES:
+:CUSTOM_ID: h-d1069450-7145-4d75-b0e2-284ed0498e33
+:END:
+
+If $N$ is a normal subgroup of $G$, then the cosets of  $N$
+equipped with the multiplication $(gN)(hN)=ghN$
+form a group called the {{{dfn(factor group)}}} of $G$ by $N$.
+We denote it by $G/N$. Obviously $|G/N| = [G : N]$ holds.
+
+*** Definition: Homomorphism, Epimorphism, Monomorphism, Endomorphism
+:PROPERTIES:
+:CUSTOM_ID: h-2fe4d8cf-7547-444d-b89d-dca92f38d856
+:END:
+
+1. The mapping $\pi$ from the group $G$ to the group $H$ is called a
+   {{{dfn(Homomorphism)}}} from $G$ to $H$ if for any $g_{1},g_{2}\in G$
+   we have $\pi(g_{1}g_{2}) = \pi(g_{1})\pi(g_{2})$.
+   We write $\pi(G) = G^{\pi}=\{\pi(g)\mid g\in G\}$
+   and call $\pi(G) = G^{\pi}$ the {{{dfn(Image of $G$ under $\pi$)}}}.
+2. The homomorphism $\pi$ from $G$ to $H$ is called an {{{dfn(Epimorphism)}}}
+   if $\pi$ is a surjective mapping from $G$ to $H$, i.e. if $H = G^{\pi}$ holds.
+3. The homomorphism $\pi$ of $G$ in $H$ is called a {{{dfn(Monomorphism)}}},
+   if $\pi$ is an injective mapping from $G$ to $\pi(G)$.
+4. A homomorphism from $G$ to $G$ is called an {{{dfn(Endomorphism)}}} of $G$.
+
+*** Remark
+:PROPERTIES:
+:CUSTOM_ID: h-b49f0818-e110-4708-8725-ad7f8acb68e9
+:END:
+
+Let $\pi$ be a homomorphism from $G$ to $H$.
+
+1. If $E$ is the identity element of $G$, then $\pi(E)$ is the identity element of $H$.
+2. For each $g\in G$ we have $\pi(g^{-1})= \pi(g)^{-1}$.
+3. $\pi(G) = \{\pi(g)\mid g\in G\}$ is a subgroup of $H$.
+4. If $M$ is a generator system of $G$, then the homomorphism is
+   $\pi$ is uniquely determined by knowing $\pi(m)$ for all $m\in M$.
+
+*** Fundamental theorem on homomorphisms
+:PROPERTIES:
+:CUSTOM_ID: h-2e7faccd-738e-408f-b535-a451dadf2893
+:END:
+
+1. If $R$ is a normal subgroup of $G$, then the mapping is $\alpha$ with
+   $\alpha(g)=gR$ an epimorphism from $G$ to $G/R$. We call $\alpha$ the
+   {{{dfn(natural homomorphism)}}} from $G$ to $G/R$.
+2. Let $\pi$ be a homomorphism from $G$ to $H$. Let $K=\{g|g\in G,\pi(g)=e\}$.
+   We call $K$ the {{{dfn(kernel of $\pi$)}}}.
+   Then $K$ is a normal subgroup of $G$, and it gives a monomorphism
+   $\varphi$ from $G/K$ to $H$ with $\alpha\varphi=\pi$.
+   In particular, $G/K = \pi(G)$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-8b734a38-0c43-44b7-881e-60c6d13f1351
+:END:
+
+If the $N_{i}$ with $i\in I$ are normal subgroups of $G$, then both their
+product $\langle N_{i}\mid i\in I\rangle$ and their intersection
+$\bigcap_{i \in I}N_{i}$ are normal subgroups of $G$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-c3f12e91-787c-452d-a321-ab56a53301ad
+:END:
+
+Let $N$ be a normal subgroup of $G$.
+
+1. Among the subgroups $U$ of $G$ with $N\leq U\leq G$ and all the
+   subgroups of $\bar{G} = G/N$ there is a one-to-one correspondence $\alpha$
+   that preserves the lattice operations intersection and product
+   defined by $\alpha(U)= U/N$.
+2. For $N\leq U\leq G$ we have $[G : U] = [G/N: U/N]$.
+3. If $N\leq M\trianglelefteq G$, then $M/N\trianglelefteq G/N$ and
+   $(G/N)/(M/N) = G/M$.
+
+*** Lemma
+:PROPERTIES:
+:CUSTOM_ID: h-cae183c2-faa1-4fd5-854d-b1d14b8ee95a
+:END:
+
+If $N$ is a normal subgroup and $U$ is a subgroup of $G$,
+then the product $\langle N,U\rangle$ agrees with the product $UN$ defined in 1.2.11
+agree. In particular, then $NU = UN$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-57a53144-a760-49a1-883b-17a6377c0019
+:END:
+
+If $N$ is a normal subgroup of $G$ and $U$ is a subgroup of $G$, then
+$N\cap U\trianglelefteq U$ and $UN/N\cong U/(U\cap N)$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-91e450e8-54d8-4a18-a3d6-47bce27193bb
+:END:
+
+If $M$ and $N$ are normal subgroups of $G$ with $M\cap N=\mathbf{1}$,
+then $mn=nm$ holds for all $m$ from $M$ and all $n$ from $N$.
+We then say: $M$ and $N$ are elementwise commutable.
+
+*** Definition
+:PROPERTIES:
+:CUSTOM_ID: h-ce7c6b14-fb65-48ab-8663-5ff23f941399
+:END:
+
+If $M$ is a subset of $G$, then we write
+$M^{G} := \langle m^{g}\mid m\in M,g\in G\rangle$.
+Obviously $M^{G}$ is the smallest normal subgroup of $G$ which contains $M$.
+
+** Automorphisms
+:PROPERTIES:
+:CUSTOM_ID: h-69de70ea-4c86-4bed-8432-1486c2c58c1a
+:END:
+
+*** Definition
+:PROPERTIES:
+:CUSTOM_ID: h-1398c842-03ab-41d4-b872-9c3f66710f5d
+:END:
+
+An isomorphism from $G$ to itself is called an {{{dfn(Automorphism)}}}
+of $G$. The automorphisms of $G$ form a group $A(G)$ with respect to the
+following product definition:
+
+For $\alpha,\beta\in A(G)$ let $\alpha\beta$ be defined by
+$(\beta\alpha)(g)=\beta(\alpha(g))$.
+
+The group $A(G)$ is called the {{{dfn(Automorphism Group)}}} of $G$. If $G$ is
+finite, then obviously $A(G)$ is also finite
+
+*** Proposition: Inner Automorphisms
+:PROPERTIES:
+:CUSTOM_ID: h-07a1b7e1-0aa9-42db-8170-56ba93a8f945
+:END:
+
+Every mapping $\alpha$ of the form
+$\alpha(x) = x^{g}$ with $g\in G$
+is an automorphism of $G$, a so-called {{{dfn(Inner Automorphism)}}}.
+
+Inner automorphisms form a normal subgroup $I(G)$ of $A(G)$.
+We call the group $I(G)$ the inner automorphism group of $G$.
+It is isomorphic to the factor group $G/Z(G)$ of $G$ modulo its center $Z(G)$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-ad848a51-4768-4e90-94ea-5341b6e5d358
+:END:
+
+Let $M$ and $N$ be normal subgroups of $G$ with $M\leq N$.
+Let $U$ be a subgroup of the automorphism group $A(G)$ of $G$.
+For every automorphism $\alpha$ from $U$, suppose $\alpha(M)=M$ and $\alpha(N)=N$ hold.
+Then the mapping $\bar{\alpha}$ with
+
+$\bar\alpha(nM) = \alpha(n)M$ for $n\in N$
+
+is an automorphism of $N/M$, the assignment of $\alpha$ to $\bar\alpha$
+gives a homomorphism of $U$ in the automorphism group $A(N/M)$ of $N/M$.
+The kernel of this homomorphism consists of the automorphisms
+$\alpha$ from $U$ of the form $\alpha(n) = nm(n)$ with $m(n)\in M$ for
+all $n$ from $N$. The $m(n)$ suffice for the functional equation $m(n_{1}n_{2}) = m(n_{1})^{n_{2}}m(n_{2})$.
+(In §17 we shall have to speak in detail about this functional
+equation.)
+
+In the special case $U = I(G)$ we give for the kernel of the composite
+Homomorphism from $G$ (via $I(G)$) to $A(N/M)$ the notation
+
+$C_{G}(N/M) = \{G \mid n^{g}M = nM \mbox{ for every }n\in N\}$.
+
+Then clearly then $G/C_{G}(N/M)$ is isomorphic to a subgroup of $A(N/M)$.
+(For $M = \mathbf{1}$, $C_{G} (N/\mathbf{1})$ is the centralizer
+$C_{G}(M)$ introduced in 2.17b.)
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-1501a394-4f2c-44a6-ac3b-b8aa349f22dc
+:END:
+
+Let $N$ be a normal subgroup of $G$ and $\alpha$ an automorphism of $G$
+with $\alpha(n)=n$ for all $n\in N$ and $gN = \alpha(g)N$ for all $g\in G$.
+Then $\alpha(g) = gT(g)$, where $T(g)$ lies in $Z(N)$, depends only on
+the coset $gN$ and the functional equation $T(gh) = T(g)^{h}T(h)$ from
+Theorem 4.3 is satisfied.
+
+All automorphisms $\alpha$ of the given form are pairwise commutable.
+If $m$ is the exponent of $Z(N)$, then $\alpha^{m}=1$.
+In particular, if $(O(\alpha), |Z(N|) = 1$, then $\alpha = 1$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-d4b5503b-52a5-410c-8e9c-564e689b7a08
+:END:
+
+If $U$ is a subgroup of $G$, let $C_{G}(U)$ be the centralizer of $U$ and $N_{G}(U)$ the normalizer of $U$ in $G$.
+Then the factor group $N_{G}(U)/C_{G}(U)$ is isomorphic to a subgroup of the automorphism group $A(U)$ of $U$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-7a4b5b58-c82f-495d-8a5c-6f3a580718d3
+:END:
+
+Let $G$ be a cyclic group of order $n$.
+Then the automorphisms of $G$ have the form $\alpha(g) = g^{k}$ with $(k, n) = 1$.
+The automorphism group $A(G)$ of $G$ is isomorphic to the multiplicative
+group of remainders mod $n$ that are relatively prime to $n$. In
+particular, $|A(G)| = \varphi(n)$, where $\varphi$ is the Euler totient function
+from number theory.
+
+*** Definition: Characteristic Subgroup
+:PROPERTIES:
+:CUSTOM_ID: h-37a69218-8aef-458e-b2f5-b07b8dccc00f
+:END:
+
+The subgroup $U$ of $G$ is called a {{{dfn(Characteristic Subgroup)}}}
+of $G$ if $\alpha(U) = U$ for every automorphism $\alpha$ of $G$.
+(Obviously every characteristic subgroup of $G$ is a normal subgroup of
+$G$.) If $G$ has only the characteristic subgroups $\mathbf{1}$ and $G$,
+then $G$ is called characteristically simple.
+
+Trivial but useful is:
+
+*** Lemma
+:PROPERTIES:
+:CUSTOM_ID: h-29cc942b-2653-4558-a0ac-68cf82ee4b0b
+:END:
+
+1. Let $N$ be a normal subgroup of $G$ and $M$ a characteristic subgroup of $N$. Then $M$ is a normal subgroup of $G$.
+2. If $A\leq B\leq G$, $A$ is characteristic in Bund $B$ is characteristic in $G$, then $A$ is characteristic in $G$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-796f1474-2355-4177-977b-e33aad8a6f06
+:END:
+
+Let $N\triangleleft G$ and let $|N|$ and $|G/N|$ be finite and relatively prime.
+
+1. If $M\leq G$ and $|M|$ divides $|N|$, then $M\leq N$ holds.
+2. $N$ is the only subgroup of $G$ with order $|N|$.
+
+In particular, $N$ is a characteristic subgroup of $G$.
+
+*** Examples
+:PROPERTIES:
+:CUSTOM_ID: h-a409d849-e91d-4cd4-a4ea-a1c8dc93f99c
+:END:
+
+1. Let $p$ be an odd prime number and let $G$ be the group of all integers
+   linear maps $x\to ax+b$ ($a,b,x\in GF(p)$, $a\neq0$) over the finite field $GF(p)$.
+   Then every automorphism of $G$ is an inner automorphism.
+2. (G.E. WALL)
+   Let $G$ be the group of integral linear maps $x\to ax + b$ over the ring of integers modulo 8 with $a = 1 (2)$.
+   (The order of $G$ is 25.)
+   Then the map is $\alpha$, which transforms $G$ with $xG =ax+b$ into $\alpha(G)$ with $x\alpha(G) = ax + b + \frac{1}{2 }(a^{2}-1)$ is an automorphism of $G$ which maps every element of $G$ to a conjugate, but which is not an inner automorphism of $G$.
+
+** Permutation Groups
+:PROPERTIES:
+:CUSTOM_ID: h-af42c3ae-8e4c-49e0-b80d-5a453040f2be
+:END:
+
+*** Definition: Permutations, Permutation Group
+:PROPERTIES:
+:CUSTOM_ID: h-fa420ecd-20e5-4637-a51b-0a528406d6b1
+:END:
+
+Let $\Omega$ be a finite set with $|\Omega| = n$.
+We denote the elements of $\Omega$ using the natural numbers 1, \dots, $n$ (to
+distinguish them from group elements).
+
+The set of all one-to-one mappings from $\Omega$ to itself becomes a
+group if we define the product $gh$ of two mappings $g$ and $h$ by
+$i^{gh}=(i^{g})^{h}$ $(i\in \Omega)$.
+
+We call this group the {{{dfn(Symmetric Group)}}} $S_{n}$ of degree $n$ (on $\Omega$).
+Obviously $|S_{n}|=n!$ holds.
+We call the elements of $S_{n}$ permutations and often write them in the
+form $G = \binom{i}{i^{g}}$.
+If $\Delta$ is a subset of $\Omega$ and $g\in S_{n}$, we write
+$\Delta^{g} = \{i^{g}\mid i\in \Delta\}$.
+
+*** Proposition
+:PROPERTIES:
+:CUSTOM_ID: h-836209ba-85ae-41b9-9c49-0ba1293fb41a
+:END:
+
+A permutation of shape
+
+$$ P = \begin{pmatrix}a_{1} & a_{2} & \dots & a_{k-1} & a_{k} & a_{k+1} & \dots & a_{n}\\
+a_{2} & a_{3} & \dots & a_{k} & a_{1} & a_{k+1} & \dots & a_{n}\end{pmatrix}$$
+
+(or in short: $P = (a_{1}, a_{2}, \dots, a_{k})$) means a $k$ cycle
+or cycle of length $k$.
+
+We call the 2-cycles {{{dfn(transpositions)}}}.
+
+Every permutation $g$ can be written uniquely (up to ordering) as the
+product of disjoint cycles, which do not have a common digit.
+
+The fixed digits $i$ at $G$ appear with $i^{g} = i$ as cycles of the
+length 1 and are usually not written down.
+If the lengths of these cycles $z_{1},\dots,z_{m}$, then the order $O(G)$
+of $g$ is the least common multiple of $z_{i}$.
+We call the $m$ tuple $(z_{1}, \dots, z_{m})$ the {{{dfn(type of Permutation)}}} $G$.
+
+*** Lemma: Conjugacy classes of $S_{n}$
+:PROPERTIES:
+:CUSTOM_ID: h-5b6809ae-c0b9-4f25-baca-a6f7f2a2b128
+:END:
+
+Let $g$ have the factorization into cycles $g = (a_{1},\dots,a_{k})\dots(s_{1},\dots,s_{m})$ and let
+$T = \binom{a_{i}}{b_{i}}\dots\binom{s_{j}}{t_{j}}$.
+Then $g^{T} = T^{-1}gT$ has the cycle decomposition
+$g^{T} = (b_{1}, \dots, b_{k})\dots(t_{1},\dots,t_{m}).$
+
+In particular, it follows that the conjugation classes $S_{n}$ consist
+of permutations of the same type.
+
+
+*** Definition
+:PROPERTIES:
+:CUSTOM_ID: h-7f58a258-18cc-4b97-ace0-42365f0e1212
+:END:
+
+Let $g$ be a Permutation of $\{1,\dots,n\}$. Write
+
+$$ \prod_{i\lt j}(g(i)-g(j))=\varepsilon\prod_{i\lt j}(i-j) $$
+
+with $\varepsilon=\pm1$. We define the {{{dfn(Sign)}}} of $g$ to be
+$\mathrm{sgn}(g)=\varepsilon$.
+
+We call permutations $\pi\in S_{n}$ with $\mathrm{sgn}(\pi)=1$ {{{dfn(Even)}}},
+and those with $\mathrm{sgn}(\pi)=-1$ {{{dfn(Odd)}}}.
+
+
+*** Proposition: Alternating Subgroup
+:PROPERTIES:
+:CUSTOM_ID: h-9922e51d-c2a9-4bd0-8713-4acd7da94494
+:END:
+
+Let $n\gt 1$. The permutations $\pi\in S_{n}$ with $\mathrm{sgn}(\pi)=1$
+form a normal subgroup $A_{n}\lt S_{n}$ of index 2. We call $A_{n}$ the
+{{{dfn(Alternating Group)}}} of degree $n$.
+
+*** Definition: Permutation Group
+:PROPERTIES:
+:CUSTOM_ID: h-8d6c2399-40ea-4d60-be40-f7c781685d28
+:END:
+
+Each subgroup of $S_{n}$ is called a {{{dfn(Permutation Group)}}} of
+degree $n$.

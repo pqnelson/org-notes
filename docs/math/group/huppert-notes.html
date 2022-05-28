@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2022-05-28 Sat 16:08 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notes on Huppert</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Alex Nelson">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Notes on Huppert</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-8453cd0c-faac-409f-b871-5a079daf8b98">1. Basics</a>
+<ul>
+<li><a href="#h-e99b44eb-c48e-4e35-8307-c3a062b2d800">1.1. The Group Axioms</a></li>
+<li><a href="#h-87333076-41f1-44f8-8721-4e73e6ccdf6f">1.2. Subgroups</a></li>
+<li><a href="#h-67822d89-f033-4b7d-89ef-66b8bb89e06a">1.3. Normal Subgroups, Quotient Groups, and Group Morphisms</a></li>
+<li><a href="#h-69de70ea-4c86-4bed-8432-1486c2c58c1a">1.4. Automorphisms</a></li>
+<li><a href="#h-af42c3ae-8e4c-49e0-b80d-5a453040f2be">1.5. Permutation Groups</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+This is just the "theorem statements" and definitions. No proof given,
+since they can be found elsewhere.
+</p>
+
+<p>
+It seems the German word <i>Hilfssatz</i> translates to "Lemma".
+</p>
+
+<p>
+<i>Folgerung</i> seems to be "Corollary"?
+</p>
+
+<p>
+<i>Bemerkung</i> is "remark".
+</p>
+
+<p>
+<i>Satz</i> is "proposition" (well, literally "sentence", but it corresponds
+to a "lesser theorem").
+</p>
+
+<div id="outline-container-h-8453cd0c-faac-409f-b871-5a079daf8b98" class="outline-2">
+<h2 id="h-8453cd0c-faac-409f-b871-5a079daf8b98"><span class="section-number-2">1.</span> Basics</h2>
+<div class="outline-text-2" id="text-h-8453cd0c-faac-409f-b871-5a079daf8b98">
+</div>
+<div id="outline-container-h-e99b44eb-c48e-4e35-8307-c3a062b2d800" class="outline-3">
+<h3 id="h-e99b44eb-c48e-4e35-8307-c3a062b2d800"><span class="section-number-3">1.1.</span> The Group Axioms</h3>
+<div class="outline-text-3" id="text-h-e99b44eb-c48e-4e35-8307-c3a062b2d800">
+</div>
+
+<div id="outline-container-h-704aaf05-84b2-4b4c-a87e-97428d0ee36c" class="outline-4">
+<h4 id="h-704aaf05-84b2-4b4c-a87e-97428d0ee36c"><span class="section-number-4">1.1.1.</span> Axioms</h4>
+<div class="outline-text-4" id="text-h-704aaf05-84b2-4b4c-a87e-97428d0ee36c">
+<p>
+The nonempty set \(G\) is called a <dfn>Group</dfn> if it satisfies the
+following:
+</p>
+
+<ol class="org-ol">
+<li>For each pair \((A,B)\) of elements \(A,B\in G\), there exists a unique element
+\(C\) of \(G\), which we write as \(C=AB\). We call \(C\) the <i>product</i> of
+\(A\) and \(B\).</li>
+<li>For every \(A,B,C\in G\), we have the product be associative: \((AB)C=A(BC)\).</li>
+<li>There is an element \(E\in G\) such that \(EA=A\) for every \(A\in G\).</li>
+<li>For every \(A\in G\) there is a \(B\in G\) such that \(BA=E\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-88f7bca2-2c9f-4881-babf-e777467194f4" class="outline-4">
+<h4 id="h-88f7bca2-2c9f-4881-babf-e777467194f4"><span class="section-number-4">1.1.2.</span> Corollary: products of all tuples of a set of group elements</h4>
+<div class="outline-text-4" id="text-h-88f7bca2-2c9f-4881-babf-e777467194f4">
+<p>
+For any non-empty subsets of a group \(G\), we can multiply them together.
+We recursively define the product \(P_{k}(-)\) &#x2014; if \(A_{1}\), \(A_{2}\), &hellip; are elements of
+\(G\), and the subscript on \(P\) indicates how many elements we're
+multiplying together &#x2014; by:
+</p>
+
+<ol class="org-ol">
+<li>\(P_{1}(A_{1})= \{A_{1}\}\)</li>
+<li>\(P_{2}(A_{1},A_{2})=\{A_{1}A_{2}\}\)</li>
+<li>\(P_{n}(A_{1},\dots,A_{h})=\{XY\mid X\in P_{k}(A_{1},\dots,A_{k}),
+   Y\in P_{m}(A_{k+1},\dots,A_{k+m}), k+m=n\}\)</li>
+</ol>
+
+<p>
+We usually write \(A_{1}\cdots A_{k}\) for \(P_{k}(A_{1},\dots,A_{k})\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-a0fa1517-c651-4693-87c8-9ebbfd45e83a" class="outline-4">
+<h4 id="h-a0fa1517-c651-4693-87c8-9ebbfd45e83a"><span class="section-number-4">1.1.3.</span> Corollary: existence of right inverse, identity element, inverse law</h4>
+<div class="outline-text-4" id="text-h-a0fa1517-c651-4693-87c8-9ebbfd45e83a">
+<ol class="org-ol">
+<li>\(E\) is the identity element of the group \(G\), so \(AE=A\) for each
+\(A\in G\)</li>
+<li>If \(BA=E\), then \(AB=E\)</li>
+<li>If \(AX=AY\) or \(XA=YA\), then \(X=Y\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-73ac7d0a-0de2-4abe-be8b-b5a46249be19" class="outline-4">
+<h4 id="h-73ac7d0a-0de2-4abe-be8b-b5a46249be19"><span class="section-number-4">1.1.4.</span> Corollary</h4>
+<div class="outline-text-4" id="text-h-73ac7d0a-0de2-4abe-be8b-b5a46249be19">
+<p>
+If \(G\) is a group, suppose \(A,B\in G\), then there exists an element
+\(X\in G\) such that \(AX=B\). There also exists an element \(Y\in G\) such
+that \(YA=B\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-5e43fa8c-806b-421e-ade0-e28d99fc96db" class="outline-4">
+<h4 id="h-5e43fa8c-806b-421e-ade0-e28d99fc96db"><span class="section-number-4">1.1.5.</span> Corollary: inverse is idempotent, inverse of products</h4>
+<div class="outline-text-4" id="text-h-5e43fa8c-806b-421e-ade0-e28d99fc96db">
+<ol class="org-ol">
+<li>For any \(A\in G\) there is a unique element \(X\in G\) such that \(AX=XA=E\).
+We call \(X\) the inverse element of \(A\) and denote \(X=A^{-1}\).</li>
+<li>We have for any \(A,B\in G\) the inverse of their product
+\((AB)^{-1}=B^{-1}A^{-1}\) and \((A^{-1})^{-1}=A\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-4db6575e-f769-4d8d-8040-540f4ea69256" class="outline-4">
+<h4 id="h-4db6575e-f769-4d8d-8040-540f4ea69256"><span class="section-number-4">1.1.6.</span> Definition: power of group element</h4>
+<div class="outline-text-4" id="text-h-4db6575e-f769-4d8d-8040-540f4ea69256">
+<p>
+We can define the \(n^{\text{th}}\) power of a group element \(A\in G\) by
+\(A^{0}=E\), \(A^{n+1}=A^{n}A\) if \(n\gt 0\), and \(A^{-n}=(A^{n})^{-1}\). We
+also have \(A^{m+n}=A^{m}A^{n}\) for any \(m,n\in\mathbb{Z}\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-ef973ab0-8bfb-4675-bcb4-bee978838160" class="outline-4">
+<h4 id="h-ef973ab0-8bfb-4675-bcb4-bee978838160"><span class="section-number-4">1.1.7.</span> Definition: Order of Group</h4>
+<div class="outline-text-4" id="text-h-ef973ab0-8bfb-4675-bcb4-bee978838160">
+<p>
+We denote, for any set \(M\), its cardinality by \(|M|\). Then we define the
+<dfn>Order</dfn> of a group \(G\) to be the cardinality of its underlying
+set, and denote it by \(|G|\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-1bce340b-9b94-49e0-b65f-2b7f78025390" class="outline-4">
+<h4 id="h-1bce340b-9b94-49e0-b65f-2b7f78025390"><span class="section-number-4">1.1.8.</span> Definition: Group isomorphism</h4>
+<div class="outline-text-4" id="text-h-1bce340b-9b94-49e0-b65f-2b7f78025390">
+<p>
+Two groups, \(G_{1}\) and \(G_{2}\), are called isomorphic if there are
+there is a one-to-one mapping \(\pi\) from \(G_{1}\) to \(G_{2}\)
+</p>
+
+<p>
+\(\pi(gh) = \pi(g)\pi(h)\)
+</p>
+
+<p>
+for all elements \(g\) and \(h\) from \(G_{1}\). We then write \(G_{1}\cong G_{2}\). Group
+isomorphism is obviously an equivalence relation.
+</p>
+
+<p>
+By <dfn>Group Property</dfn> we understand a property
+which if \(G\) has it, then every group isomorphic to \(G\) also has the property.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-d8f28fcc-1815-4ae7-8068-c0f8d1205f12" class="outline-4">
+<h4 id="h-d8f28fcc-1815-4ae7-8068-c0f8d1205f12"><span class="section-number-4">1.1.9.</span> Corollary: Isomorphisms preserve identity element and inverses</h4>
+<div class="outline-text-4" id="text-h-d8f28fcc-1815-4ae7-8068-c0f8d1205f12">
+<p>
+If \(\pi\colon G_{1}\to G_{2}\) is an isomorphism and \(E_{1}\in G_{1}\) and
+\(E_{2}\in G_{2}\) are identity element, then \(\pi(E_{1})=E_{2}\).
+</p>
+
+<p>
+Further, for any \(g\in G_{1}\) we have \(\pi(g^{-1})=[\pi(g)]^{-1}\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-74b9e9f7-7512-4adf-8d1f-c8f006869080" class="outline-4">
+<h4 id="h-74b9e9f7-7512-4adf-8d1f-c8f006869080"><span class="section-number-4">1.1.10.</span> Definition: Abelian Group</h4>
+<div class="outline-text-4" id="text-h-74b9e9f7-7512-4adf-8d1f-c8f006869080">
+<p>
+The group \(G\) is called <dfn>Abelian</dfn> (or also <i>commutative</i>),
+if \(AB = BA\) for all elements \(A\) and \(B\) from \(G\). Then each
+product \(A_{1}\dots A_{n}\) with \(A_{i}\in G\) independent of the
+arrangement of the $A<sub>i</sub>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-87333076-41f1-44f8-8721-4e73e6ccdf6f" class="outline-3">
+<h3 id="h-87333076-41f1-44f8-8721-4e73e6ccdf6f"><span class="section-number-3">1.2.</span> Subgroups</h3>
+<div class="outline-text-3" id="text-h-87333076-41f1-44f8-8721-4e73e6ccdf6f">
+</div>
+
+<div id="outline-container-h-64445783-8682-45c5-80ed-933c9f85081f" class="outline-4">
+<h4 id="h-64445783-8682-45c5-80ed-933c9f85081f"><span class="section-number-4">1.2.1.</span> Definition</h4>
+<div class="outline-text-4" id="text-h-64445783-8682-45c5-80ed-933c9f85081f">
+<p>
+We call a subset \(U\subset G\) a <dfn>Subgroup</dfn> of \(G\) if it is
+closed under \(G\)'s binary operator:
+</p>
+
+<p>
+For any \(u_{1}\), \(u_{2}\in U\) we have \(u_{1}u_{2}\in U\); for any \(u\in
+U\), we have \(u^{-1}\in U\). We also have \(E\in U\), but this follows by
+combining these two conditions together.
+</p>
+
+<p>
+We write \(U\leq G\) to indicate \(U\) is a subgroup of \(G\). If \(U\neq G\),
+then we write \(U\lt G\).
+</p>
+
+<p>
+Every group \(G\) has a subgroup \(\mathbf{1}=\{E\}\) consisting of only the
+identity element. We call \(\mathbf{1}\) the <dfn>Trivial Subgroup</dfn>
+of \(G\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-a7987416-4736-41cd-ba0f-039115842280" class="outline-4">
+<h4 id="h-a7987416-4736-41cd-ba0f-039115842280"><span class="section-number-4">1.2.2.</span> Corollary</h4>
+<div class="outline-text-4" id="text-h-a7987416-4736-41cd-ba0f-039115842280">
+<p>
+If \(U\) is a finite subset of the group \(G\), and if for any
+\(u_{1}\), \(u_{2}\), from \(U\) we also have \(u_{1}u_{2}\in U\),
+then \(U\) is a subgroup of \(G\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-c68c9124-0f89-4845-a035-7c9f5fc42c51" class="outline-4">
+<h4 id="h-c68c9124-0f89-4845-a035-7c9f5fc42c51"><span class="section-number-4">1.2.3.</span> Proposition: intersection of subgroups form a subgroup</h4>
+<div class="outline-text-4" id="text-h-c68c9124-0f89-4845-a035-7c9f5fc42c51">
+<p>
+If \(U_{i}\) is a family of subgroups of \(G\) indexed by \(i\in I\),
+then \(\bigcap_{i\in I}U_{i}\) is a subgroup of \(G\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-d012307d-d241-41cf-ada7-8901beedf270" class="outline-4">
+<h4 id="h-d012307d-d241-41cf-ada7-8901beedf270"><span class="section-number-4">1.2.4.</span> Definition: subgroup generated by a subset</h4>
+<div class="outline-text-4" id="text-h-d012307d-d241-41cf-ada7-8901beedf270">
+<p>
+Let \(M\) be a subset of a group \(G\). We denote by \(\langle M\rangle\) the
+intersection of all subgroups of \(G\) which contain \(M\). Obviously
+\(\langle M\rangle\) is the smallest subgroup of \(G\) containing \(M\).
+</p>
+
+<p>
+If we write \(M^{-1}=\{g^{-1}\mid g\in M\}\), then we can write
+</p>
+
+\begin{equation}
+\langle M\rangle = \{ e,\; x_{1}\dots x_{s}\mid x_{j}\in M\cup M^{-1}, 1\leq j\leq s, s\in\mathbb{N}\}.
+\end{equation}
+
+<p>
+If \(M=\{A,B,\dots\}\), then we can write \(\langle M\rangle=\langle A,B,\dots\rangle\).
+</p>
+
+<p>
+If \(G=\langle M\rangle\), then we call \(M\) a set of <dfn>Generating Set</dfn>
+for \(G\).
+</p>
+
+<p>
+We call a group generated by a single element <dfn>Cyclic</dfn>.
+If we always write \(A^{0}=E\), then \(\langle A\rangle\) consists of the
+elements \(A^{m}\) with \(m=0,\pm1,\pm2,\dots\) which are not necessarily
+all different.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-9ab0f0c3-cd41-4530-ac95-9bf3df607347" class="outline-4">
+<h4 id="h-9ab0f0c3-cd41-4530-ac95-9bf3df607347"><span class="section-number-4">1.2.5.</span> Proposition: Multiply a subset by group element, left cosets</h4>
+<div class="outline-text-4" id="text-h-9ab0f0c3-cd41-4530-ac95-9bf3df607347">
+<p>
+If \(U\leq G\) is a subgroup, then \(gU=\{gu\mid u\in U\}\) for any \(g\in G\)
+which we call <dfn>Left Cosets</dfn> of \(U\) in \(G\). For any \(g,h\in G\)
+we have either \(gU\cap hU=\emptyset\) or \(gU=hU\).
+</p>
+
+<p>
+The group \(G\) is the disjoint union of all different left cosets \(gU\).
+</p>
+
+<p>
+If the set \(\mathcal{R}\) contains exactly one element from each left
+coset of \(U\), then we call \(\mathcal{R}\) a system of <dfn>Left Coset Representatives</dfn> of \(U\) in \(G\).
+</p>
+
+<p>
+The decomposition
+</p>
+\begin{equation}
+G = \bigcup_{R\in \mathcal{R}} RU
+\end{equation}
+<p>
+we call the "decomposition of \(G\) into left cosets by \(U\)".
+</p>
+
+<p>
+All cosets of \(U\) have the same cardinality \(|U|\). We call the
+cardinality \(|\mathcal{R}|\) the <dfn>Index</dfn> of \(U\) in \(G\) and write
+\([G:U]\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-b064cd35-cc87-431b-b4e9-51d8c2a5c3e8" class="outline-4">
+<h4 id="h-b064cd35-cc87-431b-b4e9-51d8c2a5c3e8"><span class="section-number-4">1.2.6.</span> Proposition: Right cosets, factoring decomposition</h4>
+<div class="outline-text-4" id="text-h-b064cd35-cc87-431b-b4e9-51d8c2a5c3e8">
+<ol class="org-ol">
+<li>Let \(U\) be a subgroup of \(G\). If \(G=\bigcup_{R\in\mathcal{R}}UR\) is
+the decomposition of \(G\) into right cosets of \(U\), then
+\(G=\bigcup_{R\in\mathcal{R}}R^{-1}U\) is a decomposition into left
+cosets of \(U\). (Specifically, we don't have between distinguish a
+left and right index of \(U\) in \(G\).)</li>
+<li>If \(G=\bigcup_{R\in \mathcal{R}}UR\) is a decomposition of \(G\) into
+right cosets of the subgroup \(U\), and \(U=\bigcup_{S\in\mathcal{S}}BS\) is a
+decomposition of \(U\) by \(B\), then \(G=\bigcup_{S\in\mathcal{S},R\in \mathcal{R}} BSR\) is the decomposition of \(G\) into right-cosets of
+\(B\). In particular, \([G:B] = [G:U][U:B]\).</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-h-9492837d-e706-479e-a64a-505d563fa05b" class="outline-4">
+<h4 id="h-9492837d-e706-479e-a64a-505d563fa05b"><span class="section-number-4">1.2.7.</span> Lagrange's Theorem</h4>
+<div class="outline-text-4" id="text-h-9492837d-e706-479e-a64a-505d563fa05b">
+<p>
+Let \(G\) be a finite group, let \(H\leq G\) be a subgroup. Then
+\(|G|=|H|[G:H]\). In particular, the order and index of a subgroup of a
+finite group always divide the group's order.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-6c7e08bd-d4f9-4021-9ae9-f2e7e6512294" class="outline-4">
+<h4 id="h-6c7e08bd-d4f9-4021-9ae9-f2e7e6512294"><span class="section-number-4">1.2.8.</span> Definition: Order of element, exponent of group</h4>
+<div class="outline-text-4" id="text-h-6c7e08bd-d4f9-4021-9ae9-f2e7e6512294">
+<p>
+Let \(g\) be an element of group \(G\). The smallest number \(n\in\NN\) with
+\(g^{n}=E\) we call the <dfn>Order</dfn> of \(g\), denoted \(o(g)\).
+If there is no such number, then \(o(g)=\infty\).
+</p>
+
+<p>
+The least common multiple of the orders of all elements \(g\in G\) is the
+<dfn>Exponent</dfn> of \(G\), and denote this by \(\exp(G)\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-8ca37550-9242-4fe8-bb8a-9ac652d7ada5" class="outline-4">
+<h4 id="h-8ca37550-9242-4fe8-bb8a-9ac652d7ada5"><span class="section-number-4">1.2.9.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-8ca37550-9242-4fe8-bb8a-9ac652d7ada5">
+<p>
+Let G be a group. Let \(g\in G\) with \(o(g) = n\lt\infty\). Then:
+</p>
+
+<ol class="org-ol">
+<li>\(n|m\) follows from \(g^{m} = E\).</li>
+<li>\(\langle g\rangle = \{E, g, g^{2}, \dots, g^{n-1}\}\) and
+\(\langle g\rangle = o(g) = n\).
+In particular, \(o(g)\) divides \(|G|\) for finite \(G\).</li>
+<li>If k is an integer rational number, then \(o(g^{k}) = n/(n,k)\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-9733f1a5-14db-43e0-96bd-c0be59cf5135" class="outline-4">
+<h4 id="h-9733f1a5-14db-43e0-96bd-c0be59cf5135"><span class="section-number-4">1.2.10.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-9733f1a5-14db-43e0-96bd-c0be59cf5135">
+<p>
+Every group of prime order is cyclic.
+</p>
+
+<p>
+(This is only the first in a long line of theorems where we derive
+information about \(G\) from prime
+factorizations of \(|G|\).)
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-37a9ae10-db64-47ff-bdaa-e1ba71512c2f" class="outline-4">
+<h4 id="h-37a9ae10-db64-47ff-bdaa-e1ba71512c2f"><span class="section-number-4">1.2.11.</span> Definition: Multiplying subsets</h4>
+<div class="outline-text-4" id="text-h-37a9ae10-db64-47ff-bdaa-e1ba71512c2f">
+<p>
+If \(A\) and \(B\) are subsets of the group \(G\), then we set
+\(AB=\{ab\mid a\in A,b\in B\}\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-0dec1ad8-7dcc-4798-bfa8-4f4141921e31" class="outline-4">
+<h4 id="h-0dec1ad8-7dcc-4798-bfa8-4f4141921e31"><span class="section-number-4">1.2.12.</span> Lemma</h4>
+<div class="outline-text-4" id="text-h-0dec1ad8-7dcc-4798-bfa8-4f4141921e31">
+<ol class="org-ol">
+<li>If \(A = \bigcup_{R\in \mathcal{R}} R(A\cap B)\) is the coset decomposition from A to \(A\cap B\),
+then \(AB = \bigcup_{R\in \mathcal{R}} RB\) is a disjoint
+decomposition of the set \(AB\). In particular, if \(A\) and \(B\) are finite,
+then \(|AB|=|A||B|/|A\cap B|\).</li>
+<li>\(AB\) is a subgroup of \(G\) if and only if \(AB = BA\).</li>
+<li>(Dedehind identity) \(A\leq C\leq G\) and \(C\subset AB\), then it
+follows that \(C=AB\cap C=A(B\cap C)\).</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-h-2c3b1285-7697-4464-8f9c-0f28c0405e56" class="outline-4">
+<h4 id="h-2c3b1285-7697-4464-8f9c-0f28c0405e56"><span class="section-number-4">1.2.13.</span> Lemma</h4>
+<div class="outline-text-4" id="text-h-2c3b1285-7697-4464-8f9c-0f28c0405e56">
+<p>
+Let \(A\) and \(B\) be subgroups of \(G\) of finite
+Index. Then:
+</p>
+
+<ol class="org-ol">
+<li>\([G: A\cap B] \leq [G : A][G : B]\).</li>
+<li>If \([G: A]\) and \([G: B]\) are divisors, then \([G:A\cap B]=[G:A][G:B]\).
+If \(G\) is finite, then \(G = AB\).</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-h-eb8ccf50-688d-44f2-b5b2-6bb89e393664" class="outline-4">
+<h4 id="h-eb8ccf50-688d-44f2-b5b2-6bb89e393664"><span class="section-number-4">1.2.14.</span> Lemma: Conjugation by Element</h4>
+<div class="outline-text-4" id="text-h-eb8ccf50-688d-44f2-b5b2-6bb89e393664">
+<p>
+If \(a\) and \(g\) are elements of \(G\), then we let \(g^{a}=a^{-1}ga\).
+We call the mapping \(g\to g^{a}\) the transformation with \(a\). then
+the following rules apply:
+</p>
+
+<ul class="org-ul">
+<li>(1) \(g^{ab}=(g^{a})^{b}\).</li>
+<li>(2) \((gh)^{a}=g^{a}h^{a}\)</li>
+<li>(3) \((g^{a})^{-1} = (g^{-1})^{a}\)</li>
+</ul>
+
+<p>
+We also define \(g^{a+b}\) by \(g^{a+b}=g^{a}g^{b}\). However, it should be noted
+that then i. a. \(g^{a+b}\neq g^{b+a}\) because the elements \(g^{a}\) and \(g^{b}\) are not
+necessary interchangeable. But the following always applies:
+</p>
+
+<ul class="org-ul">
+<li>(4) \(g^{ab+ac} = (g^{a})^{b+c}\) and</li>
+<li>(5) \(g^{ba + ca} = (g^{b+c})^{a}\).</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-c6a9a205-731a-4c41-97ae-e615125125bc" class="outline-4">
+<h4 id="h-c6a9a205-731a-4c41-97ae-e615125125bc"><span class="section-number-4">1.2.15.</span> Definition: Conjugating a subset, subgroup</h4>
+<div class="outline-text-4" id="text-h-c6a9a205-731a-4c41-97ae-e615125125bc">
+<p>
+If \(M\) is a nonempty subset of \(G\) and \(g\in G\),
+so we set \(M^{g} = \{m^{g}\mid m\in M\}\).
+We call the sets \(M^{g}\) the conjugates of \(M\) in \(G\).
+</p>
+
+<p>
+If \(U\) is a subgroup of \(G\), then \(U^{g}\) is a subgroup of \(G\) isomorphic to \(U\):
+The group property of \(U^{g}\) follows from 2.14 (2) and (3).
+The mapping \(\pi\) from \(U\) to \(U^{g}\) with \(\pi(u)= u^{g}\), which is divided by \(\alpha\) with
+\(\alpha(u^{g}) = (u^{g})^{g^{-1}}\) is reversed, by 2.14 (2) there is an
+isomorphism from \(U\) to \(U^{g}\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-774e5b95-b7df-4985-86bf-d2729ccb8f44" class="outline-4">
+<h4 id="h-774e5b95-b7df-4985-86bf-d2729ccb8f44"><span class="section-number-4">1.2.16.</span> Proposition: Conjugacy classes, the Class Equation</h4>
+<div class="outline-text-4" id="text-h-774e5b95-b7df-4985-86bf-d2729ccb8f44">
+<p>
+Let \(M=\{m\}\) be a set of one element. Then we call the set \(\{m^{g}\mid g\in G\}\)
+of elements conjugate to \(m\) in \(G\) the <dfn>Conjugacy Class</dfn> \(m\) in \(G\).
+The conjugacy classes are equivalence classes for the following
+equivalence relation:
+</p>
+
+<p>
+Let \(x\sim y\) if there is a \(g\in G\) such that \(x^{g} = y\). If \(G\) is
+finite, then the partition into conjugacy classes yields a disjoint decomposition
+\(G = \bigcup^{h}_{i}R_{i}\)
+and the equation
+</p>
+\begin{equation}
+|G| = \sum^{h}_{i=1}|R_{i}|\quad\mbox{(so-called class equation)}
+\end{equation}
+<p>
+where the \(R_{i}\) are the different conjugacy classes of \(G\).
+We call the number \(h\) of conjugacy classes the <dfn>Class Number of \(G\)</dfn>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-1dba1a8e-07d9-42c8-8364-2c5a138af76e" class="outline-4">
+<h4 id="h-1dba1a8e-07d9-42c8-8364-2c5a138af76e"><span class="section-number-4">1.2.17.</span> Definition: Normalizer, Centralizer, Center</h4>
+<div class="outline-text-4" id="text-h-1dba1a8e-07d9-42c8-8364-2c5a138af76e">
+<ol class="org-ol">
+<li>Let \(M\) be a subset of \(G\). Then we call \(N_{G}(M) = \{g|g\in G, M^{g}=M\}\)
+the <dfn>Normalizer</dfn> of \(M\) in \(G\). Obviously \(N_{G}(M)\) is a subgroup
+by \(G\). If \(U\) is a subgroup of \(G\), then \(U\leq N_{G}(U)\) holds. Apparently is
+\(N_{G}(M^{X} = N_{G}(M)^{X}\) for all \(X\in G\).</li>
+<li>The set \(C_{G}(M) = \{g\mid g\in G, gm=mg\mbox{ for all }m\in M\}\)
+is called the <dfn>Centralizer</dfn> of \(M\) in \(G\). \(C_{G}(M)\) is also a subgroup
+of \(G\), and obviously \(C_{G}(M)\leq N_{G}(M)\) holds. If \(U\) is an
+Abelian subgroup of \(G\), then we have \(U\leq C_{G}(U)\).</li>
+<li>We set \(C_{G}(G) = Z(G)\) and call this the <dfn>Center</dfn> of G.
+So the center \(Z(G)\) of \(G\) consists of those elements
+of \(G\), which commute with every element of \(G\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-9e20e311-07f3-4751-870a-7563e813cec3" class="outline-4">
+<h4 id="h-9e20e311-07f3-4751-870a-7563e813cec3"><span class="section-number-4">1.2.18.</span> Proposition: Number of Conjugacy Classes</h4>
+<div class="outline-text-4" id="text-h-9e20e311-07f3-4751-870a-7563e813cec3">
+<p>
+The index \([G:N_{G}(M)]\) is the number of distinct conjugacy classes of
+\(M\) in \(G\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-97e72420-0692-43b8-8568-7521bc51569d" class="outline-4">
+<h4 id="h-97e72420-0692-43b8-8568-7521bc51569d"><span class="section-number-4">1.2.19.</span> Proposition: Double Cosets Partition \(G\)</h4>
+<div class="outline-text-4" id="text-h-97e72420-0692-43b8-8568-7521bc51569d">
+<p>
+Let \(U\) and \(B\) be subgroups of \(G\). We call
+\(U g B = \{ugv\mid u\in U, v\in B\}\) (with \(g\in G\))
+<dfn>Double Cosets</dfn> of \(U\),
+\(B\) in \(G\).
+</p>
+
+<p>
+From \(U g B\cap U h B\neq\emptyset\) it follows \(UgB = UhB\).
+So the double cosets yield a disjoint decomposition of \(G\).
+If \(G\) is finite, then
+</p>
+
+<p>
+\[G=\bigcup^{n}_{i}Ug_{i}B\quad\mbox{(disjoint)}\]
+</p>
+
+<p>
+and
+</p>
+
+<p>
+\[|G| = \sum^{n}_{i=1}\frac{|U||B|}{|U^{g_{i}}\cap B|}.\]
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-8265e1a5-18e1-4704-b7f4-966a1c19fd79" class="outline-4">
+<h4 id="h-8265e1a5-18e1-4704-b7f4-966a1c19fd79"><span class="section-number-4">1.2.20.</span> Proposition: Subgroups of Cyclic Group</h4>
+<div class="outline-text-4" id="text-h-8265e1a5-18e1-4704-b7f4-966a1c19fd79">
+<p>
+Let \(G = \langle g\rangle\) be a cyclic group of order \(o(g)\). Then
+there is exactly one subgroup of order \(d\) for each factor \(d\) of \(o(g)\)
+of \(G\), namely \(\langle g^{k}\rangle\) with \(k = o(g)/d\).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-67822d89-f033-4b7d-89ef-66b8bb89e06a" class="outline-3">
+<h3 id="h-67822d89-f033-4b7d-89ef-66b8bb89e06a"><span class="section-number-3">1.3.</span> Normal Subgroups, Quotient Groups, and Group Morphisms</h3>
+<div class="outline-text-3" id="text-h-67822d89-f033-4b7d-89ef-66b8bb89e06a">
+</div>
+
+<div id="outline-container-h-352c2fdd-3d41-44ff-8721-211e29497b91" class="outline-4">
+<h4 id="h-352c2fdd-3d41-44ff-8721-211e29497b91"><span class="section-number-4">1.3.1.</span> Definition</h4>
+<div class="outline-text-4" id="text-h-352c2fdd-3d41-44ff-8721-211e29497b91">
+<p>
+The subgroup \(N\) of \(G\) is called a <dfn>Normal Subgroup</dfn> of \(G\) (often also
+called normal subgroup or invariant subgroup) if
+\(N^{g}\leq N\) holds for all \(g\) from \(G\). We then write \(N\trianglelefteq G\)
+or \(N\triangleleft G\), if \(N\) differs from \(G\). Every group \(G\) owns the
+trivial normal subgroup \(G\) and \(\mathbf{1}\).
+</p>
+
+<p>
+If \(G\) has only the normal subgroups \(\mathbf{1}\) and \(G\), then we call
+\(G\) a <dfn>Simple</dfn> group. Obviously every group of prime order is
+simple.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-5a442315-05ac-415d-89bd-9b2fda7d0df8" class="outline-4">
+<h4 id="h-5a442315-05ac-415d-89bd-9b2fda7d0df8"><span class="section-number-4">1.3.2.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-5a442315-05ac-415d-89bd-9b2fda7d0df8">
+<p>
+Let \(N\) be a subgroup of \(G\). Then the following are equivalent:
+</p>
+<ol class="org-ol">
+<li>\(N\trianglelefteq G\).</li>
+<li>\(N^{g} = N\) for all \(g\in G\).</li>
+<li>\(gN=Ng\) for all \(g\in G\).</li>
+<li>Every left coset of \(N\) is a right coset of \(N\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-19159c74-9d00-4be4-9a0d-53c7b014067a" class="outline-4">
+<h4 id="h-19159c74-9d00-4be4-9a0d-53c7b014067a"><span class="section-number-4">1.3.3.</span> Remark</h4>
+<div class="outline-text-4" id="text-h-19159c74-9d00-4be4-9a0d-53c7b014067a">
+<p>
+If \(N\) is a subgroup of \(G\) with \([G : N] = 2\), then
+\(N\triangleleft G\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-3bdf8108-d845-4c7c-bebd-ffea9aba34e1" class="outline-4">
+<h4 id="h-3bdf8108-d845-4c7c-bebd-ffea9aba34e1"><span class="section-number-4">1.3.4.</span> Proposition: Cosets of \(N\) form group iff \(N\) is normal subgroup</h4>
+<div class="outline-text-4" id="text-h-3bdf8108-d845-4c7c-bebd-ffea9aba34e1">
+<p>
+We have \((gN)(hN)=gh N\) on the set of left cosets of subgroup \(N\) of \(G\)
+be well-defined multiplication operator precisely when \(N\) is normal in \(G\).
+</p>
+
+<p>
+When equipped with this multiplication, the cosets of \(N\) form a group.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-d1069450-7145-4d75-b0e2-284ed0498e33" class="outline-4">
+<h4 id="h-d1069450-7145-4d75-b0e2-284ed0498e33"><span class="section-number-4">1.3.5.</span> Definition: Quotient Group</h4>
+<div class="outline-text-4" id="text-h-d1069450-7145-4d75-b0e2-284ed0498e33">
+<p>
+If \(N\) is a normal subgroup of \(G\), then the cosets of  \(N\)
+equipped with the multiplication \((gN)(hN)=ghN\)
+form a group called the <dfn>factor group</dfn> of \(G\) by \(N\).
+We denote it by \(G/N\). Obviously \(|G/N| = [G : N]\) holds.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-2fe4d8cf-7547-444d-b89d-dca92f38d856" class="outline-4">
+<h4 id="h-2fe4d8cf-7547-444d-b89d-dca92f38d856"><span class="section-number-4">1.3.6.</span> Definition: Homomorphism, Epimorphism, Monomorphism, Endomorphism</h4>
+<div class="outline-text-4" id="text-h-2fe4d8cf-7547-444d-b89d-dca92f38d856">
+<ol class="org-ol">
+<li>The mapping \(\pi\) from the group \(G\) to the group \(H\) is called a
+<dfn>Homomorphism</dfn> from \(G\) to \(H\) if for any \(g_{1},g_{2}\in G\)
+we have \(\pi(g_{1}g_{2}) = \pi(g_{1})\pi(g_{2})\).
+We write \(\pi(G) = G^{\pi}=\{\pi(g)\mid g\in G\}\)
+and call \(\pi(G) = G^{\pi}\) the <dfn>Image of \(G\) under \(\pi\)</dfn>.</li>
+<li>The homomorphism \(\pi\) from \(G\) to \(H\) is called an <dfn>Epimorphism</dfn>
+if \(\pi\) is a surjective mapping from \(G\) to \(H\), i.e. if \(H = G^{\pi}\) holds.</li>
+<li>The homomorphism \(\pi\) of \(G\) in \(H\) is called a <dfn>Monomorphism</dfn>,
+if \(\pi\) is an injective mapping from \(G\) to \(\pi(G)\).</li>
+<li>A homomorphism from \(G\) to \(G\) is called an <dfn>Endomorphism</dfn> of \(G\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-b49f0818-e110-4708-8725-ad7f8acb68e9" class="outline-4">
+<h4 id="h-b49f0818-e110-4708-8725-ad7f8acb68e9"><span class="section-number-4">1.3.7.</span> Remark</h4>
+<div class="outline-text-4" id="text-h-b49f0818-e110-4708-8725-ad7f8acb68e9">
+<p>
+Let \(\pi\) be a homomorphism from \(G\) to \(H\).
+</p>
+
+<ol class="org-ol">
+<li>If \(E\) is the identity element of \(G\), then \(\pi(E)\) is the identity element of \(H\).</li>
+<li>For each \(g\in G\) we have \(\pi(g^{-1})= \pi(g)^{-1}\).</li>
+<li>\(\pi(G) = \{\pi(g)\mid g\in G\}\) is a subgroup of \(H\).</li>
+<li>If \(M\) is a generator system of \(G\), then the homomorphism is
+\(\pi\) is uniquely determined by knowing \(\pi(m)\) for all \(m\in M\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-2e7faccd-738e-408f-b535-a451dadf2893" class="outline-4">
+<h4 id="h-2e7faccd-738e-408f-b535-a451dadf2893"><span class="section-number-4">1.3.8.</span> Fundamental theorem on homomorphisms</h4>
+<div class="outline-text-4" id="text-h-2e7faccd-738e-408f-b535-a451dadf2893">
+<ol class="org-ol">
+<li>If \(R\) is a normal subgroup of \(G\), then the mapping is \(\alpha\) with
+\(\alpha(g)=gR\) an epimorphism from \(G\) to \(G/R\). We call \(\alpha\) the
+<dfn>natural homomorphism</dfn> from \(G\) to \(G/R\).</li>
+<li>Let \(\pi\) be a homomorphism from \(G\) to \(H\). Let \(K=\{g|g\in G,\pi(g)=e\}\).
+We call \(K\) the <dfn>kernel of \(\pi\)</dfn>.
+Then \(K\) is a normal subgroup of \(G\), and it gives a monomorphism
+\(\varphi\) from \(G/K\) to \(H\) with \(\alpha\varphi=\pi\).
+In particular, \(G/K = \pi(G)\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-8b734a38-0c43-44b7-881e-60c6d13f1351" class="outline-4">
+<h4 id="h-8b734a38-0c43-44b7-881e-60c6d13f1351"><span class="section-number-4">1.3.9.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-8b734a38-0c43-44b7-881e-60c6d13f1351">
+<p>
+If the \(N_{i}\) with \(i\in I\) are normal subgroups of \(G\), then both their
+product \(\langle N_{i}\mid i\in I\rangle\) and their intersection
+\(\bigcap_{i \in I}N_{i}\) are normal subgroups of \(G\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-c3f12e91-787c-452d-a321-ab56a53301ad" class="outline-4">
+<h4 id="h-c3f12e91-787c-452d-a321-ab56a53301ad"><span class="section-number-4">1.3.10.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-c3f12e91-787c-452d-a321-ab56a53301ad">
+<p>
+Let \(N\) be a normal subgroup of \(G\).
+</p>
+
+<ol class="org-ol">
+<li>Among the subgroups \(U\) of \(G\) with \(N\leq U\leq G\) and all the
+subgroups of \(\bar{G} = G/N\) there is a one-to-one correspondence \(\alpha\)
+that preserves the lattice operations intersection and product
+defined by \(\alpha(U)= U/N\).</li>
+<li>For \(N\leq U\leq G\) we have \([G : U] = [G/N: U/N]\).</li>
+<li>If \(N\leq M\trianglelefteq G\), then \(M/N\trianglelefteq G/N\) and
+\((G/N)/(M/N) = G/M\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-cae183c2-faa1-4fd5-854d-b1d14b8ee95a" class="outline-4">
+<h4 id="h-cae183c2-faa1-4fd5-854d-b1d14b8ee95a"><span class="section-number-4">1.3.11.</span> Lemma</h4>
+<div class="outline-text-4" id="text-h-cae183c2-faa1-4fd5-854d-b1d14b8ee95a">
+<p>
+If \(N\) is a normal subgroup and \(U\) is a subgroup of \(G\),
+then the product \(\langle N,U\rangle\) agrees with the product \(UN\) defined in 1.2.11
+agree. In particular, then \(NU = UN\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-57a53144-a760-49a1-883b-17a6377c0019" class="outline-4">
+<h4 id="h-57a53144-a760-49a1-883b-17a6377c0019"><span class="section-number-4">1.3.12.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-57a53144-a760-49a1-883b-17a6377c0019">
+<p>
+If \(N\) is a normal subgroup of \(G\) and \(U\) is a subgroup of \(G\), then
+\(N\cap U\trianglelefteq U\) and \(UN/N\cong U/(U\cap N)\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-91e450e8-54d8-4a18-a3d6-47bce27193bb" class="outline-4">
+<h4 id="h-91e450e8-54d8-4a18-a3d6-47bce27193bb"><span class="section-number-4">1.3.13.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-91e450e8-54d8-4a18-a3d6-47bce27193bb">
+<p>
+If \(M\) and \(N\) are normal subgroups of \(G\) with \(M\cap N=\mathbf{1}\),
+then \(mn=nm\) holds for all \(m\) from \(M\) and all \(n\) from \(N\).
+We then say: \(M\) and \(N\) are elementwise commutable.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-ce7c6b14-fb65-48ab-8663-5ff23f941399" class="outline-4">
+<h4 id="h-ce7c6b14-fb65-48ab-8663-5ff23f941399"><span class="section-number-4">1.3.14.</span> Definition</h4>
+<div class="outline-text-4" id="text-h-ce7c6b14-fb65-48ab-8663-5ff23f941399">
+<p>
+If \(M\) is a subset of \(G\), then we write
+\(M^{G} := \langle m^{g}\mid m\in M,g\in G\rangle\).
+Obviously \(M^{G}\) is the smallest normal subgroup of \(G\) which contains \(M\).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-69de70ea-4c86-4bed-8432-1486c2c58c1a" class="outline-3">
+<h3 id="h-69de70ea-4c86-4bed-8432-1486c2c58c1a"><span class="section-number-3">1.4.</span> Automorphisms</h3>
+<div class="outline-text-3" id="text-h-69de70ea-4c86-4bed-8432-1486c2c58c1a">
+</div>
+
+<div id="outline-container-h-1398c842-03ab-41d4-b872-9c3f66710f5d" class="outline-4">
+<h4 id="h-1398c842-03ab-41d4-b872-9c3f66710f5d"><span class="section-number-4">1.4.1.</span> Definition</h4>
+<div class="outline-text-4" id="text-h-1398c842-03ab-41d4-b872-9c3f66710f5d">
+<p>
+An isomorphism from \(G\) to itself is called an <dfn>Automorphism</dfn>
+of \(G\). The automorphisms of \(G\) form a group \(A(G)\) with respect to the
+following product definition:
+</p>
+
+<p>
+For \(\alpha,\beta\in A(G)\) let \(\alpha\beta\) be defined by
+\((\beta\alpha)(g)=\beta(\alpha(g))\).
+</p>
+
+<p>
+The group \(A(G)\) is called the <dfn>Automorphism Group</dfn> of \(G\). If \(G\) is
+finite, then obviously \(A(G)\) is also finite
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-07a1b7e1-0aa9-42db-8170-56ba93a8f945" class="outline-4">
+<h4 id="h-07a1b7e1-0aa9-42db-8170-56ba93a8f945"><span class="section-number-4">1.4.2.</span> Proposition: Inner Automorphisms</h4>
+<div class="outline-text-4" id="text-h-07a1b7e1-0aa9-42db-8170-56ba93a8f945">
+<p>
+Every mapping \(\alpha\) of the form
+\(\alpha(x) = x^{g}\) with \(g\in G\)
+is an automorphism of \(G\), a so-called <dfn>Inner Automorphism</dfn>.
+</p>
+
+<p>
+Inner automorphisms form a normal subgroup \(I(G)\) of \(A(G)\).
+We call the group \(I(G)\) the inner automorphism group of \(G\).
+It is isomorphic to the factor group \(G/Z(G)\) of \(G\) modulo its center \(Z(G)\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-ad848a51-4768-4e90-94ea-5341b6e5d358" class="outline-4">
+<h4 id="h-ad848a51-4768-4e90-94ea-5341b6e5d358"><span class="section-number-4">1.4.3.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-ad848a51-4768-4e90-94ea-5341b6e5d358">
+<p>
+Let \(M\) and \(N\) be normal subgroups of \(G\) with \(M\leq N\).
+Let \(U\) be a subgroup of the automorphism group \(A(G)\) of \(G\).
+For every automorphism \(\alpha\) from \(U\), suppose \(\alpha(M)=M\) and \(\alpha(N)=N\) hold.
+Then the mapping \(\bar{\alpha}\) with
+</p>
+
+<p>
+\(\bar\alpha(nM) = \alpha(n)M\) for \(n\in N\)
+</p>
+
+<p>
+is an automorphism of \(N/M\), the assignment of \(\alpha\) to \(\bar\alpha\)
+gives a homomorphism of \(U\) in the automorphism group \(A(N/M)\) of \(N/M\).
+The kernel of this homomorphism consists of the automorphisms
+\(\alpha\) from \(U\) of the form \(\alpha(n) = nm(n)\) with \(m(n)\in M\) for
+all \(n\) from \(N\). The \(m(n)\) suffice for the functional equation \(m(n_{1}n_{2}) = m(n_{1})^{n_{2}}m(n_{2})\).
+(In §17 we shall have to speak in detail about this functional
+equation.)
+</p>
+
+<p>
+In the special case \(U = I(G)\) we give for the kernel of the composite
+Homomorphism from \(G\) (via \(I(G)\)) to \(A(N/M)\) the notation
+</p>
+
+<p>
+\(C_{G}(N/M) = \{G \mid n^{g}M = nM \mbox{ for every }n\in N\}\).
+</p>
+
+<p>
+Then clearly then \(G/C_{G}(N/M)\) is isomorphic to a subgroup of \(A(N/M)\).
+(For \(M = \mathbf{1}\), \(C_{G} (N/\mathbf{1})\) is the centralizer
+\(C_{G}(M)\) introduced in 2.17b.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-1501a394-4f2c-44a6-ac3b-b8aa349f22dc" class="outline-4">
+<h4 id="h-1501a394-4f2c-44a6-ac3b-b8aa349f22dc"><span class="section-number-4">1.4.4.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-1501a394-4f2c-44a6-ac3b-b8aa349f22dc">
+<p>
+Let \(N\) be a normal subgroup of \(G\) and \(\alpha\) an automorphism of \(G\)
+with \(\alpha(n)=n\) for all \(n\in N\) and \(gN = \alpha(g)N\) for all \(g\in G\).
+Then \(\alpha(g) = gT(g)\), where \(T(g)\) lies in \(Z(N)\), depends only on
+the coset \(gN\) and the functional equation \(T(gh) = T(g)^{h}T(h)\) from
+Theorem 4.3 is satisfied.
+</p>
+
+<p>
+All automorphisms \(\alpha\) of the given form are pairwise commutable.
+If \(m\) is the exponent of \(Z(N)\), then \(\alpha^{m}=1\).
+In particular, if \((O(\alpha), |Z(N|) = 1\), then \(\alpha = 1\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-d4b5503b-52a5-410c-8e9c-564e689b7a08" class="outline-4">
+<h4 id="h-d4b5503b-52a5-410c-8e9c-564e689b7a08"><span class="section-number-4">1.4.5.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-d4b5503b-52a5-410c-8e9c-564e689b7a08">
+<p>
+If \(U\) is a subgroup of \(G\), let \(C_{G}(U)\) be the centralizer of \(U\) and \(N_{G}(U)\) the normalizer of \(U\) in \(G\).
+Then the factor group \(N_{G}(U)/C_{G}(U)\) is isomorphic to a subgroup of the automorphism group \(A(U)\) of \(U\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-7a4b5b58-c82f-495d-8a5c-6f3a580718d3" class="outline-4">
+<h4 id="h-7a4b5b58-c82f-495d-8a5c-6f3a580718d3"><span class="section-number-4">1.4.6.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-7a4b5b58-c82f-495d-8a5c-6f3a580718d3">
+<p>
+Let \(G\) be a cyclic group of order \(n\).
+Then the automorphisms of \(G\) have the form \(\alpha(g) = g^{k}\) with \((k, n) = 1\).
+The automorphism group \(A(G)\) of \(G\) is isomorphic to the multiplicative
+group of remainders mod \(n\) that are relatively prime to \(n\). In
+particular, \(|A(G)| = \varphi(n)\), where \(\varphi\) is the Euler totient function
+from number theory.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-37a69218-8aef-458e-b2f5-b07b8dccc00f" class="outline-4">
+<h4 id="h-37a69218-8aef-458e-b2f5-b07b8dccc00f"><span class="section-number-4">1.4.7.</span> Definition: Characteristic Subgroup</h4>
+<div class="outline-text-4" id="text-h-37a69218-8aef-458e-b2f5-b07b8dccc00f">
+<p>
+The subgroup \(U\) of \(G\) is called a <dfn>Characteristic Subgroup</dfn>
+of \(G\) if \(\alpha(U) = U\) for every automorphism \(\alpha\) of \(G\).
+(Obviously every characteristic subgroup of \(G\) is a normal subgroup of
+\(G\).) If \(G\) has only the characteristic subgroups \(\mathbf{1}\) and \(G\),
+then \(G\) is called characteristically simple.
+</p>
+
+<p>
+Trivial but useful is:
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-29cc942b-2653-4558-a0ac-68cf82ee4b0b" class="outline-4">
+<h4 id="h-29cc942b-2653-4558-a0ac-68cf82ee4b0b"><span class="section-number-4">1.4.8.</span> Lemma</h4>
+<div class="outline-text-4" id="text-h-29cc942b-2653-4558-a0ac-68cf82ee4b0b">
+<ol class="org-ol">
+<li>Let \(N\) be a normal subgroup of \(G\) and \(M\) a characteristic subgroup of \(N\). Then \(M\) is a normal subgroup of \(G\).</li>
+<li>If \(A\leq B\leq G\), \(A\) is characteristic in Bund \(B\) is characteristic in \(G\), then \(A\) is characteristic in \(G\).</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-796f1474-2355-4177-977b-e33aad8a6f06" class="outline-4">
+<h4 id="h-796f1474-2355-4177-977b-e33aad8a6f06"><span class="section-number-4">1.4.9.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-796f1474-2355-4177-977b-e33aad8a6f06">
+<p>
+Let \(N\triangleleft G\) and let \(|N|\) and \(|G/N|\) be finite and relatively prime.
+</p>
+
+<ol class="org-ol">
+<li>If \(M\leq G\) and \(|M|\) divides \(|N|\), then \(M\leq N\) holds.</li>
+<li>\(N\) is the only subgroup of \(G\) with order \(|N|\).</li>
+</ol>
+
+<p>
+In particular, \(N\) is a characteristic subgroup of \(G\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-a409d849-e91d-4cd4-a4ea-a1c8dc93f99c" class="outline-4">
+<h4 id="h-a409d849-e91d-4cd4-a4ea-a1c8dc93f99c"><span class="section-number-4">1.4.10.</span> Examples</h4>
+<div class="outline-text-4" id="text-h-a409d849-e91d-4cd4-a4ea-a1c8dc93f99c">
+<ol class="org-ol">
+<li>Let \(p\) be an odd prime number and let \(G\) be the group of all integers
+linear maps \(x\to ax+b\) (\(a,b,x\in GF(p)\), \(a\neq0\)) over the finite field \(GF(p)\).
+Then every automorphism of \(G\) is an inner automorphism.</li>
+<li>(G.E. WALL)
+Let \(G\) be the group of integral linear maps \(x\to ax + b\) over the ring of integers modulo 8 with \(a = 1 (2)\).
+(The order of \(G\) is 25.)
+Then the map is \(\alpha\), which transforms \(G\) with \(xG =ax+b\) into \(\alpha(G)\) with \(x\alpha(G) = ax + b + \frac{1}{2 }(a^{2}-1)\) is an automorphism of \(G\) which maps every element of \(G\) to a conjugate, but which is not an inner automorphism of \(G\).</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-af42c3ae-8e4c-49e0-b80d-5a453040f2be" class="outline-3">
+<h3 id="h-af42c3ae-8e4c-49e0-b80d-5a453040f2be"><span class="section-number-3">1.5.</span> Permutation Groups</h3>
+<div class="outline-text-3" id="text-h-af42c3ae-8e4c-49e0-b80d-5a453040f2be">
+</div>
+
+<div id="outline-container-h-fa420ecd-20e5-4637-a51b-0a528406d6b1" class="outline-4">
+<h4 id="h-fa420ecd-20e5-4637-a51b-0a528406d6b1"><span class="section-number-4">1.5.1.</span> Definition: Permutations, Permutation Group</h4>
+<div class="outline-text-4" id="text-h-fa420ecd-20e5-4637-a51b-0a528406d6b1">
+<p>
+Let \(\Omega\) be a finite set with \(|\Omega| = n\).
+We denote the elements of \(\Omega\) using the natural numbers 1, &hellip;, \(n\) (to
+distinguish them from group elements).
+</p>
+
+<p>
+The set of all one-to-one mappings from \(\Omega\) to itself becomes a
+group if we define the product \(gh\) of two mappings \(g\) and \(h\) by
+\(i^{gh}=(i^{g})^{h}\) \((i\in \Omega)\).
+</p>
+
+<p>
+We call this group the <dfn>Symmetric Group</dfn> \(S_{n}\) of degree \(n\) (on \(\Omega\)).
+Obviously \(|S_{n}|=n!\) holds.
+We call the elements of \(S_{n}\) permutations and often write them in the
+form \(G = \binom{i}{i^{g}}\).
+If \(\Delta\) is a subset of \(\Omega\) and \(g\in S_{n}\), we write
+\(\Delta^{g} = \{i^{g}\mid i\in \Delta\}\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-836209ba-85ae-41b9-9c49-0ba1293fb41a" class="outline-4">
+<h4 id="h-836209ba-85ae-41b9-9c49-0ba1293fb41a"><span class="section-number-4">1.5.2.</span> Proposition</h4>
+<div class="outline-text-4" id="text-h-836209ba-85ae-41b9-9c49-0ba1293fb41a">
+<p>
+A permutation of shape
+</p>
+
+<p>
+\[ P = \begin{pmatrix}a_{1} & a_{2} & \dots & a_{k-1} & a_{k} & a_{k+1} & \dots & a_{n}\\
+a_{2} & a_{3} & \dots & a_{k} & a_{1} & a_{k+1} & \dots & a_{n}\end{pmatrix}\]
+</p>
+
+<p>
+(or in short: \(P = (a_{1}, a_{2}, \dots, a_{k})\)) means a \(k\) cycle
+or cycle of length \(k\).
+</p>
+
+<p>
+We call the 2-cycles <dfn>transpositions</dfn>.
+</p>
+
+<p>
+Every permutation \(g\) can be written uniquely (up to ordering) as the
+product of disjoint cycles, which do not have a common digit.
+</p>
+
+<p>
+The fixed digits \(i\) at \(G\) appear with \(i^{g} = i\) as cycles of the
+length 1 and are usually not written down.
+If the lengths of these cycles \(z_{1},\dots,z_{m}\), then the order \(O(G)\)
+of \(g\) is the least common multiple of \(z_{i}\).
+We call the \(m\) tuple \((z_{1}, \dots, z_{m})\) the <dfn>type of Permutation</dfn> \(G\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-5b6809ae-c0b9-4f25-baca-a6f7f2a2b128" class="outline-4">
+<h4 id="h-5b6809ae-c0b9-4f25-baca-a6f7f2a2b128"><span class="section-number-4">1.5.3.</span> Lemma: Conjugacy classes of \(S_{n}\)</h4>
+<div class="outline-text-4" id="text-h-5b6809ae-c0b9-4f25-baca-a6f7f2a2b128">
+<p>
+Let \(g\) have the factorization into cycles \(g = (a_{1},\dots,a_{k})\dots(s_{1},\dots,s_{m})\) and let
+\(T = \binom{a_{i}}{b_{i}}\dots\binom{s_{j}}{t_{j}}\).
+Then \(g^{T} = T^{-1}gT\) has the cycle decomposition
+$g<sup>T</sup> = (b<sub>1</sub>, &hellip;, b<sub>k</sub>)&hellip;(t<sub>1</sub>,&hellip;,t<sub>m</sub>).$
+</p>
+
+<p>
+In particular, it follows that the conjugation classes \(S_{n}\) consist
+of permutations of the same type.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-h-7f58a258-18cc-4b97-ace0-42365f0e1212" class="outline-4">
+<h4 id="h-7f58a258-18cc-4b97-ace0-42365f0e1212"><span class="section-number-4">1.5.4.</span> Definition</h4>
+<div class="outline-text-4" id="text-h-7f58a258-18cc-4b97-ace0-42365f0e1212">
+<p>
+Let \(g\) be a Permutation of \(\{1,\dots,n\}\). Write
+</p>
+
+<p>
+\[ \prod_{i\lt j}(g(i)-g(j))=\varepsilon\prod_{i\lt j}(i-j) \]
+</p>
+
+<p>
+with \(\varepsilon=\pm1\). We define the <dfn>Sign</dfn> of \(g\) to be
+\(\mathrm{sgn}(g)=\varepsilon\).
+</p>
+
+<p>
+We call permutations \(\pi\in S_{n}\) with \(\mathrm{sgn}(\pi)=1\) <dfn>Even</dfn>,
+and those with \(\mathrm{sgn}(\pi)=-1\) <dfn>Odd</dfn>.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-h-9922e51d-c2a9-4bd0-8713-4acd7da94494" class="outline-4">
+<h4 id="h-9922e51d-c2a9-4bd0-8713-4acd7da94494"><span class="section-number-4">1.5.5.</span> Proposition: Alternating Subgroup</h4>
+<div class="outline-text-4" id="text-h-9922e51d-c2a9-4bd0-8713-4acd7da94494">
+<p>
+Let \(n\gt 1\). The permutations \(\pi\in S_{n}\) with \(\mathrm{sgn}(\pi)=1\)
+form a normal subgroup \(A_{n}\lt S_{n}\) of index 2. We call \(A_{n}\) the
+<dfn>Alternating Group</dfn> of degree \(n\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-8d6c2399-40ea-4d60-be40-f7c781685d28" class="outline-4">
+<h4 id="h-8d6c2399-40ea-4d60-be40-f7c781685d28"><span class="section-number-4">1.5.6.</span> Definition: Permutation Group</h4>
+<div class="outline-text-4" id="text-h-8d6c2399-40ea-4d60-be40-f7c781685d28">
+<p>
+Each subgroup of \(S_{n}\) is called a <dfn>Permutation Group</dfn> of
+degree \(n\).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2022-05-28 Sat 16:08.</p>
+</div>
+</body>
+</html>
