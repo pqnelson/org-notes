@@ -206,6 +206,27 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -218,7 +239,14 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-d2755cca-4bd3-4e61-8fa8-cedbb1371c14">1. References</a></li>
+<li><a href="#h-cecb52b6-8035-498e-92de-ed293e597846">1. Basics</a></li>
+<li><a href="#h-906b2122-c941-47f2-aeee-76f4f01d2743">2. Booleans and Propositions</a></li>
+<li><a href="#h-5dcf2f86-3ffd-417a-8b1c-80586b495595">3. Tactics</a></li>
+<li><a href="#h-d2755cca-4bd3-4e61-8fa8-cedbb1371c14">4. References</a>
+<ul>
+<li><a href="#h-04884a18-26b5-4208-a05c-a22d6a78a93e">4.1. Tutorials</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -226,8 +254,112 @@
 What happens we you combine Automath and LCF? You get Coq.
 </p>
 
+<div id="outline-container-h-cecb52b6-8035-498e-92de-ed293e597846" class="outline-2">
+<h2 id="h-cecb52b6-8035-498e-92de-ed293e597846"><span class="section-number-2">1.</span> Basics</h2>
+<div class="outline-text-2" id="text-h-cecb52b6-8035-498e-92de-ed293e597846">
+<p>
+We have a hierarchy of universes <code>Type n : Type (S n)</code> for each natural
+number <code>n = 0, 1, 2, ...</code>; we also have a special <code>Prop</code> type for
+propositions.
+</p>
+
+<p>
+Generic definitions look like:
+</p>
+
+<pre class="example" id="org0eadcde">
+Definition my_new_term : Type :=
+  (* body *).
+</pre>
+
+<p>
+We can ask Coq to evaluate a term by writing <code>Compute &lt;term&gt;.</code>
+(including the period).
+</p>
+
+<p>
+There are also theorems.
+</p>
+
+<pre class="example" id="org009c3a2">
+Theorem ex_arith_thm : forall (n : nat), n + 0 = n.
+Proof.
+  (* ... *)
+Qed.
+</pre>
+
+<p>
+Synonyms for <code>Theorem</code> <a href="https://coq.inria.fr/refman/language/core/definitions.html#assertions-and-proofs">include</a>: <code>Lemma</code>, <code>Example</code>. <code>Remark</code>, <code>Fact</code>,
+<code>Corollary</code>, <code>Proposition</code>, and <code>Property</code>.
+</p>
+
+<p>
+Implicit arguments are in curly braces <code>{X : T}</code>, explicit arguments
+annotated with types are in parentheses <code>(x : T)</code>, and explicit
+arguments with implicit types are just given <code>x</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-906b2122-c941-47f2-aeee-76f4f01d2743" class="outline-2">
+<h2 id="h-906b2122-c941-47f2-aeee-76f4f01d2743"><span class="section-number-2">2.</span> Booleans and Propositions</h2>
+<div class="outline-text-2" id="text-h-906b2122-c941-47f2-aeee-76f4f01d2743">
+<p>
+Coq distinguishes between propositions (mathematical statements) and
+booleans (data types which have two values).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-5dcf2f86-3ffd-417a-8b1c-80586b495595" class="outline-2">
+<h2 id="h-5dcf2f86-3ffd-417a-8b1c-80586b495595"><span class="section-number-2">3.</span> Tactics</h2>
+<div class="outline-text-2" id="text-h-5dcf2f86-3ffd-417a-8b1c-80586b495595">
+<p>
+There is something on the order of 100 tactics in Coq, which makes it
+hard to remember.
+</p>
+
+<ul class="org-ul">
+<li><code>intros</code> names variables</li>
+<li><code>generalize dependent x</code> will move the variable <code>x</code> and anything else
+that depends on it from the context back to an explicit hypothesis in
+the goal</li>
+<li><code>unfold</code> will unfold a definition, which we will need to do when a
+definition involves a <code>match ... with...</code> expression.</li>
+<li><code>reflexivity</code> finishes the proof when the goal is of the form <code>e = e</code>.</li>
+<li><code>apply label</code> typically works by using a formula associated with the
+<code>label</code> (referring to a <code>forall ..., P -&gt; Q</code> type formula) rewriting
+our goal <code>Q'</code> into the premise of the <code>label</code>'s formula <code>P'</code>. Note
+that we can only <code>apply</code> <i>exactly matching formulas</i>.
+<ul class="org-ul">
+<li>If we want to apply a theorem or equation with some subexpression
+standing in for a variable, we can explicitly tell Coq to do this by
+<code>apply label with (var := subexpression).</code></li>
+</ul></li>
+<li><code>f_equal</code>: Given a goal of the form <code>f a1 ... an = g b1 ... bn</code>,
+the tactic <code>f_equal</code> will produce subgoals of the form <code>f = g</code>,
+<code>a1 = b1</code>, &#x2026;, <code>an = bn</code>.</li>
+<li><code>injection</code> &#x2014; if we have an equality of constructors
+<code>Constructor t_1 ... t_n = Constructor u_1 ... u_n</code>, we can use the
+fact that type constructors are injective to transform our goal into
+\(n\) equalities <code>t_1 = u_1</code>, &#x2026;, <code>t_n = u_n</code></li>
+<li><code>discriminate</code> uses the fact that constructors are disjoint, so we can
+never have a situation where <code>H : Con1 ... = Con2 ...</code>. We use this fact
+on a hypothesis as <code>discriminate H</code>.</li>
+<li><code>destruct</code> is useful for case-base proofs.</li>
+<li><code>induction</code> is useful for, well, proofs by induction; unlike
+<code>destruct</code>, the <code>induction</code> tactic will introduce induction hypotheses
+<ul class="org-ul">
+<li>Gotchya: some times we want to leave a variable universally
+quantified when doing an induction proof; forgetting to do so will
+produce an impossible situation. See <a href="https://www.seas.upenn.edu/~cis500/current/sf/lf-current/Tactics.html#lab150">Foundations</a> on this.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
 <div id="outline-container-h-d2755cca-4bd3-4e61-8fa8-cedbb1371c14" class="outline-2">
-<h2 id="h-d2755cca-4bd3-4e61-8fa8-cedbb1371c14"><span class="section-number-2">1.</span> References</h2>
+<h2 id="h-d2755cca-4bd3-4e61-8fa8-cedbb1371c14"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-d2755cca-4bd3-4e61-8fa8-cedbb1371c14">
 <ul class="org-ul">
 <li><a href="https://coq.discourse.group/t/why-doesnt-coq-have-a-theorem-type-like-hol-light/532">Why doesn’t Coq have a theorem Type like HOL Light?</a>, Zulip question</li>
@@ -237,10 +369,23 @@ ITP - Interactive Theorem Proving, First International Conference - 2010, Jul 20
 <a href="https://hal.inria.fr/inria-00520604/document">inria-00520604</a></li>
 </ul>
 </div>
+
+<div id="outline-container-h-04884a18-26b5-4208-a05c-a22d6a78a93e" class="outline-3">
+<h3 id="h-04884a18-26b5-4208-a05c-a22d6a78a93e"><span class="section-number-3">4.1.</span> Tutorials</h3>
+<div class="outline-text-3" id="text-h-04884a18-26b5-4208-a05c-a22d6a78a93e">
+<ul class="org-ul">
+<li>Benjamin Pierce and friends,<br>
+<a href="https://softwarefoundations.cis.upenn.edu/">Software Foundations</a>.<br>
+Its a Coq tutorial, and a textbook akin to <i>TAPL</i>.</li>
+<li>Lucas Silver,<br>
+<a href="https://www.cis.upenn.edu/~plclub/blog/2020-05-15-Rewriting-in-Coq/">An Introduction To Rewriting In Coq</a>.</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-11 Tue 13:11.</p>
+<p class="postamble">Last Updated 2022-06-01 Wed 09:21.</p>
 </div>
 </body>
 </html>

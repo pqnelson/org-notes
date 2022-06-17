@@ -13,6 +13,95 @@
 
 What happens we you combine Automath and LCF? You get Coq.
 
+* Basics
+:PROPERTIES:
+:CUSTOM_ID: h-cecb52b6-8035-498e-92de-ed293e597846
+:END:
+
+We have a hierarchy of universes ~Type n : Type (S n)~ for each natural
+number ~n = 0, 1, 2, ...~; we also have a special ~Prop~ type for
+propositions.
+
+Generic definitions look like:
+
+#+begin_example
+Definition my_new_term : Type :=
+  (* body *).
+#+end_example
+
+We can ask Coq to evaluate a term by writing ~Compute <term>.~
+(including the period).
+
+There are also theorems.
+
+#+begin_example
+Theorem ex_arith_thm : forall (n : nat), n + 0 = n.
+Proof.
+  (* ... *)
+Qed.
+#+end_example
+
+Synonyms for ~Theorem~ [[https://coq.inria.fr/refman/language/core/definitions.html#assertions-and-proofs][include]]: ~Lemma~, ~Example~. ~Remark~, ~Fact~,
+~Corollary~, ~Proposition~, and ~Property~.
+
+Implicit arguments are in curly braces ~{X : T}~, explicit arguments
+annotated with types are in parentheses ~(x : T)~, and explicit
+arguments with implicit types are just given ~x~.
+
+* Booleans and Propositions
+:PROPERTIES:
+:CUSTOM_ID: h-906b2122-c941-47f2-aeee-76f4f01d2743
+:END:
+
+Coq distinguishes between propositions (mathematical statements) and
+booleans (data types which have two values).
+
+* Tactics
+:PROPERTIES:
+:CUSTOM_ID: h-5dcf2f86-3ffd-417a-8b1c-80586b495595
+:END:
+
+There is something on the order of 100 tactics in Coq, which makes it
+hard to remember.
+
+- ~intros~ names variables
+- ~generalize dependent x~ will move the variable ~x~ and anything else
+  that depends on it from the context back to an explicit hypothesis in
+  the goal
+- ~split~ turns a goal ~A /\ B~ into two goals, namely ~A~ and ~B~
+- ~unfold~ will unfold a definition, which we will need to do when a
+  definition involves a ~match ... with...~ expression.
+- ~reflexivity~ finishes the proof when the goal is of the form ~e = e~.
+- ~apply label~ typically works by using a formula associated with the
+  ~label~ (referring to a ~forall ..., P -> Q~ type formula) rewriting
+  our goal ~Q'~ into the premise of the ~label~'s formula ~P'~. Note
+  that we can only ~apply~ /exactly matching formulas/.
+  - If we want to apply a theorem or equation with some subexpression
+    standing in for a variable, we can explicitly tell Coq to do this by
+    ~apply label with (var := subexpression).~
+- ~f_equal~: Given a goal of the form ~f a1 ... an = g b1 ... bn~,
+  the tactic ~f_equal~ will produce subgoals of the form ~f = g~,
+  ~a1 = b1~, ..., ~an = bn~.
+  - ~f_equiv~ does likewise, but when an equivalence relation ~R~
+    relates the two terms
+- ~injection~ --- if we have an equality of constructors
+  ~Constructor t_1 ... t_n = Constructor u_1 ... u_n~, we can use the
+  fact that type constructors are injective to transform our goal into
+  $n$ equalities ~t_1 = u_1~, ..., ~t_n = u_n~
+- ~discriminate~ uses the fact that constructors are disjoint, so we can
+  never have a situation where ~H : Con1 ... = Con2 ...~. We use this fact
+  on a hypothesis as ~discriminate H~.
+- ~destruct~ is useful for case-base proofs.
+- ~induction~ is useful for, well, proofs by induction; unlike
+  ~destruct~, the ~induction~ tactic will introduce induction hypotheses
+  - Gotchya: some times we want to leave a variable universally
+    quantified when doing an induction proof; forgetting to do so will
+    produce an impossible situation. See [[https://www.seas.upenn.edu/~cis500/current/sf/lf-current/Tactics.html#lab150][Foundations]] on this.
+- ~inversion~ --- when proving an inductive ~Prop~, we may want to
+  analyze ("destructure") the evidence of the inductive hypothesis;
+  inversion let's us do this. Hence ~inversion~ requires a label,
+  referring to a proposition to invert.
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-d2755cca-4bd3-4e61-8fa8-cedbb1371c14
@@ -23,4 +112,16 @@ What happens we you combine Automath and LCF? You get Coq.
   "Importing HOL Light into Coq".\\
   ITP - Interactive Theorem Proving, First International Conference - 2010, Jul 2010, Edimbourg, United Kingdom. pp.307-322.
   [[https://hal.inria.fr/inria-00520604/document][inria-00520604]]
-  
+
+See also [[https://gitlab.mpi-sws.org/iris/stdpp/-/blob/master/theories/base.v#L310-314][base.v]] for ~Params~.
+
+** Tutorials
+:PROPERTIES:
+:CUSTOM_ID: h-04884a18-26b5-4208-a05c-a22d6a78a93e
+:END:
+
+- Benjamin Pierce and friends,\\
+  [[https://softwarefoundations.cis.upenn.edu/][Software Foundations]].\\
+  Its a Coq tutorial, and a textbook akin to /TAPL/.
+- Lucas Silver,\\
+  [[https://www.cis.upenn.edu/~plclub/blog/2020-05-15-Rewriting-in-Coq/][An Introduction To Rewriting In Coq]].
