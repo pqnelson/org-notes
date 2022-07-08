@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Idioms - SML</title>
+<title>ST Monad - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -213,70 +213,103 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Idioms - SML</h1>
+<h1 class="title">ST Monad - SML</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-151fd75d-61bd-4eb2-b962-3724940c7e31">1. Using <code>type t</code> in Signatures</a></li>
+<li><a href="#h-c16ea4f8-e7de-4f67-ace7-ca6922719bb7">1. Introduction</a></li>
+<li><a href="#h-cfde934a-2d81-4a8a-9ca9-f32cac8f8247">2. Implementation</a></li>
+<li><a href="#h-ba354002-0dc7-4384-9654-f2076a75d496">3. References</a></li>
 </ul>
 </div>
 </div>
+
+<div id="outline-container-h-c16ea4f8-e7de-4f67-ace7-ca6922719bb7" class="outline-2">
+<h2 id="h-c16ea4f8-e7de-4f67-ace7-ca6922719bb7"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-c16ea4f8-e7de-4f67-ace7-ca6922719bb7">
 <p>
-These are idioms gleaned from reading some random Standard ML programs.
+The <dfn>State Transformer Monad</dfn> (not to be confused with the
+<code>StateT</code> monad transformer) is of type <code>ST s a</code> in Haskell. Intuitively
+the <code>s</code> parameter encodes the state, and <code>a</code> encodes the return value.
 </p>
 
-<div id="outline-container-h-151fd75d-61bd-4eb2-b962-3724940c7e31" class="outline-2">
-<h2 id="h-151fd75d-61bd-4eb2-b962-3724940c7e31"><span class="section-number-2">1.</span> Using <code>type t</code> in Signatures</h2>
-<div class="outline-text-2" id="text-h-151fd75d-61bd-4eb2-b962-3724940c7e31">
 <p>
-When encoding a data type as a signature, for example a <code>signature SET</code>,
-use <code>type t</code> to specify the data type.
-</p>
-
-<p>
-Example:
+The definition of the <code>ST</code> monad is <a href="https://hackage.haskell.org/package/base-4.16.2.0/docs/src/GHC.ST.html#ST">given as</a>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">SET</span> =
-<span class="org-keyword">sig</span>
-    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>;
-    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t;
-    <span class="org-keyword">val</span> <span class="org-variable-name">insert</span> : 'a -&gt; 'a t -&gt; 'a t;
-    <span class="org-keyword">val</span> <span class="org-variable-name">null</span> : 'a t -&gt; bool;
-    <span class="org-keyword">val</span> <span class="org-variable-name">member</span> : 'a -&gt; 'a t -&gt; bool;
-    <span class="org-keyword">val</span> <span class="org-variable-name">map</span> : ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t;
-<span class="org-keyword">end</span>;
-
-<span class="org-keyword">structure</span> <span class="org-module-def">TreeSet</span> : SET =
-<span class="org-keyword">struct</span>
-    <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int*'a*('a t)*('a t);
-
-    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = E;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
-      | insert x (T (n, v, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">null</span> E = true
-      | null _ = false;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">member</span> _ E = false
-      | x (T (_, v, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">map</span> _ E = E
-      | map f (T (_, x, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
-<span class="org-keyword">end</span>;
-
-<span class="org-comment-delimiter">(* </span><span class="org-comment">mySet : TreeSet.t</span><span class="org-comment-delimiter"> *)</span>
-mySet = TreeSet.empty;
+<pre class="src src-haskell"><span class="org-haskell-keyword">newtype</span> <span class="org-haskell-type">ST</span> s a <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">ST</span> (<span class="org-haskell-constructor">STRep</span> s a)
+<span class="org-haskell-keyword">type</span> <span class="org-haskell-type">STRep</span> s a <span class="org-haskell-operator">=</span> <span class="org-haskell-type">State#</span> s <span class="org-haskell-operator">-&gt;</span> (<span class="org-haskell-operator">#</span> <span class="org-haskell-type">State#</span> s, a <span class="org-haskell-operator">#</span>)
 </pre>
 </div>
+
+<p>
+There are a couple of functions worth mentioning:
+</p>
+
+<ol class="org-ol">
+<li><code>runST :: (forall s. ST s a) -&gt; a</code> returns the value of the
+computation</li>
+<li><code>fixST :: (a -&gt; ST s a) -&gt; ST s a</code></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-cfde934a-2d81-4a8a-9ca9-f32cac8f8247" class="outline-2">
+<h2 id="h-cfde934a-2d81-4a8a-9ca9-f32cac8f8247"><span class="section-number-2">2.</span> Implementation</h2>
+<div class="outline-text-2" id="text-h-cfde934a-2d81-4a8a-9ca9-f32cac8f8247">
+<p>
+The Haskell implementation of the <code>ST</code> monad is the same as the
+implementation of <code>IO</code>. We can cheat and do likewise, by first observing
+in our <a href="io-monad.html">IO monad</a> implementation we have:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">abstype</span> 'a <span class="org-type-def">Job</span> = JOB <span class="org-keyword">of</span> unit -&gt; 'a
+<span class="org-keyword">with</span>
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+We take advantage of the fact that <code>'a</code> is isomorphic to <code>unit * 'a</code>
+(and <code>'a * unit</code>). Then we could generalize the construction to:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">abstype</span> ('s, 'a) <span class="org-type-def">ST</span> = ST <span class="org-keyword">of</span> ('s -&gt; 's * 'a)
+<span class="org-keyword">with</span>
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+If we fix <code>'s = unit</code>, then we recover the IO monad.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-ba354002-0dc7-4384-9654-f2076a75d496" class="outline-2">
+<h2 id="h-ba354002-0dc7-4384-9654-f2076a75d496"><span class="section-number-2">3.</span> References</h2>
+<div class="outline-text-2" id="text-h-ba354002-0dc7-4384-9654-f2076a75d496">
+<ul class="org-ul">
+<li>John Launchbury, Simon Peyton Jones,<br>
+"State in Haskell".<br>
+<i>Lisp and Symbolic Computation</i> (1995) pp. 293&#x2013;342.
+<a href="https://www.microsoft.com/en-us/research/publication/state-in-haskell/">Eprint</a>.</li>
+<li>Stephanie Weirich,<br>
+<a href="https://www.seas.upenn.edu/~cis552/17fa/lectures/stub/STMonad.html">The ST and IO Monads</a>.<br>
+CIS552 lecture, UPenn, 2017 Fall Quarter.</li>
+<li></li>
+</ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-26 Wed 10:16.</p>
+<p class="postamble">Last Updated 2022-07-08 Fri 09:47.</p>
 </div>
 </body>
 </html>

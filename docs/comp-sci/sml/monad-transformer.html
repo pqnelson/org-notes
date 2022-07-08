@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Idioms - SML</title>
+<title>Monad Transformer - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -213,70 +213,96 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Idioms - SML</h1>
+<h1 class="title">Monad Transformer - SML</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-151fd75d-61bd-4eb2-b962-3724940c7e31">1. Using <code>type t</code> in Signatures</a></li>
+<li><a href="#h-7d7a975d-ae99-43e2-adf1-a2d273feb5e8">1. Introduction</a></li>
+<li><a href="#h-058d3bd2-eb33-4e56-af11-bed47e911f77">2. References</a>
+<ul>
+<li><a href="#h-789c6184-637c-45ae-aad1-2d06b8d95754">2.1. OCaml Implementations</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
-<p>
-These are idioms gleaned from reading some random Standard ML programs.
-</p>
 
-<div id="outline-container-h-151fd75d-61bd-4eb2-b962-3724940c7e31" class="outline-2">
-<h2 id="h-151fd75d-61bd-4eb2-b962-3724940c7e31"><span class="section-number-2">1.</span> Using <code>type t</code> in Signatures</h2>
-<div class="outline-text-2" id="text-h-151fd75d-61bd-4eb2-b962-3724940c7e31">
+<div id="outline-container-h-7d7a975d-ae99-43e2-adf1-a2d273feb5e8" class="outline-2">
+<h2 id="h-7d7a975d-ae99-43e2-adf1-a2d273feb5e8"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-7d7a975d-ae99-43e2-adf1-a2d273feb5e8">
 <p>
-When encoding a data type as a signature, for example a <code>signature SET</code>,
-use <code>type t</code> to specify the data type.
+The basic idea is we want to combine monads together. Towards that end,
+we have a SML Functor which will "eat in" a monad, and produce a monad.
 </p>
 
 <p>
-Example:
+We have to implement an individual monad transformer as an individual
+functor. For example,
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">SET</span> =
-<span class="org-keyword">sig</span>
-    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>;
-    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t;
-    <span class="org-keyword">val</span> <span class="org-variable-name">insert</span> : 'a -&gt; 'a t -&gt; 'a t;
-    <span class="org-keyword">val</span> <span class="org-variable-name">null</span> : 'a t -&gt; bool;
-    <span class="org-keyword">val</span> <span class="org-variable-name">member</span> : 'a -&gt; 'a t -&gt; bool;
-    <span class="org-keyword">val</span> <span class="org-variable-name">map</span> : ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t;
-<span class="org-keyword">end</span>;
-
-<span class="org-keyword">structure</span> <span class="org-module-def">TreeSet</span> : SET =
+<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">StateT</span>(<span class="org-keyword">type</span> <span class="org-type-def">state</span>
+               <span class="org-keyword">structure</span> <span class="org-module-def">M</span> : MONAD) : MONAD =
 <span class="org-keyword">struct</span>
-    <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int*'a*('a t)*('a t);
+  <span class="org-keyword">type</span> <span class="org-type-def">state</span> = state;
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">Type constructor</span><span class="org-comment-delimiter"> *)</span>
+  <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span> = (state -&gt; 'a * state) M.t;
 
-    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = E;
+  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> x = <span class="org-keyword">fn</span> s =&gt; M.return (x,s);
 
-    <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
-      | insert x (T (n, v, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> m f = <span class="org-keyword">fn</span> s =&gt; M.bind (m s) (<span class="org-keyword">fn</span> (x, s') =&gt; f x s');
 
-    <span class="org-keyword">fun</span> <span class="org-function-name">null</span> E = true
-      | null _ = false;
+  <span class="org-keyword">fun</span> <span class="org-function-name">lift</span> m = <span class="org-keyword">fn</span> s =&gt; M.bind m (<span class="org-keyword">fn</span> x =&gt; M.return (x,s));
 
-    <span class="org-keyword">fun</span> <span class="org-function-name">member</span> _ E = false
-      | x (T (_, v, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">map</span> _ E = E
-      | map f (T (_, x, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">etc.</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-
-<span class="org-comment-delimiter">(* </span><span class="org-comment">mySet : TreeSet.t</span><span class="org-comment-delimiter"> *)</span>
-mySet = TreeSet.empty;
 </pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-058d3bd2-eb33-4e56-af11-bed47e911f77" class="outline-2">
+<h2 id="h-058d3bd2-eb33-4e56-af11-bed47e911f77"><span class="section-number-2">2.</span> References</h2>
+<div class="outline-text-2" id="text-h-058d3bd2-eb33-4e56-af11-bed47e911f77">
+<ul class="org-ul">
+<li>Sheng Liang, Paul Hudak, Mark Jones,<br>
+"Monad transformers and modular interpreters".<br>
+In <i>POPL '95: Proceedings of the 22nd ACM SIGPLAN-SIGACT symposium on Principles of programming languages</i>,
+January 1995, pp.333–343
+<a href="https://doi.org/10.1145/199448.199528">https://doi.org/10.1145/199448.199528</a></li>
+<li>Mark P Jones,<br>
+"Functional Programming with Overloading and Higher-Order
+Polymorphism".<br>
+<a href="http://web.cecs.pdx.edu/~mpj/pubs/springschool.html">Eprint</a>, 1995, 40 pages.</li>
+<li>Martin Grabmuller,<br>
+"Monad Transformers Step by Step".<br>
+<a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.596&amp;rep=rep1&amp;type=pdf">Citeseer</a> 2006 draft.</li>
+</ul>
+</div>
+
+<div id="outline-container-h-789c6184-637c-45ae-aad1-2d06b8d95754" class="outline-3">
+<h3 id="h-789c6184-637c-45ae-aad1-2d06b8d95754"><span class="section-number-3">2.1.</span> OCaml Implementations</h3>
+<div class="outline-text-3" id="text-h-789c6184-637c-45ae-aad1-2d06b8d95754">
+<ul class="org-ul">
+<li>Łukasz Stafiniak,<br>
+"Functional Programming, lecture 8: Monads".<br>
+<a href="https://ii.uni.wroc.pl/~lukstafi/pmwiki/uploads/Functional/functional-lecture08.pdf">Slides</a></li>
+<li>Xavier Leroy,<br>
+"Functional programming languages, Part IV: monadic transformations,
+monadic programming".<br>
+<a href="https://xavierleroy.org/mpri/2-4/monads.2up.pdf">slides</a></li>
+<li>Daniel Perez,
+<a href="https://github.com/danhper/ocaml-monads/blob/b96a48511dc75b8bf1263ca7f07c32b9a37d2c96/src/monads.mli#L1764-L1990">Implementation</a></li>
+<li>Jim Pryor,<br>
+<a href="http://lambda1.jimpryor.net/monad_transformers/">Monad Transformers</a></li>
+</ul>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-26 Wed 10:16.</p>
+<p class="postamble">Last Updated 2022-07-08 Fri 14:12.</p>
 </div>
 </body>
 </html>

@@ -1,0 +1,76 @@
+#+TITLE: ST Monad - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-07-08T09:18:48-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Friday July  8, 2022 at  9:18AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-c16ea4f8-e7de-4f67-ace7-ca6922719bb7
+:END:
+
+The {{{dfn(State Transformer Monad)}}} (not to be confused with the
+~StateT~ monad transformer) is of type ~ST s a~ in Haskell. Intuitively
+the ~s~ parameter encodes the state, and ~a~ encodes the return value.
+
+The definition of the ~ST~ monad is [[https://hackage.haskell.org/package/base-4.16.2.0/docs/src/GHC.ST.html#ST][given as]]:
+
+#+begin_src haskell
+newtype ST s a = ST (STRep s a)
+type STRep s a = State# s -> (# State# s, a #)
+#+end_src
+
+There are a couple of functions worth mentioning:
+
+1. ~runST :: (forall s. ST s a) -> a~ returns the value of the
+   computation
+2. ~fixST :: (a -> ST s a) -> ST s a~
+
+* Implementation
+:PROPERTIES:
+:CUSTOM_ID: h-cfde934a-2d81-4a8a-9ca9-f32cac8f8247
+:END:
+
+The Haskell implementation of the ~ST~ monad is the same as the
+implementation of ~IO~. We can cheat and do likewise, by first observing
+in our [[file:io-monad.org][IO monad]] implementation we have:
+
+#+begin_src sml
+abstype 'a Job = JOB of unit -> 'a
+with
+    (* ... *)
+end;
+#+end_src
+
+We take advantage of the fact that ~'a~ is isomorphic to ~unit * 'a~
+(and ~'a * unit~). Then we could generalize the construction to:
+
+#+begin_src sml
+abstype ('s, 'a) ST = ST of ('s -> 's * 'a)
+with
+    (* ... *)
+end;
+#+end_src
+
+If we fix ~'s = unit~, then we recover the IO monad.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-ba354002-0dc7-4384-9654-f2076a75d496
+:END:
+
+- John Launchbury, Simon Peyton Jones,\\
+  "State in Haskell".\\
+  /Lisp and Symbolic Computation/ (1995) pp. 293--342.
+  [[https://www.microsoft.com/en-us/research/publication/state-in-haskell/][Eprint]].
+- Stephanie Weirich,\\
+  [[https://www.seas.upenn.edu/~cis552/17fa/lectures/stub/STMonad.html][The ST and IO Monads]].\\
+  CIS552 lecture, UPenn, 2017 Fall Quarter.
+- 

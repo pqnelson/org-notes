@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Idioms - SML</title>
+<title>Type Theory of SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -213,70 +213,48 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Idioms - SML</h1>
+<h1 class="title">Type Theory of SML</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-151fd75d-61bd-4eb2-b962-3724940c7e31">1. Using <code>type t</code> in Signatures</a></li>
+<li><a href="#h-07afd94f-ca63-4a36-8c04-9dbe20f18872">1. Overview</a></li>
+<li><a href="#h-56474fb9-30f9-42d5-b52a-f02846a54af9">2. Value Restriction</a></li>
 </ul>
 </div>
 </div>
-<p>
-These are idioms gleaned from reading some random Standard ML programs.
-</p>
 
-<div id="outline-container-h-151fd75d-61bd-4eb2-b962-3724940c7e31" class="outline-2">
-<h2 id="h-151fd75d-61bd-4eb2-b962-3724940c7e31"><span class="section-number-2">1.</span> Using <code>type t</code> in Signatures</h2>
-<div class="outline-text-2" id="text-h-151fd75d-61bd-4eb2-b962-3724940c7e31">
+<div id="outline-container-h-07afd94f-ca63-4a36-8c04-9dbe20f18872" class="outline-2">
+<h2 id="h-07afd94f-ca63-4a36-8c04-9dbe20f18872"><span class="section-number-2">1.</span> Overview</h2>
+<div class="outline-text-2" id="text-h-07afd94f-ca63-4a36-8c04-9dbe20f18872">
 <p>
-When encoding a data type as a signature, for example a <code>signature SET</code>,
-use <code>type t</code> to specify the data type.
+Standard ML appears to be prenex polymorphic typed-lambda calculus, but
+it is a Hindley-Milner system.
 </p>
 
 <p>
-Example:
+I'm going to have to examine the definition in greater detail, but I do
+not know what the type theoretic structure of a <code>datatype</code> (algebraic
+data type) is, exactly. I suspect it is a iso-recursive variant type, if
+I may borrow the terminology of TAPL.
 </p>
-
-<div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">SET</span> =
-<span class="org-keyword">sig</span>
-    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>;
-    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t;
-    <span class="org-keyword">val</span> <span class="org-variable-name">insert</span> : 'a -&gt; 'a t -&gt; 'a t;
-    <span class="org-keyword">val</span> <span class="org-variable-name">null</span> : 'a t -&gt; bool;
-    <span class="org-keyword">val</span> <span class="org-variable-name">member</span> : 'a -&gt; 'a t -&gt; bool;
-    <span class="org-keyword">val</span> <span class="org-variable-name">map</span> : ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t;
-<span class="org-keyword">end</span>;
-
-<span class="org-keyword">structure</span> <span class="org-module-def">TreeSet</span> : SET =
-<span class="org-keyword">struct</span>
-    <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int*'a*('a t)*('a t);
-
-    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = E;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
-      | insert x (T (n, v, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">null</span> E = true
-      | null _ = false;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">member</span> _ E = false
-      | x (T (_, v, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">map</span> _ E = E
-      | map f (T (_, x, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
-<span class="org-keyword">end</span>;
-
-<span class="org-comment-delimiter">(* </span><span class="org-comment">mySet : TreeSet.t</span><span class="org-comment-delimiter"> *)</span>
-mySet = TreeSet.empty;
-</pre>
 </div>
+</div>
+
+<div id="outline-container-h-56474fb9-30f9-42d5-b52a-f02846a54af9" class="outline-2">
+<h2 id="h-56474fb9-30f9-42d5-b52a-f02846a54af9"><span class="section-number-2">2.</span> Value Restriction</h2>
+<div class="outline-text-2" id="text-h-56474fb9-30f9-42d5-b52a-f02846a54af9">
+<p>
+If we allow <i>anything</i> to appear in a reference type, then we can
+quickly run into problems when storing a function in a
+reference. Because of this, Standard ML restricts what values may be
+stored in a reference type. The 1997 definition calls them
+<dfn>Non-Expansive Expressions</dfn> (but doesn't clearly define the term).</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-26 Wed 10:16.</p>
+<p class="postamble">Last Updated 2022-07-08 Fri 09:00.</p>
 </div>
 </body>
 </html>

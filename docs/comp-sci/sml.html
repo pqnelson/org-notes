@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -249,25 +249,26 @@
 </li>
 </ul>
 </li>
-<li><a href="#h-8bb21485-1413-4bef-9b13-d8255e14c965">4. References</a>
+<li><a href="#h-cabfd644-fda3-4801-b97f-eb709f55f662">4. Value Restriction</a></li>
+<li><a href="#h-8bb21485-1413-4bef-9b13-d8255e14c965">5. References</a>
 <ul>
-<li><a href="#h-8f79e9f1-f460-40a5-8172-d70436622563">4.1. Standard Basis</a></li>
-<li><a href="#h-cf15cca4-a340-407e-9cbc-4a7eed153e63">4.2. Tutorials</a></li>
-<li><a href="#h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940">4.3. Definition of Standard ML</a></li>
-<li><a href="#h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc">4.4. Classic ML</a></li>
-<li><a href="#h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa">4.5. PCF</a>
+<li><a href="#h-8f79e9f1-f460-40a5-8172-d70436622563">5.1. Standard Basis</a></li>
+<li><a href="#h-cf15cca4-a340-407e-9cbc-4a7eed153e63">5.2. Tutorials</a></li>
+<li><a href="#h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940">5.3. Definition of Standard ML</a></li>
+<li><a href="#h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc">5.4. Classic ML</a></li>
+<li><a href="#h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa">5.5. PCF</a>
 <ul>
-<li><a href="#h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb">4.5.1. Full Abstraction of PCF</a></li>
+<li><a href="#h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb">5.5.1. Full Abstraction of PCF</a></li>
 </ul>
 </li>
-<li><a href="#h-412ef711-6f44-4b0b-bdea-31d24d849d87">4.6. Category Theory</a></li>
-<li><a href="#h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd">4.7. Pure Functional Programming</a></li>
+<li><a href="#h-412ef711-6f44-4b0b-bdea-31d24d849d87">5.6. Category Theory</a></li>
+<li><a href="#h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd">5.7. Pure Functional Programming</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="remark" id="orge764975">
+<div class="remark" id="orgf5fabf2">
 <p>
 This page has gotten a little unruly. I might refactor out the
 discussion of the Core and Module language into a separate tutorial
@@ -324,8 +325,8 @@ constants.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 3.14159; <span class="org-comment-delimiter">(* </span><span class="org-comment">A declaration without a type annotation </span><span class="org-comment-delimiter">*)</span>
-<span class="org-keyword">val</span> <span class="org-variable-name">tau</span> : real = 6.28318; <span class="org-comment-delimiter">(* </span><span class="org-comment">An annotated declaration </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 3.14159; <span class="org-comment-delimiter">(* </span><span class="org-comment">A declaration without a type annotation</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">val</span> <span class="org-variable-name">tau</span> : real = 6.28318; <span class="org-comment-delimiter">(* </span><span class="org-comment">An annotated declaration</span><span class="org-comment-delimiter"> *)</span>
 </pre>
 </div>
 </div>
@@ -408,7 +409,7 @@ available at the time. For example:
 
 <span class="org-keyword">fun</span> area(r) = pi*r*r;
 
-<span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 1.0; <span class="org-comment-delimiter">(* </span><span class="org-comment">redefinitions are allowed </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 1.0; <span class="org-comment-delimiter">(* </span><span class="org-comment">redefinitions are allowed</span><span class="org-comment-delimiter"> *)</span>
 
 area(1.0);
 </pre>
@@ -542,7 +543,7 @@ row by an "<code>of</code>" keyword.
 we have <code>int list</code>.
 </p>
 
-<div class="remark" id="orgfa13684">
+<div class="remark" id="orgd687cde">
 <p>
 Unlike Haskell, if we want to have a parametrized type, we need to
 include the apostrophe, e.g., <code>datatype 'a Foo = Bar of ('a * int)</code>.
@@ -569,7 +570,7 @@ field by name rather than by its position.
                       born = 1956,
                       occupation = <span class="org-string">"Master of the Universe"</span>};
 
-print (#occupation harry); <span class="org-comment-delimiter">(* </span><span class="org-comment">prints "Master of the Universe" to screen </span><span class="org-comment-delimiter">*)</span>
+print (#occupation harry); <span class="org-comment-delimiter">(* </span><span class="org-comment">prints "Master of the Universe" to screen</span><span class="org-comment-delimiter"> *)</span>
 </pre>
 </div>
 
@@ -650,11 +651,11 @@ example:
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">iref</span> : int ref;
 
-iref := 3; <span class="org-comment-delimiter">(* </span><span class="org-comment">initialize the ref </span><span class="org-comment-delimiter">*)</span>
+iref := 3; <span class="org-comment-delimiter">(* </span><span class="org-comment">initialize the ref</span><span class="org-comment-delimiter"> *)</span>
 
-iref := !iref - 1; <span class="org-comment-delimiter">(* </span><span class="org-comment">update the ref </span><span class="org-comment-delimiter">*)</span>
+iref := !iref - 1; <span class="org-comment-delimiter">(* </span><span class="org-comment">update the ref</span><span class="org-comment-delimiter"> *)</span>
 
-<span class="org-keyword">val</span> <span class="org-variable-name">foo</span> : int = (!iref)*7; <span class="org-comment-delimiter">(* </span><span class="org-comment">use the ref </span><span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">val</span> <span class="org-variable-name">foo</span> : int = (!iref)*7; <span class="org-comment-delimiter">(* </span><span class="org-comment">use the ref</span><span class="org-comment-delimiter"> *)</span>
 </pre>
 </div>
 
@@ -695,7 +696,7 @@ for a newline character, or <code>#"\uxxxx"</code> where <code>xxxx</code> are 4
 There are about a dozen primitive exceptions defined:
 </p>
 
-<pre class="example" id="org083c15d">
+<pre class="example" id="orgadb72a2">
 exception Bind
 exception Chr
 exception Div
@@ -846,7 +847,7 @@ for multiplication is higher than addition, and division is higher than
 addition.
 </p>
 
-<div class="remark" id="org70c366e">
+<div class="remark" id="org58630cb">
 <p>
 There's a lot more functionality provided by the Standard ML built-in
 library, but the rest seem to be contained in modules.
@@ -879,7 +880,7 @@ minimum. For example,
       | spam    [] = 0;
 <span class="org-keyword">end</span>;
 
-Foo.span Foo.foo; <span class="org-comment-delimiter">(* </span><span class="org-comment">=&gt; 0 </span><span class="org-comment-delimiter">*)</span>
+Foo.span Foo.foo; <span class="org-comment-delimiter">(* </span><span class="org-comment">=&gt; 0</span><span class="org-comment-delimiter"> *)</span>
 </pre>
 </div>
 </div>
@@ -894,13 +895,13 @@ signature is interpreted as a specification.
 
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">QUEUE</span> = <span class="org-keyword">sig</span>
-    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>; <span class="org-comment-delimiter">(* </span><span class="org-comment">type of queues </span><span class="org-comment-delimiter">*)</span>
-    <span class="org-keyword">exception</span> E; <span class="org-comment-delimiter">(* </span><span class="org-comment">for errors </span><span class="org-comment-delimiter">*)</span>
-    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">the empty queue </span><span class="org-comment-delimiter">*)</span>
-    <span class="org-keyword">val</span> <span class="org-variable-name">enq</span> : 'a t * 'a -&gt; 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">add to end </span><span class="org-comment-delimiter">*)</span>
-    <span class="org-keyword">val</span> <span class="org-variable-name">null</span> : 'a t -&gt; bool; <span class="org-comment-delimiter">(* </span><span class="org-comment">test for empty queue </span><span class="org-comment-delimiter">*)</span>
-    <span class="org-keyword">val</span> <span class="org-variable-name">hd</span> : 'a t -&gt; 'a; <span class="org-comment-delimiter">(* </span><span class="org-comment">return the front of the queue </span><span class="org-comment-delimiter">*)</span>
-    <span class="org-keyword">val</span> <span class="org-variable-name">deq</span> : 'a t -&gt; 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">remove the front of the queue </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>; <span class="org-comment-delimiter">(* </span><span class="org-comment">type of queues</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">exception</span> E; <span class="org-comment-delimiter">(* </span><span class="org-comment">for errors</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">the empty queue</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">enq</span> : 'a t * 'a -&gt; 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">add to end</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">null</span> : 'a t -&gt; bool; <span class="org-comment-delimiter">(* </span><span class="org-comment">test for empty queue</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">hd</span> : 'a t -&gt; 'a; <span class="org-comment-delimiter">(* </span><span class="org-comment">return the front of the queue</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">deq</span> : 'a t -&gt; 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">remove the front of the queue</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
 </pre>
 </div>
@@ -959,9 +960,9 @@ We can "implement" a queue by making the types declared in the signature
       | deq _     = <span class="org-keyword">raise</span> E;
 <span class="org-keyword">end</span>;
 
-List.null Q1.empty; <span class="org-comment-delimiter">(* </span><span class="org-comment">evaluates to "true" </span><span class="org-comment-delimiter">*)</span>
+List.null Q1.empty; <span class="org-comment-delimiter">(* </span><span class="org-comment">evaluates to "true"</span><span class="org-comment-delimiter"> *)</span>
 
-List.null Q2.empty; <span class="org-comment-delimiter">(* </span><span class="org-comment">ERROR!!! </span><span class="org-comment-delimiter">*)</span>
+List.null Q2.empty; <span class="org-comment-delimiter">(* </span><span class="org-comment">ERROR!!!</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-comment-delimiter">(* </span><span class="org-comment">In SML/NJ we get:</span>
 
 <span class="org-comment">stdIn:7.1-7.19 Error: operator and operand do not agree [tycon mismatch]</span>
@@ -1011,14 +1012,14 @@ With opaque signature ascription! We have
     <span class="org-keyword">type</span> <span class="org-type-def">context</span>;
 
     <span class="org-keyword">val</span> <span class="org-variable-name">axiom_trueR</span> : context -&gt; thm;
-    <span class="org-comment-delimiter">(* </span><span class="org-comment">other inference rules omitted </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">other inference rules omitted</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
 
 <span class="org-keyword">structure</span> <span class="org-module-def">Kernel</span> :&gt; KERNEL = <span class="org-keyword">struct</span>
     <span class="org-keyword">datatype</span> <span class="org-type-def">thm</span> = <span class="org-keyword">datatype</span> <span class="org-type-def">Syntax.formula</span>;
     <span class="org-keyword">type</span> <span class="org-type-def">context</span> = Syntax.formula list;
 
-    <span class="org-comment-delimiter">(* </span><span class="org-comment">inference rules omitted </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">inference rules omitted</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
 </pre>
 </div>
@@ -1032,8 +1033,19 @@ then they'll get an error.
 </div>
 </div>
 
+<div id="outline-container-h-cabfd644-fda3-4801-b97f-eb709f55f662" class="outline-2">
+<h2 id="h-cabfd644-fda3-4801-b97f-eb709f55f662"><span class="section-number-2">4.</span> Value Restriction</h2>
+<div class="outline-text-2" id="text-h-cabfd644-fda3-4801-b97f-eb709f55f662">
+<p>
+Polymorphic <code>ref</code> types can cause problems when they store a function.
+The way around this is value restriction (or what the 1997 revised
+definition calls "non-expansive expressions").
+</p>
+</div>
+</div>
+
 <div id="outline-container-h-8bb21485-1413-4bef-9b13-d8255e14c965" class="outline-2">
-<h2 id="h-8bb21485-1413-4bef-9b13-d8255e14c965"><span class="section-number-2">4.</span> References</h2>
+<h2 id="h-8bb21485-1413-4bef-9b13-d8255e14c965"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-8bb21485-1413-4bef-9b13-d8255e14c965">
 <ul class="org-ul">
 <li>John Mitchell and Robert Harper,<br>
@@ -1045,7 +1057,7 @@ CMU-CS-97-147 Tech. Report, dated June 27, 1997, <a href="https://www.cs.cmu.edu
 </div>
 
 <div id="outline-container-h-8f79e9f1-f460-40a5-8172-d70436622563" class="outline-3">
-<h3 id="h-8f79e9f1-f460-40a5-8172-d70436622563"><span class="section-number-3">4.1.</span> Standard Basis</h3>
+<h3 id="h-8f79e9f1-f460-40a5-8172-d70436622563"><span class="section-number-3">5.1.</span> Standard Basis</h3>
 <div class="outline-text-3" id="text-h-8f79e9f1-f460-40a5-8172-d70436622563">
 <ul class="org-ul">
 <li>Implementations
@@ -1059,7 +1071,7 @@ CMU-CS-97-147 Tech. Report, dated June 27, 1997, <a href="https://www.cs.cmu.edu
 </div>
 
 <div id="outline-container-h-cf15cca4-a340-407e-9cbc-4a7eed153e63" class="outline-3">
-<h3 id="h-cf15cca4-a340-407e-9cbc-4a7eed153e63"><span class="section-number-3">4.2.</span> Tutorials</h3>
+<h3 id="h-cf15cca4-a340-407e-9cbc-4a7eed153e63"><span class="section-number-3">5.2.</span> Tutorials</h3>
 <div class="outline-text-3" id="text-h-cf15cca4-a340-407e-9cbc-4a7eed153e63">
 <ul class="org-ul">
 <li>Lawrence Paulson,<br>
@@ -1073,7 +1085,7 @@ CUP, second ed., 1996; <a href="https://www.cl.cam.ac.uk/~lp15/MLbook/pub-detail
 </div>
 
 <div id="outline-container-h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940" class="outline-3">
-<h3 id="h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940"><span class="section-number-3">4.3.</span> Definition of Standard ML</h3>
+<h3 id="h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940"><span class="section-number-3">5.3.</span> Definition of Standard ML</h3>
 <div class="outline-text-3" id="text-h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940">
 <p>
 There is a precise definition of Standard ML (first <a href="https://smlfamily.github.io/sml90-defn.pdf">published</a> in 1990, later
@@ -1108,7 +1120,7 @@ definition of Standard ML (amazing!)</li>
 </div>
 
 <div id="outline-container-h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc" class="outline-3">
-<h3 id="h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc"><span class="section-number-3">4.4.</span> Classic ML</h3>
+<h3 id="h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc"><span class="section-number-3">5.4.</span> Classic ML</h3>
 <div class="outline-text-3" id="text-h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc">
 <p>
 A "dialect", I suppose we could call the "primordial Ur ML" (or
@@ -1124,7 +1136,7 @@ A "dialect", I suppose we could call the "primordial Ur ML" (or
 </div>
 
 <div id="outline-container-h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa" class="outline-3">
-<h3 id="h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa"><span class="section-number-3">4.5.</span> PCF</h3>
+<h3 id="h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa"><span class="section-number-3">5.5.</span> PCF</h3>
 <div class="outline-text-3" id="text-h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa">
 <ul class="org-ul">
 <li>Martin Hotzel Escardo, <a href="https://www.cs.bham.ac.uk/~mhe/papers/RNC3.pdf">Introduction to Real PCF</a>.</li>
@@ -1145,7 +1157,7 @@ Springer, 2011; chapter 2 introduces PCF.</li>
 </div>
 
 <div id="outline-container-h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb" class="outline-4">
-<h4 id="h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb"><span class="section-number-4">4.5.1.</span> Full Abstraction of PCF</h4>
+<h4 id="h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb"><span class="section-number-4">5.5.1.</span> Full Abstraction of PCF</h4>
 <div class="outline-text-4" id="text-h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb">
 <p>
 There are concerns about whether the operational semantics of PCF
@@ -1213,7 +1225,7 @@ Eprint: <a href="https://ora.ox.ac.uk/objects/uuid:63c54392-39f3-46f1-8a68-e6ff0
 </div>
 
 <div id="outline-container-h-412ef711-6f44-4b0b-bdea-31d24d849d87" class="outline-3">
-<h3 id="h-412ef711-6f44-4b0b-bdea-31d24d849d87"><span class="section-number-3">4.6.</span> Category Theory</h3>
+<h3 id="h-412ef711-6f44-4b0b-bdea-31d24d849d87"><span class="section-number-3">5.6.</span> Category Theory</h3>
 <div class="outline-text-3" id="text-h-412ef711-6f44-4b0b-bdea-31d24d849d87">
 <p>
 One major unresolved issue, for me, is whether we can articulate
@@ -1235,7 +1247,7 @@ pp 32-46
 </div>
 
 <div id="outline-container-h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd" class="outline-3">
-<h3 id="h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd"><span class="section-number-3">4.7.</span> Pure Functional Programming</h3>
+<h3 id="h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd"><span class="section-number-3">5.7.</span> Pure Functional Programming</h3>
 <div class="outline-text-3" id="text-h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd">
 <p>
 Usually people don't do pure functional programming in Standard ML (or
@@ -1270,7 +1282,7 @@ Milner's context lemmas</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-28 Fri 10:58.</p>
+<p class="postamble">Last Updated 2022-07-07 Thu 13:28.</p>
 </div>
 </body>
 </html>

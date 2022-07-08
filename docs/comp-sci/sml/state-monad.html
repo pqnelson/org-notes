@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>State Monad - SML</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">State Monad - SML</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-21196b9d-c2a1-4a15-b646-1952d4cd028d">1. Introduction</a></li>
+<li><a href="#h-3a45c708-3600-4240-bb9f-98fb0c39c3d4">2. Heuristic Derivation</a></li>
+<li><a href="#h-9da84a55-fed7-479b-b77d-cc8946784019">3. Implementation Details</a>
+<ul>
+<li><a href="#h-b150c671-a8b9-46f4-b2b1-936468b47cf3">3.1. Higher-Order Types</a></li>
+</ul>
+</li>
+<li><a href="#h-1ceb984d-54d3-4718-8883-56e5cf4ef952">4. OCaml Implementation</a></li>
+<li><a href="#h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d">5. References</a>
+<ul>
+<li><a href="#h-789c6184-637c-45ae-aad1-2d06b8d95754">5.1. OCaml Implementations</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-21196b9d-c2a1-4a15-b646-1952d4cd028d" class="outline-2">
+<h2 id="h-21196b9d-c2a1-4a15-b646-1952d4cd028d"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-21196b9d-c2a1-4a15-b646-1952d4cd028d">
+<p>
+We can think of the State monad as a Reader monad which is also a Writer
+monad, but that's probably not the best way to derive the State monad.
+</p>
+
+<p>
+Wadler introduced the idea of encoding state into a monad back in 1992
+(if not earlier) in his paper "The Essence of Functional
+Programming". But the formalism of <code>State</code> in terms of <code>StateT</code>
+<a href="monad-transformer.html">monad transformers</a> seems to be from Jones's 1995 paper "Functional
+Programming with Overloading and Higher-Order Polymorphism".
+</p>
+
+<p>
+Confusingly, early papers mix up the <code>State</code> monad with the <code>ST</code> monad.
+We can view this as a generalization of the <a href="io-monad.html">IO Monad</a>, where we now have:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-haskell-keyword">type</span> <span class="org-haskell-type">RealWorld</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-operator">...</span>
+
+<span class="org-haskell-keyword">type</span> <span class="org-haskell-type">IO</span> a <span class="org-haskell-operator">=</span> <span class="org-haskell-type">State</span> <span class="org-haskell-type">RealWorld</span> a
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-3a45c708-3600-4240-bb9f-98fb0c39c3d4" class="outline-2">
+<h2 id="h-3a45c708-3600-4240-bb9f-98fb0c39c3d4"><span class="section-number-2">2.</span> Heuristic Derivation</h2>
+<div class="outline-text-2" id="text-h-3a45c708-3600-4240-bb9f-98fb0c39c3d4">
+<p>
+We basically have a state be described along the lines of:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> ('s,'a) <span class="org-type-def">State</span> = State <span class="org-keyword">of</span> ('s -&gt; 'a*'s);
+</pre>
+</div>
+
+<p>
+This is tempting, but wrong. Why?
+</p>
+
+<p>
+We do not want to export the constructor, because we do not want the
+user to do pattern matching. We could ostensibly just do:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">type</span> ('s, 'a) <span class="org-type-def">State</span> = 's -&gt; 'a * 's;
+</pre>
+</div>
+
+<p>
+But this won't do. Why not? Because almost <i>any</i> function could qualify for
+being a term of type <code>State</code>. That's bad.
+</p>
+
+<p>
+What we do is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">abstype</span> ('s, 'a) <span class="org-type-def">State</span> = State <span class="org-keyword">of</span> ('s -&gt; 'a * 's)
+<span class="org-keyword">where</span>
+  <span class="org-keyword">fun</span> <span class="org-function-name">state</span> (f : 's -&gt; 'a * 's) = State f;
+  <span class="org-keyword">fun</span> <span class="org-function-name">runState</span> t st = <span class="org-comment-delimiter">(* </span><span class="org-comment">magic...</span><span class="org-comment-delimiter"> *)</span>;
+  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> x = state (<span class="org-keyword">fn</span> st =&gt; (x, st));
+
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">"k" for "kontinuation"</span><span class="org-comment-delimiter"> *)</span>
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> act k = state (<span class="org-keyword">fn</span> st =&gt;
+                             <span class="org-keyword">let</span> <span class="org-keyword">val</span> (x, st') = runState act st
+                             <span class="org-keyword">in</span> runState (k x) st'
+                             <span class="org-keyword">end</span>);
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Probably a more honest answer is to have <code>State of {runState : 's -&gt; 'a*'s}</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-9da84a55-fed7-479b-b77d-cc8946784019" class="outline-2">
+<h2 id="h-9da84a55-fed7-479b-b77d-cc8946784019"><span class="section-number-2">3.</span> Implementation Details</h2>
+<div class="outline-text-2" id="text-h-9da84a55-fed7-479b-b77d-cc8946784019">
+</div>
+
+<div id="outline-container-h-b150c671-a8b9-46f4-b2b1-936468b47cf3" class="outline-3">
+<h3 id="h-b150c671-a8b9-46f4-b2b1-936468b47cf3"><span class="section-number-3">3.1.</span> Higher-Order Types</h3>
+<div class="outline-text-3" id="text-h-b150c671-a8b9-46f4-b2b1-936468b47cf3">
+<p>
+Haskell can have higher-order types (where types and type constructors
+are given as constructors). If we try to naively translate this into
+Standard ML, there is nothing "obviously" comparable.
+</p>
+
+<p>
+What we should do instead is to use SML Functors. After all, we have a
+Monad be encoded using an ML structure, so if our intuitive
+understanding of a Monad transformer is (according to <a href="https://hackage.haskell.org/package/transformers-0.6.0.4/docs/Control-Monad-Trans-Class.html">Haskell</a>):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-haskell-keyword">class</span> (<span class="org-haskell-keyword">forall</span> m<span class="org-haskell-operator">.</span> <span class="org-haskell-type">Monad</span> m <span class="org-haskell-operator">=&gt;</span> <span class="org-haskell-type">Monad</span> (t m)) <span class="org-haskell-operator">=&gt;</span> <span class="org-haskell-type">MonadTrans</span> t <span class="org-haskell-keyword">where</span>
+    lift <span class="org-haskell-operator">::</span> (<span class="org-haskell-type">Monad</span> m) <span class="org-haskell-operator">=&gt;</span> m a <span class="org-haskell-operator">-&gt;</span> t m a
+</pre>
+</div>
+
+<p>
+It has to satisfy the following two laws:
+</p>
+
+<ol class="org-ol">
+<li><code>lift . return = return</code></li>
+<li><code>lift (m &gt;&gt;= f) = lift m &gt;&gt;= (lift . f)</code></li>
+</ol>
+
+<p>
+What we should do is define a monad transformer as a functor.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">functor</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-1ceb984d-54d3-4718-8883-56e5cf4ef952" class="outline-2">
+<h2 id="h-1ceb984d-54d3-4718-8883-56e5cf4ef952"><span class="section-number-2">4.</span> OCaml Implementation</h2>
+<div class="outline-text-2" id="text-h-1ceb984d-54d3-4718-8883-56e5cf4ef952">
+<p>
+Cambridge L28 taught in 2014&#x2013;2015 has, in its
+<a href="https://www.cl.cam.ac.uk/teaching/1415/L28/monads.pdf">lecture notes</a>, an implementation in OCaml which is very straightforward:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ocaml"><span class="org-tuareg-font-lock-governing">module type</span> <span class="org-tuareg-font-lock-module">MONAD</span> =
+<span class="org-tuareg-font-lock-governing">sig</span>
+  <span class="org-tuareg-font-lock-governing">type</span> <span class="org-type">'a t</span>
+  <span class="org-tuareg-font-lock-governing">val</span> <span class="org-function-name">return</span> : 'a -&gt; 'a t
+  <span class="org-tuareg-font-lock-governing">val</span> (<span class="org-function-name">&gt;&gt;=</span>) : 'a t -&gt; ('a -&gt; 'b t) -&gt; 'b t
+<span class="org-tuareg-font-lock-governing">end</span>
+
+<span class="org-tuareg-font-lock-governing">module type</span> <span class="org-tuareg-font-lock-module">STATE</span> =
+<span class="org-tuareg-font-lock-governing">sig</span>
+  <span class="org-tuareg-font-lock-governing">include</span> <span class="org-tuareg-font-lock-module">MONAD</span>
+  <span class="org-tuareg-font-lock-governing">type</span> <span class="org-type">state</span>
+  <span class="org-tuareg-font-lock-governing">val</span> <span class="org-function-name">get</span> : state t
+  <span class="org-tuareg-font-lock-governing">val</span> <span class="org-function-name">put</span> : state -&gt; unit t
+  <span class="org-tuareg-font-lock-governing">val</span> <span class="org-function-name">runState</span> : 'a t -&gt; <span class="org-tuareg-font-lock-label">init</span>:state -&gt; state * 'a
+<span class="org-tuareg-font-lock-governing">end</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d" class="outline-2">
+<h2 id="h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d">
+<ul class="org-ul">
+<li>Mark P Jones,<br>
+"Functional Programming with Overloading and Higher-Order
+Polymorphism".<br>
+<a href="http://web.cecs.pdx.edu/~mpj/pubs/springschool.html">Eprint</a>, 1995, 40 pages.</li>
+<li>NLab, <a href="https://ncatlab.org/nlab/show/state+monad">State Monad</a></li>
+<li>Ravi Chugh and Stuart Kurtz,<br>
+"State Monad I".<br>
+<a href="http://cmsc-16100.cs.uchicago.edu/2016/Lectures/18-state-monad-1.php">Lecture</a> U. Chicago, CMSC-16100, 2016.</li>
+<li>School of Haskell on
+<a href="https://www.schoolofhaskell.com/school/starting-with-haskell/basics-of-haskell/12-State-Monad">State monad</a>.</li>
+<li>William Yao,<br>
+<a href="https://williamyaoh.com/posts/2020-07-12-deriving-state-monad.html">Deriving the State monad from first principles</a>.<br>
+Blog post dated July 12, 2020.</li>
+</ul>
+</div>
+
+
+
+<div id="outline-container-h-789c6184-637c-45ae-aad1-2d06b8d95754" class="outline-3">
+<h3 id="h-789c6184-637c-45ae-aad1-2d06b8d95754"><span class="section-number-3">5.1.</span> OCaml Implementations</h3>
+<div class="outline-text-3" id="text-h-789c6184-637c-45ae-aad1-2d06b8d95754">
+<ul class="org-ul">
+<li>Łukasz Stafiniak,<br>
+"Functional Programming, lecture 8: Monads".<br>
+<a href="https://ii.uni.wroc.pl/~lukstafi/pmwiki/uploads/Functional/functional-lecture08.pdf">Slides</a></li>
+<li>Xavier Leroy,<br>
+"Functional programming languages, Part IV: monadic transformations,
+monadic programming".<br>
+<a href="https://xavierleroy.org/mpri/2-4/monads.2up.pdf">slides</a></li>
+<li>Daniel Perez,
+<a href="https://github.com/danhper/ocaml-monads/blob/b96a48511dc75b8bf1263ca7f07c32b9a37d2c96/src/monads.mli#L1764-L1990">Implementation</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2022-07-08 Fri 13:52.</p>
+</div>
+</body>
+</html>

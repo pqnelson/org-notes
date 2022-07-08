@@ -1,0 +1,76 @@
+#+TITLE: Monad Transformer - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-07-08T09:56:30-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Friday July  8, 2022 at  9:56AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-7d7a975d-ae99-43e2-adf1-a2d273feb5e8
+:END:
+
+The basic idea is we want to combine monads together. Towards that end,
+we have a SML Functor which will "eat in" a monad, and produce a monad.
+
+We have to implement an individual monad transformer as an individual
+functor. For example,
+
+#+begin_src sml
+functor StateT(type state
+               structure M : MONAD) : MONAD =
+struct
+  type state = state;
+  (* Type constructor *)
+  type 'a t = (state -> 'a * state) M.t;
+
+  fun return x = fn s => M.return (x,s);
+
+  fun bind m f = fn s => M.bind (m s) (fn (x, s') => f x s');
+
+  fun lift m = fn s => M.bind m (fn x => M.return (x,s));
+
+  (* etc. *)
+end;
+#+end_src
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-058d3bd2-eb33-4e56-af11-bed47e911f77
+:END:
+
+- Sheng Liang, Paul Hudak, Mark Jones,\\
+  "Monad transformers and modular interpreters".\\
+  In /POPL '95: Proceedings of the 22nd ACM SIGPLAN-SIGACT symposium on Principles of programming languages/,
+  January 1995, pp.333–343
+  https://doi.org/10.1145/199448.199528
+- Mark P Jones,\\
+  "Functional Programming with Overloading and Higher-Order
+  Polymorphism".\\
+  [[http://web.cecs.pdx.edu/~mpj/pubs/springschool.html][Eprint]], 1995, 40 pages.
+- Martin Grabmuller,\\
+  "Monad Transformers Step by Step".\\
+  [[https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.596&rep=rep1&type=pdf][Citeseer]] 2006 draft.
+
+** OCaml Implementations
+:PROPERTIES:
+:CUSTOM_ID: h-789c6184-637c-45ae-aad1-2d06b8d95754
+:END:
+
+- Łukasz Stafiniak,\\
+  "Functional Programming, lecture 8: Monads".\\
+  [[https://ii.uni.wroc.pl/~lukstafi/pmwiki/uploads/Functional/functional-lecture08.pdf][Slides]]
+- Xavier Leroy,\\
+  "Functional programming languages, Part IV: monadic transformations,
+  monadic programming".\\
+  [[https://xavierleroy.org/mpri/2-4/monads.2up.pdf][slides]]
+- Daniel Perez,
+  [[https://github.com/danhper/ocaml-monads/blob/b96a48511dc75b8bf1263ca7f07c32b9a37d2c96/src/monads.mli#L1764-L1990][Implementation]]
+- Jim Pryor,\\
+  [[http://lambda1.jimpryor.net/monad_transformers/][Monad Transformers]]

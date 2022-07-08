@@ -1,0 +1,36 @@
+#+TITLE: Type Theory of SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-07-08T08:53:23-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Friday July  8, 2022 at  8:53AM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-07afd94f-ca63-4a36-8c04-9dbe20f18872
+:END:
+
+Standard ML appears to be prenex polymorphic typed-lambda calculus, but
+it is a Hindley-Milner system.
+
+I'm going to have to examine the definition in greater detail, but I do
+not know what the type theoretic structure of a ~datatype~ (algebraic
+data type) is, exactly. I suspect it is a iso-recursive variant type, if
+I may borrow the terminology of TAPL.
+
+* Value Restriction
+:PROPERTIES:
+:CUSTOM_ID: h-56474fb9-30f9-42d5-b52a-f02846a54af9
+:END:
+
+If we allow /anything/ to appear in a reference type, then we can
+quickly run into problems when storing a function in a
+reference. Because of this, Standard ML restricts what values may be
+stored in a reference type. The 1997 definition calls them
+{{{dfn(Non-Expansive Expressions)}}} (but doesn't clearly define the term).

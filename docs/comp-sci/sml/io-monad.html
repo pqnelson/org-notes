@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Idioms - SML</title>
+<title>IO Monad - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -213,70 +213,116 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Idioms - SML</h1>
+<h1 class="title">IO Monad - SML</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-151fd75d-61bd-4eb2-b962-3724940c7e31">1. Using <code>type t</code> in Signatures</a></li>
+<li><a href="#h-3a1304a4-9f78-4564-b60a-5f38eb8f88be">1. Introduction</a></li>
+<li><a href="#h-71c727eb-aa16-440b-85a9-e791f7171c2a">2. Using Modules</a></li>
+<li><a href="#h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8">3. References</a></li>
 </ul>
 </div>
 </div>
-<p>
-These are idioms gleaned from reading some random Standard ML programs.
-</p>
 
-<div id="outline-container-h-151fd75d-61bd-4eb2-b962-3724940c7e31" class="outline-2">
-<h2 id="h-151fd75d-61bd-4eb2-b962-3724940c7e31"><span class="section-number-2">1.</span> Using <code>type t</code> in Signatures</h2>
-<div class="outline-text-2" id="text-h-151fd75d-61bd-4eb2-b962-3724940c7e31">
+<div id="outline-container-h-3a1304a4-9f78-4564-b60a-5f38eb8f88be" class="outline-2">
+<h2 id="h-3a1304a4-9f78-4564-b60a-5f38eb8f88be"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-3a1304a4-9f78-4564-b60a-5f38eb8f88be">
 <p>
-When encoding a data type as a signature, for example a <code>signature SET</code>,
-use <code>type t</code> to specify the data type.
-</p>
-
-<p>
-Example:
+We can construct the IO Monad in Standard ML, which has been done in
+Gordon's PhD thesis. There the construction uses an abstract type:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">SET</span> =
-<span class="org-keyword">sig</span>
-    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>;
-    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t;
-    <span class="org-keyword">val</span> <span class="org-variable-name">insert</span> : 'a -&gt; 'a t -&gt; 'a t;
-    <span class="org-keyword">val</span> <span class="org-variable-name">null</span> : 'a t -&gt; bool;
-    <span class="org-keyword">val</span> <span class="org-variable-name">member</span> : 'a -&gt; 'a t -&gt; bool;
-    <span class="org-keyword">val</span> <span class="org-variable-name">map</span> : ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t;
-<span class="org-keyword">end</span>;
+<pre class="src src-sml"><span class="org-keyword">infix</span> 1 &gt;&gt; &gt;&gt;=
+<span class="org-keyword">abstype</span> 'a <span class="org-type-def">Job</span> = JOB <span class="org-keyword">of</span> unit -&gt; 'a
+<span class="org-keyword">with</span>
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">exec : 'a Job -&gt; 'a</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">fun</span> <span class="org-function-name">exec</span> (JOB f)  = f ()
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">return : 'a -&gt; 'a Job</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">fun</span> <span class="org-function-name">return</span> x      = JOB (<span class="org-keyword">fn</span> _ =&gt; x)
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">(&gt;&gt;=) : 'a Job * ('a -&gt; 'b Job) -&gt; 'b Job</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">fun</span> (JOB f) &gt;&gt;= q = JOB (<span class="org-keyword">fn</span> _ =&gt; exec (q (f ())))
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">getStr : int -&gt; TextIO.vector Job</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">fun</span> <span class="org-function-name">getStr</span> n      = JOB (<span class="org-keyword">fn</span> _ =&gt; TextIO.inputN(TextIO.stdIn, n))
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">putStr : string -&gt; unit Job</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">fun</span> <span class="org-function-name">putStr</span> s      = JOB (<span class="org-keyword">fn</span> _ =&gt; print s)
+<span class="org-keyword">end</span>
 
-<span class="org-keyword">structure</span> <span class="org-module-def">TreeSet</span> : SET =
-<span class="org-keyword">struct</span>
-    <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int*'a*('a t)*('a t);
+<span class="org-comment-delimiter">(* </span><span class="org-comment">(&gt;&gt;) : 'a Job * 'b Job -&gt; 'b Job</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">p</span> &gt;&gt; q  =  p &gt;&gt;= (<span class="org-keyword">fn</span> _ =&gt; q);
 
-    <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = E;
+<span class="org-comment-delimiter">(* </span><span class="org-comment">gettingLine : string -&gt; string Job</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">gettingLine</span> s =
+    getStr 1 &gt;&gt;= (<span class="org-keyword">fn</span> c =&gt; <span class="org-keyword">if</span> c = <span class="org-string">"\n"</span>
+                          <span class="org-keyword">then</span> return(s)
+                          <span class="org-keyword">else</span> gettingLine (s^c));
 
-    <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
-      | insert x (T (n, v, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
+<span class="org-comment-delimiter">(* </span><span class="org-comment">getLine : string Job</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">val</span> <span class="org-variable-name">getLine</span> = gettingLine <span class="org-string">""</span>;
 
-    <span class="org-keyword">fun</span> <span class="org-function-name">null</span> E = true
-      | null _ = false;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">member</span> _ E = false
-      | x (T (_, v, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
-
-    <span class="org-keyword">fun</span> <span class="org-function-name">map</span> _ E = E
-      | map f (T (_, x, l, r)) = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
-<span class="org-keyword">end</span>;
-
-<span class="org-comment-delimiter">(* </span><span class="org-comment">mySet : TreeSet.t</span><span class="org-comment-delimiter"> *)</span>
-mySet = TreeSet.empty;
+<span class="org-keyword">val</span> <span class="org-variable-name">main</span> : unit Job =
+    putStr <span class="org-string">"First name: "</span> &gt;&gt; getLine &gt;&gt;= (<span class="org-keyword">fn</span> first =&gt;
+    putStr <span class="org-string">"Second name: "</span> &gt;&gt; getLine &gt;&gt;= (<span class="org-keyword">fn</span> second =&gt;
+    putStr (<span class="org-string">"Hello "</span>^first^<span class="org-string">" "</span>^second^<span class="org-string">"\n"</span>)));
+<span class="org-comment-delimiter">(* </span><span class="org-comment">exec main;</span><span class="org-comment-delimiter"> *)</span>
 </pre>
 </div>
 </div>
 </div>
+
+<div id="outline-container-h-71c727eb-aa16-440b-85a9-e791f7171c2a" class="outline-2">
+<h2 id="h-71c727eb-aa16-440b-85a9-e791f7171c2a"><span class="section-number-2">2.</span> Using Modules</h2>
+<div class="outline-text-2" id="text-h-71c727eb-aa16-440b-85a9-e791f7171c2a">
+<p>
+We can encode the IO Monad using SML's Module system. The signature for
+a Monad would be:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">MONAD</span> = <span class="org-keyword">sig</span>
+    <span class="org-keyword">type</span> 'a <span class="org-type-def">m</span>;
+    <span class="org-keyword">val</span> <span class="org-variable-name">return</span> : 'a -&gt; 'a m;
+    <span class="org-keyword">val</span> <span class="org-variable-name">bind</span> : 'a m -&gt; ('a -&gt; 'b m) -&gt; 'b m;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+The IO Monad requires a few more public-facing methods.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">IO_MONAD</span> =
+<span class="org-keyword">sig</span>
+    <span class="org-keyword">include</span> MONAD;
+    <span class="org-keyword">val</span> <span class="org-variable-name">exec</span> : 'a m -&gt; 'a;
+    <span class="org-keyword">val</span> <span class="org-variable-name">getStr</span> : int -&gt; TextIO.vector m;
+    <span class="org-keyword">val</span> <span class="org-variable-name">putStr</span> : string -&gt; unit m;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Observe we just switched the <code>Job</code> constructor to <code>m</code>. The
+implementation details are straightforward.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8" class="outline-2">
+<h2 id="h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8"><span class="section-number-2">3.</span> References</h2>
+<div class="outline-text-2" id="text-h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8">
+<ul class="org-ul">
+<li>Andrew Gordon,<br>
+"Functional Programming and Input/Output".<br>
+Ph.D. Thesis, Cambridge, 1994; <a href="https://www.microsoft.com/en-us/research/publication/functional-programming-input-output/">Eprint</a>.</li>
+</ul>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-26 Wed 10:16.</p>
+<p class="postamble">Last Updated 2022-07-08 Fri 09:29.</p>
 </div>
 </body>
 </html>

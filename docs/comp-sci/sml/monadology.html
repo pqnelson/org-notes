@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -269,7 +269,7 @@ The state monad encodes a computation <code>state -&gt; (a, state)</code>.
     <span class="org-keyword">type</span> <span class="org-type-def">state</span>;
     <span class="org-keyword">include</span> MONAD <span class="org-keyword">where</span> <span class="org-keyword">type</span> 'a <span class="org-type-def">m</span> = state -&gt; 'a * state;
 
-    <span class="org-comment-delimiter">(* </span><span class="org-comment">core </span><span class="org-comment-delimiter">*)</span>
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">core</span><span class="org-comment-delimiter"> *)</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">runState</span> : 'a m -&gt; state -&gt; 'a * state;
     <span class="org-keyword">val</span> <span class="org-variable-name">get</span> : state m;
     <span class="org-keyword">val</span> <span class="org-variable-name">put</span> : state -&gt; unit m;
@@ -444,7 +444,7 @@ This typechecks fine, but it doesn't produce what we'd expect. For
 example, in Hamlet:
 </p>
 
-<pre class="example" id="org3d362e9">
+<pre class="example" id="org271eefd">
 - putStr "foo";
 val it = IO _fn : unit IO
 - print "foo\n";

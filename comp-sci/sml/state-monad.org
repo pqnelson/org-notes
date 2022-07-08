@@ -1,0 +1,173 @@
+#+TITLE: State Monad - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-07-08T09:00:55-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Friday July  8, 2022 at  9:00AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-21196b9d-c2a1-4a15-b646-1952d4cd028d
+:END:
+
+We can think of the State monad as a Reader monad which is also a Writer
+monad, but that's probably not the best way to derive the State monad.
+
+Wadler introduced the idea of encoding state into a monad back in 1992
+(if not earlier) in his paper "The Essence of Functional
+Programming". But the formalism of ~State~ in terms of ~StateT~
+[[file:monad-transformer.org][monad transformers]] seems to be from Jones's 1995 paper "Functional
+Programming with Overloading and Higher-Order Polymorphism".
+
+Confusingly, early papers mix up the ~State~ monad with the ~ST~ monad.
+We can view this as a generalization of the [[file:io-monad.org][IO Monad]], where we now have:
+
+#+begin_src haskell
+type RealWorld = ...
+
+type IO a = State RealWorld a
+#+end_src
+
+* Heuristic Derivation
+:PROPERTIES:
+:CUSTOM_ID: h-3a45c708-3600-4240-bb9f-98fb0c39c3d4
+:END:
+
+We basically have a state be described along the lines of:
+
+#+begin_src sml
+datatype ('s,'a) State = State of ('s -> 'a*'s);
+#+end_src
+
+This is tempting, but wrong. Why?
+
+We do not want to export the constructor, because we do not want the
+user to do pattern matching. We could ostensibly just do:
+
+#+begin_src sml
+type ('s, 'a) State = 's -> 'a * 's;
+#+end_src
+
+But this won't do. Why not? Because almost /any/ function could qualify for
+being a term of type ~State~. That's bad.
+
+What we do is:
+
+#+begin_src sml
+abstype ('s, 'a) State = State of ('s -> 'a * 's)
+where
+  fun state (f : 's -> 'a * 's) = State f;
+  fun runState t st = (* magic... *);
+  fun return x = state (fn st => (x, st));
+
+  (* "k" for "kontinuation" *)
+  fun bind act k = state (fn st =>
+                             let val (x, st') = runState act st
+                             in runState (k x) st'
+                             end);
+end;
+#+end_src
+
+Probably a more honest answer is to have ~State of {runState : 's -> 'a*'s}~.
+
+* Implementation Details
+:PROPERTIES:
+:CUSTOM_ID: h-9da84a55-fed7-479b-b77d-cc8946784019
+:END:
+
+** Higher-Order Types
+:PROPERTIES:
+:CUSTOM_ID: h-b150c671-a8b9-46f4-b2b1-936468b47cf3
+:END:
+
+Haskell can have higher-order types (where types and type constructors
+are given as constructors). If we try to naively translate this into
+Standard ML, there is nothing "obviously" comparable.
+
+What we should do instead is to use SML Functors. After all, we have a
+Monad be encoded using an ML structure, so if our intuitive
+understanding of a Monad transformer is (according to [[https://hackage.haskell.org/package/transformers-0.6.0.4/docs/Control-Monad-Trans-Class.html][Haskell]]):
+
+#+begin_src haskell
+class (forall m. Monad m => Monad (t m)) => MonadTrans t where
+    lift :: (Monad m) => m a -> t m a
+#+end_src
+
+It has to satisfy the following two laws:
+
+1. ~lift . return = return~
+2. ~lift (m >>= f) = lift m >>= (lift . f)~
+
+What we should do is define a monad transformer as a functor.
+
+#+begin_src sml
+functor
+#+end_src
+
+* OCaml Implementation
+:PROPERTIES:
+:CUSTOM_ID: h-1ceb984d-54d3-4718-8883-56e5cf4ef952
+:END:
+
+Cambridge L28 taught in 2014--2015 has, in its
+[[https://www.cl.cam.ac.uk/teaching/1415/L28/monads.pdf][lecture notes]], an implementation in OCaml which is very straightforward:
+
+#+begin_src ocaml
+module type MONAD =
+sig
+  type 'a t
+  val return : 'a -> 'a t
+  val (>>=) : 'a t -> ('a -> 'b t) -> 'b t
+end
+
+module type STATE =
+sig
+  include MONAD
+  type state
+  val get : state t
+  val put : state -> unit t
+  val runState : 'a t -> init:state -> state * 'a
+end
+#+end_src
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d
+:END:
+
+- Mark P Jones,\\
+  "Functional Programming with Overloading and Higher-Order
+  Polymorphism".\\
+  [[http://web.cecs.pdx.edu/~mpj/pubs/springschool.html][Eprint]], 1995, 40 pages.
+- NLab, [[https://ncatlab.org/nlab/show/state+monad][State Monad]]
+- Ravi Chugh and Stuart Kurtz,\\
+  "State Monad I".\\
+  [[http://cmsc-16100.cs.uchicago.edu/2016/Lectures/18-state-monad-1.php][Lecture]] U. Chicago, CMSC-16100, 2016.
+- School of Haskell on
+  [[https://www.schoolofhaskell.com/school/starting-with-haskell/basics-of-haskell/12-State-Monad][State monad]].
+- William Yao,\\
+  [[https://williamyaoh.com/posts/2020-07-12-deriving-state-monad.html][Deriving the State monad from first principles]].\\
+  Blog post dated July 12, 2020.
+  
+
+
+** OCaml Implementations
+:PROPERTIES:
+:CUSTOM_ID: h-789c6184-637c-45ae-aad1-2d06b8d95754
+:END:
+
+- Łukasz Stafiniak,\\
+  "Functional Programming, lecture 8: Monads".\\
+  [[https://ii.uni.wroc.pl/~lukstafi/pmwiki/uploads/Functional/functional-lecture08.pdf][Slides]]
+- Xavier Leroy,\\
+  "Functional programming languages, Part IV: monadic transformations,
+  monadic programming".\\
+  [[https://xavierleroy.org/mpri/2-4/monads.2up.pdf][slides]]
+- Daniel Perez,
+  [[https://github.com/danhper/ocaml-monads/blob/b96a48511dc75b8bf1263ca7f07c32b9a37d2c96/src/monads.mli#L1764-L1990][Implementation]]

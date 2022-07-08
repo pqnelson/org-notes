@@ -1,0 +1,95 @@
+#+TITLE: IO Monad - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-07-08T09:22:00-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Friday July  8, 2022 at  9:22AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-3a1304a4-9f78-4564-b60a-5f38eb8f88be
+:END:
+
+We can construct the IO Monad in Standard ML, which has been done in
+Gordon's PhD thesis. There the construction uses an abstract type:
+
+#+begin_src sml
+infix 1 >> >>=
+abstype 'a Job = JOB of unit -> 'a
+with
+    (* exec : 'a Job -> 'a *)
+    fun exec (JOB f)  = f ()
+    (* return : 'a -> 'a Job *)
+    fun return x      = JOB (fn _ => x)
+    (* (>>=) : 'a Job * ('a -> 'b Job) -> 'b Job *)
+    fun (JOB f) >>= q = JOB (fn _ => exec (q (f ())))
+    (* getStr : int -> TextIO.vector Job *)
+    fun getStr n      = JOB (fn _ => TextIO.inputN(TextIO.stdIn, n))
+    (* putStr : string -> unit Job *)
+    fun putStr s      = JOB (fn _ => print s)
+end
+
+(* (>>) : 'a Job * 'b Job -> 'b Job *)
+fun p >> q  =  p >>= (fn _ => q);
+
+(* gettingLine : string -> string Job *)
+fun gettingLine s =
+    getStr 1 >>= (fn c => if c = "\n"
+                          then return(s)
+                          else gettingLine (s^c));
+
+(* getLine : string Job *)
+val getLine = gettingLine "";
+
+val main : unit Job =
+    putStr "First name: " >> getLine >>= (fn first =>
+    putStr "Second name: " >> getLine >>= (fn second =>
+    putStr ("Hello "^first^" "^second^"\n")));
+(* exec main; *)
+#+end_src
+
+* Using Modules
+:PROPERTIES:
+:CUSTOM_ID: h-71c727eb-aa16-440b-85a9-e791f7171c2a
+:END:
+
+We can encode the IO Monad using SML's Module system. The signature for
+a Monad would be:
+
+#+begin_src sml
+signature MONAD = sig
+    type 'a m;
+    val return : 'a -> 'a m;
+    val bind : 'a m -> ('a -> 'b m) -> 'b m;
+end;
+#+end_src
+
+The IO Monad requires a few more public-facing methods.
+
+#+begin_src sml
+signature IO_MONAD =
+sig
+    include MONAD;
+    val exec : 'a m -> 'a;
+    val getStr : int -> TextIO.vector m;
+    val putStr : string -> unit m;
+end;
+#+end_src
+
+Observe we just switched the ~Job~ constructor to ~m~. The
+implementation details are straightforward.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8
+:END:
+
+- Andrew Gordon,\\
+  "Functional Programming and Input/Output".\\
+  Ph.D. Thesis, Cambridge, 1994; [[https://www.microsoft.com/en-us/research/publication/functional-programming-input-output/][Eprint]].
