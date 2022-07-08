@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -267,7 +267,7 @@ propositions.
 Generic definitions look like:
 </p>
 
-<pre class="example" id="org0eadcde">
+<pre class="example" id="org00acdd4">
 Definition my_new_term : Type :=
   (* body *).
 </pre>
@@ -281,7 +281,7 @@ We can ask Coq to evaluate a term by writing <code>Compute &lt;term&gt;.</code>
 There are also theorems.
 </p>
 
-<pre class="example" id="org009c3a2">
+<pre class="example" id="org7d2d038">
 Theorem ex_arith_thm : forall (n : nat), n + 0 = n.
 Proof.
   (* ... *)
@@ -324,6 +324,7 @@ hard to remember.
 <li><code>generalize dependent x</code> will move the variable <code>x</code> and anything else
 that depends on it from the context back to an explicit hypothesis in
 the goal</li>
+<li><code>split</code> turns a goal <code>A /\ B</code> into two goals, namely <code>A</code> and <code>B</code></li>
 <li><code>unfold</code> will unfold a definition, which we will need to do when a
 definition involves a <code>match ... with...</code> expression.</li>
 <li><code>reflexivity</code> finishes the proof when the goal is of the form <code>e = e</code>.</li>
@@ -338,7 +339,11 @@ standing in for a variable, we can explicitly tell Coq to do this by
 </ul></li>
 <li><code>f_equal</code>: Given a goal of the form <code>f a1 ... an = g b1 ... bn</code>,
 the tactic <code>f_equal</code> will produce subgoals of the form <code>f = g</code>,
-<code>a1 = b1</code>, &#x2026;, <code>an = bn</code>.</li>
+<code>a1 = b1</code>, &#x2026;, <code>an = bn</code>.
+<ul class="org-ul">
+<li><code>f_equiv</code> does likewise, but when an equivalence relation <code>R</code>
+relates the two terms</li>
+</ul></li>
 <li><code>injection</code> &#x2014; if we have an equality of constructors
 <code>Constructor t_1 ... t_n = Constructor u_1 ... u_n</code>, we can use the
 fact that type constructors are injective to transform our goal into
@@ -354,6 +359,10 @@ on a hypothesis as <code>discriminate H</code>.</li>
 quantified when doing an induction proof; forgetting to do so will
 produce an impossible situation. See <a href="https://www.seas.upenn.edu/~cis500/current/sf/lf-current/Tactics.html#lab150">Foundations</a> on this.</li>
 </ul></li>
+<li><code>inversion</code> &#x2014; when proving an inductive <code>Prop</code>, we may want to
+analyze ("destructure") the evidence of the inductive hypothesis;
+inversion let's us do this. Hence <code>inversion</code> requires a label,
+referring to a proposition to invert.</li>
 </ul>
 </div>
 </div>
@@ -367,7 +376,15 @@ produce an impossible situation. See <a href="https://www.seas.upenn.edu/~cis500
 "Importing HOL Light into Coq".<br>
 ITP - Interactive Theorem Proving, First International Conference - 2010, Jul 2010, Edimbourg, United Kingdom. pp.307-322.
 <a href="https://hal.inria.fr/inria-00520604/document">inria-00520604</a></li>
+<li>Ralf Jung,
+"Exponential blowup when using unbundled typeclasses to model algebraic hierarchies".
+<a href="https://www.ralfj.de/blog/2019/05/15/typeclasses-exponential-blowup.html">Blog post</a>.</li>
 </ul>
+
+
+<p>
+See also <a href="https://gitlab.mpi-sws.org/iris/stdpp/-/blob/master/theories/base.v#L310-314">base.v</a> for <code>Params</code>.
+</p>
 </div>
 
 <div id="outline-container-h-04884a18-26b5-4208-a05c-a22d6a78a93e" class="outline-3">
@@ -385,7 +402,7 @@ Its a Coq tutorial, and a textbook akin to <i>TAPL</i>.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-06-01 Wed 09:21.</p>
+<p class="postamble">Last Updated 2022-06-17 Fri 09:27.</p>
 </div>
 </body>
 </html>
