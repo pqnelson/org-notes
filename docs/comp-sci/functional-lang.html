@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Statically-Typed Functional Languages</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Statically-Typed Functional Languages</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-bad31a31-f627-4de0-b7c9-dbe712e888c2">1. Introduction</a>
+<ul>
+<li><a href="#h-5c4e0c0e-eedc-4802-bc43-74642393fcd9">1.1. What are "algebraic data types"?</a></li>
+</ul>
+</li>
+<li><a href="#h-b20aaf69-4fb7-4614-a19a-442edd5a9f74">2. GHC Core</a>
+<ul>
+<li><a href="#h-d55708ac-878a-42f2-b451-31ec087fed7e">2.1. Prenex Polymorphism</a></li>
+</ul>
+</li>
+<li><a href="#h-4c425055-f94d-4575-817f-44ea5d738e90">3. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-bad31a31-f627-4de0-b7c9-dbe712e888c2" class="outline-2">
+<h2 id="h-bad31a31-f627-4de0-b7c9-dbe712e888c2"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-bad31a31-f627-4de0-b7c9-dbe712e888c2">
+<p>
+Statically-typed functional programming languages appear to be
+variations on a theme with slight differences among syntax. One way to
+derive statically-typed functional languages is:
+</p>
+
+<ol class="org-ol">
+<li>Start with a typed lambda-calculus</li>
+<li>Add algebraic data types</li>
+</ol>
+
+<p>
+This will give the "floor model" of such languages, then we can add more
+bells and whistles and syntactic sugar.
+</p>
+</div>
+
+<div id="outline-container-h-5c4e0c0e-eedc-4802-bc43-74642393fcd9" class="outline-3">
+<h3 id="h-5c4e0c0e-eedc-4802-bc43-74642393fcd9"><span class="section-number-3">1.1.</span> What are "algebraic data types"?</h3>
+<div class="outline-text-3" id="text-h-5c4e0c0e-eedc-4802-bc43-74642393fcd9">
+<p>
+I have not found a rigorous definition anywhere, but a suitable
+implementation of algebraic data types requires the following:
+</p>
+
+<ol class="org-ol">
+<li>Iso-recursive types</li>
+<li>Variant types</li>
+<li>Product ("tuple") types</li>
+</ol>
+
+<p>
+What's an "iso-recursive type"? Well, recursive types are formalized
+using a new binder (&mu;) with a type variable \(X\). This is called the
+<dfn>Fixpoint Type Constructor</dfn>.
+</p>
+
+<p>
+We then have two
+functions
+</p>
+
+<ul class="org-ul">
+<li>\(\mathrm{unfold}\colon\mu X.\tau\to\tau[(\mu X.\tau)/X]\)
+where \(\tau[(\mu X.\tau)/X]\) is obtained by replacing all free
+instances of \(X\) by \(\mu X.\tau\), and</li>
+<li>\(\mathrm{fold}\colon\tau[(\mu X.\tau)/X]\to\mu X.\tau\)</li>
+</ul>
+
+<p>
+Such that
+</p>
+
+<ol class="org-ol">
+<li>\(\mathrm{fold}\circ\mathrm{unfold}=\mathrm{id}_{\mu X.\tau}\) is the
+identity function, and</li>
+<li>\(\mathrm{unfold}\circ\mathrm{fold}=\mathrm{id}_{\tau[(\mu X.\tau)/X]}\)
+is the identity function.</li>
+</ol>
+
+<p>
+An algebraic data type is then a variant, each branch being a product
+type (possibly recursive). For example, a list:
+</p>
+
+<ul class="org-ul">
+<li>Type definition: \(\tau~\mathrm{list} = \mu X.(\mathbf{1} + (\tau\times X))\)
+<ul class="org-ul">
+<li>Technically, we have it be \(\forall\tau.\mu X.(\mathbf{1} + (\tau\times X))\)</li>
+<li>Haskell swaps \(\mu\) and \(\forall\) binders, confusingly enough</li>
+</ul></li>
+<li>Constructors:
+<ol class="org-ol">
+<li>\(\mathrm{nil}_{\tau} = \mathrm{fold}_{\tau~\mathrm{list}}(\mathrm{injl~unit})\)</li>
+<li>\(\mathrm{cons}_{\tau} = \lambda x{:}\tau.\lambda\ell{:}\tau~\mathrm{list}.\mathrm{fold}_{\tau~\mathrm{list}}~\mathrm{injr}(x,\ell)\)</li>
+</ol></li>
+<li>Pattern matching (destructuring, etc.) then uses "unfold",
+specifically
+\(\lambda\ell{:}\tau~\mathrm{list}.\mathrm{case}~(\mathrm{unfold}_{\tau~\mathrm{list}}\ell)~\mathrm{of}\dots\)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-b20aaf69-4fb7-4614-a19a-442edd5a9f74" class="outline-2">
+<h2 id="h-b20aaf69-4fb7-4614-a19a-442edd5a9f74"><span class="section-number-2">2.</span> GHC Core</h2>
+<div class="outline-text-2" id="text-h-b20aaf69-4fb7-4614-a19a-442edd5a9f74">
+<p>
+We can write a minimal functional language using System F, which is what
+Haskell does with its intermediate Core language:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Expr</span>
+  <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Var</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Lit</span> <span class="org-haskell-constructor">Literal</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">App</span> <span class="org-haskell-constructor">Expr</span> <span class="org-haskell-constructor">Expr</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Lam</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Expr</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Both term and type lambda</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Let</span> <span class="org-haskell-constructor">Bind</span> <span class="org-haskell-constructor">Expr</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Case</span> <span class="org-haskell-constructor">Expr</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Type</span> [(<span class="org-haskell-constructor">AltCon</span>, [<span class="org-haskell-constructor">Var</span>], <span class="org-haskell-constructor">Expr</span>)]
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Type</span> <span class="org-haskell-constructor">Type</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Used for type application</span>
+
+<span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Var</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">Id</span> <span class="org-haskell-constructor">Name</span> <span class="org-haskell-constructor">Type</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Term variable</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">TyVar</span> <span class="org-haskell-constructor">Name</span> <span class="org-haskell-constructor">Kind</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Type/kind variable</span>
+
+<span class="org-haskell-keyword">type</span> <span class="org-haskell-type">Kind</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-type">Type</span>
+
+<span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Type</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">TyVarTy</span> <span class="org-haskell-constructor">Var</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">LitTy</span> <span class="org-haskell-constructor">TyLit</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">AppTy</span> <span class="org-haskell-constructor">Type</span> <span class="org-haskell-constructor">Type</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">TyConApp</span> <span class="org-haskell-constructor">TyCon</span> [<span class="org-haskell-constructor">Type</span>]
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">FunTy</span> <span class="org-haskell-constructor">Type</span> <span class="org-haskell-constructor">Type</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Not really necy</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">ForAllTy</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Type</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-d55708ac-878a-42f2-b451-31ec087fed7e" class="outline-3">
+<h3 id="h-d55708ac-878a-42f2-b451-31ec087fed7e"><span class="section-number-3">2.1.</span> Prenex Polymorphism</h3>
+<div class="outline-text-3" id="text-h-d55708ac-878a-42f2-b451-31ec087fed7e">
+<p>
+We actually don't need "full" System F. We can restrict attention to
+rank-1 polymorphism, where the &forall; and big &Lambda; binders appear in
+"prenex form" (i.e., outermost position). So, we can write:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">MonoType</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">TyVarTy</span> <span class="org-haskell-constructor">Var</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">LitTy</span> <span class="org-haskell-constructor">TyLit</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">AppTy</span> <span class="org-haskell-constructor">MonoType</span> <span class="org-haskell-constructor">MonoType</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">TyConApp</span> <span class="org-haskell-constructor">TyCon</span> [<span class="org-haskell-constructor">MonoType</span>]
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">FunTy</span> <span class="org-haskell-constructor">MonoType</span> <span class="org-haskell-constructor">MonoType</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Not really necy</span>
+<span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Type</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">TSType</span> <span class="org-haskell-constructor">MonoType</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">ForAllTy</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">TypeScheme</span>
+</pre>
+</div>
+
+<p>
+Or something like that.
+</p>
+
+<p>
+This will have decidable type checking, whereas System F does not have
+decidable type checking (it's known to be undecidable).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-4c425055-f94d-4575-817f-44ea5d738e90" class="outline-2">
+<h2 id="h-4c425055-f94d-4575-817f-44ea5d738e90"><span class="section-number-2">3.</span> References</h2>
+<div class="outline-text-2" id="text-h-4c425055-f94d-4575-817f-44ea5d738e90">
+<ul class="org-ul">
+<li>Simon Peyton Jones,<br>
+"Into the Core: Squeezing Haskell into Nine Constructors".<br>
+<a href="https://youtu.be/uR_VzYxvbxg">2016 talk</a> and <a href="https://youtu.be/Gml1m-3L47s">2022 talk</a>
+<ul class="org-ul">
+<li>Talks about making a minimal functional language atop System F.</li>
+</ul></li>
+<li>Lecture notes on recursive types; CS Cornell Fall 2012 course 4110
+<a href="https://www.cs.cornell.edu/courses/cs4110/2012fa/lectures/lecture27.pdf">PDF</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2022-07-15 Fri 09:11.</p>
+</div>
+</body>
+</html>

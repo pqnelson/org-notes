@@ -1,0 +1,138 @@
+#+TITLE: Statically-Typed Functional Languages
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-07-15T08:07:03-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Friday July 15, 2022 at  8:07AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-bad31a31-f627-4de0-b7c9-dbe712e888c2
+:END:
+
+Statically-typed functional programming languages appear to be
+variations on a theme with slight differences among syntax. One way to
+derive statically-typed functional languages is:
+
+1. Start with a typed lambda-calculus
+2. Add algebraic data types
+
+This will give the "floor model" of such languages, then we can add more
+bells and whistles and syntactic sugar.
+
+** What are "algebraic data types"?
+:PROPERTIES:
+:CUSTOM_ID: h-5c4e0c0e-eedc-4802-bc43-74642393fcd9
+:END:
+
+I have not found a rigorous definition anywhere, but a suitable
+implementation of algebraic data types requires the following:
+
+1. Iso-recursive types
+2. Variant types
+3. Product ("tuple") types
+
+What's an "iso-recursive type"? Well, recursive types are formalized
+using a new binder (\mu) with a type variable $X$. This is called the
+{{{dfn(Fixpoint Type Constructor)}}}.
+
+We then have two
+functions
+
+- $\mathrm{unfold}\colon\mu X.\tau\to\tau[(\mu X.\tau)/X]$
+  where $\tau[(\mu X.\tau)/X]$ is obtained by replacing all free
+  instances of $X$ by $\mu X.\tau$, and
+- $\mathrm{fold}\colon\tau[(\mu X.\tau)/X]\to\mu X.\tau$
+
+Such that
+
+1. $\mathrm{fold}\circ\mathrm{unfold}=\mathrm{id}_{\mu X.\tau}$ is the
+   identity function, and
+2. $\mathrm{unfold}\circ\mathrm{fold}=\mathrm{id}_{\tau[(\mu X.\tau)/X]}$
+   is the identity function.
+
+An algebraic data type is then a variant, each branch being a product
+type (possibly recursive). For example, a list:
+
+- Type definition: $\tau~\mathrm{list} = \mu X.(\mathbf{1} + (\tau\times X))$
+  - Technically, we have it be $\forall\tau.\mu X.(\mathbf{1} + (\tau\times X))$
+  - Haskell swaps $\mu$ and $\forall$ binders, confusingly enough
+- Constructors:
+  1. $\mathrm{nil}_{\tau} = \mathrm{fold}_{\tau~\mathrm{list}}(\mathrm{injl~unit})$
+  2. $\mathrm{cons}_{\tau} = \lambda x{:}\tau.\lambda\ell{:}\tau~\mathrm{list}.\mathrm{fold}_{\tau~\mathrm{list}}~\mathrm{injr}(x,\ell)$
+- Pattern matching (destructuring, etc.) then uses "unfold",
+  specifically
+  $\lambda\ell{:}\tau~\mathrm{list}.\mathrm{case}~(\mathrm{unfold}_{\tau~\mathrm{list}}\ell)~\mathrm{of}\dots$ 
+
+* GHC Core
+:PROPERTIES:
+:CUSTOM_ID: h-b20aaf69-4fb7-4614-a19a-442edd5a9f74
+:END:
+
+We can write a minimal functional language using System F, which is what
+Haskell does with its intermediate Core language:
+
+#+begin_src haskell
+data Expr
+  = Var Var
+  | Lit Literal
+  | App Expr Expr
+  | Lam Var Expr -- Both term and type lambda
+  | Let Bind Expr
+  | Case Expr Var Type [(AltCon, [Var], Expr)]
+  | Type Type -- Used for type application
+
+data Var = Id Name Type -- Term variable
+  | TyVar Name Kind -- Type/kind variable
+
+type Kind = Type
+
+data Type = TyVarTy Var
+  | LitTy TyLit
+  | AppTy Type Type
+  | TyConApp TyCon [Type]
+  | FunTy Type Type -- Not really necy
+  | ForAllTy Var Type
+#+end_src
+
+** Prenex Polymorphism
+:PROPERTIES:
+:CUSTOM_ID: h-d55708ac-878a-42f2-b451-31ec087fed7e
+:END:
+
+We actually don't need "full" System F. We can restrict attention to
+rank-1 polymorphism, where the \forall and big \Lambda binders appear in
+"prenex form" (i.e., outermost position). So, we can write:
+
+#+begin_src haskell
+data MonoType = TyVarTy Var
+  | LitTy TyLit
+  | AppTy MonoType MonoType
+  | TyConApp TyCon [MonoType]
+  | FunTy MonoType MonoType -- Not really necy
+data Type = TSType MonoType
+  | ForAllTy Var TypeScheme
+#+end_src
+
+Or something like that.
+
+This will have decidable type checking, whereas System F does not have
+decidable type checking (it's known to be undecidable).
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-4c425055-f94d-4575-817f-44ea5d738e90
+:END:
+
+- Simon Peyton Jones,\\
+  "Into the Core: Squeezing Haskell into Nine Constructors".\\
+  [[https://youtu.be/uR_VzYxvbxg][2016 talk]] and [[https://youtu.be/Gml1m-3L47s][2022 talk]]
+  - Talks about making a minimal functional language atop System F.
+- Lecture notes on recursive types; CS Cornell Fall 2012 course 4110
+  [[https://www.cs.cornell.edu/courses/cs4110/2012fa/lectures/lecture27.pdf][PDF]]
