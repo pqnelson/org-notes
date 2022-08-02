@@ -1,0 +1,206 @@
+#+TITLE: Car
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-07-28T11:37:43-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Thursday July 28, 2022 at 11:37AM
+
+* Acceleration
+:PROPERTIES:
+:CUSTOM_ID: h-6d3d6c49-4157-4f61-ad3e-012b151dddb4
+:END:
+
+We can relate the car's speed to its engine's RPM by the following
+formula:
+
+\begin{equation}
+|\vec{v}| = \frac{(2\pi r_{\text{wheel}})(RPM)}{g_{t}g_{d}}
+\end{equation}
+
+where $g_{t}$ is the gear ratio for the transmission, and $g_{d}$ is the
+gear ratio for the differential.
+
+I'm told:
+
+#+begin_quote
+A typical engine accelerates from idling to ~6000 rpm in about 4 secs
+($a\sim 1300$ rpm/s), the driver disengages the clutch to shift gears and the
+rpm drops to 4500.
+
+Reference: https://www.physicsforums.com/threads/need-help-understanding-engine-acceleration-and-relation-with-torque.766950/
+#+end_quote
+
+The gear ratio for the differential varies depending on the car, but it
+typically is around
+
+\begin{equation}
+g_{d}\approx 4.00.
+\end{equation}
+
+We could model the engine's RPM as something like a periodic function:
+
+\begin{equation}
+f(t) = \begin{cases}\omega t & 0\leq t\leq t_{1}\\
+4500 & t_{1}\leq t\leq T
+\end{cases}
+\end{equation}
+
+where the shift time is $T-t_{1}$ on the order of 1 second.
+
+** Typical Transmission
+:PROPERTIES:
+:CUSTOM_ID: h-4b0d51e1-cd44-4f51-898e-6c3beb12e2b8
+:END:
+
+A typical transmission would have something like the following gear
+ratios:
+
+| Gear   | Ratio |
+|--------+-------|
+| First  | 4:1   |
+| Second | 3:1   |
+| Third  | 2:1   |
+| Fourth | 1:1   |
+| Fifth  | 1:2   |
+| Sixth  | 1:3   |
+
+Usually the transmissions go up to 4 or so, but this is a fine
+heuristic.
+
+** Typical Differential
+:PROPERTIES:
+:CUSTOM_ID: h-aca32486-387f-48f3-8a82-dfc088fd3b92
+:END:
+
+The differential gear ratio is usually around 4:1.
+
+** Typical Tire Size
+:PROPERTIES:
+:CUSTOM_ID: h-74f793ed-6ec6-49a7-9ae5-72bc29a1eddf
+:END:
+
+We usually have tire radius be around 0.400 meters.
+
+** Drag and Rolling Resistance
+:PROPERTIES:
+:CUSTOM_ID: h-3bac94c0-c13e-4a9a-aaf7-788a309c94cd
+:END:
+
+On the road, rolling resistance is negligible. But drag force is not!
+(Off the rad, rolling resistant becomes non-negligible.)
+
+** Exact Solution For Drag in 1-Dimension
+:PROPERTIES:
+:CUSTOM_ID: h-e2f8c9f3-edfc-4147-9d39-d08964f0514b
+:END:
+
+Actually, we would have Newton's second equation become (for
+one-dimensional motion):
+
+\begin{equation}
+\frac{\mathrm{d}v(t)}{\mathrm{d}t} = (2\pi r_{wh})\omega_{n}(t) -
+c_{d} v(t)^{2}
+\end{equation}
+
+where $c_{d}$ is the drag coefficient. For cars, $c_{d}\approx 0.3$ nowadays but
+before World War 2 cars had $c_{d}\approx 1$. For motorcycles $0.5\leq c_{d}\leq 1$.
+
+*For simplicity* we will absorb the factor of $2\pi r_{wh}$ into
+$\omega_{n}(t)$. We also model $\omega_{n}(t) = \omega_{n}\cdot t$ as a linear
+homogeneous function of time.
+
+We can solve this using [[https://en.wikipedia.org/wiki/Bessel_function][Bessel functions]] of the first kind as:
+
+\begin{equation}
+v(t) =
+i\sqrt{\frac{\omega_{n}t}{c_{d}}}
+\frac{J_{-2/3}\left(\frac{2}{3} i \sqrt{\omega_{n} c_{d}} t^{3/2}\right) - C_{1} J_{2/3}\left(\frac{2}{3} i \sqrt{\omega_{n} c_{d}} t^{3/2}\right)}{J_{1/3}\left(\frac{2}{3} i \sqrt{\omega_{n} c_{d}} t^{3/2}\right) + C_{1} J_{-1/3}\left(\frac{2}{3} i \sqrt{\omega_{n} c_{d}} t^{3/2}\right)}
+\end{equation}
+
+where $C_{1}$ is some constant to be determined by initial data.
+
+We see that $v(0)$ is indeterminate, but its limit is well-defined and
+has value:
+
+\begin{equation}
+\lim_{t\to 0}v(t) = \frac{3^{1/3} (i\sqrt{\omega_{n}c_{d}})^{2/3}\Gamma(2/3)}{c_{d}C_{1}\Gamma(1/3)}.
+\end{equation}
+
+Thus, if we are given the initial velocity as $v(0) = v_{0}\neq 0$, we can set
+the limit equal to this, giving us:
+
+\begin{equation}
+C_{1} = \frac{3^{1/3} (i\sqrt{\omega_{n}c_{d}})^{2/3}\Gamma(2/3)}{c_{d}v_{0}\Gamma(1/3)}.
+\end{equation}
+
+We have been quite cavalier in our computations, since it's entirely
+symbolic in nature. The proliferation of $i=\sqrt{-1}$ is alarming, but
+surprisingly when we plug in realistic values for our parameters...we
+obtain real values (i.e., the values produced are real numbers).
+
+*** When Shifting Gears
+:PROPERTIES:
+:CUSTOM_ID: h-e5c51425-73d8-43f6-99c3-84b34e515f1d
+:END:
+
+If we model shifting gears as requiring 1 second of time (or some finite
+amount of time $\Delta t$) where there is no forward velocity
+$\omega_{n}(t)=0$, then the solution is quite simple. Our equations of
+motion
+
+\begin{equation}
+\frac{\mathrm{d}v(t)}{\mathrm{d}t} = -c_{d} v(t)^{2}
+\end{equation}
+
+has a solution
+
+\begin{equation}
+v(t) = \frac{1}{c_{d}t - C_{1}}
+\end{equation}
+
+where $C_{1}$ is determined by initial conditions. If the initial
+velocity is $v(0)=v_{0}$ for example, then $C_{1}=-1/v_{0}$. That is to
+say, if $v(0) = v_{0}\neq 0$, then
+
+\begin{equation}
+v(t) = \frac{v_{0}}{v_{0}c_{d}t + 1}.
+\end{equation}
+
+*** Complete Solution
+:PROPERTIES:
+:CUSTOM_ID: h-18a9a972-c789-4885-9a42-2d74d00e7d34
+:END:
+
+We can then use these two general solutions to form piecewise the
+behaviour of the vehicle as it is shifting gears.
+
+**** Asymptotic Behaviour of Bessel Functions
+:PROPERTIES:
+:CUSTOM_ID: h-b4b62d7b-5364-4127-99a6-846b29f5455d
+:END:
+
+We can use the asymptotic approximations of $J_{\alpha}(ix)$ for large
+real $x$ (and another asymptotic approximation for small real $x$).
+
+As $x\to\infty$, we have
+
+\begin{equation}
+J_{\alpha}(ix)\sim\frac{1}{\sqrt{2\pi ix}}\exp\left[-i\left(ix - \frac{\alpha\pi}{2} - \frac{\pi}{4}\right)\right].
+\end{equation}
+
+For $x\to0$, we have
+
+\begin{equation}
+J_{\alpha}(ix) \sim \frac{1}{\Gamma(1 + \alpha)}\left(\frac{ix}{2}\right)^{\alpha}.
+\end{equation}
+
+I'm sure we can invent some function $f(t)$ such that for $0\lt t\ll 1$
+we have $f(t)\approx (it/2)^{\alpha}/\Gamma(1+\alpha)$ and for larger
+$t$ we have $f(t)$ approximate the first asymptotic expansion.
+

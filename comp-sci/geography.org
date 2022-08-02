@@ -1,0 +1,110 @@
+#+TITLE: Geography
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-07-27T09:35:24-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Wednesday July 27, 2022 at  9:35AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-8db7bc98-98de-4384-b5cd-23720273eeab
+:END:
+
+Suppose we want to model a planet's atmospheric dynamics, or we want to
+simulate a fictitious world (like Dwarf Fortress). First, we must encode
+the geography of the planet on a computer. How can we do it?
+
+Fans of the /Civilization/ game series may think of a hex grid. This is
+one approach, but I am lazy and want something which can be shown in the
+terminal.
+
+Thus we use a more coarse approximation using square tiles on a cube. We
+know the circumference of the Earth is approximately 40,000 kilometers
+(from this historic definition of the kilometer). This gives an
+approximate surface area of 509.295818e6 square kilometers. We can
+construct a cube with approximately the same area, its side length
+$\ell$ then satisfies
+
+\begin{equation}
+6\ell^{2}=509.295818\times 10^{6}~\mathrm{km}^{2}.
+\end{equation}
+
+#+begin_src elisp :exports both
+(let ((radius (/ 20e3 pi)))
+  (sqrt (/ (* 4 pi (expt radius 2))
+           6)))
+#+end_src
+
+This gives $\ell\approx 9213$ kilometers. More generally, for a planet
+with radius $R$ units, we would have $\ell\approx R\sqrt{2}$.
+
+One face will contain the North pole, its opposing face will contain the
+South pole. The remaining four faces contain the equator.
+
+** Tiling Each Face
+:PROPERTIES:
+:CUSTOM_ID: h-97967122-9a78-4fe2-bc94-8c46bce0aae4
+:END:
+
+We then subdivide each face into square {{{dfn(Region)}}} tiles, and
+subdivide each region into {{{dfn(Local Area)}}} tiles. (I borrow this
+terminology from /Dwarf Fortress/.)
+
+Suppose we have 8-by-8 region tiles for a face (for a total of 64
+regions per face, and 384 regions on the planet). This would require
+each region having an area of $(\ell/8)^{2}$ --- for Earth, this is
+1,326,291 square kilometers
+(slightly larger than the combined areas of California, Nevada, Arizona,
+and Utah).
+
+#+begin_src elisp :exports both :wrap example :results list
+(let* ((radius (/ 20e3 pi))
+       (side-length (sqrt (/ (* 4 pi (expt radius 2))
+                             6))))
+  (list :1-byte (sq (/ side-length 8))
+        :2-byte (sq (/ side-length 16))
+        :4-byte (sq (/ side-length 32))
+        :8-byte (sq (/ side-length 64))))
+#+end_src
+
+We see for 16-by-16 regions on a face, each region is approximately
+330,000 square kilometers (about the size of New Mexico [314,160 km^{2}]);
+for 32-by-32 regions on a face, each region is about 83,000 square kilometers (about
+the size of Maine [80,005 km^{2}]); for 64-by-64 regions on a face, each region is
+approximately 20,000 square kilometers (slightly larger than the land
+area of New Jersey [19,047 square km]).
+
+For context, many war games --- like Gary Grigsby's /War in the East 2/
+--- use 10 nautical miles for each tile length (about 18.5 kilometers).
+If we try to make each local area tile have side length 18.5 kilometers,
+then we find one face of the "planet cube" consists of 498-by-498 local
+area tiles. We can observe $512=2^{9}\approx 498$ and thus if we choose
+to work with 512-by-512 local area tiles per face, then 1 local area
+tile is approximately 18-by-18 kilometers [323.8 square km] (roughly twice the area of
+Washington, D.C. [158 km^{2}]; or, if you prefer, a little smaller than the city of
+Detroit [351 square kilometers]).
+
+We can compare this to various crude discretizations used in climate
+models, where the horizontal resolution is roughly 100 kilometers (and
+vertical resolution is 95 levels). The horizontal resolution changes
+with latitude, but it gives us a sense of size (about 5 times larger
+than our local area tile's edge length).
+
+#+begin_remark
+Do we really /need/ all these local area tiles? It depends on what
+degree of error and accuracy we wish. For a region tile which is
+entirely Ocean, arguably, we do not need local area tiles. It depends on
+what we want to accomplish with our encoding.
+#+end_remark
+
+Observe then that the planet would require $6\times 2^{18}\approx
+1.5\times 10^{6}$ local area tiles. If we have $n$ bytes of data per
+tile (for, e.g., average temperature, precipitation, terrain, or
+whatever), then we need something on the order of $2n$ Megabytes of
+memory to store it.

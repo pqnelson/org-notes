@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Physics</title>
+<title>Geography</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -206,54 +206,190 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../index.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Physics</h1>
-
-<div id="outline-container-h-a0765aea-2782-40b7-934f-491a81350bd5" class="outline-2">
-<h2 id="h-a0765aea-2782-40b7-934f-491a81350bd5">Overview</h2>
-<div class="outline-text-2" id="text-h-a0765aea-2782-40b7-934f-491a81350bd5">
-<p>
-I will be working my way through a number of physics textbooks for
-enjoyment. One of the books I hope to work my way through (even if
-partially) is Kip Thorne and Roger Blanford's
-<cite class="book-title">Modern Classical Physics</cite>.
-</p>
-
-<p>
-Currently I'm reading Landau and Lifshitz's <cite class="book-title">Fluid Mechanics</cite>.
-(See what's on deck in my <a href="reading-list.html">reading list</a>.)
-Like all prideful pseudo-academics, I use cryptic abbreviations, and
-refer to Landau and Lifshitz as "L&amp;L". I may split my time between that and
-L&amp;L's <cite class="book-title">Statistical Mechanics</cite>.
-</p>
-</div>
-</div>
-
-<div id="outline-container-h-68c84fb3-2e1b-41b3-bfbf-eac66813487c" class="outline-2">
-<h2 id="h-68c84fb3-2e1b-41b3-bfbf-eac66813487c">Contents</h2>
-<div class="outline-text-2" id="text-h-68c84fb3-2e1b-41b3-bfbf-eac66813487c">
-<ul class="org-ul">
-<li><a href="climate/index.html">Climate Science</a> for a rapid introduction, mostly a sequence of
-specific calculations</li>
-<li><a href="fluid-mechanics.html">Fluid Mechanics</a> (<a href="fluid-mechanics/index.html">topics</a>) discusses the physics of fluids, which is critical
-to modeling the atmosphere and oceans.</li>
-<li><a href="landau/index.html">Reading notes on Landau and Lifshitz</a></li>
-<li><a href="multiphysics.html">Multiphysics</a> computer simulation of coupled physical systems</li>
-<li><a href="data.html">Data</a> for tables of compiled empirical measurements, for quick reference</li>
-<li><a href="meta-physics.html">Meta-Physics</a> for the conventions I've taken</li>
-<li><a href="car.html">Car physics</a></li>
+<h1 class="title">Geography</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-8db7bc98-98de-4384-b5cd-23720273eeab">1. Introduction</a>
+<ul>
+<li><a href="#h-97967122-9a78-4fe2-bc94-8c46bce0aae4">1.1. Tiling Each Face</a></li>
 </ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-8db7bc98-98de-4384-b5cd-23720273eeab" class="outline-2">
+<h2 id="h-8db7bc98-98de-4384-b5cd-23720273eeab"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-8db7bc98-98de-4384-b5cd-23720273eeab">
+<p>
+Suppose we want to model a planet's atmospheric dynamics, or we want to
+simulate a fictitious world (like Dwarf Fortress). First, we must encode
+the geography of the planet on a computer. How can we do it?
+</p>
+
+<p>
+Fans of the <i>Civilization</i> game series may think of a hex grid. This is
+one approach, but I am lazy and want something which can be shown in the
+terminal.
+</p>
+
+<p>
+Thus we use a more coarse approximation using square tiles on a cube. We
+know the circumference of the Earth is approximately 40,000 kilometers
+(from this historic definition of the kilometer). This gives an
+approximate surface area of 509.295818e6 square kilometers. We can
+construct a cube with approximately the same area, its side length
+\(\ell\) then satisfies
+</p>
+
+\begin{equation}
+6\ell^{2}=509.295818\times 10^{6}~\mathrm{km}^{2}.
+\end{equation}
+
+<div class="org-src-container">
+<pre class="src src-elisp">(<span class="org-keyword">let</span> ((radius (/ 20e3 pi)))
+  (sqrt (/ (* 4 pi (expt radius 2))
+           6)))
+</pre>
+</div>
+
+<pre class="example">
+9213.177319235614
+</pre>
+
+
+<p>
+This gives \(\ell\approx 9213\) kilometers. More generally, for a planet
+with radius \(R\) units, we would have \(\ell\approx R\sqrt{2}\).
+</p>
+
+<p>
+One face will contain the North pole, its opposing face will contain the
+South pole. The remaining four faces contain the equator.
+</p>
+</div>
+
+<div id="outline-container-h-97967122-9a78-4fe2-bc94-8c46bce0aae4" class="outline-3">
+<h3 id="h-97967122-9a78-4fe2-bc94-8c46bce0aae4"><span class="section-number-3">1.1.</span> Tiling Each Face</h3>
+<div class="outline-text-3" id="text-h-97967122-9a78-4fe2-bc94-8c46bce0aae4">
+<p>
+We then subdivide each face into square <dfn>Region</dfn> tiles, and
+subdivide each region into <dfn>Local Area</dfn> tiles. (I borrow this
+terminology from <i>Dwarf Fortress</i>.)
+</p>
+
+<p>
+Suppose we have 8-by-8 region tiles for a face (for a total of 64
+regions per face, and 384 regions on the planet). This would require
+each region having an area of \((\ell/8)^{2}\) &#x2014; for Earth, this is
+1,326,291 square kilometers
+(slightly larger than the combined areas of California, Nevada, Arizona,
+and Utah).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp">(<span class="org-keyword">let*</span> ((radius (/ 20e3 pi))
+       (side-length (sqrt (/ (* 4 pi (expt radius 2))
+                             6))))
+  (list <span class="org-builtin">:1-byte</span> (sq (/ side-length 8))
+        <span class="org-builtin">:2-byte</span> (sq (/ side-length 16))
+        <span class="org-builtin">:4-byte</span> (sq (/ side-length 32))
+        <span class="org-builtin">:8-byte</span> (sq (/ side-length 64))))
+</pre>
+</div>
+
+<pre class="example" id="org5d4716b">
+- :1-byte
+- 1326291.1924324615
+- :2-byte
+- 331572.7981081154
+- :4-byte
+- 82893.19952702885
+- :8-byte
+- 20723.29988175721
+</pre>
+
+<p>
+We see for 16-by-16 regions on a face, each region is approximately
+330,000 square kilometers (about the size of New Mexico [314,160 km<sup>2</sup>]);
+for 32-by-32 regions on a face, each region is about 83,000 square kilometers (about
+the size of Maine [80,005 km<sup>2</sup>]); for 64-by-64 regions on a face, each region is
+approximately 20,000 square kilometers (slightly larger than the land
+area of New Jersey [19,047 square km]).
+</p>
+
+<p>
+For context, many war games &#x2014; like Gary Grigsby's <i>War in the East 2</i>
+&#x2014; use 10 nautical miles for each tile length (about 18.5 kilometers).
+If we try to make each local area tile have side length 18.5 kilometers,
+then we find one face of the "planet cube" consists of 498-by-498 local
+area tiles. We can observe \(512=2^{9}\approx 498\) and thus if we choose
+to work with 512-by-512 local area tiles per face, then 1 local area
+tile is approximately 18-by-18 kilometers [323.8 square km] (roughly twice the area of
+Washington, D.C. [158 km<sup>2</sup>]; or, if you prefer, a little smaller than the city of
+Detroit [351 square kilometers]).
+</p>
+
+<p>
+We can compare this to various crude discretizations used in climate
+models, where the horizontal resolution is roughly 100 kilometers (and
+vertical resolution is 95 levels). The horizontal resolution changes
+with latitude, but it gives us a sense of size (about 5 times larger
+than our local area tile's edge length).
+</p>
+
+<div class="remark" id="org8ca50b1">
+<p>
+Do we really <i>need</i> all these local area tiles? It depends on what
+degree of error and accuracy we wish. For a region tile which is
+entirely Ocean, arguably, we do not need local area tiles. It depends on
+what we want to accomplish with our encoding.
+</p>
+
+</div>
+
+<p>
+Observe then that the planet would require \(6\times 2^{18}\approx
+1.5\times 10^{6}\) local area tiles. If we have \(n\) bytes of data per
+tile (for, e.g., average temperature, precipitation, terrain, or
+whatever), then we need something on the order of \(2n\) Megabytes of
+memory to store it.</p>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-07-28 Thu 11:46.</p>
+<p class="postamble">Last Updated 2022-07-27 Wed 11:12.</p>
 </div>
 </body>
 </html>
