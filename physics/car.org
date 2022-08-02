@@ -204,3 +204,39 @@ I'm sure we can invent some function $f(t)$ such that for $0\lt t\ll 1$
 we have $f(t)\approx (it/2)^{\alpha}/\Gamma(1+\alpha)$ and for larger
 $t$ we have $f(t)$ approximate the first asymptotic expansion.
 
+* Actual Solution
+:PROPERTIES:
+:CUSTOM_ID: h-9918be2d-4724-460a-b5b0-9b123c23fd28
+:END:
+
+The eagle-eyed reader will observe a problem with modeling the
+contribution of the engine to acceleration. That is to say, we are
+assuming the RPM increases linearly with time. We would then have
+
+\begin{equation}
+a_{n}(t) = 2\pi r_{wh}\omega_{n}^{2}t^{2} =: a_{n}\cdot t^{2}.
+\end{equation}
+
+We should instead have the equations of motion be
+
+\begin{equation}
+\frac{\mathrm{d}v(t)}{\mathrm{d}t} = a_{n}\cdot t^{2} - c_{d} v(t)^{2}.
+\end{equation}
+
+Then we have the generic solution look like:
+
+\begin{equation}
+v(t) = \sqrt{\frac{t^{2} a_{n}}{c_{d}}}
+\frac{J_{-3/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)-C_{1} J_{3/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)}{J_{1/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)+C_{1} J_{-1/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)}
+\end{equation}
+
+We solve the initial condition by taking the $t\to 0$ limit and $v(t)\to v_{0}$, giving us
+
+\begin{equation}
+v_{0} =
+\frac{2[-c_{d} a_{n}]^{1/4}\Gamma(3/4)}{c_{d}C_{1}\Gamma(1/4)}.
+\end{equation}
+
+Of course, if I am in error about this, and the correct setup would be
+to have acceleration due to the engine be linear in time, then the
+preceding section's scratchwork should be used instead.

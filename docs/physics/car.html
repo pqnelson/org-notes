@@ -257,6 +257,7 @@
 </li>
 </ul>
 </li>
+<li><a href="#h-9918be2d-4724-460a-b5b0-9b123c23fd28">2. Actual Solution</a></li>
 </ul>
 </div>
 </div>
@@ -549,9 +550,56 @@ we have \(f(t)\approx (it/2)^{\alpha}/\Gamma(1+\alpha)\) and for larger
 </div>
 </div>
 </div>
+
+<div id="outline-container-h-9918be2d-4724-460a-b5b0-9b123c23fd28" class="outline-2">
+<h2 id="h-9918be2d-4724-460a-b5b0-9b123c23fd28"><span class="section-number-2">2.</span> Actual Solution</h2>
+<div class="outline-text-2" id="text-h-9918be2d-4724-460a-b5b0-9b123c23fd28">
+<p>
+The eagle-eyed reader will observe a problem with modeling the
+contribution of the engine to acceleration. That is to say, we are
+assuming the RPM increases linearly with time. We would then have
+</p>
+
+\begin{equation}
+a_{n}(t) = 2\pi r_{wh}\omega_{n}^{2}t^{2} =: a_{n}\cdot t^{2}.
+\end{equation}
+
+<p>
+We should instead have the equations of motion be
+</p>
+
+\begin{equation}
+\frac{\mathrm{d}v(t)}{\mathrm{d}t} = a_{n}\cdot t^{2} - c_{d} v(t)^{2}.
+\end{equation}
+
+<p>
+Then we have the generic solution look like:
+</p>
+
+\begin{equation}
+v(t) = \sqrt{\frac{t^{2} a_{n}}{c_{d}}}
+\frac{J_{-3/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)-C_{1} J_{3/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)}{J_{1/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)+C_{1} J_{-1/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)}
+\end{equation}
+
+<p>
+We solve the initial condition by taking the \(t\to 0\) limit and \(v(t)\to v_{0}\), giving us
+</p>
+
+\begin{equation}
+v_{0} =
+\frac{2[-c_{d} a_{n}]^{1/4}\Gamma(3/4)}{c_{d}C_{1}\Gamma(1/4)}.
+\end{equation}
+
+<p>
+Of course, if I am in error about this, and the correct setup would be
+to have acceleration due to the engine be linear in time, then the
+preceding section's scratchwork should be used instead.
+</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-08-02 Tue 11:13.</p>
+<p class="postamble">Last Updated 2022-08-02 Tue 11:50.</p>
 </div>
 </body>
 </html>
