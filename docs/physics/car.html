@@ -257,7 +257,11 @@
 </li>
 </ul>
 </li>
-<li><a href="#h-9918be2d-4724-460a-b5b0-9b123c23fd28">2. Actual Solution</a></li>
+<li><a href="#h-9918be2d-4724-460a-b5b0-9b123c23fd28">2. Actual Solution</a>
+<ul>
+<li><a href="#h-5416a814-365f-4b88-bf66-6f5211ba72c7">2.1. Asymptotic Approximation</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -577,7 +581,7 @@ Then we have the generic solution look like:
 </p>
 
 \begin{equation}
-v(t) = \sqrt{\frac{t^{2} a_{n}}{c_{d}}}
+v(t) = i\sqrt{\frac{t^{2} a_{n}}{c_{d}}}
 \frac{J_{-3/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)-C_{1} J_{3/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)}{J_{1/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)+C_{1} J_{-1/4}\left(\frac{1}{2} i t^2 \sqrt{c_{d} a_{n}}\right)}
 \end{equation}
 
@@ -596,10 +600,57 @@ to have acceleration due to the engine be linear in time, then the
 preceding section's scratchwork should be used instead.
 </p>
 </div>
+
+<div id="outline-container-h-5416a814-365f-4b88-bf66-6f5211ba72c7" class="outline-3">
+<h3 id="h-5416a814-365f-4b88-bf66-6f5211ba72c7"><span class="section-number-3">2.1.</span> Asymptotic Approximation</h3>
+<div class="outline-text-3" id="text-h-5416a814-365f-4b88-bf66-6f5211ba72c7">
+<p>
+If we plug in the asymptotic approximation of \(J_{\alpha}(i x)\) for
+\(x\gg 1\), we get the "long time" solution
+</p>
+
+\begin{equation}
+v_{big}(t) \sim \sqrt{\frac{a_{n}}{c_{d}}}t.
+\end{equation}
+
+<p>
+The small time asymptotic approximation gives us
+</p>
+
+\begin{equation}
+v_{small}(t)\sim i\sqrt{\frac{a_{n}}{c_{d}}}t\frac{2}{3i} \frac{1}{\sqrt{a_{n}c_{d}} t^{2}}
+\frac{a_{n}c_{d} t^{4}C_{1}\Gamma(5/4) + 2\sqrt[4]{-a_{n}c_{d}}t\Gamma(7/4)}{\sqrt[4]{-ac}t\Gamma(3/2) + 2C_{1}\Gamma(5/4)}.
+\end{equation}
+
+<p>
+Unfolding the definition of \(C_{1}\) gives us a simplified, more
+appealing form:
+</p>
+
+\begin{equation}
+v_{small}(t)\sim\frac{4}{3}\frac{\Gamma(3/4)\Gamma(5/4) a_{n} t^{3} + \Gamma(1/4)\Gamma(7/4)v_{0}}{4\Gamma(3/4)\Gamma(5/4) + \Gamma(1/4)\Gamma(2/3)c_{d}v_{0} t}.
+\end{equation}
+
+<p>
+(Assuming, of course, I did my arithmetic correctly.)
+We can check the units, recall that \(a_{n}\cdot t^{2}\) has units of
+acceleration, so \(a_{n}\cdot t^{3}\) has units of velocity. The numerator
+has units of velocity. The denominator is dimensionless, so this looks correct.
+</p>
+
+<p>
+Schematically, this looks like (recall that \(c_{d}\sim 1\)):
+</p>
+
+\begin{equation}
+v_{s}(t)\approx \frac{a_{n}t^{3} + v_{0}}{4 + c_{d}v_{0}t}.
+\end{equation}
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-08-02 Tue 11:50.</p>
+<p class="postamble">Last Updated 2022-08-02 Tue 12:32.</p>
 </div>
 </body>
 </html>
