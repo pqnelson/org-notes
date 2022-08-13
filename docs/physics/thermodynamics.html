@@ -4,7 +4,7 @@
 <!-- 2022-07-16 Sat 09:56 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Physics</title>
+<title>Thermodynamics</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Alex Nelson">
 <style type="text/css">
@@ -229,50 +229,118 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../index.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Physics</h1>
-
-<div id="outline-container-h-a0765aea-2782-40b7-934f-491a81350bd5" class="outline-2">
-<h2 id="h-a0765aea-2782-40b7-934f-491a81350bd5">Overview</h2>
-<div class="outline-text-2" id="text-h-a0765aea-2782-40b7-934f-491a81350bd5">
-<p>
-I will be working my way through a number of physics textbooks for
-enjoyment. One of the books I hope to work my way through (even if
-partially) is Kip Thorne and Roger Blanford's
-<cite class="book-title">Modern Classical Physics</cite>.
-</p>
-
-<p>
-Currently I'm reading Landau and Lifshitz's <cite class="book-title">Fluid Mechanics</cite>.
-(See what's on deck in my <a href="reading-list.html">reading list</a>.)
-Like all prideful pseudo-academics, I use cryptic abbreviations, and
-refer to Landau and Lifshitz as "L&amp;L". I may split my time between that and
-L&amp;L's <cite class="book-title">Statistical Mechanics</cite>.
-</p>
-</div>
-</div>
-
-<div id="outline-container-h-68c84fb3-2e1b-41b3-bfbf-eac66813487c" class="outline-2">
-<h2 id="h-68c84fb3-2e1b-41b3-bfbf-eac66813487c">Contents</h2>
-<div class="outline-text-2" id="text-h-68c84fb3-2e1b-41b3-bfbf-eac66813487c">
-<ul class="org-ul">
-<li><a href="climate/index.html">Climate Science</a> for a rapid introduction, mostly a sequence of
-specific calculations</li>
-<li><a href="thermodynamics.html">Thermodynamics</a></li>
-<li><a href="fluid-mechanics.html">Fluid Mechanics</a> (<a href="fluid-mechanics/index.html">topics</a>) discusses the physics of fluids, which is critical
-to modeling the atmosphere and oceans.</li>
-<li><a href="landau/index.html">Reading notes on Landau and Lifshitz</a></li>
-<li><a href="multiphysics.html">Multiphysics</a> computer simulation of coupled physical systems</li>
-<li><a href="data.html">Data</a> for tables of compiled empirical measurements, for quick reference</li>
-<li><a href="meta-physics.html">Meta-Physics</a> for the conventions I've taken</li>
-<li><a href="car.html">Car physics</a></li>
+<h1 class="title">Thermodynamics</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-e04e2db8-a2f7-41dd-b4bc-9a9ccb00b09a">1. Molecular Model</a></li>
 </ul>
+</div>
+</div>
+
+<div id="outline-container-h-e04e2db8-a2f7-41dd-b4bc-9a9ccb00b09a" class="outline-2">
+<h2 id="h-e04e2db8-a2f7-41dd-b4bc-9a9ccb00b09a"><span class="section-number-2">1.</span> Molecular Model</h2>
+<div class="outline-text-2" id="text-h-e04e2db8-a2f7-41dd-b4bc-9a9ccb00b09a">
+<p>
+We have a molecular model of gases, which has from
+</p>
+
+\begin{equation}
+\delta Q = nC_{V}\,\mathrm{d}T
+\end{equation}
+
+<p>
+And the increase in translational kinetic energy
+</p>
+
+\begin{equation}
+\delta K_{tr} = \frac{3}{2}nR\,\mathrm{d}T.
+\end{equation}
+
+<p>
+Setting these equal, since the total molecular energy increase is
+stipulated to be \(\delta K_{tr}\), we find
+</p>
+
+\begin{equation}
+C_{V} = \frac{3}{2}R.
+\end{equation}
+
+<p>
+This works for monatomic gases.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defvar</span> <span class="org-variable-name">gas-constant</span> 8.31446261815324)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">mono-atomic molecules</span>
+(* 1.5 gas-constant)
+</pre>
+</div>
+
+<pre class="example">
+12.47169392722986
+</pre>
+
+
+<p>
+For diatomic gases, we need to account for rotational degrees of
+freedom, which changes \(3/2\) to \(5/2\) in the definition of total
+molecular energy:
+</p>
+
+\begin{equation}
+\delta K_{tr} = \frac{5}{2}nR\,\mathrm{d}T.
+\end{equation}
+
+<p>
+This gives us:
+</p>
+
+\begin{equation}
+C_{V} = \frac{5}{2}R.
+\end{equation}
+
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">diatomic gases</span>
+(* 2.5 gas-constant)
+</pre>
+</div>
+
+<pre class="example">
+20.7861565453831
+</pre>
 </div>
 </div>
 </div>
