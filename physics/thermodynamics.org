@@ -11,55 +11,98 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 # Created Saturday July 16, 2022 at  9:28AM
 
-* Molecular Model
+* Introduction
 :PROPERTIES:
-:CUSTOM_ID: h-e04e2db8-a2f7-41dd-b4bc-9a9ccb00b09a
+:CUSTOM_ID: h-349eb31f-1ee7-4c39-b8d8-a54a1a2be4e2
 :END:
 
-We have a molecular model of gases, which has from
+Thermodynamics introduces new physical quantities (namely, temperature
+and heat). The first thing we need to do: construct an apparatus to
+measure temperature. A "thermometer", if you will. Towards that end, we
+need to introduce the zeroth law of thermodynamics.
+
+** Definition: Thermodynamic System, Environment
+:PROPERTIES:
+:CUSTOM_ID: h-527fdb37-a1cd-411c-831a-bff5da507df4
+:END:
+
+A {{{dfn(Thermodynamic System)}}} (or just {{{dfn(System)}}}) is a
+collection of matter and/or radiation, confined spatially by some
+barrier separating it from its {{{dfn(Environment)}}}.
+
+** Definition: State Variables
+:PROPERTIES:
+:CUSTOM_ID: h-a6fab8d7-8fea-49f1-b554-4ad50e01b2b7
+:END:
+
+We describe a thermodynamic system by means of certain physical
+quantities called {{{dfn(State Variables)}}}.
+
+- Extensive state variables are directly proportional to the size of the
+  system. Examples: mass, energy, volume.
+- Intensive state variables are not. Examples: density $\rho$,
+  temperature, hardness.
+
+This division between intensive and extensive state variables make sense
+within thermodynamics, but clever people may invent quantities which are
+neither intensive nor extensive (e.g., the squareroot of volume).
+
+** Definition: Thermal Equilibrium
+:PROPERTIES:
+:CUSTOM_ID: h-f5bc77ee-0973-49c5-82ae-e674ac4b9594
+:END:
+
+We will say a system is in {{{dfn(Thermodynamic Equilibrium)}}} if its
+temperature is approximately the same everywhere within the system.
+
+Different authors give different variations of the definition (e.g., the
+/variance/ of the temperature is "small" compared to the mean temperature).
+
+** Zeroth Law of Thermodynamics
+:PROPERTIES:
+:CUSTOM_ID: h-2db30d0b-dc1c-47fa-adbd-79f70c97f30c
+:END:
+
+When two thermodynamic systems are in contact, they will eventually
+reach thermodynamic equilibrium.
+
+If we have three thermodynamic systems (call them A, B, and C) such that
+A is in contact with B and B is in contact with C, then eventually they
+will reach thermodynamic equilibrium with one another. In particular, A
+will be in thermodynamic equilibrium with C.
+
+Phrased differently, "is in thermodynamic equilibrium with" is a
+transitive relation.
+
+** Ideal Gas Law
+:PROPERTIES:
+:CUSTOM_ID: h-694761e8-12ad-4e60-a1c7-b49ad6269799
+:END:
+
+Many physical systems may be approximated by the ideal-gas law:
 
 \begin{equation}
-\delta Q = nC_{V}\,\mathrm{d}T
+pV = nRT
 \end{equation}
 
-And the increase in translational kinetic energy
+where:
 
-\begin{equation}
-\delta K_{tr} = \frac{3}{2}nR\,\mathrm{d}T.
-\end{equation}
+- $p$ is the pressure of the gas
+- $V$ is the volume of the gas
+- $n$ is the number of moles of gas
+- $R$ is the universal gas constant
+- $T$ is the temperature of the gas.
 
-Setting these equal, since the total molecular energy increase is
-stipulated to be $\delta K_{tr}$, we find
+* Statistical Mechanics
+:PROPERTIES:
+:CUSTOM_ID: h-abeb6b71-d994-43cb-bf9c-2f37c4b614e7
+:END:
 
-\begin{equation}
-C_{V} = \frac{3}{2}R.
-\end{equation}
+We can derive many results in thermodynamics using a "microscopic" or
+"molecular" perspective. This is precisely statistical mechanics. (We
+can also use computers and [[https://en.wikipedia.org/wiki/Molecular_dynamics][molecular dynamics]] nowadays --- see, e.g.,
+Rapaport's {{{book-title(The Art of Molecular Dynamics Simulation)}}}.)
 
-This works for monatomic gases.
-
-#+begin_src emacs-lisp :exports both
-(defvar gas-constant 8.31446261815324)
-
-;; mono-atomic molecules
-(* 1.5 gas-constant)
-#+end_src
-
-For diatomic gases, we need to account for rotational degrees of
-freedom, which changes $3/2$ to $5/2$ in the definition of total
-molecular energy:
-
-\begin{equation}
-\delta K_{tr} = \frac{5}{2}nR\,\mathrm{d}T.
-\end{equation}
-
-This gives us:
-
-\begin{equation}
-C_{V} = \frac{5}{2}R.
-\end{equation}
-
-
-#+begin_src emacs-lisp :exports both
-;; diatomic gases
-(* 2.5 gas-constant)
-#+end_src
+Most books will jump into quantum statistical mechanics, but there are a
+few which discuss classical derivations: Greiner, Huang, and a few
+others spring to mind.

@@ -1,0 +1,65 @@
+#+TITLE: Temperature - Statistical Mechanics
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-08-13T07:57:16-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday August 13, 2022 at  7:57AM
+
+* Molecular Model
+:PROPERTIES:
+:CUSTOM_ID: h-e04e2db8-a2f7-41dd-b4bc-9a9ccb00b09a
+:END:
+
+We have a molecular model of gases, which has from
+
+\begin{equation}
+\delta Q = nC_{V}\,\mathrm{d}T
+\end{equation}
+
+And the increase in translational kinetic energy
+
+\begin{equation}
+\delta K_{tr} = \frac{3}{2}nR\,\mathrm{d}T.
+\end{equation}
+
+Setting these equal, since the total molecular energy increase is
+stipulated to be $\delta K_{tr}$, we find
+
+\begin{equation}
+C_{V} = \frac{3}{2}R.
+\end{equation}
+
+This works for monatomic gases.
+
+#+begin_src emacs-lisp :exports both
+(defvar gas-constant 8.31446261815324)
+
+;; mono-atomic molecules
+(* 1.5 gas-constant)
+#+end_src
+
+For diatomic gases, we need to account for rotational degrees of
+freedom, which changes $3/2$ to $5/2$ in the definition of total
+molecular energy:
+
+\begin{equation}
+\delta K_{tr} = \frac{5}{2}nR\,\mathrm{d}T.
+\end{equation}
+
+This gives us:
+
+\begin{equation}
+C_{V} = \frac{5}{2}R.
+\end{equation}
+
+
+#+begin_src emacs-lisp :exports both
+;; diatomic gases
+(* 2.5 gas-constant)
+#+end_src
