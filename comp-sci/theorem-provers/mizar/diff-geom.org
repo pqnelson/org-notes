@@ -1,0 +1,101 @@
+#+TITLE: Differential Geometry - Mizar
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-08-18T09:33:55-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Thursday August 18, 2022 at  9:33AM
+
+* Mapping out what has been formalized
+:PROPERTIES:
+:CUSTOM_ID: h-21bd913f-82ca-441e-9aff-8924135f744d
+:END:
+
+There seems to be some work done on topological manifolds, but not much
+on differential manifolds. So far, there does not appear to be a notion
+of atlases or charts (so far as I can tell, at least).
+
+- [[http://mizar.org/version/current/html/mfold_0.html][~mfold_0~]] on [[http://mizar.org/fm/2014-22/pdf22-2/mfold_0.pdf][topological manifolds]] is a retcon, retroactively
+  introducing a notion of a locally Euclidean space which covers
+  manifolds with and without boundary.
+- [[http://mizar.org/version/current/html/mfold_1.html][~mfold_1~]] formalizes
+  [[http://mizar.org/fm/2011-19/pdf19-1/mfold_1.pdf][the definition of topological manifolds]] following Jack Lee.
+  - [[http://mizar.org/version/current/html/connsp_2.html][~connsp_2~]] formalizes notions related to being a neighborhood to a
+    point in a topological space, which is used when defining the
+    attribute ~locally_euclidean~ (~MFOLD_0:def2~).
+  - [[http://mizar.org/version/current/html/mfold_1.html#V2][~n-manifold~]] is defined as a Hausdorff, second-countable, $n$
+    locally Euclidean space.
+- [[http://mizar.org/version/current/html/mfold_2.html][~mfold_2~]] formalizes examples of manifolds, namely
+  [[http://mizar.org/fm/2012-20/pdf20-1/mfold_2.pdf][planes, spheres, and stereographic projection]].
+- [[http://mizar.org/version/current/html/connsp_1.html][~connsp_1~]] formalizes notions of [[http://mizar.org/fm/1990-1/pdf1-1/connsp_1.pdf][connected spaces]]
+  - [[http://mizar.org/version/current/html/borsuk_2.html#V1][~pathwise_connected~]] is an attribute defined in
+    [[http://mizar.org/version/current/html/borsuk_2.html#V1][~BORSKU_2:Def3~]]
+- [[http://mizar.org/version/current/html/connsp_3.html][~connsp_3~]] formalizes notions of [[http://mizar.org/fm/1996-5/pdf5-4/connsp_3.pdf][components]]
+
+* Topics Not Yet Formalized
+:PROPERTIES:
+:CUSTOM_ID: h-22dc2629-4ec7-46d6-b094-b8de14a1aa1b
+:END:
+
+However, what is lacking is...well, a bit. For example:
+
+- Charts and Atlases
+  - This is tricky, because there are two conventions for defining a
+    chart, and they are completely opposite of each other.
+    - *Convention 1:* Given a
+      manifold $M$ we could define a chart as $\varphi\colon U\subset M\to\mathbb{R}^{n}$
+      being a homeomorphism with its image. The mapping in this direction (from patch of
+      manifold to Euclidean space) is called the local coordinate for the patch.
+      - Bourbaki follows this convention, at least I infer as much from
+        /Lie Groups/, III \sect1.1 Lemma 1
+        (page 210 of my paperback copy);
+      - Warner's /Foundations of Differential Geometry and Lie Groups/ 
+        (Def.1.3) follows this convention;
+      - Isham's /Modern Differential Geometry for Physicists/ follows this
+        convention (Def.2.1 in \sect2.2).
+      - Spivak's /Comprehensive Introduction to Differential Geometry/,
+        vol. I, appears to follow this convention (for every $x\in M$
+        there is a neighborhood $U\subset M$ of $x\in U$ which is
+        homeomorphic to an open subset of $\mathbb{R}^{n}$ --- pg 1; but
+        also see chapter 2, where smooth structures are defined using
+        charts following this convention)
+      - If I recall correctly, both Tu and Lee follow this convention.
+    - *Convention 2:* Given a manifold, a chart is a mapping
+      $\varphi\colon V\subset\mathbb{R}^{n}\to M$ which is a homeomorphism
+      with its image. The mapping in this direction (from a patch of
+      Euclidean space to the manifold) is called a local parametrization
+      for the manifold.
+      - Milnor follows this convention,
+      - do Carmo's /Riemannian Geometry/ uses this convention.
+      - Besse's /Einstein Manifolds/ (\sect1.41)
+        appears to have a chart be from a patch of Euclidean space to the
+        manifold.
+      - When I took Dr Fuchs's
+        course on differential topology, the convention used followed Milnor
+        (I suspect to avoid people copying proofs from Tu, Lee, and friends).
+  - Compatible charts
+  - Atlas = family of pairwise compatible charts which cover the manifold
+  - Equivalent atlases = the union of the atlases is another atlas
+  - Two atlases are equivalent if and only if every chart from one atlas
+    is compatible with every chart from the other atlas.
+  - The relation (equivalent atlases) is transitive
+  - A subset of the manifold is open (with respect to an atlas) if blah
+    blah blah. Atlases induce a topology.
+- Mappings between manifolds
+  - Embedding, Immersion, Submersion, Diffeomorphism, Local Diffeomorphism
+  - Partitions of Unity
+- Products of Manifolds
+  - There are other related constructions (the disjoint union of
+    manifolds of the same dimension, and the connected sum), but I'm not
+    sure how necessary they are to begin with...
+- Submanifolds
+- Tangent Vectors and Vector Fields
+  - Tangent bundle, double tangent bundle
+- Differentials of Smooth Maps
+- Morse Theory
+- Differential Forms
