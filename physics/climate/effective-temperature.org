@@ -114,3 +114,55 @@ decreases $T_{\oplus}\to0$, as we would expect. Similarly, for
 decreasing the radius of the Sun $R_{\odot}\to0$, we see the Earth
 would receive decreasing radiance hence decreasing temperature
 $T_{\oplus}\to0$, as we would expect.
+
+* Remark: Explicit Formula
+:PROPERTIES:
+:CUSTOM_ID: h-a13603ef-a461-4b77-8b8f-8aa80e31ad7f
+:END:
+
+We should note that the explicit formula for the effective temperature
+of a planet at the top of the atmosphere may be written as:
+
+\begin{equation}
+T_{\oplus} = T_{\odot} \sqrt{\frac{R_{\odot}\sqrt{(1-a)}}{2D}}
+\end{equation}
+
+where:
+- $a$ is the planet's albedo (a constant between 0 and 1, for Earth
+  $a\approx 0.3$)
+- $D$ is the distance from the sun to the planet
+- $R_{\odot}$ is the radius of the sun
+- $T_{\odot}$ is the temperature of the sun
+- $T_{\oplus}$ is the effective temperature at the top of the atmosphere
+  of the planet.
+
+A handy relationship that falls out of this: if we have two planets and
+we know $D_{1}$, $D_{2}$, the albedos $a_{j}$, and the effective temperature of the first
+$T_{1}$, we can obtain the effective temperature of the second by
+multiplying by $T_{2} = T_{1}\sqrt{D_{1}/D_{2}}\sqrt[4]{(1-a_{2})/(1-a_{1})}$.
+
+If we do not know the albedos, and assume there is a uniform probability
+of taking any value between 0 and 1, then the expected value of the
+quartic root of the ratios turns out to be
+\begin{equation}
+\int^{1}_{0}\int^{1}_{0}\sqrt[4]{\frac{1-a_{2}}{1-a_{1}}}\,\D a_{1}\D a_{2} = \frac{16}{15}.
+\end{equation}
+If we have absolutely no knowledge of the albedos, this is a fine estimate.
+
+If we know $a_{2}$ but not $a_{1}$, we could use the approximation
+\begin{equation}
+\int^{1}_{0}\sqrt[4]{\frac{1-a_{2}}{1-a_{1}}}\,\D a_{1} = \frac{4}{3}\sqrt[4]{1-a_{2}}.
+\end{equation}
+If we know $a_{1}$ but not $a_{2}$, we could use
+\begin{equation}
+\int^{1}_{0}\sqrt[4]{\frac{1-a_{2}}{1-a_{1}}}\,\D a_{2} = \frac{4}{5}\frac{1}{\sqrt[4]{1-a_{1}}}.
+\end{equation}
+All assuming a uniform ("uninformed") distribution.
+
+So, for example, a generic planet in the same solar system as Earth. If
+we do not know the other planet's albedo, we could use the estimate
+\begin{equation}
+\sqrt[4]{\frac{1-a_{2}}{1-a_{1}}} \approx \frac{4}{5}\frac{1}{\sqrt[4]{0.7}}\approx0.874612.
+\end{equation}
+This is just an estimate, to be used when we need some sense of what the answer should
+be near.

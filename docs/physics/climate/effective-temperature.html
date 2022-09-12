@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -369,9 +369,82 @@ would receive decreasing radiance hence decreasing temperature
 </div>
 </div>
 </div>
+
+<div id="outline-container-h-a13603ef-a461-4b77-8b8f-8aa80e31ad7f" class="outline-2">
+<h2 id="h-a13603ef-a461-4b77-8b8f-8aa80e31ad7f"><span class="section-number-2">3.</span> Remark: Explicit Formula</h2>
+<div class="outline-text-2" id="text-h-a13603ef-a461-4b77-8b8f-8aa80e31ad7f">
+<p>
+We should note that the explicit formula for the effective temperature
+of a planet at the top of the atmosphere may be written as:
+</p>
+
+\begin{equation}
+T_{\oplus} = T_{\odot} \sqrt{\frac{R_{\odot}\sqrt{(1-a)}}{2D}}
+\end{equation}
+
+<p>
+where:
+</p>
+<ul class="org-ul">
+<li>\(a\) is the planet's albedo (a constant between 0 and 1, for Earth
+\(a\approx 0.3\))</li>
+<li>\(D\) is the distance from the sun to the planet</li>
+<li>\(R_{\odot}\) is the radius of the sun</li>
+<li>\(T_{\odot}\) is the temperature of the sun</li>
+<li>\(T_{\oplus}\) is the effective temperature at the top of the atmosphere
+of the planet.</li>
+</ul>
+
+<p>
+A handy relationship that falls out of this: if we have two planets and
+we know \(D_{1}\), \(D_{2}\), the albedos \(a_{j}\), and the effective temperature of the first
+\(T_{1}\), we can obtain the effective temperature of the second by
+multiplying by \(T_{2} = T_{1}\sqrt{D_{1}/D_{2}}\sqrt[4]{(1-a_{2})/(1-a_{1})}\).
+</p>
+
+<p>
+If we do not know the albedos, and assume there is a uniform probability
+of taking any value between 0 and 1, then the expected value of the
+quartic root of the ratios turns out to be
+</p>
+\begin{equation}
+\int^{1}_{0}\int^{1}_{0}\sqrt[4]{\frac{1-a_{2}}{1-a_{1}}}\,\D a_{1}\D a_{2} = \frac{16}{15}.
+\end{equation}
+<p>
+If we have absolutely no knowledge of the albedos, this is a fine estimate.
+</p>
+
+<p>
+If we know \(a_{2}\) but not \(a_{1}\), we could use the approximation
+</p>
+\begin{equation}
+\int^{1}_{0}\sqrt[4]{\frac{1-a_{2}}{1-a_{1}}}\,\D a_{1} = \frac{4}{3}\sqrt[4]{1-a_{2}}.
+\end{equation}
+<p>
+If we know \(a_{1}\) but not \(a_{2}\), we could use
+</p>
+\begin{equation}
+\int^{1}_{0}\sqrt[4]{\frac{1-a_{2}}{1-a_{1}}}\,\D a_{2} = \frac{4}{5}\frac{1}{\sqrt[4]{1-a_{1}}}.
+\end{equation}
+<p>
+All assuming a uniform ("uninformed") distribution.
+</p>
+
+<p>
+So, for example, a generic planet in the same solar system as Earth. If
+we do not know the other planet's albedo, we could use the estimate
+</p>
+\begin{equation}
+\sqrt[4]{\frac{1-a_{2}}{1-a_{1}}} \approx \frac{4}{5}\frac{1}{\sqrt[4]{0.7}}\approx0.874612.
+\end{equation}
+<p>
+This is just an estimate, to be used when we need some sense of what the answer should
+be near.</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated 2022-08-30 Tue 09:05.</p>
 </div>
 </body>
 </html>
