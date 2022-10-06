@@ -56,3 +56,77 @@ end;
 (* mySet : TreeSet.t *)
 mySet = TreeSet.empty;
 #+end_src
+
+* Stringify Types
+:PROPERTIES:
+:CUSTOM_ID: h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d
+:END:
+
+In Haskell, we tend to have a single typeclass ~Show~ which has a "to string"
+method. Standard ML does not have anything similar to type classes, so
+we end up encoding them as signatures. Strictly speaking, we would have
+
+#+begin_src sml
+signature SHOW =
+sig
+    type t;
+    val toString : t -> string;
+end;
+#+end_src
+
+** Type Conversions
+:PROPERTIES:
+:CUSTOM_ID: h-889254de-0316-4e44-9331-d92d371b8419
+:END:
+
+More broadly, if we have defined two types ~A~ and ~B~, and it is
+"obvious" we can convert any value of type ~A~ to a value of type ~B~,
+then we define a function of the form:
+
+#+begin_src sml
+structure A =
+struct
+    type t;
+    val toB : t -> B;
+    (* val fromB : B -> t; if we can convert the other way around *)
+    (* etc. *)
+end;
+#+end_src
+
+Then we have ~A.toB foo~ be an "obvious" conversion.
+
+- Gansner and Reppy's /Standard ML Basis Library/, section 1.1.4,
+  encourages this sort of naming convention for conversion functions.
+
+* Comparable Types
+:PROPERTIES:
+:CUSTOM_ID: h-770611ec-d37f-42e9-9e97-802a79d389be
+:END:
+
+When defining a new type ~T~, we would need to implement a function ~compare : T*T -> order~.
+This should be placed in a signature, so it's "public facing".
+
+- Gansner and Reppy's /Standard ML Basis Library/, sections 1.1.3 and 4.1,
+  encourages this sort of practice with linear orders.
+
+* Principle: Similar Functions should have Similar Names
+:PROPERTIES:
+:CUSTOM_ID: h-20417263-b75c-464c-b4ef-e48078110bd6
+:END:
+
+If we are building our own collection data structure (say, a set or
+hashmap or whatever), then we should name the functions similar to
+analogous functions on lists. For example,
+
+#+begin_src sml
+signature SET =
+sig
+    type 'a t;
+    val app : ('a -> unit) -> 'a t -> unit;
+    val map : ('a -> 'b) -> 'a t -> 'b t;
+    (* And so on... *)
+end;
+#+end_src
+
+- Gansner and Reppy's /Standard ML Basis Library/, section 1.1.2,
+  encourages this sort of practice.

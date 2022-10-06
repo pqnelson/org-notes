@@ -1,0 +1,46 @@
+#+TITLE: 
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-09-12T10:48:20-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Monday September 12, 2022 at 10:48AM
+
+* Haskell
+:PROPERTIES:
+:CUSTOM_ID: h-47461047-834e-4052-91df-3fb0fa62d8ee
+:END:
+
+Haskell's IO Monad works with an abstraction called "handles". They are
+[[https://github.com/ghc/ghc/blob/29bcd9363f2712524f7720377f19cb885adf2825/libraries/base/GHC/IO/Handle/Types.hs#L99-L140][defined]] as (stripping back to bare bones):
+
+#+begin_src haskell
+data Handle
+  = FileHandle FilePath !(MVar Handle__)
+  | DuplexHandle FilePath !(MVar Handle__) !(MVar Handle__)
+
+data Handle__ = Handle__ {
+    haFD :: !FD
+    haType :: HandleType
+    haIsBin :: Bool
+    haIsStream :: Bool
+    haBufferMode :: BufferMode
+    haBuffer :: !(IORef Buffer)
+    haBuffers :: !(IORef BufferList)
+    haOtherSide :: (Maybe (MVar Handle__))
+}
+#+end_src
+
+Then ~openFile :: FilePath -> IOMode -> IO Handle~ creates a new IO
+monad wrapping around any IO computations involving the given file.
+
+Roughly, a ~Handle~ is approximately equivalent to a union of a [[https://smlfamily.github.io/Basis/prim-io.html#SIG:PRIM_IO.reader:TY:SPEC][~Reader~]]
+and [[https://smlfamily.github.io/Basis/prim-io.html#SIG:PRIM_IO.writer:TY][~Writer~]] in Standard ML. Instead of file descriptors, Standard ML
+uses ~OS.IO.iodesc~ for a platform-independent way to describe "files".
+Then Haskell's IO roughly corresponds to the ~TextIO~ module in Standard
+ML, but in a monadic fashion.

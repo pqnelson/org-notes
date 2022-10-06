@@ -219,6 +219,13 @@
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-151fd75d-61bd-4eb2-b962-3724940c7e31">1. Using <code>type t</code> in Signatures</a></li>
+<li><a href="#h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d">2. Stringify Types</a>
+<ul>
+<li><a href="#h-889254de-0316-4e44-9331-d92d371b8419">2.1. Type Conversions</a></li>
+</ul>
+</li>
+<li><a href="#h-770611ec-d37f-42e9-9e97-802a79d389be">3. Comparable Types</a></li>
+<li><a href="#h-20417263-b75c-464c-b4ef-e48078110bd6">4. Principle: Similar Functions should have Similar Names</a></li>
 </ul>
 </div>
 </div>
@@ -274,9 +281,102 @@ mySet = TreeSet.empty;
 </div>
 </div>
 </div>
+
+<div id="outline-container-h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d" class="outline-2">
+<h2 id="h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d"><span class="section-number-2">2.</span> Stringify Types</h2>
+<div class="outline-text-2" id="text-h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d">
+<p>
+In Haskell, we tend to have a single typeclass <code>Show</code> which has a "to string"
+method. Standard ML does not have anything similar to type classes, so
+we end up encoding them as signatures. Strictly speaking, we would have
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">SHOW</span> =
+<span class="org-keyword">sig</span>
+    <span class="org-keyword">type</span> <span class="org-type-def">t</span>;
+    <span class="org-keyword">val</span> <span class="org-variable-name">toString</span> : t -&gt; string;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-889254de-0316-4e44-9331-d92d371b8419" class="outline-3">
+<h3 id="h-889254de-0316-4e44-9331-d92d371b8419"><span class="section-number-3">2.1.</span> Type Conversions</h3>
+<div class="outline-text-3" id="text-h-889254de-0316-4e44-9331-d92d371b8419">
+<p>
+More broadly, if we have defined two types <code>A</code> and <code>B</code>, and it is
+"obvious" we can convert any value of type <code>A</code> to a value of type <code>B</code>,
+then we define a function of the form:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">A</span> =
+<span class="org-keyword">struct</span>
+    <span class="org-keyword">type</span> <span class="org-type-def">t</span>;
+    <span class="org-keyword">val</span> <span class="org-variable-name">toB</span> : t -&gt; B;
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">val fromB : B -&gt; t; if we can convert the other way around</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">etc.</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Then we have <code>A.toB foo</code> be an "obvious" conversion.
+</p>
+
+<ul class="org-ul">
+<li>Gansner and Reppy's <i>Standard ML Basis Library</i>, section 1.1.4,
+encourages this sort of naming convention for conversion functions.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-770611ec-d37f-42e9-9e97-802a79d389be" class="outline-2">
+<h2 id="h-770611ec-d37f-42e9-9e97-802a79d389be"><span class="section-number-2">3.</span> Comparable Types</h2>
+<div class="outline-text-2" id="text-h-770611ec-d37f-42e9-9e97-802a79d389be">
+<p>
+When defining a new type <code>T</code>, we would need to implement a function <code>compare : T*T -&gt; order</code>.
+This should be placed in a signature, so it's "public facing".
+</p>
+
+<ul class="org-ul">
+<li>Gansner and Reppy's <i>Standard ML Basis Library</i>, sections 1.1.3 and 4.1,
+encourages this sort of practice with linear orders.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-20417263-b75c-464c-b4ef-e48078110bd6" class="outline-2">
+<h2 id="h-20417263-b75c-464c-b4ef-e48078110bd6"><span class="section-number-2">4.</span> Principle: Similar Functions should have Similar Names</h2>
+<div class="outline-text-2" id="text-h-20417263-b75c-464c-b4ef-e48078110bd6">
+<p>
+If we are building our own collection data structure (say, a set or
+hashmap or whatever), then we should name the functions similar to
+analogous functions on lists. For example,
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">SET</span> =
+<span class="org-keyword">sig</span>
+    <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>;
+    <span class="org-keyword">val</span> <span class="org-variable-name">app</span> : ('a -&gt; unit) -&gt; 'a t -&gt; unit;
+    <span class="org-keyword">val</span> <span class="org-variable-name">map</span> : ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t;
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">And so on...</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>Gansner and Reppy's <i>Standard ML Basis Library</i>, section 1.1.2,
+encourages this sort of practice.</li>
+</ul>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-26 Wed 10:16.</p>
+<p class="postamble">Last Updated 2022-09-12 Mon 08:54.</p>
 </div>
 </body>
 </html>

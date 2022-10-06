@@ -239,6 +239,26 @@ appropriate handler, and some number of argument predicates. As
 SCMUTILS uses [[file:multiple-dispatch.org::*Predicate Dispatching][Predicate Dispatching]] the predicates control method
 selection.
 
+* Associativity
+:PROPERTIES:
+:CUSTOM_ID: h-820b1044-6b2e-43a8-9308-4ac138dde15d
+:END:
+
+There doesn't appear to be anything in the standard about associativity
+of the operations. SBCL [[https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/code/numbers.lisp#L149-L191][2.0.11]] defines addition, subtraction, division,
+and multiplication basically as we have (with a ~reduce~).
+
+CCL [[https://github.com/Clozure/ccl/blob/v1.12/level-1/l1-numbers.lisp#L206-L255][v1.12]] does, more or less, the same thing (except using an explicit
+~do*~ loop).
+
+The hyperspec says we can expect the arguments to be rearranged,
+evaluated in any order, and so we do not require it be evaluated "from
+left to right". We could have a perfectly valid implementation work
+"from right to left". That's a nightmare.
+
+Curiously, Scheme says that subtraction and division must be
+left-associative, but the standard (R7RS small, and R5RS) say nothing
+about the associativity of addition or multiplication.
 
 * References
 :PROPERTIES:
