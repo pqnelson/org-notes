@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-11-17 Thu 18:48 -->
+<!-- 2022-11-20 Sun 17:54 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mithril.js</title>
@@ -237,6 +237,194 @@
  <a accesskey="H" href="../index.html"> HOME </a>
 </div><div id="content">
 <h1 class="title">Mithril.js</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#h-5b5ee42d-9166-4959-b75d-2b5d348581a8">1. "Design Tools"</a>
+<ul>
+<li><a href="#h-6afdd666-a0c7-4948-8821-df384cb19e75">1.1. SAM (State-Action-Model)</a>
+<ul>
+<li><a href="#h-bbe4f793-f7f2-4d05-9ec1-cddeae1d8a78">1.1.1. Example in Mithril.js</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-81096b07-f043-42aa-91c4-fba28ee7e052">2. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-5b5ee42d-9166-4959-b75d-2b5d348581a8" class="outline-2">
+<h2 id="h-5b5ee42d-9166-4959-b75d-2b5d348581a8"><span class="section-number-2">1.</span> "Design Tools"</h2>
+<div class="outline-text-2" id="text-h-5b5ee42d-9166-4959-b75d-2b5d348581a8">
+<p>
+I know React uses a <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel">MVVM</a> architecture for its components. Mithril.js
+uses MVC explicitly.
+</p>
+</div>
+
+<div id="outline-container-h-6afdd666-a0c7-4948-8821-df384cb19e75" class="outline-3">
+<h3 id="h-6afdd666-a0c7-4948-8821-df384cb19e75"><span class="section-number-3">1.1.</span> SAM (State-Action-Model)</h3>
+<div class="outline-text-3" id="text-h-6afdd666-a0c7-4948-8821-df384cb19e75">
+<p>
+There is also the State-Action-Model architecture, which is the hot new
+thing replacing MVC (and MVVM). Basically, as I understand it,
+</p>
+
+<ol class="org-ol">
+<li>Actions compute proposals. Actions cannot mutate the properties of
+the model.</li>
+<li>The models accepts, partially accepts, or rejects the proposal. A
+model should be a series of "acceptors" and "reactors".
+<ul class="org-ul">
+<li>Acceptors validate proposals and mutate the state accordingly</li>
+<li>Reactors react to state mutations and are not involved in the
+processing proposals</li>
+</ul></li>
+<li>Evaluate whether a next-action is needed</li>
+<li>Compute the new state representation.</li>
+</ol>
+
+<p>
+Assignments are not mutations, and mutations must be explicit.
+</p>
+
+<p>
+The "programming step" is specified by <code>Action -&gt; Model -&gt; State</code>.
+</p>
+
+<ul class="org-ul">
+<li>Actions are functions, with type signature <code>Action : Event -&gt; Proposal</code></li>
+<li>Proposals are "proposals to mutate the property values of the Model"</li>
+<li>The Model is an instance of a class (or closure) generally with a
+single method that is used to receive proposals to mutate the property
+values; when the mutation is complete, the model invokes the "State"
+function, whose role is to compute the (control) state, which can also
+be viewed as the state representation of the model.</li>
+<li>The State function invokes the next-action predicate which computes
+whether an action needs to be triggered in the current (new)
+occurrence of a control state.</li>
+</ul>
+
+<p>
+The idea is that <code>&lt;View params={Model} /&gt;</code> is no different than <code>View = f(Model)</code>.
+Then the purpose of React (and friends) is to decompose the view into a
+series of <b><b>pure</b></b> functions.
+</p>
+
+<p>
+Now, in "traditional/orthodox MVC", it's entirely interactive (as
+opposed to <i>reactive</i>). The action (<i>nee</i> Controller) would call an
+update method on the model, then depending on success or failure would
+determine how to update the view accordingly.
+</p>
+
+<p>
+Reactive coding would have actions (controllers) pass values to the
+model, regardless of the outcome. There is no "decide how to update the
+model". A reactive MVC would look something like
+</p>
+
+<ul class="org-ul">
+<li><code>View = f(Model.present(Action(data)))</code>
+<ul class="org-ul">
+<li>When an action is triggered, it computes a data set from a set of
+inputs (e.g., user inputs) that is presented to the model, which then
+decides if and how to update itself.</li>
+<li>Once the update is complete, the view is rendered from the new model state.</li>
+<li>The reactive loop is then closed.</li>
+</ul></li>
+</ul>
+
+<p>
+The SAM pattern boils down to the expresion:
+</p>
+
+<ul class="org-ul">
+<li><code>View = State(view_model(Model.present(Action(data))), next_action_predicate(Model))</code>
+<ul class="org-ul">
+<li><code>Action</code>, <code>view_model</code>, and <code>next_action_predicate</code> must be pure functions</li>
+<li><code>next_action_predicate</code> is a callback invoked once the state
+representation has been created and on its way to be rendered to the user.</li>
+</ul></li>
+</ul>
+
+
+
+<p>
+References:
+</p>
+
+<ul class="org-ul">
+<li><a href="https://dzone.com/articles/the-three-approximations-you-should-never-use-when">https://dzone.com/articles/the-three-approximations-you-should-never-use-when</a></li>
+<li><a href="https://www.infoq.com/articles/no-more-mvc-frameworks/">https://www.infoq.com/articles/no-more-mvc-frameworks/</a></li>
+<li><a href="https://sam.js.org/">https://sam.js.org/</a></li>
+<li><a href="https://github.com/MithrilJS/mithril.js/issues/2495#issuecomment-1196762487">https://github.com/MithrilJS/mithril.js/issues/2495#issuecomment-1196762487</a></li>
+<li><a href="https://meiosis.js.org/">https://meiosis.js.org/</a></li>
+</ul>
+</div>
+
+<div id="outline-container-h-bbe4f793-f7f2-4d05-9ec1-cddeae1d8a78" class="outline-4">
+<h4 id="h-bbe4f793-f7f2-4d05-9ec1-cddeae1d8a78"><span class="section-number-4">1.1.1.</span> Example in Mithril.js</h4>
+<div class="outline-text-4" id="text-h-bbe4f793-f7f2-4d05-9ec1-cddeae1d8a78">
+<p>
+Let's examine the following "counter" example from <a href="https://github.com/MithrilJS/mithril.js/issues/2495#issuecomment-1196762487">foucist</a>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-js"><span class="org-keyword">const</span> <span class="org-variable-name">State</span> = () =&gt; ({ count: 0 });
+
+<span class="org-keyword">const</span> <span class="org-variable-name">Actions</span> = state =&gt; ({
+  increment: () =&gt; state.count += 1,
+  decrement: () =&gt; state.count -= 1
+});
+
+<span class="org-keyword">const</span> <span class="org-variable-name">state</span>   = State();
+<span class="org-keyword">const</span> <span class="org-variable-name">actions</span> = Actions(state);
+
+<span class="org-keyword">const</span> <span class="org-variable-name">Counter</span> = {
+  view: ({ attrs: { state, actions } }) =&gt;
+    m(<span class="org-string">'div'</span>,
+      m(<span class="org-string">'h1'</span>, <span class="org-string">'Counter'</span>),
+      m(<span class="org-string">'p'</span>, state.count),
+      m(<span class="org-string">'button'</span>, { onclick: actions.increment }, <span class="org-string">'+'</span>),
+      m(<span class="org-string">'button'</span>, { onclick: actions.decrement }, <span class="org-string">'-'</span>)
+    )
+};
+
+m.mount(document.body, {
+  view: () =&gt; m(Counter, { state, actions })
+});
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>An <code>update</code> is a stream of "patches"</li>
+<li>A <code>states</code> stream of states, obtained with <code>scan</code> on the <code>update</code>
+stream and applying an "accumulator"</li>
+<li>An <code>actions</code> object containing functions which we pass <code>update</code>, so
+that those actions trigger state changes. To be explicit, we would
+have
+<code>increment: (update, amount) =&gt; { update((state) =&gt; ({ count: state.count + amount})}</code>
+(but this is clearly overkill with superfluous boilerplate)</li>
+</ul>
+
+<p>
+For more on SAM in Mithril, see:
+</p>
+
+<ul class="org-ul">
+<li><a href="https://meiosis.js.org/">https://meiosis.js.org/</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-81096b07-f043-42aa-91c4-fba28ee7e052" class="outline-2">
+<h2 id="h-81096b07-f043-42aa-91c4-fba28ee7e052"><span class="section-number-2">2.</span> References</h2>
+<div class="outline-text-2" id="text-h-81096b07-f043-42aa-91c4-fba28ee7e052">
 <ul class="org-ul">
 <li>James Forbes, <a href="https://james-forbes.com/posts/hooks-and-streams">Hooks and Streams</a></li>
 <li>James Adam,
@@ -250,8 +438,10 @@
 </ul></li>
 </ul>
 </div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-11-17 Thu 18:46.</p>
+<p class="postamble">Last Updated 2022-11-20 Sun 17:54.</p>
 </div>
 </body>
 </html>

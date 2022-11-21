@@ -11,6 +11,134 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 # Created Thursday November 17, 2022 at  6:39PM
 
+* "Design Tools"
+:PROPERTIES:
+:CUSTOM_ID: h-5b5ee42d-9166-4959-b75d-2b5d348581a8
+:END:
+
+I know React uses a [[https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel][MVVM]] architecture for its components. Mithril.js
+uses MVC explicitly.
+
+** SAM (State-Action-Model)
+:PROPERTIES:
+:CUSTOM_ID: h-6afdd666-a0c7-4948-8821-df384cb19e75
+:END:
+
+There is also the State-Action-Model architecture, which is the hot new
+thing replacing MVC (and MVVM). Basically, as I understand it,
+
+1. Actions compute proposals. Actions cannot mutate the properties of
+   the model.
+2. The models accepts, partially accepts, or rejects the proposal. A
+   model should be a series of "acceptors" and "reactors".
+   - Acceptors validate proposals and mutate the state accordingly
+   - Reactors react to state mutations and are not involved in the
+     processing proposals
+3. Evaluate whether a next-action is needed
+4. Compute the new state representation.
+
+Assignments are not mutations, and mutations must be explicit.
+
+The "programming step" is specified by ~Action -> Model -> State~.
+
+- Actions are functions, with type signature ~Action : Event -> Proposal~
+- Proposals are "proposals to mutate the property values of the Model"
+- The Model is an instance of a class (or closure) generally with a
+  single method that is used to receive proposals to mutate the property
+  values; when the mutation is complete, the model invokes the "State"
+  function, whose role is to compute the (control) state, which can also
+  be viewed as the state representation of the model.
+- The State function invokes the next-action predicate which computes
+  whether an action needs to be triggered in the current (new)
+  occurrence of a control state.
+
+The idea is that ~<View params={Model} />~ is no different than ~View = f(Model)~.
+Then the purpose of React (and friends) is to decompose the view into a
+series of **pure** functions.
+
+Now, in "traditional/orthodox MVC", it's entirely interactive (as
+opposed to /reactive/). The action (/nee/ Controller) would call an
+update method on the model, then depending on success or failure would
+determine how to update the view accordingly.
+
+Reactive coding would have actions (controllers) pass values to the
+model, regardless of the outcome. There is no "decide how to update the
+model". A reactive MVC would look something like
+
+- ~View = f(Model.present(Action(data)))~
+  - When an action is triggered, it computes a data set from a set of
+    inputs (e.g., user inputs) that is presented to the model, which then
+    decides if and how to update itself.
+  - Once the update is complete, the view is rendered from the new model state.
+  - The reactive loop is then closed.
+
+The SAM pattern boils down to the expresion:
+
+- ~View = State(view_model(Model.present(Action(data))), next_action_predicate(Model))~
+  - ~Action~, ~view_model~, and ~next_action_predicate~ must be pure functions
+  - ~next_action_predicate~ is a callback invoked once the state
+    representation has been created and on its way to be rendered to the user.
+
+
+
+References:
+
+- https://dzone.com/articles/the-three-approximations-you-should-never-use-when
+- https://www.infoq.com/articles/no-more-mvc-frameworks/
+- https://sam.js.org/
+- https://github.com/MithrilJS/mithril.js/issues/2495#issuecomment-1196762487
+- https://meiosis.js.org/
+
+*** Example in Mithril.js
+:PROPERTIES:
+:CUSTOM_ID: h-bbe4f793-f7f2-4d05-9ec1-cddeae1d8a78
+:END:
+
+Let's examine the following "counter" example from [[https://github.com/MithrilJS/mithril.js/issues/2495#issuecomment-1196762487][foucist]]:
+
+#+begin_src js
+const State = () => ({ count: 0 });
+
+const Actions = state => ({
+  increment: () => state.count += 1,
+  decrement: () => state.count -= 1
+});
+
+const state   = State();
+const actions = Actions(state);
+
+const Counter = {
+  view: ({ attrs: { state, actions } }) =>
+    m('div',
+      m('h1', 'Counter'),
+      m('p', state.count),
+      m('button', { onclick: actions.increment }, '+'),
+      m('button', { onclick: actions.decrement }, '-')
+    )
+};
+
+m.mount(document.body, {
+  view: () => m(Counter, { state, actions })
+});
+#+end_src
+
+- An ~update~ is a stream of "patches"
+- A ~states~ stream of states, obtained with ~scan~ on the ~update~
+  stream and applying an "accumulator"
+- An ~actions~ object containing functions which we pass ~update~, so
+  that those actions trigger state changes. To be explicit, we would
+  have
+  ~increment: (update, amount) => { update((state) => ({ count: state.count + amount})}~
+  (but this is clearly overkill with superfluous boilerplate)
+
+For more on SAM in Mithril, see:
+
+- https://meiosis.js.org/
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-81096b07-f043-42aa-91c4-fba28ee7e052
+:END:
 - James Forbes, [[https://james-forbes.com/posts/hooks-and-streams][Hooks and Streams]]
 - James Adam,
   [[https://jamesadam.me/2017/03/09/implementing-search-as-you-type-with-mithril-js/][Implementing Search-as-you-type with Mithril.js]]
