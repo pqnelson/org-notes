@@ -1,0 +1,388 @@
+#+TITLE: de Bruijn Indices - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-12-31T08:57:47-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ../sml.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Saturday December 31, 2022 at  8:57AM
+
+* Problem Statement
+:PROPERTIES:
+:CUSTOM_ID: h-a4e15c60-3817-479a-b174-e2165a8f8a78
+:END:
+
+The basic problem is to consider the untyped lambda calculus. How can we
+encode it in Standard ML? The naive way runs into problems, for example:
+
+$$(\lambda x . \lambda y . x y x y) (y y) \to_{\text{naive}} \lambda y . ((y y) y (y y) y)$$
+
+This is incorrect, it should instead change the bound $y$ variable to
+avoid accidentally capturing the free variable:
+
+$$(\lambda x . \lambda y . x y x y) (y y) \to \lambda z . ((y y) z (y y) z)$$
+
+How can we avoid the problem of accidental capture?
+
+* Solution
+:PROPERTIES:
+:CUSTOM_ID: h-69f5b62a-bcd4-4de3-896c-0238934c797c
+:END:
+
+The approach De Bruijn took was to use numbers for bound
+variables. (What do we do with free variables? Well...let's see how we
+translate bound variables into numbers first.)
+
+The idea is: a bound variable is replaced by a number counting how many
+lambdas occur between the bound variable and its binder? For example,
+the identity combinator's bound variable has nothing between it and its
+binder, so we would encode it as:
+
+$$ \lambda x . x \mapsto \lambda.0 $$
+
+When there is 1 lambda between the bound variable and its binder:
+
+$$ \lambda x . \lambda y . x \mapsto \lambda\lambda.1 $$
+
+A tricky one:
+
+$$ \lambda x.\lambda y.\lambda s.\lambda z.x s (y s z)\mapsto \lambda\lambda\lambda\lambda.3~1~(2~1~0)$$
+
+The names of the bound variables do not matter:
+
+$$(\lambda x . x~x)(\lambda y.y~y)\mapsto (\lambda.0~0)(\lambda.0~0)$$
+
+This is the basic idea of de Bruijn indices.
+
+** Translation Algorithm
+:PROPERTIES:
+:CUSTOM_ID: h-28efb67b-84c8-46d3-adde-08ba31d42dc5
+:END:
+
+The basic algorithm could be sketched out using an associative array (or
+"dictionary") of bindings, which is called the {{{dfn(Context)}}} in the
+literature.
+
+*Step 1.* We initialize the context $\Gamma\gets\{\}$ and the binding
+depth $\delta\gets 0$. We are given a lambda expression $e$ we will
+translate to de Bruijn notation.
+
+*Step 2.* (Handle variables.) If our expression is not a variable, go to
+step 5. If our expression is a variable $e = x$, then we check if the
+variable is in our context $x\in\Gamma$. If it is, go to step 4. If $e = x$
+is free, then go to the next step.
+
+*Step 3.* (Shift de Bruijn indices, add new binding.) If $e = x$ is not
+in our existing context $x\notin\Gamma$, we add it, which means
+we construct a new context by copying over all existing bindings with
+the de Bruijn index shifted by 1, and assign $x$ the de Bruijn index of 0:
+$\Gamma_{\text{new}} = \{(y,n+1)\mid (y,n)\in\Gamma\}\cup\{(x,0)\}$.
+Set $\Gamma\gets\Gamma_{\text{new}}$ and move to the next step.
+
+*Step 4.* (Swap variable for de Bruijn index.) Our expression is a
+variable $e=x$ and our context has a binding for it $x\in\Gamma$. Then
+we lookup the de Bruijn index in the context $\Gamma(x)=n$ and return
+$n$ as the translation.
+
+*Step 5.* If our expression $e$ is a lambda abstraction $e = \lambda x.e'$,
+then we move on to step 6. Otherwise we move to step 7.
+
+*Step 6.* Given a lambda abstraction for our expression $e = \lambda x.e'$,
+we translate $x$ to a de Bruijn index and update our context --- exactly
+as we have done in step 3. Using this new context $\Gamma_{\text{new}}$,
+we translate the body of the abstraction $e'$ using this new context;
+i.e., we set $e\gets e'$ and $\Gamma\gets\Gamma_{\text{new}}$, then
+return to step 2. This produces a translation $e'\mapsto\widetilde{e}'$,
+and we return $\lambda . \widetilde{e}'$ as the translation.
+
+*Step 7.* The last possibility is that $e$ is an application of
+expressions, so $e = e_{1}~e_{2}$. We can then, in parallel and separately,
+construct two copies of the current context $\Gamma_{1}\gets\Gamma$ and
+$\Gamma_{2}\gets\Gamma$, then concurrently return to step 2 with
+(a) expression $e_{1}$ and context $\Gamma_{1}$, and
+(b) expression $e_{2}$ and context $\Gamma_{2}$. This will translate the
+subexpressions $e_{1}\mapsto\widetilde{e}_{1}$ and 
+$e_{2}\mapsto\widetilde{e}_{2}$, then we return as our translation
+the application $\widetilde{e}_{1}~\widetilde{e}_{2}$.
+
+(End of Algorithm)
+
+** Free Variables
+:PROPERTIES:
+:CUSTOM_ID: h-534e5fe2-7cfc-4354-bda2-23bfc766fbf3
+:END:
+
+What do we do with free variables? Well, the way it is handled
+traditionally is to treat them as we have outlined: they are integers
+larger than the number of binders. This has its problems if we wanted to
+print out the resulting translation to the user, e.g., for debugging
+purposes. 
+
+** Substitution
+:PROPERTIES:
+:CUSTOM_ID: h-1a0cf8ac-e24a-416e-905d-4549fd236a31
+:END:
+
+But this begs the question: how does substitution work in de Bruijn
+indices?
+
+We see that $(\lambda x.\lambda y.x)e\to\lambda y.e$; with de Bruijn
+indices, we would have $(\lambda\lambda.1)\widetilde{e}$ translated...how?
+Well, we begin by realizing $x$ has been replaced initially by 0, so we
+would write:
+$$ (\lambda\lambda.1)\widetilde{e}\to (\lambda.1)[0 := \widetilde{e}]$$
+This gets the ball rolling. Next, we need to move the substitution
+through the lambda binder. This would increment the de Bruijn index for
+the bound variable we are substituting for:
+$$ (\lambda.1)[0 := \widetilde{e}] \stackrel{?}{=} \lambda.(1[1 := \widetilde{e}])$$
+Would this work? Care must be taken with free variables in $\widetilde{e}$,
+we must make sure they remain free.
+
+For a ground term $\widetilde{e}$, we can simply work with care-free
+abandon, replacing $1$ by $\widetilde{e}$, and we're finished.
+
+For an expression $\widetilde{e}$ with free variables, then we run into
+problems. Really? Well, take $\widetilde{e}=0$. Then we would have
+$$ (\lambda.1)[0 := 0] \stackrel{?}{=} \lambda.(1[1 := 0]) = \lambda.0 $$
+This is *not* equal to the translation of $(\lambda x.\lambda y.x)x$ into de Bruijn
+indices. What happened?
+
+Well, free variables screwed everything up. We need to keep free
+variables /free/. That is, we need to keep their value above the "depth"
+of binders.
+
+We introduce a notion of {{{dfn(shift operator)}}} $\uparrow^{n}_{c}$
+which increments de Bruijn indices at or above the cutoff $c$ by an
+amount $n$. We define it inductively by the rules:
+
+$$ \uparrow^{n}_{c}(m) = \begin{cases}m & \mbox{if }m\lt c\\ m + n & \mbox{otherwise}\end{cases} $$
+$$ \uparrow^{n}_{c}(\lambda.e) = \lambda.(\uparrow^{n}_{c+1}(e))$$
+$$ \uparrow^{n}_{c}(e_{1}~e_{2}) = \uparrow^{n}_{c}(e_{1})~\uparrow^{n}_{c}(e_{2})$$
+
+Observe, if we want to shift free variables by 1 in an expression, we
+would write $\uparrow^{1}_{0}(e)$. The cutoff starts at $c=0$, but will
+increment to reflect the "binder depth" of the subexpression.
+
+Substitution, using the shift function, is then defined by:
+
+$$ m [n := e] = \begin{cases} e & \mbox{if }m=n\\m &\mbox{otherwise}\end{cases}$$
+$$ (\lambda.e_{1})[n := e] = \lambda.(e_{1}[m+1 := \uparrow^{1}_{0}(e)])$$
+$$ (e_{1}~e_{2})[n := e] = (e_{1}[n := e])~(e_{2}[n := e])$$
+
+Does this fix our situation? We should observe our /naive/ attempt at
+substitution has $(\lambda.e_{1})[n := e] = \lambda.(e_{1}[m+1 := e])$,
+so the shift function is used /only/ when substituting into a lambda
+expression. We also see that we shift all variables above a cutoff
+$c=0$, i.e., we shift all /free variables/ by 1. Therefore, we /expect/
+this should work.
+
+We see for our particular expression:
+
+$$ (\lambda\lambda.1)0 = (\lambda.1)[0 := 0] $$
+
+Then applying our rules for substitution:
+
+$$ (\lambda.1)[0 := 0] = \lambda.(1[0 + 1 := \uparrow^{1}_{0}(0)]) = \lambda.(1[1 := 1]). $$
+
+Thus we find:
+
+$$ (\lambda\lambda.1)0\to\lambda.1 $$
+
+This works as we expected! ...for one simple example. If we had a
+different context, where $x$ were translated to $n$, then we would have instead:
+
+$$ (\lambda\lambda.1)n\to\lambda.(n+1) $$
+
+...which is right. We would therefore need to shift down
+by 1. That is to say, we would need beta reduction to be defined as:
+
+\begin{equation}
+(\lambda.e_{1})e_{2}\to_{\beta} \uparrow^{-1}_{0}(e_{1}[0 := \uparrow^{1}_{0}(e_{2})])
+\end{equation}
+
+Wait, would this work with our original situation? Let us evaluate:
+
+$$ (\lambda\lambda.1)n\to_{\beta}\uparrow^{-1}_{0}((\lambda.1)[0 := n+1])$$
+$$ \uparrow^{-1}_{0}((\lambda.1)[0 := n+1]) = \uparrow^{-1}_{0}(\lambda.(1[0 + 1 := \uparrow^{1}_{0}(n+1)]))$$
+$$ \uparrow^{-1}_{0}(\lambda.(1[0 + 1 := \uparrow^{1}_{0}(n+1)])) = \uparrow^{-1}_{0}(\lambda.(1[1 := n+2]))$$
+$$ \uparrow^{-1}_{0}(\lambda.(1[1 := n+2])) = \uparrow^{-1}_{0}(\lambda.n+2)$$
+$$ \uparrow^{-1}_{0}(\lambda.n+2) = \lambda.\uparrow^{-1}_{1}(n+2)$$
+$$ \lambda.\uparrow^{-1}_{1}(n+2) = \lambda.(n+1) $$
+
+Without the outermost $\uparrow^{-1}_{0}(\dots)$, we would have obtained
+the incorrect solution. Without the innermost $\uparrow^{1}_{0}(\dots)$,
+we would have mistaken the free variable $0$ for a bound
+variable. Therefore, we are forced to admit the beta-reduction rule as proposed.
+
+* Locally Nameless Variables
+:PROPERTIES:
+:CUSTOM_ID: h-16502c44-ef38-4b5c-8cc9-577a9621f5d2
+:END:
+
+This is a big old mess, all caused by free variables. What if we
+just...leave free variables alone? Treat them as strings? Then we won't
+have to worry about shifting and unshifting in beta
+reduction. But we have two notions of variables --- free variables and
+bound ones.
+
+#+begin_src sml
+datatype Name = Bound of int
+       | Free of string;
+
+datatype Expr = Var of Name
+       | Lam of Expr
+       | App of Expr * Expr;
+#+end_src
+
+We then substitute an expression for a name.
+
+#+begin_src sml
+fun subst e' x@(Free n) = (fn e@(Var (Free y)) => if n = y then e' else e
+                        | e@(Var _) => e
+                        | (Lam e) => Lam (subst e' x e)
+                        | (App (e1, e2)) => App (subst e' x e1, subst e' x e2))
+  | subst e' x@(Bound n) = (fn e@(Var (Bound m)) => if m = n then e' else e
+                           | e@(Var _) => e
+                           | (Lam e) => Lam (subst e' (Bound (n+1)) e)
+                           | (App (e1, e2)) => App (subst e' x e1, subst e' x e2));
+#+end_src
+
+Actually, since both ~int~ and ~string~ are equality types, we can
+simplify this code quite a bit:
+
+#+begin_src sml
+fun shift (Bound n) = Bound (n + 1)
+  | shift e = e;
+
+fun subst (e' : Expr) (x : Name) =
+    (fn e@(Var y) => if x = y then e' else e
+    | (Lam e) => Lam (subst e' (shift x) e)
+    | (App (e1, e2)) => App (subst e' x e1, subst e' x e2));
+#+end_src
+
+That's it, we've got the substitution mechanism, and now beta reduction
+simplifies to:
+
+#+begin_src sml
+fun beta e@(Var _) = e
+  | beta e@(Lam _) = e
+  | beta e@(App (e1, e2)) = case e1 of
+                            | (Var _) => e
+                            | (Lam e') => subst e2 (Bound 0) e'
+                            | (App (e11, e12)) =>
+                              let val v1 = beta e1
+                              in if e1 = v1 then e else beta (App (v1, e2))
+                              end;
+#+end_src
+
+We should probably add some logic to avoid infinite loops with beta
+reduction, but this illustrates the mechanics of locally nameless
+variables.
+
+* HOAS, PHOAS, etc.
+:PROPERTIES:
+:CUSTOM_ID: h-0825b3d3-5d90-4f57-b3ff-bec320045ec1
+:END:
+
+A more sophisticated approach to encoding binders, free and bound
+variables, etc., is to piggieback off the programming language. This
+assumes the type system is sufficiently powerful. For Standard ML, we
+lack sufficient strength.
+
+For a SML library useful for a runtime HOAS/PHOAS encoding, see:
+
+- Umut A. Acar, Guy E. Blelloch, Robert Harper,\\
+  "Selective Memoization".\\
+  {{{arXiv(1106.0447)}}}, 31 pages.
+
+* ...and /Typed/ Lambda Calculus
+:PROPERTIES:
+:CUSTOM_ID: h-3761a02f-4b76-4769-a18f-defd3cc8d6be
+:END:
+
+Thus far, we have worked with locally nameless variables for untyped
+lambda calculus. What happens if we add types?
+
+At the very least, we would need to add the type of the bound variable
+to ~Lam~ (lambda abstraction). This minimal approach would require us to
+typecheck expressions to make sure evaluation makes sense ("works").
+
+We could equally do something like:
+#+begin_src sml
+type Name = string;
+(* datatype Var = ... *) (* The implementation is immaterial *)
+
+datatype Type =
+         | TArr of Type * Type
+         (* | other base types... *)
+         | TBool;
+
+datatype Term =
+       | Const of boolean
+       | Var of Name
+       | Abs of Type * Term
+       | App of Term * Term;
+#+end_src
+
+If we wanted to use locally nameless variables for polymorphic lambda
+calculus, we would have something like:
+
+#+begin_src sml
+type Name = string;
+datatype Var = (* ... *) (* The implementation is immaterial *)
+
+datatype Sort = (* complicated mess *);
+
+datatype Type =
+         | Ty Name * (Type list)
+         | TVar Var * Sort;
+
+datatype Term =
+         | Const Name * Type
+         | FVar Var * Type
+         | BVar int
+         | Abs Type * Term
+         | App Term * Term;
+#+end_src
+
+This is, after all, what happens in:
+
+- Tobias Nipkow, Simon Roßkopf,\\
+  "Isabelle's Metalogic: Formalization and Proof Checker".\\
+  {{{arXiv(2104.12224)}}}, 18 pages.
+
+For first-order dependently-typed lambda calculus (LF or its variants),
+then I believe we need to define the ~Type~ and ~Term~ datatypes
+simultaneously. For example, formalizing de Groote's
+$\lambda^{\lambda}$ (from his paper "Defining λ-Typed λ-Calculi
+by Axiomatizing the Typing Relation"), we would need something like:
+
+#+begin_src sml
+datatype Expr =
+         | EType
+         | EVar of Var
+         | ELam of Expr * Expr
+         | EApp of Expr * Expr
+     and Type =
+         | TKind
+         | TLam of Expr * Type;
+#+end_src
+
+Or perhaps more succinctly using one datatype for pseudo-expressions:
+
+#+begin_src sml
+datatype Expr =
+         | Type
+         | Kind
+         | Var of Var
+         | Lam of Expr * Expr
+         | App of Expr * Expr;
+#+end_src
+
+It's probably wise to use opaque types, then make certain constructors
+public, so as to avoid passing off illegal pseudoexpressions as
+perfectly valid expressions.

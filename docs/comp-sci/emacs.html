@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- 2022-12-31 Sat 09:10 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Haskell</title>
+<title>Emacs</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -213,46 +214,65 @@
  |
  <a accesskey="H" href="../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Haskell</h1>
+<h1 class="title">Emacs</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-35f73750-4ad3-4d3c-bdec-429eee81e731">1. References</a>
+<li><a href="#orge7d2e82">1. Building Emacs</a>
 <ul>
-<li><a href="#h-070ae1ee-843d-41d0-9486-0f04016d6fda">1.1. Type Checking</a></li>
+<li><a href="#orgfde25e1">1.1. On Windows</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-h-35f73750-4ad3-4d3c-bdec-429eee81e731" class="outline-2">
-<h2 id="h-35f73750-4ad3-4d3c-bdec-429eee81e731"><span class="section-number-2">1.</span> References</h2>
-<div class="outline-text-2" id="text-h-35f73750-4ad3-4d3c-bdec-429eee81e731">
-<ul class="org-ul">
-<li>Ben Lynn's <a href="https://crypto.stanford.edu/~blynn/compiler/socrates.html">notes on Haskell compiler</a></li>
-<li>John Hughes,<br>
-<a href="https://www.cs.ox.ac.uk/publications/publication3788-abstract.html">THE DESIGN AND IMPLEMENTATION OF PROGRAMMING LANGUAGES</a></li>
-</ul>
+<div id="outline-container-orge7d2e82" class="outline-2">
+<h2 id="orge7d2e82"><span class="section-number-2">1.</span> Building Emacs</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Compiling Emacs from scratch does not seem to be well documented.
+</p>
 </div>
 
+<div id="outline-container-orgfde25e1" class="outline-3">
+<h3 id="orgfde25e1"><span class="section-number-3">1.1.</span> On Windows</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+There are two ways to go about this: either use Mingw, or use the
+Windows Subystem for Linux (WSL).
+</p>
 
-<div id="outline-container-h-070ae1ee-843d-41d0-9486-0f04016d6fda" class="outline-3">
-<h3 id="h-070ae1ee-843d-41d0-9486-0f04016d6fda"><span class="section-number-3">1.1.</span> Type Checking</h3>
-<div class="outline-text-3" id="text-h-070ae1ee-843d-41d0-9486-0f04016d6fda">
-<ul class="org-ul">
-<li>Dimitrios Vytiniotis, Simon Peyton Jones, Tom Schrijvers, Martin Sulzmann,<br>
-"OutsideIn(X): Modular type inference with local assumptions".<br>
-<i>Journal of Functional Programming</i> <b>21</b> (2011) pp. 333&#x2013;412 
-<a href="https://www.microsoft.com/en-us/research/publication/outsideinx-modular-type-inference-with-local-assumptions/">Eprint</a></li>
-</ul>
+<p>
+MinGW uses Pacman as its package manager, so all you need to do is
+something like <code>pacman -S emacs</code>.
+</p>
+
+<p>
+For WSL, I use Ubuntu WSL. Although I could just use the package
+provided, I build it from scratch. My shell looks something like:
+</p>
+
+<pre class="example" id="orgb6999b1">
+~ $ mkdir -p src/
+~ $ cd src
+~/src/ $ git clone https://git.savannah.gnu.org/git/emacs.git
+~/src/emacs/ $ git checkout emacs-28
+~/src/emacs/ $ ./autogen.sh
+~/src/emacs/ $ ./configure --with-wide-int --with-gnutls=ifavailable --with-x-toolkit=no --with-m17n-flt --with-modules --with-json --with-threads --with-included-regex --with-compress-install CFLAGS="-O3 -mtune=native -march=native -fno-finite-math-only"
+...
+~/src/emacs/ $ make
+...
+~/src/emacs/ $ sudo make install
+...
+</pre>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-08-09 Mon 18:44.</p>
+<p class="postamble">Last Updated 2022-12-18 Sun 09:58.</p>
 </div>
 </body>
 </html>

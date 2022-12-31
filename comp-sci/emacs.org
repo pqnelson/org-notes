@@ -1,0 +1,42 @@
+#+TITLE: Emacs
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2022-12-18T09:36:29-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Sunday December 18, 2022 at  9:36AM
+
+* Building Emacs
+
+Compiling Emacs from scratch does not seem to be well documented.
+
+** On Windows
+
+There are two ways to go about this: either use Mingw, or use the
+Windows Subystem for Linux (WSL).
+
+MinGW uses Pacman as its package manager, so all you need to do is
+something like ~pacman -S emacs~.
+
+For WSL, I use Ubuntu WSL. Although I could just use the package
+provided, I build it from scratch. My shell looks something like:
+
+#+begin_example
+~ $ mkdir -p src/
+~ $ cd src
+~/src/ $ git clone https://git.savannah.gnu.org/git/emacs.git
+~/src/emacs/ $ git checkout emacs-28
+~/src/emacs/ $ ./autogen.sh
+~/src/emacs/ $ ./configure --with-wide-int --with-gnutls=ifavailable --with-x-toolkit=no --with-m17n-flt --with-modules --with-json --with-threads --with-included-regex --with-compress-install CFLAGS="-O3 -mtune=native -march=native -fno-finite-math-only"
+...
+~/src/emacs/ $ make
+...
+~/src/emacs/ $ sudo make install
+...
+#+end_example
+

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2022-12-31 Sat 12:22 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>de Bruijn Indices - SML</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="../sml.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">de Bruijn Indices - SML</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-a4e15c60-3817-479a-b174-e2165a8f8a78">1. Problem Statement</a></li>
+<li><a href="#h-69f5b62a-bcd4-4de3-896c-0238934c797c">2. Solution</a>
+<ul>
+<li><a href="#h-28efb67b-84c8-46d3-adde-08ba31d42dc5">2.1. Translation Algorithm</a></li>
+<li><a href="#h-534e5fe2-7cfc-4354-bda2-23bfc766fbf3">2.2. Free Variables</a></li>
+<li><a href="#h-1a0cf8ac-e24a-416e-905d-4549fd236a31">2.3. Substitution</a></li>
+</ul>
+</li>
+<li><a href="#h-16502c44-ef38-4b5c-8cc9-577a9621f5d2">3. Locally Nameless Variables</a></li>
+<li><a href="#h-0825b3d3-5d90-4f57-b3ff-bec320045ec1">4. HOAS, PHOAS, etc.</a></li>
+<li><a href="#h-3761a02f-4b76-4769-a18f-defd3cc8d6be">5. &#x2026;and <i>Typed</i> Lambda Calculus</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-a4e15c60-3817-479a-b174-e2165a8f8a78" class="outline-2">
+<h2 id="h-a4e15c60-3817-479a-b174-e2165a8f8a78"><span class="section-number-2">1.</span> Problem Statement</h2>
+<div class="outline-text-2" id="text-h-a4e15c60-3817-479a-b174-e2165a8f8a78">
+<p>
+The basic problem is to consider the untyped lambda calculus. How can we
+encode it in Standard ML? The naive way runs into problems, for example:
+</p>
+
+<p>
+\[(\lambda x . \lambda y . x y x y) (y y) \to_{\text{naive}} \lambda y . ((y y) y (y y) y)\]
+</p>
+
+<p>
+This is incorrect, it should instead change the bound \(y\) variable to
+avoid accidentally capturing the free variable:
+</p>
+
+<p>
+\[(\lambda x . \lambda y . x y x y) (y y) \to \lambda z . ((y y) z (y y) z)\]
+</p>
+
+<p>
+How can we avoid the problem of accidental capture?
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-69f5b62a-bcd4-4de3-896c-0238934c797c" class="outline-2">
+<h2 id="h-69f5b62a-bcd4-4de3-896c-0238934c797c"><span class="section-number-2">2.</span> Solution</h2>
+<div class="outline-text-2" id="text-h-69f5b62a-bcd4-4de3-896c-0238934c797c">
+<p>
+The approach De Bruijn took was to use numbers for bound
+variables. (What do we do with free variables? Well&#x2026;let's see how we
+translate bound variables into numbers first.)
+</p>
+
+<p>
+The idea is: a bound variable is replaced by a number counting how many
+lambdas occur between the bound variable and its binder? For example,
+the identity combinator's bound variable has nothing between it and its
+binder, so we would encode it as:
+</p>
+
+<p>
+\[ \lambda x . x \mapsto \lambda.0 \]
+</p>
+
+<p>
+When there is 1 lambda between the bound variable and its binder:
+</p>
+
+<p>
+\[ \lambda x . \lambda y . x \mapsto \lambda\lambda.1 \]
+</p>
+
+<p>
+A tricky one:
+</p>
+
+<p>
+\[ \lambda x.\lambda y.\lambda s.\lambda z.x s (y s z)\mapsto \lambda\lambda\lambda\lambda.3~1~(2~1~0)\]
+</p>
+
+<p>
+The names of the bound variables do not matter:
+</p>
+
+<p>
+\[(\lambda x . x~x)(\lambda y.y~y)\mapsto (\lambda.0~0)(\lambda.0~0)\]
+</p>
+
+<p>
+This is the basic idea of de Bruijn indices.
+</p>
+</div>
+
+<div id="outline-container-h-28efb67b-84c8-46d3-adde-08ba31d42dc5" class="outline-3">
+<h3 id="h-28efb67b-84c8-46d3-adde-08ba31d42dc5"><span class="section-number-3">2.1.</span> Translation Algorithm</h3>
+<div class="outline-text-3" id="text-h-28efb67b-84c8-46d3-adde-08ba31d42dc5">
+<p>
+The basic algorithm could be sketched out using an associative array (or
+"dictionary") of bindings, which is called the <dfn>Context</dfn> in the
+literature.
+</p>
+
+<p>
+<b>Step 1.</b> We initialize the context \(\Gamma\gets\{\}\) and the binding
+depth \(\delta\gets 0\). We are given a lambda expression \(e\) we will
+translate to de Bruijn notation.
+</p>
+
+<p>
+<b>Step 2.</b> (Handle variables.) If our expression is not a variable, go to
+step 5. If our expression is a variable \(e = x\), then we check if the
+variable is in our context \(x\in\Gamma\). If it is, go to step 4. If \(e = x\)
+is free, then go to the next step.
+</p>
+
+<p>
+<b>Step 3.</b> (Shift de Bruijn indices, add new binding.) If \(e = x\) is not
+in our existing context \(x\notin\Gamma\), we add it, which means
+we construct a new context by copying over all existing bindings with
+the de Bruijn index shifted by 1, and assign \(x\) the de Bruijn index of 0:
+\(\Gamma_{\text{new}} = \{(y,n+1)\mid (y,n)\in\Gamma\}\cup\{(x,0)\}\).
+Set \(\Gamma\gets\Gamma_{\text{new}}\) and move to the next step.
+</p>
+
+<p>
+<b>Step 4.</b> (Swap variable for de Bruijn index.) Our expression is a
+variable \(e=x\) and our context has a binding for it \(x\in\Gamma\). Then
+we lookup the de Bruijn index in the context \(\Gamma(x)=n\) and return
+\(n\) as the translation.
+</p>
+
+<p>
+<b>Step 5.</b> If our expression \(e\) is a lambda abstraction \(e = \lambda x.e'\),
+then we move on to step 6. Otherwise we move to step 7.
+</p>
+
+<p>
+<b>Step 6.</b> Given a lambda abstraction for our expression \(e = \lambda x.e'\),
+we translate \(x\) to a de Bruijn index and update our context &#x2014; exactly
+as we have done in step 3. Using this new context \(\Gamma_{\text{new}}\),
+we translate the body of the abstraction \(e'\) using this new context;
+i.e., we set \(e\gets e'\) and \(\Gamma\gets\Gamma_{\text{new}}\), then
+return to step 2. This produces a translation \(e'\mapsto\widetilde{e}'\),
+and we return \(\lambda . \widetilde{e}'\) as the translation.
+</p>
+
+<p>
+<b>Step 7.</b> The last possibility is that \(e\) is an application of
+expressions, so \(e = e_{1}~e_{2}\). We can then, in parallel and separately,
+construct two copies of the current context \(\Gamma_{1}\gets\Gamma\) and
+\(\Gamma_{2}\gets\Gamma\), then concurrently return to step 2 with
+(a) expression \(e_{1}\) and context \(\Gamma_{1}\), and
+(b) expression \(e_{2}\) and context \(\Gamma_{2}\). This will translate the
+subexpressions \(e_{1}\mapsto\widetilde{e}_{1}\) and 
+\(e_{2}\mapsto\widetilde{e}_{2}\), then we return as our translation
+the application \(\widetilde{e}_{1}~\widetilde{e}_{2}\).
+</p>
+
+<p>
+(End of Algorithm)
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-534e5fe2-7cfc-4354-bda2-23bfc766fbf3" class="outline-3">
+<h3 id="h-534e5fe2-7cfc-4354-bda2-23bfc766fbf3"><span class="section-number-3">2.2.</span> Free Variables</h3>
+<div class="outline-text-3" id="text-h-534e5fe2-7cfc-4354-bda2-23bfc766fbf3">
+<p>
+What do we do with free variables? Well, the way it is handled
+traditionally is to treat them as we have outlined: they are integers
+larger than the number of binders. This has its problems if we wanted to
+print out the resulting translation to the user, e.g., for debugging
+purposes. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-1a0cf8ac-e24a-416e-905d-4549fd236a31" class="outline-3">
+<h3 id="h-1a0cf8ac-e24a-416e-905d-4549fd236a31"><span class="section-number-3">2.3.</span> Substitution</h3>
+<div class="outline-text-3" id="text-h-1a0cf8ac-e24a-416e-905d-4549fd236a31">
+<p>
+But this begs the question: how does substitution work in de Bruijn
+indices?
+</p>
+
+<p>
+We see that \((\lambda x.\lambda y.x)e\to\lambda y.e\); with de Bruijn
+indices, we would have \((\lambda\lambda.1)\widetilde{e}\) translated&#x2026;how?
+Well, we begin by realizing \(x\) has been replaced initially by 0, so we
+would write:
+\[ (\lambda\lambda.1)\widetilde{e}\to (\lambda.1)[0 := \widetilde{e}]\]
+This gets the ball rolling. Next, we need to move the substitution
+through the lambda binder. This would increment the de Bruijn index for
+the bound variable we are substituting for:
+\[ (\lambda.1)[0 := \widetilde{e}] \stackrel{?}{=} \lambda.(1[1 := \widetilde{e}])\]
+Would this work? Care must be taken with free variables in \(\widetilde{e}\),
+we must make sure they remain free.
+</p>
+
+<p>
+For a ground term \(\widetilde{e}\), we can simply work with care-free
+abandon, replacing \(1\) by \(\widetilde{e}\), and we're finished.
+</p>
+
+<p>
+For an expression \(\widetilde{e}\) with free variables, then we run into
+problems. Really? Well, take \(\widetilde{e}=0\). Then we would have
+\[ (\lambda.1)[0 := 0] \stackrel{?}{=} \lambda.(1[1 := 0]) = \lambda.0 \]
+This is <b>not</b> equal to the translation of \((\lambda x.\lambda y.x)x\) into de Bruijn
+indices. What happened?
+</p>
+
+<p>
+Well, free variables screwed everything up. We need to keep free
+variables <i>free</i>. That is, we need to keep their value above the "depth"
+of binders.
+</p>
+
+<p>
+We introduce a notion of <dfn>shift operator</dfn> \(\uparrow^{n}_{c}\)
+which increments de Bruijn indices at or above the cutoff \(c\) by an
+amount \(n\). We define it inductively by the rules:
+</p>
+
+<p>
+\[ \uparrow^{n}_{c}(m) = \begin{cases}m & \mbox{if }m\lt c\\ m + n & \mbox{otherwise}\end{cases} \]
+\[ \uparrow^{n}_{c}(\lambda.e) = \lambda.(\uparrow^{n}_{c+1}(e))\]
+\[ \uparrow^{n}_{c}(e_{1}~e_{2}) = \uparrow^{n}_{c}(e_{1})~\uparrow^{n}_{c}(e_{2})\]
+</p>
+
+<p>
+Observe, if we want to shift free variables by 1 in an expression, we
+would write \(\uparrow^{1}_{0}(e)\). The cutoff starts at \(c=0\), but will
+increment to reflect the "binder depth" of the subexpression.
+</p>
+
+<p>
+Substitution, using the shift function, is then defined by:
+</p>
+
+<p>
+\[ m [n := e] = \begin{cases} e & \mbox{if }m=n\\m &\mbox{otherwise}\end{cases}\]
+\[ (\lambda.e_{1})[n := e] = \lambda.(e_{1}[m+1 := \uparrow^{1}_{0}(e)])\]
+\[ (e_{1}~e_{2})[n := e] = (e_{1}[n := e])~(e_{2}[n := e])\]
+</p>
+
+<p>
+Does this fix our situation? We should observe our <i>naive</i> attempt at
+substitution has \((\lambda.e_{1})[n := e] = \lambda.(e_{1}[m+1 := e])\),
+so the shift function is used <i>only</i> when substituting into a lambda
+expression. We also see that we shift all variables above a cutoff
+\(c=0\), i.e., we shift all <i>free variables</i> by 1. Therefore, we <i>expect</i>
+this should work.
+</p>
+
+<p>
+We see for our particular expression:
+</p>
+
+<p>
+\[ (\lambda\lambda.1)0 = (\lambda.1)[0 := 0] \]
+</p>
+
+<p>
+Then applying our rules for substitution:
+</p>
+
+<p>
+\[ (\lambda.1)[0 := 0] = \lambda.(1[0 + 1 := \uparrow^{1}_{0}(0)]) = \lambda.(1[1 := 1]). \]
+</p>
+
+<p>
+Thus we find:
+</p>
+
+<p>
+\[ (\lambda\lambda.1)0\to\lambda.1 \]
+</p>
+
+<p>
+This works as we expected! &#x2026;for one simple example. If we had a
+different context, where \(x\) were translated to \(n\), then we would have instead:
+</p>
+
+<p>
+\[ (\lambda\lambda.1)n\to\lambda.(n+1) \]
+</p>
+
+<p>
+&#x2026;which is right. We would therefore need to shift down
+by 1. That is to say, we would need beta reduction to be defined as:
+</p>
+
+\begin{equation}
+(\lambda.e_{1})e_{2}\to_{\beta} \uparrow^{-1}_{0}(e_{1}[0 := \uparrow^{1}_{0}(e_{2})])
+\end{equation}
+
+<p>
+Wait, would this work with our original situation? Let us evaluate:
+</p>
+
+<p>
+\[ (\lambda\lambda.1)n\to_{\beta}\uparrow^{-1}_{0}((\lambda.1)[0 := n+1])\]
+\[ \uparrow^{-1}_{0}((\lambda.1)[0 := n+1]) = \uparrow^{-1}_{0}(\lambda.(1[0 + 1 := \uparrow^{1}_{0}(n+1)]))\]
+\[ \uparrow^{-1}_{0}(\lambda.(1[0 + 1 := \uparrow^{1}_{0}(n+1)])) = \uparrow^{-1}_{0}(\lambda.(1[1 := n+2]))\]
+\[ \uparrow^{-1}_{0}(\lambda.(1[1 := n+2])) = \uparrow^{-1}_{0}(\lambda.n+2)\]
+\[ \uparrow^{-1}_{0}(\lambda.n+2) = \lambda.\uparrow^{-1}_{1}(n+2)\]
+\[ \lambda.\uparrow^{-1}_{1}(n+2) = \lambda.(n+1) \]
+</p>
+
+<p>
+Without the outermost \(\uparrow^{-1}_{0}(\dots)\), we would have obtained
+the incorrect solution. Without the innermost \(\uparrow^{1}_{0}(\dots)\),
+we would have mistaken the free variable \(0\) for a bound
+variable. Therefore, we are forced to admit the beta-reduction rule as proposed.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-16502c44-ef38-4b5c-8cc9-577a9621f5d2" class="outline-2">
+<h2 id="h-16502c44-ef38-4b5c-8cc9-577a9621f5d2"><span class="section-number-2">3.</span> Locally Nameless Variables</h2>
+<div class="outline-text-2" id="text-h-16502c44-ef38-4b5c-8cc9-577a9621f5d2">
+<p>
+This is a big old mess, all caused by free variables. What if we
+just&#x2026;leave free variables alone? Treat them as strings? Then we won't
+have to worry about shifting and unshifting in beta
+reduction. But we have two notions of variables &#x2014; free variables and
+bound ones.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Name</span> = Bound <span class="org-keyword">of</span> int
+       | Free <span class="org-keyword">of</span> string;
+
+<span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> = Var <span class="org-keyword">of</span> Name
+       | Lam <span class="org-keyword">of</span> Expr
+       | App <span class="org-keyword">of</span> Expr * Expr;
+</pre>
+</div>
+
+<p>
+We then substitute an expression for a name.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">subst</span> e' x@(Free n) = (<span class="org-keyword">fn</span> e@(Var (Free y)) =&gt; <span class="org-keyword">if</span> n = y <span class="org-keyword">then</span> e' <span class="org-keyword">else</span> e
+                        | e@(Var _) =&gt; e
+                        | (Lam e) =&gt; Lam (subst e' x e)
+                        | (App (e1, e2)) =&gt; App (subst e' x e1, subst e' x e2))
+  | subst e' x@(Bound n) = (<span class="org-keyword">fn</span> e@(Var (Bound m)) =&gt; <span class="org-keyword">if</span> m = n <span class="org-keyword">then</span> e' <span class="org-keyword">else</span> e
+                           | e@(Var _) =&gt; e
+                           | (Lam e) =&gt; Lam (subst e' (Bound (n+1)) e)
+                           | (App (e1, e2)) =&gt; App (subst e' x e1, subst e' x e2));
+</pre>
+</div>
+
+<p>
+Actually, since both <code>int</code> and <code>string</code> are equality types, we can
+simplify this code quite a bit:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">shift</span> (Bound n) = Bound (n + 1)
+  | shift e = e;
+
+<span class="org-keyword">fun</span> <span class="org-function-name">subst</span> (e' : Expr) (x : Name) =
+    (<span class="org-keyword">fn</span> e@(Var y) =&gt; <span class="org-keyword">if</span> x = y <span class="org-keyword">then</span> e' <span class="org-keyword">else</span> e
+    | (Lam e) =&gt; Lam (subst e' (shift x) e)
+    | (App (e1, e2)) =&gt; App (subst e' x e1, subst e' x e2));
+</pre>
+</div>
+
+<p>
+That's it, we've got the substitution mechanism, and now beta reduction
+simplifies to:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">beta</span> e@(Var _) = e
+  | beta e@(Lam _) = e
+  | beta e@(App (e1, e2)) = <span class="org-keyword">case</span> e1 <span class="org-keyword">of</span>
+                            | (Var _) =&gt; e
+                            | (Lam e') =&gt; subst e2 (Bound 0) e'
+                            | (App (e11, e12)) =&gt;
+                              <span class="org-keyword">let</span> <span class="org-keyword">val</span> <span class="org-variable-name">v1</span> = beta e1
+                              <span class="org-keyword">in</span> <span class="org-keyword">if</span> e1 = v1 <span class="org-keyword">then</span> e <span class="org-keyword">else</span> beta (App (v1, e2))
+                              <span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+We should probably add some logic to avoid infinite loops with beta
+reduction, but this illustrates the mechanics of locally nameless
+variables.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-0825b3d3-5d90-4f57-b3ff-bec320045ec1" class="outline-2">
+<h2 id="h-0825b3d3-5d90-4f57-b3ff-bec320045ec1"><span class="section-number-2">4.</span> HOAS, PHOAS, etc.</h2>
+<div class="outline-text-2" id="text-h-0825b3d3-5d90-4f57-b3ff-bec320045ec1">
+<p>
+A more sophisticated approach to encoding binders, free and bound
+variables, etc., is to piggieback off the programming language. This
+assumes the type system is sufficiently powerful. For Standard ML, we
+lack sufficient strength.
+</p>
+
+<p>
+For a SML library useful for a runtime HOAS/PHOAS encoding, see:
+</p>
+
+<ul class="org-ul">
+<li>Umut A. Acar, Guy E. Blelloch, Robert Harper,<br>
+"Selective Memoization".<br>
+<a href="https://arxiv.org/abs/1106.0447">arXiv:1106.0447</a>, 31 pages.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-3761a02f-4b76-4769-a18f-defd3cc8d6be" class="outline-2">
+<h2 id="h-3761a02f-4b76-4769-a18f-defd3cc8d6be"><span class="section-number-2">5.</span> &#x2026;and <i>Typed</i> Lambda Calculus</h2>
+<div class="outline-text-2" id="text-h-3761a02f-4b76-4769-a18f-defd3cc8d6be">
+<p>
+Thus far, we have worked with locally nameless variables for untyped
+lambda calculus. What happens if we add types?
+</p>
+
+<p>
+At the very least, we would need to add the type of the bound variable
+to <code>Lam</code> (lambda abstraction). This minimal approach would require us to
+typecheck expressions to make sure evaluation makes sense ("works").
+</p>
+
+<p>
+We could equally do something like:
+</p>
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Name</span> = string;
+<span class="org-comment-delimiter">(* </span><span class="org-comment">datatype Var = ...</span><span class="org-comment-delimiter"> *)</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">The implementation is immaterial</span><span class="org-comment-delimiter"> *)</span>
+
+<span class="org-keyword">datatype</span> <span class="org-type-def">Type</span> =
+         | TArr <span class="org-keyword">of</span> Type * Type
+         <span class="org-comment-delimiter">(* </span><span class="org-comment">| other base types...</span><span class="org-comment-delimiter"> *)</span>
+         | TBool;
+
+<span class="org-keyword">datatype</span> <span class="org-type-def">Term</span> =
+       | Const <span class="org-keyword">of</span> boolean
+       | Var <span class="org-keyword">of</span> Name
+       | Abs <span class="org-keyword">of</span> Type * Term
+       | App <span class="org-keyword">of</span> Term * Term;
+</pre>
+</div>
+
+<p>
+If we wanted to use locally nameless variables for polymorphic lambda
+calculus, we would have something like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Name</span> = string;
+<span class="org-keyword">datatype</span> <span class="org-type-def">Var</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">The implementation is immaterial</span><span class="org-comment-delimiter"> *)</span>
+
+<span class="org-keyword">datatype</span> <span class="org-type-def">Sort</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">complicated mess</span><span class="org-comment-delimiter"> *)</span>;
+
+<span class="org-keyword">datatype</span> <span class="org-type-def">Type</span> =
+         | Ty Name * (Type list)
+         | TVar Var * Sort;
+
+<span class="org-keyword">datatype</span> <span class="org-type-def">Term</span> =
+         | Const Name * Type
+         | FVar Var * Type
+         | BVar int
+         | Abs Type * Term
+         | App Term * Term;
+</pre>
+</div>
+
+<p>
+This is, after all, what happens in:
+</p>
+
+<ul class="org-ul">
+<li>Tobias Nipkow, Simon Roßkopf,<br>
+"Isabelle's Metalogic: Formalization and Proof Checker".<br>
+<a href="https://arxiv.org/abs/2104.12224">arXiv:2104.12224</a>, 18 pages.</li>
+</ul>
+
+<p>
+For first-order dependently-typed lambda calculus (LF or its variants),
+then I believe we need to define the <code>Type</code> and <code>Term</code> datatypes
+simultaneously. For example, formalizing de Groote's
+\(\lambda^{\lambda}\) (from his paper "Defining λ-Typed λ-Calculi
+by Axiomatizing the Typing Relation"), we would need something like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> =
+         | EType
+         | EVar <span class="org-keyword">of</span> Var
+         | ELam <span class="org-keyword">of</span> Expr * Expr
+         | EApp <span class="org-keyword">of</span> Expr * Expr
+     <span class="org-keyword">and</span> Type =
+         | TKind
+         | TLam <span class="org-keyword">of</span> Expr * Type;
+</pre>
+</div>
+
+<p>
+Or perhaps more succinctly using one datatype for pseudo-expressions:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> =
+         | Type
+         | Kind
+         | Var <span class="org-keyword">of</span> Var
+         | Lam <span class="org-keyword">of</span> Expr * Expr
+         | App <span class="org-keyword">of</span> Expr * Expr;
+</pre>
+</div>
+
+<p>
+It's probably wise to use opaque types, then make certain constructors
+public, so as to avoid passing off illegal pseudoexpressions as
+perfectly valid expressions.</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2022-12-31 Sat 12:22.</p>
+</div>
+</body>
+</html>
