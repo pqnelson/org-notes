@@ -77,4 +77,44 @@ Mathematics/:
 - Andrzej Trybulec,\\
   "Tarski Grothendieck Set Theory".\\
   /Formalized Mathematics/ *1*, no.1 (1990) 9--11, [[http://mizar.org/fm/1990-1/pdf1-1/tarski.pdf][PDF]].
-  
+
+* Soft Types Examples: Subsets
+
+We have a /predicate/ for $\subseteq$ encoded in Mizar
+[[http://mizar.org/version/current/html/tarski.html#R1][TARSKI:def 3]] as:
+
+#+begin_src mizar
+definition
+  let X, Y be set;
+  pred X c= Y means :: TARSKI:def 3
+  for x being object st x in X holds x in Y;
+  reflexivity;
+end; 
+#+end_src
+
+The /type/ for a Subset of $X$ is defined in [[http://mizar.org/version/current/html/subset_1.html#NM2][SUBSET_1]] as
+
+#+begin_src mizar
+definition
+  let X be set;
+  mode Subset of X is Element of bool X;
+end; 
+#+end_src
+
+and ~bool of X~ is defined in [[http://mizar.org/version/current/html/zfmisc_1.html#K1][~ZFMISC_1:def 1~]]
+as:
+
+#+begin_src mizar
+definition
+  let X be set ;
+  func bool X -> set means :Def1: :: ZFMISC_1:def 1
+  for Z being set holds
+  (Z in it iff Z c= X);
+  :: correctness conditions omitted
+end;
+#+end_src
+
+When we include ~SUBSET~ in the requirements directive, Mizar will
+automatically infer from ~X c= Y~ that ~X is Subset of Y~. If we want to
+establish this claim, it amounts to showing for any object ~x~ st ~x in X~
+we have ~x in Y~.

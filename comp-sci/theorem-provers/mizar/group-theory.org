@@ -180,6 +180,44 @@ H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
 - ~is_Sylow_p-subgroup_of_prime~ defined line 2196 of [[http://mizar.org/version/current/html/group_10.html][~group_10.miz~]]
 - ~the_sylow_p-subgroups_of_prime(p,G)~ defined line 3109 of [[http://mizar.org/version/current/html/group_10.html][~group_10.miz~]]
 
+** Product Groups
+:PROPERTIES:
+:CUSTOM_ID: h-71dc116b-6bab-4e06-9d8a-ab7a6a7dd9fc
+:END:
+
+- Product groups are discussed in [[http://mizar.org/version/current/html/group_7.html][~group_7~]], [[http://mizar.org/version/current/html/group_12.html][~group_12~]],
+  [[http://mizar.org/version/current/html/group_19.html][~group_19~]], and briefly in a few other articles.
+- For sets, the Cartesian product of a family of sets is scattered in
+  several articles.
+  - The Cartesian product of a family of sets is defined in
+    [[http://mizar.org/version/current/html/card_3.html#K4][~CARD_3:def 2~]]
+  - A family of sets indexed by $I$ is called a ~ManySortedSet of I~
+    in Mizar, and defined in [[http://mizar.org/version/current/html/pboole.html#NM1][~pboole.miz~]]
+- The notion of a "family of groups" is defined using the following
+  strategy in [[http://mizar.org/version/current/html/group_7.html][~group_7~]]:
+  - A binary relation is defined as ~multMagma-yielding~ if every object
+    in its range is a ~multMagma~ (~GROUP_7:def 1~)
+  - A family of magmas indexed by $I$ is defined as a ~multMagma-Family of I~
+  - We define a product of a family of magmas, which produces a [strict] magma.
+  - We then define a number of attributes for a family of magmas:
+    associative, commutative, Group-like; we cluster functorial
+    registrations indicating the product of an associative family of
+    magmas is an associative magma, etc.
+  - This will give us, from the power of Mizar adjectives, the product
+    of an associative group-like family of magmas /is/ a group.
+- If $\mathcal{F}$ is a family of groups indexed by $I$, the isomorphism
+  of $\mathcal{F}_{i}$ with "its obvious subgroup" in $\prod\mathcal{F}$
+  is defined in [[http://mizar.org/version/current/html/group_12.html][~group_12~]] (the isomorphism is ~(1ProdHom (F, i))~ and
+  the subgroup is ~ProjGroup (F,i)~).
+- In [[http://mizar.org/version/current/html/group_19.html][~group_19~]], a family of groups indexed by $I$ is defined as a
+  group-like associative family of magmas.
+- The basic design here is
+  - if $\mathcal{F}$ is a family of groups indexed by $I$, then
+    $\mathcal{F}_{i}$ is a group and the Mizar notation for this would
+    be ~F.i~
+  - if $g\in\prod\mathcal{F}$ is an element of the product group, then
+    $g_{i}\in\mathcal{F}_{i}$ is written in Mizar as ~g.i~ (so ~g~ is a
+    function with ~dom g = I~).
 
 
 ** Representation Theory

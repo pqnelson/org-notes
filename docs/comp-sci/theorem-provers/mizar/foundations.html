@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -235,6 +235,14 @@
  <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">Axiomatic Foundations - Mizar</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org2e0698e">1. Soft Types Examples: Subsets</a></li>
+</ul>
+</div>
+</div>
 <p>
 The foundations of mathematics used by Mizar is actually formalized in a
 couple articles in the current MML:
@@ -269,7 +277,7 @@ for \(x\) being object holds<br>
 for \(x, y, z\) being object st \(P_{1}[x,y]\) &amp; \(P_{1}[x,z]\) holds \(y = z\)</dd>
 </dl>
 
-<div class="remark" id="orgcfe627e">
+<div class="remark" id="org7987a9e">
 <p>
 The axiom of regularity may look a little strange, but remember: if we
 have \(\forall X((\exists x, P[x,X])\implies Q[X])\), then this is
@@ -278,7 +286,7 @@ logically equivalent to \(\forall X\forall x(P[x,X]\implies Q[X])\).
 
 </div>
 
-<div class="remark" id="org679a1d7">
+<div class="remark" id="org0017fc6">
 <p>
 The axiom schema of specification can be <a href="https://en.wikipedia.org/wiki/Axiom_schema_of_specification#Relation_to_the_axiom_schema_of_replacement">derived</a> from the schema of
 replacement. 
@@ -327,9 +335,64 @@ Mathematics</i>:
 "Tarski Grothendieck Set Theory".<br>
 <i>Formalized Mathematics</i> <b>1</b>, no.1 (1990) 9&#x2013;11, <a href="http://mizar.org/fm/1990-1/pdf1-1/tarski.pdf">PDF</a>.</li>
 </ul>
+
+<div id="outline-container-org2e0698e" class="outline-2">
+<h2 id="org2e0698e"><span class="section-number-2">1.</span> Soft Types Examples: Subsets</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+We have a <i>predicate</i> for \(\subseteq\) encoded in Mizar
+<a href="http://mizar.org/version/current/html/tarski.html#R1">TARSKI:def 3</a> as:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> X, Y <span class="org-mizar-normal">be</span> set;
+  <span class="org-mizar-normal">pred</span> X c= Y <span class="org-mizar-normal">means</span> <span class="org-comment-delimiter">:: </span><span class="org-comment">TARSKI:def 3</span>
+  <span class="org-mizar-formula">for</span> x <span class="org-mizar-formula">being</span> object <span class="org-mizar-formula">st</span> x in X <span class="org-mizar-formula">holds</span> x in Y;
+  <span class="org-mizar-normal">reflexivity</span>;
+<span class="org-mizar-block">end</span>; 
+</pre>
+</div>
+
+<p>
+The <i>type</i> for a Subset of \(X\) is defined in <a href="http://mizar.org/version/current/html/subset_1.html#NM2">SUBSET<sub>1</sub></a> as
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> X <span class="org-mizar-normal">be</span> set;
+  <span class="org-mizar-normal">mode</span> Subset <span class="org-mizar-normal">of</span> X <span class="org-mizar-normal">is</span> Element <span class="org-mizar-normal">of</span> bool X;
+<span class="org-mizar-block">end</span>; 
+</pre>
+</div>
+
+<p>
+and <code>bool of X</code> is defined in <a href="http://mizar.org/version/current/html/zfmisc_1.html#K1"><code>ZFMISC_1:def 1</code></a>
+as:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> X <span class="org-mizar-normal">be</span> set ;
+  <span class="org-mizar-normal">func</span> bool X -&gt; set <span class="org-mizar-normal">means</span> :Def1: <span class="org-comment-delimiter">:: </span><span class="org-comment">ZFMISC_1:def 1</span>
+  <span class="org-mizar-formula">for</span> Z <span class="org-mizar-formula">being</span> set <span class="org-mizar-formula">holds</span>
+  (Z in <span class="org-mizar-normal">it</span> <span class="org-mizar-formula">iff</span> Z c= X);
+  <span class="org-comment-delimiter">:: </span><span class="org-comment">correctness conditions omitted</span>
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
+
+<p>
+When we include <code>SUBSET</code> in the requirements directive, Mizar will
+automatically infer from <code>X c= Y</code> that <code>X is Subset of Y</code>. If we want to
+establish this claim, it amounts to showing for any object <code>x</code> st <code>x in X</code>
+we have <code>x in Y</code>.
+</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-05-25 Wed 12:12.</p>
+<p class="postamble">Last Updated 2023-01-11 Wed 08:36.</p>
 </div>
 </body>
 </html>

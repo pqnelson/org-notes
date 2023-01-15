@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -243,7 +243,8 @@
 <li><a href="#h-9f5cf940-9a00-4b52-886d-f414fb02838d">2. Group Theory</a>
 <ul>
 <li><a href="#h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7">2.1. Definitions</a></li>
-<li><a href="#h-e33b09d4-26e4-44e8-b68b-31bf539a87b4">2.2. Representation Theory</a></li>
+<li><a href="#h-71dc116b-6bab-4e06-9d8a-ab7a6a7dd9fc">2.2. Product Groups</a></li>
+<li><a href="#h-e33b09d4-26e4-44e8-b68b-31bf539a87b4">2.3. Representation Theory</a></li>
 </ul>
 </li>
 </ul>
@@ -322,7 +323,7 @@ This is also extended to, for a group \(G\), subsets \(A\subset G\)
 we'd have <code>A"</code> be the collection of <code>g"</code> for <code>g in A</code>, i.e.,
 \(A^{-1}=\{g^{-1}|g\in A\}\); see line 57 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>
 </p>
-<pre class="example" id="org6c2e651">
+<pre class="example" id="orgd62eb59">
 let G be Group;
 let A be Subset of G;
 func A " -&gt; Subset of G equals :: GROUP_2:def 1
@@ -338,12 +339,13 @@ underlying set of \(G\) equal to the set underlying \(H\)</li>
 The trivial subgroup of \(G\) is denoted <code>(1).G</code>, defined on line 1258
 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> as
 </p>
-<pre class="example" id="orge72a311">
+<pre class="example" id="orgae89af4">
   func (1).G -&gt; strict Subgroup of G means
   :Def7:
   the carrier of it = {1_G};
 </pre>
 <ul class="org-ul">
+<li><b>NOTE:</b> the adjective "trivial" isn't actually defined until <a href="http://mizar.org/version/current/html/group_6.html"><code>GROUP_6</code></a></li>
 <li><p>
 "strict" is a weird meta-term (c.f., <a href="http://mizar.uwb.edu.pl/forum/archive/0701/msg00008.html">discussion</a>),
 </p>
@@ -355,7 +357,6 @@ of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.mi
 <li>"strict" for subgroup is on line 1011 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>; it's a
 registration of a cluster. I believe it refers to being a proper
 subgroup.</li>
-</ul></li>
 
 <li><code>(Omega).G</code> (line of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>) seems to be the other trivial subgroup of \(G\), i.e., \(G\) itself
 <ul class="org-ul">
@@ -363,8 +364,11 @@ subgroup.</li>
 line 764; a comment before it notes this notation is used for
 improper subspaces</li>
 </ul></li>
-<li>Left cosets are defined on line 2448 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> (right cosets
-are defined on line 2468)</li>
+<li>Left cosets are defined on line 2448 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> (right cosets</li>
+</ul>
+<p>
+are defined on line 2468)
+</p></li>
 <li>The index of a subgroup \(H\lt G\) is defined as the cardinality of left
 cosets of \(H\)  on line 2789 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a></li>
 
@@ -401,7 +405,7 @@ subgroup containing \(A\)</li>
 <li><p>
 Frattini subgroup is tricky. Relevant code starts around 1371 of  <a href="http://mizar.org/version/current/html/group_4.html"><code>group_4.miz</code></a>
 </p>
-<pre class="example" id="orgddab36b">
+<pre class="example" id="orgee98331">
 ::$N Frattini subgroup
   func Phi(G) -&gt; strict Subgroup of G means
   :Def7:
@@ -464,10 +468,56 @@ of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.mi
 </div>
 </div>
 
+<div id="outline-container-h-71dc116b-6bab-4e06-9d8a-ab7a6a7dd9fc" class="outline-3">
+<h3 id="h-71dc116b-6bab-4e06-9d8a-ab7a6a7dd9fc"><span class="section-number-3">2.2.</span> Product Groups</h3>
+<div class="outline-text-3" id="text-h-71dc116b-6bab-4e06-9d8a-ab7a6a7dd9fc">
+<ul class="org-ul">
+<li>Product groups are discussed in <a href="http://mizar.org/version/current/html/group_7.html"><code>group_7</code></a>, <a href="http://mizar.org/version/current/html/group_12.html"><code>group_12</code></a>,
+<a href="http://mizar.org/version/current/html/group_19.html"><code>group_19</code></a>, and briefly in a few other articles.</li>
+<li>For sets, the Cartesian product of a family of sets is scattered in
+several articles.
+<ul class="org-ul">
+<li>The Cartesian product of a family of sets is defined in
+<a href="http://mizar.org/version/current/html/card_3.html#K4"><code>CARD_3:def 2</code></a></li>
+<li>A family of sets indexed by \(I\) is called a <code>ManySortedSet of I</code>
+in Mizar, and defined in <a href="http://mizar.org/version/current/html/pboole.html#NM1"><code>pboole.miz</code></a></li>
+</ul></li>
+<li>The notion of a "family of groups" is defined using the following
+strategy in <a href="http://mizar.org/version/current/html/group_7.html"><code>group_7</code></a>:
+<ul class="org-ul">
+<li>A binary relation is defined as <code>multMagma-yielding</code> if every object
+in its range is a <code>multMagma</code> (<code>GROUP_7:def 1</code>)</li>
+<li>A family of magmas indexed by \(I\) is defined as a <code>multMagma-Family of I</code></li>
+<li>We define a product of a family of magmas, which produces a [strict] magma.</li>
+<li>We then define a number of attributes for a family of magmas:
+associative, commutative, Group-like; we cluster functorial
+registrations indicating the product of an associative family of
+magmas is an associative magma, etc.</li>
+<li>This will give us, from the power of Mizar adjectives, the product
+of an associative group-like family of magmas <i>is</i> a group.</li>
+</ul></li>
+<li>If \(\mathcal{F}\) is a family of groups indexed by \(I\), the isomorphism
+of \(\mathcal{F}_{i}\) with "its obvious subgroup" in \(\prod\mathcal{F}\)
+is defined in <a href="http://mizar.org/version/current/html/group_12.html"><code>group_12</code></a> (the isomorphism is <code>(1ProdHom (F, i))</code> and
+the subgroup is <code>ProjGroup (F,i)</code>).</li>
+<li>In <a href="http://mizar.org/version/current/html/group_19.html"><code>group_19</code></a>, a family of groups indexed by \(I\) is defined as a
+group-like associative family of magmas.</li>
+<li>The basic design here is
+<ul class="org-ul">
+<li>if \(\mathcal{F}\) is a family of groups indexed by \(I\), then
+\(\mathcal{F}_{i}\) is a group and the Mizar notation for this would
+be <code>F.i</code></li>
+<li>if \(g\in\prod\mathcal{F}\) is an element of the product group, then
+\(g_{i}\in\mathcal{F}_{i}\) is written in Mizar as <code>g.i</code> (so <code>g</code> is a
+function with <code>dom g = I</code>).</li>
+</ul></li>
+</ul>
+</div>
+</div>
 
 
 <div id="outline-container-h-e33b09d4-26e4-44e8-b68b-31bf539a87b4" class="outline-3">
-<h3 id="h-e33b09d4-26e4-44e8-b68b-31bf539a87b4"><span class="section-number-3">2.2.</span> Representation Theory</h3>
+<h3 id="h-e33b09d4-26e4-44e8-b68b-31bf539a87b4"><span class="section-number-3">2.3.</span> Representation Theory</h3>
 <div class="outline-text-3" id="text-h-e33b09d4-26e4-44e8-b68b-31bf539a87b4">
 <p>
 It seems that the notion of a group action and group representation
@@ -501,7 +551,7 @@ would need to:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-05-02 Mon 11:12.</p>
+<p class="postamble">Last Updated 2023-01-15 Sun 08:46.</p>
 </div>
 </body>
 </html>

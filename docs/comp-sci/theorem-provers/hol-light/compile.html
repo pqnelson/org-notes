@@ -241,7 +241,7 @@ On a Raspberry Pi, simply install OCaml using <code>sudo apt install ocaml</code
 Then clone and build OPAM:
 </p>
 
-<pre class="example" id="orgb895eee">
+<pre class="example" id="org3ecec58">
 alex@rpi:~/$ cd src
 alex@rpi:~/src/$ git clone https://github.com/ocaml/opam
 ...
@@ -256,7 +256,7 @@ alex@rpi:~/src/OPAM/$ sudo make install
 Before we finish, we need to also install bubblewrap&#x2026;because&#x2026;reasons&#x2026;
 </p>
 
-<pre class="example" id="org2597067">
+<pre class="example" id="orged87fb3">
 alex@rpi:~/src/OPAM/$ sudo apt install bubblewrap
 alex@rpi:~/src/OPAM/$ cd ~
 alex@rpi:~/$ opam init
@@ -316,7 +316,7 @@ Now we build the infrastructure necessary to play with HOL Light (this
 will take about an hour in the following state):
 </p>
 
-<pre class="example" id="org89da6cd">
+<pre class="example" id="orgaab9d91">
 alex@raspberrypi:~$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Installing new switch packages &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -346,7 +346,7 @@ Processing 13/18: [ocaml-base-compiler: make world]
 Clone HOL Light from github:
 </p>
 
-<pre class="example" id="orgbef7dd2">
+<pre class="example" id="org3ac24fa">
 alex@box:~/src/$ git clone https://github.com/jrh13/hol-light
 Cloning into 'hol-light'...
 remote: Enumerating objects: 8310, done.
@@ -370,7 +370,7 @@ The trippy thing is we need to use OPAM to use the "correct" version of
 OCaml (c.f., <a href="https://github.com/jrh13/hol-light/issues/64#issuecomment-894131933">Github Issue</a>), the following bash commands should work:
 </p>
 
-<pre class="example" id="org50d04a4">
+<pre class="example" id="org11bb36f">
 opam switch create 4.05.0
 eval $(opam env)
 opam pin add camlp5 7.08
@@ -390,7 +390,7 @@ on <code>Processing 7/12: [ocaml-base-compiler ...]</code>, but that's because
 it's building the OCaml compiler from scratch; be patient!):
 </p>
 
-<pre class="example" id="org9f098c0">
+<pre class="example" id="org3aa9fd8">
 alex@box:~/src/hol-light/$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Gathering sources &gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -444,7 +444,7 @@ Now, the next step is to run <code>make</code>.
 <b>It is crucial to run <code>make</code> before loading hol into an OCaml repl.</b>
 </p>
 
-<pre class="example" id="org7b1618d">
+<pre class="example" id="orgff6857a">
 alex@box:~/src/hol-light/$ make
 ...
 </pre>
@@ -455,7 +455,7 @@ include camlp5, and then tell it to <code>#use "hol.ml";;</code> (yes, both
 semicolons are necessary).
 </p>
 
-<pre class="example" id="orgc563443">
+<pre class="example" id="orgf01ad88">
 alex@box:~/src/hol-light/$ ocaml -I `camlp5 -where` camlp5o.cma
 
         OCaml version 4.05.0
@@ -476,7 +476,7 @@ error, which is just confusing and cryptic.)
 Now we can simply <code>#use "hol.ml";;</code> to get:
 </p>
 
-<pre class="example" id="org4cd32c8">
+<pre class="example" id="org6c6d299">
 # #use "hol.ml";;
 ...
 ...
