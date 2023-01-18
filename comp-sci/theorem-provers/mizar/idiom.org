@@ -76,6 +76,44 @@ Use [[http://mizar.org/version/current/html/xboole_0.html][~xboole_0~]] definiti
 ~Y c= X~. This is the idiomatic way to prove the claim. Avoid [[http://mizar.org/version/current/html/tarski.html][~TARSKI:2~]]
 if possible.
 
+* Prefer Defining Attributes
+:PROPERTIES:
+:CUSTOM_ID: h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c
+:END:
+
+There are times when it is unclear whether we should define a new mode
+or a new attribute, and the rule of thumb is to prefer defining
+attributes and registering them (as opposed to using redefinitions).
+
+There's an entire article justifying this practice:
+
+- Artur Kornilowicz,\\
+  "Registrations vs Redefinitions in Mizar".\\
+  [[http://ceur-ws.org/Vol-1785/F5.pdf][Eprint]]
+
+The rule presented in the paper:
+
+#+begin_quote
+If the result type of a functor and the mother type of a mode to which
+the original type of the functor and the mode is redefined is an
+expandable type, then such redefinitions are replaceable by a functorial
+registration in the case of functors and by a conditional registration
+in the case of modes.
+#+end_quote
+
+To be explicit, there are two cases:
+
+1. When a ~redefine func~ can be replaced by a registration:
+   if we redefine a functor to have the type an expandable mode,
+   then we can replace the redefinition with a functor registration
+   (provided the original definition of the functor has the same "mother
+   type" [base type] as the desired type of the redefinition)
+   - In this case, a functorial registration suffices.
+2. When a ~redefine mode~ can be replaced by a registration:
+   when the original definition of the mode has the same "mother mode"
+   [base type] as the new redefinition's type
+   - In this case, a conditional registration suffices.
+
 * When in doubt, make it public
 :PROPERTIES:
 :CUSTOM_ID: h-ada80631-141b-4d42-877d-1773d385645e
