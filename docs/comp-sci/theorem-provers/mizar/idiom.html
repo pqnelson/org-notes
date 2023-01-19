@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:48 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Idiomatic Mizar</title>
@@ -189,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -230,7 +229,8 @@
 </ul>
 </li>
 <li><a href="#h-c237f8b0-d62a-4f23-972c-26128f814532">3. Proving Equality</a></li>
-<li><a href="#h-ada80631-141b-4d42-877d-1773d385645e">4. When in doubt, make it public</a></li>
+<li><a href="#h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c">4. Prefer Defining Attributes</a></li>
+<li><a href="#h-ada80631-141b-4d42-877d-1773d385645e">5. When in doubt, make it public</a></li>
 </ul>
 </div>
 </div>
@@ -243,7 +243,7 @@ The idiomatic way to define a new gadget, well, suppose we had our
 definition found in a textbook schematically as:
 </p>
 
-<div class="definition" id="orge787e7d">
+<div class="definition" id="org1a27e5a">
 <p>
 A <dfn>Gadget</dfn> consists of <i>stuff</i> equipped with <i>structure</i> such
 that <i>properties</i> hold.
@@ -320,8 +320,64 @@ if possible.
 </div>
 </div>
 
+<div id="outline-container-h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c" class="outline-2">
+<h2 id="h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c"><span class="section-number-2">4.</span> Prefer Defining Attributes</h2>
+<div class="outline-text-2" id="text-h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c">
+<p>
+There are times when it is unclear whether we should define a new mode
+or a new attribute, and the rule of thumb is to prefer defining
+attributes and registering them (as opposed to using redefinitions).
+</p>
+
+<p>
+There's an entire article justifying this practice:
+</p>
+
+<ul class="org-ul">
+<li>Artur Kornilowicz,<br>
+"Registrations vs Redefinitions in Mizar".<br>
+<a href="http://ceur-ws.org/Vol-1785/F5.pdf">Eprint</a></li>
+</ul>
+
+<p>
+The rule presented in the paper:
+</p>
+
+<blockquote>
+<p>
+If the result type of a functor and the mother type of a mode to which
+the original type of the functor and the mode is redefined is an
+expandable type, then such redefinitions are replaceable by a functorial
+registration in the case of functors and by a conditional registration
+in the case of modes.
+</p>
+</blockquote>
+
+<p>
+To be explicit, there are two cases:
+</p>
+
+<ol class="org-ol">
+<li>When a <code>redefine func</code> can be replaced by a registration:
+if we redefine a functor to have the type an expandable mode,
+then we can replace the redefinition with a functor registration
+(provided the original definition of the functor has the same "mother
+type" [base type] as the desired type of the redefinition)
+<ul class="org-ul">
+<li>In this case, a functorial registration suffices.</li>
+</ul></li>
+<li>When a <code>redefine mode</code> can be replaced by a registration:
+when the original definition of the mode has the same "mother mode"
+[base type] as the new redefinition's type
+<ul class="org-ul">
+<li>In this case, a conditional registration suffices.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+
 <div id="outline-container-h-ada80631-141b-4d42-877d-1773d385645e" class="outline-2">
-<h2 id="h-ada80631-141b-4d42-877d-1773d385645e"><span class="section-number-2">4.</span> When in doubt, make it public</h2>
+<h2 id="h-ada80631-141b-4d42-877d-1773d385645e"><span class="section-number-2">5.</span> When in doubt, make it public</h2>
 <div class="outline-text-2" id="text-h-ada80631-141b-4d42-877d-1773d385645e">
 <p>
 Programmers have the idiom to make code private by default, and for good
@@ -349,7 +405,7 @@ This is just to clarify the proof for myself.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-03-04 Fri 08:24.</p>
+<p class="postamble">Last Updated 2023-01-18 Wed 09:04.</p>
 </div>
 </body>
 </html>

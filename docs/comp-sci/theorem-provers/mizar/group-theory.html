@@ -244,7 +244,8 @@
 <ul>
 <li><a href="#h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7">2.1. Definitions</a></li>
 <li><a href="#h-71dc116b-6bab-4e06-9d8a-ab7a6a7dd9fc">2.2. Product Groups</a></li>
-<li><a href="#h-e33b09d4-26e4-44e8-b68b-31bf539a87b4">2.3. Representation Theory</a></li>
+<li><a href="#h-2a6b701b-cdd4-4958-9a40-b98df09ff271">2.3. Specific Groups</a></li>
+<li><a href="#h-e33b09d4-26e4-44e8-b68b-31bf539a87b4">2.4. Representation Theory</a></li>
 </ul>
 </li>
 </ul>
@@ -323,7 +324,7 @@ This is also extended to, for a group \(G\), subsets \(A\subset G\)
 we'd have <code>A"</code> be the collection of <code>g"</code> for <code>g in A</code>, i.e.,
 \(A^{-1}=\{g^{-1}|g\in A\}\); see line 57 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>
 </p>
-<pre class="example" id="orgd62eb59">
+<pre class="example" id="orge16085d">
 let G be Group;
 let A be Subset of G;
 func A " -&gt; Subset of G equals :: GROUP_2:def 1
@@ -339,7 +340,7 @@ underlying set of \(G\) equal to the set underlying \(H\)</li>
 The trivial subgroup of \(G\) is denoted <code>(1).G</code>, defined on line 1258
 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> as
 </p>
-<pre class="example" id="orgae89af4">
+<pre class="example" id="org4992a47">
   func (1).G -&gt; strict Subgroup of G means
   :Def7:
   the carrier of it = {1_G};
@@ -405,7 +406,7 @@ subgroup containing \(A\)</li>
 <li><p>
 Frattini subgroup is tricky. Relevant code starts around 1371 of  <a href="http://mizar.org/version/current/html/group_4.html"><code>group_4.miz</code></a>
 </p>
-<pre class="example" id="orgee98331">
+<pre class="example" id="org6af4160">
 ::$N Frattini subgroup
   func Phi(G) -&gt; strict Subgroup of G means
   :Def7:
@@ -516,8 +517,25 @@ function with <code>dom g = I</code>).</li>
 </div>
 
 
+<div id="outline-container-h-2a6b701b-cdd4-4958-9a40-b98df09ff271" class="outline-3">
+<h3 id="h-2a6b701b-cdd4-4958-9a40-b98df09ff271"><span class="section-number-3">2.3.</span> Specific Groups</h3>
+<div class="outline-text-3" id="text-h-2a6b701b-cdd4-4958-9a40-b98df09ff271">
+<ul class="org-ul">
+<li>The permutation group is defined in <a href="http://mizar.uwb.edu.pl/version/current/html/matrix_1.html#K10"><code>MATRIX_1</code></a> as <code>Group_of_Perm n</code>
+<ul class="org-ul">
+<li>The attribute <a href="http://mizar.uwb.edu.pl/version/current/html/matrix_1.html#V6"><code>even</code></a> is defined there</li>
+<li>This is the Symmetric group on \(n\) symbols</li>
+<li>The symmetric group on an arbitrary set \(X\) is defined in <code>CAYLEY</code> as
+<a href="http://mizar.uwb.edu.pl/version/current/html/cayley.html#K2"><code>SymGroup X</code></a></li>
+</ul></li>
+<li>The group \(\mathbb{Z}\) is defined in <a href="http://mizar.uwb.edu.pl/version/current/html/gr_cy_1.html#K2"><code>GR_CY_1</code></a> as <code>INT.Group</code></li>
+<li>The finite cyclic group \(\mathbb{Z}/n\mathbb{Z}\) is defined as
+<code>INT.Group(n)</code> in <a href="http://mizar.uwb.edu.pl/version/current/html/gr_cy_1.html#K4"><code>GR_CY_1</code></a></li>
+</ul>
+</div>
+</div>
 <div id="outline-container-h-e33b09d4-26e4-44e8-b68b-31bf539a87b4" class="outline-3">
-<h3 id="h-e33b09d4-26e4-44e8-b68b-31bf539a87b4"><span class="section-number-3">2.3.</span> Representation Theory</h3>
+<h3 id="h-e33b09d4-26e4-44e8-b68b-31bf539a87b4"><span class="section-number-3">2.4.</span> Representation Theory</h3>
 <div class="outline-text-3" id="text-h-e33b09d4-26e4-44e8-b68b-31bf539a87b4">
 <p>
 It seems that the notion of a group action and group representation
@@ -551,7 +569,7 @@ would need to:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-01-15 Sun 08:46.</p>
+<p class="postamble">Last Updated 2023-01-19 Thu 09:55.</p>
 </div>
 </body>
 </html>

@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -321,6 +321,13 @@ equipped with a group structure) then defines the properties
 specifying the group structure must be continuous (<code>UnContinuous</code>
 asserts the inverse operator is continuous, <code>BinContinuous</code> asserts
 the binary operator is continuous).</li>
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/symsp_1.html"><code>symsp_1</code></a> defines Symplectic vector spaces as <a href="http://mizar.uwb.edu.pl/version/current/html/symsp_1.html#NM1"><code>SympSp</code></a>
+<ul class="org-ul">
+<li>Also defined is the bilinear antisymmetric form on a Symplectic
+vector space, as <a href="http://mizar.uwb.edu.pl/version/current/html/symsp_1.html#K2"><code>PProJ</code></a></li>
+</ul></li>
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/ortsp_1.html"><code>ortsp_1</code></a> defines the construction of a bilinear symmetric form in an
+orthogonal vector space</li>
 </ul>
 </div>
 </div>
@@ -350,7 +357,7 @@ manifold).
 <div id="outline-container-h-9cb82a62-a811-4a83-ada1-ab7fc5aaf75b" class="outline-4">
 <h4 id="h-9cb82a62-a811-4a83-ada1-ab7fc5aaf75b"><span class="section-number-4">2.2.2.</span> Lie Algebras</h4>
 <div class="outline-text-4" id="text-h-9cb82a62-a811-4a83-ada1-ab7fc5aaf75b">
-<div class="definition" id="org06d2056">
+<div class="definition" id="orgc5e4b27">
 <p>
 A vector space \(L\) over a field \(F\) with an operation \(L\times L\to L\),
 denoted \((x,y)\to[x, y]\) called the bracket (or commutator) of \(x\) and \(y\),
@@ -371,7 +378,7 @@ This is the definition given by Humphreys' <i>Introduction to Lie Algebras and R
 <i>Lie Groups and Lie Algebras</i> I.1&sect;2 Definition 1:
 </p>
 
-<div class="definition" id="orgafb97e9">
+<div class="definition" id="org7319eac">
 <p>
 An algebra \(\mathfrak{g}\) over a commutative unital [associative] ring
 \(K\) is called a <dfn>Lie Algebra</dfn> over \(K\) if its multiplication
@@ -395,7 +402,7 @@ it is not adequately justified. "Bilinear" yes, but "alternating"? No,
 not in general: only if the characteristic of \(K\) is not 2.
 </p>
 
-<div class="remark" id="orgd96eb70">
+<div class="remark" id="org44af971">
 <p>
 Mizar's notion of an algebra is <b>almost</b> good: they demand an algebra be
 unital, but this is not true in general for Lie algebras. Further, since
@@ -407,30 +414,53 @@ which extends <code>ModuleStr</code>.
 
 </div>
 
+<div class="remark" id="org43c7bfd">
+<p>
+Unfortunately, <a href="http://mizar.uwb.edu.pl/version/current/html/lopban_8.html#V1"><code>Bilinear</code></a> <i>is</i> defined as an attribute, but only for
+operators over real vector spaces. (See also <a href="http://mizar.uwb.edu.pl/version/current/html/lopban_8.html#V2"><code>Bilinear</code></a> and <a href="http://mizar.uwb.edu.pl/version/current/html/lopban_8.html#NM1"><code>BilinearOperator</code></a>.)
+I think the definition can be generalized in a straightforward manner:
+just use <a href="http://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V13"><code>additive</code></a> and <a href="http://mizar.uwb.edu.pl/version/current/html/mod_2.html#V1"><code>homogeneous</code></a> (whereas we would <i>want</i> to use
+something like <code>linear</code>). Being <code>homogeneous</code> forces <code>K</code> to be a non
+empty multMagma (instead of just being 1-sorted).
+</p>
+
+</div>
+
 <div class="org-src-container">
 <pre class="src src-mizar"><span class="org-comment-delimiter">:: </span><span class="org-comment">C.f., LOPBAN_8:5 and LOPBAN_8:6, FUNCT_5:def 1 and FUNCT_5:def 3</span>
 <span class="org-comment-delimiter">:: </span><span class="org-comment">and RINGCAT1:def 1</span>
 <span class="org-mizar-main">definition</span>
-  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> 1-sorted;
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> non empty multMagma;
   <span class="org-mizar-skeleton">let</span> L,M,N <span class="org-mizar-normal">be</span> ModuleStr <span class="org-mizar-normal">over</span> K
   <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Function <span class="org-mizar-normal">of</span> [:L,M:],N;
   <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> bilinear <span class="org-mizar-normal">means</span>
-  <span class="org-mizar-formula">for</span> l <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> L <span class="org-mizar-formula">holds</span> (curry IT).l <span class="org-mizar-normal">is</span> linear <span class="org-mizar-formula">&amp;</span>
-  <span class="org-mizar-formula">for</span> m <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> M <span class="org-mizar-formula">holds</span> (curry' IT).m <span class="org-mizar-normal">is</span> linear
+  (<span class="org-mizar-formula">for</span> l <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> L <span class="org-mizar-formula">st</span> l in dom (curry IT)
+   <span class="org-mizar-formula">holds</span> (curry IT).l <span class="org-mizar-normal">is</span> additive homogeneous Function <span class="org-mizar-normal">of</span> M,N) <span class="org-mizar-formula">&amp;</span>
+  (<span class="org-mizar-formula">for</span> m <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> M <span class="org-mizar-formula">st</span> m in dom (curry' IT)
+   <span class="org-mizar-formula">holds</span> (curry' IT).m <span class="org-mizar-normal">is</span> additive homogeneous Function <span class="org-mizar-normal">of</span> L,N);
+<span class="org-mizar-block">end</span>;
+
+<span class="org-mizar-main">theorem</span> Ex:
+  <span class="org-mizar-formula">for</span> K <span class="org-mizar-formula">being</span> non empty multMagma
+  <span class="org-mizar-formula">for</span> L,M,N <span class="org-mizar-formula">being</span> ModuleStr <span class="org-mizar-normal">over</span> K
+  <span class="org-mizar-formula">holds</span> [: the carrier <span class="org-mizar-normal">of</span> L, the carrier <span class="org-mizar-normal">of</span> M :] --&gt; (0.N) <span class="org-mizar-normal">is</span> bilinear;
+
+<span class="org-mizar-main">registration</span>
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> non empty multMagma;
+  <span class="org-mizar-skeleton">let</span> L,M,N <span class="org-mizar-normal">be</span> ModuleStr <span class="org-mizar-normal">over</span> K;
+  <span class="org-mizar-normal">cluster</span> bilinear <span class="org-mizar-formula">for</span> Function <span class="org-mizar-normal">of</span> [:L,M:],N;
+  <span class="org-mizar-normal">existence</span><span class="org-type"> by Ex</span>;
 <span class="org-mizar-block">end</span>;
 
 <span class="org-mizar-main">registration</span>
-  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> 1-sorted;
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> non empty multMagma;
   <span class="org-mizar-skeleton">let</span> M <span class="org-mizar-normal">be</span> ModuleStr <span class="org-mizar-normal">over</span> K;
   <span class="org-mizar-normal">cluster</span> bilinear <span class="org-mizar-formula">for</span> BinOp <span class="org-mizar-normal">of</span> M;
-  <span class="org-mizar-normal">existence</span>
-  <span class="org-mizar-block">proof</span>
-    <span class="org-mizar-skeleton">take</span> IT = the addF <span class="org-mizar-normal">of</span> M;
-  <span class="org-mizar-block">end</span>;
+  <span class="org-mizar-normal">existence</span><span class="org-type"> by Ex</span>;
 <span class="org-mizar-block">end</span>;
 
 <span class="org-mizar-main">definition</span>
-  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> 1-sorted;
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> non empty multMagma;
   <span class="org-mizar-normal">struct</span> (ModuleStr <span class="org-mizar-normal">over</span> K) LieAlgebraStr <span class="org-mizar-normal">over</span> K
   (# carrier -&gt; set,
      addF -&gt; BinOp <span class="org-mizar-normal">of</span> the carrier,
@@ -440,7 +470,7 @@ which extends <code>ModuleStr</code>.
 <span class="org-mizar-block">end</span>;
 
 <span class="org-mizar-main">definition</span>
-  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> 1-sorted;
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> non empty multMagma;
   <span class="org-mizar-skeleton">let</span> L <span class="org-mizar-normal">be</span> LieAlgebraStr <span class="org-mizar-normal">over</span> K;
   <span class="org-mizar-skeleton">let</span> x,y <span class="org-mizar-normal">be</span> Element <span class="org-mizar-normal">of</span> L;
   <span class="org-mizar-normal">func</span> [. x, y .] -&gt; Element <span class="org-mizar-normal">of</span> L <span class="org-mizar-normal">equals</span>
@@ -449,6 +479,22 @@ which extends <code>ModuleStr</code>.
   <span class="org-mizar-block">proof</span>
     <span class="org-mizar-skeleton">thus</span> (the bracket <span class="org-mizar-normal">of</span> L).(x, y) <span class="org-mizar-normal">is</span> Element <span class="org-mizar-normal">of</span> L;
   <span class="org-mizar-block">end</span>;
+<span class="org-mizar-block">end</span>;
+
+<span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> non empty multMagma;
+  <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> LieAlgebraStr <span class="org-mizar-normal">over</span> K;
+  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> LieAlgebra-like <span class="org-mizar-normal">means</span> :Def:
+  (<span class="org-mizar-formula">for</span> x <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> IT <span class="org-mizar-formula">holds</span> [. x, x .] = 0.IT)
+  <span class="org-mizar-formula">&amp;</span> (<span class="org-mizar-formula">for</span> x,y,z <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> IT
+     <span class="org-mizar-formula">holds</span> [. x, [. y, z .].] + [.y,[.z,x.].] + [.z,[.x,y.]] = 0.IT); 
+<span class="org-mizar-block">end</span>;
+
+<span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> non empty multMagma;
+  <span class="org-mizar-normal">mode</span> LieAlgebra <span class="org-mizar-normal">is</span> LieAlgebra-like LieAlgebraStr <span class="org-mizar-normal">over</span> K;
+  <span class="org-mizar-normal">existence</span>;
+  <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
 <span class="org-mizar-block">end</span>;
 
 <span class="org-comment-delimiter">:: </span><span class="org-comment">RING_3:def 5 defines Char for a Ring</span>
@@ -488,7 +534,7 @@ Thread on Math.Overflow</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-14 Thu 11:04.</p>
+<p class="postamble">Last Updated 2023-01-19 Thu 12:20.</p>
 </div>
 </body>
 </html>

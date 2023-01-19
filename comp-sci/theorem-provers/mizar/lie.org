@@ -63,6 +63,11 @@ relevant.
   specifying the group structure must be continuous (~UnContinuous~
   asserts the inverse operator is continuous, ~BinContinuous~ asserts
   the binary operator is continuous).
+- [[http://mizar.uwb.edu.pl/version/current/html/symsp_1.html][~symsp_1~]] defines Symplectic vector spaces as [[http://mizar.uwb.edu.pl/version/current/html/symsp_1.html#NM1][~SympSp~]]
+  - Also defined is the bilinear antisymmetric form on a Symplectic
+    vector space, as [[http://mizar.uwb.edu.pl/version/current/html/symsp_1.html#K2][~PProJ~]]
+- [[http://mizar.uwb.edu.pl/version/current/html/ortsp_1.html][~ortsp_1~]] defines the construction of a bilinear symmetric form in an
+  orthogonal vector space
   
 ** Not in Mizar
 :PROPERTIES:
@@ -125,30 +130,50 @@ want. Consequently, it seems that we should define a ~struct LieAlgebraStr~
 which extends ~ModuleStr~.
 #+end_remark
 
+#+begin_remark
+Unfortunately, [[http://mizar.uwb.edu.pl/version/current/html/lopban_8.html#V1][~Bilinear~]] /is/ defined as an attribute, but only for
+operators over real vector spaces. (See also [[http://mizar.uwb.edu.pl/version/current/html/lopban_8.html#V2][~Bilinear~]] and [[http://mizar.uwb.edu.pl/version/current/html/lopban_8.html#NM1][~BilinearOperator~]].)
+I think the definition can be generalized in a straightforward manner:
+just use [[http://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V13][~additive~]] and [[http://mizar.uwb.edu.pl/version/current/html/mod_2.html#V1][~homogeneous~]] (whereas we would /want/ to use
+something like ~linear~). Being ~homogeneous~ forces ~K~ to be a non
+empty multMagma (instead of just being 1-sorted).
+#+end_remark
+
 #+begin_src mizar
 :: C.f., LOPBAN_8:5 and LOPBAN_8:6, FUNCT_5:def 1 and FUNCT_5:def 3
 :: and RINGCAT1:def 1
 definition
-  let K be 1-sorted;
+  let K be non empty multMagma;
   let L,M,N be ModuleStr over K
   let IT be Function of [:L,M:],N;
   attr IT is bilinear means
-  for l being Element of L holds (curry IT).l is linear &
-  for m being Element of M holds (curry' IT).m is linear
+  (for l being Element of L st l in dom (curry IT)
+   holds (curry IT).l is additive homogeneous Function of M,N) &
+  (for m being Element of M st m in dom (curry' IT)
+   holds (curry' IT).m is additive homogeneous Function of L,N);
+end;
+
+theorem Ex:
+  for K being non empty multMagma
+  for L,M,N being ModuleStr over K
+  holds [: the carrier of L, the carrier of M :] --> (0.N) is bilinear;
+
+registration
+  let K be non empty multMagma;
+  let L,M,N be ModuleStr over K;
+  cluster bilinear for Function of [:L,M:],N;
+  existence by Ex;
 end;
 
 registration
-  let K be 1-sorted;
+  let K be non empty multMagma;
   let M be ModuleStr over K;
   cluster bilinear for BinOp of M;
-  existence
-  proof
-    take IT = the addF of M;
-  end;
+  existence by Ex;
 end;
 
 definition
-  let K be 1-sorted;
+  let K be non empty multMagma;
   struct (ModuleStr over K) LieAlgebraStr over K
   (# carrier -> set,
      addF -> BinOp of the carrier,
@@ -158,7 +183,7 @@ definition
 end;
 
 definition
-  let K be 1-sorted;
+  let K be non empty multMagma;
   let L be LieAlgebraStr over K;
   let x,y be Element of L;
   func [. x, y .] -> Element of L equals
@@ -167,6 +192,22 @@ definition
   proof
     thus (the bracket of L).(x, y) is Element of L;
   end;
+end;
+
+definition
+  let K be non empty multMagma;
+  let IT be LieAlgebraStr over K;
+  attr IT is LieAlgebra-like means :Def:
+  (for x being Element of IT holds [. x, x .] = 0.IT)
+  & (for x,y,z being Element of IT
+     holds [. x, [. y, z .].] + [.y,[.z,x.].] + [.z,[.x,y.]] = 0.IT); 
+end;
+
+definition
+  let K be non empty multMagma;
+  mode LieAlgebra is LieAlgebra-like LieAlgebraStr over K;
+  existence;
+  :: ...
 end;
 
 :: RING_3:def 5 defines Char for a Ring
