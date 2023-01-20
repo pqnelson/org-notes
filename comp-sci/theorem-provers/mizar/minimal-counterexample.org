@@ -1,0 +1,111 @@
+#+TITLE: Proof by Minimal Counter-Example in Mizar
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-01-20T09:32:40-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Friday January 20, 2023 at  9:32AM
+
+In finite group theory, we often use a technique called "proof by
+minimal counter-example". Often we just say, "Suppose $G$ is a minimal
+counter-example to the claim", then get to work. We could formalize this
+in Mizar using the following sketch:
+
+#+begin_src mizar
+for G being finite Group
+holds P[G]
+proof
+  set A = { n where n is Element of NAT : ex G being finite Group
+                                          st n = card G & not P[G] };
+  A is non empty implies contradiction
+  proof
+    assume A1: A be non empty;
+    defpred P1[Nat] means ex x being object st x in A & x = $1;
+    A2: ex k being Nat st P1[k] by A1, XBOOLE_0:def 1;
+    consider n being Nat such that
+    A3: P1[n] & for k being Nat st P1[k] holds n <= k
+    from NAT_1:sch 5(A2);
+    consider G being finite Group such that
+    A4: n = card G & not P[G]
+    by A3;
+    ex H being finite Group st card H < n & not P[H]
+    proof
+      :: ...
+    end;
+    hence contradiction by A4;
+  end;
+end;
+#+end_src
+
+The "minimality" condition is enforced by [[http://mizar.org/version/current/html/nat_1.html#S5][~NAT_1:sch 5~]].
+
+* Using Kuratowski--Zorn Lemma
+:PROPERTIES:
+:CUSTOM_ID: h-3b279867-b821-4009-afb9-24b57edfbb39
+:END:
+
+One could alternatively create a [[http://mizar.org/version/current/html/orders_2.html#NM1][~Poset~]] of finite groups using
+~is Subgroup of~ as the ordering relation. Then minimality would be
+enforced using the [[http://mizar.org/version/current/html/orders_2.html#T56][Kuratowski--Zorn lemma]]. This requires proving, for
+any chain of subgroups, there is a minimal element...which is true, it's
+the trivial group.
+
+Then proof-by-minimal counterexample would consider the subset of the
+poset ~FiniteGroups~ which consists of groups which do not satisfy the
+predicate. We'd need to rely on the fact that subsets of chains are
+chains ([[http://mizar.org/version/current/html/orders_2.html#T10][~ORDERS_2:10~]]). I think we'd need to prove that a Subset of a
+Poset forms another Poset.
+
+#+begin_src mizar
+for A being non empty Poset
+for B being non empty Subset of A
+holds RelStr(# B, (the InternalRel of A) /\ [: B, B :] #) is Poset;
+
+definition
+  func FiniteGroups -> RelStr means
+  :Def:
+  (for x being object holds x is strict finite Group iff x in the carrier of it)
+  (for x,y being object st x is strict finite Group & y is strict finite Group
+   holds [x,y] in (the InternalRel of it) iff x is Subgroup of y);
+  existence;
+  uniqueness;
+end;
+
+:: reflexivity by GROUP_2:54
+:: antisymmetric by GROUP_2:55
+:: transitivity by GROUP_2:56
+registration
+  cluster FiniteGroups -> reflexive transitive antisymmetric;
+  correctness;
+end;
+:: Thus FiniteGroups is a Poset
+#+end_src
+
+This might be "too strong" a condition, in the sense we may want the
+relation to be: ~[x,y] in (the InternalRelation of it) iff ex z being Subgroup of y st x,z are_isomorphic~.
+This weaker version would allow $G\leq G\times H$, for example.
+
+#+begin_src mizar
+scheme
+MinCounterEx { P[finite Group] } :
+  for G being finite Group holds P[G]
+provided
+  A1: (ex G being finite Group
+       st (for H being finite Group st not P[H]
+           holds not (H is Subgroup of G))
+        & not P[G])
+      implies contradiction
+proof end;
+#+end_src
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-a073a849-4e9f-46c9-8f85-993116c3e782
+:END:
+
+- https://groupprops.subwiki.org/wiki/Induction_for_finite_groups

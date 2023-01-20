@@ -168,7 +168,7 @@ H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
     Subgroup of ~G./.M~
 - a group $G$ is "simple" if ~IT is not trivial~ and there is no
   nontrivial normal subgroup $H\triangleleft G$ (i.e., $H\neq 1$ and
-  $H\neq G$) line 998 of [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]]
+  $H\neq G$) line 998 of [[http://mizar.org/version/current/html/group_9.html#V5][~group_9.miz~]]
 - The chunk of text dealing with composition series begins on line 6701
   of [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]] (the ~composition_series~ is defined on line 6708)
 - The Jordan-Holder attribute for composition series of $G$
@@ -227,12 +227,15 @@ H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
 
 - The permutation group is defined in [[http://mizar.uwb.edu.pl/version/current/html/matrix_1.html#K10][~MATRIX_1~]] as ~Group_of_Perm n~
   - The attribute [[http://mizar.uwb.edu.pl/version/current/html/matrix_1.html#V6][~even~]] is defined there
-  - This is the Symmetric group on $n$ symbols
+  - This is the Symmetric group on $n$ symbols --- i.e., $S_{n}$ = ~Group_of_Perm n~
   - The symmetric group on an arbitrary set $X$ is defined in ~CAYLEY~ as
-    [[http://mizar.uwb.edu.pl/version/current/html/cayley.html#K2][~SymGroup X~]]
+    [[http://mizar.uwb.edu.pl/version/current/html/cayley.html#K2][~SymGroup X~]] --- i.e., $\mathrm{Sym}(X)$ = ~SymGroup X~
+  - If you want to prove properties about permutation groups, you should
+    work with ~Group_of_Perm n~.
 - The group $\mathbb{Z}$ is defined in [[http://mizar.uwb.edu.pl/version/current/html/gr_cy_1.html#K2][~GR_CY_1~]] as ~INT.Group~
 - The finite cyclic group $\mathbb{Z}/n\mathbb{Z}$ is defined as
   ~INT.Group(n)~ in [[http://mizar.uwb.edu.pl/version/current/html/gr_cy_1.html#K4][~GR_CY_1~]]
+  
 ** Representation Theory
 :PROPERTIES:
 :CUSTOM_ID: h-e33b09d4-26e4-44e8-b68b-31bf539a87b4
@@ -250,6 +253,8 @@ are...well, kind of muddled in Mizar.
     ~Function of [:O,E:],E~ such that for any ~g,h being Element of O~
     and for any ~e being Element of E~ we would have
     ~it.(g,it.(h,e))=it.(g*h,e)~ as desired.
+  - This definition is from Bourbaki; see {{{book-title(Algebra)}}}
+    chapter I \sect 3.1, \sect5.1 /et seq/.
 - If we wanted to define a ~Representation~ of a group, probably we
   would need to:
   1. Define an adjective ~Representation-like~ on a
@@ -257,4 +262,10 @@ are...well, kind of muddled in Mizar.
      ~for g,h being Element of G holds IT.(g * h) = (IT.g) * (IT.h)~
   2. Register ~Representation-like for Function of G,(Funcs (E,E))~
   3. Define a type ~Representation of G means ex E st it is Representation-like for Function of G,(Funcs (E,E))~
-     
+- An alternative plan would be:
+  1. Define a structure ~RepresentationStr~ consisting of a set ~E~ and
+     a mapping ~Function of G,(Funcs (E,E))~
+  2. Define an adjective ~Representation-like~ for ~RepresentationStr~
+     which ensures the ~Function of G,(Funcs (E,E))~ is multiplicative
+  3. Define a ~mode Representation is Representation-like RepresentationStr~.
+
