@@ -49,8 +49,9 @@ schematically define it as:
 
 #+begin_src mizar
 definition
+  :: Any preliminary loci declarations here...
   let IT be Gadget;
-  attr hairy for IT means
+  attr IT is hairy means
   :Def:
   :: ...
 end;
@@ -67,6 +68,48 @@ Use ~snake_case~ by default. The only exception that comes to mind is if
 there's an already existing attribute which does not use ~snake_case~
 and we are defining a generalization of it.
 
+** Attributes vs Predicates
+:PROPERTIES:
+:CUSTOM_ID: h-90b13f3b-6948-4dce-a014-9f61cde07967
+:END:
+
+There are times when we want a predicate instead of an attribute. For
+example, it is better to have a predicate ~G is_product_of Fam~ instead of 
+an attribute ~G is product Fam~ or some other hackneyed solution.
+
+Ask yourself: am I trying to write a proposition? Or am I trying to
+describe a sub-class of terms? If you are trying to describe a subclass
+of terms, you probably want either a mode or an attribute.
+
+* Defining Functors
+:PROPERTIES:
+:CUSTOM_ID: h-5881c56c-2ce4-4ba5-af3c-d238e8e85981
+:END:
+
+*Principle 1: consistency.*
+Honestly, the best policy is to be consistent with what you're working
+with.
+
+For example, I want to define the semi-direct product of two
+groups. I look at the definition of the product of two groups in
+[[http://mizar.org/version/current/html/group_7.html#T21][~GROUP_7~]], and define it similarly ~semidirect_product (G1, G2, phi)~
+(or something similar).
+
+When defining the Hall $\pi$ subgroups, I look at how the Sylow $p$
+Subgroups were defined in [[http://mizar.org/version/current/html/group_10.html#K15][~GROUP_10~]] and adopt analogous naming
+conventions like ~the_hall_pi-subgroups_of_primes (Pi, G)~.
+
+*Principle 2: readability.* If there is nothing analogous existing in
+the Mizar Math library, then try to be faithful to the notation in the
+literature /provided it is well understood./ For example, the classical
+matrix groups $GL(n,\mathbb{F})$ or $SL(n,\mathbb{F})$ and so on. We
+could encode these as ~GL(n, F)~, ~SL(n, F)~, etc.
+
+Care must be taken with this principle: finite group theory has a lot of
+whacky notation which mystifies the entire subject. It would be better
+to define the ~signalizer(A)~ instead of ~|/|(A)~ or some other
+approximation of И(A).
+
 * Proving Equality
 :PROPERTIES:
 :CUSTOM_ID: h-c237f8b0-d62a-4f23-972c-26128f814532
@@ -76,7 +119,7 @@ Use [[http://mizar.org/version/current/html/xboole_0.html][~xboole_0~]] definiti
 ~Y c= X~. This is the idiomatic way to prove the claim. Avoid [[http://mizar.org/version/current/html/tarski.html][~TARSKI:2~]]
 if possible.
 
-* Prefer Defining Attributes
+* Prefer Defining Attributes Over Modes
 :PROPERTIES:
 :CUSTOM_ID: h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c
 :END:

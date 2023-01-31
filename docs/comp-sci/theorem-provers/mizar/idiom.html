@@ -206,6 +206,27 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -226,11 +247,13 @@
 <li><a href="#h-f7f182d8-cefb-4cf2-a1ff-222bb752bf29">2. Defining new attributes</a>
 <ul>
 <li><a href="#h-f46be9be-286d-45cd-83ea-970f40340710">2.1. Naming attributes</a></li>
+<li><a href="#h-90b13f3b-6948-4dce-a014-9f61cde07967">2.2. Attributes vs Predicates</a></li>
 </ul>
 </li>
-<li><a href="#h-c237f8b0-d62a-4f23-972c-26128f814532">3. Proving Equality</a></li>
-<li><a href="#h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c">4. Prefer Defining Attributes</a></li>
-<li><a href="#h-ada80631-141b-4d42-877d-1773d385645e">5. When in doubt, make it public</a></li>
+<li><a href="#h-5881c56c-2ce4-4ba5-af3c-d238e8e85981">3. Defining Functors</a></li>
+<li><a href="#h-c237f8b0-d62a-4f23-972c-26128f814532">4. Proving Equality</a></li>
+<li><a href="#h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c">5. Prefer Defining Attributes Over Modes</a></li>
+<li><a href="#h-ada80631-141b-4d42-877d-1773d385645e">6. When in doubt, make it public</a></li>
 </ul>
 </div>
 </div>
@@ -243,7 +266,7 @@ The idiomatic way to define a new gadget, well, suppose we had our
 definition found in a textbook schematically as:
 </p>
 
-<div class="definition" id="orgaca0875">
+<div class="definition" id="org1189ece">
 <p>
 A <dfn>Gadget</dfn> consists of <i>stuff</i> equipped with <i>structure</i> such
 that <i>properties</i> hold.
@@ -284,8 +307,9 @@ schematically define it as:
 
 <div class="org-src-container">
 <pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-comment-delimiter">:: </span><span class="org-comment">Any preliminary loci declarations here...</span>
   <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Gadget;
-  <span class="org-mizar-normal">attr</span> hairy <span class="org-mizar-formula">for</span> IT <span class="org-mizar-normal">means</span>
+  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> hairy <span class="org-mizar-normal">means</span>
   :Def:
   <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
 <span class="org-mizar-block">end</span>;
@@ -307,10 +331,66 @@ and we are defining a generalization of it.
 </p>
 </div>
 </div>
+
+<div id="outline-container-h-90b13f3b-6948-4dce-a014-9f61cde07967" class="outline-3">
+<h3 id="h-90b13f3b-6948-4dce-a014-9f61cde07967"><span class="section-number-3">2.2.</span> Attributes vs Predicates</h3>
+<div class="outline-text-3" id="text-h-90b13f3b-6948-4dce-a014-9f61cde07967">
+<p>
+There are times when we want a predicate instead of an attribute. For
+example, it is better to have a predicate <code>G is_product_of Fam</code> instead of 
+an attribute <code>G is product Fam</code> or some other hackneyed solution.
+</p>
+
+<p>
+Ask yourself: am I trying to write a proposition? Or am I trying to
+describe a sub-class of terms? If you are trying to describe a subclass
+of terms, you probably want either a mode or an attribute.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-5881c56c-2ce4-4ba5-af3c-d238e8e85981" class="outline-2">
+<h2 id="h-5881c56c-2ce4-4ba5-af3c-d238e8e85981"><span class="section-number-2">3.</span> Defining Functors</h2>
+<div class="outline-text-2" id="text-h-5881c56c-2ce4-4ba5-af3c-d238e8e85981">
+<p>
+<b>Principle 1: consistency.</b>
+Honestly, the best policy is to be consistent with what you're working
+with.
+</p>
+
+<p>
+For example, I want to define the semi-direct product of two
+groups. I look at the definition of the product of two groups in
+<a href="http://mizar.org/version/current/html/group_7.html#T21"><code>GROUP_7</code></a>, and define it similarly <code>semidirect_product (G1, G2, phi)</code>
+(or something similar).
+</p>
+
+<p>
+When defining the Hall \(\pi\) subgroups, I look at how the Sylow \(p\)
+Subgroups were defined in <a href="http://mizar.org/version/current/html/group_10.html#K15"><code>GROUP_10</code></a> and adopt analogous naming
+conventions like <code>the_hall_pi-subgroups_of_primes (Pi, G)</code>.
+</p>
+
+<p>
+<b>Principle 2: readability.</b> If there is nothing analogous existing in
+the Mizar Math library, then try to be faithful to the notation in the
+literature <i>provided it is well understood.</i> For example, the classical
+matrix groups \(GL(n,\mathbb{F})\) or \(SL(n,\mathbb{F})\) and so on. We
+could encode these as <code>GL(n, F)</code>, <code>SL(n, F)</code>, etc.
+</p>
+
+<p>
+Care must be taken with this principle: finite group theory has a lot of
+whacky notation which mystifies the entire subject. It would be better
+to define the <code>signalizer(A)</code> instead of <code>|/|(A)</code> or some other
+approximation of И(A).
+</p>
+</div>
 </div>
 
 <div id="outline-container-h-c237f8b0-d62a-4f23-972c-26128f814532" class="outline-2">
-<h2 id="h-c237f8b0-d62a-4f23-972c-26128f814532"><span class="section-number-2">3.</span> Proving Equality</h2>
+<h2 id="h-c237f8b0-d62a-4f23-972c-26128f814532"><span class="section-number-2">4.</span> Proving Equality</h2>
 <div class="outline-text-2" id="text-h-c237f8b0-d62a-4f23-972c-26128f814532">
 <p>
 Use <a href="http://mizar.org/version/current/html/xboole_0.html"><code>xboole_0</code></a> definition 10 to prove <code>X = Y</code> by proving <code>X c= Y</code> and
@@ -321,7 +401,7 @@ if possible.
 </div>
 
 <div id="outline-container-h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c" class="outline-2">
-<h2 id="h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c"><span class="section-number-2">4.</span> Prefer Defining Attributes</h2>
+<h2 id="h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c"><span class="section-number-2">5.</span> Prefer Defining Attributes Over Modes</h2>
 <div class="outline-text-2" id="text-h-ce0ec1af-f8be-4141-b904-a61b91e3fa6c">
 <p>
 There are times when it is unclear whether we should define a new mode
@@ -377,7 +457,7 @@ when the original definition of the mode has the same "mother mode"
 </div>
 
 <div id="outline-container-h-ada80631-141b-4d42-877d-1773d385645e" class="outline-2">
-<h2 id="h-ada80631-141b-4d42-877d-1773d385645e"><span class="section-number-2">5.</span> When in doubt, make it public</h2>
+<h2 id="h-ada80631-141b-4d42-877d-1773d385645e"><span class="section-number-2">6.</span> When in doubt, make it public</h2>
 <div class="outline-text-2" id="text-h-ada80631-141b-4d42-877d-1773d385645e">
 <p>
 Programmers have the idiom to make code private by default, and for good
@@ -405,7 +485,7 @@ This is just to clarify the proof for myself.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-01-20 Fri 15:57.</p>
+<p class="postamble">Last Updated 2023-01-30 Mon 09:13.</p>
 </div>
 </body>
 </html>

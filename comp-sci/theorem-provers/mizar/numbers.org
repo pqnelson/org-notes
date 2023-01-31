@@ -1,0 +1,43 @@
+#+TITLE: Numbers in Mizar
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-01-31T09:22:39-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Tuesday January 31, 2023 at  9:22AM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-c926d0bf-e3ac-4c16-a291-d11edd2abc59
+:END:
+
+Numbers are constructed in Mizar as /working mathematicians/ use them,
+e.g., $\mathbb{N}\subset\mathbb{Z}\subset\mathbb{Q}\subset\mathbb{R}$.
+
+But they are scattered across various articles (~NUMBERS~, ~XREAL~,
+~XXREAL~, ~ORDINAL~, ~NEWTON~, and so on).
+
+- Natural numbers are registered as real numbers in [[http://mizar.uwb.edu.pl/version/current/html/xreal_0.html#CC2][~XREAL_0~]]
+  - This implies that ~positive~ is registered for ~natural~ numbers,
+    since ~positive~ is registered for ~real~ numbers in
+    [[http://mizar.uwb.edu.pl/version/current/html/xreal_0.html#RC3][~XREAL_0~]], too.
+- The general pattern seems to be that the /set/ of a number system is
+  defined using all capital letters (e.g., [[http://mizar.uwb.edu.pl/version/current/html/numbers.html#K4][~INT~]], [[http://mizar.uwb.edu.pl/version/current/html/numbers.html#K3][~RAT~]], [[http://mizar.uwb.edu.pl/version/current/html/numbers.html#K1][~REAL~]], [[http://mizar.uwb.edu.pl/version/current/html/numbers.html#K2][~COMPLEX~]], etc.),
+  the attribute of belonging to the set is defined using all lowercase
+  letters
+  (e.g., [[http://mizar.uwb.edu.pl/version/current/html/int_1.html#V1][~integer~]], [[http://mizar.uwb.edu.pl/version/current/html/rat_1.html#V1][~rational~]], [[http://mizar.uwb.edu.pl/version/current/html/xreal_0.html#V1][~real~]], [[http://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#V1][~complex~]], etc.),
+  and the type is defined using PascalCase
+  (e.g., [[http://mizar.uwb.edu.pl/version/current/html/ordinal1.html#NM6][~Nat~]], [[http://mizar.uwb.edu.pl/version/current/html/int_1.html#NM1][~Integer~]], [[http://mizar.uwb.edu.pl/version/current/html/rat_1.html#NM1][~Rational~]], [[http://mizar.uwb.edu.pl/version/current/html/xreal_0.html#NM1][~Real~]], [[http://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#NM1][~Complex~]], etc.).
+  - The only "exception" to this is that [[http://mizar.uwb.edu.pl/version/current/html/ordinal1.html#V7][~natural~]] is defined as belonging
+    to the $\omega$ ordinal...but [[http://mizar.uwb.edu.pl/version/current/html/numbers.html#NK1][~NAT~]] is defined as a synonym for
+    $\omega$, so I guess it all checks out.
+- This extends to Quaternions: the set [[http://mizar.uwb.edu.pl/version/current/html/quaterni.html#K1][~QUATERNION~]], attribute [[http://mizar.uwb.edu.pl/version/current/html/quaterni.html#V1][~quaternion~]], and
+  type [[http://mizar.uwb.edu.pl/version/current/html/quaterni.html#NM1][~Quaternion~]]
+- The Octonions are implicitly constructed in [[http://mizar.uwb.edu.pl/version/current/html/cayldick.html][~CAYLDICK~]], but there is
+  no set ~OCTONION~, attribute ~octonion~, or type ~Octonion~ (though it
+  should be straightforward to implement these guys).
