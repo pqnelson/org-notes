@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Weight-Balanced Tree - SML</title>
@@ -189,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -242,14 +241,20 @@
 <ul>
 <li><a href="#h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6">1. Introduction</a>
 <ul>
-<li><a href="#h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b">1.1. Ordered Elements</a></li>
-<li><a href="#h-3aafa167-010e-4967-9a53-33ee50444f24">1.2. Initial Functor</a></li>
-<li><a href="#h-2cd10aca-84b8-4cc0-b667-001e969d5738">1.3. "Balanced" part of "Weight-Balanced Tree"</a></li>
+<li><a href="#h-e4dfa8a2-b105-43f1-9105-4e1ec2db2ff6">1.1. A Word about Style and Conventions</a></li>
+<li><a href="#h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b">1.2. Ordered Elements</a></li>
+<li><a href="#h-3aafa167-010e-4967-9a53-33ee50444f24">1.3. Initial Functor</a>
+<ul>
+<li><a href="#h-7b18d91a-27f0-471c-b2a9-13bfb00f23f7">1.3.1. Desired API</a></li>
+</ul>
+</li>
+<li><a href="#h-2cd10aca-84b8-4cc0-b667-001e969d5738">1.4. "Balanced" part of "Weight-Balanced Tree"</a></li>
 </ul>
 </li>
 <li><a href="#h-e6ca4f2a-c3b3-4a42-9eda-846b020acfdf">2. Inserting a new value</a></li>
-<li><a href="#h-56f9e2fa-fedd-409c-9212-d511f7d42620">3. Deleting an Element</a></li>
-<li><a href="#h-a3213d67-b211-41d1-baea-406a81802cfe">4. References</a></li>
+<li><a href="#h-5a8c4e4b-7c2d-410e-9940-c5d4b6ae4382">3. Querying for an Element</a></li>
+<li><a href="#h-56f9e2fa-fedd-409c-9212-d511f7d42620">4. Deleting an Element</a></li>
+<li><a href="#h-a3213d67-b211-41d1-baea-406a81802cfe">5. References</a></li>
 </ul>
 </div>
 </div>
@@ -258,12 +263,12 @@
 <h2 id="h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6">
 <p>
-Haskell uses <a href="https://en.wikipedia.org/wiki/Weight-balanced_tree">Weight-balanced trees</a> in their implementations of sets and
-maps. But their implementation is rather tricky. So I thought I would
+Haskell uses <a href="https://en.wikipedia.org/wiki/Weight-balanced_tree">Weight-balanced trees</a> in their implementations of sets (<a href="https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Set.html"><code>Data.Set</code></a>) and
+maps (<a href="https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Map-Strict.html"><code>Data.Map</code></a>). But their implementation is rather tricky. So I thought I would
 write some notes about them.
 </p>
 
-<div class="definition" id="org234ffef">
+<div class="definition" id="orgd3b2b7e">
 <p>
 A <dfn>Weight-balanced tree</dfn> is either
 </p>
@@ -281,7 +286,7 @@ pidgin Standard ML:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">pidgin code </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">pidgin code</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">datatype</span> 'a <span class="org-type-def">WBTree</span> = E
        | T <span class="org-keyword">of</span> int*'a*('a WBTree)*('a WBTree);
 </pre>
@@ -294,8 +299,27 @@ making <code>WBTree</code> a functor parametrized by an <code>ORDERED</code> mod
 </p>
 </div>
 
+<div id="outline-container-h-e4dfa8a2-b105-43f1-9105-4e1ec2db2ff6" class="outline-3">
+<h3 id="h-e4dfa8a2-b105-43f1-9105-4e1ec2db2ff6"><span class="section-number-3">1.1.</span> A Word about Style and Conventions</h3>
+<div class="outline-text-3" id="text-h-e4dfa8a2-b105-43f1-9105-4e1ec2db2ff6">
+<p>
+Following the Standard ML Basis Library, we will adopt the naming
+convention of "naming similar things similarly". So we will test for
+emptiness using a function named <code>null</code> in a nod to <a href="https://smlfamily.github.io/Basis/list.html#SIG:LIST.null:VAL"><code>List.null</code></a>.
+Sometimes this coincides with Haskell's naming conventions (e.g., <a href="https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Map-Strict.html#v:null"><code>Data.Map.null</code></a>),
+sometimes it will not.
+</p>
+
+<p>
+We will also part from Standard ML when the name is too much of a
+stretch (e.g., we will talk about the <code>size</code> of a tree, not the <code>length</code>
+of a tree).
+</p>
+</div>
+</div>
+
 <div id="outline-container-h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b" class="outline-3">
-<h3 id="h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b"><span class="section-number-3">1.1.</span> Ordered Elements</h3>
+<h3 id="h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b"><span class="section-number-3">1.2.</span> Ordered Elements</h3>
 <div class="outline-text-3" id="text-h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b">
 <p>
 Following Haskell's <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-Ord.html#t:Ord"><code>Data.Ord</code></a> signature, we will provide a similar
@@ -306,9 +330,9 @@ signature, and then an <code>Ord</code> functor to construct a module with the
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig</span><span class="org-comment-delimiter"> *)</span>
 
-<span class="org-comment-delimiter">(* </span><span class="org-comment">minimal signature which is fleshed out in a functor </span><span class="org-comment-delimiter">*)</span>
+<span class="org-comment-delimiter">(* </span><span class="org-comment">minimal signature which is fleshed out in a functor</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">signature</span> <span class="org-interface-def">COMPARABLE</span> =
 <span class="org-keyword">sig</span>
     <span class="org-keyword">type</span> <span class="org-type-def">t</span>;
@@ -346,7 +370,7 @@ signature, and then an <code>Ord</code> functor to construct a module with the
 </div>
 
 <div id="outline-container-h-3aafa167-010e-4967-9a53-33ee50444f24" class="outline-3">
-<h3 id="h-3aafa167-010e-4967-9a53-33ee50444f24"><span class="section-number-3">1.2.</span> Initial Functor</h3>
+<h3 id="h-3aafa167-010e-4967-9a53-33ee50444f24"><span class="section-number-3">1.3.</span> Initial Functor</h3>
 <div class="outline-text-3" id="text-h-3aafa167-010e-4967-9a53-33ee50444f24">
 <p>
 We also want a "smart constructor" which will automatically track the
@@ -354,7 +378,7 @@ size of the tree. This seems silly, but it saves a lot of concern later on.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">bin : Node.t -&gt; t -&gt; t -&gt; t </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">bin : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">bin</span> x l r = T (1 + size l + size r, x, l, r);
 </pre>
 </div>
@@ -364,7 +388,7 @@ Then a weight-balanced tree:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int*Node.t*t*t;
@@ -376,19 +400,67 @@ Then a weight-balanced tree:
      | size (T (n, _, _, _)) = n;
 
    <span class="org-keyword">fun</span> <span class="org-function-name">bin</span> x l r = T (1 + size l + size r, x, l, r);
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
 </pre>
+</div>
+</div>
+
+<div id="outline-container-h-7b18d91a-27f0-471c-b2a9-13bfb00f23f7" class="outline-4">
+<h4 id="h-7b18d91a-27f0-471c-b2a9-13bfb00f23f7"><span class="section-number-4">1.3.1.</span> Desired API</h4>
+<div class="outline-text-4" id="text-h-7b18d91a-27f0-471c-b2a9-13bfb00f23f7">
+<p>
+We will want some functions for a weight-balanced tree:
+</p>
+
+<ul class="org-ul">
+<li><code>size : t -&gt; int</code> to tell us how many elements belong to the tree;</li>
+<li><code>null : t -&gt; bool</code> tests if a tree is empty;</li>
+<li><code>insert : Node.t -&gt; t -&gt; t</code> to take a value and a tree, then produce a
+tree with the value inserted into it;</li>
+<li><code>member : Node.t -&gt; t -&gt; bool</code> to check if a value belongs to a tree
+or not;</li>
+<li><code>delete : Node.t -&gt; t -&gt; t</code> to remove a value from a tree (if
+present), or do nothing (if absent).</li>
+</ul>
+
+<p>
+There are some "nice to have" functions:
+</p>
+
+<ul class="org-ul">
+<li><code>filter : (Node.t -&gt; bool) -&gt; t -&gt; t</code> to filter out all the elements
+which satisfy the predicate</li>
+<li><code>toList : t -&gt; Node.t list</code> to transform a weight-balanced tree to a list</li>
+<li><code>foldl : (Node.t -&gt; 'a -&gt; 'a) -&gt; 'a -&gt; t -&gt; 'a</code></li>
+<li><code>foldr : (Node.t -&gt; 'a -&gt; 'a) -&gt; 'a -&gt; t -&gt; 'a</code></li>
+<li><code>exists : (Node.t -&gt; bool) -&gt; t -&gt; bool</code> tests each element of the
+tree, and returns <code>true</code> upon the first success</li>
+<li><code>all : (Node.t -&gt; bool) -&gt; t -&gt; bool</code> tests every element of the tree
+against the supplied predicate, returns <code>false</code> upon first failure</li>
+</ul>
+
+<p>
+The only "obvious" function which would be nice to have, but is not at
+all obvious how to implement it, would be a <code>map : (Node.t -&gt; 'a) -&gt; t -&gt; 'a Tree?</code>
+There is probably a way to do it, but I cannot see it at present.
+</p>
+
+<p>
+We could also consider functions which merge trees together, or remove
+subtrees, etc. I am not sure <i>I</i> will need them, but they are useful.
+</p>
 </div>
 </div>
 </div>
 
 <div id="outline-container-h-2cd10aca-84b8-4cc0-b667-001e969d5738" class="outline-3">
-<h3 id="h-2cd10aca-84b8-4cc0-b667-001e969d5738"><span class="section-number-3">1.3.</span> "Balanced" part of "Weight-Balanced Tree"</h3>
+<h3 id="h-2cd10aca-84b8-4cc0-b667-001e969d5738"><span class="section-number-3">1.4.</span> "Balanced" part of "Weight-Balanced Tree"</h3>
 <div class="outline-text-3" id="text-h-2cd10aca-84b8-4cc0-b667-001e969d5738">
-<div class="definition" id="org529c836">
+<div class="definition" id="orgea93f56">
 <p>
-We say a weight-balanced tree (n, x, L, R) is <dfn>Balanced</dfn> if:
+Let <code>Delta</code> be a positive number.
+We say a weight-balanced tree \((n, x, L, R)\) is <dfn>Balanced</dfn> if:
 </p>
 <ul class="org-ul">
 <li>When the subtrees L and R are both non-empty:
@@ -409,7 +481,7 @@ When <code>Delta</code> is 3 and <code>L</code> = 5, then <code>15 &gt; R &gt;= 
 for the sizes for the right subtree.
 </p>
 
-<div class="remark" id="orgbd5850a">
+<div class="remark" id="org380bef4">
 <p>
 There is some slight variation in the definition of a WBT being
 balanced. For example, Hirai and Yamamoto define it as
@@ -426,7 +498,7 @@ We could implement this predicate in Standard ML as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int*Node.t*t*t;
@@ -439,14 +511,14 @@ We could implement this predicate in Standard ML as:
 
    <span class="org-keyword">val</span> <span class="org-variable-name">delta</span> : int = 3;
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">isBalanced : t -&gt; t -&gt; bool </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">isBalanced : t -&gt; t -&gt; bool</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">isBalanced</span> l r = delta*(size l + 1) &gt;= (size r + 1);
 
    <span class="org-keyword">fun</span> <span class="org-function-name">balanced</span> E = true
      | balanced (T (_, _, l, r)) = isBalanced l r <span class="org-keyword">andalso</span>
                                    isBalanced r l <span class="org-keyword">andalso</span>
                                    balanced l <span class="org-keyword">andalso</span> balanced r;
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
 </pre>
 </div>
@@ -469,7 +541,7 @@ with the implementation:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">first attempt </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">first attempt</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
   | insert x (t <span class="org-keyword">as</span> T (sz, v, l, r)) =
     <span class="org-keyword">case</span> compare(x,v) <span class="org-keyword">of</span>
@@ -488,7 +560,7 @@ less than the root of the subtree. But what happens with
 </p>
 
 
-<div id="org8429c0e" class="figure">
+<div id="org5085dc8" class="figure">
 <p><img src="../../img/tree-2.png" alt="tree-2.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>Naive insertion of <code>[1,2,3,4,5]</code> into an empty tree.</p>
@@ -501,16 +573,16 @@ situation?
 
 <p>
 Well, the astute reader will note our <code>insert</code> function does not check
-if the subtrees are balanced. Why on Earth would anyone expect the
+if the subtrees are balanced. Therefore, why on Earth would anyone expect the
 result to be a balanced tree?
 </p>
 
 <p>
-We can remedy this by balancing the tree after inserting:
+We can remedy this by <i>balancing</i> the tree after inserting:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">insert : Node.t -&gt; t -&gt; t </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">insert : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
   | insert x (tree <span class="org-keyword">as</span> T (sz, v, l, r)) =
     <span class="org-keyword">case</span> compare(x,v) <span class="org-keyword">of</span>
@@ -539,7 +611,7 @@ Tree rotation can graphically visualized as:
 </p>
 
 
-<div id="org3d96933" class="figure">
+<div id="orgb7744d3" class="figure">
 <p><img src="../../img/tree-1.png" alt="tree-1.png">
 </p>
 <p><span class="figure-number">Figure 2: </span>Single left and single right rotations of tree with \(x < a < y < b < z\).</p>
@@ -550,7 +622,7 @@ The implementation of this, albeit unoptimized:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">balanceL : Node.t -&gt; t -&gt; t -&gt; t </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">balanceL : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced l r <span class="org-keyword">then</span> T(1 + size l + size r, x, l, r)
                      <span class="org-keyword">else</span> rotateL x l r;
 </pre>
@@ -563,7 +635,7 @@ have <i>double</i> rotations. A <dfn>double left rotation</dfn> moves a
 </p>
 
 
-<div id="org345b7de" class="figure">
+<div id="orgabaa4b9" class="figure">
 <p><img src="../../img/tree-3.png" alt="tree-3.png">
 </p>
 <p><span class="figure-number">Figure 3: </span>Double left rotation of tree with \(x < a < y < b < z\).</p>
@@ -574,7 +646,7 @@ This is done first by performing a "local right" rotation:
 </p>
 
 
-<div id="org570bcd4" class="figure">
+<div id="orge30cf68" class="figure">
 <p><img src="../../img/tree-4.png" alt="tree-4.png">
 </p>
 <p><span class="figure-number">Figure 4: </span>"Local right" rotation of tree with \(x < a < y < b < z\).</p>
@@ -587,7 +659,7 @@ construct a <dfn>double right rotation</dfn> as moving a "pivot" node
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">rotateL : Node.t -&gt; t -&gt; t -&gt; t </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">rotateL : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">rotateL</span> x l (r <span class="org-keyword">as</span> (T (_,_,rl,rr))) =
     <span class="org-keyword">if</span> isSingle rl rr <span class="org-keyword">then</span> singleL x l r
     <span class="org-keyword">else</span> doubleL x l r
@@ -610,7 +682,7 @@ the <code>Gamma</code> parameter. For us, we name <code>Gamma</code> something m
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">isSingle : t -&gt; t -&gt; bool </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">isSingle : t -&gt; t -&gt; bool</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">isSingle</span> l r = (size l + 1) &lt; ratio*(size r + 1);
 </pre>
 </div>
@@ -622,7 +694,7 @@ We combine these functions together, and our functor so far becomes:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int*Node.t*t*t;
@@ -635,13 +707,13 @@ We combine these functions together, and our functor so far becomes:
 
    <span class="org-keyword">fun</span> <span class="org-function-name">bin</span> x l r = T(1 + size l + size r, x, l, r);
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">laziness </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">laziness</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">val</span> <span class="org-variable-name">compare</span> = Node.compare;
 
    <span class="org-keyword">val</span> <span class="org-variable-name">ratio</span> : int = 2;
    <span class="org-keyword">val</span> <span class="org-variable-name">delta</span> : int = 3;
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">isBalanced : t -&gt; t -&gt; bool </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">isBalanced : t -&gt; t -&gt; bool</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">isBalanced</span> l r = delta*(size l + 1) &gt;= (size r + 1);
 
    <span class="org-keyword">fun</span> <span class="org-function-name">balanced</span> E = true
@@ -649,7 +721,7 @@ We combine these functions together, and our functor so far becomes:
                                    isBalanced r l <span class="org-keyword">andalso</span>
                                    balanced l <span class="org-keyword">andalso</span> balanced r;
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">Helper functions to ensure the tree isBalanced </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">Helper functions to ensure the tree isBalanced</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">isSingle</span> a b = (size a + 1) &lt; ratio*(size b + 1);
 
    <span class="org-keyword">fun</span> <span class="org-function-name">singleL</span> x l (T (_, y, rl, rr)) = bin y (bin x l rl) rr
@@ -682,19 +754,19 @@ We combine these functions together, and our functor so far becomes:
    <span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced l r <span class="org-keyword">then</span> bin x l r
                         <span class="org-keyword">else</span> rotateL x l r;
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">insert : Node.t -&gt; t -&gt; t </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">insert : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
      | insert x (tree <span class="org-keyword">as</span> T (sz, v, l, r)) =
        (<span class="org-keyword">case</span> compare(x,v) <span class="org-keyword">of</span>
            LESS =&gt; balanceL v (insert x l) r
          | EQUAL =&gt; tree
          | GREATER =&gt; balanceR v l  (insert x r));
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
 </pre>
 </div>
 
-<div class="exercise" id="orge930a17">
+<div class="exercise" id="orge12fb36">
 <p>
 Assume <code>l</code> and <code>r</code> are balanced trees, and <code>x</code> is a value such that it
 lies between the subtrees.
@@ -707,7 +779,7 @@ lies between the subtrees.
 
 </div>
 
-<div class="exercise" id="orga247907">
+<div class="exercise" id="orgb433b1e">
 <p>
 Optimize our code. We proved it works (well, in an exercise), so prove
 your optimizations "work" as well!
@@ -717,8 +789,73 @@ your optimizations "work" as well!
 </div>
 </div>
 
+<div id="outline-container-h-5a8c4e4b-7c2d-410e-9940-c5d4b6ae4382" class="outline-2">
+<h2 id="h-5a8c4e4b-7c2d-410e-9940-c5d4b6ae4382"><span class="section-number-2">3.</span> Querying for an Element</h2>
+<div class="outline-text-2" id="text-h-5a8c4e4b-7c2d-410e-9940-c5d4b6ae4382">
+<p>
+How can we check if a tree \(T\) contains an element \(x\)? There are two
+cases:
+</p>
+
+<ol class="org-ol">
+<li>If \(T\) is empty, then \(x\) is not a member of it; and</li>
+<li><p>
+If \(T\) is not empty, then we can write \(T = (n,y,L,R)\). We should
+compare \(x\) against \(y\) (the value for the node in the branch). If
+they are equal, then \(x=y\) and \(x\) <i>is</i> a member of the tree.
+</p>
+
+<p>
+If \(x < y\), then we should recursively check the subtree \(L\) to see
+if \(x\) is a member of \(L\).
+</p>
+
+<p>
+If \(x > y\), then we should recursively check the right subtree \(R\) to
+see if \(x\) is a member of \(R\).
+</p></li>
+</ol>
+
+<p>
+Since the subtrees \(L\) and \(R\) are balanced, there would be about
+\(\log_{2}(n)\) iterations when searching if \(x\) is a member of the tree.
+We can easily code this up as:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
+<span class="org-keyword">struct</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
+
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">member : Node.t -&gt; t -&gt; bool</span><span class="org-comment-delimiter"> *)</span>
+   <span class="org-keyword">fun</span> <span class="org-function-name">member</span> x E = false
+     | member x (T (_,y,l,r)) = <span class="org-keyword">case</span> compare(x,y) <span class="org-keyword">of</span>
+                                    EQUAL =&gt; true
+                                  | LESS =&gt; member x l
+                                  | GREATER =&gt; member x r;
+
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<div class="exercise" id="org84d16a0">
+<p>
+Write a function to query for the subtree consisting of elements:
+</p>
+<ol class="org-ol">
+<li>less than or equal to \(x\)</li>
+<li>strictly less than \(x\)</li>
+<li>greater than or equal to \(x\)</li>
+<li>strictly greater than \(x\)</li>
+</ol>
+
+</div>
+</div>
+</div>
+
 <div id="outline-container-h-56f9e2fa-fedd-409c-9212-d511f7d42620" class="outline-2">
-<h2 id="h-56f9e2fa-fedd-409c-9212-d511f7d42620"><span class="section-number-2">3.</span> Deleting an Element</h2>
+<h2 id="h-56f9e2fa-fedd-409c-9212-d511f7d42620"><span class="section-number-2">4.</span> Deleting an Element</h2>
 <div class="outline-text-2" id="text-h-56f9e2fa-fedd-409c-9212-d511f7d42620">
 <p>
 When deleting an element from a weight-balanced tree, we just need to do
@@ -730,7 +867,7 @@ well, we'll just brush that problem into another function which will
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">delete : Node.t -&gt; t -&gt; t </span><span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">delete : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">delete</span> _ E = E
   | delete x (tree <span class="org-keyword">as</span> T (_, y, l, r)) =
     (<span class="org-keyword">case</span> compare (x,y) <span class="org-keyword">of</span>
@@ -806,7 +943,7 @@ Great, now we have the ability to insert and delete elements from our
 weight-balanced tree.
 </p>
 
-<div class="exercise" id="orgc6e03ae">
+<div class="exercise" id="org2daae0f">
 <p>
 Prove, if <code>tree</code> is a <i>balanced</i> weight-balanced tree containing the value <code>x</code>,
 then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
@@ -814,7 +951,7 @@ then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
 
 </div>
 
-<div class="exercise" id="org4cc3b38">
+<div class="exercise" id="orgd884b01">
 <p>
 Change our code for the case when <code>x</code> is not contained in <code>tree</code>, then
 we have <code>delete x tree</code> return the <code>tree</code> unmodified. [Hint: we cannot
@@ -837,20 +974,20 @@ after deletion will be the same if and only if they are the same.]
 
    <span class="org-keyword">fun</span> <span class="org-function-name">bin</span> x l r = T(1 + size l + size r, x, l, r);
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">laziness </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">laziness</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">val</span> <span class="org-variable-name">compare</span> = Node.compare;
 
    <span class="org-keyword">val</span> <span class="org-variable-name">ratio</span> : int = 2;
    <span class="org-keyword">val</span> <span class="org-variable-name">delta</span> : int = 3;
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">member : Node.t -&gt; t -&gt; bool </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">member : Node.t -&gt; t -&gt; bool</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">member</span> x E = false
      | member x (T (_,y,l,r)) = <span class="org-keyword">case</span> compare(x,y) <span class="org-keyword">of</span>
                                     EQUAL =&gt; true
                                   | LESS =&gt; member x l
                                   | GREATER =&gt; member x r;
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">isBalanced : t -&gt; t -&gt; bool </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">isBalanced : t -&gt; t -&gt; bool</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">isBalanced</span> l r = delta*(size l + 1) &gt;= (size r + 1);
 
    <span class="org-keyword">fun</span> <span class="org-function-name">balanced</span> E = true
@@ -858,7 +995,7 @@ after deletion will be the same if and only if they are the same.]
                                    isBalanced r l <span class="org-keyword">andalso</span>
                                    balanced l <span class="org-keyword">andalso</span> balanced r;
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">Helper functions to ensure the tree isBalanced </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">Helper functions to ensure the tree isBalanced</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">isSingle</span> a b = (size a + 1) &lt; ratio*(size b + 1);
 
    <span class="org-keyword">fun</span> <span class="org-function-name">singleL</span> x l (T (_, y, rl, rr)) = bin y (bin x l rl) rr
@@ -891,7 +1028,7 @@ after deletion will be the same if and only if they are the same.]
    <span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced l r <span class="org-keyword">then</span> bin x l r
                         <span class="org-keyword">else</span> rotateL x l r;
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">insert : Node.t -&gt; t -&gt; t </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">insert : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
      | insert x (tree <span class="org-keyword">as</span> T (sz, v, l, r)) =
        (<span class="org-keyword">case</span> compare(x,v) <span class="org-keyword">of</span>
@@ -899,9 +1036,9 @@ after deletion will be the same if and only if they are the same.]
          | EQUAL =&gt; tree
          | GREATER =&gt; balanceR v l  (insert x r));
 
-   <span class="org-comment-delimiter">(** </span><span class="org-comment">Helper functions for delete *</span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(** </span><span class="org-comment">Helper functions for delete</span><span class="org-comment-delimiter"> **)</span>
    <span class="org-comment-delimiter">(* </span><span class="org-comment">Retrieve the maximal key for the set, and the set stripped</span>
-<span class="org-comment">      of that element. </span><span class="org-comment-delimiter">*)</span>
+<span class="org-comment">      of that element.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">maxViewSure</span> x l E = (x, l)
      | maxViewSure x l (T (_, xr, lr, rr)) =
        (<span class="org-keyword">case</span> maxViewSure xr lr rr <span class="org-keyword">of</span>
@@ -916,13 +1053,13 @@ after deletion will be the same if and only if they are the same.]
             (m, l') =&gt; (m, balanceR x l' r));
 
    <span class="org-comment-delimiter">(* </span><span class="org-comment">Retrieves the minimal key of the set, and the set is stripped of that</span>
-<span class="org-comment">      element, or `NONE` if passed an empty list. </span><span class="org-comment-delimiter">*)</span>
+<span class="org-comment">      element, or `NONE` if passed an empty list.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">minView</span> E = NONE
      | minView (T (_, x, l, r)) = SOME (minViewSure x l r);
 
    <span class="org-comment-delimiter">(* </span><span class="org-comment">Glue two trees together.</span>
 <span class="org-comment">      Assume that `l` and `r` are already balanced with respect to each</span>
-<span class="org-comment">      other. </span><span class="org-comment-delimiter">*)</span>
+<span class="org-comment">      other.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">glue</span> E r = r
      | glue l E = l
      | glue (l <span class="org-keyword">as</span> T(sl,xl,ll,lr)) (r <span class="org-keyword">as</span> T(sr,xr,rl,rr))
@@ -933,7 +1070,7 @@ after deletion will be the same if and only if they are the same.]
               <span class="org-keyword">in</span> balanceL m l r'
               <span class="org-keyword">end</span>;
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">delete : Node.t -&gt; t -&gt; t </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">delete : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">delete</span> _ E = E
      | delete x (tree <span class="org-keyword">as</span> T (_, y, l, r)) =
        (<span class="org-keyword">case</span> compare (x,y) <span class="org-keyword">of</span>
@@ -941,7 +1078,7 @@ after deletion will be the same if and only if they are the same.]
           | EQUAL =&gt; glue l r
           | GREATER =&gt; balanceL y l (delete x r));
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come </span><span class="org-comment-delimiter">*)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
 </pre>
 </div>
@@ -949,7 +1086,7 @@ after deletion will be the same if and only if they are the same.]
 </div>
 
 <div id="outline-container-h-a3213d67-b211-41d1-baea-406a81802cfe" class="outline-2">
-<h2 id="h-a3213d67-b211-41d1-baea-406a81802cfe"><span class="section-number-2">4.</span> References</h2>
+<h2 id="h-a3213d67-b211-41d1-baea-406a81802cfe"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-a3213d67-b211-41d1-baea-406a81802cfe">
 <ul class="org-ul">
 <li>Stephen Adams,<br>
@@ -968,7 +1105,7 @@ In <i>J. of Func. Progr.</i> <b>3</b> no.4 (1993) pp.553&#x2013;561,
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-03-27 Sun 14:17.</p>
+<p class="postamble">Last Updated 2023-02-12 Sun 10:34.</p>
 </div>
 </body>
 </html>

@@ -16,8 +16,8 @@
 :CUSTOM_ID: h-8246ebcc-2ee8-46a2-a4b0-ff9f094a23a6
 :END:
 
-Haskell uses [[https://en.wikipedia.org/wiki/Weight-balanced_tree][Weight-balanced trees]] in their implementations of sets and
-maps. But their implementation is rather tricky. So I thought I would
+Haskell uses [[https://en.wikipedia.org/wiki/Weight-balanced_tree][Weight-balanced trees]] in their implementations of sets ([[https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Set.html][~Data.Set~]]) and
+maps ([[https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Map-Strict.html][~Data.Map~]]). But their implementation is rather tricky. So I thought I would
 write some notes about them.
 
 #+begin_definition
@@ -39,6 +39,21 @@ datatype 'a WBTree = E
 This doesn't quite work since we want to have a ~compare:'a*'a -> order~
 function given. But SML's module system let's us guarantee this by
 making ~WBTree~ a functor parametrized by an ~ORDERED~ module.
+
+** A Word about Style and Conventions
+:PROPERTIES:
+:CUSTOM_ID: h-e4dfa8a2-b105-43f1-9105-4e1ec2db2ff6
+:END:
+
+Following the Standard ML Basis Library, we will adopt the naming
+convention of "naming similar things similarly". So we will test for
+emptiness using a function named ~null~ in a nod to [[https://smlfamily.github.io/Basis/list.html#SIG:LIST.null:VAL][~List.null~]].
+Sometimes this coincides with Haskell's naming conventions (e.g., [[https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Map-Strict.html#v:null][~Data.Map.null~]]),
+sometimes it will not.
+
+We will also part from Standard ML when the name is too much of a
+stretch (e.g., we will talk about the ~size~ of a tree, not the ~length~
+of a tree).
 
 ** Ordered Elements
 :PROPERTIES:
@@ -120,13 +135,49 @@ struct
 end;
 #+end_src
 
+*** Desired API
+:PROPERTIES:
+:CUSTOM_ID: h-7b18d91a-27f0-471c-b2a9-13bfb00f23f7
+:END:
+
+We will want some functions for a weight-balanced tree:
+
+- ~size : t -> int~ to tell us how many elements belong to the tree;
+- ~null : t -> bool~ tests if a tree is empty;
+- ~insert : Node.t -> t -> t~ to take a value and a tree, then produce a
+  tree with the value inserted into it;
+- ~member : Node.t -> t -> bool~ to check if a value belongs to a tree
+  or not;
+- ~delete : Node.t -> t -> t~ to remove a value from a tree (if
+  present), or do nothing (if absent).
+
+There are some "nice to have" functions:
+
+- ~filter : (Node.t -> bool) -> t -> t~ to filter out all the elements
+  which satisfy the predicate
+- ~toList : t -> Node.t list~ to transform a weight-balanced tree to a list
+- ~foldl : (Node.t -> 'a -> 'a) -> 'a -> t -> 'a~
+- ~foldr : (Node.t -> 'a -> 'a) -> 'a -> t -> 'a~
+- ~exists : (Node.t -> bool) -> t -> bool~ tests each element of the
+  tree, and returns ~true~ upon the first success
+- ~all : (Node.t -> bool) -> t -> bool~ tests every element of the tree
+  against the supplied predicate, returns ~false~ upon first failure
+
+The only "obvious" function which would be nice to have, but is not at
+all obvious how to implement it, would be a ~map : (Node.t -> 'a) -> t -> 'a Tree?~
+There is probably a way to do it, but I cannot see it at present.
+
+We could also consider functions which merge trees together, or remove
+subtrees, etc. I am not sure /I/ will need them, but they are useful.
+
 ** "Balanced" part of "Weight-Balanced Tree"
 :PROPERTIES:
 :CUSTOM_ID: h-2cd10aca-84b8-4cc0-b667-001e969d5738
 :END:
 
 #+begin_definition
-We say a weight-balanced tree (n, x, L, R) is {{{dfn(Balanced)}}} if:
+Let ~Delta~ be a positive number.
+We say a weight-balanced tree $(n, x, L, R)$ is {{{dfn(Balanced)}}} if:
 - When the subtrees L and R are both non-empty:
   ~Delta*(size(L)) > size(R)~ and ~Delta*size(R) > size(L)~;
 - If either subtree is empty, the other is either a singleton or empty.
@@ -210,10 +261,10 @@ This is just a linked list with extra baggage! How can we fix this
 situation?
 
 Well, the astute reader will note our ~insert~ function does not check
-if the subtrees are balanced. Why on Earth would anyone expect the
+if the subtrees are balanced. Therefore, why on Earth would anyone expect the
 result to be a balanced tree?
 
-We can remedy this by balancing the tree after inserting:
+We can remedy this by /balancing/ the tree after inserting:
 
 #+begin_src sml
 (* insert : Node.t -> t -> t *)
@@ -374,6 +425,53 @@ lies between the subtrees.
 #+begin_exercise
 Optimize our code. We proved it works (well, in an exercise), so prove
 your optimizations "work" as well!
+#+end_exercise
+
+* Querying for an Element
+:PROPERTIES:
+:CUSTOM_ID: h-5a8c4e4b-7c2d-410e-9940-c5d4b6ae4382
+:END:
+
+How can we check if a tree $T$ contains an element $x$? There are two
+cases:
+
+1. If $T$ is empty, then $x$ is not a member of it; and
+2. If $T$ is not empty, then we can write $T = (n,y,L,R)$. We should
+   compare $x$ against $y$ (the value for the node in the branch). If
+   they are equal, then $x=y$ and $x$ /is/ a member of the tree.
+
+   If $x < y$, then we should recursively check the subtree $L$ to see
+   if $x$ is a member of $L$.
+
+   If $x > y$, then we should recursively check the right subtree $R$ to
+   see if $x$ is a member of $R$.
+
+Since the subtrees $L$ and $R$ are balanced, there would be about
+$\log_{2}(n)$ iterations when searching if $x$ is a member of the tree.
+We can easily code this up as:
+
+#+begin_src sml
+functor WBTree(Node : ORD) =
+struct
+   (* ... *)
+
+   (* member : Node.t -> t -> bool *)
+   fun member x E = false
+     | member x (T (_,y,l,r)) = case compare(x,y) of
+                                    EQUAL => true
+                                  | LESS => member x l
+                                  | GREATER => member x r;
+
+   (* ... *)
+end;
+#+end_src
+
+#+begin_exercise
+Write a function to query for the subtree consisting of elements:
+1. less than or equal to $x$
+2. strictly less than $x$
+3. greater than or equal to $x$
+4. strictly greater than $x$
 #+end_exercise
 
 * Deleting an Element
