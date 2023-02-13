@@ -324,7 +324,7 @@ This is also extended to, for a group \(G\), subsets \(A\subset G\)
 we'd have <code>A"</code> be the collection of <code>g"</code> for <code>g in A</code>, i.e.,
 \(A^{-1}=\{g^{-1}|g\in A\}\); see line 57 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>
 </p>
-<pre class="example" id="orgc60e886">
+<pre class="example" id="orgcb89a39">
 let G be Group;
 let A be Subset of G;
 func A " -&gt; Subset of G equals :: GROUP_2:def 1
@@ -338,7 +338,7 @@ underlying set of \(G\) equal to the set underlying \(H\)</li>
 The trivial subgroup of \(G\) is denoted <code>(1).G</code>, defined on line 1258
 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> as
 </p>
-<pre class="example" id="org9b91f3c">
+<pre class="example" id="org0af9b5a">
   func (1).G -&gt; strict Subgroup of G means
   :Def7:
   the carrier of it = {1_G};
@@ -418,7 +418,7 @@ usually write as \(\langle A\rangle\)</li>
 <li><p>
 Frattini subgroup is tricky. Relevant code starts around 1371 of  <a href="http://mizar.org/version/current/html/group_4.html"><code>group_4.miz</code></a>
 </p>
-<pre class="example" id="orge063672">
+<pre class="example" id="orgebf3856">
 ::$N Frattini subgroup
   func Phi(G) -&gt; strict Subgroup of G means
   :Def7:
@@ -466,7 +466,23 @@ Subgroup of <code>G./.M</code></li>
 </ul></li>
 <li>a group \(G\) is "simple" if <code>IT is not trivial</code> and there is no
 nontrivial normal subgroup \(H\triangleleft G\) (i.e., \(H\neq 1\) and
-\(H\neq G\)) line 998 of <a href="http://mizar.org/version/current/html/group_9.html#V5"><code>group_9.miz</code></a></li>
+\(H\neq G\)) line 998 of <a href="http://mizar.org/version/current/html/group_9.html#V5"><code>group_9.miz</code></a>
+<ul class="org-ul">
+<li><p>
+Be careful! There is some confusing double-negation in the
+definition of <code>simple</code>, but it is logically equivalent to
+</p>
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Group;
+  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> simple <span class="org-mizar-normal">means</span> <span class="org-comment-delimiter">:: </span><span class="org-comment">GROUP_9:def 12</span>
+  (<span class="org-mizar-formula">not</span> IT <span class="org-mizar-normal">is</span> trivial <span class="org-mizar-formula">&amp;</span>
+  (<span class="org-mizar-formula">for</span> H <span class="org-mizar-formula">being</span> strict normal Subgroup <span class="org-mizar-normal">of</span> IT
+   <span class="org-mizar-formula">holds</span> (H = (Omega).IT <span class="org-mizar-formula">or</span> H = (1).IT)));
+<span class="org-mizar-block">end</span>; 
+</pre>
+</div></li>
+</ul></li>
 <li>The chunk of text dealing with composition series begins on line 6701
 of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.miz</code></a> (the <code>composition_series</code> is defined on line 6708)</li>
 <li>The Jordan-Holder attribute for composition series of \(G\)
@@ -594,7 +610,7 @@ which ensures the <code>Function of G,(Funcs (E,E))</code> is multiplicative</li
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-01-30 Mon 08:52.</p>
+<p class="postamble">Last Updated 2023-02-03 Fri 09:32.</p>
 </div>
 </body>
 </html>

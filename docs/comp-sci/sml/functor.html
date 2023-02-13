@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Standard ML - Topics</title>
+<title>Functors in SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -209,51 +209,69 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../sml.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Standard ML - Topics</h1>
-<ul class="org-ul">
-<li><a href="implementations.html">Implementations</a> of Standard ML, and how to compile them</li>
-<li><a href="monadology.html">Monadology</a> on how to implement monads in Standard ML
-<ul class="org-ul">
-<li><a href="io-monad.html">IO Monad</a></li>
-<li><a href="state-monad.html">State Monad</a> and its derivation</li>
-<li><a href="st-monad.html">ST Monad</a></li>
-<li><a href="monad-transformer.html">Monad Transformers</a></li>
-</ul></li>
-<li><a href="equational-reasoning.html">Equational Reasoning</a> in Standard ML</li>
-<li><a href="coding-conventions.html">Coding Conventions</a></li>
-<li><a href="idioms.html">Idioms</a> for Standard ML</li>
-<li><a href="io.html">Input/Output</a> in Standard ML compared to Haskell</li>
-<li>Literate Code
-<ul class="org-ul">
-<li><a href="dollar-sign.html">Application Operator</a> - Haskell's <code>$</code> in Standard ML</li>
-<li><a href="string-stream.html">String Streams</a> in SML</li>
-<li><a href="xunit.html">xUnit Framework</a> implementation in Standard ML</li>
-<li><a href="weight-balanced-tree.html">Weight-Balanced Trees</a> in SML</li>
-<li><a href="nbe.html">Normalization by Evaluation</a> implementation</li>
-</ul></li>
-<li><a href="type-theory.html">Type Theory of Standard ML</a></li>
-<li><a href="de-bruijn-index.html">De Bruijn Indices</a></li>
-<li><a href="functor.html">Functors in Standard ML</a> for implementing the notion of a (Haskell)
-functor in Standard ML.</li>
-</ul>
-
-<p>
-<b>Elsewhere:</b>
-</p>
-
-<ul class="org-ul">
-<li><a href="http://www.macs.hw.ac.uk/ultra/skalpel/html/sml.html">The Standard ML Programming Language</a> page from ULTRA group (at Heriot
-Watt University)</li>
-<li><a href="https://blog.plover.com/prog/haskell/sml-defects.html">What was wrong with SML?</a> for a thoughtful discussion of defects
-concerning SML</li>
+<h1 class="title">Functors in SML</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-48e173de-b89d-4e1a-8753-a621a025b0e5">1. Basic Idea</a></li>
+<li><a href="#h-191faef2-3b83-46a7-8433-0d9e2ce7692e">2. References</a></li>
 </ul>
 </div>
+</div>
+
+<div id="outline-container-h-48e173de-b89d-4e1a-8753-a621a025b0e5" class="outline-2">
+<h2 id="h-48e173de-b89d-4e1a-8753-a621a025b0e5"><span class="section-number-2">1.</span> Basic Idea</h2>
+<div class="outline-text-2" id="text-h-48e173de-b89d-4e1a-8753-a621a025b0e5">
+<p>
+A functor in ML means a "parametrized module". It's an unfortunate
+choice of words, because "functor" has come to mean something completely
+different in functional programming. I will discuss that "something
+completely different" implemented in Standard ML.
+</p>
+
+<p>
+In Haskell, the <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-Functor.html">functor</a> class consists of the <code>fmap</code> function and the
+<code>&lt;$</code> infix operator. I do not believe the <code>&lt;$</code> infix operator is
+necessary. We can then implement this as a signature:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">FUNCTOR</span> = <span class="org-keyword">sig</span>
+    <span class="org-keyword">type</span> 'a <span class="org-type-def">f</span>;
+    <span class="org-keyword">val</span> <span class="org-variable-name">fmap</span> : ('a -&gt; 'b) -&gt; 'a f -&gt; 'b f;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+There are two constraints to a functor:
+</p>
+
+<ol class="org-ol">
+<li><code>fmap id = id</code> it preserves the identity function, and</li>
+<li><code>fmap (f o g) = (fmap f) o (fmap g)</code> it preserves composition.</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-191faef2-3b83-46a7-8433-0d9e2ce7692e" class="outline-2">
+<h2 id="h-191faef2-3b83-46a7-8433-0d9e2ce7692e"><span class="section-number-2">2.</span> References</h2>
+<div class="outline-text-2" id="text-h-191faef2-3b83-46a7-8433-0d9e2ce7692e">
+<ul class="org-ul">
+<li><a href="https://jobjo.github.io/2018/01/28/implicit-functors.html">Implicit Functors</a> in OCaml</li>
+<li>Joel Björnson, <a href="https://blog.shaynefletcher.org/2017/05/more-type-classes-in-ocaml.html">More type classes</a> which implements functors, monoids,
+and applicatives in OCaml</li>
+</ul>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-06 Mon 10:35.</p>
+<p class="postamble">Last Updated 2023-02-06 Mon 10:26.</p>
 </div>
 </body>
 </html>

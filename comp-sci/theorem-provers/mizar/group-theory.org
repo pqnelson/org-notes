@@ -179,6 +179,17 @@ H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
 - a group $G$ is "simple" if ~IT is not trivial~ and there is no
   nontrivial normal subgroup $H\triangleleft G$ (i.e., $H\neq 1$ and
   $H\neq G$) line 998 of [[http://mizar.org/version/current/html/group_9.html#V5][~group_9.miz~]]
+  - Be careful! There is some confusing double-negation in the
+    definition of ~simple~, but it is logically equivalent to
+    #+begin_src mizar
+definition
+  let IT be Group;
+  attr IT is simple means :: GROUP_9:def 12
+  (not IT is trivial &
+  (for H being strict normal Subgroup of IT
+   holds (H = (Omega).IT or H = (1).IT)));
+end; 
+    #+end_src
 - The chunk of text dealing with composition series begins on line 6701
   of [[http://mizar.org/version/current/html/group_9.html][~group_9.miz~]] (the ~composition_series~ is defined on line 6708)
 - The Jordan-Holder attribute for composition series of $G$
