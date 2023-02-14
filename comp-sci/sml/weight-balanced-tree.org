@@ -184,7 +184,12 @@ We say a weight-balanced tree $(n, x, L, R)$ is {{{dfn(Balanced)}}} if:
 #+end_definition
 
 The use of ~Delta~ allows some "wiggle room" in determining if a tree is
-balanced. For example, when ~Delta~ is 2, and ~L~ = 5, then ~10 > R >= 3~
+balanced. The larger the ~Delta~, the fewer times we demand the tree be
+rebalanced; on the other hand, the smaller the value of ~Delta~, the
+more "perfectly" balanced the tree becomes (and the quicker it is to
+perform operations).
+
+For example, when ~Delta~ is 2, and ~L~ = 5, then ~10 > R >= 3~
 is the acceptable range of sizes for the right subtree.
 
 When ~Delta~ is 3 and ~L~ = 5, then ~15 > R >= 2~ is an acceptable range
@@ -271,17 +276,23 @@ We can remedy this by /balancing/ the tree after inserting:
 fun insert x E = singleton x
   | insert x (tree as T (sz, v, l, r)) =
     case compare(x,v) of
-       LESS => balanceL v (insert x l) r)
+       LESS => balanceL v (insert x l) r
      | EQUAL => tree
      | GREATER => balanceR v l  (insert x r);
 #+end_src
 
 We call ~balanceL~ when inserting a new element into the left subtree
-(or deleting something from the right subtree), which amounts to:
+(or deleting something from the right subtree), which will guarantee the
+resulting left subtree is "not too big" (i.e., balanced). The function
+amounts to:
 
-- check if the tree would be balanced
-  - if so, then just construct the tree
-  - otherwise rotate left "by some amount".
+- check if the tree constructed from the new left and right subtrees
+  would be balanced;
+  - if so, then just construct the tree;
+  - otherwise rotate right "by some amount".
+
+Similarly, ~balanceR~ is invoked to make sure the right subtree is "not
+too big" and will restore balance by rotating left.
 
 This is a classic trick with binary trees: rotations to rebalance them.
 Tree rotation can graphically visualized as:
@@ -289,12 +300,23 @@ Tree rotation can graphically visualized as:
 #+CAPTION: Single left and single right rotations of tree with $x < a < y < b < z$.
 [[../../img/tree-1.png]]
 
+We see that ~size r > delta*(size l)~ is the same as ~not isBalanced l r~,
+i.e., the right subtree is "too big" when ~isBalanced l r~ is false. Similarly,
+~size l > delta*(size r)~ is the same as ~not isBalanced r l~, which
+tells us the left subtree is "too big".
+
 The implementation of this, albeit unoptimized:
 
 #+begin_src sml
+(* balanceR : Node.t -> t -> t -> t *)
+fun balanceR x l r = if isBalanced l r
+                     then T(1 + size l + size r, x, l, r)
+                     else (* when size r > delta*(size l) *) rotateL x l r;
+
 (* balanceL : Node.t -> t -> t -> t *)
-fun balanceL x l r = if isBalanced l r then T(1 + size l + size r, x, l, r)
-                     else rotateL x l r;
+fun balanceL x l r = if isBalanced r l
+                     then T(1 + size l + size r, x, l, r)
+                     else (* when size l > delta*(size r) *) rotateR x l r;
 #+end_src
 
 Now it's just a matter to code up left rotations, right? Well, we also
@@ -326,6 +348,8 @@ fun singleL x l (T (_, v, rl, rr)) = bin y (bin x l rl) rr
 fun doubleL x l (T (_, y, (T (_, z, rll, rlr)), rr))
     = bin z (bin x l rll) (bin y rlr rr)
   | doubleL _ _ _ = raise "doubleL";
+
+(* ...and analogous functions for right rotations *)
 #+end_src
 
 But what is the condition for ~isSingle~? Basically, if the ratio of the
@@ -397,11 +421,11 @@ struct
        else doubleL x l r
      | rotateL _ _ _ = raise (Fail "rotateL");
 
-   fun balanceR x l r = if isBalanced r l then bin x l r
-                        else rotateR x l r;
-
-   fun balanceL x l r = if isBalanced l r then bin x l r
+   fun balanceR x l r = if isBalanced l r then bin x l r
                         else rotateL x l r;
+
+   fun balanceL x l r = if isBalanced r l then bin x l r
+                        else rotateR x l r;
 
    (* insert : Node.t -> t -> t *)
    fun insert x E = singleton x
@@ -425,6 +449,15 @@ lies between the subtrees.
 #+begin_exercise
 Optimize our code. We proved it works (well, in an exercise), so prove
 your optimizations "work" as well!
+
+There are many different avenues for optimization, for example:
+~balanceL~ and ~balanceR~ recursively call functions which destruct
+the arguments in the same way; is it faster to "collapse" the helper
+~rotate~ functions into one giant ~balanceL~ (and another giant
+~balanceR~) function?
+
+For other ideas, see Milan Straka's "The performance of the Haskell
+~Containers~ Package" (2010).
 #+end_exercise
 
 * Querying for an Element
@@ -507,39 +540,56 @@ When both ~l~ and ~r~ are non-empty, we have two cases:
    ~balanceL~ to produce a balanced tree.
 
 #+begin_src sml
+(* glue : t -> t -> t *)
 fun glue E r = r
   | glue l E = l
-  | glue (l as T(sl,xl,ll,lr)) (r as T(sr,xr,lr,rr))
-    = if sl > sr then (case maxView xl ll lr of
-                           SOME (m, l') => balanceR m l' r
-                         | _ => raise (Fail "glue sl > sr"))
-      else (case minView xr lr rr of
-                SOME (m, r') => balanceL m l r'
-              | _ => raise (Fail "glue sl <= sr"));
+  | glue (l as T(sl,xl,ll,lr)) (r as T(sr,xr,rl,rr))
+    = if sl > sr then (let val (m, l') = maxViewSure xl ll lr
+                       in balanceR m l' r
+                       end)
+      else (let val (m, r') = minViewSure xr rl rr
+            in balanceL m l r'
+            end);
 #+end_src
 
 We can get the maximum element of a tree, plus a version of the tree
-with that element /removed/. How? Simply plumb the right subtree:
+with that element /removed/. How? Simply plumb the right subtree ---
+recursively examine the right subtree until it is finally empty, then
+the node must contain the maximum value. Since we assume the tree is
+balanced, we know that every value in the left subtree will be less than
+any value in the right subtree.
+
+We will return the rebalanced right-subtree (minus the maximum value)
+and the maximum value:
 
 #+begin_src sml
+(* maxViewSure : Node.t -> t -> t -> Node.t * t *)
 fun maxViewSure x l E = (x, l)
-  | maxView x l (T (_, xr, lr, rr)) =
+  | maxViewSure x l (T (_, xr, lr, rr)) =
     (case maxViewSure xr lr rr of
          (m, r') => (m, balanceL x l r'));
 
+(* maxView : t -> (Node.t * t) option *)
 fun maxView E = NONE
   | maxView (T (_, x, l, r)) = SOME (maxViewSure x l r);
 #+end_src
 
 Similarly, the minimum element of the tree, and a version of the tree
-with that element surgically removed:
+with that element surgically removed. How? Well, we just keep examining
+the left sub-tree until we find the smallest element. Since the tree is
+assumed to be balanced, we know the left subtree consists of values
+/guaranteed to be smaller/ than any value found in the right
+subtree. So we just surgically remove the smallest element, then
+rebalance the remaining trees:
 
 #+begin_src sml
+(* minViewSure : Node.t -> t -> t -> Node.t * t *)
 fun minViewSure x E r = (x, r)
-  | minView x (T (_, xl, ll, lr)) r =
+  | minViewSure x (T (_, xl, ll, lr)) r =
     (case minViewSure xl ll lr of
          (m, l') => (m, balanceR x l' r));
 
+(* minView : t -> (Node.t * t) option *)
 fun minView E = NONE
   | minView (T (_, x, l, r)) = SOME (minViewSure x l r);
 #+end_src
@@ -620,11 +670,12 @@ struct
        else doubleL x l r
      | rotateL _ _ _ = raise (Fail "rotateL");
 
-   fun balanceR x l r = if isBalanced r l then bin x l r
-                        else rotateR x l r;
 
-   fun balanceL x l r = if isBalanced l r then bin x l r
+   fun balanceR x l r = if isBalanced l r then bin x l r
                         else rotateL x l r;
+
+   fun balanceL x l r = if isBalanced r l then bin x l r
+                        else rotateR x l r;
 
    (* insert : Node.t -> t -> t *)
    fun insert x E = singleton x
@@ -685,6 +736,12 @@ end;
 :CUSTOM_ID: h-a3213d67-b211-41d1-baea-406a81802cfe
 :END:
 
+- Jürg Nievergelt and Edward M. Reingold,\\
+  "Binary search trees of bounded balance".\\
+  /STOC '72: Proceedings of the fourth annual ACM symposium on Theory of computing/,
+  May 1972, Pages 137--142
+  https://doi.org/10.1145/800152.804906
+  - Cited/blamed as the origin/inspiration for weighted-balanced trees
 - Stephen Adams,\\
   "Functional Pearls: Efficient sets --- a balancing act".\\
   In /J. of Func. Progr./ *3* no.4 (1993) pp.553--561,
@@ -693,6 +750,14 @@ end;
   "Balancing weight-balanced trees" (PDF).\\
   /Journal of Functional Programming/ *21* no.3 (2011): 287.
   [[https://yoichihirai.com/bst.pdf][PDF]]
+  - *CAUTION:* the ~balanceL~ and ~balanceR~ functions described by
+    Hirai and Yamamoto are /the opposite/ of their definitions in
+    Haskell (and we follow the definitions of Haskell).
 - Lukas Barth and Dorothea Wagner,\\
   "Engineering Top-Down Weight-Balanced Trees".\\
   {{{arXiv(1910.07849)}}}, 14 pages.
+- Joachim Breitner, Antal Spector-Zabusky, Yao Li, Christine Rizkallah,
+  John Wiegley, Stephanie Weirich,\\
+  "Ready, Set, Verify! Applying hs-to-coq to real-world Haskell code".\\
+  {{{arXiv(1803.06960)}}}, 30 pages.
+

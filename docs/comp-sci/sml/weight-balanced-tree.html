@@ -268,7 +268,7 @@ maps (<a href="https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Ma
 write some notes about them.
 </p>
 
-<div class="definition" id="orgd3b2b7e">
+<div class="definition" id="org764387d">
 <p>
 A <dfn>Weight-balanced tree</dfn> is either
 </p>
@@ -457,7 +457,7 @@ subtrees, etc. I am not sure <i>I</i> will need them, but they are useful.
 <div id="outline-container-h-2cd10aca-84b8-4cc0-b667-001e969d5738" class="outline-3">
 <h3 id="h-2cd10aca-84b8-4cc0-b667-001e969d5738"><span class="section-number-3">1.4.</span> "Balanced" part of "Weight-Balanced Tree"</h3>
 <div class="outline-text-3" id="text-h-2cd10aca-84b8-4cc0-b667-001e969d5738">
-<div class="definition" id="orgea93f56">
+<div class="definition" id="orgb89e46b">
 <p>
 Let <code>Delta</code> be a positive number.
 We say a weight-balanced tree \((n, x, L, R)\) is <dfn>Balanced</dfn> if:
@@ -472,7 +472,14 @@ We say a weight-balanced tree \((n, x, L, R)\) is <dfn>Balanced</dfn> if:
 
 <p>
 The use of <code>Delta</code> allows some "wiggle room" in determining if a tree is
-balanced. For example, when <code>Delta</code> is 2, and <code>L</code> = 5, then <code>10 &gt; R &gt;= 3</code>
+balanced. The larger the <code>Delta</code>, the fewer times we demand the tree be
+rebalanced; on the other hand, the smaller the value of <code>Delta</code>, the
+more "perfectly" balanced the tree becomes (and the quicker it is to
+perform operations).
+</p>
+
+<p>
+For example, when <code>Delta</code> is 2, and <code>L</code> = 5, then <code>10 &gt; R &gt;= 3</code>
 is the acceptable range of sizes for the right subtree.
 </p>
 
@@ -481,7 +488,7 @@ When <code>Delta</code> is 3 and <code>L</code> = 5, then <code>15 &gt; R &gt;= 
 for the sizes for the right subtree.
 </p>
 
-<div class="remark" id="org380bef4">
+<div class="remark" id="org754d287">
 <p>
 There is some slight variation in the definition of a WBT being
 balanced. For example, Hirai and Yamamoto define it as
@@ -560,7 +567,7 @@ less than the root of the subtree. But what happens with
 </p>
 
 
-<div id="org5085dc8" class="figure">
+<div id="org3c2e722" class="figure">
 <p><img src="../../img/tree-2.png" alt="tree-2.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>Naive insertion of <code>[1,2,3,4,5]</code> into an empty tree.</p>
@@ -586,7 +593,7 @@ We can remedy this by <i>balancing</i> the tree after inserting:
 <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
   | insert x (tree <span class="org-keyword">as</span> T (sz, v, l, r)) =
     <span class="org-keyword">case</span> compare(x,v) <span class="org-keyword">of</span>
-       LESS =&gt; balanceL v (insert x l) r)
+       LESS =&gt; balanceL v (insert x l) r
      | EQUAL =&gt; tree
      | GREATER =&gt; balanceR v l  (insert x r);
 </pre>
@@ -594,16 +601,24 @@ We can remedy this by <i>balancing</i> the tree after inserting:
 
 <p>
 We call <code>balanceL</code> when inserting a new element into the left subtree
-(or deleting something from the right subtree), which amounts to:
+(or deleting something from the right subtree), which will guarantee the
+resulting left subtree is "not too big" (i.e., balanced). The function
+amounts to:
 </p>
 
 <ul class="org-ul">
-<li>check if the tree would be balanced
+<li>check if the tree constructed from the new left and right subtrees
+would be balanced;
 <ul class="org-ul">
-<li>if so, then just construct the tree</li>
-<li>otherwise rotate left "by some amount".</li>
+<li>if so, then just construct the tree;</li>
+<li>otherwise rotate right "by some amount".</li>
 </ul></li>
 </ul>
+
+<p>
+Similarly, <code>balanceR</code> is invoked to make sure the right subtree is "not
+too big" and will restore balance by rotating left.
+</p>
 
 <p>
 This is a classic trick with binary trees: rotations to rebalance them.
@@ -611,20 +626,33 @@ Tree rotation can graphically visualized as:
 </p>
 
 
-<div id="orgb7744d3" class="figure">
+<div id="org48aa3a5" class="figure">
 <p><img src="../../img/tree-1.png" alt="tree-1.png">
 </p>
 <p><span class="figure-number">Figure 2: </span>Single left and single right rotations of tree with \(x < a < y < b < z\).</p>
 </div>
 
 <p>
+We see that <code>size r &gt; delta*(size l)</code> is the same as <code>not isBalanced l r</code>,
+i.e., the right subtree is "too big" when <code>isBalanced l r</code> is false. Similarly,
+<code>size l &gt; delta*(size r)</code> is the same as <code>not isBalanced r l</code>, which
+tells us the left subtree is "too big".
+</p>
+
+<p>
 The implementation of this, albeit unoptimized:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">balanceL : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
-<span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced l r <span class="org-keyword">then</span> T(1 + size l + size r, x, l, r)
-                     <span class="org-keyword">else</span> rotateL x l r;
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">balanceR : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">balanceR</span> x l r = <span class="org-keyword">if</span> isBalanced l r
+                     <span class="org-keyword">then</span> T(1 + size l + size r, x, l, r)
+                     <span class="org-keyword">else</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">when size r &gt; delta*(size l)</span><span class="org-comment-delimiter"> *)</span> rotateL x l r;
+
+<span class="org-comment-delimiter">(* </span><span class="org-comment">balanceL : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced r l
+                     <span class="org-keyword">then</span> T(1 + size l + size r, x, l, r)
+                     <span class="org-keyword">else</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">when size l &gt; delta*(size r)</span><span class="org-comment-delimiter"> *)</span> rotateR x l r;
 </pre>
 </div>
 
@@ -635,7 +663,7 @@ have <i>double</i> rotations. A <dfn>double left rotation</dfn> moves a
 </p>
 
 
-<div id="orgabaa4b9" class="figure">
+<div id="org2dc91c9" class="figure">
 <p><img src="../../img/tree-3.png" alt="tree-3.png">
 </p>
 <p><span class="figure-number">Figure 3: </span>Double left rotation of tree with \(x < a < y < b < z\).</p>
@@ -646,7 +674,7 @@ This is done first by performing a "local right" rotation:
 </p>
 
 
-<div id="orge30cf68" class="figure">
+<div id="org40d0744" class="figure">
 <p><img src="../../img/tree-4.png" alt="tree-4.png">
 </p>
 <p><span class="figure-number">Figure 4: </span>"Local right" rotation of tree with \(x < a < y < b < z\).</p>
@@ -671,6 +699,8 @@ construct a <dfn>double right rotation</dfn> as moving a "pivot" node
 <span class="org-keyword">fun</span> <span class="org-function-name">doubleL</span> x l (T (_, y, (T (_, z, rll, rlr)), rr))
     = bin z (bin x l rll) (bin y rlr rr)
   | doubleL _ _ _ = <span class="org-keyword">raise</span> <span class="org-string">"doubleL"</span>;
+
+<span class="org-comment-delimiter">(* </span><span class="org-comment">...and analogous functions for right rotations</span><span class="org-comment-delimiter"> *)</span>
 </pre>
 </div>
 
@@ -748,11 +778,11 @@ We combine these functions together, and our functor so far becomes:
        <span class="org-keyword">else</span> doubleL x l r
      | rotateL _ _ _ = <span class="org-keyword">raise</span> (Fail <span class="org-string">"rotateL"</span>);
 
-   <span class="org-keyword">fun</span> <span class="org-function-name">balanceR</span> x l r = <span class="org-keyword">if</span> isBalanced r l <span class="org-keyword">then</span> bin x l r
-                        <span class="org-keyword">else</span> rotateR x l r;
-
-   <span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced l r <span class="org-keyword">then</span> bin x l r
+   <span class="org-keyword">fun</span> <span class="org-function-name">balanceR</span> x l r = <span class="org-keyword">if</span> isBalanced l r <span class="org-keyword">then</span> bin x l r
                         <span class="org-keyword">else</span> rotateL x l r;
+
+   <span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced r l <span class="org-keyword">then</span> bin x l r
+                        <span class="org-keyword">else</span> rotateR x l r;
 
    <span class="org-comment-delimiter">(* </span><span class="org-comment">insert : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
@@ -766,7 +796,7 @@ We combine these functions together, and our functor so far becomes:
 </pre>
 </div>
 
-<div class="exercise" id="orge12fb36">
+<div class="exercise" id="org0d2ec2f">
 <p>
 Assume <code>l</code> and <code>r</code> are balanced trees, and <code>x</code> is a value such that it
 lies between the subtrees.
@@ -779,10 +809,23 @@ lies between the subtrees.
 
 </div>
 
-<div class="exercise" id="orgb433b1e">
+<div class="exercise" id="org2f48ab3">
 <p>
 Optimize our code. We proved it works (well, in an exercise), so prove
 your optimizations "work" as well!
+</p>
+
+<p>
+There are many different avenues for optimization, for example:
+<code>balanceL</code> and <code>balanceR</code> recursively call functions which destruct
+the arguments in the same way; is it faster to "collapse" the helper
+<code>rotate</code> functions into one giant <code>balanceL</code> (and another giant
+<code>balanceR</code>) function?
+</p>
+
+<p>
+For other ideas, see Milan Straka's "The performance of the Haskell
+<code>Containers</code> Package" (2010).
 </p>
 
 </div>
@@ -839,7 +882,7 @@ We can easily code this up as:
 </pre>
 </div>
 
-<div class="exercise" id="org84d16a0">
+<div class="exercise" id="org3064cb4">
 <p>
 Write a function to query for the subtree consisting of elements:
 </p>
@@ -894,29 +937,41 @@ and invoke <code>balanceR</code> to produce a balanced tree;</li>
 </ol>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">glue</span> E r = r
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">glue : t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">glue</span> E r = r
   | glue l E = l
-  | glue (l <span class="org-keyword">as</span> T(sl,xl,ll,lr)) (r <span class="org-keyword">as</span> T(sr,xr,lr,rr))
-    = <span class="org-keyword">if</span> sl &gt; sr <span class="org-keyword">then</span> (<span class="org-keyword">case</span> maxView xl ll lr <span class="org-keyword">of</span>
-                           SOME (m, l') =&gt; balanceR m l' r
-                         | _ =&gt; <span class="org-keyword">raise</span> (Fail <span class="org-string">"glue sl &gt; sr"</span>))
-      <span class="org-keyword">else</span> (<span class="org-keyword">case</span> minView xr lr rr <span class="org-keyword">of</span>
-                SOME (m, r') =&gt; balanceL m l r'
-              | _ =&gt; <span class="org-keyword">raise</span> (Fail <span class="org-string">"glue sl &lt;= sr"</span>));
+  | glue (l <span class="org-keyword">as</span> T(sl,xl,ll,lr)) (r <span class="org-keyword">as</span> T(sr,xr,rl,rr))
+    = <span class="org-keyword">if</span> sl &gt; sr <span class="org-keyword">then</span> (<span class="org-keyword">let</span> <span class="org-keyword">val</span> (m, l') = maxViewSure xl ll lr
+                       <span class="org-keyword">in</span> balanceR m l' r
+                       <span class="org-keyword">end</span>)
+      <span class="org-keyword">else</span> (<span class="org-keyword">let</span> <span class="org-keyword">val</span> (m, r') = minViewSure xr rl rr
+            <span class="org-keyword">in</span> balanceL m l r'
+            <span class="org-keyword">end</span>);
 </pre>
 </div>
 
 <p>
 We can get the maximum element of a tree, plus a version of the tree
-with that element <i>removed</i>. How? Simply plumb the right subtree:
+with that element <i>removed</i>. How? Simply plumb the right subtree &#x2014;
+recursively examine the right subtree until it is finally empty, then
+the node must contain the maximum value. Since we assume the tree is
+balanced, we know that every value in the left subtree will be less than
+any value in the right subtree.
+</p>
+
+<p>
+We will return the rebalanced right-subtree (minus the maximum value)
+and the maximum value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">maxViewSure</span> x l E = (x, l)
-  | maxView x l (T (_, xr, lr, rr)) =
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">maxViewSure : Node.t -&gt; t -&gt; t -&gt; Node.t * t</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">maxViewSure</span> x l E = (x, l)
+  | maxViewSure x l (T (_, xr, lr, rr)) =
     (<span class="org-keyword">case</span> maxViewSure xr lr rr <span class="org-keyword">of</span>
          (m, r') =&gt; (m, balanceL x l r'));
 
+<span class="org-comment-delimiter">(* </span><span class="org-comment">maxView : t -&gt; (Node.t * t) option</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">maxView</span> E = NONE
   | maxView (T (_, x, l, r)) = SOME (maxViewSure x l r);
 </pre>
@@ -924,15 +979,22 @@ with that element <i>removed</i>. How? Simply plumb the right subtree:
 
 <p>
 Similarly, the minimum element of the tree, and a version of the tree
-with that element surgically removed:
+with that element surgically removed. How? Well, we just keep examining
+the left sub-tree until we find the smallest element. Since the tree is
+assumed to be balanced, we know the left subtree consists of values
+<i>guaranteed to be smaller</i> than any value found in the right
+subtree. So we just surgically remove the smallest element, then
+rebalance the remaining trees:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">minViewSure</span> x E r = (x, r)
-  | minView x (T (_, xl, ll, lr)) r =
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">minViewSure : Node.t -&gt; t -&gt; t -&gt; Node.t * t</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">minViewSure</span> x E r = (x, r)
+  | minViewSure x (T (_, xl, ll, lr)) r =
     (<span class="org-keyword">case</span> minViewSure xl ll lr <span class="org-keyword">of</span>
          (m, l') =&gt; (m, balanceR x l' r));
 
+<span class="org-comment-delimiter">(* </span><span class="org-comment">minView : t -&gt; (Node.t * t) option</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">minView</span> E = NONE
   | minView (T (_, x, l, r)) = SOME (minViewSure x l r);
 </pre>
@@ -943,7 +1005,7 @@ Great, now we have the ability to insert and delete elements from our
 weight-balanced tree.
 </p>
 
-<div class="exercise" id="org2daae0f">
+<div class="exercise" id="org7faaefa">
 <p>
 Prove, if <code>tree</code> is a <i>balanced</i> weight-balanced tree containing the value <code>x</code>,
 then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
@@ -951,7 +1013,7 @@ then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
 
 </div>
 
-<div class="exercise" id="orgd884b01">
+<div class="exercise" id="orgbcc5f67">
 <p>
 Change our code for the case when <code>x</code> is not contained in <code>tree</code>, then
 we have <code>delete x tree</code> return the <code>tree</code> unmodified. [Hint: we cannot
@@ -1022,11 +1084,12 @@ after deletion will be the same if and only if they are the same.]
        <span class="org-keyword">else</span> doubleL x l r
      | rotateL _ _ _ = <span class="org-keyword">raise</span> (Fail <span class="org-string">"rotateL"</span>);
 
-   <span class="org-keyword">fun</span> <span class="org-function-name">balanceR</span> x l r = <span class="org-keyword">if</span> isBalanced r l <span class="org-keyword">then</span> bin x l r
-                        <span class="org-keyword">else</span> rotateR x l r;
 
-   <span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced l r <span class="org-keyword">then</span> bin x l r
+   <span class="org-keyword">fun</span> <span class="org-function-name">balanceR</span> x l r = <span class="org-keyword">if</span> isBalanced l r <span class="org-keyword">then</span> bin x l r
                         <span class="org-keyword">else</span> rotateL x l r;
+
+   <span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced r l <span class="org-keyword">then</span> bin x l r
+                        <span class="org-keyword">else</span> rotateR x l r;
 
    <span class="org-comment-delimiter">(* </span><span class="org-comment">insert : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
@@ -1089,6 +1152,14 @@ after deletion will be the same if and only if they are the same.]
 <h2 id="h-a3213d67-b211-41d1-baea-406a81802cfe"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-a3213d67-b211-41d1-baea-406a81802cfe">
 <ul class="org-ul">
+<li>Jürg Nievergelt and Edward M. Reingold,<br>
+"Binary search trees of bounded balance".<br>
+<i>STOC '72: Proceedings of the fourth annual ACM symposium on Theory of computing</i>,
+May 1972, Pages 137&#x2013;142
+<a href="https://doi.org/10.1145/800152.804906">https://doi.org/10.1145/800152.804906</a>
+<ul class="org-ul">
+<li>Cited/blamed as the origin/inspiration for weighted-balanced trees</li>
+</ul></li>
 <li>Stephen Adams,<br>
 "Functional Pearls: Efficient sets &#x2014; a balancing act".<br>
 In <i>J. of Func. Progr.</i> <b>3</b> no.4 (1993) pp.553&#x2013;561,
@@ -1096,16 +1167,25 @@ In <i>J. of Func. Progr.</i> <b>3</b> no.4 (1993) pp.553&#x2013;561,
 <li>Yoichi Hirai and Kazuhiko Yamamoto,<br>
 "Balancing weight-balanced trees" (PDF).<br>
 <i>Journal of Functional Programming</i> <b>21</b> no.3 (2011): 287.
-<a href="https://yoichihirai.com/bst.pdf">PDF</a></li>
+<a href="https://yoichihirai.com/bst.pdf">PDF</a>
+<ul class="org-ul">
+<li><b>CAUTION:</b> the <code>balanceL</code> and <code>balanceR</code> functions described by
+Hirai and Yamamoto are <i>the opposite</i> of their definitions in
+Haskell (and we follow the definitions of Haskell).</li>
+</ul></li>
 <li>Lukas Barth and Dorothea Wagner,<br>
 "Engineering Top-Down Weight-Balanced Trees".<br>
 <a href="https://arxiv.org/abs/1910.07849">arXiv:1910.07849</a>, 14 pages.</li>
+<li>Joachim Breitner, Antal Spector-Zabusky, Yao Li, Christine Rizkallah,
+John Wiegley, Stephanie Weirich,<br>
+"Ready, Set, Verify! Applying hs-to-coq to real-world Haskell code".<br>
+<a href="https://arxiv.org/abs/1803.06960">arXiv:1803.06960</a>, 30 pages.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-12 Sun 10:34.</p>
+<p class="postamble">Last Updated 2023-02-13 Mon 13:10.</p>
 </div>
 </body>
 </html>
