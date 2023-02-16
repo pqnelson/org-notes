@@ -205,23 +205,69 @@ end;
 :CUSTOM_ID: h-3aafa167-010e-4967-9a53-33ee50444f24
 :END:
 
-We also want a "smart constructor" which will automatically track the
-size of the tree. This seems silly, but it saves a lot of concern later on.
+We parametrize the ~WBTree~ structure by a module abstracting the
+desired properties of the type for values of the tree. The only desired
+condition is that it is an ordered type, which in Standard ML is encoded
+by specifying it is a structure whose signature is ~ORD~:
 
 #+begin_src sml
-(* bin : Node.t -> t -> t -> t *)
-fun bin x l r = T (1 + size l + size r, x, l, r);
+functor WBTree(Node : ORD) =
+struct
+  (* more to come *)
+end;
 #+end_src
 
-Then a weight-balanced tree:
+A weight-balanced tree is a binary tree with some metadata.
+For our purposes, the only metadata we track in a branch of a
+weight-balanced tree is the size of the tree, which is just an ~int~.
+We abbreviate the constructors for the empty tree as ~E~ and a branch of
+the tree as ~T~. This will be used internally, we will want the rest of
+the world to only be vaguely aware ~WBTree.t~ even exists.
+
+#+begin_src sml
+functor WBTree(Node : ORD) =
+struct
+   (* Declaration for the type of a weight-balanced tree. *)
+   datatype t = E
+              | T of int * Node.t * t * t;
+
+   (* more to come *)
+end;
+#+end_src
+
+We also want a "smart constructor" which will automatically track the
+size of the tree. This may seem silly, but it will preserve the
+invariant condition ~size(tree) = 1 + size(left) + size(right)~
+automatically for us. This will be used internally, we will want to
+avoid making anything outside the functor realize the smart constructor
+~bin~ even exists.
+
+#+begin_src sml
+functor WBTree(Node : ORD) =
+struct
+   (* Declaration for the type of a weight-balanced tree. *)
+   datatype t = E
+              | T of int * Node.t * t * t;
+   
+   (* bin : Node.t -> t -> t -> t *)
+   fun bin x l r = T (1 + size l + size r, x, l, r);
+
+   (* more to come *)
+end;
+#+end_src
+
+Then we flesh out the remaining helper functions for a weight-balanced
+tree, giving us our initial functor:
 
 #+begin_src sml
 (* wbtree.fun *)
 functor WBTree(Node : ORD) =
 struct
-   datatype t = E | T of int*Node.t*t*t;
+   datatype t = E
+              | T of int * Node.t * t * t;
 
    val empty = E;
+   
    fun singleton (v : Node.t) = T (1, v, E, E);
 
    fun size E = 0
@@ -237,28 +283,37 @@ end;
 :CUSTOM_ID: h-7b18d91a-27f0-471c-b2a9-13bfb00f23f7
 :END:
 
-We will want some functions for a weight-balanced tree:
+We will want some "public" functions for a weight-balanced tree:
 
-- ~size : t -> int~ to tell us how many nodes are in the tree;
+- ~empty : t~ for publicly using the empty tree
+- ~singleton : Node.t -> t~ for public constructing a tree consisting of
+  a single node
+- ~size : t -> int~ tells us how many nodes are in the tree;
 - ~null : t -> bool~ tests if a tree is empty;
-- ~insert : Node.t -> t -> t~ to take a value and a tree, then produce a
+- ~insert : Node.t -> t -> t~ takes a value and a tree, then produce a
   tree with the value inserted into it;
-- ~member : Node.t -> t -> bool~ to check if a value belongs to a tree
+- ~member : Node.t -> t -> bool~ checks if a value belongs to a tree
   or not;
-- ~delete : Node.t -> t -> t~ to remove a value from a tree (if
-  present), or do nothing (if absent).
+- ~delete : Node.t -> t -> t~ removes a value from a tree (if
+  present), or does nothing (if absent).
 
 There are some "nice to have" functions:
 
-- ~filter : (Node.t -> bool) -> t -> t~ to filter out all the elements
-  which satisfy the predicate
-- ~toList : t -> Node.t list~ to transform a weight-balanced tree to a list
-- ~foldl : (Node.t -> 'a -> 'a) -> 'a -> t -> 'a~
-- ~foldr : (Node.t -> 'a -> 'a) -> 'a -> t -> 'a~
+- ~filter : (Node.t -> bool) -> t -> t~ constructs a new tree consisting
+  of all the elements which satisfy the predicate
+- ~toList : t -> Node.t list~ converts a weight-balanced tree into a
+  [sorted] list
+- ~fromList : Node.t list -> t~ converts a list into a weight-balanced tree
+- ~foldl : (Node.t -> 'a -> 'a) -> 'a -> t -> 'a~ left reduces the tree in
+  ascending order, i.e., it's the same as ~foldl f b t = List.foldl f b (toList t)~
+- ~foldr : (Node.t -> 'a -> 'a) -> 'a -> t -> 'a~ right reduces the tree in
+  ascending order, i.e., it's the same as ~foldr f b t = List.foldr f b (toList t)~
 - ~exists : (Node.t -> bool) -> t -> bool~ tests each element of the
-  tree, and returns ~true~ upon the first success
+  tree, and returns ~true~ upon the first success (or ~false~ upon
+  universal failure)
 - ~all : (Node.t -> bool) -> t -> bool~ tests every element of the tree
-  against the supplied predicate, returns ~false~ upon first failure
+  against the supplied predicate, returns ~false~ upon first failure (or
+  ~true~ upon universal success)
 
 The only "obvious" function which would be nice to have, but is not at
 all obvious how to implement it, would be a ~map : (Node.t -> 'a) -> t -> 'a Tree?~
@@ -658,10 +713,16 @@ simple cases: if ~l~ is empty, just return the right subtree; if ~r~ is
 empty, return the left subtree.
 
 When both ~l~ and ~r~ are non-empty, we have two cases:
-1. ~size l > size r~, then we merge ~r~ into the right subtree of ~l~
-   and invoke ~balanceR~ to produce a balanced tree;
-2. otherwise, we merge ~l~ into the left subtree of ~r~ and invoke
-   ~balanceL~ to produce a balanced tree.
+1. ~size l > size r~, then take the largest value found in the left
+   subtree ~l~, then surgically remove it from ~l~ to obtain the value
+   ~m~ and the lobotomized left subtree ~l'~ and then (since the right
+   subtree may be too big) we rebalance everything by invoking ~balanceR m l' r~
+   to produce a balanced tree;
+2. otherwise, we do the mirror image of everything we did in the
+   previous case, except we surgically remove the smallest value from
+   the right subtree to obtain the value ~m~ and the lobotomized right
+   subtree ~r'~
+   and rebalance everything by invoking ~balanceL m l r'~ to produce a balanced tree.
 
 #+begin_src sml
 (* glue : t -> t -> t *)
