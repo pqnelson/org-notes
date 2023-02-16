@@ -274,7 +274,7 @@ write some notes about them. We should recall, in general, a binary tree
 is inductively defined as
 </p>
 
-<div class="definition" id="org874de10">
+<div class="definition" id="org9ba7ed7">
 <p>
 A <dfn>Binary Tree</dfn> is either
 </p>
@@ -341,7 +341,7 @@ size to be "neither branch should be horribly bigger than the other" and
 still have logarithmic runtime for the tree operations.
 </p>
 
-<div class="definition" id="orgb241394">
+<div class="definition" id="org487fdbe">
 <p>
 Let \(\Delta\in\mathbb{R}\) be a positive real constant (called the <dfn>Weight Ratio</dfn>)
 greater than 1.
@@ -601,7 +601,7 @@ when \(|R|=0\) or \(|L|=0\), when we should allow the other subtree to be
 either empty or a singleton. Formally:
 </p>
 
-<div class="definition" id="org2eaeb84">
+<div class="definition" id="orgd2be48e">
 <p>
 Let <code>Delta</code> be a positive number.
 We say a weight-balanced tree \((n, x, L, R)\) is <dfn>Strictly Balanced</dfn> if:
@@ -636,16 +636,16 @@ perform operations).
 </p>
 
 <p>
-For example, when <code>Delta</code> is 2, and <code>L</code> = 5, then <code>10 &gt; R &gt;= 3</code>
-is the acceptable range of sizes for the right subtree.
+For example, when <code>Delta</code> is 2, and <code>size(L)</code> = 5, then a <i>strictly balanced</i>
+tree allows the range of sizes <code>10 &gt; size(R) &gt;= 3</code> for the right subtree.
 </p>
 
 <p>
-When <code>Delta</code> is 3 and <code>L</code> = 5, then <code>15 &gt; R &gt;= 2</code> is an acceptable range
-for the sizes for the right subtree.
+When <code>Delta</code> is 3 and <code>size(L)</code> = 5, then a <i>strictly balanced</i> tree
+allows <code>15 &gt; size(R) &gt;= 2</code> for the sizes for the right subtree.
 </p>
 
-<div class="remark" id="org681e27e">
+<div class="remark" id="orgc416d55">
 <p>
 There is some slight variation in the definition of a WBT being
 balanced. For example, Hirai and Yamamoto define it as
@@ -737,7 +737,7 @@ less than the root of the subtree. But what happens with
 </p>
 
 
-<div id="orgc23a878" class="figure">
+<div id="org63b1c41" class="figure">
 <p><img src="../../img/tree-2.png" alt="tree-2.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>Naive insertion of <code>[1,2,3,4,5]</code> into an empty tree.</p>
@@ -796,7 +796,7 @@ Tree rotation can graphically visualized as:
 </p>
 
 
-<div id="org772c7c4" class="figure">
+<div id="org52f37b3" class="figure">
 <p><img src="../../img/tree-1.png" alt="tree-1.png">
 </p>
 <p><span class="figure-number">Figure 2: </span>Single left and single right rotations of tree with \(x < a < y < b < z\).</p>
@@ -833,10 +833,10 @@ have <i>double</i> rotations. A <dfn>double left rotation</dfn> moves a
 </p>
 
 
-<div id="org74193b2" class="figure">
+<div id="org5967717" class="figure">
 <p><img src="../../img/tree-3.png" alt="tree-3.png">
 </p>
-<p><span class="figure-number">Figure 3: </span>Double left rotation of tree with \(x < a < y < b < z\).</p>
+<p><span class="figure-number">Figure 3: </span>Double left rotation of tree with \(x < a < y_{0} < b < y_{1} < c < z\).</p>
 </div>
 
 <p>
@@ -844,10 +844,10 @@ This is done first by performing a "local right" rotation:
 </p>
 
 
-<div id="org4ca1488" class="figure">
+<div id="org82bbd03" class="figure">
 <p><img src="../../img/tree-4.png" alt="tree-4.png">
 </p>
-<p><span class="figure-number">Figure 4: </span>"Local right" rotation of tree with \(x < a < y < b < z\).</p>
+<p><span class="figure-number">Figure 4: </span>"Local right" rotation of tree with \(x < a < y_{0} < b < y_{1} < c < z\).</p>
 </div>
 
 <p>
@@ -966,7 +966,7 @@ We combine these functions together, and our functor so far becomes:
 </pre>
 </div>
 
-<div class="exercise" id="org36e9147">
+<div class="exercise" id="org7de22a2">
 <p>
 Assume <code>l</code> and <code>r</code> are balanced trees, and <code>x</code> is a value such that it
 lies between the subtrees.
@@ -979,7 +979,7 @@ lies between the subtrees.
 
 </div>
 
-<div class="exercise" id="orgc45ee9e">
+<div class="exercise" id="org958b32f">
 <p>
 Optimize our code. We proved it works (well, in an exercise), so prove
 your optimizations "work" as well!
@@ -1052,7 +1052,7 @@ We can easily code this up as:
 </pre>
 </div>
 
-<div class="exercise" id="org516e07d">
+<div class="exercise" id="org3caf518">
 <p>
 Write a function to query for the subtree consisting of elements:
 </p>
@@ -1175,7 +1175,7 @@ Great, now we have the ability to insert and delete elements from our
 weight-balanced tree.
 </p>
 
-<div class="exercise" id="org269eef0">
+<div class="exercise" id="orgb2f6cd1">
 <p>
 Prove, if <code>tree</code> is a <i>balanced</i> weight-balanced tree containing the value <code>x</code>,
 then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
@@ -1183,7 +1183,7 @@ then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
 
 </div>
 
-<div class="exercise" id="orgd8a6a07">
+<div class="exercise" id="org7936561">
 <p>
 Change our code for the case when <code>x</code> is not contained in <code>tree</code>, then
 we have <code>delete x tree</code> return the <code>tree</code> unmodified. [Hint: we cannot
@@ -1404,7 +1404,7 @@ John Wiegley, Stephanie Weirich,<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-16 Thu 12:12.</p>
+<p class="postamble">Last Updated 2023-02-16 Thu 12:30.</p>
 </div>
 </body>
 </html>

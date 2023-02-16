@@ -302,11 +302,11 @@ rebalanced; on the other hand, the smaller the value of ~Delta~, the
 more "perfectly" balanced the tree becomes (and the quicker it is to
 perform operations).
 
-For example, when ~Delta~ is 2, and ~L~ = 5, then ~10 > R >= 3~
-is the acceptable range of sizes for the right subtree.
+For example, when ~Delta~ is 2, and ~size(L)~ = 5, then a /strictly balanced/
+tree allows the range of sizes ~10 > size(R) >= 3~ for the right subtree.
 
-When ~Delta~ is 3 and ~L~ = 5, then ~15 > R >= 2~ is an acceptable range
-for the sizes for the right subtree.
+When ~Delta~ is 3 and ~size(L)~ = 5, then a /strictly balanced/ tree
+allows ~15 > size(R) >= 2~ for the sizes for the right subtree.
 
 #+begin_remark
 There is some slight variation in the definition of a WBT being
@@ -447,12 +447,12 @@ Now it's just a matter to code up left rotations, right? Well, we also
 have /double/ rotations. A {{{dfn(double left rotation)}}} moves a
 "pivot" node "from the left" by two positions. Graphically:
 
-#+CAPTION: Double left rotation of tree with $x < a < y < b < z$.
+#+CAPTION: Double left rotation of tree with $x < a < y_{0} < b < y_{1} < c < z$.
 [[../../img/tree-3.png]]
 
 This is done first by performing a "local right" rotation:
 
-#+CAPTION: "Local right" rotation of tree with $x < a < y < b < z$.
+#+CAPTION: "Local right" rotation of tree with $x < a < y_{0} < b < y_{1} < c < z$.
 [[../../img/tree-4.png]]
 
 Then a "global left" rotation yields the result. We can similarly
