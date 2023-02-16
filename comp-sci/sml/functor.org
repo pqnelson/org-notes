@@ -1,0 +1,47 @@
+#+TITLE: Functors in SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-02-06T10:18:03-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Monday February  6, 2023 at 10:18AM
+
+* Basic Idea
+:PROPERTIES:
+:CUSTOM_ID: h-48e173de-b89d-4e1a-8753-a621a025b0e5
+:END:
+
+A functor in ML means a "parametrized module". It's an unfortunate
+choice of words, because "functor" has come to mean something completely
+different in functional programming. I will discuss that "something
+completely different" implemented in Standard ML.
+
+In Haskell, the [[https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-Functor.html][functor]] class consists of the ~fmap~ function and the
+~<$~ infix operator. I do not believe the ~<$~ infix operator is
+necessary. We can then implement this as a signature:
+
+#+begin_src sml
+signature FUNCTOR = sig
+    type 'a f;
+    val fmap : ('a -> 'b) -> 'a f -> 'b f;
+end;
+#+end_src
+
+There are two constraints to a functor:
+
+1. ~fmap id = id~ it preserves the identity function, and
+2. ~fmap (f o g) = (fmap f) o (fmap g)~ it preserves composition.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-191faef2-3b83-46a7-8433-0d9e2ce7692e
+:END:
+
+- [[https://jobjo.github.io/2018/01/28/implicit-functors.html][Implicit Functors]] in OCaml
+- Joel Björnson, [[https://blog.shaynefletcher.org/2017/05/more-type-classes-in-ocaml.html][More type classes]] which implements functors, monoids,
+  and applicatives in OCaml

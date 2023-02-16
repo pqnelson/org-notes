@@ -30,8 +30,22 @@ type STRep s a = State# s -> (# State# s, a #)
 There are a couple of functions worth mentioning:
 
 1. ~runST :: (forall s. ST s a) -> a~ returns the value of the
-   computation
-2. ~fixST :: (a -> ST s a) -> ST s a~
+   computation; the ~forall~ ensures that the internal state used by the
+   ~ST~ computation is inaccessible to the rest of the program.
+2. ~fixST :: (a -> ST s a) -> ST s a~ which allows the result of an ~ST~
+   computation to be used (lazily) inside the computation.
+   
+
+Apparently this ~ST~ monad can be traced back to the paper:
+
+- John Launchbury and Simon Peyton Jones,\\
+  "Lazy Functional State Threads".\\
+  /CM SIGPLAN Notices/ *29*, no.6 (1994) 24--35.
+  PLDI '94, [[https://www.microsoft.com/en-us/research/wp-content/uploads/1994/06/lazy-functional-state-threads.pdf][Eprint]].
+
+Also, be warned, ~ST~ does not stand for "state thread", at least
+according to that paper. We /should/ think of an ~ST~ monad as
+abstracting away a stateful computation.
 
 * Implementation
 :PROPERTIES:
@@ -61,11 +75,149 @@ end;
 
 If we fix ~'s = unit~, then we recover the IO monad.
 
+
+* Example with Standard ML Regions
+:PROPERTIES:
+:CUSTOM_ID: h-4a64d26f-a2aa-45f5-827c-564893f38717
+:END:
+
+From a [[https://stackoverflow.com/a/26435065/1296973][Stackoverflow answer]]:
+
+#+begin_quote
+After some headbanging, I think this /is/ possible --- or at least close
+enough to it to work --- although it isn't very pretty to look at. (I may
+be on completely the wrong track here, someone knowledgeable please
+comment.)
+
+
+It's possible (I think) to use SML's generative datatypes and functors
+to create abstract phantom types that cannot be referred to outside a
+given lexical block:
+#+begin_src sml
+datatype ('s, 'a) Res = ResC of 's
+
+signature BLOCK = sig
+  type t
+  val f:('s, t) Res -> t
+end
+
+signature REGION = sig
+  type t
+  val run:unit -> t
+end
+
+functor Region(B:BLOCK) :> REGION where type t = B.t = struct
+  type t = B.t
+  datatype phan = Phan
+  fun run () = let
+    val ret = (print "opening region\n"; B.f(ResC Phan))
+  in print "closing region\n" ; ret end
+end
+
+structure T = Region(struct
+  type t = int
+  fun f resource = ( (* this function forms the body of the "region" *)
+    6
+  )
+end)
+
+;print (Int.toString(T.run()))
+#+end_src
+
+This prevents the program from simply returning ~resource~ or declaring
+external mutable variables it could be assigned to, which deals with
+most of the issue. But it can still be closed over by functions created
+within the "region" block, and retained that way past its supposed close
+point; such functions /could/ be exported and the dangling resource
+reference used again, causing problems.
+
+We can imitate ~ST~ though, and prevent closures from being able to do
+anything useful with ~resource~ by forcing the region to use a monad keyed
+with the phantom type:
+
+#+begin_src sml
+signature RMONAD = sig
+  type ('s, 'a, 'r) m
+  val ret: ('s * 'r) -> 'a -> ('s, 'a, 'r) m
+  val bnd: ('s, 'a, 'r) m * ('a * 'r -> ('s, 'b, 'r) m) -> ('s, 'b, 'r) m
+  val get: 's -> ('s, 'a, 'r) m -> 'a * 'r
+end
+
+structure RMonad :> RMONAD = struct
+  type ('s, 'a, 'r) m = 's -> 's * 'a * 'r
+  fun ret (k, r) x = fn _ => (k, x, r)
+  fun bnd (m, f) = fn k => let
+    val (_, v, r) = m k
+  in f (v, r) k end
+  fun get k m = let val (_, v, r) = m k in (v, r) end
+end
+
+signature MBLOCK = sig
+  type t
+  val f:(t -> ('s, t, 'r) RMonad.m)  (* return *)
+         * ('r -> ('s, string, 'r) RMonad.m) (* operations on r *)
+        -> ('s, t, 'r) RMonad.m
+end
+
+signature MREGION = sig
+  type t
+  val run:unit -> t
+end
+
+functor MRegion(B:MBLOCK) :> MREGION where type t = B.t = struct
+  type t = B.t
+  datatype phan = Phan
+  fun run () = let
+    val (ret, res) = RMonad.get Phan (B.f(RMonad.ret(Phan, "RESOURCE"),
+                                     (fn r => RMonad.ret(Phan, "RESOURCE") r)))
+  in
+    print("closing " ^ res ^ "\n") ; ret
+  end
+end
+
+structure T = MRegion(struct
+  type t = int
+  fun f (return, toString) = let
+    val >>= = RMonad.bnd
+    infix >>=
+  in
+    return 6 >>= (fn(x, r) =>
+      toString r >>= (fn(s, r) => (
+        print ("received " ^ s ^ "\n");
+        return (x + 1)
+    )))
+  end
+end)
+
+;T.run()
+#+end_src
+
+(this is a mess, but it shows my basic idea)
+
+The resource takes the role of ~STRef~; if all of the provided operations
+on it return a monadic value instead of working directly, it will build
+up a chain of delayed operations that can only be executed by being
+returned to ~run~. This counters the ability of closures to retain a copy
+of ~r~ outside the block because they will never actually be able to
+execute the op chain, being unable to return to ~run~, and are therefore
+unable to access it in any way.
+
+Invoking ~T.run~ twice will re-use the same "key" type, meaning this isn't
+equivalent to a nested ~forall~, but that shouldn't make a difference if
+there's no way to share ~r~ between two separate invocations; which there
+isn't --- if it can't be returned, can't be assigned outside, and any
+closures can't run the code that works on it. At least, I think so.
+#+end_quote
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-ba354002-0dc7-4384-9654-f2076a75d496
 :END:
 
+- John Launchbury and Simon Peyton Jones,\\
+  "Lazy Functional State Threads".\\
+  /CM SIGPLAN Notices/ *29*, no.6 (1994) 24--35.
+  PLDI '94, [[https://www.microsoft.com/en-us/research/wp-content/uploads/1994/06/lazy-functional-state-threads.pdf][Eprint]].
 - John Launchbury, Simon Peyton Jones,\\
   "State in Haskell".\\
   /Lisp and Symbolic Computation/ (1995) pp. 293--342.

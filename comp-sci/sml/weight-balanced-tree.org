@@ -66,6 +66,8 @@ function, then "fill in the gaps"; we thus define a ~COMPARABLE~
 signature, and then an ~Ord~ functor to construct a module with the
 ~ORD~ signature.
 
+The bare minimum we need is just a ~compare~ function for a type:
+
 #+begin_src sml
 (* ord.sig *)
 
@@ -75,6 +77,16 @@ sig
     type t;
     val compare : t*t -> order;
 end;
+#+end_src
+
+But we will expect an ordered element to have a fuller suite of
+functions, namely every possible comparison relational operator
+imaginable, as well as a way to determine which value is ~max~ and ~min~:
+
+#+begin_src sml
+(* ord.sig *)
+
+signature COMPARABLE = (* ... *);
 
 signature ORD =
 sig
@@ -88,6 +100,17 @@ sig
     val max : t*t -> t;
     val min : t*t -> t;
 end;
+#+end_src
+
+We lastly will have a functor to "hydrate" the ~ORD~ signature, given a
+module implementing ~COMPARABLE~ functions:
+
+#+begin_src sml
+(* ord.sig *)
+
+signature COMPARABLE = (* ... *);
+
+signature ORD = (* ... *);
 
 functor Ord(Ordered : COMPARABLE) : ORD with type t = Ordered.t =
 struct
@@ -102,6 +125,7 @@ struct
     fun min (x,y) = if lt(x,y) then x else y;
 end;
 #+end_src
+
 
 ** Initial Functor
 :PROPERTIES:
@@ -175,6 +199,15 @@ subtrees, etc. I am not sure /I/ will need them, but they are useful.
 :CUSTOM_ID: h-2cd10aca-84b8-4cc0-b667-001e969d5738
 :END:
 
+Our intuition is that we have a binary tree consist of a left subtree
+$L$ and a right subtree $R$, we think they are balanced if the size of
+the right subtree $|R|$ is bounded by a multiple of the size of the left
+subtree. i.e., $\Delta|L|\geq|R|$ and a similar condition for the left
+subtree $\Delta|R|\geq|L|$ for some fixed real constant 
+$\Delta\geq1$ (usually $\Delta\in\{2,3,4\}$). There is some subtlety
+when $|R|=0$ or $|L|=0$, when we should allow the other subtree to be
+either empty or a singleton. Formally:
+
 #+begin_definition
 Let ~Delta~ be a positive number.
 We say a weight-balanced tree $(n, x, L, R)$ is {{{dfn(Balanced)}}} if:
@@ -204,13 +237,24 @@ condition; instead of ~Delta*size(L) > size(R) >= ceiling(size(L)/Delta)~,
 we would allow ~Delta*size(L) + (Delta - 1) >= size(R) >= ceiling(size(L)/Delta) - 1~.
 #+end_remark
 
+We will conceptually think of subtree $T_{1}$ as
+{{{define(Balanced With Respect to)}}} subtree $T_{2}$
+if $\Delta(|T_{2}|+1)\geq|T_{1}|+1$. This is implemented as
+~isBalanced T2 T1~ --- the intuition is the curried form
+~isBalanced T2~ is a predicate testing if the next tree supplies is
+balanced with respect to $T_{2}$.
+
+Then the assertion that the tree /as a whole/ is balanced is then
+~balanced T~ and implemented in terms of checking if the left and right
+subtrees are balanced with respect to each other (and if they are,
+themselves, balanced trees). 
 We could implement this predicate in Standard ML as:
 
 #+begin_src sml
 (* wbtree.fun *)
 functor WBTree(Node : ORD) =
 struct
-   datatype t = E | T of int*Node.t*t*t;
+   datatype t = E | T of int * Node.t * t * t;
 
    val empty = E;
    fun singleton (v : Node.t) = T (1, v, E, E);
@@ -337,7 +381,7 @@ construct a {{{dfn(double right rotation)}}} as moving a "pivot" node
 
 #+begin_src sml
 (* rotateL : Node.t -> t -> t -> t *)
-fun rotateL x l (r as (T (_,_,rl,rr))) =
+fun rotateL x l (r as (T (_, _, rl, rr))) =
     if isSingle rl rr then singleL x l r
     else doubleL x l r
   | rotateL _ _ _ = raise "rotateL";
@@ -370,7 +414,7 @@ We combine these functions together, and our functor so far becomes:
 (* wbtree.fun *)
 functor WBTree(Node : ORD) =
 struct
-   datatype t = E | T of int*Node.t*t*t;
+   datatype t = E | T of int * Node.t * t * t;
 
    val empty = E;
    fun singleton (v : Node.t) = T (1, v, E, E);
@@ -411,12 +455,12 @@ struct
        = bin y (bin x ll lrl) (bin z lrr r)
      | doubleR _ _ _ = raise (Fail "doubleR");
 
-   fun rotateR x (l as (T (_,_,ll,lr))) r =
+   fun rotateR x (l as (T (_, _, ll, lr))) r =
        if isSingle ll lr then singleR x l r
        else doubleR x l r
      | rotateR _ _ _ = raise (Fail "rotateR");
 
-   fun rotateL x l (r as (T (_,_,rl,rr))) =
+   fun rotateL x l (r as (T (_, _, rl, rr))) =
        if isSingle rl rr then singleL x l r
        else doubleL x l r
      | rotateL _ _ _ = raise (Fail "rotateL");
@@ -543,7 +587,7 @@ When both ~l~ and ~r~ are non-empty, we have two cases:
 (* glue : t -> t -> t *)
 fun glue E r = r
   | glue l E = l
-  | glue (l as T(sl,xl,ll,lr)) (r as T(sr,xr,rl,rr))
+  | glue (l as T(sl, xl, ll, lr)) (r as T(sr, xr, rl, rr))
     = if sl > sr then (let val (m, l') = maxViewSure xl ll lr
                        in balanceR m l' r
                        end)
@@ -612,7 +656,7 @@ after deletion will be the same if and only if they are the same.]
 #+begin_src sml
 functor WBTree(Node : ORD) =
 struct
-   datatype t = E | T of int*Node.t*t*t;
+   datatype t = E | T of int * Node.t * t * t;
 
    val empty = E;
    fun singleton (v : Node.t) = T (1, v, E, E);
@@ -660,12 +704,12 @@ struct
        = bin y (bin x ll lrl) (bin z lrr r)
      | doubleR _ _ _ = raise (Fail "doubleR");
 
-   fun rotateR x (l as (T (_,_,ll,lr))) r =
+   fun rotateR x (l as (T (_, _, ll, lr))) r =
        if isSingle ll lr then singleR x l r
        else doubleR x l r
      | rotateR _ _ _ = raise (Fail "rotateR");
 
-   fun rotateL x l (r as (T (_,_,rl,rr))) =
+   fun rotateL x l (r as (T (_, _, rl, rr))) =
        if isSingle rl rr then singleL x l r
        else doubleL x l r
      | rotateL _ _ _ = raise (Fail "rotateL");
@@ -711,7 +755,7 @@ struct
       other. *)
    fun glue E r = r
      | glue l E = l
-     | glue (l as T(sl,xl,ll,lr)) (r as T(sr,xr,rl,rr))
+     | glue (l as T(sl, xl, ll, lr)) (r as T(sr, xr, rl, rr))
        = if sl > sr then (let val (m, l') = maxViewSure xl ll lr
                           in balanceR m l' r
                           end)
@@ -728,6 +772,53 @@ struct
           | GREATER => balanceL y l (delete x r));
 
    (* more to come *)
+end;
+#+end_src
+
+* Appendix: Source Code by Files
+:PROPERTIES:
+:CUSTOM_ID: h-dba585e6-ce2d-4652-89df-759006bd8082
+:END:
+
+** ord.sig
+:PROPERTIES:
+:CUSTOM_ID: h-e0dc94f8-0daf-49c4-bfb2-3512397bc428
+:END:
+
+#+begin_src sml
+(* ord.sig *)
+
+(* minimal signature which is fleshed out in a functor *)
+signature COMPARABLE =
+sig
+    type t;
+    val compare : t*t -> order;
+end;
+
+signature ORD =
+sig
+    type t;
+    val compare : t*t -> order;
+    val gt : t*t -> bool;
+    val eq : t*t -> bool;
+    val lt : t*t -> bool;
+    val geq : t*t -> bool;
+    val leq : t*t -> bool;
+    val max : t*t -> t;
+    val min : t*t -> t;
+end;
+
+functor Ord(Ordered : COMPARABLE) : ORD with type t = Ordered.t =
+struct
+    type t = Ordered.t;
+    val compare = Ordered.compare;
+    fun gt (x,y) = compare (x,y) = GREATER;
+    fun eq (x,y) = compare (x,y) = EQUAL;
+    fun lt (x,y) = compare (x,y) = LESS;
+    fun geq (x,y) = not (lt (x,y));
+    fun leq (x,y) = not (gt (x,y));
+    fun max (x,y) = if lt(x,y) then y else x;
+    fun min (x,y) = if lt(x,y) then x else y;
 end;
 #+end_src
 

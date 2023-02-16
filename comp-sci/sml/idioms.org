@@ -57,6 +57,98 @@ end;
 mySet = TreeSet.empty;
 #+end_src
 
+* Datatypes in Signatures
+:PROPERTIES:
+:CUSTOM_ID: h-b1168d9b-0e58-41f4-9bcc-53e5d2775d08
+:END:
+
+One caveat worth discussing: we can end up with duplicate-but-distinct types 
+if we place datatype declarations in signatures. For example, consider
+the signature:
+
+#+begin_src sml
+signature EXP = sig
+    datatype t = Var of id
+               | Abs of id * t
+               | App of t * t
+end;
+#+end_src
+
+Suppose we have two different structures which implement this signature,
+e.g., one for a parse tree and another for an abstract syntax tree:
+
+#+begin_src sml
+structure ParseTree : EXP = struct
+    datatype t = Var of id
+               | Abs of id * t
+               | App of t * t;
+end;
+
+structure AST : EXP = struct
+    datatype t = Var of id
+               | Abs of id * t
+               | App of t * t;
+end;
+#+end_src
+
+The surprise: ~AST.t~ and ~ParseTree.t~ are two distinct types.
+This is because Standard ML has generative datatype declarations,
+meaning: each time a ~datatype~ declaration is encountered, a new type
+will be created. We could avoid this by doing something like:
+
+#+begin_src sml
+struct Exp = struct
+    datatype t = Var of id
+               | Abs of id * t
+               | App of t * t;
+end;
+       
+signature EXP = sig
+    datatype t = datatype Exp.t;
+end;
+#+end_src
+
+This is specified by rule 18 of the 1997 definition of SML to not
+generate duplicate datatypes. We could also do the following:
+
+#+begin_src sml
+datatype Exp = Var of id
+             | Abs of id * Exp
+             | App of Exp * Exp;
+
+signature EXP = sig
+    datatype t = datatype Exp;
+end;
+#+end_src
+
+But it is unclear if we could do the following:
+
+#+begin_src sml
+local
+    datatype Exp = Var of id
+                 | Abs of id * Exp
+                 | App of Exp * Exp;
+in
+    signature EXP = sig
+        datatype t = datatype Exp;
+    end;
+end;
+#+end_src
+
+This also has the problem/feature that the constructors ~Var~, ~Abs~,
+~App~ are private.
+
+(This is also probably why signatures should have just ~type t~ instead
+of a datatype declaration.)
+
+See:
+- [[http://mlton.org/GenerativeDatatype][Generative Datatypes]] in MLton's wiki
+- [[http://mlton.org/TipsForWritingConciseSML][Tips for writing concise SML]] in MLton's wiki
+- Appendix G \sect\sect2--3 of the [[https://smlfamily.github.io/sml97-defn.pdf][Revised Definition of Standard ML]].
+- \sect4.3.3 of "The History of Standard ML"
+- Karl Crary, Robert Harper, Perry Cheng, Leaf Petersen, Chris Stone,
+  [[https://www.seas.upenn.edu/~sweirich/types/archive/1999-2003/msg00053.html][Transparent and opaque interpretations of datatypes]] (1998).
+  
 * Stringify Types
 :PROPERTIES:
 :CUSTOM_ID: h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d

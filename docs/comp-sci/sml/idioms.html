@@ -219,13 +219,14 @@
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-151fd75d-61bd-4eb2-b962-3724940c7e31">1. Using <code>type t</code> in Signatures</a></li>
-<li><a href="#h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d">2. Stringify Types</a>
+<li><a href="#h-b1168d9b-0e58-41f4-9bcc-53e5d2775d08">2. Datatypes in Signatures</a></li>
+<li><a href="#h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d">3. Stringify Types</a>
 <ul>
-<li><a href="#h-889254de-0316-4e44-9331-d92d371b8419">2.1. Type Conversions</a></li>
+<li><a href="#h-889254de-0316-4e44-9331-d92d371b8419">3.1. Type Conversions</a></li>
 </ul>
 </li>
-<li><a href="#h-770611ec-d37f-42e9-9e97-802a79d389be">3. Comparable Types</a></li>
-<li><a href="#h-20417263-b75c-464c-b4ef-e48078110bd6">4. Principle: Similar Functions should have Similar Names</a></li>
+<li><a href="#h-770611ec-d37f-42e9-9e97-802a79d389be">4. Comparable Types</a></li>
+<li><a href="#h-20417263-b75c-464c-b4ef-e48078110bd6">5. Principle: Similar Functions should have Similar Names</a></li>
 </ul>
 </div>
 </div>
@@ -282,8 +283,123 @@ mySet = TreeSet.empty;
 </div>
 </div>
 
+<div id="outline-container-h-b1168d9b-0e58-41f4-9bcc-53e5d2775d08" class="outline-2">
+<h2 id="h-b1168d9b-0e58-41f4-9bcc-53e5d2775d08"><span class="section-number-2">2.</span> Datatypes in Signatures</h2>
+<div class="outline-text-2" id="text-h-b1168d9b-0e58-41f4-9bcc-53e5d2775d08">
+<p>
+One caveat worth discussing: we can end up with duplicate-but-distinct types 
+if we place datatype declarations in signatures. For example, consider
+the signature:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">EXP</span> = <span class="org-keyword">sig</span>
+    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = Var <span class="org-keyword">of</span> id
+               | Abs <span class="org-keyword">of</span> id * t
+               | App <span class="org-keyword">of</span> t * t
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Suppose we have two different structures which implement this signature,
+e.g., one for a parse tree and another for an abstract syntax tree:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">ParseTree</span> : EXP = <span class="org-keyword">struct</span>
+    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = Var <span class="org-keyword">of</span> id
+               | Abs <span class="org-keyword">of</span> id * t
+               | App <span class="org-keyword">of</span> t * t;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">structure</span> <span class="org-module-def">AST</span> : EXP = <span class="org-keyword">struct</span>
+    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = Var <span class="org-keyword">of</span> id
+               | Abs <span class="org-keyword">of</span> id * t
+               | App <span class="org-keyword">of</span> t * t;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+The surprise: <code>AST.t</code> and <code>ParseTree.t</code> are two distinct types.
+This is because Standard ML has generative datatype declarations,
+meaning: each time a <code>datatype</code> declaration is encountered, a new type
+will be created. We could avoid this by doing something like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">struct</span> Exp = <span class="org-keyword">struct</span>
+    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = Var <span class="org-keyword">of</span> id
+               | Abs <span class="org-keyword">of</span> id * t
+               | App <span class="org-keyword">of</span> t * t;
+<span class="org-keyword">end</span>;
+       
+<span class="org-keyword">signature</span> <span class="org-interface-def">EXP</span> = <span class="org-keyword">sig</span>
+    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = <span class="org-keyword">datatype</span> <span class="org-type-def">Exp.t</span>;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+This is specified by rule 18 of the 1997 definition of SML to not
+generate duplicate datatypes. We could also do the following:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Exp</span> = Var <span class="org-keyword">of</span> id
+             | Abs <span class="org-keyword">of</span> id * Exp
+             | App <span class="org-keyword">of</span> Exp * Exp;
+
+<span class="org-keyword">signature</span> <span class="org-interface-def">EXP</span> = <span class="org-keyword">sig</span>
+    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = <span class="org-keyword">datatype</span> <span class="org-type-def">Exp</span>;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+But it is unclear if we could do the following:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">local</span>
+    <span class="org-keyword">datatype</span> <span class="org-type-def">Exp</span> = Var <span class="org-keyword">of</span> id
+                 | Abs <span class="org-keyword">of</span> id * Exp
+                 | App <span class="org-keyword">of</span> Exp * Exp;
+<span class="org-keyword">in</span>
+    <span class="org-keyword">signature</span> <span class="org-interface-def">EXP</span> = <span class="org-keyword">sig</span>
+        <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = <span class="org-keyword">datatype</span> <span class="org-type-def">Exp</span>;
+    <span class="org-keyword">end</span>;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+This also has the problem/feature that the constructors <code>Var</code>, <code>Abs</code>,
+<code>App</code> are private.
+</p>
+
+<p>
+(This is also probably why signatures should have just <code>type t</code> instead
+of a datatype declaration.)
+</p>
+
+<p>
+See:
+</p>
+<ul class="org-ul">
+<li><a href="http://mlton.org/GenerativeDatatype">Generative Datatypes</a> in MLton's wiki</li>
+<li><a href="http://mlton.org/TipsForWritingConciseSML">Tips for writing concise SML</a> in MLton's wiki</li>
+<li>Appendix G &sect;&sect;2&#x2013;3 of the <a href="https://smlfamily.github.io/sml97-defn.pdf">Revised Definition of Standard ML</a>.</li>
+<li>&sect;4.3.3 of "The History of Standard ML"</li>
+<li>Karl Crary, Robert Harper, Perry Cheng, Leaf Petersen, Chris Stone,
+<a href="https://www.seas.upenn.edu/~sweirich/types/archive/1999-2003/msg00053.html">Transparent and opaque interpretations of datatypes</a> (1998).</li>
+</ul>
+</div>
+</div>
+
 <div id="outline-container-h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d" class="outline-2">
-<h2 id="h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d"><span class="section-number-2">2.</span> Stringify Types</h2>
+<h2 id="h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d"><span class="section-number-2">3.</span> Stringify Types</h2>
 <div class="outline-text-2" id="text-h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d">
 <p>
 In Haskell, we tend to have a single typeclass <code>Show</code> which has a "to string"
@@ -302,7 +418,7 @@ we end up encoding them as signatures. Strictly speaking, we would have
 </div>
 
 <div id="outline-container-h-889254de-0316-4e44-9331-d92d371b8419" class="outline-3">
-<h3 id="h-889254de-0316-4e44-9331-d92d371b8419"><span class="section-number-3">2.1.</span> Type Conversions</h3>
+<h3 id="h-889254de-0316-4e44-9331-d92d371b8419"><span class="section-number-3">3.1.</span> Type Conversions</h3>
 <div class="outline-text-3" id="text-h-889254de-0316-4e44-9331-d92d371b8419">
 <p>
 More broadly, if we have defined two types <code>A</code> and <code>B</code>, and it is
@@ -334,7 +450,7 @@ encourages this sort of naming convention for conversion functions.</li>
 </div>
 
 <div id="outline-container-h-770611ec-d37f-42e9-9e97-802a79d389be" class="outline-2">
-<h2 id="h-770611ec-d37f-42e9-9e97-802a79d389be"><span class="section-number-2">3.</span> Comparable Types</h2>
+<h2 id="h-770611ec-d37f-42e9-9e97-802a79d389be"><span class="section-number-2">4.</span> Comparable Types</h2>
 <div class="outline-text-2" id="text-h-770611ec-d37f-42e9-9e97-802a79d389be">
 <p>
 When defining a new type <code>T</code>, we would need to implement a function <code>compare : T*T -&gt; order</code>.
@@ -349,7 +465,7 @@ encourages this sort of practice with linear orders.</li>
 </div>
 
 <div id="outline-container-h-20417263-b75c-464c-b4ef-e48078110bd6" class="outline-2">
-<h2 id="h-20417263-b75c-464c-b4ef-e48078110bd6"><span class="section-number-2">4.</span> Principle: Similar Functions should have Similar Names</h2>
+<h2 id="h-20417263-b75c-464c-b4ef-e48078110bd6"><span class="section-number-2">5.</span> Principle: Similar Functions should have Similar Names</h2>
 <div class="outline-text-2" id="text-h-20417263-b75c-464c-b4ef-e48078110bd6">
 <p>
 If we are building our own collection data structure (say, a set or
@@ -376,7 +492,7 @@ encourages this sort of practice.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-09-12 Mon 08:54.</p>
+<p class="postamble">Last Updated 2023-02-14 Tue 09:21.</p>
 </div>
 </body>
 </html>

@@ -219,7 +219,11 @@
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-21196b9d-c2a1-4a15-b646-1952d4cd028d">1. Introduction</a></li>
-<li><a href="#h-3a45c708-3600-4240-bb9f-98fb0c39c3d4">2. Heuristic Derivation</a></li>
+<li><a href="#h-3a45c708-3600-4240-bb9f-98fb0c39c3d4">2. Heuristic Derivation</a>
+<ul>
+<li><a href="#h-4f2f2ebc-0571-43b9-9429-f16a012eef2b">2.1. Stack Computation</a></li>
+</ul>
+</li>
 <li><a href="#h-9da84a55-fed7-479b-b77d-cc8946784019">3. Implementation Details</a>
 <ul>
 <li><a href="#h-b150c671-a8b9-46f4-b2b1-936468b47cf3">3.1. Higher-Order Types</a></li>
@@ -320,6 +324,67 @@ What we do is:
 Probably a more honest answer is to have <code>State of {runState : 's -&gt; 'a*'s}</code>.
 </p>
 </div>
+
+<div id="outline-container-h-4f2f2ebc-0571-43b9-9429-f16a012eef2b" class="outline-3">
+<h3 id="h-4f2f2ebc-0571-43b9-9429-f16a012eef2b"><span class="section-number-3">2.1.</span> Stack Computation</h3>
+<div class="outline-text-3" id="text-h-4f2f2ebc-0571-43b9-9429-f16a012eef2b">
+<p>
+One fascinating derivation is to consider a simple "stack computer",
+modeled by a list of integers. We also have a register (a "top of stack"
+value). The "state" <code>'s</code> in this case is <code>int list</code>, the <code>'a</code> in this
+case is the "top of stack" register <code>int</code>.
+</p>
+
+<p>
+Here <code>return (x : int) = State (fn s =&gt; (x, s))</code> updates the "top of stack"
+register.
+</p>
+
+<p>
+The bind function composes state-transition functions:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">f : top-of-stack -&gt; State</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">bind</span> (State st) f = State (<span class="org-keyword">fn</span> s =&gt; <span class="org-keyword">let</span> <span class="org-keyword">val</span> (x, s') = st s
+                                           <span class="org-keyword">val</span> (State st') = f x
+                                       <span class="org-keyword">in</span> st' s'
+                                       <span class="org-keyword">end</span>);
+</pre>
+</div>
+
+<p>
+We would then have the basic operations like push, pop, top, etc., be
+implemented using monadic constructor:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> ('a * 's) State = State <span class="org-keyword">of</span> ('s -&gt; 'a * 's);
+
+<span class="org-comment-delimiter">(* </span><span class="org-comment">push : int -&gt; State (int list) int</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">fun</span> <span class="org-function-name">push</span> n = State (<span class="org-keyword">fn</span> s =&gt; (n, n::s));
+
+<span class="org-comment-delimiter">(* </span><span class="org-comment">pop : State (int list) int</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">val</span> <span class="org-variable-name">pop</span> = State (<span class="org-keyword">fn</span> (x::xs) =&gt; (x, xs));
+
+<span class="org-comment-delimiter">(* </span><span class="org-comment">top : State (int list) int</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">val</span> <span class="org-variable-name">top</span> = State (<span class="org-keyword">fn</span> (x::xs) =&gt; (x, x::xs));
+</pre>
+</div>
+
+<p>
+I really like this example, since it emphasizes with clarity the
+essential aspect of the state monad as abstracting the notion of a
+stateful computation. I found this example from:
+</p>
+
+<ul class="org-ul">
+<li>Wayne Snyder,<br>
+<a href="https://www.cs.bu.edu/fac/snyder/cs320/Lectures/Lecture12--%20State%20Monad.pdf">Lecture 12: State Monads</a>.<br>
+Boston University, course CS 320.</li>
+</ul>
+</div>
+</div>
 </div>
 
 <div id="outline-container-h-9da84a55-fed7-479b-b77d-cc8946784019" class="outline-2">
@@ -398,6 +463,7 @@ Cambridge L28 taught in 2014&#x2013;2015 has, in its
 </div>
 </div>
 
+
 <div id="outline-container-h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d" class="outline-2">
 <h2 id="h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d">
@@ -439,7 +505,7 @@ monadic programming".<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-07-08 Fri 13:52.</p>
+<p class="postamble">Last Updated 2023-02-14 Tue 10:48.</p>
 </div>
 </body>
 </html>

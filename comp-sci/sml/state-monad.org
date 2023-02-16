@@ -76,6 +76,53 @@ end;
 
 Probably a more honest answer is to have ~State of {runState : 's -> 'a*'s}~.
 
+** Stack Computation
+:PROPERTIES:
+:CUSTOM_ID: h-4f2f2ebc-0571-43b9-9429-f16a012eef2b
+:END:
+
+One fascinating derivation is to consider a simple "stack computer",
+modeled by a list of integers. We also have a register (a "top of stack"
+value). The "state" ~'s~ in this case is ~int list~, the ~'a~ in this
+case is the "top of stack" register ~int~.
+
+Here ~return (x : int) = State (fn s => (x, s))~ updates the "top of stack"
+register.
+
+The bind function composes state-transition functions:
+
+#+begin_src sml
+(* f : top-of-stack -> State *)
+fun bind (State st) f = State (fn s => let val (x, s') = st s
+                                           val (State st') = f x
+                                       in st' s'
+                                       end);
+#+end_src
+
+We would then have the basic operations like push, pop, top, etc., be
+implemented using monadic constructor:
+
+#+begin_src sml
+datatype ('a * 's) State = State of ('s -> 'a * 's);
+
+(* push : int -> State (int list) int *)
+fun push n = State (fn s => (n, n::s));
+
+(* pop : State (int list) int *)
+val pop = State (fn (x::xs) => (x, xs));
+
+(* top : State (int list) int *)
+val top = State (fn (x::xs) => (x, x::xs));
+#+end_src
+
+I really like this example, since it emphasizes with clarity the
+essential aspect of the state monad as abstracting the notion of a
+stateful computation. I found this example from:
+
+- Wayne Snyder,\\
+  [[https://www.cs.bu.edu/fac/snyder/cs320/Lectures/Lecture12--%20State%20Monad.pdf][Lecture 12: State Monads]].\\
+  Boston University, course CS 320.
+
 * Implementation Details
 :PROPERTIES:
 :CUSTOM_ID: h-9da84a55-fed7-479b-b77d-cc8946784019
@@ -135,6 +182,7 @@ sig
   val runState : 'a t -> init:state -> state * 'a
 end
 #+end_src
+
 
 * References
 :PROPERTIES:

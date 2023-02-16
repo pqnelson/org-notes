@@ -220,7 +220,8 @@
 <ul>
 <li><a href="#h-c16ea4f8-e7de-4f67-ace7-ca6922719bb7">1. Introduction</a></li>
 <li><a href="#h-cfde934a-2d81-4a8a-9ca9-f32cac8f8247">2. Implementation</a></li>
-<li><a href="#h-ba354002-0dc7-4384-9654-f2076a75d496">3. References</a></li>
+<li><a href="#h-4a64d26f-a2aa-45f5-827c-564893f38717">3. Example with Standard ML Regions</a></li>
+<li><a href="#h-ba354002-0dc7-4384-9654-f2076a75d496">4. References</a></li>
 </ul>
 </div>
 </div>
@@ -250,9 +251,29 @@ There are a couple of functions worth mentioning:
 
 <ol class="org-ol">
 <li><code>runST :: (forall s. ST s a) -&gt; a</code> returns the value of the
-computation</li>
-<li><code>fixST :: (a -&gt; ST s a) -&gt; ST s a</code></li>
+computation; the <code>forall</code> ensures that the internal state used by the
+<code>ST</code> computation is inaccessible to the rest of the program.</li>
+<li><code>fixST :: (a -&gt; ST s a) -&gt; ST s a</code> which allows the result of an <code>ST</code>
+computation to be used (lazily) inside the computation.</li>
 </ol>
+
+
+<p>
+Apparently this <code>ST</code> monad can be traced back to the paper:
+</p>
+
+<ul class="org-ul">
+<li>John Launchbury and Simon Peyton Jones,<br>
+"Lazy Functional State Threads".<br>
+<i>CM SIGPLAN Notices</i> <b>29</b>, no.6 (1994) 24&#x2013;35.
+PLDI '94, <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/1994/06/lazy-functional-state-threads.pdf">Eprint</a>.</li>
+</ul>
+
+<p>
+Also, be warned, <code>ST</code> does not stand for "state thread", at least
+according to that paper. We <i>should</i> think of an <code>ST</code> monad as
+abstracting away a stateful computation.
+</p>
 </div>
 </div>
 
@@ -292,10 +313,166 @@ If we fix <code>'s = unit</code>, then we recover the IO monad.
 </div>
 </div>
 
+
+<div id="outline-container-h-4a64d26f-a2aa-45f5-827c-564893f38717" class="outline-2">
+<h2 id="h-4a64d26f-a2aa-45f5-827c-564893f38717"><span class="section-number-2">3.</span> Example with Standard ML Regions</h2>
+<div class="outline-text-2" id="text-h-4a64d26f-a2aa-45f5-827c-564893f38717">
+<p>
+From a <a href="https://stackoverflow.com/a/26435065/1296973">Stackoverflow answer</a>:
+</p>
+
+<blockquote>
+<p>
+After some headbanging, I think this <i>is</i> possible &#x2014; or at least close
+enough to it to work &#x2014; although it isn't very pretty to look at. (I may
+be on completely the wrong track here, someone knowledgeable please
+comment.)
+</p>
+
+
+<p>
+It's possible (I think) to use SML's generative datatypes and functors
+to create abstract phantom types that cannot be referred to outside a
+given lexical block:
+</p>
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> ('s, 'a) <span class="org-type-def">Res</span> = ResC <span class="org-keyword">of</span> 's
+
+<span class="org-keyword">signature</span> <span class="org-interface-def">BLOCK</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">t</span>
+  <span class="org-keyword">val</span> <span class="org-variable-name">f</span>:('s, t) Res -&gt; t
+<span class="org-keyword">end</span>
+
+<span class="org-keyword">signature</span> <span class="org-interface-def">REGION</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">t</span>
+  <span class="org-keyword">val</span> <span class="org-variable-name">run</span>:unit -&gt; t
+<span class="org-keyword">end</span>
+
+<span class="org-keyword">functor</span> <span class="org-module-def">Region</span>(B:BLOCK) :&gt; REGION <span class="org-keyword">where</span> <span class="org-keyword">type</span> <span class="org-type-def">t</span> = B.t = <span class="org-keyword">struct</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">t</span> = B.t
+  <span class="org-keyword">datatype</span> <span class="org-type-def">phan</span> = Phan
+  <span class="org-keyword">fun</span> <span class="org-function-name">run</span> () = <span class="org-keyword">let</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">ret</span> = (print <span class="org-string">"opening region\n"</span>; B.f(ResC Phan))
+  <span class="org-keyword">in</span> print <span class="org-string">"closing region\n"</span> ; ret <span class="org-keyword">end</span>
+<span class="org-keyword">end</span>
+
+<span class="org-keyword">structure</span> <span class="org-module-def">T</span> = Region(<span class="org-keyword">struct</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">t</span> = int
+  <span class="org-keyword">fun</span> <span class="org-function-name">f</span> resource = ( <span class="org-comment-delimiter">(* </span><span class="org-comment">this function forms the body of the "region"</span><span class="org-comment-delimiter"> *)</span>
+    6
+  )
+<span class="org-keyword">end</span>)
+
+;print (Int.toString(T.run()))
+</pre>
+</div>
+
+<p>
+This prevents the program from simply returning <code>resource</code> or declaring
+external mutable variables it could be assigned to, which deals with
+most of the issue. But it can still be closed over by functions created
+within the "region" block, and retained that way past its supposed close
+point; such functions <i>could</i> be exported and the dangling resource
+reference used again, causing problems.
+</p>
+
+<p>
+We can imitate <code>ST</code> though, and prevent closures from being able to do
+anything useful with <code>resource</code> by forcing the region to use a monad keyed
+with the phantom type:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">RMONAD</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">type</span> ('s, 'a, 'r) <span class="org-type-def">m</span>
+  <span class="org-keyword">val</span> <span class="org-variable-name">ret</span>: ('s * 'r) -&gt; 'a -&gt; ('s, 'a, 'r) m
+  <span class="org-keyword">val</span> <span class="org-variable-name">bnd</span>: ('s, 'a, 'r) m * ('a * 'r -&gt; ('s, 'b, 'r) m) -&gt; ('s, 'b, 'r) m
+  <span class="org-keyword">val</span> <span class="org-variable-name">get</span>: 's -&gt; ('s, 'a, 'r) m -&gt; 'a * 'r
+<span class="org-keyword">end</span>
+
+<span class="org-keyword">structure</span> <span class="org-module-def">RMonad</span> :&gt; RMONAD = <span class="org-keyword">struct</span>
+  <span class="org-keyword">type</span> ('s, 'a, 'r) <span class="org-type-def">m</span> = 's -&gt; 's * 'a * 'r
+  <span class="org-keyword">fun</span> <span class="org-function-name">ret</span> (k, r) x = <span class="org-keyword">fn</span> _ =&gt; (k, x, r)
+  <span class="org-keyword">fun</span> <span class="org-function-name">bnd</span> (m, f) = <span class="org-keyword">fn</span> k =&gt; <span class="org-keyword">let</span>
+    <span class="org-keyword">val</span> (_, v, r) = m k
+  <span class="org-keyword">in</span> f (v, r) k <span class="org-keyword">end</span>
+  <span class="org-keyword">fun</span> <span class="org-function-name">get</span> k m = <span class="org-keyword">let</span> <span class="org-keyword">val</span> (_, v, r) = m k <span class="org-keyword">in</span> (v, r) <span class="org-keyword">end</span>
+<span class="org-keyword">end</span>
+
+<span class="org-keyword">signature</span> <span class="org-interface-def">MBLOCK</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">t</span>
+  <span class="org-keyword">val</span> <span class="org-variable-name">f</span>:(t -&gt; ('s, t, 'r) RMonad.m)  <span class="org-comment-delimiter">(* </span><span class="org-comment">return</span><span class="org-comment-delimiter"> *)</span>
+         * ('r -&gt; ('s, string, 'r) RMonad.m) <span class="org-comment-delimiter">(* </span><span class="org-comment">operations on r</span><span class="org-comment-delimiter"> *)</span>
+        -&gt; ('s, t, 'r) RMonad.m
+<span class="org-keyword">end</span>
+
+<span class="org-keyword">signature</span> <span class="org-interface-def">MREGION</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">t</span>
+  <span class="org-keyword">val</span> <span class="org-variable-name">run</span>:unit -&gt; t
+<span class="org-keyword">end</span>
+
+<span class="org-keyword">functor</span> <span class="org-module-def">MRegion</span>(B:MBLOCK) :&gt; MREGION <span class="org-keyword">where</span> <span class="org-keyword">type</span> <span class="org-type-def">t</span> = B.t = <span class="org-keyword">struct</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">t</span> = B.t
+  <span class="org-keyword">datatype</span> <span class="org-type-def">phan</span> = Phan
+  <span class="org-keyword">fun</span> <span class="org-function-name">run</span> () = <span class="org-keyword">let</span>
+    <span class="org-keyword">val</span> (ret, res) = RMonad.get Phan (B.f(RMonad.ret(Phan, <span class="org-string">"RESOURCE"</span>),
+                                     (<span class="org-keyword">fn</span> r =&gt; RMonad.ret(Phan, <span class="org-string">"RESOURCE"</span>) r)))
+  <span class="org-keyword">in</span>
+    print(<span class="org-string">"closing "</span> ^ res ^ <span class="org-string">"\n"</span>) ; ret
+  <span class="org-keyword">end</span>
+<span class="org-keyword">end</span>
+
+<span class="org-keyword">structure</span> <span class="org-module-def">T</span> = MRegion(<span class="org-keyword">struct</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">t</span> = int
+  <span class="org-keyword">fun</span> <span class="org-function-name">f</span> (return, toString) = <span class="org-keyword">let</span>
+    <span class="org-keyword">val</span> &gt;&gt;= = RMonad.bnd
+    <span class="org-keyword">infix</span> &gt;&gt;=
+  <span class="org-keyword">in</span>
+    return 6 &gt;&gt;= (<span class="org-keyword">fn</span>(x, r) =&gt;
+      toString r &gt;&gt;= (<span class="org-keyword">fn</span>(s, r) =&gt; (
+        print (<span class="org-string">"received "</span> ^ s ^ <span class="org-string">"\n"</span>);
+        return (x + 1)
+    )))
+  <span class="org-keyword">end</span>
+<span class="org-keyword">end</span>)
+
+;T.run()
+</pre>
+</div>
+
+<p>
+(this is a mess, but it shows my basic idea)
+</p>
+
+<p>
+The resource takes the role of <code>STRef</code>; if all of the provided operations
+on it return a monadic value instead of working directly, it will build
+up a chain of delayed operations that can only be executed by being
+returned to <code>run</code>. This counters the ability of closures to retain a copy
+of <code>r</code> outside the block because they will never actually be able to
+execute the op chain, being unable to return to <code>run</code>, and are therefore
+unable to access it in any way.
+</p>
+
+<p>
+Invoking <code>T.run</code> twice will re-use the same "key" type, meaning this isn't
+equivalent to a nested <code>forall</code>, but that shouldn't make a difference if
+there's no way to share <code>r</code> between two separate invocations; which there
+isn't &#x2014; if it can't be returned, can't be assigned outside, and any
+closures can't run the code that works on it. At least, I think so.
+</p>
+</blockquote>
+</div>
+</div>
+
 <div id="outline-container-h-ba354002-0dc7-4384-9654-f2076a75d496" class="outline-2">
-<h2 id="h-ba354002-0dc7-4384-9654-f2076a75d496"><span class="section-number-2">3.</span> References</h2>
+<h2 id="h-ba354002-0dc7-4384-9654-f2076a75d496"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-ba354002-0dc7-4384-9654-f2076a75d496">
 <ul class="org-ul">
+<li>John Launchbury and Simon Peyton Jones,<br>
+"Lazy Functional State Threads".<br>
+<i>CM SIGPLAN Notices</i> <b>29</b>, no.6 (1994) 24&#x2013;35.
+PLDI '94, <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/1994/06/lazy-functional-state-threads.pdf">Eprint</a>.</li>
 <li>John Launchbury, Simon Peyton Jones,<br>
 "State in Haskell".<br>
 <i>Lisp and Symbolic Computation</i> (1995) pp. 293&#x2013;342.
@@ -309,7 +486,7 @@ CIS552 lecture, UPenn, 2017 Fall Quarter.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-07-08 Fri 09:47.</p>
+<p class="postamble">Last Updated 2023-02-14 Tue 10:15.</p>
 </div>
 </body>
 </html>
