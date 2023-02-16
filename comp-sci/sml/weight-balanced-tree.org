@@ -82,11 +82,16 @@ metadata is a non-negative real number called the tree's
 one subtree's weights are no larger than some multiple of the weight of
 the other subtree), specifically: $\Delta\cdot W(L)\geq W(R)$ and
 $\Delta\cdot W(R)\geq W(L)$.
+
+Phrased differently, the tree is balanced if the ratio of
+weights for the subtrees $W(L)/W(R)$ and $W(R)/W(L)$ are not larger than
+the weight-ratio parameter $\Delta$ (i.e., $\Delta\geq W(L)/W(R)$
+and $\Delta\geq W(R)/W(L)$) provided $W(R)\neq0$ and $W(L)\neq0$.
 #+end_definition
 
 The common convention takes the weight of the tree $W(T)$ to be its size
 (i.e., number of nodes) denoted $|T|$; we will take $W(T)=1+|T|$ to
-handle pathological edge-cases with empty subtrees.
+handle pathological edge-cases with populating an initially empty tree.
 
 Now, we want to implement in Standard ML a weight-balanced tree as an
 algebraic data type, something like:
