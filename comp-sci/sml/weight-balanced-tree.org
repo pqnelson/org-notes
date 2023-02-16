@@ -18,27 +18,95 @@
 
 Haskell uses [[https://en.wikipedia.org/wiki/Weight-balanced_tree][Weight-balanced trees]] in their implementations of sets ([[https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Set.html][~Data.Set~]]) and
 maps ([[https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Map-Strict.html][~Data.Map~]]). But their implementation is rather tricky. So I thought I would
-write some notes about them.
+write some notes about them. We should recall, in general, a binary tree
+is inductively defined as
 
 #+begin_definition
-A {{{dfn(Weight-balanced tree)}}} is either
+A {{{dfn(Binary Tree)}}} is either
 
 1. the empty tree
-2. a branch encoded as a tuple (weight, node value, left subtree, right subtree).
+2. a branch consisting of a value, a left subtree, a right subtree, and
+   possibly some metadata.
 #+end_definition
 
-Henceforth, we will take the size of the tree to be its weight. In
-pidgin Standard ML:
+Algebraic data types were invented specifically to describe these
+inductive definitions, we could easily implement a tree in Standard ML
+as:
 
 #+begin_src sml
-(* pidgin code *)
-datatype 'a WBTree = E
-       | T of int*'a*('a WBTree)*('a WBTree);
+type Metadata = (* whatever you want, we omit it *);
+
+datatype 'a BinaryTree
+  = EmptyTree
+  | Branch of 'a * ('a BinaryTree) * ('a BinaryTree) *  Metadata;
 #+end_src
 
-This doesn't quite work since we want to have a ~compare:'a*'a -> order~
-function given. But SML's module system let's us guarantee this by
-making ~WBTree~ a functor parametrized by an ~ORDERED~ module.
+The ~Branch~ constructor takes a 4-tuple
+~(value, left_subtree, right_subtree, metadata)~ and produces a
+~BinaryTree~ object. (The ordering of the components of the 4-tuple is
+arbitrary, we could easily make metadata the first component.)
+
+What's so great about using algebraic data types for implementing trees?
+It helps us reason about the code.
+Whenever we write a function concerning a ~BinaryTree~ object, we can
+write one clause to handle the case of the empty tree, and another
+separate clause to handle the case of a branch. For example, we could
+count the nodes in a tree thusly:
+
+#+begin_src sml
+fun node_count EmptyTree = 0
+  | node_count (Branch (_, left, right, _))
+    = 1 + node_count left + node_count right;
+#+end_src
+
+If the tree were ordered such that the left subtree contained all values
+less than the value of the branch (and the right subtree contained all
+values greater than the value of the branch), and if further the left
+and right subtrees were equal in size, then searching for a value would
+take about $\log_{2}(n)$ comparisons where $n$ is the size of the
+tree. Other operations would similarly take logarithmic time, which is
+desirable compared to a linked list's linear time.
+
+We can weaken our demand that the left and right subtrees be equal in
+size to be "neither branch should be horribly bigger than the other" and
+still have logarithmic runtime for the tree operations.
+
+#+begin_definition
+Let $\Delta\in\mathbb{R}$ be a positive real constant (called the {{{dfn(Weight Ratio)}}})
+greater than 1.
+
+Then a {{{dfn(Weight-balanced tree)}}} is a binary tree $T$, whose
+metadata is a non-negative real number called the tree's
+{{{dfn(Weight)}}} denoted $W(T)$, such that the left subtree is
+{{{dfn(Balanced)}}} with respect to the right subtree (in the sense that
+one subtree's weights are no larger than some multiple of the weight of
+the other subtree), specifically: $\Delta\cdot W(L)\geq W(R)$ and
+$\Delta\cdot W(R)\geq W(L)$.
+#+end_definition
+
+The common convention takes the weight of the tree $W(T)$ to be its size
+(i.e., number of nodes) denoted $|T|$; we will take $W(T)=1+|T|$ to
+handle pathological edge-cases with empty subtrees.
+
+Now, we want to implement in Standard ML a weight-balanced tree as an
+algebraic data type, something like:
+
+#+begin_src sml
+(* Wishful thinking: *)
+datatype 'a WBTree = Empty
+                   | Branch of int * 'a * ('a WBTree) * ('a WBTree);
+#+end_src
+
+This doesn't quite work since we /want/ to make the values in tree nodes
+"comparable", in the sense that they have a specified ~compare: 'a * 'a -> order~
+function given. We want this so we can enforce the desired
+condition that the left subtree contains values smaller than the branch
+node's value (and similarly the right subtree consists of values greater
+than the branch node's value).
+
+Standard ML's type system is too weak to enforce this demand on its
+own. But SML's module system let's us guarantee this by making ~WBTree~
+a functor, i.e., a structure parametrized by an ~ORDERED~ module.
 
 ** A Word about Style and Conventions
 :PROPERTIES:
@@ -166,7 +234,7 @@ end;
 
 We will want some functions for a weight-balanced tree:
 
-- ~size : t -> int~ to tell us how many elements belong to the tree;
+- ~size : t -> int~ to tell us how many nodes are in the tree;
 - ~null : t -> bool~ tests if a tree is empty;
 - ~insert : Node.t -> t -> t~ to take a value and a tree, then produce a
   tree with the value inserted into it;
@@ -202,18 +270,25 @@ subtrees, etc. I am not sure /I/ will need them, but they are useful.
 Our intuition is that we have a binary tree consist of a left subtree
 $L$ and a right subtree $R$, we think they are balanced if the size of
 the right subtree $|R|$ is bounded by a multiple of the size of the left
-subtree. i.e., $\Delta|L|\geq|R|$ and a similar condition for the left
-subtree $\Delta|R|\geq|L|$ for some fixed real constant 
+subtree. i.e., $\Delta\cdot|L|\geq|R|$ and a similar condition for the left
+subtree $\Delta\cdot|R|\geq|L|$ for some fixed real constant 
 $\Delta\geq1$ (usually $\Delta\in\{2,3,4\}$). There is some subtlety
 when $|R|=0$ or $|L|=0$, when we should allow the other subtree to be
 either empty or a singleton. Formally:
 
 #+begin_definition
 Let ~Delta~ be a positive number.
-We say a weight-balanced tree $(n, x, L, R)$ is {{{dfn(Balanced)}}} if:
+We say a weight-balanced tree $(n, x, L, R)$ is {{{dfn(Strictly Balanced)}}} if:
 - When the subtrees L and R are both non-empty:
-  ~Delta*(size(L)) > size(R)~ and ~Delta*size(R) > size(L)~;
+  ~Delta*size(L) > size(R)~ and ~Delta*size(R) > size(L)~;
 - If either subtree is empty, the other is either a singleton or empty.
+
+We say a weight-balanced tree is {{{dfn(Balanced)}}} if
+1. ~Delta*(1 + size(L)) >= 1 + size(R)~ and
+2. ~Delta*(1 + size(R)) >= 1 + size(L)~.
+
+Observe, if a weight-balanced tree is "strictly balanced", then it is
+also "balanced".
 #+end_definition
 
 The use of ~Delta~ allows some "wiggle room" in determining if a tree is
@@ -239,9 +314,9 @@ we would allow ~Delta*size(L) + (Delta - 1) >= size(R) >= ceiling(size(L)/Delta)
 
 We will conceptually think of subtree $T_{1}$ as
 {{{define(Balanced With Respect to)}}} subtree $T_{2}$
-if $\Delta(|T_{2}|+1)\geq|T_{1}|+1$. This is implemented as
+if $\Delta\cdot(|T_{2}|+1)\geq|T_{1}|+1$. This is implemented as
 ~isBalanced T2 T1~ --- the intuition is the curried form
-~isBalanced T2~ is a predicate testing if the next tree supplies is
+~isBalanced T2~ is a predicate testing if its argument (the expected $T_{1}$) is
 balanced with respect to $T_{2}$.
 
 Then the assertion that the tree /as a whole/ is balanced is then

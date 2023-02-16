@@ -1,0 +1,220 @@
+#+TITLE: Formal Definition of Standard ML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-02-16T08:56:37-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Thursday February 16, 2023 at  8:56AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-adc2558e-5e71-4a91-bc4a-0e0cc331f773
+:END:
+
+The definition of Standard ML has a formal definition using some sort of
+operational semantics. It was first formally defined in 1990, then
+revised in 1997. The current formal definition of Standard ML may be
+found in the 1997 definition, but Milner and Tofte wrote a commentary
+on the 1990 definition. (Tofte had this on his website, but when he
+retired his university took down the website.)
+
+Unfortunately, reasoning with the formal definition is not terribly easy
+or straightforward. Don Syme's paper, "Reasoning with the Formal Definition of Standard ML in HOL",
+reviews the "obvious approaches" like encoding an inference rule from
+the formal definition
+\begin{equation}
+\frac{s,E\vdash exp\Rightarrow v,s'}{s,E\vdash (exp)\Rightarrow v,s'}
+\end{equation}
+as the axiom
+\begin{equation}
+\vdash\mathtt{INFERABLE}(s,E,atexp,val,s')\supset
+\mathtt{INFERABLE}(s,E,\mathtt{(}\;atexp\;\mathtt{)},val,s')
+\end{equation}
+makes it impossible to prove claims like, "It is impossible for [the
+following bad situation] to occur."
+
+* Phases in Executing a Program
+:PROPERTIES:
+:CUSTOM_ID: h-91dedd8b-ba0d-4f1e-bab4-3de882481cdb
+:END:
+
+There are three phases in executing a Standard ML program, according to
+the formal definition (paragraph 3 of \sect1):
+
+#+begin_quote
+In the execution of a declaration there are three phases:
+/parsing, elaboration, and evaluation./
+Parsing determines the grammatical form of a declaration.
+Elaboration, the /static/ phase, determines whether it is well-typed and
+well-formed in other ways, and records relevant type or form information
+in the basis.
+Finally evaluation, the /dynamic/ phase, determines the value
+of the declaration and records relevant value information in the basis
+[= top level environment].
+#+end_quote
+
+We usually take the first two phases for granted, and jumpt to thinking
+about the dynamic phase when it comes to semantics.
+
+Also worth mentioning, at the end of the next paragraph in the formal definition,
+
+#+begin_quote
+In fact, elaboration without evaluation is part of what is normally called
+/compilation/; once a declaration (or larger entity) is compiled one wishes to
+evaluate it --- repeatedly --- without re-elaboration, from which it follows that
+it is useful to perform the evaluation phase separately.
+#+end_quote
+
+** Basic Steps in Executing a Program
+:PROPERTIES:
+:CUSTOM_ID: h-36c1be92-1df5-4547-9944-6479a83de834
+:END:
+
+So, the formal definition tells us the following additional pieces of
+information:
+
+1. The execution of a program is expressed as a sentence of the form
+   \[ s, B\vdash \textit{program}\Rightarrow B', s' \]
+   where $s$ is the state before execution, $B$ is the basis (= all
+   declared information) before execution, $s'$ is the state /after/
+   execution, $B'$ is the basis /after/ execution.
+2. A basis $B$ is a pair $B_{\text{STAT}}$, $B_{\text{DYN}}$ consisting
+   of a /static/ and a /dynamic/ basis. The static basis contains all
+   the type and structure information provided by previous
+   declarations. The dynamic basis contains all associations of
+   identifiers with values.
+3. Rule (189) of the 1997 definition [corresponding to rule (196) of the
+   1990 definition] tells us a program takes the form
+   \[ \textit{program}_{1} = \textit{topdec}_{1}\; ;\;\textit{program}_{2}\]
+   Its execution consists of the following parts:
+
+   1. $B_{\text{STAT}}\vdash_{\text{STAT}}\textit{topdec}_{1}\Rightarrow B'_{\text{STAT}}$
+      --- elaboration of $\textit{topdec}_{1}$
+   2. $s, B_{\text{DYN}}\vdash_{\text{DYN}}\textit{topdec}_{1}\Rightarrow B_{\text{DYN}}',s'$
+      --- evaluation of $\textit{topdec}_{1}$
+   3. $s', B\oplus B'\vdash\textit{program}_{2}\Rightarrow B'',s''$
+      --- execution of $\textit{program}_{2}$.
+
+   Observe that failures during elaboration are handled in rule (187),
+   and an evaluation yielding exceptions is handled in rule (188).
+
+We learn that /topdec/ is a syntactic class referring to:
+
+- Declarations of "core" expressions (types, functions, constants, etc.)
+- Declarations of structures
+- Declarations of signatures
+- Declarations of functors
+
+Oddly enough, there is no specification for whether there is a "main"
+function (as one would expect in C-like languages) or if we just embed
+code we want run at the top-level. This has become
+implementation-specific, and a source of frustration when writing
+implementation-independent code.
+
+* Summary of Semantics
+:PROPERTIES:
+:CUSTOM_ID: h-5f0eff98-c29e-4868-8bd1-f0211dddffa7
+:END:
+
+The "semantics" (of evaluating expressions) which we normally think of,
+well, they're called the {{{define(dynamic semantics)}}} of the
+language. It could boil down to maybe a dozen rules or fewer, and may be
+found in \sect6 of the formal definition. Basically:
+
+- Evaluate arguments from left to right for function applications,
+  tuples, and constructors; this is rule (97).
+- If an exception occurs during evaluation, it propagates until it is
+  handled (if at all).
+- References are handled in rules (99) & (100) as one would expect
+- Function applications have nuances due to closures being carefully
+  defined as a triple ~(match, E, VE)~ where ~match~ corresponds roughly
+  to the "body" of the closure, ~E~ is the environment when the closure
+  was defined, and ~VE~ modified ~E~ by handling recursive bindings (see
+  \sect6.6 for a full explanation)
+- Primitive ("built in") operations are handled in rule (101)
+- Function closures are specified by rules (102) and (108).
+- Exception throwing/raising and handling are specified by rules (103),
+  (104), (105), (106), and (107).
+
+The rest of the "dynamic semantics" [rules (109) through (149)] for the "core" language (i.e.,
+the part of Standard ML which is not modules = structures + signatures +
+functors) concerns itself with pattern matching and binding rules.
+
+The "dynamic semantics" of modules seems to concern itself with binding
+rules and descriptions.
+
+The reader should be cautious: the derived forms and syntactic sugar are
+completely stripped away by the point we consider the dynamic
+semantics. So, for example, an ordered pair "~(t1, t2)~" becomes the
+record "~{1 = t1, 2 = t2}~"; infix operators "~t1 op t2~" are replaced by
+"~op(t1, t2)~", which is then desugared further into "~op {1=t1, 2=t2}~".
+So if we have a "~val x : int ref = 3~", then "~x := 33~" is desugared into
+"~:= { 1 = x, 2 = 33 }~". 
+
+Type checking occurs in what the formal definition calls the "static
+semantics" step.
+
+* Reasoning with the Definition
+:PROPERTIES:
+:CUSTOM_ID: h-61fc37d6-61c8-4cff-8a8a-195042186c64
+:END:
+
+This seems to be an open problem, and I don't think anyone cares anymore
+(everyone has moved on to using, e.g., Coq to prove properties about
+OCaml and pretending OCaml works according to the Coq specifications).
+
+I think it is possible to produce a collection of rules to enable
+[[file:equational-reasoning.org][equational reasoning]] with purely functional Standard ML code. But this
+is an assertion of belief, rather than anything said with any evidence.
+
+The challenge is to prove the rules supplied for equational reasoning
+may be derived from the formal definition.
+
+** Predefined Functions, Types, Signatures, and Structures
+:PROPERTIES:
+:CUSTOM_ID: h-519f2b39-6fd5-416b-a08c-5783827a4ced
+:END:
+
+The other challenge is to formally specify what the definition calls the
+"initial basis". It has been informally specified in the
+[[https://smlfamily.github.io/Basis/][Standard ML Basis Library]], but a formal specification is absent.
+
+I think we could happily work with a /fragment/ of the Standard Basis,
+e.g., working with:
+
+- ~int~
+- ~char~
+- ~string~
+- ~unit~
+- ~bool~
+- ~list~
+- ~option~
+- ~order~
+- Input/Output
+- Exception handling?
+
+Note that the only "side effects" formally specified in the 1997
+definition is from ~ref~ (rule 99) and mutating references (rule 100).
+We would have to formally specify "side effects" from input/output
+somehow. 
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-fd9bdc7a-f83f-43d9-8e49-ff20e57f7c51
+:END:
+
+- The [[https://smlfamily.github.io/sml90-defn.pdf][1990 Definition of Standard ML]] (pdf)
+- The [[https://smlfamily.github.io/sml97-defn.pdf][1997 Revised Definition of Standard ML]] (pdf)
+- Robin Milner and Mads Tofte,
+  /Commentary on Standard ML/.
+- Donald Syme,\\
+  "Reasoning with the Formal Definition of Standard ML in HOL".\\
+  In /Sixth International Workshop on Higher Order Logic Theorem Proving and its Applications/,
+  1993; {{{doi(10.1007/3-540-57826-9_124)}}}.
+        
+  

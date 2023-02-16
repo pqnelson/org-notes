@@ -270,37 +270,126 @@
 <p>
 Haskell uses <a href="https://en.wikipedia.org/wiki/Weight-balanced_tree">Weight-balanced trees</a> in their implementations of sets (<a href="https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Set.html"><code>Data.Set</code></a>) and
 maps (<a href="https://hackage.haskell.org/package/containers-0.6.7/docs/Data-Map-Strict.html"><code>Data.Map</code></a>). But their implementation is rather tricky. So I thought I would
-write some notes about them.
+write some notes about them. We should recall, in general, a binary tree
+is inductively defined as
 </p>
 
-<div class="definition" id="org54764f3">
+<div class="definition" id="orgb0bbfc3">
 <p>
-A <dfn>Weight-balanced tree</dfn> is either
+A <dfn>Binary Tree</dfn> is either
 </p>
 
 <ol class="org-ol">
 <li>the empty tree</li>
-<li>a branch encoded as a tuple (weight, node value, left subtree, right subtree).</li>
+<li>a branch consisting of a value, a left subtree, a right subtree, and
+possibly some metadata.</li>
 </ol>
 
 </div>
 
 <p>
-Henceforth, we will take the size of the tree to be its weight. In
-pidgin Standard ML:
+Algebraic data types were invented specifically to describe these
+inductive definitions, we could easily implement a tree in Standard ML
+as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">pidgin code</span><span class="org-comment-delimiter"> *)</span>
-<span class="org-keyword">datatype</span> 'a <span class="org-type-def">WBTree</span> = E
-       | T <span class="org-keyword">of</span> int*'a*('a WBTree)*('a WBTree);
+<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Metadata</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">whatever you want, we omit it</span><span class="org-comment-delimiter"> *)</span>;
+
+<span class="org-keyword">datatype</span> 'a <span class="org-type-def">BinaryTree</span>
+  = EmptyTree
+  | Branch <span class="org-keyword">of</span> 'a * ('a BinaryTree) * ('a BinaryTree) *  Metadata;
 </pre>
 </div>
 
 <p>
-This doesn't quite work since we want to have a <code>compare:'a*'a -&gt; order</code>
-function given. But SML's module system let's us guarantee this by
-making <code>WBTree</code> a functor parametrized by an <code>ORDERED</code> module.
+The <code>Branch</code> constructor takes a 4-tuple
+<code>(value, left_subtree, right_subtree, metadata)</code> and produces a
+<code>BinaryTree</code> object. (The ordering of the components of the 4-tuple is
+arbitrary, we could easily make metadata the first component.)
+</p>
+
+<p>
+What's so great about using algebraic data types for implementing trees?
+It helps us reason about the code.
+Whenever we write a function concerning a <code>BinaryTree</code> object, we can
+write one clause to handle the case of the empty tree, and another
+separate clause to handle the case of a branch. For example, we could
+count the nodes in a tree thusly:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">node_count</span> EmptyTree = 0
+  | node_count (Branch (_, left, right, _))
+    = 1 + node_count left + node_count right;
+</pre>
+</div>
+
+<p>
+If the tree were ordered such that the left subtree contained all values
+less than the value of the branch (and the right subtree contained all
+values greater than the value of the branch), and if further the left
+and right subtrees were equal in size, then searching for a value would
+take about \(\log_{2}(n)\) comparisons where \(n\) is the size of the
+tree. Other operations would similarly take logarithmic time, which is
+desirable compared to a linked list's linear time.
+</p>
+
+<p>
+We can weaken our demand that the left and right subtrees be equal in
+size to be "neither branch should be horribly bigger than the other" and
+still have logarithmic runtime for the tree operations.
+</p>
+
+<div class="definition" id="org75fcfdb">
+<p>
+Let \(\Delta\in\mathbb{R}\) be a positive real constant (called the <dfn>Weight Ratio</dfn>)
+greater than 1.
+</p>
+
+<p>
+Then a <dfn>Weight-balanced tree</dfn> is a binary tree \(T\), whose
+metadata is a non-negative real number called the tree's
+<dfn>Weight</dfn> denoted \(W(T)\), such that the left subtree is
+<dfn>Balanced</dfn> with respect to the right subtree (in the sense that
+one subtree's weights are no larger than some multiple of the weight of
+the other subtree), specifically: \(\Delta\cdot W(L)\geq W(R)\) and
+\(\Delta\cdot W(R)\geq W(L)\).
+</p>
+
+</div>
+
+<p>
+The common convention takes the weight of the tree \(W(T)\) to be its size
+(i.e., number of nodes) denoted \(|T|\); we will take \(W(T)=1+|T|\) to
+handle pathological edge-cases with empty subtrees.
+</p>
+
+<p>
+Now, we want to implement in Standard ML a weight-balanced tree as an
+algebraic data type, something like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">Wishful thinking:</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">datatype</span> 'a <span class="org-type-def">WBTree</span> = Empty
+                   | Branch <span class="org-keyword">of</span> int * 'a * ('a WBTree) * ('a WBTree);
+</pre>
+</div>
+
+<p>
+This doesn't quite work since we <i>want</i> to make the values in tree nodes
+"comparable", in the sense that they have a specified <code>compare: 'a * 'a -&gt; order</code>
+function given. We want this so we can enforce the desired
+condition that the left subtree contains values smaller than the branch
+node's value (and similarly the right subtree consists of values greater
+than the branch node's value).
+</p>
+
+<p>
+Standard ML's type system is too weak to enforce this demand on its
+own. But SML's module system let's us guarantee this by making <code>WBTree</code>
+a functor, i.e., a structure parametrized by an <code>ORDERED</code> module.
 </p>
 </div>
 
@@ -451,7 +540,7 @@ We will want some functions for a weight-balanced tree:
 </p>
 
 <ul class="org-ul">
-<li><code>size : t -&gt; int</code> to tell us how many elements belong to the tree;</li>
+<li><code>size : t -&gt; int</code> to tell us how many nodes are in the tree;</li>
 <li><code>null : t -&gt; bool</code> tests if a tree is empty;</li>
 <li><code>insert : Node.t -&gt; t -&gt; t</code> to take a value and a tree, then produce a
 tree with the value inserted into it;</li>
@@ -498,23 +587,36 @@ subtrees, etc. I am not sure <i>I</i> will need them, but they are useful.
 Our intuition is that we have a binary tree consist of a left subtree
 \(L\) and a right subtree \(R\), we think they are balanced if the size of
 the right subtree \(|R|\) is bounded by a multiple of the size of the left
-subtree. i.e., \(\Delta|L|\geq|R|\) and a similar condition for the left
-subtree \(\Delta|R|\geq|L|\) for some fixed real constant 
+subtree. i.e., \(\Delta\cdot|L|\geq|R|\) and a similar condition for the left
+subtree \(\Delta\cdot|R|\geq|L|\) for some fixed real constant 
 \(\Delta\geq1\) (usually \(\Delta\in\{2,3,4\}\)). There is some subtlety
 when \(|R|=0\) or \(|L|=0\), when we should allow the other subtree to be
 either empty or a singleton. Formally:
 </p>
 
-<div class="definition" id="orgc2d3dff">
+<div class="definition" id="orgff190fe">
 <p>
 Let <code>Delta</code> be a positive number.
-We say a weight-balanced tree \((n, x, L, R)\) is <dfn>Balanced</dfn> if:
+We say a weight-balanced tree \((n, x, L, R)\) is <dfn>Strictly Balanced</dfn> if:
 </p>
 <ul class="org-ul">
 <li>When the subtrees L and R are both non-empty:
-<code>Delta*(size(L)) &gt; size(R)</code> and <code>Delta*size(R) &gt; size(L)</code>;</li>
+<code>Delta*size(L) &gt; size(R)</code> and <code>Delta*size(R) &gt; size(L)</code>;</li>
 <li>If either subtree is empty, the other is either a singleton or empty.</li>
 </ul>
+
+<p>
+We say a weight-balanced tree is <dfn>Balanced</dfn> if
+</p>
+<ol class="org-ol">
+<li><code>Delta*(1 + size(L)) &gt;= 1 + size(R)</code> and</li>
+<li><code>Delta*(1 + size(R)) &gt;= 1 + size(L)</code>.</li>
+</ol>
+
+<p>
+Observe, if a weight-balanced tree is "strictly balanced", then it is
+also "balanced".
+</p>
 
 </div>
 
@@ -536,7 +638,7 @@ When <code>Delta</code> is 3 and <code>L</code> = 5, then <code>15 &gt; R &gt;= 
 for the sizes for the right subtree.
 </p>
 
-<div class="remark" id="org1702156">
+<div class="remark" id="org81a5ec7">
 <p>
 There is some slight variation in the definition of a WBT being
 balanced. For example, Hirai and Yamamoto define it as
@@ -551,9 +653,9 @@ we would allow <code>Delta*size(L) + (Delta - 1) &gt;= size(R) &gt;= ceiling(siz
 <p>
 We will conceptually think of subtree \(T_{1}\) as
 <dfn>Balanced With Respect to</dfn> subtree \(T_{2}\)
-if \(\Delta(|T_{2}|+1)\geq|T_{1}|+1\). This is implemented as
+if \(\Delta\cdot(|T_{2}|+1)\geq|T_{1}|+1\). This is implemented as
 <code>isBalanced T2 T1</code> &#x2014; the intuition is the curried form
-<code>isBalanced T2</code> is a predicate testing if the next tree supplies is
+<code>isBalanced T2</code> is a predicate testing if its argument (the expected \(T_{1}\)) is
 balanced with respect to \(T_{2}\).
 </p>
 
@@ -628,7 +730,7 @@ less than the root of the subtree. But what happens with
 </p>
 
 
-<div id="orgf927daf" class="figure">
+<div id="orgd9e846c" class="figure">
 <p><img src="../../img/tree-2.png" alt="tree-2.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>Naive insertion of <code>[1,2,3,4,5]</code> into an empty tree.</p>
@@ -687,7 +789,7 @@ Tree rotation can graphically visualized as:
 </p>
 
 
-<div id="org739b3a0" class="figure">
+<div id="orgdbf20a5" class="figure">
 <p><img src="../../img/tree-1.png" alt="tree-1.png">
 </p>
 <p><span class="figure-number">Figure 2: </span>Single left and single right rotations of tree with \(x < a < y < b < z\).</p>
@@ -724,7 +826,7 @@ have <i>double</i> rotations. A <dfn>double left rotation</dfn> moves a
 </p>
 
 
-<div id="org1d8ec65" class="figure">
+<div id="orgd8f8f6f" class="figure">
 <p><img src="../../img/tree-3.png" alt="tree-3.png">
 </p>
 <p><span class="figure-number">Figure 3: </span>Double left rotation of tree with \(x < a < y < b < z\).</p>
@@ -735,7 +837,7 @@ This is done first by performing a "local right" rotation:
 </p>
 
 
-<div id="org57151ea" class="figure">
+<div id="org0bd2801" class="figure">
 <p><img src="../../img/tree-4.png" alt="tree-4.png">
 </p>
 <p><span class="figure-number">Figure 4: </span>"Local right" rotation of tree with \(x < a < y < b < z\).</p>
@@ -857,7 +959,7 @@ We combine these functions together, and our functor so far becomes:
 </pre>
 </div>
 
-<div class="exercise" id="orgd57ee0f">
+<div class="exercise" id="org33ad914">
 <p>
 Assume <code>l</code> and <code>r</code> are balanced trees, and <code>x</code> is a value such that it
 lies between the subtrees.
@@ -870,7 +972,7 @@ lies between the subtrees.
 
 </div>
 
-<div class="exercise" id="orgf72e023">
+<div class="exercise" id="org37a120c">
 <p>
 Optimize our code. We proved it works (well, in an exercise), so prove
 your optimizations "work" as well!
@@ -943,7 +1045,7 @@ We can easily code this up as:
 </pre>
 </div>
 
-<div class="exercise" id="orge68a69d">
+<div class="exercise" id="orgcba067b">
 <p>
 Write a function to query for the subtree consisting of elements:
 </p>
@@ -1066,7 +1168,7 @@ Great, now we have the ability to insert and delete elements from our
 weight-balanced tree.
 </p>
 
-<div class="exercise" id="org4373d69">
+<div class="exercise" id="org3e51f8e">
 <p>
 Prove, if <code>tree</code> is a <i>balanced</i> weight-balanced tree containing the value <code>x</code>,
 then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
@@ -1074,7 +1176,7 @@ then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
 
 </div>
 
-<div class="exercise" id="orgefc9852">
+<div class="exercise" id="orgab32966">
 <p>
 Change our code for the case when <code>x</code> is not contained in <code>tree</code>, then
 we have <code>delete x tree</code> return the <code>tree</code> unmodified. [Hint: we cannot
@@ -1295,7 +1397,7 @@ John Wiegley, Stephanie Weirich,<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-14 Tue 09:51.</p>
+<p class="postamble">Last Updated 2023-02-16 Thu 12:03.</p>
 </div>
 </body>
 </html>

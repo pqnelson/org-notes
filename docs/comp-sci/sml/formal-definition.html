@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Formal Definition of Standard ML</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Formal Definition of Standard ML</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-adc2558e-5e71-4a91-bc4a-0e0cc331f773">1. Introduction</a></li>
+<li><a href="#h-91dedd8b-ba0d-4f1e-bab4-3de882481cdb">2. Phases in Executing a Program</a>
+<ul>
+<li><a href="#h-36c1be92-1df5-4547-9944-6479a83de834">2.1. Basic Steps in Executing a Program</a></li>
+</ul>
+</li>
+<li><a href="#h-5f0eff98-c29e-4868-8bd1-f0211dddffa7">3. Summary of Semantics</a></li>
+<li><a href="#h-61fc37d6-61c8-4cff-8a8a-195042186c64">4. Reasoning with the Definition</a>
+<ul>
+<li><a href="#h-519f2b39-6fd5-416b-a08c-5783827a4ced">4.1. Predefined Functions, Types, Signatures, and Structures</a></li>
+</ul>
+</li>
+<li><a href="#h-fd9bdc7a-f83f-43d9-8e49-ff20e57f7c51">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-adc2558e-5e71-4a91-bc4a-0e0cc331f773" class="outline-2">
+<h2 id="h-adc2558e-5e71-4a91-bc4a-0e0cc331f773"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-adc2558e-5e71-4a91-bc4a-0e0cc331f773">
+<p>
+The definition of Standard ML has a formal definition using some sort of
+operational semantics. It was first formally defined in 1990, then
+revised in 1997. The current formal definition of Standard ML may be
+found in the 1997 definition, but Milner and Tofte wrote a commentary
+on the 1990 definition. (Tofte had this on his website, but when he
+retired his university took down the website.)
+</p>
+
+<p>
+Unfortunately, reasoning with the formal definition is not terribly easy
+or straightforward. Don Syme's paper, "Reasoning with the Formal Definition of Standard ML in HOL",
+reviews the "obvious approaches" like encoding an inference rule from
+the formal definition
+</p>
+\begin{equation}
+\frac{s,E\vdash exp\Rightarrow v,s'}{s,E\vdash (exp)\Rightarrow v,s'}
+\end{equation}
+<p>
+as the axiom
+</p>
+\begin{equation}
+\vdash\mathtt{INFERABLE}(s,E,atexp,val,s')\supset
+\mathtt{INFERABLE}(s,E,\mathtt{(}\;atexp\;\mathtt{)},val,s')
+\end{equation}
+<p>
+makes it impossible to prove claims like, "It is impossible for [the
+following bad situation] to occur."
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-91dedd8b-ba0d-4f1e-bab4-3de882481cdb" class="outline-2">
+<h2 id="h-91dedd8b-ba0d-4f1e-bab4-3de882481cdb"><span class="section-number-2">2.</span> Phases in Executing a Program</h2>
+<div class="outline-text-2" id="text-h-91dedd8b-ba0d-4f1e-bab4-3de882481cdb">
+<p>
+There are three phases in executing a Standard ML program, according to
+the formal definition (paragraph 3 of &sect;1):
+</p>
+
+<blockquote>
+<p>
+In the execution of a declaration there are three phases:
+<i>parsing, elaboration, and evaluation.</i>
+Parsing determines the grammatical form of a declaration.
+Elaboration, the <i>static</i> phase, determines whether it is well-typed and
+well-formed in other ways, and records relevant type or form information
+in the basis.
+Finally evaluation, the <i>dynamic</i> phase, determines the value
+of the declaration and records relevant value information in the basis
+[= top level environment].
+</p>
+</blockquote>
+
+<p>
+We usually take the first two phases for granted, and jumpt to thinking
+about the dynamic phase when it comes to semantics.
+</p>
+
+<p>
+Also worth mentioning, at the end of the next paragraph in the formal definition,
+</p>
+
+<blockquote>
+<p>
+In fact, elaboration without evaluation is part of what is normally called
+<i>compilation</i>; once a declaration (or larger entity) is compiled one wishes to
+evaluate it &#x2014; repeatedly &#x2014; without re-elaboration, from which it follows that
+it is useful to perform the evaluation phase separately.
+</p>
+</blockquote>
+</div>
+
+<div id="outline-container-h-36c1be92-1df5-4547-9944-6479a83de834" class="outline-3">
+<h3 id="h-36c1be92-1df5-4547-9944-6479a83de834"><span class="section-number-3">2.1.</span> Basic Steps in Executing a Program</h3>
+<div class="outline-text-3" id="text-h-36c1be92-1df5-4547-9944-6479a83de834">
+<p>
+So, the formal definition tells us the following additional pieces of
+information:
+</p>
+
+<ol class="org-ol">
+<li>The execution of a program is expressed as a sentence of the form
+\[ s, B\vdash \textit{program}\Rightarrow B', s' \]
+where \(s\) is the state before execution, \(B\) is the basis (= all
+declared information) before execution, \(s'\) is the state <i>after</i>
+execution, \(B'\) is the basis <i>after</i> execution.</li>
+<li>A basis \(B\) is a pair \(B_{\text{STAT}}\), \(B_{\text{DYN}}\) consisting
+of a <i>static</i> and a <i>dynamic</i> basis. The static basis contains all
+the type and structure information provided by previous
+declarations. The dynamic basis contains all associations of
+identifiers with values.</li>
+<li><p>
+Rule (189) of the 1997 definition [corresponding to rule (196) of the
+1990 definition] tells us a program takes the form
+\[ \textit{program}_{1} = \textit{topdec}_{1}\; ;\;\textit{program}_{2}\]
+Its execution consists of the following parts:
+</p>
+
+<ol class="org-ol">
+<li>\(B_{\text{STAT}}\vdash_{\text{STAT}}\textit{topdec}_{1}\Rightarrow B'_{\text{STAT}}\)
+&#x2014; elaboration of \(\textit{topdec}_{1}\)</li>
+<li>\(s, B_{\text{DYN}}\vdash_{\text{DYN}}\textit{topdec}_{1}\Rightarrow B_{\text{DYN}}',s'\)
+&#x2014; evaluation of \(\textit{topdec}_{1}\)</li>
+<li>\(s', B\oplus B'\vdash\textit{program}_{2}\Rightarrow B'',s''\)
+&#x2014; execution of \(\textit{program}_{2}\).</li>
+</ol>
+
+<p>
+Observe that failures during elaboration are handled in rule (187),
+and an evaluation yielding exceptions is handled in rule (188).
+</p></li>
+</ol>
+
+<p>
+We learn that <i>topdec</i> is a syntactic class referring to:
+</p>
+
+<ul class="org-ul">
+<li>Declarations of "core" expressions (types, functions, constants, etc.)</li>
+<li>Declarations of structures</li>
+<li>Declarations of signatures</li>
+<li>Declarations of functors</li>
+</ul>
+
+<p>
+Oddly enough, there is no specification for whether there is a "main"
+function (as one would expect in C-like languages) or if we just embed
+code we want run at the top-level. This has become
+implementation-specific, and a source of frustration when writing
+implementation-independent code.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-5f0eff98-c29e-4868-8bd1-f0211dddffa7" class="outline-2">
+<h2 id="h-5f0eff98-c29e-4868-8bd1-f0211dddffa7"><span class="section-number-2">3.</span> Summary of Semantics</h2>
+<div class="outline-text-2" id="text-h-5f0eff98-c29e-4868-8bd1-f0211dddffa7">
+<p>
+The "semantics" (of evaluating expressions) which we normally think of,
+well, they're called the <dfn>dynamic semantics</dfn> of the
+language. It could boil down to maybe a dozen rules or fewer, and may be
+found in &sect;6 of the formal definition. Basically:
+</p>
+
+<ul class="org-ul">
+<li>Evaluate arguments from left to right for function applications,
+tuples, and constructors; this is rule (97).</li>
+<li>If an exception occurs during evaluation, it propagates until it is
+handled (if at all).</li>
+<li>References are handled in rules (99) &amp; (100) as one would expect</li>
+<li>Function applications have nuances due to closures being carefully
+defined as a triple <code>(match, E, VE)</code> where <code>match</code> corresponds roughly
+to the "body" of the closure, <code>E</code> is the environment when the closure
+was defined, and <code>VE</code> modified <code>E</code> by handling recursive bindings (see
+&sect;6.6 for a full explanation)</li>
+<li>Primitive ("built in") operations are handled in rule (101)</li>
+<li>Function closures are specified by rules (102) and (108).</li>
+<li>Exception throwing/raising and handling are specified by rules (103),
+(104), (105), (106), and (107).</li>
+</ul>
+
+<p>
+The rest of the "dynamic semantics" [rules (109) through (149)] for the "core" language (i.e.,
+the part of Standard ML which is not modules = structures + signatures +
+functors) concerns itself with pattern matching and binding rules.
+</p>
+
+<p>
+The "dynamic semantics" of modules seems to concern itself with binding
+rules and descriptions.
+</p>
+
+<p>
+The reader should be cautious: the derived forms and syntactic sugar are
+completely stripped away by the point we consider the dynamic
+semantics. So, for example, an ordered pair "<code>(t1, t2)</code>" becomes the
+record "<code>{1 = t1, 2 = t2}</code>"; infix operators "<code>t1 op t2</code>" are replaced by
+"<code>op(t1, t2)</code>", which is then desugared further into "<code>op {1=t1, 2=t2}</code>".
+So if we have a "<code>val x : int ref = 3</code>", then "<code>x := 33</code>" is desugared into
+"<code>:= { 1 = x, 2 = 33 }</code>". 
+</p>
+
+<p>
+Type checking occurs in what the formal definition calls the "static
+semantics" step.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-61fc37d6-61c8-4cff-8a8a-195042186c64" class="outline-2">
+<h2 id="h-61fc37d6-61c8-4cff-8a8a-195042186c64"><span class="section-number-2">4.</span> Reasoning with the Definition</h2>
+<div class="outline-text-2" id="text-h-61fc37d6-61c8-4cff-8a8a-195042186c64">
+<p>
+This seems to be an open problem, and I don't think anyone cares anymore
+(everyone has moved on to using, e.g., Coq to prove properties about
+OCaml and pretending OCaml works according to the Coq specifications).
+</p>
+
+<p>
+I think it is possible to produce a collection of rules to enable
+<a href="equational-reasoning.html">equational reasoning</a> with purely functional Standard ML code. But this
+is an assertion of belief, rather than anything said with any evidence.
+</p>
+
+<p>
+The challenge is to prove the rules supplied for equational reasoning
+may be derived from the formal definition.
+</p>
+</div>
+
+<div id="outline-container-h-519f2b39-6fd5-416b-a08c-5783827a4ced" class="outline-3">
+<h3 id="h-519f2b39-6fd5-416b-a08c-5783827a4ced"><span class="section-number-3">4.1.</span> Predefined Functions, Types, Signatures, and Structures</h3>
+<div class="outline-text-3" id="text-h-519f2b39-6fd5-416b-a08c-5783827a4ced">
+<p>
+The other challenge is to formally specify what the definition calls the
+"initial basis". It has been informally specified in the
+<a href="https://smlfamily.github.io/Basis/">Standard ML Basis Library</a>, but a formal specification is absent.
+</p>
+
+<p>
+I think we could happily work with a <i>fragment</i> of the Standard Basis,
+e.g., working with:
+</p>
+
+<ul class="org-ul">
+<li><code>int</code></li>
+<li><code>char</code></li>
+<li><code>string</code></li>
+<li><code>unit</code></li>
+<li><code>bool</code></li>
+<li><code>list</code></li>
+<li><code>option</code></li>
+<li><code>order</code></li>
+<li>Input/Output</li>
+<li>Exception handling?</li>
+</ul>
+
+<p>
+Note that the only "side effects" formally specified in the 1997
+definition is from <code>ref</code> (rule 99) and mutating references (rule 100).
+We would have to formally specify "side effects" from input/output
+somehow. 
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-fd9bdc7a-f83f-43d9-8e49-ff20e57f7c51" class="outline-2">
+<h2 id="h-fd9bdc7a-f83f-43d9-8e49-ff20e57f7c51"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-fd9bdc7a-f83f-43d9-8e49-ff20e57f7c51">
+<ul class="org-ul">
+<li>The <a href="https://smlfamily.github.io/sml90-defn.pdf">1990 Definition of Standard ML</a> (pdf)</li>
+<li>The <a href="https://smlfamily.github.io/sml97-defn.pdf">1997 Revised Definition of Standard ML</a> (pdf)</li>
+<li>Robin Milner and Mads Tofte,
+<i>Commentary on Standard ML</i>.</li>
+<li>Donald Syme,<br>
+"Reasoning with the Formal Definition of Standard ML in HOL".<br>
+In <i>Sixth International Workshop on Higher Order Logic Theorem Proving and its Applications</i>,
+1993; doi:<a href="https://doi.org/10.1007/3-540-57826-9_124">10.1007/3-540-57826-9_124</a>.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2023-02-16 Thu 10:54.</p>
+</div>
+</body>
+</html>
