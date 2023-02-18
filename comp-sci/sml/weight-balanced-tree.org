@@ -297,30 +297,49 @@ We will want some "public" functions for a weight-balanced tree:
 - ~delete : Node.t -> t -> t~ removes a value from a tree (if
   present), or does nothing (if absent).
 
-There are some "nice to have" functions:
+There are some "nice to have" functions, which "working programmers"
+will want...but we may or may not need /all/ of them:
 
-- ~filter : (Node.t -> bool) -> t -> t~ constructs a new tree consisting
-  of all the elements which satisfy the predicate
-- ~toList : t -> Node.t list~ converts a weight-balanced tree into a
-  [sorted] list
-- ~fromList : Node.t list -> t~ converts a list into a weight-balanced tree
-- ~foldl : (Node.t -> 'a -> 'a) -> 'a -> t -> 'a~ left reduces the tree in
-  ascending order, i.e., it's the same as ~foldl f b t = List.foldl f b (toList t)~
-- ~foldr : (Node.t -> 'a -> 'a) -> 'a -> t -> 'a~ right reduces the tree in
-  ascending order, i.e., it's the same as ~foldr f b t = List.foldr f b (toList t)~
-- ~exists : (Node.t -> bool) -> t -> bool~ tests each element of the
-  tree, and returns ~true~ upon the first success (or ~false~ upon
-  universal failure)
-- ~all : (Node.t -> bool) -> t -> bool~ tests every element of the tree
-  against the supplied predicate, returns ~false~ upon first failure (or
-  ~true~ upon universal success)
+- Set operations on two trees
+  - ~union : t -> t -> t~ which will add elements from the second tree
+    (the "right" tree) to the first "left" tree if the element is absent
+    from the first tree --- so if the comparison of node values is not
+    injective (intuitively: two distinct values are "equivalent" and
+    treated as ~EQUAL~), then the existing value is kept.
+  - ~difference : t -> t -> t~ which will remove elements from the first
+    tree which are present in the second tree
+  - ~intersection : t -> t -> t~ which will produce a tree consisting of
+    values from the first tree which are members of the second tree.
+- List conversions
+  - ~toList : t -> Node.t list~ converts a weight-balanced tree into a
+    [sorted] list
+  - ~fromList : Node.t list -> t~ converts a list into a weight-balanced tree
+- Reducing a tree into a value by applying a function iteratively
+  - ~foldl : (Node.t -> 'a -> 'a) -> 'a -> t -> 'a~ left reduces the tree in
+    ascending order, i.e., it's the same as ~foldl f b t = List.foldl f b (toList t)~
+  - ~foldr : (Node.t -> 'a -> 'a) -> 'a -> t -> 'a~ right reduces the tree in
+    ascending order, i.e., it's the same as ~foldr f b t = List.foldr f b (toList t)~
+- Predicates and quantifiers
+  - ~eq : t * t -> bool~ tests if all the elements in one tree is in the
+    other tree.
+  - ~filter : (Node.t -> bool) -> t -> t~ constructs a new tree consisting
+    of all the elements which satisfy the predicate.
+  - ~exists : (Node.t -> bool) -> t -> bool~ tests each element of the
+    tree, and returns ~true~ upon the first success (or ~false~ upon
+    universal failure).
+  - ~all : (Node.t -> bool) -> t -> bool~ tests every element of the tree
+    against the supplied predicate, returns ~false~ upon first failure (or
+    ~true~ upon universal success).
+- Debugging
+  - ~showTree : (Node.t -> string) -> t -> string~ produces a string representation of the tree.
+  - ~isValid : t -> bool~ testing if the tree is actually a valid weight-balanced tre.
 
 The only "obvious" function which would be nice to have, but is not at
 all obvious how to implement it, would be a ~map : (Node.t -> 'a) -> t -> 'a Tree?~
-There is probably a way to do it, but I cannot see it at present.
-
-We could also consider functions which merge trees together, or remove
-subtrees, etc. I am not sure /I/ will need them, but they are useful.
+There is probably a way to do it, but I cannot see it at
+present. *However*, we /can/ construct a ~app : (Node.t -> unit) -> t -> unit~
+function which will apply a function yielding side-effects to each node
+in the tree.
 
 ** "Balanced" part of "Weight-Balanced Tree"
 :PROPERTIES:
@@ -427,7 +446,7 @@ with the implementation:
 fun insert x E = singleton x
   | insert x (t as T (sz, v, l, r)) =
     case compare(x,v) of
-       LESS => T (sz+1, v, insert x l, r)
+       LESS => T (sz + 1, v, insert x l, r)
      | EQUAL => t
      | GREATER T(sz + 1, v, l, insert x r);
 #+end_src
@@ -448,7 +467,7 @@ Well, the astute reader will note our ~insert~ function does not check
 if the subtrees are balanced. Therefore, why on Earth would anyone expect the
 result to be a balanced tree?
 
-We can remedy this by /balancing/ the tree after inserting:
+We can remedy this by /balancing/ the tree after inserting a new node:
 
 #+begin_src sml
 (* insert : Node.t -> t -> t *)
@@ -468,7 +487,9 @@ amounts to:
 - check if the tree constructed from the new left and right subtrees
   would be balanced;
   - if so, then just construct the tree;
-  - otherwise rotate right "by some amount".
+  - otherwise move a branch of the left subtree over to the right
+    subtree
+    (computer scientists call this: rotating right "by some amount").
 
 Similarly, ~balanceR~ is invoked to make sure the right subtree is "not
 too big" and will restore balance by rotating left.
@@ -489,12 +510,12 @@ The implementation of this, albeit unoptimized:
 #+begin_src sml
 (* balanceR : Node.t -> t -> t -> t *)
 fun balanceR x l r = if isBalanced l r
-                     then T(1 + size l + size r, x, l, r)
+                     then bin x l r
                      else (* when size r > delta*(size l) *) rotateL x l r;
 
 (* balanceL : Node.t -> t -> t -> t *)
 fun balanceL x l r = if isBalanced r l
-                     then T(1 + size l + size r, x, l, r)
+                     then bin x l r
                      else (* when size l > delta*(size r) *) rotateR x l r;
 #+end_src
 
@@ -637,6 +658,13 @@ the arguments in the same way; is it faster to "collapse" the helper
 
 For other ideas, see Milan Straka's "The performance of the Haskell
 ~Containers~ Package" (2010).
+#+end_exercise
+
+#+begin_exercise
+Prove or find a counter-example: ~insert~ is not commutative, in the
+sense that for any tree ~t~ and any values ~x~ and ~y~, we do not have
+~insert x (insert y t)~ identical as a tree to ~insert y (insert x t)~.
+The two trees have the same set of nodes, but the branches are different.
 #+end_exercise
 
 * Querying for an Element

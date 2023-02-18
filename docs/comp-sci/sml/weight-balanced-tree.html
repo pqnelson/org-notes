@@ -274,7 +274,7 @@ write some notes about them. We should recall, in general, a binary tree
 is inductively defined as
 </p>
 
-<div class="definition" id="org2139856">
+<div class="definition" id="org560600d">
 <p>
 A <dfn>Binary Tree</dfn> is either
 </p>
@@ -341,7 +341,7 @@ size to be "neither branch should be horribly bigger than the other" and
 still have logarithmic runtime for the tree operations.
 </p>
 
-<div class="definition" id="org85e3aa8">
+<div class="definition" id="org695a297">
 <p>
 Let \(\Delta\in\mathbb{R}\) be a positive real constant (called the <dfn>Weight Ratio</dfn>)
 greater than 1.
@@ -613,36 +613,63 @@ present), or does nothing (if absent).</li>
 </ul>
 
 <p>
-There are some "nice to have" functions:
+There are some "nice to have" functions, which "working programmers"
+will want&#x2026;but we may or may not need <i>all</i> of them:
 </p>
 
 <ul class="org-ul">
-<li><code>filter : (Node.t -&gt; bool) -&gt; t -&gt; t</code> constructs a new tree consisting
-of all the elements which satisfy the predicate</li>
+<li>Set operations on two trees
+<ul class="org-ul">
+<li><code>union : t -&gt; t -&gt; t</code> which will add elements from the second tree
+(the "right" tree) to the first "left" tree if the element is absent
+from the first tree &#x2014; so if the comparison of node values is not
+injective (intuitively: two distinct values are "equivalent" and
+treated as <code>EQUAL</code>), then the existing value is kept.</li>
+<li><code>difference : t -&gt; t -&gt; t</code> which will remove elements from the first
+tree which are present in the second tree</li>
+<li><code>intersection : t -&gt; t -&gt; t</code> which will produce a tree consisting of
+values from the first tree which are members of the second tree.</li>
+</ul></li>
+<li>List conversions
+<ul class="org-ul">
 <li><code>toList : t -&gt; Node.t list</code> converts a weight-balanced tree into a
 [sorted] list</li>
 <li><code>fromList : Node.t list -&gt; t</code> converts a list into a weight-balanced tree</li>
+</ul></li>
+<li>Reducing a tree into a value by applying a function iteratively
+<ul class="org-ul">
 <li><code>foldl : (Node.t -&gt; 'a -&gt; 'a) -&gt; 'a -&gt; t -&gt; 'a</code> left reduces the tree in
 ascending order, i.e., it's the same as <code>foldl f b t = List.foldl f b (toList t)</code></li>
 <li><code>foldr : (Node.t -&gt; 'a -&gt; 'a) -&gt; 'a -&gt; t -&gt; 'a</code> right reduces the tree in
 ascending order, i.e., it's the same as <code>foldr f b t = List.foldr f b (toList t)</code></li>
+</ul></li>
+<li>Predicates and quantifiers
+<ul class="org-ul">
+<li><code>eq : t * t -&gt; bool</code> tests if all the elements in one tree is in the
+other tree.</li>
+<li><code>filter : (Node.t -&gt; bool) -&gt; t -&gt; t</code> constructs a new tree consisting
+of all the elements which satisfy the predicate.</li>
 <li><code>exists : (Node.t -&gt; bool) -&gt; t -&gt; bool</code> tests each element of the
 tree, and returns <code>true</code> upon the first success (or <code>false</code> upon
-universal failure)</li>
+universal failure).</li>
 <li><code>all : (Node.t -&gt; bool) -&gt; t -&gt; bool</code> tests every element of the tree
 against the supplied predicate, returns <code>false</code> upon first failure (or
-<code>true</code> upon universal success)</li>
+<code>true</code> upon universal success).</li>
+</ul></li>
+<li>Debugging
+<ul class="org-ul">
+<li><code>showTree : (Node.t -&gt; string) -&gt; t -&gt; string</code> produces a string representation of the tree.</li>
+<li><code>isValid : t -&gt; bool</code> testing if the tree is actually a valid weight-balanced tre.</li>
+</ul></li>
 </ul>
 
 <p>
 The only "obvious" function which would be nice to have, but is not at
 all obvious how to implement it, would be a <code>map : (Node.t -&gt; 'a) -&gt; t -&gt; 'a Tree?</code>
-There is probably a way to do it, but I cannot see it at present.
-</p>
-
-<p>
-We could also consider functions which merge trees together, or remove
-subtrees, etc. I am not sure <i>I</i> will need them, but they are useful.
+There is probably a way to do it, but I cannot see it at
+present. <b>However</b>, we <i>can</i> construct a <code>app : (Node.t -&gt; unit) -&gt; t -&gt; unit</code>
+function which will apply a function yielding side-effects to each node
+in the tree.
 </p>
 </div>
 </div>
@@ -662,7 +689,7 @@ when \(|R|=0\) or \(|L|=0\), when we should allow the other subtree to be
 either empty or a singleton. Formally:
 </p>
 
-<div class="definition" id="org9bfdf3c">
+<div class="definition" id="org19fc140">
 <p>
 Let <code>Delta</code> be a positive number.
 We say a weight-balanced tree \((n, x, L, R)\) is <dfn>Strictly Balanced</dfn> if:
@@ -706,7 +733,7 @@ When <code>Delta</code> is 3 and <code>size(L)</code> = 5, then a <i>strictly ba
 allows <code>15 &gt; size(R) &gt;= 2</code> for the sizes for the right subtree.
 </p>
 
-<div class="remark" id="orgac43e38">
+<div class="remark" id="org630310e">
 <p>
 There is some slight variation in the definition of a WBT being
 balanced. For example, Hirai and Yamamoto define it as
@@ -783,7 +810,7 @@ with the implementation:
 <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
   | insert x (t <span class="org-keyword">as</span> T (sz, v, l, r)) =
     <span class="org-keyword">case</span> compare(x,v) <span class="org-keyword">of</span>
-       LESS =&gt; T (sz+1, v, insert x l, r)
+       LESS =&gt; T (sz + 1, v, insert x l, r)
      | EQUAL =&gt; t
      | GREATER T(sz + 1, v, l, insert x r);
 </pre>
@@ -798,7 +825,7 @@ less than the root of the subtree. But what happens with
 </p>
 
 
-<div id="orgae7051b" class="figure">
+<div id="orgd00770b" class="figure">
 <p><img src="../../img/tree-2.png" alt="tree-2.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>Naive insertion of <code>[1,2,3,4,5]</code> into an empty tree.</p>
@@ -816,7 +843,7 @@ result to be a balanced tree?
 </p>
 
 <p>
-We can remedy this by <i>balancing</i> the tree after inserting:
+We can remedy this by <i>balancing</i> the tree after inserting a new node:
 </p>
 
 <div class="org-src-container">
@@ -842,7 +869,9 @@ amounts to:
 would be balanced;
 <ul class="org-ul">
 <li>if so, then just construct the tree;</li>
-<li>otherwise rotate right "by some amount".</li>
+<li>otherwise move a branch of the left subtree over to the right
+subtree
+(computer scientists call this: rotating right "by some amount").</li>
 </ul></li>
 </ul>
 
@@ -857,7 +886,7 @@ Tree rotation can graphically visualized as:
 </p>
 
 
-<div id="org004847a" class="figure">
+<div id="org6339335" class="figure">
 <p><img src="../../img/tree-1.png" alt="tree-1.png">
 </p>
 <p><span class="figure-number">Figure 2: </span>Single left and single right rotations of tree with \(x < a < y < b < z\).</p>
@@ -877,12 +906,12 @@ The implementation of this, albeit unoptimized:
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">balanceR : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">balanceR</span> x l r = <span class="org-keyword">if</span> isBalanced l r
-                     <span class="org-keyword">then</span> T(1 + size l + size r, x, l, r)
+                     <span class="org-keyword">then</span> bin x l r
                      <span class="org-keyword">else</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">when size r &gt; delta*(size l)</span><span class="org-comment-delimiter"> *)</span> rotateL x l r;
 
 <span class="org-comment-delimiter">(* </span><span class="org-comment">balanceL : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced r l
-                     <span class="org-keyword">then</span> T(1 + size l + size r, x, l, r)
+                     <span class="org-keyword">then</span> bin x l r
                      <span class="org-keyword">else</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">when size l &gt; delta*(size r)</span><span class="org-comment-delimiter"> *)</span> rotateR x l r;
 </pre>
 </div>
@@ -894,7 +923,7 @@ have <i>double</i> rotations. A <dfn>double left rotation</dfn> moves a
 </p>
 
 
-<div id="org335b8b4" class="figure">
+<div id="orgf810f34" class="figure">
 <p><img src="../../img/tree-3.png" alt="tree-3.png">
 </p>
 <p><span class="figure-number">Figure 3: </span>Double left rotation of tree with \(x < a < y_{0} < b < y_{1} < c < z\).</p>
@@ -905,7 +934,7 @@ This is done first by performing a "local right" rotation:
 </p>
 
 
-<div id="org97fa121" class="figure">
+<div id="org5522944" class="figure">
 <p><img src="../../img/tree-4.png" alt="tree-4.png">
 </p>
 <p><span class="figure-number">Figure 4: </span>"Local right" rotation of tree with \(x < a < y_{0} < b < y_{1} < c < z\).</p>
@@ -1027,7 +1056,7 @@ We combine these functions together, and our functor so far becomes:
 </pre>
 </div>
 
-<div class="exercise" id="org4c8b22e">
+<div class="exercise" id="org126dd8c">
 <p>
 Assume <code>l</code> and <code>r</code> are balanced trees, and <code>x</code> is a value such that it
 lies between the subtrees.
@@ -1040,7 +1069,7 @@ lies between the subtrees.
 
 </div>
 
-<div class="exercise" id="org77edd26">
+<div class="exercise" id="orgbf82f26">
 <p>
 Optimize our code. We proved it works (well, in an exercise), so prove
 your optimizations "work" as well!
@@ -1057,6 +1086,16 @@ the arguments in the same way; is it faster to "collapse" the helper
 <p>
 For other ideas, see Milan Straka's "The performance of the Haskell
 <code>Containers</code> Package" (2010).
+</p>
+
+</div>
+
+<div class="exercise" id="org51cf92e">
+<p>
+Prove or find a counter-example: <code>insert</code> is not commutative, in the
+sense that for any tree <code>t</code> and any values <code>x</code> and <code>y</code>, we do not have
+<code>insert x (insert y t)</code> identical as a tree to <code>insert y (insert x t)</code>.
+The two trees have the same set of nodes, but the branches are different.
 </p>
 
 </div>
@@ -1113,7 +1152,7 @@ We can easily code this up as:
 </pre>
 </div>
 
-<div class="exercise" id="org12b31a1">
+<div class="exercise" id="orgbe2633f">
 <p>
 Write a function to query for the subtree consisting of elements:
 </p>
@@ -1242,7 +1281,7 @@ Great, now we have the ability to insert and delete elements from our
 weight-balanced tree.
 </p>
 
-<div class="exercise" id="org089cad3">
+<div class="exercise" id="org770bda0">
 <p>
 Prove, if <code>tree</code> is a <i>balanced</i> weight-balanced tree containing the value <code>x</code>,
 then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
@@ -1250,7 +1289,7 @@ then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
 
 </div>
 
-<div class="exercise" id="org4a0cfda">
+<div class="exercise" id="orgf69f923">
 <p>
 Change our code for the case when <code>x</code> is not contained in <code>tree</code>, then
 we have <code>delete x tree</code> return the <code>tree</code> unmodified. [Hint: we cannot
@@ -1471,7 +1510,7 @@ John Wiegley, Stephanie Weirich,<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-16 Thu 13:51.</p>
+<p class="postamble">Last Updated 2023-02-17 Fri 09:49.</p>
 </div>
 </body>
 </html>
