@@ -225,7 +225,11 @@
 <li><a href="#h-889254de-0316-4e44-9331-d92d371b8419">3.1. Type Conversions</a></li>
 </ul>
 </li>
-<li><a href="#h-770611ec-d37f-42e9-9e97-802a79d389be">4. Comparable Types</a></li>
+<li><a href="#h-770611ec-d37f-42e9-9e97-802a79d389be">4. Comparable Types</a>
+<ul>
+<li><a href="#h-bb3e2d02-6651-49d4-82bb-11083bfa0fb5">4.1. Caveat: Equality Testing</a></li>
+</ul>
+</li>
 <li><a href="#h-20417263-b75c-464c-b4ef-e48078110bd6">5. Principle: Similar Functions should have Similar Names</a></li>
 </ul>
 </div>
@@ -402,7 +406,7 @@ See:
 <h2 id="h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d"><span class="section-number-2">3.</span> Stringify Types</h2>
 <div class="outline-text-2" id="text-h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d">
 <p>
-In Haskell, we tend to have a single typeclass <code>Show</code> which has a "to string"
+In Haskell, we tend to have a single typeclass <a href="https://hackage.haskell.org/package/base-4.17.0.0/docs/Text-Show.html"><code>Show</code></a> which has a "to string"
 method. Standard ML does not have anything similar to type classes, so
 we end up encoding them as signatures. Strictly speaking, we would have
 </p>
@@ -453,14 +457,65 @@ encourages this sort of naming convention for conversion functions.</li>
 <h2 id="h-770611ec-d37f-42e9-9e97-802a79d389be"><span class="section-number-2">4.</span> Comparable Types</h2>
 <div class="outline-text-2" id="text-h-770611ec-d37f-42e9-9e97-802a79d389be">
 <p>
-When defining a new type <code>T</code>, we would need to implement a function <code>compare : T*T -&gt; order</code>.
+When defining a new type <code>T</code>, we would need to implement a function
+<code>compare : T * T -&gt;</code> <a href="https://smlfamily.github.io/Basis/general.html#SIG:GENERAL.order:TY"><code>order</code></a>.
 This should be placed in a signature, so it's "public facing".
+</p>
+
+<p>
+We would want various nice properties of the ordering, like:
+</p>
+
+<ul class="org-ul">
+<li>Transitivity: if <code>compare(x,y) = compare(y,z)</code>, then we want
+<code>compare(x,z) = compare(x,y)</code> too.</li>
+<li>Reflexivity: for any <code>x</code>, we want <code>compare(x, x) = EQUAL</code></li>
+<li>Antisymmetry: if <code>not (compare(x, y) = GREATER)</code> and
+<code>not (compare(y, x) = GREATER)</code>, then we expect <code>compare(x, y) = EQUAL</code>.</li>
+</ul>
+
+<p>
+A "nice to have" property which, I am not certain is absolutely necessary:
+</p>
+
+<ul class="org-ul">
+<li>Completeness: for any <code>x</code> and <code>y</code>, we want <code>compare(x,y) orelse compare(y,x)</code>
+to be true</li>
+</ul>
+
+<p>
+Examples:
+</p>
+
+<ul class="org-ul">
+<li><a href="weight-balanced-tree.html#h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b">Discussion with Weight-Balanced Trees</a></li>
+</ul>
+
+<p>
+References:
 </p>
 
 <ul class="org-ul">
 <li>Gansner and Reppy's <i>Standard ML Basis Library</i>, sections 1.1.3 and 4.1,
 encourages this sort of practice with linear orders.</li>
 </ul>
+</div>
+
+<div id="outline-container-h-bb3e2d02-6651-49d4-82bb-11083bfa0fb5" class="outline-3">
+<h3 id="h-bb3e2d02-6651-49d4-82bb-11083bfa0fb5"><span class="section-number-3">4.1.</span> Caveat: Equality Testing</h3>
+<div class="outline-text-3" id="text-h-bb3e2d02-6651-49d4-82bb-11083bfa0fb5">
+<p>
+The only caveat which springs to mind is that it may be faster to
+implement your own function testing for equality. Again, Haskell has
+<a href="https://hackage.haskell.org/package/base-4.17.0.0/docs/Data-Eq.html"><code>Data.Eq</code></a> typeclass, but Standard ML has equality type kludge.
+</p>
+
+<p>
+For example, if you are implementing a proof assistant, and you have a
+datatype encoding logical propositions, it would be somewhat faster to
+implement your own <code>eq</code> function than to use <code>compare (x,y) = EQUALS</code>.
+</p>
+</div>
 </div>
 </div>
 
@@ -484,6 +539,14 @@ analogous functions on lists. For example,
 </pre>
 </div>
 
+<p>
+The intuition being that an instance of <code>SET.t</code> is like a list and
+should have analogous <a href="https://smlfamily.github.io/Basis/list.html#SIG:LIST.map:VAL"><code>map</code></a> and <a href="https://smlfamily.github.io/Basis/list.html#SIG:LIST.app:VAL"><code>app</code></a> functions (among others). In
+retrospect, a better design choice would have been to have a hierarchy
+of signatures for collections, and the structure would implement the
+relevant one.
+</p>
+
 <ul class="org-ul">
 <li>Gansner and Reppy's <i>Standard ML Basis Library</i>, section 1.1.2,
 encourages this sort of practice.</li>
@@ -492,7 +555,7 @@ encourages this sort of practice.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-14 Tue 09:21.</p>
+<p class="postamble">Last Updated 2023-02-21 Tue 08:25.</p>
 </div>
 </body>
 </html>

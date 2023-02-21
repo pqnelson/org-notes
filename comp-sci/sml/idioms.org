@@ -154,7 +154,7 @@ See:
 :CUSTOM_ID: h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d
 :END:
 
-In Haskell, we tend to have a single typeclass ~Show~ which has a "to string"
+In Haskell, we tend to have a single typeclass [[https://hackage.haskell.org/package/base-4.17.0.0/docs/Text-Show.html][~Show~]] which has a "to string"
 method. Standard ML does not have anything similar to type classes, so
 we end up encoding them as signatures. Strictly speaking, we would have
 
@@ -195,11 +195,44 @@ Then we have ~A.toB foo~ be an "obvious" conversion.
 :CUSTOM_ID: h-770611ec-d37f-42e9-9e97-802a79d389be
 :END:
 
-When defining a new type ~T~, we would need to implement a function ~compare : T*T -> order~.
+When defining a new type ~T~, we would need to implement a function
+~compare : T * T ->~ [[https://smlfamily.github.io/Basis/general.html#SIG:GENERAL.order:TY][~order~]].
 This should be placed in a signature, so it's "public facing".
+
+We would want various nice properties of the ordering, like:
+
+- Transitivity: if ~compare(x,y) = compare(y,z)~, then we want
+  ~compare(x,z) = compare(x,y)~ too.
+- Reflexivity: for any ~x~, we want ~compare(x, x) = EQUAL~
+- Antisymmetry: if ~not (compare(x, y) = GREATER)~ and
+  ~not (compare(y, x) = GREATER)~, then we expect ~compare(x, y) = EQUAL~.
+
+A "nice to have" property which, I am not certain is absolutely necessary:
+
+- Completeness: for any ~x~ and ~y~, we want ~compare(x,y) orelse compare(y,x)~
+  to be true
+
+Examples:
+
+- [[file:weight-balanced-tree.org::#h-96e60562-fa51-44fd-b2c2-1808d0d7cc2b][Discussion with Weight-Balanced Trees]]
+  
+References:
 
 - Gansner and Reppy's /Standard ML Basis Library/, sections 1.1.3 and 4.1,
   encourages this sort of practice with linear orders.
+
+** Caveat: Equality Testing
+:PROPERTIES:
+:CUSTOM_ID: h-bb3e2d02-6651-49d4-82bb-11083bfa0fb5
+:END:
+
+The only caveat which springs to mind is that it may be faster to
+implement your own function testing for equality. Again, Haskell has
+[[https://hackage.haskell.org/package/base-4.17.0.0/docs/Data-Eq.html][~Data.Eq~]] typeclass, but Standard ML has equality type kludge.
+
+For example, if you are implementing a proof assistant, and you have a
+datatype encoding logical propositions, it would be somewhat faster to
+implement your own ~eq~ function than to use ~compare (x,y) = EQUALS~.
 
 * Principle: Similar Functions should have Similar Names
 :PROPERTIES:
@@ -219,6 +252,12 @@ sig
     (* And so on... *)
 end;
 #+end_src
+
+The intuition being that an instance of ~SET.t~ is like a list and
+should have analogous [[https://smlfamily.github.io/Basis/list.html#SIG:LIST.map:VAL][~map~]] and [[https://smlfamily.github.io/Basis/list.html#SIG:LIST.app:VAL][~app~]] functions (among others). In
+retrospect, a better design choice would have been to have a hierarchy
+of signatures for collections, and the structure would implement the
+relevant one.
 
 - Gansner and Reppy's /Standard ML Basis Library/, section 1.1.2,
   encourages this sort of practice.
