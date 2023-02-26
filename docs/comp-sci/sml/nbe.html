@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Normalization by Evaluation</title>
@@ -189,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,6 +206,27 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -220,7 +240,13 @@
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-ea13da4e-431d-4c86-ba53-eec2f29b8ed2">1. Overview</a></li>
-<li><a href="#h-226a7a03-950e-4964-ba32-283c449ff4f8">2. References</a></li>
+<li><a href="#h-80788dc8-193c-4121-94ab-198604dfe041">2. Example: Simply-Typed Lambda Calculus</a>
+<ul>
+<li><a href="#h-399b4fdd-2ac9-4013-bd0f-feb06a22cbd7">2.1. Reification/Evaluation and Alternatives</a></li>
+<li><a href="#h-605f7d6c-6672-4a93-b961-040fe4e47b22">2.2. Optimizations</a></li>
+</ul>
+</li>
+<li><a href="#h-226a7a03-950e-4964-ba32-283c449ff4f8">3. References</a></li>
 </ul>
 </div>
 </div>
@@ -232,16 +258,196 @@
 A common project for functional programming courses is to implement a
 typed lambda calculus. There are a variety of ways to do this, but we
 will focus on the technique of <dfn>Normalization by Evaluation</dfn>.
-(The alternative techniques seem to be variations of de Bruijn indices,
-though I understand some languages have more sophisticated techniques
-with nominal variables, or whatever.)
+Basically, we encode the object language as syntactic objects, then we
+translate it into the implementing language for evaluation (or evaluate
+it through some other means), and finally translate back to the object
+language. Amazingly enough, this works.
+</p>
+
+<p>
+To be clear, by "evaluate it by some means", what we really mean is we
+will use the denotational semantics of the language to evaluate
+expressions.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-80788dc8-193c-4121-94ab-198604dfe041" class="outline-2">
+<h2 id="h-80788dc8-193c-4121-94ab-198604dfe041"><span class="section-number-2">2.</span> Example: Simply-Typed Lambda Calculus</h2>
+<div class="outline-text-2" id="text-h-80788dc8-193c-4121-94ab-198604dfe041">
+<p>
+Suppose we had simply-typed lambda calculus with some set of base types,
+products, and function types. We encode these using an algebraic data type:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">Syntactic types</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">datatype</span> <span class="org-type-def">Type</span> = Basic <span class="org-keyword">of</span> string
+              | Fun <span class="org-keyword">of</span> Type * Type
+              | Pair <span class="org-keyword">of</span> Type * Type;
+</pre>
+</div>
+
+<p>
+Now, terms in the object language are then encoded using syntactic
+terms, as distinguished from terms in the metalanguage used for
+evaluation. We have the syntactic terms:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Term</span> = var <span class="org-keyword">of</span> string
+              | lam <span class="org-keyword">of</span> string * Term <span class="org-comment-delimiter">(* </span><span class="org-comment">lam (var_name, body)</span><span class="org-comment-delimiter"> *)</span>
+              | app <span class="org-keyword">of</span> Term * Term
+              | pair <span class="org-keyword">of</span> Term * Term
+              | fst <span class="org-keyword">of</span> Term
+              | snd <span class="org-keyword">of</span> Term;
+</pre>
+</div>
+
+<div class="remark" id="org88d4eb0">
+<p>
+It may prove useful to use <a href="de-bruijn-index.html">de Bruijn indices</a> or locally nameless
+variables, when encoding syntactic terms. I'm not sure whether I'll do
+it or not.
+</p>
+
+</div>
+
+<p>
+The semantic terms are precisely interpretations of the syntactic terms
+as elements of the metalanguage. We have
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Sem</span> = LAM <span class="org-keyword">of</span> (Sem -&gt; Sem)
+             | PAIR <span class="org-keyword">of</span> Sem * Sem
+             | SYN <span class="org-keyword">of</span> Term;
+</pre>
+</div>
+
+<p>
+We need to move back-and-forth from the "syntactic level" and the
+"semantic level". The terminology used for translations moving from one
+level to the other are standardized as:
+</p>
+
+<ul class="org-ul">
+<li><b>Reification</b> (intuitively "evaluation"), denoted \(\downarrow^{\tau}\), constructs a syntactic representation of a
+"well-behaved" semantic value, and</li>
+<li><b>Reflection</b>, denoted \(\uparrow_{\tau}\) constructs "well-behaved" semantic values from pieces of
+syntax.</li>
+</ul>
+
+<p>
+These are mutually recursive functions defined by the following
+equations:
+</p>
+
+\begin{align}
+  \uparrow_{\alpha} t &= \mathbf{SYN}\ t \\
+  \uparrow_{\tau_1 \to \tau_2} v &= 
+     \mathbf{LAM} (\lambda S.\ \uparrow_{\tau_2} (\mathbf{app}\ (v, \downarrow^{\tau_1} S))) \\
+  \uparrow_{\tau_1 \times \tau_2} v &=
+     \mathbf{PAIR} (\uparrow_{\tau_1} (\mathbf{fst}\ v), \uparrow_{\tau_2} (\mathbf{snd}\ v)) \\[1ex]
+  \downarrow^{\alpha} (\mathbf{SYN}\ t) &= t \\
+  \downarrow^{\tau_1 \to \tau_2} (\mathbf{LAM}\ S) &=
+     \mathbf{lam}\ (x, \downarrow^{\tau_2} (S\ (\uparrow_{\tau_1} (\mathbf{var}\ x)))) 
+     \text{ where } x \text{ is fresh} \\
+  \downarrow^{\tau_1 \times \tau_2} (\mathbf{PAIR}\ (S, T)) &=
+     \mathbf{pair}\ (\downarrow^{\tau_1} S, \downarrow^{\tau_2} T)
+\end{align}
+
+<p>
+For any well-typed syntactic term \(s\) of type \(\tau\), its semantic value
+\(S\) can be reified into the ($&beta;$-normal $&eta;$-long) normal form of
+\(s\). The process of obtaining the "meaning" of \(s\) we denote by
+\(\|s\|_{\Gamma}\) where \(\Gamma\) is the context of bindings, defined
+inductively by:
+</p>
+
+\begin{align}
+  \| \mathbf{var}\ x \|_\Gamma &= \Gamma(x) \\
+  \| \mathbf{lam}\ (x, s) \|_\Gamma &= 
+     \mathbf{LAM}\ (\lambda S.\ \| s \|_{\Gamma, x \mapsto S}) \\
+  \| \mathbf{app}\ (s, t) \|_\Gamma &=
+    S\ (\|t\|_\Gamma) \text{ where } \|s\|_\Gamma = \mathbf{LAM}\ S \\
+  \| \mathbf{pair}\ (s, t) \|_\Gamma &=
+     \mathbf{PAIR}\ (\|s\|_\Gamma, \|t\|_\Gamma) \\
+  \| \mathbf{fst}\ s \|_\Gamma &=
+      S \text{ where } \|s\|_\Gamma = \mathbf{PAIR}\ (S, T) \\
+  \| \mathbf{snd}\ t \|_\Gamma &=
+      T \text{ where } \|t\|_\Gamma = \mathbf{PAIR}\ (S, T)
+\end{align}
+
+<div class="remark" id="org66d673b">
+<p>
+In the literature, usually the meaning is denoted using Oxford brackets \([\![t]\!]\)
+instead of the norm \(\|t\|\).
+</p>
+
+</div>
+
+<p>
+Then normalization by evaluation may be defined by reifying the meaning
+of any well-typed syntactic term.
+</p>
+
+<p>
+We should prove soundness (if any two syntactic terms are \(\beta\eta\) equivalent,
+then they will have the same meaning) and completeness
+(if any two syntactic terms have equal meanings, then they are
+\(\beta\eta\) equivalent).
+</p>
+</div>
+
+<div id="outline-container-h-399b4fdd-2ac9-4013-bd0f-feb06a22cbd7" class="outline-3">
+<h3 id="h-399b4fdd-2ac9-4013-bd0f-feb06a22cbd7"><span class="section-number-3">2.1.</span> Reification/Evaluation and Alternatives</h3>
+<div class="outline-text-3" id="text-h-399b4fdd-2ac9-4013-bd0f-feb06a22cbd7">
+<p>
+The "by evaluation" occurs in the reification function. <b>Reification is just evaluation.</b>
+We implemented it using a crude form of higher-order abstract
+syntax. There is another popular method, using closures. This seems to
+be first done in Andreas Abel's thesis. This could be viewed as the
+<a href="https://en.wikipedia.org/wiki/Defunctionalization">defunctionalization</a> of the implementation we sketched above.
+</p>
+
+<p>
+"A closure packages an expression that has not yet been evaluated with
+the runtime environment in which the expression was created."
 </p>
 </div>
 </div>
 
 
+<div id="outline-container-h-605f7d6c-6672-4a93-b961-040fe4e47b22" class="outline-3">
+<h3 id="h-605f7d6c-6672-4a93-b961-040fe4e47b22"><span class="section-number-3">2.2.</span> Optimizations</h3>
+<div class="outline-text-3" id="text-h-605f7d6c-6672-4a93-b961-040fe4e47b22">
+<p>
+The sketchy algorithm from the previous section is a faithful, but
+naive, implementation of the idea underlying normalization-by-evaluation.
+</p>
+
+<p>
+There are various optimizations we could consider. For example, we could
+use higher-order-syntax more effectively.
+</p>
+
+<ul class="org-ul">
+<li>Klaus Aehlig and Florian Haftmann and Tobias Nipkow,<br>
+"A Compiled Implementation of Normalization by Evaluation".<br>
+<a href="https://www21.in.tum.de/~nipkow/pubs/tphols08.pdf">PDF</a></li>
+<li>Mathieu Boespflug,<br>
+"Efficient normalization by evaluation".<br>
+<cite class="book-title">2009 Workshop on Normalization by Evaluation</cite>,
+ed. Olivier Danvy, Aug 2009, Los Angeles, United States.
+Eprint: <a href="https://hal.inria.fr/inria-00434283/document">inria-00434283</a></li>
+</ul>
+</div>
+</div>
+</div>
+
 <div id="outline-container-h-226a7a03-950e-4964-ba32-283c449ff4f8" class="outline-2">
-<h2 id="h-226a7a03-950e-4964-ba32-283c449ff4f8"><span class="section-number-2">2.</span> References</h2>
+<h2 id="h-226a7a03-950e-4964-ba32-283c449ff4f8"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-226a7a03-950e-4964-ba32-283c449ff4f8">
 <ul class="org-ul">
 <li>David Thrane Christiansen,
@@ -254,15 +460,26 @@ with nominal variables, or whatever.)
 <a href="https://augustss.blogspot.com/2007/10/simpler-easier-in-recent-paper-simply.html">Simpler, Easier!</a>
 Blog post dated 25 October 2007, giving an implementation of
 dependently typed lambda calculus in Haskell</li>
+<li>Andres Löh, Conor McBride and Wouter Swierstra,<br>
+"A Tutorial Implementation of a Dependently Typed Lambda Calculus".<br>
+<a href="https://www.andres-loeh.de/LambdaPi/">Eprint and code</a></li>
 <li>Andreas Abel,
 "Normalization by Evaluation: Dependent Types and Impredicativity".
 <a href="https://www.cse.chalmers.se/~abela/habil.pdf">PDF</a>, PhD thesis (2013), 96 pages</li>
+<li>Klaus Aehlig and Florian Haftmann and Tobias Nipkow,<br>
+"A Compiled Implementation of Normalization by Evaluation".<br>
+<a href="https://www21.in.tum.de/~nipkow/pubs/tphols08.pdf">PDF</a></li>
+<li>Mathieu Boespflug,<br>
+"Efficient normalization by evaluation".<br>
+<cite class="book-title">2009 Workshop on Normalization by Evaluation</cite>,
+ed. Olivier Danvy, Aug 2009, Los Angeles, United States.
+Eprint: <a href="https://hal.inria.fr/inria-00434283/document">inria-00434283</a></li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-03-29 Tue 12:12.</p>
+<p class="postamble">Last Updated 2023-02-22 Wed 11:28.</p>
 </div>
 </body>
 </html>

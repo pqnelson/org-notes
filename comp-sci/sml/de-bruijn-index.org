@@ -386,3 +386,79 @@ datatype Expr =
 It's probably wise to use opaque types, then make certain constructors
 public, so as to avoid passing off illegal pseudoexpressions as
 perfectly valid expressions.
+* Explicit Substitutions
+:PROPERTIES:
+:CUSTOM_ID: h-507248f5-0954-4c7e-9393-c8fb75833372
+:END:
+
+It is also standard, when implementing a lambda calculus interpreter
+with de Bruijn indices, to use explicit substitution. This transforms
+substitution from "an operation on syntactic terms" to "part of the syntax".
+
+Although this sounds like a great idea, it comes at considerable
+cost. For example, lambda calculus with explicit substitution is no
+longer strongly normalizing, as first proved in:
+
+- P-A. Melliès,\\
+  "Typed lambda-calculi with explicit substitutions may not terminate".\\
+  TLCA 1995, pp.328--334; [[https://www.irif.fr/~mellies/papers/Mellies95tlca.ps][Eprint]].
+
+** And Type Theory
+:PROPERTIES:
+:CUSTOM_ID: h-d945e1e1-35f5-4aea-81a3-50b54af769d9
+:END:
+
+There are difficulties doing this with dependent types, which is
+discussed beautifully in:
+
+- César Muñoz,
+  "Dependent Types and Explicit Substitutions".
+  Eprint [[https://ntrs.nasa.gov/api/citations/19990116988/downloads/19990116988.pdf][NASA/CR-1999-209722]], 1999; 32 pages.
+
+* De Bruijn Levels
+:PROPERTIES:
+:CUSTOM_ID: h-e4b20d7d-34ef-4039-9dfa-5175fefa7344
+:END:
+
+If we start counting from the "inside" outwards, instead of using the
+"depth" for numbering bound variables, we start counting from the
+innermost binder, then we end up with de Bruijn levels. This is useful
+when implementing [[file:nbe.org][normalization by evaluation]] because it allows us to
+use purely functional code. This is done, e.g., in section 3.1 of:
+
+- Andrzej Filinski,\\
+  "A Semantic Account of Type-Directed Partial Evaluation".\\
+  BRICS Report Series *6* no.17 (1999) 26 pages.
+  {{{doi(10.7146/brics.v6i17.20074)}}}
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-cae74e21-ef79-4f31-a5be-786564b0fe9b
+:END:
+
+- Nicolaas de Bruijn,\\
+  "Lambda Calculus Notation with Nameless Dummies, a Tool for Automatic
+  Formula Manipulation, with Application to the Church-Rosser
+  Theorem".\\
+  {{{book-title(Indagationes Mathematicae (Proceedings))}}} *75* 5 (1972) pp.381--392 
+  [[http://alexandria.tue.nl/repository/freearticles/597619.pdf][pdf]].
+- TAPL
+
+** Explicit Substitutions
+:PROPERTIES:
+:CUSTOM_ID: h-c4daab70-c334-4226-8c9b-671a6153f8c6
+:END:
+
+- Martin Abadi, Lucas Cardelli, Pierre-Louis Curien, and Jean-Jacques Lévy,\\
+  "Explicit substitutions".\\
+  /Journal of Functional Programming/ *1* no.4 (1991) pp.375--416
+  - This is the first paper which introduces explicit substitutions as a concept.
+  - [[http://pauillac.inria.fr/~levy/pubs/90popljfp.pdf][Expanded Eprint]]
+  - [[https://web.archive.org/web/20220115113454/www.hpl.hp.com/techreports/Compaq-DEC/SRC-RR-54.pdf][Archived eprint]] of version presented at 7th ACM Principles of
+    Programming languages conference
+- Mauricio Ayala-Rincon and  César Muñoz,\\
+  "Explicit Substitutions and All That".
+  Eprint [[https://ntrs.nasa.gov/citations/20010000323][NASA/CR-2000-210621]], 32 pages.
+- P-A. Melliès,\\
+  "Typed lambda-calculi with explicit substitutions may not terminate".\\
+  TLCA 1995, pp.328--334; [[https://www.irif.fr/~mellies/papers/Mellies95tlca.ps][Eprint]].

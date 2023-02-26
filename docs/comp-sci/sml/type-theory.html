@@ -206,6 +206,27 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -220,6 +241,8 @@
 <ul>
 <li><a href="#h-07afd94f-ca63-4a36-8c04-9dbe20f18872">1. Overview</a></li>
 <li><a href="#h-56474fb9-30f9-42d5-b52a-f02846a54af9">2. Value Restriction</a></li>
+<li><a href="#h-244680bc-e10d-4998-a7d2-4831cbd142b6">3. Polymorphism</a></li>
+<li><a href="#h-7e32734c-7e9c-46b7-a9f1-e87d33219ef2">4. References</a></li>
 </ul>
 </div>
 </div>
@@ -229,7 +252,9 @@
 <div class="outline-text-2" id="text-h-07afd94f-ca63-4a36-8c04-9dbe20f18872">
 <p>
 Standard ML appears to be prenex polymorphic typed-lambda calculus, but
-it is a Hindley-Milner system.
+it is a Hindley-Milner system. But I'm skeptical whether this is a good
+intuition, since it seems algebraic data types match initial algebras
+for endofunctors.
 </p>
 
 <p>
@@ -249,12 +274,110 @@ If we allow <i>anything</i> to appear in a reference type, then we can
 quickly run into problems when storing a function in a
 reference. Because of this, Standard ML restricts what values may be
 stored in a reference type. The 1997 definition calls them
-<dfn>Non-Expansive Expressions</dfn> (but doesn't clearly define the term).</p>
+<dfn>Non-Expansive Expressions</dfn> and defines the in chapter 4
+section 7.
+</p>
+
+<p>
+After desugaring an expression and performing the expansions defined in
+the parsing step, the grammar for them in quasi-EBNF:
+</p>
+
+<pre class="example" id="org6ac908d">
+nexp = scon              ; special constants = literal values
+     | ["op"] longvid    ; identifiers
+     | "{" [nexprow] "}" ; record types
+     | "(" nexp ")"
+     | conexp nexp       ; constructors applied to nexp
+     | nexp ":" ty
+     | "fn" match        ; anonymous functions
+
+nexprow = lab "=" nexp ["," nexprow]
+
+conexp = "(" conexp [":" ty] ")"
+       | ["op"] longvid
+</pre>
+
+<p>
+The only constraints here are that within a <code>conexp</code> we require
+<code>longvid</code> is not <code>ref</code>, and <code>is</code> of \(C(longvid)\in\{\mathtt{c},\mathtt{e}\}\).
+</p>
+
+<p>
+We should actually think of "non-expansive expressions" as "syntactic
+values". (If we compare them to semantic values found in chapter 6, then
+we're actually pretty close.)
+</p>
+
+<p>
+Observe that <code>ref NONE</code> is not a non-expansive expression because we could
+do terrible things, like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">r</span>: 'a option ref = ref NONE
+<span class="org-keyword">val</span> <span class="org-variable-name">r1</span>: string option ref = r
+<span class="org-keyword">val</span> <span class="org-variable-name">r2</span>: int option ref = r
+<span class="org-keyword">val</span> () = r1 := SOME <span class="org-string">"foo"</span>
+<span class="org-keyword">val</span> <span class="org-variable-name">v</span>: int = valOf (!r2)
+</pre>
+</div>
+
+<p>
+Also observe:
+</p>
+
+<ul class="org-ul">
+<li>Function applications are expansive expressions</li>
+<li>Let-expressions are expansive expressions</li>
+<li>Raising or handling exceptions are expansive expressions</li>
+<li>Conditionals and case-expressions are expansive expressions</li>
+</ul>
+
+<p>
+Really, any expressions which can be evaluated further can create new
+reference cells or raise exceptions, which are expansive (in the sense
+that they <i>expand</i> memory usage).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-244680bc-e10d-4998-a7d2-4831cbd142b6" class="outline-2">
+<h2 id="h-244680bc-e10d-4998-a7d2-4831cbd142b6"><span class="section-number-2">3.</span> Polymorphism</h2>
+<div class="outline-text-2" id="text-h-244680bc-e10d-4998-a7d2-4831cbd142b6">
+<p>
+The notion of the "closure" operation when elaborating an expression
+(the Clos operation defined in section 4.8) occurs in rule (15) of the
+definition of Standard ML and is responsible for transforming an
+expression into a polymorphic expression. This "Clos" operation enforces
+value restriction by preventing a declaration binding an identifier to
+an expansive expression from becoming polymorphic.
+</p>
+
+<p>
+The comment to rule (15) is also worth pondering.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-7e32734c-7e9c-46b7-a9f1-e87d33219ef2" class="outline-2">
+<h2 id="h-7e32734c-7e9c-46b7-a9f1-e87d33219ef2"><span class="section-number-2">4.</span> References</h2>
+<div class="outline-text-2" id="text-h-7e32734c-7e9c-46b7-a9f1-e87d33219ef2">
+<ul class="org-ul">
+<li><a href="https://www.smlnj.org/doc/Conversion/types.html">Types and Type Checking</a> SMLNJ documentation</li>
+<li>MLton documentation has a lot of gems
+<ul class="org-ul">
+<li><a href="http://mlton.org/ValueRestriction">Value Restriction</a></li>
+<li><a href="http://mlton.org/Monomorphise">Monomorphise</a> seems to support the intuition of
+initial algebra semantics for algebraic data types</li>
+<li><a href="http://mlton.org/FirstClassPolymorphism">First-Class Polymorphism</a> doesn't exist in Standard ML (alas)</li>
+</ul></li>
+</ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-07-08 Fri 09:00.</p>
+<p class="postamble">Last Updated 2023-02-24 Fri 11:39.</p>
 </div>
 </body>
 </html>

@@ -19,10 +19,151 @@
 A common project for functional programming courses is to implement a
 typed lambda calculus. There are a variety of ways to do this, but we
 will focus on the technique of {{{dfn(Normalization by Evaluation)}}}.
-(The alternative techniques seem to be variations of de Bruijn indices,
-though I understand some languages have more sophisticated techniques
-with nominal variables, or whatever.)
+Basically, we encode the object language as syntactic objects, then we
+translate it into the implementing language for evaluation (or evaluate
+it through some other means), and finally translate back to the object
+language. Amazingly enough, this works.
 
+To be clear, by "evaluate it by some means", what we really mean is we
+will use the denotational semantics of the language to evaluate
+expressions.
+
+* Example: Simply-Typed Lambda Calculus
+:PROPERTIES:
+:CUSTOM_ID: h-80788dc8-193c-4121-94ab-198604dfe041
+:END:
+
+Suppose we had simply-typed lambda calculus with some set of base types,
+products, and function types. We encode these using an algebraic data type:
+
+#+begin_src sml
+(* Syntactic types *)
+datatype Type = Basic of string
+              | Fun of Type * Type
+              | Pair of Type * Type;
+#+end_src
+
+Now, terms in the object language are then encoded using syntactic
+terms, as distinguished from terms in the metalanguage used for
+evaluation. We have the syntactic terms:
+
+#+begin_src sml
+datatype Term = var of string
+              | lam of string * Term (* lam (var_name, body) *)
+              | app of Term * Term
+              | pair of Term * Term
+              | fst of Term
+              | snd of Term;
+#+end_src
+
+#+begin_remark
+It may prove useful to use [[file:de-bruijn-index.org][de Bruijn indices]] or locally nameless
+variables, when encoding syntactic terms. I'm not sure whether I'll do
+it or not.
+#+end_remark
+
+The semantic terms are precisely interpretations of the syntactic terms
+as elements of the metalanguage. We have
+
+#+begin_src sml
+datatype Sem = LAM of (Sem -> Sem)
+             | PAIR of Sem * Sem
+             | SYN of Term;
+#+end_src
+
+We need to move back-and-forth from the "syntactic level" and the
+"semantic level". The terminology used for translations moving from one
+level to the other are standardized as:
+
+- *Reification* (intuitively "evaluation"), denoted $\downarrow^{\tau}$, constructs a syntactic representation of a
+  "well-behaved" semantic value, and
+- *Reflection*, denoted $\uparrow_{\tau}$ constructs "well-behaved" semantic values from pieces of
+  syntax. 
+
+These are mutually recursive functions defined by the following
+equations:
+
+\begin{align}
+  \uparrow_{\alpha} t &= \mathbf{SYN}\ t \\
+  \uparrow_{\tau_1 \to \tau_2} v &= 
+     \mathbf{LAM} (\lambda S.\ \uparrow_{\tau_2} (\mathbf{app}\ (v, \downarrow^{\tau_1} S))) \\
+  \uparrow_{\tau_1 \times \tau_2} v &=
+     \mathbf{PAIR} (\uparrow_{\tau_1} (\mathbf{fst}\ v), \uparrow_{\tau_2} (\mathbf{snd}\ v)) \\[1ex]
+  \downarrow^{\alpha} (\mathbf{SYN}\ t) &= t \\
+  \downarrow^{\tau_1 \to \tau_2} (\mathbf{LAM}\ S) &=
+     \mathbf{lam}\ (x, \downarrow^{\tau_2} (S\ (\uparrow_{\tau_1} (\mathbf{var}\ x)))) 
+     \text{ where } x \text{ is fresh} \\
+  \downarrow^{\tau_1 \times \tau_2} (\mathbf{PAIR}\ (S, T)) &=
+     \mathbf{pair}\ (\downarrow^{\tau_1} S, \downarrow^{\tau_2} T)
+\end{align}
+
+For any well-typed syntactic term $s$ of type $\tau$, its semantic value
+$S$ can be reified into the ($\beta$-normal $\eta$-long) normal form of
+$s$. The process of obtaining the "meaning" of $s$ we denote by
+$\|s\|_{\Gamma}$ where $\Gamma$ is the context of bindings, defined
+inductively by:
+
+\begin{align}
+  \| \mathbf{var}\ x \|_\Gamma &= \Gamma(x) \\
+  \| \mathbf{lam}\ (x, s) \|_\Gamma &= 
+     \mathbf{LAM}\ (\lambda S.\ \| s \|_{\Gamma, x \mapsto S}) \\
+  \| \mathbf{app}\ (s, t) \|_\Gamma &=
+    S\ (\|t\|_\Gamma) \text{ where } \|s\|_\Gamma = \mathbf{LAM}\ S \\
+  \| \mathbf{pair}\ (s, t) \|_\Gamma &=
+     \mathbf{PAIR}\ (\|s\|_\Gamma, \|t\|_\Gamma) \\
+  \| \mathbf{fst}\ s \|_\Gamma &=
+      S \text{ where } \|s\|_\Gamma = \mathbf{PAIR}\ (S, T) \\
+  \| \mathbf{snd}\ t \|_\Gamma &=
+      T \text{ where } \|t\|_\Gamma = \mathbf{PAIR}\ (S, T)
+\end{align}
+
+#+begin_remark
+In the literature, usually the meaning is denoted using Oxford brackets $[\![t]\!]$
+instead of the norm $\|t\|$.
+#+end_remark
+
+Then normalization by evaluation may be defined by reifying the meaning
+of any well-typed syntactic term.
+
+We should prove soundness (if any two syntactic terms are $\beta\eta$ equivalent,
+then they will have the same meaning) and completeness
+(if any two syntactic terms have equal meanings, then they are
+$\beta\eta$ equivalent).
+
+** Reification/Evaluation and Alternatives
+:PROPERTIES:
+:CUSTOM_ID: h-399b4fdd-2ac9-4013-bd0f-feb06a22cbd7
+:END:
+
+The "by evaluation" occurs in the reification function. *Reification is just evaluation.*
+We implemented it using a crude form of higher-order abstract
+syntax. There is another popular method, using closures. This seems to
+be first done in Andreas Abel's thesis. This could be viewed as the
+[[https://en.wikipedia.org/wiki/Defunctionalization][defunctionalization]] of the implementation we sketched above.
+
+"A closure packages an expression that has not yet been evaluated with
+the runtime environment in which the expression was created."
+
+
+** Optimizations
+:PROPERTIES:
+:CUSTOM_ID: h-605f7d6c-6672-4a93-b961-040fe4e47b22
+:END:
+
+The sketchy algorithm from the previous section is a faithful, but
+naive, implementation of the idea underlying normalization-by-evaluation.
+
+There are various optimizations we could consider. For example, we could
+use higher-order-syntax more effectively.
+
+- Klaus Aehlig and Florian Haftmann and Tobias Nipkow,\\
+  "A Compiled Implementation of Normalization by Evaluation".\\
+  [[https://www21.in.tum.de/~nipkow/pubs/tphols08.pdf][PDF]]
+- Mathieu Boespflug,\\
+  "Efficient normalization by evaluation".\\
+  {{{book-title(2009 Workshop on Normalization by Evaluation)}}},
+  ed. Olivier Danvy, Aug 2009, Los Angeles, United States.
+  Eprint: [[https://hal.inria.fr/inria-00434283/document][inria-00434283]]
 
 * References
 :PROPERTIES:
@@ -39,6 +180,17 @@ with nominal variables, or whatever.)
   [[https://augustss.blogspot.com/2007/10/simpler-easier-in-recent-paper-simply.html][Simpler, Easier!]]
   Blog post dated 25 October 2007, giving an implementation of
   dependently typed lambda calculus in Haskell
+- Andres Löh, Conor McBride and Wouter Swierstra,\\
+  "A Tutorial Implementation of a Dependently Typed Lambda Calculus".\\
+  [[https://www.andres-loeh.de/LambdaPi/][Eprint and code]]
 - Andreas Abel,
   "Normalization by Evaluation: Dependent Types and Impredicativity".
   [[https://www.cse.chalmers.se/~abela/habil.pdf][PDF]], PhD thesis (2013), 96 pages
+- Klaus Aehlig and Florian Haftmann and Tobias Nipkow,\\
+  "A Compiled Implementation of Normalization by Evaluation".\\
+  [[https://www21.in.tum.de/~nipkow/pubs/tphols08.pdf][PDF]]
+- Mathieu Boespflug,\\
+  "Efficient normalization by evaluation".\\
+  {{{book-title(2009 Workshop on Normalization by Evaluation)}}},
+  ed. Olivier Danvy, Aug 2009, Los Angeles, United States.
+  Eprint: [[https://hal.inria.fr/inria-00434283/document][inria-00434283]]

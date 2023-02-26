@@ -250,6 +250,17 @@
 <li><a href="#h-16502c44-ef38-4b5c-8cc9-577a9621f5d2">3. Locally Nameless Variables</a></li>
 <li><a href="#h-0825b3d3-5d90-4f57-b3ff-bec320045ec1">4. HOAS, PHOAS, etc.</a></li>
 <li><a href="#h-3761a02f-4b76-4769-a18f-defd3cc8d6be">5. &#x2026;and <i>Typed</i> Lambda Calculus</a></li>
+<li><a href="#h-507248f5-0954-4c7e-9393-c8fb75833372">6. Explicit Substitutions</a>
+<ul>
+<li><a href="#h-d945e1e1-35f5-4aea-81a3-50b54af769d9">6.1. And Type Theory</a></li>
+</ul>
+</li>
+<li><a href="#h-e4b20d7d-34ef-4039-9dfa-5175fefa7344">7. De Bruijn Levels</a></li>
+<li><a href="#h-cae74e21-ef79-4f31-a5be-786564b0fe9b">8. References</a>
+<ul>
+<li><a href="#h-c4daab70-c334-4226-8c9b-671a6153f8c6">8.1. Explicit Substitutions</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -763,12 +774,109 @@ Or perhaps more succinctly using one datatype for pseudo-expressions:
 <p>
 It's probably wise to use opaque types, then make certain constructors
 public, so as to avoid passing off illegal pseudoexpressions as
-perfectly valid expressions.</p>
+perfectly valid expressions.
+</p>
+</div>
+</div>
+<div id="outline-container-h-507248f5-0954-4c7e-9393-c8fb75833372" class="outline-2">
+<h2 id="h-507248f5-0954-4c7e-9393-c8fb75833372"><span class="section-number-2">6.</span> Explicit Substitutions</h2>
+<div class="outline-text-2" id="text-h-507248f5-0954-4c7e-9393-c8fb75833372">
+<p>
+It is also standard, when implementing a lambda calculus interpreter
+with de Bruijn indices, to use explicit substitution. This transforms
+substitution from "an operation on syntactic terms" to "part of the syntax".
+</p>
+
+<p>
+Although this sounds like a great idea, it comes at considerable
+cost. For example, lambda calculus with explicit substitution is no
+longer strongly normalizing, as first proved in:
+</p>
+
+<ul class="org-ul">
+<li>P-A. Melliès,<br>
+"Typed lambda-calculi with explicit substitutions may not terminate".<br>
+TLCA 1995, pp.328&#x2013;334; <a href="https://www.irif.fr/~mellies/papers/Mellies95tlca.ps">Eprint</a>.</li>
+</ul>
+</div>
+
+<div id="outline-container-h-d945e1e1-35f5-4aea-81a3-50b54af769d9" class="outline-3">
+<h3 id="h-d945e1e1-35f5-4aea-81a3-50b54af769d9"><span class="section-number-3">6.1.</span> And Type Theory</h3>
+<div class="outline-text-3" id="text-h-d945e1e1-35f5-4aea-81a3-50b54af769d9">
+<p>
+There are difficulties doing this with dependent types, which is
+discussed beautifully in:
+</p>
+
+<ul class="org-ul">
+<li>César Muñoz,
+"Dependent Types and Explicit Substitutions".
+Eprint <a href="https://ntrs.nasa.gov/api/citations/19990116988/downloads/19990116988.pdf">NASA/CR-1999-209722</a>, 1999; 32 pages.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-e4b20d7d-34ef-4039-9dfa-5175fefa7344" class="outline-2">
+<h2 id="h-e4b20d7d-34ef-4039-9dfa-5175fefa7344"><span class="section-number-2">7.</span> De Bruijn Levels</h2>
+<div class="outline-text-2" id="text-h-e4b20d7d-34ef-4039-9dfa-5175fefa7344">
+<p>
+If we start counting from the "inside" outwards, instead of using the
+"depth" for numbering bound variables, we start counting from the
+innermost binder, then we end up with de Bruijn levels. This is useful
+when implementing <a href="nbe.html">normalization by evaluation</a> because it allows us to
+use purely functional code. This is done, e.g., in section 3.1 of:
+</p>
+
+<ul class="org-ul">
+<li>Andrzej Filinski,<br>
+"A Semantic Account of Type-Directed Partial Evaluation".<br>
+BRICS Report Series <b>6</b> no.17 (1999) 26 pages.
+doi:<a href="https://doi.org/10.7146/brics.v6i17.20074">10.7146/brics.v6i17.20074</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-cae74e21-ef79-4f31-a5be-786564b0fe9b" class="outline-2">
+<h2 id="h-cae74e21-ef79-4f31-a5be-786564b0fe9b"><span class="section-number-2">8.</span> References</h2>
+<div class="outline-text-2" id="text-h-cae74e21-ef79-4f31-a5be-786564b0fe9b">
+<ul class="org-ul">
+<li>Nicolaas de Bruijn,<br>
+"Lambda Calculus Notation with Nameless Dummies, a Tool for Automatic
+Formula Manipulation, with Application to the Church-Rosser
+Theorem".<br>
+<cite class="book-title">Indagationes Mathematicae (Proceedings)</cite> <b>75</b> 5 (1972) pp.381&#x2013;392 
+<a href="http://alexandria.tue.nl/repository/freearticles/597619.pdf">pdf</a>.</li>
+<li>TAPL</li>
+</ul>
+</div>
+
+<div id="outline-container-h-c4daab70-c334-4226-8c9b-671a6153f8c6" class="outline-3">
+<h3 id="h-c4daab70-c334-4226-8c9b-671a6153f8c6"><span class="section-number-3">8.1.</span> Explicit Substitutions</h3>
+<div class="outline-text-3" id="text-h-c4daab70-c334-4226-8c9b-671a6153f8c6">
+<ul class="org-ul">
+<li>Martin Abadi, Lucas Cardelli, Pierre-Louis Curien, and Jean-Jacques Lévy,<br>
+"Explicit substitutions".<br>
+<i>Journal of Functional Programming</i> <b>1</b> no.4 (1991) pp.375&#x2013;416
+<ul class="org-ul">
+<li>This is the first paper which introduces explicit substitutions as a concept.</li>
+<li><a href="http://pauillac.inria.fr/~levy/pubs/90popljfp.pdf">Expanded Eprint</a></li>
+<li><a href="https://web.archive.org/web/20220115113454/www.hpl.hp.com/techreports/Compaq-DEC/SRC-RR-54.pdf">Archived eprint</a> of version presented at 7th ACM Principles of
+Programming languages conference</li>
+</ul></li>
+<li>Mauricio Ayala-Rincon and  César Muñoz,<br>
+"Explicit Substitutions and All That".
+Eprint <a href="https://ntrs.nasa.gov/citations/20010000323">NASA/CR-2000-210621</a>, 32 pages.</li>
+<li>P-A. Melliès,<br>
+"Typed lambda-calculi with explicit substitutions may not terminate".<br>
+TLCA 1995, pp.328&#x2013;334; <a href="https://www.irif.fr/~mellies/papers/Mellies95tlca.ps">Eprint</a>.</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-01-18 Wed 09:04.</p>
+<p class="postamble">Last Updated 2023-02-22 Wed 09:18.</p>
 </div>
 </body>
 </html>

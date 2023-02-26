@@ -17,7 +17,9 @@
 :END:
 
 Standard ML appears to be prenex polymorphic typed-lambda calculus, but
-it is a Hindley-Milner system.
+it is a Hindley-Milner system. But I'm skeptical whether this is a good
+intuition, since it seems algebraic data types match initial algebras
+for endofunctors.
 
 I'm going to have to examine the definition in greater detail, but I do
 not know what the type theoretic structure of a ~datatype~ (algebraic
@@ -33,4 +35,78 @@ If we allow /anything/ to appear in a reference type, then we can
 quickly run into problems when storing a function in a
 reference. Because of this, Standard ML restricts what values may be
 stored in a reference type. The 1997 definition calls them
-{{{dfn(Non-Expansive Expressions)}}} (but doesn't clearly define the term).
+{{{dfn(Non-Expansive Expressions)}}} and defines the in chapter 4
+section 7.
+
+After desugaring an expression and performing the expansions defined in
+the parsing step, the grammar for them in quasi-EBNF:
+
+#+begin_example
+nexp = scon              ; special constants = literal values
+     | ["op"] longvid    ; identifiers
+     | "{" [nexprow] "}" ; record types
+     | "(" nexp ")"
+     | conexp nexp       ; constructors applied to nexp
+     | nexp ":" ty
+     | "fn" match        ; anonymous functions
+
+nexprow = lab "=" nexp ["," nexprow]
+
+conexp = "(" conexp [":" ty] ")"
+       | ["op"] longvid
+#+end_example
+
+The only constraints here are that within a ~conexp~ we require
+~longvid~ is not ~ref~, and ~is~ of $C(longvid)\in\{\mathtt{c},\mathtt{e}\}$.
+
+We should actually think of "non-expansive expressions" as "syntactic
+values". (If we compare them to semantic values found in chapter 6, then
+we're actually pretty close.)
+
+Observe that ~ref NONE~ is not a non-expansive expression because we could
+do terrible things, like:
+
+#+begin_src sml
+val r: 'a option ref = ref NONE
+val r1: string option ref = r
+val r2: int option ref = r
+val () = r1 := SOME "foo"
+val v: int = valOf (!r2)
+#+end_src
+
+Also observe:
+
+- Function applications are expansive expressions
+- Let-expressions are expansive expressions
+- Raising or handling exceptions are expansive expressions
+- Conditionals and case-expressions are expansive expressions
+
+Really, any expressions which can be evaluated further can create new
+reference cells or raise exceptions, which are expansive (in the sense
+that they /expand/ memory usage).
+
+* Polymorphism
+:PROPERTIES:
+:CUSTOM_ID: h-244680bc-e10d-4998-a7d2-4831cbd142b6
+:END:
+
+The notion of the "closure" operation when elaborating an expression
+(the Clos operation defined in section 4.8) occurs in rule (15) of the
+definition of Standard ML and is responsible for transforming an
+expression into a polymorphic expression. This "Clos" operation enforces
+value restriction by preventing a declaration binding an identifier to
+an expansive expression from becoming polymorphic.
+
+The comment to rule (15) is also worth pondering.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-7e32734c-7e9c-46b7-a9f1-e87d33219ef2
+:END:
+
+- [[https://www.smlnj.org/doc/Conversion/types.html][Types and Type Checking]] SMLNJ documentation
+- MLton documentation has a lot of gems
+  - [[http://mlton.org/ValueRestriction][Value Restriction]] 
+  - [[http://mlton.org/Monomorphise][Monomorphise]] seems to support the intuition of
+    initial algebra semantics for algebraic data types
+  - [[http://mlton.org/FirstClassPolymorphism][First-Class Polymorphism]] doesn't exist in Standard ML (alas)
