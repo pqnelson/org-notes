@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -206,6 +206,27 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -221,8 +242,17 @@
 <li><a href="#h-8ab8f913-16f8-4655-9fef-2984e405acc7">1. Overview</a></li>
 <li><a href="#h-517e67e5-c13f-472b-b4dc-7ceeb9c86a0c">2. Knuth's Web and CWeb</a>
 <ul>
-<li><a href="#h-1408ab8a-c9fd-4a50-b93d-0e4b0ac3c89b">2.1. Intention: Communicate with Human Beings</a></li>
-<li><a href="#h-a6abaffd-932d-4741-a3d6-d732ba429779">2.2. Style</a></li>
+<li><a href="#h-1408ab8a-c9fd-4a50-b93d-0e4b0ac3c89b">2.1. Intention: Communicate with Human Beings</a>
+<ul>
+<li><a href="#h-710723e4-3bb5-497a-aaf6-68ba5b6a0eeb">2.1.1. Discussion of Variables</a></li>
+<li><a href="#h-456c7846-6740-468d-90c9-84c11b770736">2.1.2. "Psychologically correct order"</a></li>
+</ul>
+</li>
+<li><a href="#h-a6abaffd-932d-4741-a3d6-d732ba429779">2.2. Style</a>
+<ul>
+<li><a href="#h-4b97e024-6fc1-4fac-b928-82098bb2cab0">2.2.1. Naming Sections</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#h-bac38627-9fb2-460c-9acc-bdc741cf76e0">3. Misinterpretations of Knuth</a></li>
@@ -240,7 +270,13 @@
 </ul>
 </li>
 <li><a href="#h-54bc9d7c-f664-4f12-b9f9-635153bfd7be">5. Notes on Noweb</a></li>
-<li><a href="#h-0d908a8a-fa3e-4ae8-86cb-f54cefb65dfb">6. References</a></li>
+<li><a href="#h-ddc775f3-b8ee-41c1-9e9a-5e72c11c81fd">6. Knuth's "Structured Programming with GOTO"</a>
+<ul>
+<li><a href="#h-da35167c-aed5-4551-82ec-fdf174bf17fa">6.1. "Structured" &#x2014; Data and Control</a></li>
+<li><a href="#h-fb99dcb5-3e60-4150-b601-f23ea9e55b9d">6.2. Different Levels of Abstraction</a></li>
+</ul>
+</li>
+<li><a href="#h-0d908a8a-fa3e-4ae8-86cb-f54cefb65dfb">7. References</a></li>
 </ul>
 </div>
 </div>
@@ -337,6 +373,92 @@ programming. It's probably for this reason that literate
 programming never caught on.
 </p>
 </div>
+
+<div id="outline-container-h-710723e4-3bb5-497a-aaf6-68ba5b6a0eeb" class="outline-4">
+<h4 id="h-710723e4-3bb5-497a-aaf6-68ba5b6a0eeb"><span class="section-number-4">2.1.1.</span> Discussion of Variables</h4>
+<div class="outline-text-4" id="text-h-710723e4-3bb5-497a-aaf6-68ba5b6a0eeb">
+<p>
+Curiously, Knuth reflects about a few stylistic issues:
+</p>
+
+<blockquote>
+<p>
+The name of a section, enclosed in angle brackets, should be long
+enough to encapsulate the essential characteristics of the code in that
+section, but it should not be too verbose. I found very early that it would
+be a mistake to include all of the assumptions about local and global
+variables in the name of each section, even though such information
+would strictly be necessary to isolate that section as an independent
+module. The trick is to find a balance between formal and informal
+exposition so that a reader can grasp what is happening without being
+overwhelmed with detail. (See Naur [14].)
+</p>
+</blockquote>
+
+<p>
+I completely misread this the first time I read the article as
+discouraging the discussion of variables <i>in the body</i> of a chunk.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-456c7846-6740-468d-90c9-84c11b770736" class="outline-4">
+<h4 id="h-456c7846-6740-468d-90c9-84c11b770736"><span class="section-number-4">2.1.2.</span> "Psychologically correct order"</h4>
+<div class="outline-text-4" id="text-h-456c7846-6740-468d-90c9-84c11b770736">
+<p>
+Knuth refers to the strength of literate programming as not being forced
+to pick between "top-down" versus "bottom-up" design, stating in his
+article "Literate Programming":
+</p>
+
+<blockquote>
+<p>
+And the fact that there's no need
+to be hung up on the question of top-down versus bottom-up&#x2014;since a
+programmer can now view a large program as a web, to be explored
+in a psychologically correct order&#x2014;is perhaps the greatest lesson I have
+learned from my recent experiences.
+</p>
+</blockquote>
+
+<p>
+I have been confused by this enigmatic phrase for a while. But when
+reading his article on structured programming with the <code>goto</code> statement,
+Knuth writes:
+</p>
+
+<blockquote>
+<p>
+Putting this another way, it is much better from a psychological
+standpoint to write
+</p>
+<pre class="example" id="org15188a3">
+loop until found ... ; found; ... repeat
+</pre>
+<p>
+than to write
+</p>
+<pre class="example" id="org2153d00">
+search: while true do
+begin ... ; leave search; ... end.
+</pre>
+<p>
+The <code>leave</code> or <code>exit</code> statement is operationally the same, but intuitively
+different, <b>since it talks more about the program than about the problem.</b>
+</p>
+</blockquote>
+
+<p>
+(Bold emphasis mine.)
+</p>
+
+<p>
+It seems that one aspect of Knuth's use of the term "psychological" is
+working at the level of abstraction suitable for stating the problem, in
+a manner which is readily understandable and conceptually simple.
+</p>
+</div>
+</div>
 </div>
 
 <div id="outline-container-h-a6abaffd-932d-4741-a3d6-d732ba429779" class="outline-3">
@@ -387,6 +509,39 @@ definitions or formats)</li>
 <li>75th quartile: 16 lines of code</li>
 </ul></li>
 </ul>
+</div>
+
+<div id="outline-container-h-4b97e024-6fc1-4fac-b928-82098bb2cab0" class="outline-4">
+<h4 id="h-4b97e024-6fc1-4fac-b928-82098bb2cab0"><span class="section-number-4">2.2.1.</span> Naming Sections</h4>
+<div class="outline-text-4" id="text-h-4b97e024-6fc1-4fac-b928-82098bb2cab0">
+<p>
+Knuth has a number of "lessons learned" in the section "Stylistic
+Issues" of his article on literate programming:
+</p>
+
+<blockquote>
+<p>
+The name of a section, enclosed in angle brackets, should be long
+enough to encapsulate the essential characteristics of the code in that
+section, but it should not be too verbose. I found very early that it would
+be a mistake to include all of the assumptions about local and global
+variables in the name of each section, even though such information
+would strictly be necessary to isolate that section as an independent
+module. The trick is to find a balance between formal and informal
+exposition so that a reader can grasp what is happening without being
+overwhelmed with detail. (See Naur [14].)
+</p>
+
+<p>
+Another lesson I learned early in the game was that the name of a 
+section should explicitly mention any nonstandard control structures, even
+though its data structures can often be left implied. Furthermore, if the
+control flow is properly explained, you can avoid the usual errors 
+associated with <code>goto</code> statements; such statements can safely be introduced
+in a restrained but natural manner.
+</p>
+</blockquote>
+</div>
 </div>
 </div>
 </div>
@@ -461,7 +616,7 @@ Knuth writes:
 <p>
 But after gaining experience with WEB, I have come to realize that
 there is no need to choose once and for all between top-down and
-bottom-up, becausea program is best tough of as a web instead of as
+bottom-up, because a program is best tough of as a web instead of as
 a tree. A hierarchical structure is present, but the most important
 thing about a program is its structural relationships. A complex
 piece of software consists of simple parts and simple relations
@@ -666,8 +821,150 @@ begin/end document environment</li>
 </div>
 </div>
 
+<div id="outline-container-h-ddc775f3-b8ee-41c1-9e9a-5e72c11c81fd" class="outline-2">
+<h2 id="h-ddc775f3-b8ee-41c1-9e9a-5e72c11c81fd"><span class="section-number-2">6.</span> Knuth's "Structured Programming with GOTO"</h2>
+<div class="outline-text-2" id="text-h-ddc775f3-b8ee-41c1-9e9a-5e72c11c81fd">
+<p>
+There are a few passages worth quoting from Knuth's article on
+structured programming with the <code>goto</code> statement. In the discussion
+after example 5a:
+</p>
+
+<blockquote>
+<p>
+If such automatic <code>goto</code> elimination procedures are applied to badly
+structured programs, we can expect the resulting programs to be at
+least as badly structured. Dijkstra pointed this out already in 1968 [21],
+saying:
+</p>
+
+<pre class="example" id="org88c96ae">
+    The exercise to translate an arbitrary flow diagram more or less 
+    mechanically into a jumpless one, however, is not to be recommended.
+    Then the resulting flow diagram cannot be expected to be more
+    transparent than the original one.
+</pre>
+
+<p>
+In other words, we shouldn't merely remove <code>goto</code> statements because
+it's the fashionable thing to do; the presence or absence of goto 
+statements is not really the issue. <b>The underlying structure of the program is</b>
+<b>what counts, and we want only to avoid usages that somehow clutter up</b>
+<b>the program.</b> Good structure can be expressed in FORTRAN or COBOL,
+or even in assembly language, although less clearly and with much more
+trouble. <b>The real goal is to formulate our programs in such a way that</b>
+<b>they are easily understood.</b>
+</p>
+
+<p>
+Program structure refers to the way in which a complex algorithm
+is built up from successively simpler processes. In most situations this
+structure can be described very nicely in terms of sequential 
+compositions, conditionals, and simple iterations, together with <code>case</code> statements
+for multiway branches. Undisciplined <code>goto</code> statements make program
+structure harder to perceive, and they are often symptoms of a poor
+conceptual formulation. But there has been far too much emphasis on
+<code>goto</code> elimination instead of on the really important issues; people have
+a natural tendency to set up an easily understood quantitative goal like
+the abolition of jumps, instead of working directly for a qualitative goal
+like good program structure. In a similar way, many people have set
+up "zero population growth" as a goal to be achieved, when they really
+desire living conditions that are much harder to quantify.
+</p>
+
+<p>
+Probably the worst mistake any one can make with respect to the 
+subject of <code>go to</code> statements is to assume that "structured programming" is
+achieved by writing programs as we always have and then eliminating the
+<code>goto</code>'s. Most <code>goto</code>'s shouldn't be there in the first place! What we 
+really want is to conceive of our program in such a way that we rarely even
+think about <code>goto</code> statements, because the real need for them hardly ever
+arises. <b>The language in which we express our ideas has a strong influence</b>
+<b>on our thought processes.</b> Therefore, Dijkstra [21] asks for more new
+language features&#x2014;structures that encourage clear thinking&#x2014;in order
+to avoid the <code>goto</code>'s temptations toward complications.
+</p>
+</blockquote>
+
+<p>
+Emphasis in bold is mine.
+</p>
+</div>
+
+<div id="outline-container-h-da35167c-aed5-4551-82ec-fdf174bf17fa" class="outline-3">
+<h3 id="h-da35167c-aed5-4551-82ec-fdf174bf17fa"><span class="section-number-3">6.1.</span> "Structured" &#x2014; Data and Control</h3>
+<div class="outline-text-3" id="text-h-da35167c-aed5-4551-82ec-fdf174bf17fa">
+<p>
+Perhaps one of the ideas which has fallen into obscurity is the use of
+the term "data structure" refers to something different than what we
+think of it. There is concern about "well structured data", which sounds
+odd to modern ears. Knuth explains:
+</p>
+
+<blockquote>
+<p>
+We also need well-structured data; i.e., as we write the program we
+should have an abstract idea of what each variable means. This idea is
+also usually describable as an invariant relation, e.g., "\(m\) is the number
+of items in the table" or "\(x\) is the search argument" or "\(L[i]\) is the
+number of the root node of node \(t\)'s left subtree, or 0 if this subtree is
+empty" or "the contents of stack \(S\) are postponed obligations to do such
+and such."
+</p>
+</blockquote>
+
+<p>
+I confess I have no adequate definition for an "invariant relation", I
+suspect a good "first approximation" would be an assertion expected to hold.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-fb99dcb5-3e60-4150-b601-f23ea9e55b9d" class="outline-3">
+<h3 id="h-fb99dcb5-3e60-4150-b601-f23ea9e55b9d"><span class="section-number-3">6.2.</span> Different Levels of Abstraction</h3>
+<div class="outline-text-3" id="text-h-fb99dcb5-3e60-4150-b601-f23ea9e55b9d">
+<p>
+When pondering the definition of "structured programming", Knuth argues
+it should not rely on <code>goto</code> statements at all. Instead, it should refer
+to thinking at different "levels of abstraction" and the structure of
+the program working at these different levels.
+</p>
+
+<blockquote>
+<p>
+Indeed, Dijkstra's original article [23], which gave structured 
+programming its name, never mentioned <code>goto</code> statements at all! He directed
+attention to the critical question, "For what program structures can
+we give correctness proofs without undue labor, even if the programs
+get large?" By correctness proofs he explained that he does not mean
+formal derivations from axioms, he means any sort of proof (formal or
+informal) that is "sufficiently convincing"; and <b>a proof really means an</b>
+<b>understanding.</b> By program structure he means data structure as well
+as control structure.
+</p>
+
+<p>
+<b>We understand complex things by systematically breaking them into</b>
+<b>successively simpler parts and understanding how these parts fit together</b>
+<b>locally. Thus, we have different levels of understanding,</b> and each of those
+levels corresponds to an <i>abstraction</i> of the detail at the level from which
+it is composed. For example, at one level of abstraction, we deal with an
+integer without considering whether it is represented in binary notation
+or two's complement, etc., while at deeper levels this representation may
+be important. At more abstract levels the precise value of the integer is
+not important except as it relates to other data.
+</p>
+</blockquote>
+
+<p>
+(Bold emphasis mine, italics are Knuth's.)
+</p>
+</div>
+</div>
+</div>
+
 <div id="outline-container-h-0d908a8a-fa3e-4ae8-86cb-f54cefb65dfb" class="outline-2">
-<h2 id="h-0d908a8a-fa3e-4ae8-86cb-f54cefb65dfb"><span class="section-number-2">6.</span> References</h2>
+<h2 id="h-0d908a8a-fa3e-4ae8-86cb-f54cefb65dfb"><span class="section-number-2">7.</span> References</h2>
 <div class="outline-text-2" id="text-h-0d908a8a-fa3e-4ae8-86cb-f54cefb65dfb">
 <ul class="org-ul">
 <li>Donald Knuth,
@@ -688,7 +985,7 @@ doi:<a href="https://doi.org/10.1145/6592.6594">10.1145/6592.6594</a>.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-21 Thu 08:26.</p>
+<p class="postamble">Last Updated 2023-02-26 Sun 09:31.</p>
 </div>
 </body>
 </html>

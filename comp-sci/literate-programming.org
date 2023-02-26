@@ -86,6 +86,70 @@ Sadly programmers do not view themselves as essayists while
 programming. It's probably for this reason that literate
 programming never caught on.
 
+*** Discussion of Variables
+:PROPERTIES:
+:CUSTOM_ID: h-710723e4-3bb5-497a-aaf6-68ba5b6a0eeb
+:END:
+
+Curiously, Knuth reflects about a few stylistic issues:
+
+#+begin_quote
+The name of a section, enclosed in angle brackets, should be long
+enough to encapsulate the essential characteristics of the code in that
+section, but it should not be too verbose. I found very early that it would
+be a mistake to include all of the assumptions about local and global
+variables in the name of each section, even though such information
+would strictly be necessary to isolate that section as an independent
+module. The trick is to find a balance between formal and informal
+exposition so that a reader can grasp what is happening without being
+overwhelmed with detail. (See Naur [14].)
+#+end_quote
+
+I completely misread this the first time I read the article as
+discouraging the discussion of variables /in the body/ of a chunk.
+
+*** "Psychologically correct order"
+:PROPERTIES:
+:CUSTOM_ID: h-456c7846-6740-468d-90c9-84c11b770736
+:END:
+
+Knuth refers to the strength of literate programming as not being forced
+to pick between "top-down" versus "bottom-up" design, stating in his
+article "Literate Programming":
+
+#+begin_quote
+And the fact that there's no need
+to be hung up on the question of top-down versus bottom-up---since a
+programmer can now view a large program as a web, to be explored
+in a psychologically correct order---is perhaps the greatest lesson I have
+learned from my recent experiences.
+#+end_quote
+
+I have been confused by this enigmatic phrase for a while. But when
+reading his article on structured programming with the ~goto~ statement,
+Knuth writes:
+
+#+begin_quote
+Putting this another way, it is much better from a psychological
+standpoint to write
+#+begin_example
+loop until found ... ; found; ... repeat
+#+end_example
+than to write
+#+begin_example
+search: while true do
+begin ... ; leave search; ... end.
+#+end_example
+The ~leave~ or ~exit~ statement is operationally the same, but intuitively
+different, *since it talks more about the program than about the problem.*
+#+end_quote
+
+(Bold emphasis mine.)
+
+It seems that one aspect of Knuth's use of the term "psychological" is
+working at the level of abstraction suitable for stating the problem, in
+a manner which is readily understandable and conceptually simple.
+
 ** Style
 :PROPERTIES:
 :CUSTOM_ID: h-a6abaffd-932d-4741-a3d6-d732ba429779
@@ -124,6 +188,33 @@ Some numbers:
   - minimum of 2 lines of code
   - 25h quartile: 6 lines of code
   - 75th quartile: 16 lines of code
+
+*** Naming Sections
+:PROPERTIES:
+:CUSTOM_ID: h-4b97e024-6fc1-4fac-b928-82098bb2cab0
+:END:
+
+Knuth has a number of "lessons learned" in the section "Stylistic
+Issues" of his article on literate programming:
+
+#+begin_quote
+The name of a section, enclosed in angle brackets, should be long
+enough to encapsulate the essential characteristics of the code in that
+section, but it should not be too verbose. I found very early that it would
+be a mistake to include all of the assumptions about local and global
+variables in the name of each section, even though such information
+would strictly be necessary to isolate that section as an independent
+module. The trick is to find a balance between formal and informal
+exposition so that a reader can grasp what is happening without being
+overwhelmed with detail. (See Naur [14].)
+
+Another lesson I learned early in the game was that the name of a 
+section should explicitly mention any nonstandard control structures, even
+though its data structures can often be left implied. Furthermore, if the
+control flow is properly explained, you can avoid the usual errors 
+associated with ~goto~ statements; such statements can safely be introduced
+in a restrained but natural manner.
+#+end_quote
 
 * Misinterpretations of Knuth
 :PROPERTIES:
@@ -183,7 +274,7 @@ Knuth writes:
 #+begin_quote
 But after gaining experience with WEB, I have come to realize that
 there is no need to choose once and for all between top-down and
-bottom-up, becausea program is best tough of as a web instead of as
+bottom-up, because a program is best tough of as a web instead of as
 a tree. A hierarchical structure is present, but the most important
 thing about a program is its structural relationships. A complex
 piece of software consists of simple parts and simple relations
@@ -335,6 +426,122 @@ Formatting:
     "private function prototypes", "definitions of exported functions", etc.)
   - Name top-level "root" chunks after the files they are to represent
     (e.g., ~<<foo.c>>=~ or ~<<foo.h>>=~)
+
+* Knuth's "Structured Programming with GOTO"
+:PROPERTIES:
+:CUSTOM_ID: h-ddc775f3-b8ee-41c1-9e9a-5e72c11c81fd
+:END:
+
+There are a few passages worth quoting from Knuth's article on
+structured programming with the ~goto~ statement. In the discussion
+after example 5a:
+
+#+begin_quote
+If such automatic ~goto~ elimination procedures are applied to badly
+structured programs, we can expect the resulting programs to be at
+least as badly structured. Dijkstra pointed this out already in 1968 [21],
+saying:
+
+#+begin_example
+    The exercise to translate an arbitrary flow diagram more or less 
+    mechanically into a jumpless one, however, is not to be recommended.
+    Then the resulting flow diagram cannot be expected to be more
+    transparent than the original one.
+#+end_example
+
+In other words, we shouldn't merely remove ~goto~ statements because
+it's the fashionable thing to do; the presence or absence of goto 
+statements is not really the issue. *The underlying structure of the program is*
+*what counts, and we want only to avoid usages that somehow clutter up*
+*the program.* Good structure can be expressed in FORTRAN or COBOL,
+or even in assembly language, although less clearly and with much more
+trouble. *The real goal is to formulate our programs in such a way that*
+*they are easily understood.*
+
+Program structure refers to the way in which a complex algorithm
+is built up from successively simpler processes. In most situations this
+structure can be described very nicely in terms of sequential 
+compositions, conditionals, and simple iterations, together with ~case~ statements
+for multiway branches. Undisciplined ~goto~ statements make program
+structure harder to perceive, and they are often symptoms of a poor
+conceptual formulation. But there has been far too much emphasis on
+~goto~ elimination instead of on the really important issues; people have
+a natural tendency to set up an easily understood quantitative goal like
+the abolition of jumps, instead of working directly for a qualitative goal
+like good program structure. In a similar way, many people have set
+up "zero population growth" as a goal to be achieved, when they really
+desire living conditions that are much harder to quantify.
+
+Probably the worst mistake any one can make with respect to the 
+subject of ~go to~ statements is to assume that "structured programming" is
+achieved by writing programs as we always have and then eliminating the
+~goto~'s. Most ~goto~'s shouldn't be there in the first place! What we 
+really want is to conceive of our program in such a way that we rarely even
+think about ~goto~ statements, because the real need for them hardly ever
+arises. *The language in which we express our ideas has a strong influence*
+*on our thought processes.* Therefore, Dijkstra [21] asks for more new
+language features---structures that encourage clear thinking---in order
+to avoid the ~goto~'s temptations toward complications.
+#+end_quote
+
+Emphasis in bold is mine.
+
+** "Structured" --- Data and Control
+:PROPERTIES:
+:CUSTOM_ID: h-da35167c-aed5-4551-82ec-fdf174bf17fa
+:END:
+
+Perhaps one of the ideas which has fallen into obscurity is the use of
+the term "data structure" refers to something different than what we
+think of it. There is concern about "well structured data", which sounds
+odd to modern ears. Knuth explains:
+
+#+begin_quote
+We also need well-structured data; i.e., as we write the program we
+should have an abstract idea of what each variable means. This idea is
+also usually describable as an invariant relation, e.g., "$m$ is the number
+of items in the table" or "$x$ is the search argument" or "$L[i]$ is the
+number of the root node of node $t$'s left subtree, or 0 if this subtree is
+empty" or "the contents of stack $S$ are postponed obligations to do such
+and such."
+#+end_quote
+
+I confess I have no adequate definition for an "invariant relation", I
+suspect a good "first approximation" would be an assertion expected to hold.
+
+** Different Levels of Abstraction
+:PROPERTIES:
+:CUSTOM_ID: h-fb99dcb5-3e60-4150-b601-f23ea9e55b9d
+:END:
+
+When pondering the definition of "structured programming", Knuth argues
+it should not rely on ~goto~ statements at all. Instead, it should refer
+to thinking at different "levels of abstraction" and the structure of
+the program working at these different levels.
+
+#+begin_quote
+Indeed, Dijkstra's original article [23], which gave structured 
+programming its name, never mentioned ~goto~ statements at all! He directed
+attention to the critical question, "For what program structures can
+we give correctness proofs without undue labor, even if the programs
+get large?" By correctness proofs he explained that he does not mean
+formal derivations from axioms, he means any sort of proof (formal or
+informal) that is "sufficiently convincing"; and *a proof really means an*
+*understanding.* By program structure he means data structure as well
+as control structure.
+
+*We understand complex things by systematically breaking them into*
+*successively simpler parts and understanding how these parts fit together*
+*locally. Thus, we have different levels of understanding,* and each of those
+levels corresponds to an /abstraction/ of the detail at the level from which
+it is composed. For example, at one level of abstraction, we deal with an
+integer without considering whether it is represented in binary notation
+or two's complement, etc., while at deeper levels this representation may
+be important. At more abstract levels the precise value of the integer is
+not important except as it relates to other data.
+#+end_quote
+
+(Bold emphasis mine, italics are Knuth's.)
 
 * References
 :PROPERTIES:
