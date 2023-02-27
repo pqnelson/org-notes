@@ -45,9 +45,13 @@ type ~T~). In math, on paper, we write $e_{1}\cong e_{2} : \tau$. We
 usually suppress the type.
 
 - ~e value~ means that ~e~ is a value; not every expression has a value
-  (e.g., ~5 div 0~). For now, values may be described inductively as:
-  - The basic types like numbers, strings, characters,
-  - applications of datatype constructors to values,
+  (e.g., ~5 div 0~).
+  - For now, values may be described inductively as:
+    - The basic types like numbers, strings, characters,
+    - applications of datatype constructors to values,
+  - More generally, "values" would be /syntactical values/ or
+    "non-expansive expressions" as found in chapter 4 of the definition
+    of Standard ML (1997 revision).
 - ~e valuable~ mean "There exists a ~v~ such that ~v value~ and ~e == v~"
   - If an expression raises an exception, then it is not valuable.
 - ~f : T1 -> T2, f total~ means "For all values ~v1 : T1~, if ~v1 value~,
@@ -107,14 +111,40 @@ Two functions ~f~ and ~g~ have a slightly different notion of
 extensionally equivalent, discussed down below.
 #+end_remark
 
+#+begin_remark
+More generally, we can weaken our first two criteria to be:
+- $e\hookrightarrow v$ and $e'\hookrightarrow v'$ and $v\cong v'$
+- the evaluation of ~e~ and ~e'~ both raise the same /type/ of exception
+  with extensionally equivalent payloads
+#+end_remark
+
 #+begin_proposition
 If ~e1 ==> e2~, then ~e1 == e2~.
 #+end_proposition
+
+#+begin_corollary
+If ~e1 =​=​> e~ and ~e2 =​​=​> e~, then ~e1 =​= e2~.
+#+end_corollary
 
 #+begin_definition
 {{{define(Referential Transparency)}}}:
 If $e\cong e'$, then any instance of $e$ can be freely replaced with $e'$.
 #+end_definition
+
+#+begin_remark
+I think this is not quite right. What we want to do is as follows:
+
+1. We call a context $E[-]$ (i.e., an "expression with a hole")
+   {{{define(Referentially Transparent)}}} if for any $e\hookrightarrow v$
+   of appropriate type we have $E[e]\cong E[v]$.
+2. We can call an expression $e$ {{{define(Referentially Transparent)}}}
+   if for every well-typed sub-expression $e_{1}$ there is a
+   corresponding context $E[-]$ such that (a) we have $E[e_{1}]=e$ identically,
+   and (b) $E[-]$ is a referentially transparent context.
+3. We want to work with referentially transparent expressions.
+
+
+#+end_remark
 
 #+begin_theorem
 Equivalence is an equivalence relation:
