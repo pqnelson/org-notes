@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Application Operator - SML</title>
+<title>Functional Programming in Standard ML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -213,39 +213,59 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Application Operator - SML</h1>
+<h1 class="title">Functional Programming in Standard ML</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-0d2941d0-2500-4c97-b05d-ebedf3bd6e32">1. References</a></li>
+<li><a href="#h-f6bcf684-5591-4c4a-9c2b-1552ef0fd0c2">1. Introduction</a></li>
+<li><a href="#h-ccb124e3-a218-4328-88df-258160dc5172">2. References</a></li>
 </ul>
 </div>
 </div>
+
+<div id="outline-container-h-f6bcf684-5591-4c4a-9c2b-1552ef0fd0c2" class="outline-2">
+<h2 id="h-f6bcf684-5591-4c4a-9c2b-1552ef0fd0c2"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-f6bcf684-5591-4c4a-9c2b-1552ef0fd0c2">
 <p>
-We can implement a dollar sign operator, like what Haskell has. Simply
-put, we'd have:
+Standard ML is not a "pure" functional programming language, but we can
+work with the fragment of Standard ML which <i>is</i> a "pure" functional
+language. The only side effects come from:
 </p>
 
-<div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">infixr</span> 0 $
-<span class="org-keyword">fun</span> (f $ x) = f x
-</pre>
+<ul class="org-ul">
+<li>References</li>
+<li>Exceptions</li>
+<li>Input/output</li>
+<li>Threading (forking, etc.)</li>
+</ul>
+
+<p>
+I suppose a "purist" would argue that definitions also cause a
+side-effect, altering the environment to add a new binding. We will
+ignore such people.
+</p>
+
+<p>
+The advantage to writing functional code is that we can take advantage
+of <a href="equational-reasoning.html">equational reasoning</a> to <i>prove</i> the code works as expected.
+</p>
+</div>
 </div>
 
-<div id="outline-container-h-0d2941d0-2500-4c97-b05d-ebedf3bd6e32" class="outline-2">
-<h2 id="h-0d2941d0-2500-4c97-b05d-ebedf3bd6e32"><span class="section-number-2">1.</span> References</h2>
-<div class="outline-text-2" id="text-h-0d2941d0-2500-4c97-b05d-ebedf3bd6e32">
+<div id="outline-container-h-ccb124e3-a218-4328-88df-258160dc5172" class="outline-2">
+<h2 id="h-ccb124e3-a218-4328-88df-258160dc5172"><span class="section-number-2">2.</span> References</h2>
+<div class="outline-text-2" id="text-h-ccb124e3-a218-4328-88df-258160dc5172">
 <ul class="org-ul">
-<li><a href="https://blog.0branch.com/posts/2012-04-22-application-operator.html">The application operator in Standard ML</a>, 0branch</li>
-<li><a href="https://hackage.haskell.org/package/base-4.5.0.0/docs/Prelude.html#v:-36-"><code>($)</code></a> Haskell documentation, prelude 4.5.0</li>
-<li><a href="http://www.mlton.org/InfixingOperators">Infixing Operators</a>, MLTon wiki page</li>
+<li>Åke Wikström,<br>
+<cite class="book-title">Functional Programming Using Standard ML</cite>.<br>
+Prentice Hall, 1987.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-29 Thu 10:21.</p>
+<p class="postamble">Last Updated 2023-02-27 Mon 08:18.</p>
 </div>
 </body>
 </html>

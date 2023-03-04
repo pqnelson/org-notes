@@ -64,9 +64,21 @@ usually suppress the type.
   Specifically, this means a quantifier over arbitrary expressions must
   be explicitly indicates as, "For all expressions ~e : T~ ...".
 - We write ~e'[e/x]~ for substitution of ~e~ for ~x~ in ~e'~.
-- We write ~e |-> e'~ for one step of calculation or evaluation,
-  ~e |=> e''~ for multiple parallel steps of calculation or evaluation,
-  and ~e ==> e'''~ for an arbitrary-but-finite number of steps of evaluation.
+- *Reduction* of an expression is written ~e ==> e'~ (or on paper as
+  $e \Longrightarrow e'$) and is defined using the operational semantics
+  of Standard ML. It does not necessarily correspond to the steps the
+  computer takes when evaluating a Standard ML expression (since
+  optimizations may occur, etc.).
+  - We write $e\stackrel{k}{\Longrightarrow} e'$ for "$e$ reduces to
+    $e'$ in $k$ steps of reduction"
+  - If we have $e\Longrightarrow e'$, then we mean "$e$ reduces to $e'$
+    in zero or more steps of reduction"
+- *Evaluation* of an expression is denoted $e\hookrightarrow v$
+  - Evaluation and reduction are related in the sense that if $e\hookrightarrow v$
+    then either $e$ is $v$ already or $e\stackrel{1}{\Longrightarrow}e_{1}\Longrightarrow v$
+- We write ~e |-> e'~ for one step of calculation or reduction,
+  ~e |=> e''~ for multiple parallel steps of calculation or reduction,
+  and ~e ==> e'''~ for an arbitrary-but-finite number of steps of reduction.
   - Observe if ~e |-> e'~, then ~e |=> e'~
   - If ~e |=> e'~, then ~e ==> e'~
   - If ~e1 ==> e2~ and ~e2 ==> e3~, then ~e1 ==> e3~.
@@ -84,6 +96,111 @@ usually suppress the type.
     - ~e |=> e'~
     - $e\hookrightarrow v$ for $e\Longrightarrow v$ and $v$ is a value,
       i.e., $e$ is valuable and $e\Longrightarrow v$
+
+* Provisional Definition of Extensional Equivalence
+:PROPERTIES:
+:CUSTOM_ID: h-57e4c16f-fd17-4b6f-ab48-8527cf6a3ece
+:END:
+
+There are several cases to the definition of extensional
+equivalence. Really, there is an abstract definition, and these several
+cases are theorems...but the abstract definition is too abstract.
+
+** For "base" types
+:PROPERTIES:
+:CUSTOM_ID: h-b1cbf2e8-1917-4839-b783-103116c2fa2b
+:END:
+
+Let $e$, $e'$ be two expressions of the same base type (e.g., ~int~,
+~char~, ~string~, ~bool~, ~word~, ~unit~, etc.). We say they are
+{{{dfn(Extensionally Equivalent)}}}, written $e\cong e'$, if one of the
+following is true:
+
+1. Evaluation of ~e~ produces the same value as the evaluation of ~e'~,
+2. Evaluation of ~e~ raises the same exception as the evaluation of
+   ~e'~, or
+3. Both loop forever.
+
+#+begin_remark
+We can see that two values of the same base type are extensionally
+equivalent iff they are identical (modulo silly encoding issues, like
+~0x10~ and ~16~ are the same value but expressed in superficially
+different literals).
+#+end_remark
+
+Also notice, if we have the product of base types, extensional
+equivalence carries over component-wise.
+
+** For Function Values
+:PROPERTIES:
+:CUSTOM_ID: h-501c753f-588d-4a7a-9436-33afc343fb04
+:END:
+
+We say two function values ~f : T -> T'~ and ~g : T -> T'~ of the same
+type are extensionally equivalent whenever ~f(v) == g(w)~ for all
+extensionally equivalent argument values ~v : T~ and ~w : T~.
+
+#+begin_remark
+A "function value" is an anonymous lambda expression ~fn x => e~
+together with a (possibly empty) environment of bindings for any
+"nonlocal variables" appearing in the body of the function. This pairing
+(of a lambda expression plus an environment) form a {{{dfn(Closure)}}}.
+#+end_remark
+
+** For Functions
+:PROPERTIES:
+:CUSTOM_ID: h-53a1480a-6ff2-4505-a7f8-4c752986c693
+:END:
+
+We will say two /expressions/ of type ~T -> T'~ are extensionally
+equivalent if one of the following hold:
+
+1. they both evaluate to extensionally equivalent function values,
+2. they both raise extensionally equivalent exceptions when evaluates, or
+3. both loop forever when evaluated.
+
+** General Definition
+:PROPERTIES:
+:CUSTOM_ID: h-aab6de97-f44c-4910-ba94-b074fa9300ca
+:END:
+
+Two expressions ~e~ and ~e'~ are extensionally equivalent provided (a)
+they are of the same type, and (b) one of the following holds:
+
+1. they both evaluate to extensionally equivalent values, or
+2. they both raise extensionally equivalent exceptions when evaluates, or
+3. both loop forever when evaluated.
+
+(Two exceptions are extensionally equivalent if they are the same kind of
+exception and their payloads are extensionally equivalent.)
+
+When ~e~ and ~e'~ are extensionally equivalent, we write ~e == e'~ in
+code and $e\cong e'$ on paper.
+
+** Using this Definition
+:PROPERTIES:
+:CUSTOM_ID: h-784e6087-72e0-42be-b709-ac98263747ab
+:END:
+
+For us to actually use this definition, we need to introduce the various
+base types and germane information, like:
+
+- Values of the type
+- Primitive Operations provided by the Standard Basis
+- Typing rules associated with the primitive operations
+- Evaluation rules
+
+Since most of the primitive operations are /functions/ and Standard ML
+is call-by-value, the only evaluation rules we really need are for the
+special functions like ~andalso~, ~orelse~, etc.
+
+#+begin_remark
+What exactly /are/ "values"? They correspond to non-expansive
+expressions as found in \sect4.7 of [[https://smlfamily.github.io/sml97-defn.pdf][the 1997 Definition of Standard ML]].
+These are literal values ("special constants"), tuples of non-expansive
+expressions, function values, constructors applied to non-expansive
+expressions, etc.
+#+end_remark
 
 * Basic Properties
 :PROPERTIES:
