@@ -202,38 +202,107 @@ expressions, function values, constructors applied to non-expansive
 expressions, etc.
 #+end_remark
 
+* Initial Specification of a Few Types
+:PROPERTIES:
+:CUSTOM_ID: h-d74b14b3-96ba-441b-bfee-227798e0544a
+:END:
+
+We need to specify a few of the "base types" for Standard ML before we
+can reason about things. This will include giving the operational
+semantics for a few of the functions found in the Standard basis library
+(i.e., "primitive functions").
+
+We should also provide similar specifications for ~char~, ~string~, ~unit~.
+The other interesting types are tuples, records, functions; we do not
+specify these, but they should be understood.
+
+** Integers
+:PROPERTIES:
+:CUSTOM_ID: h-d3e60ff9-e8a7-4e93-b6dd-aa735f544af6
+:END:
+
+- Type :: ~int~
+- Values :: All the integers (this may or may not coincide with your
+  implementation, we assume this is the case).
+- Operations :: Let ~e1~, ~e2~ be integer expressions. Then we have the
+  following additional operations: ~e1 + e2~, ~e1 - e2~, ~e1 * e2~, ~e1 div e2~,
+  ~e1 mod e2~, among many others found in the Standard Basis library's
+  [[https://smlfamily.github.io/Basis/integer.html][~INTEGER~]] signature.
+- Typing Rules :: If ~<op>~ is a binary operator of integers, if ~e1 : int~
+  and ~e2 : int~, then ~e1 <op> e2 : int~.
+- Evaluation :: These operations are evaluated "from left to right" by
+  first evaluating the arguments, then producing the final value.
+
+For an explicit example of the evaluation rules, we have for addition
+the following three rules:
+\begin{equation}
+\frac{e_{1}\stackrel{1}{\Longrightarrow}e_{1}'}{e_{1}~\mbox{\texttt{+}}~e_{2}
+\stackrel{1}{\Longrightarrow}
+e_{1}'~\mbox{\texttt{+}}~e_{2}}
+\end{equation}
+\begin{equation}
+\frac{n_{1}~\mbox{value}\qquad e_{2}\stackrel{1}{\Longrightarrow}e_{2}'}{n_{1}~\mbox{\texttt{+}}~e_{2}
+\stackrel{1}{\Longrightarrow}
+n_{1}~\mbox{\texttt{+}}~e_{2}'}
+\end{equation}
+\begin{equation}
+\frac{n_{1}~\mbox{value}\qquad n_{2}~\mbox{value}}{n_{1}~\mbox{\texttt{+}}~n_{2}
+\stackrel{1}{\Longrightarrow}
+n}
+\end{equation}
+where $n$ is the integer value representing the sum of the integer
+values $n_{1}$ and
+$n_{2}$.
+
+The other evaluation rules are similarly defined.
+
+** Booleans
+:PROPERTIES:
+:CUSTOM_ID: h-aa97e59e-f741-47fa-9977-dbcc09500b15
+:END:
+
+- Type :: ~bool~
+- Values :: ~true~ and ~false~
+- Operations :: Let ~e1~ and ~e2~ be Boolean expressions. Then ~e1 andalso e2~,
+  ~e1 orelse e2~, ~not e1~ are Boolean expressions. If ~t1~, ~t2~ are
+  any two expressions of type ~T~, then ~if e1 then t1 else t2~ is an
+  expression of type ~T~.
+- Typing Rules :: As we would expect.
+- Evaluation :: The definition specifies ~e1 andalso e2~ is syntactic
+  sugar for ~if e1 then e2 else false~, and ~e1 orelse e2~ is syntactic
+  sugar for ~if e1 then true else e2~. By "syntactic sugar", we mean we
+  can replace ~andalso~, ~orelse~ with these expressions.
+
+
 * Basic Properties
 :PROPERTIES:
 :CUSTOM_ID: h-1bb08f53-6114-4227-8897-b85963f0d0b8
 :END:
 
 #+begin_theorem
-For every syntactically valid Standard ML expression ~e~ that we can
+For every syntactically valid Standard ML expression ~e~ (i.e., ~e~ is
+well-typed and has type ~T~) that we can
 evaluate, exactly one of the following holds:
-- ~e ==> v~ for some value ~v~
+- ~e ==> v~ for some value ~v : T~
 - the evaluation of ~e~ raises some exception
 - the evaluation of ~e~ loops forever.
 #+end_theorem
 
+#+begin_proof
+The dynamic semantics for expressions in Standard ML is given by rules
+(90) through (149) of the [[https://smlfamily.github.io/sml97-defn.pdf][1997 Definition]]. By inspection, we see that
+these are the only possibilities. 
+#+end_proof
+
 #+begin_definition
 Two expressions ~e~ and ~e'~ are said to be {{{define(Extensionally Equivalent)}}}
-(written $e\cong e'$ or ~e == e'~) if either
-- there is some value ~v~ such that ~e ==> v~ and ~e' ==> v~, or
-- the evaluation of ~e~ and ~e'~ both raise the /same/ exception, or
+(written $e\cong e'$ or ~e == e'~) if there is a type ~T~ such that ~e : T~
+and ~e' : T~, and one of the following holds:
+- there are values ~v : T~ and ~v' : T~ such that ~e ==> v~ and ~e' ==> v'~
+  and ~v == v'~, or
+- the evaluation of ~e~ and ~e'~ both raise extensionally equivalent exceptions, or
 - the evaluation of both ~e~ and ~e'~ loop forever.
 #+end_definition
-
-#+begin_remark
-Two functions ~f~ and ~g~ have a slightly different notion of
-extensionally equivalent, discussed down below.
-#+end_remark
-
-#+begin_remark
-More generally, we can weaken our first two criteria to be:
-- $e\hookrightarrow v$ and $e'\hookrightarrow v'$ and $v\cong v'$
-- the evaluation of ~e~ and ~e'~ both raise the same /type/ of exception
-  with extensionally equivalent payloads
-#+end_remark
 
 #+begin_proposition
 If ~e1 ==> e2~, then ~e1 == e2~.
@@ -243,14 +312,39 @@ If ~e1 ==> e2~, then ~e1 == e2~.
 If ~e1 =​=​> e~ and ~e2 =​​=​> e~, then ~e1 =​= e2~.
 #+end_corollary
 
+#+begin_theorem
+Equivalence is an equivalence relation:
+1. Reflexivity: ~e == e~
+2. Symmetry: if ~e1 == e2~, then ~e2 == e1~
+3. Transitivity: if ~e1 == e2~ and ~e2 == e3~, then ~e1 == e3~.
+#+end_theorem
+
+#+begin_proof
+Proof of reflexivity: by theorem 5, there are three possibilities when
+trying to evaluate ~e~:
+1. Consider ~v : T~ such that ~e ==> v~.
+   Then ~e ==> v~ and ~e ==> v~, and ~v == v~, which means ~e == e~ by
+   definition of extensional equivalence.
+2. The evaluation of ~e~ raises an exception, which is extensionally
+   equivalent to itself. Hence ~e == e~ by the second clause of the
+   definition of extensional equivalence.
+3. The evaluation of ~e~ loops forever. Then ~e == e~ by the third
+   clause of the definition of extensional equivalence.
+
+Proof of symmetry is similar, working by cases given by the clauses of
+the definition of extensional equivalence.
+
+Transitivity is similarly done by cases, using symmetry of extensional
+equivalence to prove the first case, and possibly some lemmas for the
+remaining two cases.
+#+end_proof
+
+Furthermore, extensional equivalence is a congruence (in the sense of
+universal algebra), meaning we can replace one
+expression with an equivalent one "inside" any bigger expression. Let us
+formalize this notion using the idea of "referential transparency".
+
 #+begin_definition
-{{{define(Referential Transparency)}}}:
-If $e\cong e'$, then any instance of $e$ can be freely replaced with $e'$.
-#+end_definition
-
-#+begin_remark
-I think this is not quite right. What we want to do is as follows:
-
 1. We call a context $E[-]$ (i.e., an "expression with a hole")
    {{{define(Referentially Transparent)}}} if for any $e\hookrightarrow v$
    of appropriate type we have $E[e]\cong E[v]$.
@@ -259,19 +353,17 @@ I think this is not quite right. What we want to do is as follows:
    corresponding context $E[-]$ such that (a) we have $E[e_{1}]=e$ identically,
    and (b) $E[-]$ is a referentially transparent context.
 3. We want to work with referentially transparent expressions.
+#+end_definition
 
-
-#+end_remark
+The intuition is that referentially transparent expressions are "pure functions"
+or build out of "pure functions". There are no side-effects when
+evaluating a referentially transparent expression.
 
 #+begin_theorem
-Equivalence is an equivalence relation:
-1. Reflexivity: ~e == e~
-2. Symmetry: if ~e1 == e2~, then ~e2 == e1~
-3. Transitivity: if ~e1 == e2~ and ~e2 == e3~, then ~e1 == e3~.
+Let $e$ be a referentially transparent expression.
+Let $e_{1}$ be any subexpression of $e$ and $e = E[e_{1}]$.
+Then for any well-typed expression $e_{2}\cong e_{1}$ we have $E[e_{1}]\cong E[e_{2}]$.
 #+end_theorem
-
-Further equivalence is a congruence, meaning we can replace one
-expression with an equivalent one "inside" any bigger expression.
 
 #+begin_math-example
 For applications, we may generalize from the situation with a single argument:
