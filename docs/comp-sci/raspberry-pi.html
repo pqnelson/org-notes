@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-30 Sat 10:00 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Raspberry Pi</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="Alex Nelson">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -29,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -188,8 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
-  /*]]>*/-->
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,39 +206,17 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../index.html"> HOME </a>
-</div><div id="content">
+</div><div id="content" class="content">
 <h1 class="title">Raspberry Pi</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-2139284d-7b5c-46c8-abce-c3ede3b2b67f">1. Overview</a></li>
 <li><a href="#h-bd448f65-3561-4ce8-90da-580ef958cee7">2. Ssh into the Pi</a></li>
@@ -294,7 +271,12 @@
 </ul>
 </li>
 <li><a href="#h-70ef8113-f25f-4e98-96eb-f65586aa779a">9. Temperature Checking</a></li>
-<li><a href="#h-547100f8-09b9-4160-ae84-9e2fea00aba5">10. Mizar</a></li>
+<li><a href="#h-547100f8-09b9-4160-ae84-9e2fea00aba5">10. Mizar</a>
+<ul>
+<li><a href="#h-a505070b-b824-4c80-95ff-b1e591ab49f9">10.1. Pre-built Binaries Appear Broken</a></li>
+<li><a href="#h-82019e0e-1f56-4a09-bc95-295d204794be">10.2. Building it from Scratch</a></li>
+</ul>
+</li>
 <li><a href="#h-cd1194c0-4b09-4fd9-810c-044b646f78f9">11. Run 64-bit mode</a></li>
 <li><a href="#h-88c07655-f971-4a20-b7f9-3f75d70adacd">12. Other Links</a></li>
 </ul>
@@ -367,7 +349,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="org9f1628c">
+<pre class="example" id="orgcbd4f45">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -378,7 +360,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="org0c352fd">
+<pre class="example" id="org030c2bf">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -387,7 +369,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="orgc06ec68">
+<pre class="example" id="org8f94a9d">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -681,7 +663,7 @@ I run into a problem compiling SBCL from the RPi package, experiencing
 an error (as of git commit <code>b430f314c</code>, date Wed Apr 20 03:46:44 2022 +0300):
 </p>
 
-<pre class="example" id="orge729179">
+<pre class="example" id="orge9e3ee8">
 ~/src/sbcl $ sh make.sh
 ...
 cc -g -Wall -Wundef -Wsign-compare -Wpointer-arith -O3 -std=gnu99 -fno-pie -I.  -c -o os-common.o os-common.c
@@ -927,7 +909,7 @@ command <code>/opt/vc/bin/vcgencmd measure_temp</code>. I've stuck this into a
 script:
 </p>
 
-<pre class="example" id="org30bf5d5">
+<pre class="example" id="org1f80980">
 #!/bin/bash
 
 # ~/temperature.sh
@@ -940,12 +922,17 @@ script:
 <div id="outline-container-h-547100f8-09b9-4160-ae84-9e2fea00aba5" class="outline-2">
 <h2 id="h-547100f8-09b9-4160-ae84-9e2fea00aba5"><span class="section-number-2">10.</span> Mizar</h2>
 <div class="outline-text-2" id="text-h-547100f8-09b9-4160-ae84-9e2fea00aba5">
+</div>
+
+<div id="outline-container-h-a505070b-b824-4c80-95ff-b1e591ab49f9" class="outline-3">
+<h3 id="h-a505070b-b824-4c80-95ff-b1e591ab49f9"><span class="section-number-3">10.1.</span> Pre-built Binaries Appear Broken</h3>
+<div class="outline-text-3" id="text-h-a505070b-b824-4c80-95ff-b1e591ab49f9">
 <p>
-I couldn't get Mizar working on my Raspberry Pi 2, but it works on
-Raspberry Pi 4B. Get the latest version <a href="http://mizar.uwb.edu.pl/system/index.html#download">here</a> for Linux (ARM).
+I couldn't get Mizar working on my Raspberry Pi 2, and it does not work on
+Raspberry Pi 4B either. Get the latest version <a href="http://mizar.uwb.edu.pl/system/index.html#download">here</a> for Linux (ARM).
 </p>
 
-<pre class="example" id="org536231a">
+<pre class="example" id="org36de400">
 ~/src/$ mkdir mizar
 ~/src/$ cd mizar
 ~/src/mizar/$ wget mizar-&lt;version&gt;-arm-linux.tar
@@ -960,7 +947,7 @@ Raspberry Pi 4B. Get the latest version <a href="http://mizar.uwb.edu.pl/system/
 When I try running, say, <code>mizf</code> on 32-bit mode, I get errors:
 </p>
 
-<pre class="example" id="orgc89a210">
+<pre class="example" id="org63aa381">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char.miz
 Illegal instruction
 Illegal instruction
@@ -971,12 +958,102 @@ alex@raspberrypi:~/src/mizar-playground $
 <p>
 In 64-bit mode, I get errors:
 </p>
-<pre class="example" id="orgd2ab1d1">
+<pre class="example" id="org52c96c0">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char
 /usr/local/bin/mizf: 8: makeenv: Exec format error
 /usr/local/bin/mizf: 13: errflag: Exec format error
 /usr/local/bin/mizf: 14: addfmsg: Exec format erro
 </pre>
+</div>
+</div>
+
+<div id="outline-container-h-82019e0e-1f56-4a09-bc95-295d204794be" class="outline-3">
+<h3 id="h-82019e0e-1f56-4a09-bc95-295d204794be"><span class="section-number-3">10.2.</span> Building it from Scratch</h3>
+<div class="outline-text-3" id="text-h-82019e0e-1f56-4a09-bc95-295d204794be">
+<p>
+Fortunately, Roland Coghetto has done heroic work to make it compile on
+Raspberry Pi. The basic instructions:
+</p>
+
+<p>
+<b>Step 1: install Free Pascal.</b>
+</p>
+
+<pre class="example" id="orgd9d77ca">
+alex@raspberrypi:~$ sudo apt-get update
+alex@raspberrypi:~$ sudo apt-get upgrade
+alex@raspberrypi:~$ sudo apt-get install fpc
+</pre>
+
+<p>
+<b>Step 2: install the Mizar library.</b> We need to install the Mizar
+library, and to do that we just install the latest version of the Mizar
+system for, say, the Intel processor. This won't give us a workable
+binaries, but it installs the MML and documentation locally.
+</p>
+
+<p>
+If you tried using the pre-built binaries, then you can skip this step.
+</p>
+
+<pre class="example" id="org470aac3">
+alex@raspberrypi:~ $ cd src
+alex@raspberrypi:~/src $ mkdir mizar
+alex@raspberrypi:~/src $ cd mizar
+alex@raspberrypi:~/src/mizar $ wget http://mizar.uwb.edu.pl/~softadm/pub/system/i386-linux/mizar-8.1.12_5.72.1435-i386-linux.tar
+alex@raspberrypi:~/src/mizar $ tar xvf mizar-8.1.12_5.72.1435-i386-linux.tar
+alex@raspberrypi:~/src/mizar $ sudo bash install.sh
+
+Installation of Mizar System Version 8.1.12 (Linux/FPC) (MML 5.72.1435)
+ 
+Enter the path for installing Mizar executables
+[default is /usr/local/bin]
+Unpacking to /usr/local/bin
+ 
+Enter the path for installing Mizar shared files
+[default is /usr/local/share/mizar]
+Unpacking to /usr/local/share/mizar
+ 
+It may take some time...
+ 
+Enter the path for installing Mizar documentation
+[default is /usr/local/doc/mizar]
+Unpacking to /usr/local/doc/mizar
+ 
+The installation process of the Mizar system is completed.
+ 
+Note:
+The Mizar system requires a variable MIZFILES
+which should be set to /usr/local/share/mizar.
+ 
+If /usr/local/bin is not in your PATH please add it before running Mizar.
+ 
+With questions or comments contact mus@mizar.uwb.edu.pl
+
+alex@raspberrypi:~/src/mizar $ cd ..
+alex@raspberrypi:~/src $
+</pre>
+
+<p>
+<b>Step 3: download and compile the Mizar source code.</b> Now we download
+Roland Coghetto's modified version of the Mizar source code (the only
+changes are adding install instructions, the compile script, and
+adjusting two parameters in the code) and run the following commands:
+</p>
+
+<pre class="example" id="orgc038849">
+alex@raspberrypi:~/src $ git clone https://github.com/CoghettoR/MizarSystem/
+alex@raspberrypi:~/src $ cd MizarSystem
+alex@raspberrypi:~/src/MizarSystem $ time sh compile_rpi.sh
+alex@raspberrypi:~/src/MizarSystem $ cd bin
+alex@raspberrypi:~/src/MizarSystem/bin $ sudo cp ./* /usr/local/bin/
+alex@raspberrypi:~/src/MizarSystem $
+</pre>
+
+<p>
+<b>Done!</b> We can have built and installed Mizar locally. Time to celebrate!
+</p>
+</div>
 </div>
 </div>
 
@@ -988,7 +1065,7 @@ To make Raspberry Pi 4 run in 64-bit mode, add the following line to the
 bottom of your <code>/boot/config.txt</code>:
 </p>
 
-<pre class="example" id="org0f760b9">
+<pre class="example" id="org5debcf7">
 arm_64bit=1
 </pre>
 
@@ -1012,7 +1089,7 @@ arm_64bit=1
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-30 Sat 09:50.</p>
+<p class="postamble">Last Updated 2023-03-04 Sat 09:53.</p>
 </div>
 </body>
 </html>

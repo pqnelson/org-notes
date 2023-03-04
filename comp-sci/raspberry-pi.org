@@ -548,8 +548,13 @@ script:
 :CUSTOM_ID: h-547100f8-09b9-4160-ae84-9e2fea00aba5
 :END:
 
-I couldn't get Mizar working on my Raspberry Pi 2, but it works on
-Raspberry Pi 4B. Get the latest version [[http://mizar.uwb.edu.pl/system/index.html#download][here]] for Linux (ARM).
+** Pre-built Binaries Appear Broken
+:PROPERTIES:
+:CUSTOM_ID: h-a505070b-b824-4c80-95ff-b1e591ab49f9
+:END:
+
+I couldn't get Mizar working on my Raspberry Pi 2, and it does not work on
+Raspberry Pi 4B either. Get the latest version [[http://mizar.uwb.edu.pl/system/index.html#download][here]] for Linux (ARM).
 
 #+begin_example
 ~/src/$ mkdir mizar
@@ -579,6 +584,83 @@ alex@raspberrypi:~/src/mizar-playground $ mizf text/char
 /usr/local/bin/mizf: 13: errflag: Exec format error
 /usr/local/bin/mizf: 14: addfmsg: Exec format erro
 #+end_example
+
+** Building it from Scratch
+:PROPERTIES:
+:CUSTOM_ID: h-82019e0e-1f56-4a09-bc95-295d204794be
+:END:
+
+Fortunately, Roland Coghetto has done heroic work to make it compile on
+Raspberry Pi. The basic instructions:
+
+*Step 1: install Free Pascal.*
+
+#+begin_example
+alex@raspberrypi:~$ sudo apt-get update
+alex@raspberrypi:~$ sudo apt-get upgrade
+alex@raspberrypi:~$ sudo apt-get install fpc
+#+end_example
+
+*Step 2: install the Mizar library.* We need to install the Mizar
+library, and to do that we just install the latest version of the Mizar
+system for, say, the Intel processor. This won't give us a workable
+binaries, but it installs the MML and documentation locally.
+
+If you tried using the pre-built binaries, then you can skip this step.
+
+#+begin_example
+alex@raspberrypi:~ $ cd src
+alex@raspberrypi:~/src $ mkdir mizar
+alex@raspberrypi:~/src $ cd mizar
+alex@raspberrypi:~/src/mizar $ wget http://mizar.uwb.edu.pl/~softadm/pub/system/i386-linux/mizar-8.1.12_5.72.1435-i386-linux.tar
+alex@raspberrypi:~/src/mizar $ tar xvf mizar-8.1.12_5.72.1435-i386-linux.tar
+alex@raspberrypi:~/src/mizar $ sudo bash install.sh
+
+Installation of Mizar System Version 8.1.12 (Linux/FPC) (MML 5.72.1435)
+ 
+Enter the path for installing Mizar executables
+[default is /usr/local/bin]
+Unpacking to /usr/local/bin
+ 
+Enter the path for installing Mizar shared files
+[default is /usr/local/share/mizar]
+Unpacking to /usr/local/share/mizar
+ 
+It may take some time...
+ 
+Enter the path for installing Mizar documentation
+[default is /usr/local/doc/mizar]
+Unpacking to /usr/local/doc/mizar
+ 
+The installation process of the Mizar system is completed.
+ 
+Note:
+The Mizar system requires a variable MIZFILES
+which should be set to /usr/local/share/mizar.
+ 
+If /usr/local/bin is not in your PATH please add it before running Mizar.
+ 
+With questions or comments contact mus@mizar.uwb.edu.pl
+
+alex@raspberrypi:~/src/mizar $ cd ..
+alex@raspberrypi:~/src $
+#+end_example
+
+*Step 3: download and compile the Mizar source code.* Now we download
+Roland Coghetto's modified version of the Mizar source code (the only
+changes are adding install instructions, the compile script, and
+adjusting two parameters in the code) and run the following commands:
+
+#+begin_example
+alex@raspberrypi:~/src $ git clone https://github.com/CoghettoR/MizarSystem/
+alex@raspberrypi:~/src $ cd MizarSystem
+alex@raspberrypi:~/src/MizarSystem $ time sh compile_rpi.sh
+alex@raspberrypi:~/src/MizarSystem $ cd bin
+alex@raspberrypi:~/src/MizarSystem/bin $ sudo cp ./* /usr/local/bin/
+alex@raspberrypi:~/src/MizarSystem $
+#+end_example
+
+*Done!* We can have built and installed Mizar locally. Time to celebrate!
 
 * Run 64-bit mode
 :PROPERTIES:
