@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:48 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Metalogical Frameworks</title>
@@ -189,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -284,7 +283,7 @@ logical framework such that it can prove metatheorems. For example,
 proving <a href="https://en.wikipedia.org/wiki/Cut-elimination_theorem">cut-elimination</a>.
 </p>
 
-<div class="remark" id="org1864d13">
+<div class="remark" id="orga95bbfc">
 <p>
 I will often write "meta-logical framework" and "metalogical framework"
 interchangeably.
@@ -297,7 +296,7 @@ interchangeably.
 <div id="outline-container-h-14d91154-6603-46f9-a532-90736863a01b" class="outline-2">
 <h2 id="h-14d91154-6603-46f9-a532-90736863a01b"><span class="section-number-2">2.</span> Examples of Meta-Logical</h2>
 <div class="outline-text-2" id="text-h-14d91154-6603-46f9-a532-90736863a01b">
-<div class="math-example" id="org345ab8c">
+<div class="math-example" id="org7e84ecb">
 <p>
 <a href="hol.html">HOL</a> is a meta-logical framework, since it can encode judgements using
 inductive types (thanks to the Tarski-Knaster theorem) and inference
@@ -308,14 +307,14 @@ meta-logical framework.
 
 </div>
 
-<div class="math-example" id="org2b2de59">
+<div class="math-example" id="org73412c4">
 <p>
 A <b>NON-example</b> is <a href="automath.html">Automath</a>, which is too weak to prove metatheorems.
 </p>
 
 </div>
 
-<div class="math-example" id="org33f1468">
+<div class="math-example" id="org534ab00">
 <p>
 A mixed example would be <a href="isabelle.html">Isabelle</a> (which is a fragment of intuitionistic
 higher-order logic) alone is insufficient to be a meta-logical framework.
@@ -395,6 +394,40 @@ semantics, which would be equivalent to this "initial model"
 condition. Thus it seems unavoidable that the "initial model" condition
 is necessary.
 </p>
+
+<p>
+One thing worth noting is that, when we allow initial models, we are
+really allowing for a "deep embedding" of the "object logic" in the
+logical framework. This is what allows us to state and prove
+metatheorems concerning the "object logic". I learned this fact (initial
+models allow proving metatheorems) from:
+</p>
+
+<ul class="org-ul">
+<li>Jacob Prinz, G Kavvos, Leonidas Lampropoulos,<br>
+"Deeper Shallow Embeddings".
+In <cite class="book-title">13th International Conference on Interactive Theorem Proving (ITP 2022)</cite>,
+2022, <a href="https://drops.dagstuhl.de/opus/volltexte/2022/16737/">Eprint</a>.</li>
+</ul>
+
+<p>
+The idea of an "initial model" isn't new or novel, it's been around for
+50 years (or longer). See the "initial model theorem" as discussed on
+the <a href="https://plato.stanford.edu/entries/modeltheory-fo/">Stanford Encyclopedia of Philosophy</a> entry on first-order model
+theory; see also &sect;1.6.5, &sect;&sect;2.2.3 <i>et seq</i> of Jacobs' book on
+<i>Categorical Logic</i> (which seems to use similar notation as the articles
+cited for our source of discussion of metalogical frameworks).
+</p>
+
+<p>
+Basically, an equation is true in the initial model if and only if it is
+true in an arbitrary model. That's why we care about initial models,
+that's why encoding an "object logic" as an initial syntactic model is
+important, that's why we care about "deep embeddings". José Meseguer
+really pioneered pointing this out in the domain of semantics for
+programming languages, see his paper, "Relating Models of Polymorphism"
+(<i>POPL</i> 1989, pp.228&#x2013;241) for references.
+</p>
 </div>
 </div>
 </div>
@@ -419,7 +452,7 @@ logic. The "space of first-order languages" is then generalized as an
 <i>entailment</i>, is defined as:
 </p>
 
-<div class="definition" id="orga19ba66">
+<div class="definition" id="org08edb07">
 <p>
 An <dfn>Entailment System</dfn> consists of
 </p>
@@ -456,7 +489,7 @@ where \(sen(H)(\Gamma)=\{sen(H)(\varphi)\mid\varphi\in\Gamma\}\).</li>
 
 </div>
 
-<div class="remark" id="org7a7cb04">
+<div class="remark" id="orgd644097">
 <p>
 We can meaningfully discuss a notion of <i>proof calculi</i> for entailment
 systems. See &sect;2.3 of "Axiomatizing Reflective Logics and Languages"
@@ -471,7 +504,7 @@ from including a signature \(\Sigma\) into a larger signature \(\Sigma'\),
 or from changing syntax, or something similar.
 </p>
 
-<div class="definition" id="org6813551">
+<div class="definition" id="orgb53e180">
 <p>
 Let \(\mathcal{E}\) be an entailment system. We define its category
 \(\mathbf{Th}\) of <dfn>Theories</dfn> to consist of
@@ -493,7 +526,7 @@ and the induced functor \(sen\colon\mathbf{Th}\to\mathbf{Set}\) given by
 
 </div>
 
-<div class="remark" id="org31a30d7">
+<div class="remark" id="org55a1bbf">
 <p>
 I believe this means that \(\mathbf{Th}\) is fibred over \(\mathbf{Sign}\).
 </p>
@@ -512,7 +545,7 @@ formalize <b>model theory</b> beyond first-order logic, and has been used in
 the literature since their introduction in the '70s.
 </p>
 
-<div class="definition" id="orgd39eb8a">
+<div class="definition" id="org51a7ef1">
 <p>
 An <dfn>Institution</dfn> consists of
 </p>
@@ -546,7 +579,7 @@ every \(\varphi\in sen(\Sigma)\), we have \(M'\vDash_{\Sigma'}sen(H)(\varphi)\if
 
 </div>
 
-<div class="remark" id="org05d4fc2">
+<div class="remark" id="org0137939">
 <p>
 We can also note, if \(T=(\Sigma,\Gamma)\) is a theory, its model category
 \(\mathbf{Mod}(T)\) is the full subcategory of \(\mathbf{Mod}(\Sigma)\)
@@ -557,7 +590,7 @@ the sentences in \(\Gamma\) &#x2014; i.e., for each \(\varphi\in\Gamma\), we hav
 
 </div>
 
-<div class="theorem" id="orgd1cb58a">
+<div class="theorem" id="org0ce890a">
 <p>
 Given an institution \(I\), we may construct an entailment system \(I^{+}\)
 where we construct the relation: \(\Gamma\vdash_{\Sigma}\varphi\) if and
@@ -577,7 +610,7 @@ A logic can now be defined in glorious generality as a <i>sound</i>
 institutionalized entailment system.
 </p>
 
-<div class="definition" id="orgb11de59">
+<div class="definition" id="orgce7512c">
 <p>
 A <dfn>Logic</dfn> consists of
 </p>
@@ -619,7 +652,7 @@ holds for any model \(M\) that satisfies all the sentences in \(\Gamma\).</li>
 
 </div>
 
-<div class="theorem" id="org266bf4e">
+<div class="theorem" id="org0a8430b">
 <p>
 Given an institution \(I\), we can construct an entailment system \(I^{+}\)
 and together these form a logic, which is denoted \(I^{\dagger}\) (or, by
@@ -638,7 +671,7 @@ Furthermore, this logic is complete.
 Then the particular notion of reflection can be described as:
 </p>
 
-<div class="definition" id="org7628287">
+<div class="definition" id="org6cf7d37">
 <p>
 Given an entailment system \(\mathcal{E}\) and a nonempty set of theories
 \(\mathcal{C}\) in it, a theory \(U\) is <dfn>\(\mathcal{C}\) Universal</dfn>
@@ -677,7 +710,7 @@ classof all finitely presentable theories in the logic.
 From this perspective, we may thus define a <a href="logical-framework.html">logical framework</a> as:
 </p>
 
-<div class="definition" id="org8477115">
+<div class="definition" id="org3bddb93">
 <p>
 A <dfn>Logical Framework</dfn> consists of
 </p>
@@ -693,7 +726,7 @@ such that \(U\) is $\mathcal{C}$-universal.
 
 </div>
 
-<div class="remark" id="org5ab0d9e">
+<div class="remark" id="org9f34ef7">
 <p>
 This observation seems to have also been made in &sect;3 of
 "Axiomatizing Reflective Logics and Languages"
@@ -714,14 +747,16 @@ universal theory \(U\).
 Let me give a "morally right" definition, which fails to be rigorous:
 </p>
 
-<div class="definition" id="org76f2646">
+<div class="definition" id="orgd33a64f">
 <p>
 A <dfn>Meta-logical framework</dfn> consists of a logical framework
 \((\mathcal{L}, \mathcal{C}, U)\) equipped with
 </p>
 
 <ul class="org-ul">
-<li>a super logic \(\mathcal{S}\) containing \(\mathcal{L}\subset\mathcal{S}\)</li>
+<li>a super logic \(\mathcal{S}\) containing \(\mathcal{L}\subset\mathcal{S}\)
+[the term is analogous to how a "superset" contains a "subset", don't
+think of something like Supermathematics with Grassmann algebras]</li>
 </ul>
 
 <p>
@@ -741,15 +776,15 @@ the metatheory of any \(T\).</li>
 
 </div>
 
-<div class="remark" id="orge6884c5">
+<div class="remark" id="org64fbb29">
 <p>
 It's not clear exactly <i>how</i> super-nice the superlogic has to be; is
-there soemthing <i>weaker</i> than having Tarskian semantics?
+there something <i>weaker</i> than having Tarskian semantics?
 </p>
 
 </div>
 
-<div class="remark" id="org6f0e8a7">
+<div class="remark" id="org444fdd4">
 <p>
 Also, it's unclear <i>when</i> will a logic \(\mathcal{L}\) have a superlogic
 \(\mathcal{S}\) which has Tarskian semantics and admits quantifiers.
@@ -757,7 +792,7 @@ Also, it's unclear <i>when</i> will a logic \(\mathcal{L}\) have a superlogic
 
 </div>
 
-<div class="puzzle" id="org77e93db">
+<div class="puzzle" id="org7844bb0">
 <p>
 Can we reformulate this notion of a metalogical framework within the more
 familiar judgements and inference rules setting?
@@ -833,7 +868,7 @@ Research Centre, 1995.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-25 Fri 12:37.</p>
+<p class="postamble">Last Updated 2023-03-09 Thu 09:16.</p>
 </div>
 </body>
 </html>

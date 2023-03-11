@@ -34,6 +34,40 @@ as a different "sort" than proper sets. Confusingly, this treatment is
 referred to as "second-order set theory" in the literature (as opposed
 to "two-sorted set theory", which would make more sense).
 
+* Tarski--Grothendieck Set Theory
+:PROPERTIES:
+:CUSTOM_ID: h-cd10efca-0ee5-4666-b0de-f24ba41391ac
+:END:
+
+We could instead start with some family of collections, "Coll", which
+obeys the obvious ZF axioms. Then we form the NBG completion of this
+theory, giving us "Coll+". But we could iterate this, getting "Coll++", ..., "Coll + $n$",
+for example. Taking the limit of this, well that's precisely what
+Tarski--Grothendieck set theory does, and it treats all these
+collections as sets. It's useful for handling [[file:category-theory/large-cats.org][large categories]].
+
+The formal definition of Tarski--Grothendieck set theory is just ZF + Universes.
+That is to say, given any set $X$, we can find a Grothendieck universe $\mathcal{U}$
+containing $X$. What is a "Grothendieck universe"? It is a set
+$U$ such that:
+
+1. It is transitive: for each $X\in U$ and $x\in X$, we have $x\in U$
+2. For each $X\in U$, its power set $\mathcal{P}(X)\in U$
+3. It contains the empty set: $\emptyset\in U$
+4. Let $I\in U$, let $\{X_{\alpha}\}_{\alpha\in I}$ be a family of
+   elements of $U$. Then their union $\bigcup_{\alpha\in I}X_{\alpha}\in U$.
+
+The exact axioms vary. Some omit the inclusion of the empty set, others
+require the inclusion of the natural numbers instead. But with the
+axioms we have given, we see every Grothendieck universe is a model for
+ZF set theory.
+
+See:
+
+- [[https://ncatlab.org/nlab/show/Grothendieck+universe][Grothendieck Universe]] on nLab
+- [[https://en.wikipedia.org/wiki/Grothendieck_universe][Grothendieck Universe]] on Wikipedia
+- [[https://en.wikipedia.org/wiki/Tarski%E2%80%93Grothendieck_set_theory][Tarski--Grothendieck set theory]] on Wikipedia
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd

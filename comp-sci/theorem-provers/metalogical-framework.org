@@ -109,6 +109,32 @@ semantics, which would be equivalent to this "initial model"
 condition. Thus it seems unavoidable that the "initial model" condition
 is necessary.
 
+One thing worth noting is that, when we allow initial models, we are
+really allowing for a "deep embedding" of the "object logic" in the
+logical framework. This is what allows us to state and prove
+metatheorems concerning the "object logic". I learned this fact (initial
+models allow proving metatheorems) from:
+
+- Jacob Prinz, G Kavvos, Leonidas Lampropoulos,\\
+  "Deeper Shallow Embeddings".
+  In {{{book-title(13th International Conference on Interactive Theorem Proving (ITP 2022))}}},
+  2022, [[https://drops.dagstuhl.de/opus/volltexte/2022/16737/][Eprint]].
+
+The idea of an "initial model" isn't new or novel, it's been around for
+50 years (or longer). See the "initial model theorem" as discussed on
+the [[https://plato.stanford.edu/entries/modeltheory-fo/][Stanford Encyclopedia of Philosophy]] entry on first-order model
+theory; see also \sect1.6.5, \sect\sect2.2.3 /et seq/ of Jacobs' book on
+/Categorical Logic/ (which seems to use similar notation as the articles
+cited for our source of discussion of metalogical frameworks).
+
+Basically, an equation is true in the initial model if and only if it is
+true in an arbitrary model. That's why we care about initial models,
+that's why encoding an "object logic" as an initial syntactic model is
+important, that's why we care about "deep embeddings". José Meseguer
+really pioneered pointing this out in the domain of semantics for
+programming languages, see his paper, "Relating Models of Polymorphism"
+(/POPL/ 1989, pp.228--241) for references.
+
 * Logical Frameworks via Reflection Principles
 :PROPERTIES:
 :CUSTOM_ID: h-6ff11a58-ab6d-42c4-a72f-33a94d50834a
@@ -335,6 +361,8 @@ A {{{dfn(Meta-logical framework)}}} consists of a logical framework
 $(\mathcal{L}, \mathcal{C}, U)$ equipped with
 
 - a super logic $\mathcal{S}$ containing $\mathcal{L}\subset\mathcal{S}$
+  [the term is analogous to how a "superset" contains a "subset", don't
+  think of something like Supermathematics with Grassmann algebras]
   
 such that
 
@@ -350,7 +378,7 @@ such that
 
 #+begin_remark
 It's not clear exactly /how/ super-nice the superlogic has to be; is
-there soemthing /weaker/ than having Tarskian semantics?
+there something /weaker/ than having Tarskian semantics?
 #+end_remark
 
 #+begin_remark

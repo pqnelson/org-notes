@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -241,9 +241,10 @@
 <ul>
 <li><a href="#h-9c5c0d57-a7b0-497f-9b3a-e367ec7658a6">1. Overview</a></li>
 <li><a href="#h-a673cdab-3aa3-4979-85cf-03e70fe530a9">2. Classes</a></li>
-<li><a href="#h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd">3. References</a>
+<li><a href="#h-cd10efca-0ee5-4666-b0de-f24ba41391ac">3. Tarski&#x2013;Grothendieck Set Theory</a></li>
+<li><a href="#h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd">4. References</a>
 <ul>
-<li><a href="#h-912813df-2c88-4a03-aa81-3fa855993460">3.1. Many-Sorted Models of Sets and Classes</a></li>
+<li><a href="#h-912813df-2c88-4a03-aa81-3fa855993460">4.1. Many-Sorted Models of Sets and Classes</a></li>
 </ul>
 </li>
 </ul>
@@ -277,8 +278,54 @@ to "two-sorted set theory", which would make more sense).
 </div>
 </div>
 
+<div id="outline-container-h-cd10efca-0ee5-4666-b0de-f24ba41391ac" class="outline-2">
+<h2 id="h-cd10efca-0ee5-4666-b0de-f24ba41391ac"><span class="section-number-2">3.</span> Tarski&#x2013;Grothendieck Set Theory</h2>
+<div class="outline-text-2" id="text-h-cd10efca-0ee5-4666-b0de-f24ba41391ac">
+<p>
+We could instead start with some family of collections, "Coll", which
+obeys the obvious ZF axioms. Then we form the NBG completion of this
+theory, giving us "Coll+". But we could iterate this, getting "Coll++", &#x2026;, "Coll + \(n\)",
+for example. Taking the limit of this, well that's precisely what
+Tarski&#x2013;Grothendieck set theory does, and it treats all these
+collections as sets. It's useful for handling <a href="category-theory/large-cats.html">large categories</a>.
+</p>
+
+<p>
+The formal definition of Tarski&#x2013;Grothendieck set theory is just ZF + Universes.
+That is to say, given any set \(X\), we can find a Grothendieck universe \(\mathcal{U}\)
+containing \(X\). What is a "Grothendieck universe"? It is a set
+\(U\) such that:
+</p>
+
+<ol class="org-ol">
+<li>It is transitive: for each \(X\in U\) and \(x\in X\), we have \(x\in U\)</li>
+<li>For each \(X\in U\), its power set \(\mathcal{P}(X)\in U\)</li>
+<li>It contains the empty set: \(\emptyset\in U\)</li>
+<li>Let \(I\in U\), let \(\{X_{\alpha}\}_{\alpha\in I}\) be a family of
+elements of \(U\). Then their union \(\bigcup_{\alpha\in I}X_{\alpha}\in U\).</li>
+</ol>
+
+<p>
+The exact axioms vary. Some omit the inclusion of the empty set, others
+require the inclusion of the natural numbers instead. But with the
+axioms we have given, we see every Grothendieck universe is a model for
+ZF set theory.
+</p>
+
+<p>
+See:
+</p>
+
+<ul class="org-ul">
+<li><a href="https://ncatlab.org/nlab/show/Grothendieck+universe">Grothendieck Universe</a> on nLab</li>
+<li><a href="https://en.wikipedia.org/wiki/Grothendieck_universe">Grothendieck Universe</a> on Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Tarski%E2%80%93Grothendieck_set_theory">Tarski&#x2013;Grothendieck set theory</a> on Wikipedia</li>
+</ul>
+</div>
+</div>
+
 <div id="outline-container-h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd" class="outline-2">
-<h2 id="h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd"><span class="section-number-2">3.</span> References</h2>
+<h2 id="h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd">
 <ul class="org-ul">
 <li>Thomas Jech, <br>
@@ -294,7 +341,7 @@ Marcel Dekker, 3rd edition, 1999.</li>
 </div>
 
 <div id="outline-container-h-912813df-2c88-4a03-aa81-3fa855993460" class="outline-3">
-<h3 id="h-912813df-2c88-4a03-aa81-3fa855993460"><span class="section-number-3">3.1.</span> Many-Sorted Models of Sets and Classes</h3>
+<h3 id="h-912813df-2c88-4a03-aa81-3fa855993460"><span class="section-number-3">4.1.</span> Many-Sorted Models of Sets and Classes</h3>
 <div class="outline-text-3" id="text-h-912813df-2c88-4a03-aa81-3fa855993460">
 <ul class="org-ul">
 <li>V. Gitman,<br>
@@ -308,7 +355,7 @@ Marcel Dekker, 3rd edition, 1999.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated 2023-03-09 Thu 08:15.</p>
 </div>
 </body>
 </html>

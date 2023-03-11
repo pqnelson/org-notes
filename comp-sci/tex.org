@@ -311,6 +311,35 @@ Spam and eggs test!
 
 \bye
 #+end_src
+
+** Typing Relation
+:PROPERTIES:
+:CUSTOM_ID: h-2ab9f828-de66-4dc2-bdc6-a38f891557ad
+:END:
+
+I noticed that ~lhs2tex~ has some primitive macros which make the
+resulting LaTeX look nice. In particular, their typing relation ~t : T~
+uses ~\mathbin{:}~ to give us $t\mathbin{:}T$ as opposed to $t:T$.
+
+If we wanted a kinding relation, we would use ~\mathbin{::}~ to give us
+$T\mathbin{::}K$ instead of $T::K$.
+
+I have a hard time noticing any difference between the "before/after"
+for either situation.
+
+#+CAPTION: Different variants in the typesetting of the typing relation.
+[[../img/typing-relation-article-cls.png]]
+
+/Conceptually/ we would probably want to use a ~\mathrel{:}~, but in
+practice we would want to use ~\mathbin{:}~ or manually specify the
+spacing. The difference is that TeX will squeeze a mathbin, but not a
+mathrel, and mathbin has spacing of 4/18em (when unsqueezed) whereas
+mathrel has a spacing of 5/18em. If we wanted even less space, we could
+use a mathop.
+
+- [[https://tex.stackexchange.com/q/38982][What is the difference between ~\mathbin~ vs. ~\mathrel~?]] thread on
+  tex.stackexchange is very enlightening
+
 * Equation Indent
 :PROPERTIES:
 :CUSTOM_ID: h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6

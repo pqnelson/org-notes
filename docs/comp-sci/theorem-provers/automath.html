@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:48 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Automath</title>
@@ -189,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -207,6 +206,27 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -394,7 +414,7 @@ the context to be empty by just writing <code>&lt;turnstile&gt;</code>.
 Consider the following (adapted from Freek Wiedijk's formalization of
 <a href="http://www.cs.ru.nl/~freek/zfc-etc/holl.aut">HOL Light's logic</a>):
 </p>
-<pre class="example" id="orgeceab11">
+<pre class="example" id="org2f33fa3">
   * type : TYPE := PRIM    # sets the context to be initial empty context
   * bool : type := PRIM
   * A : type := ---        # sets the context to be A
@@ -425,14 +445,14 @@ context ending at <code>A</code>, creating a new context <code>A:type, B:type</c
 <p>
 The kernel interprets a line of the form
 </p>
-<pre class="example" id="org58ada69">
+<pre class="example" id="orgcef400f">
 a * [x:T] b := ... : T'
 </pre>
 
 <p>
 as two lines:
 </p>
-<pre class="example" id="org6c77597">
+<pre class="example" id="orga87b38c">
 a * x := --- : T
 x * b := ... : T'
 </pre>
@@ -455,7 +475,7 @@ have a proposition be a 2-expression ("type") of the form <code>p : PROP</code>.
 predicate would parametrize this by a "term":
 </p>
 
-<pre class="example" id="org05f1a5e">
+<pre class="example" id="org751dd87">
    * T : TYPE := ---
  T * [x:T]predicate : [x:T]PROP := PN
 </pre>
@@ -469,7 +489,7 @@ But is <code>[x:T]PROP</code> a valid expression? De Bruijn calls such a thing a
 <p>
 Quantifiers can be written down easily as:
 </p>
-<pre class="example" id="orgb4d9add">
+<pre class="example" id="org2fdcc48">
 T * [p:[z:T]PROP] forall : PROP := p
   * [a:PROP][b:PROP] imp:PROP := [x:a]b
   * false : PROP := PRIM
@@ -521,6 +541,14 @@ Automath.</li>
 </ul></li>
 <li><a href="https://www.win.tue.nl/automath/">Automath Archive</a> has scanned a number of tech. reports written by de
 Bruijn's team.</li>
+<li>Herman Geuvers, Rob Nederpelt,<br>
+"Characteristics of de Bruijn's early proof checker Automath".<br>
+<a href="https://arxiv.org/abs/2203.01173">arXiv:2203.01173</a>, 24 pages.
+<ul class="org-ul">
+<li>Discusses the merits and idiosyncracies of Automath, then
+reformulates its "essence" in modern type theory, relating it to
+\(\lambda\mathrm{D}\).</li>
+</ul></li>
 <li>N.G. de Bruijn,<br>
 "The mathematical language AUTOMATH, its usage and some of its
 extensions".<br>
@@ -533,7 +561,7 @@ extensions".<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-22 Tue 08:31.</p>
+<p class="postamble">Last Updated 2023-03-09 Thu 09:28.</p>
 </div>
 </body>
 </html>

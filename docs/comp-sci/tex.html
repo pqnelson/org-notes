@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-12-31 Sat 09:10 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>TeX Notes</title>
@@ -207,6 +206,27 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -234,6 +254,7 @@
 <ul>
 <li><a href="#h-024d8f89-6eec-4422-8e82-ba3e2e15a117">3.1. Normal Ordering Operators</a></li>
 <li><a href="#h-952ca320-c41f-4992-8f2f-03b63e69c307">3.2. Tractatus Numbering in Plain TeX</a></li>
+<li><a href="#h-2ab9f828-de66-4dc2-bdc6-a38f891557ad">3.3. Typing Relation</a></li>
 </ul>
 </li>
 <li><a href="#h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6">4. Equation Indent</a></li>
@@ -566,7 +587,50 @@ Spam and eggs test!
 </div>
 </div>
 </div>
+
+<div id="outline-container-h-2ab9f828-de66-4dc2-bdc6-a38f891557ad" class="outline-3">
+<h3 id="h-2ab9f828-de66-4dc2-bdc6-a38f891557ad"><span class="section-number-3">3.3.</span> Typing Relation</h3>
+<div class="outline-text-3" id="text-h-2ab9f828-de66-4dc2-bdc6-a38f891557ad">
+<p>
+I noticed that <code>lhs2tex</code> has some primitive macros which make the
+resulting LaTeX look nice. In particular, their typing relation <code>t : T</code>
+uses <code>\mathbin{:}</code> to give us \(t\mathbin{:}T\) as opposed to \(t:T\).
+</p>
+
+<p>
+If we wanted a kinding relation, we would use <code>\mathbin{::}</code> to give us
+\(T\mathbin{::}K\) instead of \(T::K\).
+</p>
+
+<p>
+I have a hard time noticing any difference between the "before/after"
+for either situation.
+</p>
+
+
+<div id="org5bfc9ee" class="figure">
+<p><img src="../img/typing-relation-article-cls.png" alt="typing-relation-article-cls.png">
+</p>
+<p><span class="figure-number">Figure 1: </span>Different variants in the typesetting of the typing relation.</p>
 </div>
+
+<p>
+<i>Conceptually</i> we would probably want to use a <code>\mathrel{:}</code>, but in
+practice we would want to use <code>\mathbin{:}</code> or manually specify the
+spacing. The difference is that TeX will squeeze a mathbin, but not a
+mathrel, and mathbin has spacing of 4/18em (when unsqueezed) whereas
+mathrel has a spacing of 5/18em. If we wanted even less space, we could
+use a mathop.
+</p>
+
+<ul class="org-ul">
+<li><a href="https://tex.stackexchange.com/q/38982">What is the difference between <code>\mathbin</code> vs. <code>\mathrel</code>?</a> thread on
+tex.stackexchange is very enlightening</li>
+</ul>
+</div>
+</div>
+</div>
+
 <div id="outline-container-h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6" class="outline-2">
 <h2 id="h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6"><span class="section-number-2">4.</span> Equation Indent</h2>
 <div class="outline-text-2" id="text-h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6">
@@ -582,7 +646,7 @@ documents, and 2.5em for single column documents.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-12-31 Sat 08:24.</p>
+<p class="postamble">Last Updated 2023-03-09 Thu 09:55.</p>
 </div>
 </body>
 </html>
