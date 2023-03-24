@@ -1,0 +1,99 @@
+#+TITLE: Brenner Equations of Motion
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-03-21T09:10:30-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Tuesday March 21, 2023 at  9:10AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-4baddb89-34e8-448d-9f4e-1f424ba4ea9d
+:END:
+
+Howard Brenner made a fascinating observation about fluid mechanics: the
+derivation of the equations of motion rely on identifying the [Eulerian]
+/mass velocity/ with the [Lagrangian] /volume velocity/,
+despite the fact the former is kinematical whereas the latter is
+dynamical. We can experimentally test this hypothesis, and Brenner *did*
+that!
+
+- Howard Brenner,\\
+  "Fluid mechanics in fluids at rest".\\
+  /Physical Review E/ *86*, no.1 (2012): 016307.
+  [[https://dspace.mit.edu/handle/1721.1/72460][Eprint]]
+
+Unsurprisingly, these quantities are /different/. We end up with three
+sets of equations:
+
+1. Conservation of mass: $\displaystyle\frac{\mathrm{D}}{\mathrm{D}t}\rho+\vec{u}_{m}\cdot\vec{\nabla}\rho=0$
+2. Euler's equations: $\displaystyle\rho\frac{\mathrm{D}}{\mathrm{D}t}\vec{u}_{v} =-\vec{\nabla}p$
+3. Constitutive equation: $\vec{u}_{v}-\vec{u}_{m}=K\nabla p$.
+
+For incompressible fluids with small pressure differences, this behaves
+the same as the Euler equations of motion.
+
+*But* for compressible fluids with large pressure differences, the
+behaviour is completely different.
+
+#+begin_puzzle
+For modeling the atmosphere of Earth in climate models, will the Brenner
+equations of motion make a significant difference?
+#+end_puzzle
+
+** Who Cares?
+:PROPERTIES:
+:CUSTOM_ID: h-bf997a7a-7c8f-45f8-b826-c49faeb00e61
+:END:
+
+It turns out that these equations of motion behave more nicely than the
+Euler equations of motion. Probably this carries over to the
+Navier-Stokes equations. See:
+
+- Eduard Feireisl and Alexis Vasseur,\\
+  "New perspectives in fluid dynamics: Mathematical analysis of a model
+  proposed by Howard Brenner."\\
+  In /New directions in mathematical fluid mechanics, Adv. Math. Fluid Mech/ (2009): 153-179.
+  [[https://web.ma.utexas.edu/users/vasseur/documents/preprints/feva07_01.pdf][Preprint]].
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-d9cd99c2-821f-413f-a99d-3613f2c041f6
+:END:
+
+- Eduard Feireisl and Alexis Vasseur,\\
+  "New perspectives in fluid dynamics: Mathematical analysis of a model
+  proposed by Howard Brenner."\\
+  In /New directions in mathematical fluid mechanics, Adv. Math. Fluid Mech/ (2009): 153-179.
+  [[https://web.ma.utexas.edu/users/vasseur/documents/preprints/feva07_01.pdf][Preprint]].
+- Howard Brenner,\\
+  "Fluid mechanics in fluids at rest".\\
+  /Physical Review E/ *86*, no.1 (2012): 016307.
+  [[https://dspace.mit.edu/handle/1721.1/72460][Eprint]]
+- Howard Brenner, Nishanth Dongari, Jason M. Reese,\\
+  "A molecular dynamics test of the Navier-Stokes-Fourier paradigm for
+  compressible gaseous continua".\\
+  {{{arXiv(1301.1716)}}}, 12 pages
+- Howard Brenner,\\
+  "Unsolved Problems in Fluid Mechanics".\\
+  [[https://cbe.osu.edu/sites/default/files/uploads/brenner.pdf][PDF]].
+- Howard Brenner,\\
+  "Beyond the no-slip boundary condition".\\
+  http://hdl.handle.net/1721.1/68655
+
+** Perhaps Relevant
+:PROPERTIES:
+:CUSTOM_ID: h-34c3c040-bbc0-4bf4-bb73-9c2588e6ff78
+:END:
+
+- Magnus Svärd,\\
+  "A new Eulerian model for viscous and heat conducting compressible flow".\\
+  {{{arXiv(1801.02468)}}}, 32 pages.
+- Jan Brezina,\\
+  "Existence of measure-valued solutions to a complete Euler system for a perfect gas".\\
+  {{{arXiv(1805.05570)}}}, 24 pages.

@@ -210,7 +210,7 @@ downside is that I need to /manually/ add signature names to the
    morecomment=[n]{(*}{*)},%
    morestring=[d]",
    literate={JOB}{{\ttfamily\scshape Job}}3 {'a}{{$\alpha$}}1 {'b}{{$\beta$}}1
-               {\ o\ }{{$\circ$}}3 {+}{{$+$}}1 {/}{{$/$}}1 {*}{{$*$}}1 {=}{{$=$\ }}1
+               {\ o\ }{{\ $\circ$\ }}3 {+}{{$+$}}1 {/}{{$/$}}1 {*}{{$*$}}1 {=}{{$=$\ }}1
                {>}{{$>$}}1 {<}{{$<$}}1
                {\\\\}{{\char`\\\char`\\}}1
                {->}{{$\rightarrow$}}2 {>=}{{$\geq$}}2 {<-}{{$\leftarrow$}}2
@@ -230,6 +230,22 @@ fun giveRaise (SOME true) = true
 \end{lstlisting}
 \end{document}
 #+end_example
+
+Note that ~lhs2tex~ uses =\mid= for the separator in algebraic data
+types and =\mathbin{::}= for esti, =\mathbin{:}= for cons,
+etc. Remember:
+
+- math operators are separated by a =\thinmuskip=
+- Binary operators are separated from ordinary atoms by a =\medmuskip=
+- Relations are separated from ordinary atoms by a =\thickmuskip=;
+  however, two consecutive relation symbols are placed next to each
+  other as if they were ordinary atoms (then treated together as a
+  relation "molecule").
+
+See:
+
+- https://tex.stackexchange.com/q/38982
+- https://tex.stackexchange.com/q/55512
 
 * Emacs
 :PROPERTIES:
