@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Computing the Solar Constant</title>
+<title>History of Fluid Mechanics</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -213,104 +213,41 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Computing the Solar Constant</h1>
-
-<div id="outline-container-h-6078b1ca-771f-41da-afcc-6d8a196bd611" class="outline-2">
-<h2 id="h-6078b1ca-771f-41da-afcc-6d8a196bd611">Problem</h2>
-<div class="outline-text-2" id="text-h-6078b1ca-771f-41da-afcc-6d8a196bd611">
-<p>
-What is the mean solar electromagnetic radiation (solar irradiance) per
-unit area of the Earth?
-</p>
+<h1 class="title">History of Fluid Mechanics</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-20a190c7-d7d4-411e-9c8e-ddc13e2720c0">1. George Stokes' contributions</a></li>
+</ul>
 </div>
 </div>
 
-<div id="outline-container-h-350dbf57-f92b-407f-a7d6-43eb5194f9d6" class="outline-2">
-<h2 id="h-350dbf57-f92b-407f-a7d6-43eb5194f9d6">Solution</h2>
-<div class="outline-text-2" id="text-h-350dbf57-f92b-407f-a7d6-43eb5194f9d6">
-<p>
-<b>Identify:</b> We need to compute the irradiance of the Sun at the distance
-the Earth is from the Sun.
-</p>
-
-<p>
-<b>Setup and Execute:</b>
-We need to use the Stefan&#x2013;Boltzmann constant:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">stefan-boltzman</span> ()
-  (<span class="org-keyword">let</span> ((kb 1.380649e-23)
-        (hbar (* 0.5 (/ 6.62607015e-34 pi)))
-        (c 299792458.0))
-    (/ (* pi pi (expt kb 4.0))
-       (* 60.0 (expt (* c hbar) 2.0) hbar))))
-(stefan-boltzman)
-</pre>
-</div>
-
-<pre class="example">
-5.6703744191844294e-08
-</pre>
-
-
-<p>
-The luminosity of the Sun would be, theoretically:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">luminosity</span> (r temperature)
-  (* 4 pi
-     (expt r 2.0)
-     (stefan-boltzman)
-     (expt temperature 4.0)))
-
-(<span class="org-keyword">let</span> ((sun-temperature     5772.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">K</span>
-      (sun-radius        695700.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (earth-distance 149596000.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (km                  1000.0)
-      (earth-radius        6378.1366)) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-  (luminosity (* sun-radius km) sun-temperature))
-</pre>
-</div>
-
-<pre class="example">
-3.827990903277097e+26
-</pre>
-
-
-<p>
-The irradiance on a point on the Earth would be
-</p>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">irradiance</span> (lumos distance)
-  (* (/ lumos pi) (expt (* 2 distance) -2)))
-
-(<span class="org-keyword">let</span> ((sun-temperature     5772.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">K</span>
-      (sun-radius        695700.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (earth-distance 149596000.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (earth-radius        6378.1366) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (km                  1000.0)) <span class="org-comment-delimiter">;; </span><span class="org-comment">m/km</span>
-  (irradiance (luminosity (* sun-radius km) sun-temperature)
-              (* km earth-distance)))
-</pre>
-</div>
-
-<pre class="example">
-1361.197273723066
-</pre>
-
-
-<p>
-Compare this to the <a href="https://en.wikipedia.org/wiki/Solar_constant">empirical value of the Solar constant</a> which is about
-1.361 kilowatts per square meter.
-</p>
+<div id="outline-container-h-20a190c7-d7d4-411e-9c8e-ddc13e2720c0" class="outline-2">
+<h2 id="h-20a190c7-d7d4-411e-9c8e-ddc13e2720c0"><span class="section-number-2">1.</span> George Stokes' contributions</h2>
+<div class="outline-text-2" id="text-h-20a190c7-d7d4-411e-9c8e-ddc13e2720c0">
+<ul class="org-ul">
+<li>George G. Stokes,<br>
+"On the steady motion of incompressible fluids".<br>
+<i>Transactions of the Cambridge Philosophical Society</i> <b>7</b> (1842)
+pp. 439&#x2013;453.
+<a href="https://babel.hathitrust.org/cgi/pt?id=mdp.39015027059651&amp;view=1up&amp;seq=427">Eprint</a>
+<ul class="org-ul">
+<li>Investigates steady motion in 2-dimensions, discusses exact
+differential forms.</li>
+</ul></li>
+<li>George G. Stokes,<br>
+"On some cases of fluid motion".<br>
+<i>Transactions of the Cambridge Philosophical Society</i> <b>8</b> (1843)
+pp.105&#x2013;137.
+<a href="https://babel.hathitrust.org/cgi/pt?id=umn.31951d000213721&amp;view=1up&amp;seq=121">Eprint</a></li>
+<li></li>
+</ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated 2023-04-05 Wed 09:26.</p>
 </div>
 </body>
 </html>
