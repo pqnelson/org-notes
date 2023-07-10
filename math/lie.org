@@ -1,0 +1,148 @@
+#+TITLE: Lie Groups and Algebras
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-05-26T09:21:50-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Friday May 26, 2023 at  9:21AM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-4d4928f6-e5fc-4af0-9fc1-7b4e3fae3304
+:END:
+
+Lie groups are groups which are manifolds, so in particular we could
+consider a one-parameter smooth family of symmetries. But moreover, we
+could consider any symmetry "arbitrarily close" to the identity
+symmetry --- these look like $I + \varepsilon X$, and the collection of
+all such $X$ guys form a Lie algebra. Intuitively, a "Lie algebra" is
+just "infinitesimal symmetries" which are "near" the identity symmetry.
+
+There are some famous families of Lie groups:
+
+- $GL(n, \mathbb{F})$ the set of $n\times n$ invertible matrices with
+  entries in the field $\mathbb{F}$
+- $SL(n, \mathbb{F})$ the set of $n\times n$ invertible matrices with
+  entries in the field $\mathbb{F}$ *and* determinant 1
+- $O(n, \mathbb{F})$ the set of $n\times n$ *orthogonal* matrices with
+  entries in the field $\mathbb{F}$
+- $SO(n, \mathbb{F})$ the set of $n\times n$ *orthogonal* matrices with
+  entries in the field $\mathbb{F}$ *and* determinant 1
+- $U(n)$ the set of $n\times n$ unitary matrices with complex entries
+- $SU(n)$ the set of $n\times n$ unitary matrices with determinant 1,
+  having complex entries.
+
+We could also classify the "simple" Lie groups using Dynkin diagrams and
+root systems:
+
+#+begin_remark
+I am lying here, the notion of a "simple Lie group" is ambiguous: no one
+can agree on its definition. But there is a notion of a simple Lie
+algebra, namely $\mathfrak{g}$ is a simple Lie algebra if its adjoint
+representation $\mathrm{ad}\colon\mathfrak{g}\to\mathfrak{gl}(\mathfrak{g})$
+is irreducible (i.e., does not contain proper ideals). 
+
+If we just take the connected Lie group corresponding to a simple Lie
+algebra, then we may have discrete normal Subgroups...which then does
+not correspond to the notion of a "simple group".
+#+end_remark
+
+- $A_{n} = SU(n+1)$
+- $B_{n}=SO(2n+1)$
+- $C_{n}=Sp(n)$
+- $D_{n}=SO(2n)$
+- Exceptional simple Lie groups --- usually there are several Lie
+  groups corresponding to the same exceptional Lie algebra, but the
+  exceptions are:
+  - $E_{6}$
+  - $E_{7}$
+  - $E_{8}$
+  - $F_{4}$ which is the isometry group of the Octonionic projective
+    plane $\mathbb{OP}^{2}$
+  - $G_{2}$ which is the automorphism group of the Octonion algebra
+    (it's also the subgroup of $SO(7)$ which preserves any chosen
+    particular vector in its 8-dimensional [real] spinor
+    representation); there are technically three groups identifiable as $G_{2}$.
+
+The Dynkin diagrams then give us a way to encode the Cartan matrix
+$a_{ij}$, which is then used to construct the Lie algebra using the
+Serre generators [= Chevalley basis = Cartan-Weyl basis] ("ladder operators" and other observables).
+Consequently, Lie algebras play a critical role in quantum field theory.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-45ec9c8d-f629-44f8-8990-899a032b54c1
+:END:
+
+- C H Barton, A Sudbery,\\
+  "Magic squares and matrix models of Lie algebras".\\
+  {{{arXiv(math/0203010)}}}, 44 pages.
+- Fabio Bernardoni, Sergio L. Cacciatori, Bianca L. Cerchiai, Antonio Scotti,\\
+  "Mapping the geometry of the F4 group".\\
+  {{{arXiv(0705.3978)}}}, 50 pages.
+- Fabio Bernardoni, Sergio L. Cacciatori, Bianca L. Cerchiai, Antonio Scotti,\\
+  "Mapping the geometry of the E6 group".\\
+  {{{arXiv(0710.0356)}}}, 30 pages.
+- Sergio L. Cacciatori,\\
+  "A simple parametrization for G2".\\
+  {{{arXiv(math-ph/0503054)}}}, 9 pages --- discusses $G_{2}$ as an
+  $SU(3)$ fibration
+- Sergio L. Cacciatori, Bianca L. Cerchiai, Alberto Della Vedova, Giovanni Ortenzi, Antonio Scotti,\\
+  "Euler angles for G2".\\
+  {{{arXiv(hep-th/0503106)}}}, 21 pages.
+- Sergio L. Cacciatori, Francesco Dalla Piazza, Antonio Scotti,\\
+  "E7 groups from octonionic magic square".\\
+  {{{arXiv(1007.4758)}}}, 23 pages.
+- S. L. Cacciatori, F. Dalla Piazza, A. Scotti,\\
+  "Compact Lie groups: Euler constructions and generalized Dyson conjecture".\\
+  {{{arXiv(1207.1262)}}}, 11 pages.
+- S. L. Cacciatori, F. Dalla Piazza, A. Scotti,\\
+  "A Simple E8 Construction".\\
+  {{{arXiv(1207.3623)}}}, 3 pages.
+- Sergio L. Cacciatori, Bianca L. Cerchiai, Alessio Marrani,\\
+  "Squaring the Magic".\\
+  {{{arXiv(1208.6153)}}}, 21 pages.
+- José Figueroa-O'Farrill,\\
+  "A geometric construction of the exceptional Lie algebras F4 and E8".\\
+  {{{arXiv(0706.2829)}}}, 12 pages.
+- Merab Gogberashvili, Alexandre Gurchumelia,\\
+  "Split Octonions and Triality in (4+4)-Space".\\
+  {{{arXiv(2012.02255)}}}, 14 pages --- interesting for Spin(4, 4)
+- Kirill Krasnov,\\
+  "Spin(11,3), particles and octonions".\\
+  {{{arXiv(2104.01786)}}}, 27 pages.
+- David A. Richter,\\
+  "Triacontagonal coordinates for the E(8) root system".\\
+  {{{arXiv(0704.3091)}}}, 4 pages.
+- Ichiro Yokota,\\
+  "Exceptional Lie groups".\\
+  {{{arXiv(0902.0431)}}}, 204 pages.
+
+** Triality
+:PROPERTIES:
+:CUSTOM_ID: h-799d7e1b-d990-4af7-9e04-5d74ae4003d5
+:END:
+
+- Jonathan M. Evans,\\
+  "Trialities and Exceptional Lie Algebras: DECONSTRUCTING the Magic Square".\\
+  {{{arXiv(0910.1828)}}}, 34 pages.
+- Merab Gogberashvili, Alexandre Gurchumelia,\\
+  "Split Octonions and Triality in (4+4)-Space".\\
+  {{{arXiv(2012.02255)}}}, 14 pages --- interesting for Spin(4, 4)
+
+** Particle Physics Related
+:PROPERTIES:
+:CUSTOM_ID: h-60755585-9f28-403e-97de-0e0e33cb1866
+:END:
+
+- R. D. Peccei,\\
+  "Discrete and Global Symmetries in Particle Physics".\\
+  {{{arXiv(hep-ph/9807516)}}}, 50 pages.
+- Pierre Ramond,\\
+  "Exceptional Groups and Physics".\\
+  {{{arXiv(hep-th/0301050)}}}, 9 pages.

@@ -473,7 +473,6 @@ There's a lot more functionality provided by the Standard ML built-in
 library, but the rest seem to be contained in modules.
 #+end_remark
 
-
 * Modules
 :PROPERTIES:
 :CUSTOM_ID: h-8a5ab802-daf2-4883-b486-87759924c0b7
@@ -630,6 +629,33 @@ then they'll get an error.
 Polymorphic ~ref~ types can cause problems when they store a function.
 The way around this is value restriction (or what the 1997 revised
 definition calls "non-expansive expressions").
+
+* Lists: Map, Fold, Filter is all you need
+:PROPERTIES:
+:CUSTOM_ID: h-f08da84c-789c-457c-9af6-59cff48ee7c7
+:END:
+
+The folklore result that you only really need ~map~,
+~foldl~, and ~filter~ for a list may be found in:
+
+- Erik Meijer, Maarten Fokkinga, and Ross Paterson,\\
+  "Functional Programming with Bananas, Lenses, Envelopes and Barbed Wire".\\
+  In /Conference on functional programming languages and computer architecture/ (pp. 124--144). Berlin, Heidelberg: Springer Berlin Heidelberg.
+  [[https://maartenfokkinga.github.io/utwente/mmf91m.pdf][PDF]].
+
+Meijer and friends work in the category *CPO* which results in a lazy
+functional language. Here a type is an $\omega$ CPO, and morphisms are
+continuous functions between them.
+
+Earlier work:
+
+- Tatsuya Hagino,\\
+  "Codatatypes in ML."
+  /Journal of symbolic computation/ *8*, no. 6 (1989) 629--650.
+
+(See also {{{arXiv(2010.05167)}}} for Hagino's PhD thesis, and his paper
+"A Typed Lambda Calculus with Categorical Type Constructors" [[https://www.lfcs.inf.ed.ac.uk/reports/88/ECS-LFCS-88-44/][eprint]] for
+more details/fun.)
 
 * References
 :PROPERTIES:
