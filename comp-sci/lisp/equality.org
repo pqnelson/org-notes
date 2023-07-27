@@ -11,6 +11,11 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 # Created Saturday April  9, 2022 at 11:41AM
 
+* Built-In Equality Predicates
+:PROPERTIES:
+:CUSTOM_ID: h-b9635bbe-00f6-4e97-b1e6-5c95aa7fb43d
+:END:
+
 There are 5 equality predicates in Common Lisp:
 
 1. [[http://www.lispworks.com/documentation/HyperSpec/Body/f_eq.htm][~eq~]] tests if its arguments point to the same ["identical"] object;
@@ -38,6 +43,135 @@ There are 5 equality predicates in Common Lisp:
      to terminate!
    - Arrays should be tested using ~equalp~
 5. [[http://www.lispworks.com/documentation/HyperSpec/Body/f_eq_sle.htm#EQ][~=~]] tests if numbers are equal, regardless of type
+
+* Egal Operator
+:PROPERTIES:
+:CUSTOM_ID: h-52709629-23a4-48bb-a4e7-3f095de33492
+:END:
+
+Henry Baker wrote a paper offering a rather robust equality predicate,
+introducing a function ~EGAL~. The basic template is as follows:
+
+#+begin_src common-lisp
+  (defun egal (x y)
+    (and (egal (type-of x) (type-of y))
+         (cond ((symbolp x) (eq x y))
+               ((numberp x) (egal-number x y))
+               ((consp x) (eq x y))
+               ((vectorp x) (egal-vector x y))
+               ((functionp x) (egal-function x y))
+               ((hash-table-p x) (egal-hashtable x y))
+               ((streamp x) (egal-stream x y))
+               ((mutable-structure-p x)
+                (eq x y))
+               (t (every #'(lambda (component)
+                             (egal (funcall component x)
+                                   (funcall component y)))
+                         (components (type-of x)))))))
+#+end_src
+
+** Numbers
+:PROPERTIES:
+:CUSTOM_ID: h-757d8938-0379-490c-a8a8-a0b42265ee35
+:END:
+
+Equality of numbers is rather involved. The biggest caveat is that the
+types *must agree*.
+
+#+begin_src common-lisp
+  (defun egal-number (x y)
+    (and (egal (type-of x) (type-of y))
+         (cond ((complexp x)
+                (and (egal-number (realpart x) (realpart y))
+                     (egal-number (imagpart x) (imagpart y))))
+               ((rationalp x)
+                (and (egal-number (numerator x) (numerator y))
+                     (egal-number (denominator x) (denominator y))))
+               ((floatp x)
+                (and (= (float-sign x) (float-sign y)) ; for IEEE-75415
+                     (= x y)))
+               ((and (fixnump x) (fixnump y)) (eq x y))
+               ((and (bignump x) (bignump y))
+                (every #'eq (digits x) (digits y)))
+               (t nil))))
+#+end_src
+
+** Vectors and Strings
+:PROPERTIES:
+:CUSTOM_ID: h-02bbd24f-7f74-40b4-b66e-3094ff2ea51c
+:END:
+
+Equality of vectors is just boiling down to two case:
+1. Mutable vectors refer to the same object in memory
+2. Immutable vectors have the same length, and iterating through each
+   pair of entries testing if they are ~EGAL~ or not.
+
+Otherwise, the predicate is false.
+
+#+begin_src common-lisp
+  (defun egal-vector (x y)
+    (cond ((and (mutable-vector-p x) (mutable-vector-p y))
+           (eq x y))
+          ((and (immutable-vector-p x) (immutable-vector-p y))
+           (and (= (length x) (length y))
+                (dotimes (i (length x) t)
+                  (unless (egal (aref x i) (aref y i))
+                    (return nil)))))
+          (t nil)))
+#+end_src
+
+** Function Equality
+:PROPERTIES:
+:CUSTOM_ID: h-e3823fb5-4a3c-4b51-9eb5-16718fa6f5e4
+:END:
+
+This is a nightmare, and doesn't seem tractable as Baker outlines
+it. Therefore, pointer equality seems best.
+
+#+begin_src common-lisp
+(defun egal-function (x y)
+  (eq x y))
+#+end_src
+
+The original implementation checked if ~x~ and ~y~ were
+~simple-function-p~ (which is not a well-defined predicate) and in that
+case, checks pointer equality.
+
+For closures (there is a not-well-defined ~closure-p~ predicate), Baker
+checks if the funtion and the environments are equal.
+
+** Hash Tables
+:PROPERTIES:
+:CUSTOM_ID: h-afa01056-eef2-4131-95af-d0240e382644
+:END:
+
+I just implement this using:
+
+#+begin_src common-lisp
+(defun egal-hashtable (x y)
+  (and (= (hash-table-count x) (hash-table-count y))
+       (with-hash-table-iterator (iterator x)
+         (loop (multiple-value-bind (entry-p key value) (iterator)
+                 (if entry-p
+                     (egal (gethash key y) value)
+                     (return t)))))))
+#+end_src
+
+This is probably not as good as ~equalp~.
+
+** Streams
+:PROPERTIES:
+:CUSTOM_ID: h-7d95f200-7c07-4f8a-96c5-92cc18e760d1
+:END:
+
+I must admit I am not terribly familiar with the sordid details about
+streams and their implementation in Common Lisp. Therefore I must defer
+to pointer equality.
+
+#+begin_src common-lisp
+(defun egal-stream (x y)
+  (eq x y))
+#+end_src
 
 * References
 :PROPERTIES:

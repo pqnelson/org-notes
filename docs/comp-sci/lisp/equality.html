@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Equality Testing</title>
@@ -189,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -219,10 +218,24 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-58159f72-2820-42e6-ba5e-a9334322d19a">1. References</a></li>
+<li><a href="#h-b9635bbe-00f6-4e97-b1e6-5c95aa7fb43d">1. Built-In Equality Predicates</a></li>
+<li><a href="#h-52709629-23a4-48bb-a4e7-3f095de33492">2. Egal Operator</a>
+<ul>
+<li><a href="#h-757d8938-0379-490c-a8a8-a0b42265ee35">2.1. Numbers</a></li>
+<li><a href="#h-02bbd24f-7f74-40b4-b66e-3094ff2ea51c">2.2. Vectors and Strings</a></li>
+<li><a href="#h-e3823fb5-4a3c-4b51-9eb5-16718fa6f5e4">2.3. Function Equality</a></li>
+<li><a href="#h-afa01056-eef2-4131-95af-d0240e382644">2.4. Hash Tables</a></li>
+<li><a href="#h-7d95f200-7c07-4f8a-96c5-92cc18e760d1">2.5. Streams</a></li>
+</ul>
+</li>
+<li><a href="#h-58159f72-2820-42e6-ba5e-a9334322d19a">3. References</a></li>
 </ul>
 </div>
 </div>
+
+<div id="outline-container-h-b9635bbe-00f6-4e97-b1e6-5c95aa7fb43d" class="outline-2">
+<h2 id="h-b9635bbe-00f6-4e97-b1e6-5c95aa7fb43d"><span class="section-number-2">1.</span> Built-In Equality Predicates</h2>
+<div class="outline-text-2" id="text-h-b9635bbe-00f6-4e97-b1e6-5c95aa7fb43d">
 <p>
 There are 5 equality predicates in Common Lisp:
 </p>
@@ -262,19 +275,181 @@ to terminate!</li>
 </ul></li>
 <li><a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_eq_sle.htm#EQ"><code>=</code></a> tests if numbers are equal, regardless of type</li>
 </ol>
+</div>
+</div>
+
+<div id="outline-container-h-52709629-23a4-48bb-a4e7-3f095de33492" class="outline-2">
+<h2 id="h-52709629-23a4-48bb-a4e7-3f095de33492"><span class="section-number-2">2.</span> Egal Operator</h2>
+<div class="outline-text-2" id="text-h-52709629-23a4-48bb-a4e7-3f095de33492">
+<p>
+Henry Baker wrote a paper offering a rather robust equality predicate,
+introducing a function <code>EGAL</code>. The basic template is as follows:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-common-lisp">  (<span class="org-keyword">defun</span> <span class="org-function-name">egal</span> (x y)
+    (and (egal (type-of x) (type-of y))
+         (<span class="org-keyword">cond</span> ((symbolp x) (eq x y))
+               ((numberp x) (egal-number x y))
+               ((consp x) (eq x y))
+               ((vectorp x) (egal-vector x y))
+               ((functionp x) (egal-function x y))
+               ((hash-table-p x) (egal-hashtable x y))
+               ((streamp x) (egal-stream x y))
+               ((mutable-structure-p x)
+                (eq x y))
+               (t (every #'(<span class="org-keyword">lambda</span> (component)
+                             (egal (funcall component x)
+                                   (funcall component y)))
+                         (components (type-of x)))))))
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-757d8938-0379-490c-a8a8-a0b42265ee35" class="outline-3">
+<h3 id="h-757d8938-0379-490c-a8a8-a0b42265ee35"><span class="section-number-3">2.1.</span> Numbers</h3>
+<div class="outline-text-3" id="text-h-757d8938-0379-490c-a8a8-a0b42265ee35">
+<p>
+Equality of numbers is rather involved. The biggest caveat is that the
+types <b>must agree</b>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-common-lisp">  (<span class="org-keyword">defun</span> <span class="org-function-name">egal-number</span> (x y)
+    (and (egal (type-of x) (type-of y))
+         (<span class="org-keyword">cond</span> ((complexp x)
+                (and (egal-number (realpart x) (realpart y))
+                     (egal-number (imagpart x) (imagpart y))))
+               ((rationalp x)
+                (and (egal-number (numerator x) (numerator y))
+                     (egal-number (denominator x) (denominator y))))
+               ((floatp x)
+                (and (= (float-sign x) (float-sign y)) <span class="org-comment">; for IEEE-75415</span>
+                     (= x y)))
+               ((and (fixnump x) (fixnump y)) (eq x y))
+               ((and (bignump x) (bignump y))
+                (every #'eq (digits x) (digits y)))
+               (t nil))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-02bbd24f-7f74-40b4-b66e-3094ff2ea51c" class="outline-3">
+<h3 id="h-02bbd24f-7f74-40b4-b66e-3094ff2ea51c"><span class="section-number-3">2.2.</span> Vectors and Strings</h3>
+<div class="outline-text-3" id="text-h-02bbd24f-7f74-40b4-b66e-3094ff2ea51c">
+<p>
+Equality of vectors is just boiling down to two case:
+</p>
+<ol class="org-ol">
+<li>Mutable vectors refer to the same object in memory</li>
+<li>Immutable vectors have the same length, and iterating through each
+pair of entries testing if they are <code>EGAL</code> or not.</li>
+</ol>
+
+<p>
+Otherwise, the predicate is false.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-common-lisp">  (<span class="org-keyword">defun</span> <span class="org-function-name">egal-vector</span> (x y)
+    (<span class="org-keyword">cond</span> ((and (mutable-vector-p x) (mutable-vector-p y))
+           (eq x y))
+          ((and (immutable-vector-p x) (immutable-vector-p y))
+           (and (= (length x) (length y))
+                (<span class="org-keyword">dotimes</span> (i (length x) t)
+                  (<span class="org-keyword">unless</span> (egal (aref x i) (aref y i))
+                    (<span class="org-keyword">return</span> nil)))))
+          (t nil)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-e3823fb5-4a3c-4b51-9eb5-16718fa6f5e4" class="outline-3">
+<h3 id="h-e3823fb5-4a3c-4b51-9eb5-16718fa6f5e4"><span class="section-number-3">2.3.</span> Function Equality</h3>
+<div class="outline-text-3" id="text-h-e3823fb5-4a3c-4b51-9eb5-16718fa6f5e4">
+<p>
+This is a nightmare, and doesn't seem tractable as Baker outlines
+it. Therefore, pointer equality seems best.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-common-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">egal-function</span> (x y)
+  (eq x y))
+</pre>
+</div>
+
+<p>
+The original implementation checked if <code>x</code> and <code>y</code> were
+<code>simple-function-p</code> (which is not a well-defined predicate) and in that
+case, checks pointer equality.
+</p>
+
+<p>
+For closures (there is a not-well-defined <code>closure-p</code> predicate), Baker
+checks if the funtion and the environments are equal.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-afa01056-eef2-4131-95af-d0240e382644" class="outline-3">
+<h3 id="h-afa01056-eef2-4131-95af-d0240e382644"><span class="section-number-3">2.4.</span> Hash Tables</h3>
+<div class="outline-text-3" id="text-h-afa01056-eef2-4131-95af-d0240e382644">
+<p>
+I just implement this using:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-common-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">egal-hashtable</span> (x y)
+  (and (= (hash-table-count x) (hash-table-count y))
+       (<span class="org-keyword">with-hash-table-iterator</span> (iterator x)
+         (<span class="org-keyword">loop</span> (<span class="org-keyword">multiple-value-bind</span> (entry-p key value) (iterator)
+                 (<span class="org-keyword">if</span> entry-p
+                     (egal (gethash key y) value)
+                     (<span class="org-keyword">return</span> t)))))))
+</pre>
+</div>
+
+<p>
+This is probably not as good as <code>equalp</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-7d95f200-7c07-4f8a-96c5-92cc18e760d1" class="outline-3">
+<h3 id="h-7d95f200-7c07-4f8a-96c5-92cc18e760d1"><span class="section-number-3">2.5.</span> Streams</h3>
+<div class="outline-text-3" id="text-h-7d95f200-7c07-4f8a-96c5-92cc18e760d1">
+<p>
+I must admit I am not terribly familiar with the sordid details about
+streams and their implementation in Common Lisp. Therefore I must defer
+to pointer equality.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-common-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">egal-stream</span> (x y)
+  (eq x y))
+</pre>
+</div>
+</div>
+</div>
+</div>
 
 <div id="outline-container-h-58159f72-2820-42e6-ba5e-a9334322d19a" class="outline-2">
-<h2 id="h-58159f72-2820-42e6-ba5e-a9334322d19a"><span class="section-number-2">1.</span> References</h2>
+<h2 id="h-58159f72-2820-42e6-ba5e-a9334322d19a"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-58159f72-2820-42e6-ba5e-a9334322d19a">
 <ul class="org-ul">
 <li><cite class="book-title">Common Lisp: The Language</cite>, chapter 6, section 3</li>
 <li>Eli Bendersky, <a href="https://eli.thegreenplace.net/2004/08/08/equality-in-lisp">Equality in Lisp</a>. Blog post dated August 8, 2004.</li>
+<li>Henry G. Baker,<br>
+"Equal Rights for Functional Objects or, The More Things Change, The More They Are the Same".<br>
+<i>ACM OOPS Messenger</i> <b>4</b>,4 (Oct. 1993), 2-27. <a href="https://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=1?doi=10.1.1.23.9999&amp;rep=rep1&amp;type=pdf">PDF</a>.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-11 Mon 08:45.</p>
+<p class="postamble">Last Updated 2023-07-27 Thu 16:30.</p>
 </div>
 </body>
 </html>
