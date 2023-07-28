@@ -153,7 +153,8 @@ I just implement this using:
        (with-hash-table-iterator (iterator x)
          (loop (multiple-value-bind (entry-p key value) (iterator)
                  (if entry-p
-                     (egal (gethash key y) value)
+                     (unless (egal (gethash key y) value)
+                       (return))
                      (return t)))))))
 #+end_src
 
