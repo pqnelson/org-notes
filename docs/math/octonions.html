@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mathematics</title>
+<title>Octonions</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -206,72 +206,89 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../index.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Mathematics</h1>
+<h1 class="title">Octonions</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-5b27c892-8f1e-4409-815a-896a1795da91">1. Basic Idea</a></li>
+<li><a href="#h-a7d4e002-4d3b-400d-953f-6e4dd94f9834">2. References</a></li>
+</ul>
+</div>
+</div>
 
-<div id="outline-container-h-bb029d4b-7a70-44ef-a73d-eca0dac8066b" class="outline-2">
-<h2 id="h-bb029d4b-7a70-44ef-a73d-eca0dac8066b">Overview</h2>
-<div class="outline-text-2" id="text-h-bb029d4b-7a70-44ef-a73d-eca0dac8066b">
+<div id="outline-container-h-5b27c892-8f1e-4409-815a-896a1795da91" class="outline-2">
+<h2 id="h-5b27c892-8f1e-4409-815a-896a1795da91"><span class="section-number-2">1.</span> Basic Idea</h2>
+<div class="outline-text-2" id="text-h-5b27c892-8f1e-4409-815a-896a1795da91">
 <p>
-I'm trying to review the mathematics necessary to understand the
-models of climate change, and various other physics. Although my
-focus is "applied", my fascination lies more towards the "pure".
+This is a generalization of the <a href="quaternions.html">quaternions</a> where we have new "numbers"
+\(i\), \(j\), \(k\), \(\ell\) obeying the expected relations &#x2014; namely, \(i^{2}=j^{2}=k^{2}=ijk=-1\)
+and \(\ell^{2}=-1\); we "extend" the quaternions by demanding:
 </p>
 
-<blockquote>
 <p>
-Pure mathematics is the art of the provable, but applied mathematics is
-the description of what happens. These heuristics illustrate the gulf
-between these realms. The domain of a theorem is bounded by extremes,
-even if unlikely. Heuristics are descriptions of what is probable, not
-the full range of what is possible.
+-\(\bar{\ell}=-\ell\)
+</p>
+<ul class="org-ul">
+<li>\(q(\ell r)=\ell(\bar{q}r)\)</li>
+<li>\((q\ell)r = (q\bar{r})\ell\)</li>
+<li>\((\ell q)(r\ell)=-\overline{qr}\)</li>
+</ul>
+
+<p>
+for all quaternions \(q\), \(r\in\mathbb{H}\).
 </p>
 
 <p>
-&#x2014; John P. Boyd, "The Devil's Invention: Asymptotic, Superasymptotic and Hyperasymptotic Series"
-&sect;3
+The resulting extension of the quaternions is precisely the octonions.
 </p>
-</blockquote>
+</div>
+</div>
 
+<div id="outline-container-h-a7d4e002-4d3b-400d-953f-6e4dd94f9834" class="outline-2">
+<h2 id="h-a7d4e002-4d3b-400d-953f-6e4dd94f9834"><span class="section-number-2">2.</span> References</h2>
+<div class="outline-text-2" id="text-h-a7d4e002-4d3b-400d-953f-6e4dd94f9834">
 <ul class="org-ul">
-<li>Analysis (which I broadly define as subjects related to doing calculus
-in more general settings)
-<ul class="org-ul">
-<li><a href="real-numbers.html">Real Numbers</a></li>
-<li><a href="infinity.html">Infinity</a> and concerns with numerical analysis</li>
-<li><a href="calculus/index.html">Calculus</a> (differential and integral)</li>
-<li><a href="complex-analysis.html">Complex Analysis</a></li>
-<li><a href="asymptotic/index.html">Asymptotic Analysis</a> for describing the behavior of functions and
-solutions to differential equations</li>
-<li><a href="pde/index.html">Partial Differential Equations</a></li>
-</ul></li>
-<li>Algebra (which I broadly define as the study of&#x2026;algebraic
-stuff&#x2026;yes, "Algebra is what algebraists do", that's it.)
-<ul class="org-ul">
-<li><a href="rings/index.html">Rings and things</a></li>
-<li><a href="differential-fields.html">Differential Fields</a> after a review of polynomials</li>
-<li>Heegner Numbers, like <code>(exp (* pi (sqrt 163)))</code>, which are near-integers</li>
-<li><a href="category-theory.html">Category Theory</a> (<a href="category-theory/index.html">topics</a>)</li>
-<li><a href="group.html">Group Theory</a> (<a href="group/index.html">topics</a>) studies symmetries</li>
-<li><a href="lie.html">Lie Groups and Algebras</a></li>
-</ul></li>
-<li>Appendix: Foundations
-<ul class="org-ul">
-<li><a href="proof-steps.html">Proof Steps</a> in structured proofs ("formal proof sketches")</li>
-<li><a href="set-theory.html">Set Theory</a></li>
-</ul></li>
+<li>John Baez,<br>
+"The Octonions".
+<a href="https://arxiv.org/abs/math/0105155">arXiv:math/0105155</a>, 56 pages.</li>
+<li>Malte Lackmann,<br>
+"The octonionic projective plane".<br>
+<a href="https://arxiv.org/abs/1909.07047">arXiv:1909.07047</a>, 9 pages.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-07-10 Mon 08:32.</p>
+<p class="postamble">Last Updated 2023-03-22 Wed 07:56.</p>
 </div>
 </body>
 </html>
