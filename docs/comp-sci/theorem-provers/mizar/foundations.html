@@ -239,7 +239,8 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgeba89e2">1. Soft Types Examples: Subsets</a></li>
+<li><a href="#h-c2f2f1d1-85b8-4681-8e17-f7c769190b7a">1. ZF Axioms in Mizar</a></li>
+<li><a href="#h-19880ad7-0dd3-4edc-9499-fa95d9b870f2">2. Soft Types Examples: Subsets</a></li>
 </ul>
 </div>
 </div>
@@ -254,30 +255,37 @@ couple articles in the current MML:
 universe containing a given set</li>
 </ul>
 
+<div id="outline-container-h-c2f2f1d1-85b8-4681-8e17-f7c769190b7a" class="outline-2">
+<h2 id="h-c2f2f1d1-85b8-4681-8e17-f7c769190b7a"><span class="section-number-2">1.</span> ZF Axioms in Mizar</h2>
+<div class="outline-text-2" id="text-h-c2f2f1d1-85b8-4681-8e17-f7c769190b7a">
 <p>
-The ZF axioms contained in Mizar:
+The <a href="https://en.wikipedia.org/wiki/Zermelo%E2%80%93Fraenkel_set_theory">ZF axioms</a> contained in Mizar:
 </p>
 
 <dl class="org-dl">
-<dt>Extensionality</dt><dd>for \(X,Y\) being set st<br>
+<dt><a href="http://mizar.org/version/current/html/tarski_0.html#T2">Extensionality</a></dt><dd>for \(X,Y\) being set st<br>
 (for \(x\) being object holds (\(x\in X \iff x\in Y\)))<br>
 holds \(X = Y\)</dd>
-<dt>Union</dt><dd>for \(X\) being set<br>
-exists \(Z\) being set st<br>
-for \(x\) being object holds<br>
-(\(x\in Z\) iff exists \(Y\) being set st (\(x\in Y\) &amp; \(Y\in X\)))</dd>
-<dt>Regularity</dt><dd>for \(x_{1}\) being object<br>
+<dt><a href="http://mizar.org/version/current/html/tarski_0.html#T5">Regularity</a></dt><dd>for \(x_{1}\) being object<br>
 for \(X\) being set st \(x_{1}\in X\) holds<br>
 exists \(Y\) being set st<br>
 (\(Y\in X\) &amp; (for \(x_{2}\) being object holds (\(x_{2}\notin X\) or \(x_{2}\notin Y\))))</dd>
-<dt>Schema of Replacement</dt><dd>exists \(X\) being set st<br>
+<dt><a href="http://mizar.org/version/current/html/tarski_0.html#T3">Pair</a></dt><dd>for \(X,Y\) being any object<br>
+exists \(Z\) being a set such that<br>
+for any object \(a\) <br>
+holds \(a\in Z\) if and only if \(a=X\) or \(a=Y\).</dd>
+<dt><a href="http://mizar.org/version/current/html/tarski_0.html#T4">Union</a></dt><dd>for \(X\) being set<br>
+exists \(Z\) being set st<br>
+for \(x\) being object holds<br>
+(\(x\in Z\) iff exists \(Y\) being set st (\(x\in Y\) &amp; \(Y\in X\)))</dd>
+<dt><a href="http://mizar.org/version/current/html/tarski_0.html#S1">Schema of Replacement</a></dt><dd>exists \(X\) being set st<br>
 for \(x\) being object holds<br>
 (\(x\in X\) iff exists \(y\) being object st (\(y\in F_{1}()\) &amp; \(P_{1}[y,x]\)))<br>
 <b>provided</b>
 for \(x, y, z\) being object st \(P_{1}[x,y]\) &amp; \(P_{1}[x,z]\) holds \(y = z\)</dd>
 </dl>
 
-<div class="remark" id="orgc6075c7">
+<div class="remark" id="org37dbff5">
 <p>
 The axiom of regularity may look a little strange, but remember: if we
 have \(\forall X((\exists x, P[x,X])\implies Q[X])\), then this is
@@ -286,7 +294,7 @@ logically equivalent to \(\forall X\forall x(P[x,X]\implies Q[X])\).
 
 </div>
 
-<div class="remark" id="org4cad759">
+<div class="remark" id="org6e5a0d7">
 <p>
 The axiom schema of specification can be <a href="https://en.wikipedia.org/wiki/Axiom_schema_of_specification#Relation_to_the_axiom_schema_of_replacement">derived</a> from the schema of
 replacement. 
@@ -294,14 +302,23 @@ replacement.
 
 </div>
 
+<div class="remark" id="org9e270dd">
 <p>
-The two missing ZF axioms are the axiom of infinity, and the axiom of
-the power set.
+Mizar just <i>defines</i> the unordered pair \(\{X,Y\}\) for any \(X\), \(Y\) in
+<a href="http://mizar.org/version/current/html/tarski.html#K2"><code>TARSKI:def 2</code></a>&#x2026;but uses the axiom of pairing to justify its existence.
 </p>
 
+</div>
+
+<p>
+The two missing ZF axioms are the axiom of infinity, and the axiom of
+the power set. The power set in Mizar is <code>bool X</code> for \(\mathcal{P}(X)\)
+and is defined in <a href="http://mizar.org/version/current/html/zfmisc_1.html#K1"><code>ZFMISC_1:def 1</code></a>, its existence follows from the
+Universe axiom.
+</p>
 
 <dl class="org-dl">
-<dt>Tarski Universe Axiom</dt><dd>for \(N\) being set<br>
+<dt><a href="http://mizar.org/version/current/html/tarski_a.html#T1">Tarski Universe Axiom</a></dt><dd>for \(N\) being set<br>
 exists \(M\) being set st<br>
 (\(N\in M\) &amp;<br>
 (for \(X\), \(Y\) being set st \(X\in M\) &amp; \(Y\subset X\) holds \(Y\in M\)) &amp;<br>
@@ -322,7 +339,20 @@ which depends on the axiom of the universe.
 </p>
 
 <p>
+There is also the well-ordering theorem (which Wikipedia includes in the
+ZF axioms, but I do not believe it's actually needed &#x2014; it should be
+included for ZFC, though). Mizar proves this in
+<a href="http://mizar.org/version/current/html/wellord2.html#T17"><code>WELLORD2:Th17</code></a>.
+</p>
+
+<p>
 Thus Tarski-Grothendieck set theory contains ZF set theory's axioms.
+</p>
+
+<p>
+Furthermore, the axiom of choice is derived from the axiom of the
+universe in <a href="http://mizar.org/version/current/html/wellord2.html#T18"><code>WELLORD2:Th18</code></a>. So really, Tarski-Grothendieck set theory
+contains the ZFC axioms.
 </p>
 
 <p>
@@ -335,10 +365,15 @@ Mathematics</i>:
 "Tarski Grothendieck Set Theory".<br>
 <i>Formalized Mathematics</i> <b>1</b>, no.1 (1990) 9&#x2013;11, <a href="http://mizar.org/fm/1990-1/pdf1-1/tarski.pdf">PDF</a>.</li>
 </ul>
+</div>
+</div>
 
-<div id="outline-container-orgeba89e2" class="outline-2">
-<h2 id="orgeba89e2"><span class="section-number-2">1.</span> Soft Types Examples: Subsets</h2>
-<div class="outline-text-2" id="text-1">
+
+
+
+<div id="outline-container-h-19880ad7-0dd3-4edc-9499-fa95d9b870f2" class="outline-2">
+<h2 id="h-19880ad7-0dd3-4edc-9499-fa95d9b870f2"><span class="section-number-2">2.</span> Soft Types Examples: Subsets</h2>
+<div class="outline-text-2" id="text-h-19880ad7-0dd3-4edc-9499-fa95d9b870f2">
 <p>
 We have a <i>predicate</i> for \(\subseteq\) encoded in Mizar
 <a href="http://mizar.org/version/current/html/tarski.html#R1">TARSKI:def 3</a> as:
@@ -355,7 +390,7 @@ We have a <i>predicate</i> for \(\subseteq\) encoded in Mizar
 </div>
 
 <p>
-The <i>type</i> for a Subset of \(X\) is defined in <a href="http://mizar.org/version/current/html/subset_1.html#NM2">SUBSET<sub>1</sub></a> as
+The <i>type</i> for a Subset of \(X\) is defined in <a href="http://mizar.org/version/current/html/subset_1.html#NM2"><code>SUBSET_1</code></a> as
 </p>
 
 <div class="org-src-container">
@@ -392,7 +427,7 @@ we have <code>x in Y</code>.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-01-18 Wed 09:04.</p>
+<p class="postamble">Last Updated 2023-08-09 Wed 09:08.</p>
 </div>
 </body>
 </html>

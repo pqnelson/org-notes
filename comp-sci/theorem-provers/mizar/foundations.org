@@ -18,20 +18,30 @@ couple articles in the current MML:
 - [[http://mizar.org/version/current/html/tarski_a.html][~tarski_a~]] for the axiom stating the existence of a Grothendieck
   universe containing a given set
 
-The ZF axioms contained in Mizar:
+* ZF Axioms in Mizar
+:PROPERTIES:
+:CUSTOM_ID: h-c2f2f1d1-85b8-4681-8e17-f7c769190b7a
+:END:
 
-- Extensionality :: for $X,Y$ being set st\\
+The [[https://en.wikipedia.org/wiki/Zermelo%E2%80%93Fraenkel_set_theory][ZF axioms]] contained in Mizar:
+
+- [[http://mizar.org/version/current/html/tarski_0.html#T2][Extensionality]] :: for $X,Y$ being set st\\
   (for $x$ being object holds ($x\in X \iff x\in Y$))\\
   holds $X = Y$
-- Union ::  for $X$ being set\\
-  exists $Z$ being set st\\
-  for $x$ being object holds\\
-  ($x\in Z$ iff exists $Y$ being set st ($x\in Y$ & $Y\in X$))
-- Regularity :: for $x_{1}$ being object\\
+- [[http://mizar.org/version/current/html/tarski_0.html#T5][Regularity]] :: for $x_{1}$ being object\\
   for $X$ being set st $x_{1}\in X$ holds\\
   exists $Y$ being set st\\
   ($Y\in X$ & (for $x_{2}$ being object holds ($x_{2}\notin X$ or $x_{2}\notin Y$)))
-- Schema of Replacement ::
+- [[http://mizar.org/version/current/html/tarski_0.html#T3][Pair]] ::
+  for $X,Y$ being any object\\
+  exists $Z$ being a set such that\\
+  for any object $a$ \\
+  holds $a\in Z$ if and only if $a=X$ or $a=Y$.
+- [[http://mizar.org/version/current/html/tarski_0.html#T4][Union]] ::  for $X$ being set\\
+  exists $Z$ being set st\\
+  for $x$ being object holds\\
+  ($x\in Z$ iff exists $Y$ being set st ($x\in Y$ & $Y\in X$))
+- [[http://mizar.org/version/current/html/tarski_0.html#S1][Schema of Replacement]] ::
   exists $X$ being set st\\
   for $x$ being object holds\\
   ($x\in X$ iff exists $y$ being object st ($y\in F_{1}()$ & $P_{1}[y,x]$))\\
@@ -49,11 +59,17 @@ The axiom schema of specification can be [[https://en.wikipedia.org/wiki/Axiom_s
 replacement. 
 #+end_remark
 
+#+begin_remark
+Mizar just /defines/ the unordered pair $\{X,Y\}$ for any $X$, $Y$ in
+[[http://mizar.org/version/current/html/tarski.html#K2][~TARSKI:def 2~]]...but uses the axiom of pairing to justify its existence.
+#+end_remark
+
 The two missing ZF axioms are the axiom of infinity, and the axiom of
-the power set.
+the power set. The power set in Mizar is ~bool X~ for $\mathcal{P}(X)$
+and is defined in [[http://mizar.org/version/current/html/zfmisc_1.html#K1][~ZFMISC_1:def 1~]], its existence follows from the
+Universe axiom.
 
-
-- Tarski Universe Axiom ::
+- [[http://mizar.org/version/current/html/tarski_a.html#T1][Tarski Universe Axiom]] ::
   for $N$ being set\\
   exists $M$ being set st\\
   ($N\in M$ &\\
@@ -69,7 +85,16 @@ The generalized axiom of infinity is derived as [[http://mizar.org/version/curre
 course, working our way backwards, this uses Theorem [[http://mizar.org/version/current/html/zfmisc_1.html#T112][~ZfMisc_1:112~]]
 which depends on the axiom of the universe.
 
+There is also the well-ordering theorem (which Wikipedia includes in the
+ZF axioms, but I do not believe it's actually needed --- it should be
+included for ZFC, though). Mizar proves this in
+[[http://mizar.org/version/current/html/wellord2.html#T17][~WELLORD2:Th17~]].
+
 Thus Tarski-Grothendieck set theory contains ZF set theory's axioms.
+
+Furthermore, the axiom of choice is derived from the axiom of the
+universe in [[http://mizar.org/version/current/html/wellord2.html#T18][~WELLORD2:Th18~]]. So really, Tarski-Grothendieck set theory
+contains the ZFC axioms.
 
 These formed the contents of the first article in /Formalized
 Mathematics/:
@@ -78,7 +103,13 @@ Mathematics/:
   "Tarski Grothendieck Set Theory".\\
   /Formalized Mathematics/ *1*, no.1 (1990) 9--11, [[http://mizar.org/fm/1990-1/pdf1-1/tarski.pdf][PDF]].
 
+
+
+
 * Soft Types Examples: Subsets
+:PROPERTIES:
+:CUSTOM_ID: h-19880ad7-0dd3-4edc-9499-fa95d9b870f2
+:END:
 
 We have a /predicate/ for $\subseteq$ encoded in Mizar
 [[http://mizar.org/version/current/html/tarski.html#R1][TARSKI:def 3]] as:
@@ -92,7 +123,7 @@ definition
 end; 
 #+end_src
 
-The /type/ for a Subset of $X$ is defined in [[http://mizar.org/version/current/html/subset_1.html#NM2][SUBSET_1]] as
+The /type/ for a Subset of $X$ is defined in [[http://mizar.org/version/current/html/subset_1.html#NM2][~SUBSET_1~]] as
 
 #+begin_src mizar
 definition
