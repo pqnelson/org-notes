@@ -1,0 +1,223 @@
+#+TITLE: Backquotes - Lisp
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-08-14T08:43:19-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Monday August 14, 2023 at  8:43AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-b18d5fb1-085d-4dd6-a5ad-08a2d47c3e93
+:END:
+
+The idea is we want a sort of "parametrized quotation" or "template", where we
+explicitly splice in lists or explicitly substitute in the values of
+variables.
+
+Where a comma appears, the form following the comma is to be evaluated
+to produce an object to be inserted at that point. For example,
+
+#+begin_src lisp
+(let ((b 3))
+  `(a b ,b ,(+ b 1) b))
+;; => (a b 3 4 b)
+#+end_src
+
+If a comma is followed by ~@~ (an at-sign), then the form following the
+at-sign is evaluated to produce a list of objects; this list is then
+"spliced" into place in the template. For example,
+
+#+begin_src lisp
+(let ((x '(a b c)))
+     `(x ,x      ,@x   foo ,(cadr x) bar ,(cdr x) baz ,@(cdr x)))
+;; => (x (a b c) a b c foo b         bar (b c)    baz b c)
+#+end_src
+
+This is especially useful for macros. For example, from my [[https://github.com/pqnelson/cl-aim/blob/main/src/fol/thm.lisp][toy proof assistant]]:
+
+#+begin_src lisp
+(defmacro defthm (name params &body formula-body)
+  `(progn
+     (defun ,(intern (string name) 'cl-aim.fol.thm) ,params
+       ,@formula-body)
+     (export ',(intern (string name) 'cl-aim.fol.thm) 'cl-aim.fol.thm)))
+#+end_src
+
+We can splice in a sublist using ~,@my-list~ to splice in the contents
+of ~my-list~ into a backquoted expression.
+
+* Basic Rules
+:PROPERTIES:
+:CUSTOM_ID: h-158b0f1a-1cae-415f-890f-b53237db1f4a
+:END:
+
+/Common Lisp: The Language/ (\sect 22.1.3) gives the following heuristic
+rules governing backquotes:
+
+- ~`basic~ is the same as ~'basic~ --- i.e., ~(quote basic)~ --- for any
+  form ~basic~ which is not a list or general vector
+- ~`,form~ is the same as ~form~ for any ~form~ provided the
+  representation of ~form~ does not begin with either ~@~ or ~.~
+- ~`,@form~ is an error
+- ~`(x1 x2 x3 ... xn . atom)~ may be interpreted to mean
+  ~(append [x1] [x2] [x3] ... [n] (quote atom))~ where the brackets are
+  used to indicate a transformation of an $x_{j}$ as follows:
+  - ~form~ is interpreted as ~(list `form)~ which contains a
+    backquoted form thatmust then be further interpreted
+  - ~,form~ is interpreted as ~(list form)~
+  - ~,@form~ is simply interpreted as ~form~
+- ~`(x1 x2 ... xn)~ is interpreted as ~`(x1 x2 ... xn . nil)~ and
+  reduces to the previous case
+- ~`(x1 x2 ... xn . ,form)~ may be interpreted to mean
+  ~`(append [x1] [x2] ... [xn] form)~ where the brackets indicate a
+  transformation of an $x_{j}$ as described above.
+- ~`(x1 x2 ... xn . ,@form)~ is an error.
+- ~`#(x1 x2 ... xn)~ may be interpreted to mean
+  ~(apply #'vector `(x1 x2 ... xn))~
+
+No other uses of comma are permitted.
+
+The use of ~,.~ is similar to ~,@~ except that ~,.~ is destructive,
+using (for example) ~nconc~ instead of ~append~.
+
+* Nested Backquotes
+:PROPERTIES:
+:CUSTOM_ID: h-15fb9b5a-3dd2-4f9a-bb8b-9a3d194548c0
+:END:
+
+*Puzzle:* We want to return a backquoted expression from a function,
+what do we do?
+
+(This happens frequently in computer algebra systems or compilers.)
+
+*Solution:* Double backquotes. What happens is that an "intermediate
+backquotation" will be returned.
+
+*Heuristic:* The "innermost" comma will be evaluated, leaving the
+"outermost" comma in the returned "intermediate backquote".
+
+Example of what a double backquote looks like:
+
+#+begin_src lisp
+(let ((b :foobar))
+ ``(,A ,,B ,,17))
+;; => `(,A ,:FOOBAR ,17)
+#+end_src
+
+We use double commas to produce an "expanded comma" expression. That is,
+
+#+begin_src lisp
+(let ((b 'spam))
+ ``(,A ,,B ,,17))
+;; => `(,A ,SPAM ,17)
+#+end_src
+
+We replace ~B~ with its value (this "consumes" one comma, prefixing the
+value with a comma).
+
+** Idiom: comma-quote-comma
+:PROPERTIES:
+:CUSTOM_ID: h-77bde178-1a00-4477-981f-62ac5ee54991
+:END:
+
+If we want to produce a quoted literal in the result, for example if ~B~
+were bound to a symbol, and we wanted to quote that symbol in the
+result, we would do something like:
+
+#+begin_src lisp
+(let ((b 'spam))
+ ``(,A ,',B ,,17))
+;; => `(,A ,'SPAM ,17)
+#+end_src
+
+This then evaluates the quote in the result --- that is, when we /use/
+this backquoted expression, the second term ~,'SPAM~ evaluates to ~SPAM~
+as a symbol.
+
+** Nested Splicing
+:PROPERTIES:
+:CUSTOM_ID: h-79514d56-ea6d-4263-a2d1-626cafe84e6e
+:END:
+
+#+begin_src lisp
+(let ((b '(spam und eggs)))
+ ``(,A ,@,B ,,17))
+;; => `(,A ,@(SPAM UND EGGS) ,17)
+
+(let ((b '(spam und eggs)))
+ ``(,A ,,@B ,,17))
+;; => `(,A ,SPAM ,UND ,EGGS ,17)
+
+(let ((b '(spam und eggs)))
+ ``(,A ,,B ,,17))
+;; => `(,A ,(SPAM UND EGGS) ,17)
+
+(let ((b '(spam und eggs)))
+ ``(,A ,',B ,,17))
+;; => `(,A ,'(SPAM UND EGGS) ,17)
+
+(let ((b '(spam und eggs)))
+ ``(,A ,@',B ,,17))
+;; => `(,A ,@'(SPAM UND EGGS) ,17)
+#+end_src
+
+* Caution: Compiler Dependence
+:PROPERTIES:
+:CUSTOM_ID: h-6c738640-21a3-4a1c-8ad3-18cd9fbb1faa
+:END:
+
+In SBCL 2.2.4.46-d4779571f, we see in the REPL:
+
+#+begin_src lisp
+;; SBCL
+(caadr (let ((b '(spam und eggs))) ``(,A ,@',B ,,17)))
+;; => ,A
+
+(type-of (caadr (let ((b '(spam und eggs))) ``(,A ,@',B ,,17))))
+;; => SB-IMPL::COMMA
+
+(cadadr (let ((b '(spam und eggs))) ``(,A ,@',B ,,17)))
+;; => ,@'(SPAM UND EGGS)
+
+(type-of (cadadr (let ((b '(spam und eggs))) ``(,A ,@',B ,,17))))
+;; => SB-IMPL::COMMA
+#+end_src
+
+This is because SBCL has an optimized internal backquote facility, with
+comma expressions. For example, in SBCL, we could obtain all the
+"comma'd expressions" by:
+
+#+begin_src lisp
+;; SBCL
+(remove-if-not #'sb-int::comma-p
+ (alexandria:flatten
+   (let ((b '(spam und eggs))) ``(,A ,@',B ,,17))))
+;; => (,A ,@'(SPAM UND EGGS) ,17)
+#+end_src
+
+In CCL 1.12.1, we find double backquotes produce "equivalent" output to
+what we'd naively expect:
+
+#+begin_src lisp
+;; CCL repl
+(let ((b '(spam und eggs)))
+  ``(,A ,@',B ,,17))
+;; => (LIST* A (APPEND '(SPAM UND EGGS) (LIST 17)))
+#+end_src
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-203674ea-a03f-45bf-9a94-6cb8bdc77f2e
+:END:
+
+- Alan Bawden,\\
+  "Quasiquotation in Lisp".\\
+  [[https://3e8.org/pub/scheme/doc/Quasiquotation%20in%20Lisp%20(Bawden).pdf][PDF]].
+- /Common Lisp The Language/,
+  [[https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node190.html#BACKQUOTE][Ch21 \sect1.3]].
