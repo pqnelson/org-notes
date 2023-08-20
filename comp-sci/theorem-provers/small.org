@@ -16,36 +16,61 @@
 
 *Solution:* Use the [[https://en.wikipedia.org/wiki/Negative_binomial_distribution][Negative Bernoulli distribution]] for $r$ bugs, the
 probability of a line of code being bug free is $p$, and the probability
-of a bug is $q\approx 20/1000$ (which is the currently accepted rate,
+of a bug is $q:=1-p\approx 20/1000$ (which is the currently accepted rate,
 informally used among programmers), and [[https://en.wikipedia.org/wiki/Chebyshev%27s_inequality][Chebyshev's inequality]] to
 estimate the number of bugs $r$ within $3\sigma$ of zero. Recall
 $\mu=pr/q$ is the mean for the distribution, and $\sigma^{2}=pr/q^{2}$
 is the variance. Then Chebyshev gives us, for tolerance of $k\sigma$:
 
 \begin{equation}
-\mu < k\sigma\implies \frac{p}{q}r < \frac{k}{q}\sqrt{pr}.
+\mu \leq k\sigma\implies \frac{p}{q}r \leq \frac{k}{q}\sqrt{pr}.
 \end{equation}
 
 We solve for $r$:
 
 \begin{equation}
-r < \frac{k^{2}}{p}.
+r \leq \frac{k^{2}}{p}.
 \end{equation}
 
-Then we find the expected number of lines of code should be
+The upper bound on $r$ is then $r_{\text{max}}$ which is defined as:
 
 \begin{equation}
-\mu \approx\frac{k^{2}}{q}.
+r_{\text{max}} := \frac{k^{2}}{p}.
+\end{equation}
+
+Then we find the expected number of lines of code corresponding to $r_{\text{max}}$ should be
+
+\begin{equation}
+\mu_{\text{max}} = \frac{pr_{\text{max}}}{q} \approx \frac{k^{2}}{q}.
 \end{equation}
 
 For the figures given, we have
 
 \begin{equation}
-\mu = 441.
+\mu_{\text{max}}(k) \approx 50 k^{2},
+\end{equation}
+
+and for $k=3$ sigmas we have:
+
+\begin{equation}
+\mu_{\text{max}} = 441.
 \end{equation}
 
 Thus the upper-bound on a program to be a candidate for being "bug free"
 is approximately 441 lines of code.
+
+#+begin_remark
+If we then use this estimate for the number of lines $n\leq 50k^{2}$
+for a /Binomial/ distributed random variable (*NOT* a /negative/
+Binomial distributed random variable), then the probability of finding a
+bug within 3 sigmas of 0 bugs is greater than 50%.
+#+end_remark
+
+#+begin_remark
+Just a quick consistency check, we can use the [[https://en.wikipedia.org/wiki/Binomial_distribution#Poisson_approximation][Poisson approximation]] to
+a Binomial distribution to find a heuristic upper bound on the number of
+lines of code to be $n\leq 10/p\approx500$.
+#+end_remark
 
 * Observations
 :PROPERTIES:
@@ -58,7 +83,7 @@ of lines of code $N$ such that the probability of finding no more than
 $3\sigma$ bugs is $\Pr(B\leq 3\sigma)\geq 0.5$, then we find $N\approx 533$.
 The R code which let me solve this by brute force:
 
-#+begin_src r
+#+begin_example
 p_bug <- 0.02
 q_bug <- 1 - p_bug
 
@@ -74,26 +99,51 @@ guess(441)
 # [1] 0.6113548
 guess(533)
 # [1] 0.5002271
-#+end_src
+#+end_example
 
 This ~guess~ is not a monotonic function, but 533 seems to be the
 greatest value of ~n~ such that ~guess(n) >= 0.5~.
 
 If we wanted to be more certain, we could modify the code:
 
-#+begin_src r
+#+begin_example
 guess <- function(n, k=3) { pbinom(round(k*sd_bug*sqrt(n)), n, p_bug)}
+
+expected_bugs <- function(n) { p_bug*n }
+
+bug_sigma <- function(n, k) { k*sd_bug*sqrt(n) }
+
 guess(1283, k=5) # expected bugs: 25.66
 # [1] 0.5000607
+bug_sigma(1283, 5)
+# [1] 25.07329
+
 guess(883, k=4) # expected bugs: 17.66
 # [1] 0.5001064
+bug_sigma(883, 4)
+# [1] 16.64058
+
 guess(533, k=3) # expected bugs: 10.66
 # [1] 0.5002271
+bug_sigma(533, 3)
+# [1] 9.696453
+
+## The case when bug_sigma(n, 3) == expected_bugs(n, 3)
+guess(441, k=3) # expected bugs: 8.82
+# [1] 0.6113548
+bug_sigma(441, 3)
+# [1] 8.82
+
 guess(283, k=2) # expected bugs: 5.66
 # [1] 0.5005881
+bug_sigma(283, 2)
+# [1] 4.710329
+
 guess(133, k=1) # expected bugs: 2.66
 # [1] 0.5018235
-#+end_src
+bug_sigma(133, 1)
+# [1] 1.614559
+#+end_example
 
 The moral: the fewer lines of code, the better.
 

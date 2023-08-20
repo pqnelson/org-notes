@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>On Kernel Size</title>
@@ -189,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
@@ -253,7 +252,7 @@
 <p>
 <b>Solution:</b> Use the <a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution">Negative Bernoulli distribution</a> for \(r\) bugs, the
 probability of a line of code being bug free is \(p\), and the probability
-of a bug is \(q\approx 20/1000\) (which is the currently accepted rate,
+of a bug is \(q:=1-p\approx 20/1000\) (which is the currently accepted rate,
 informally used among programmers), and <a href="https://en.wikipedia.org/wiki/Chebyshev%27s_inequality">Chebyshev's inequality</a> to
 estimate the number of bugs \(r\) within \(3\sigma\) of zero. Recall
 \(\mu=pr/q\) is the mean for the distribution, and \(\sigma^{2}=pr/q^{2}\)
@@ -261,7 +260,7 @@ is the variance. Then Chebyshev gives us, for tolerance of \(k\sigma\):
 </p>
 
 \begin{equation}
-\mu < k\sigma\implies \frac{p}{q}r < \frac{k}{q}\sqrt{pr}.
+\mu \leq k\sigma\implies \frac{p}{q}r \leq \frac{k}{q}\sqrt{pr}.
 \end{equation}
 
 <p>
@@ -269,15 +268,23 @@ We solve for \(r\):
 </p>
 
 \begin{equation}
-r < \frac{k^{2}}{p}.
+r \leq \frac{k^{2}}{p}.
 \end{equation}
 
 <p>
-Then we find the expected number of lines of code should be
+The upper bound on \(r\) is then \(r_{\text{max}}\) which is defined as:
 </p>
 
 \begin{equation}
-\mu \approx\frac{k^{2}}{q}.
+r_{\text{max}} := \frac{k^{2}}{p}.
+\end{equation}
+
+<p>
+Then we find the expected number of lines of code corresponding to \(r_{\text{max}}\) should be
+</p>
+
+\begin{equation}
+\mu_{\text{max}} = \frac{pr_{\text{max}}}{q} \approx \frac{k^{2}}{q}.
 \end{equation}
 
 <p>
@@ -285,13 +292,40 @@ For the figures given, we have
 </p>
 
 \begin{equation}
-\mu = 441.
+\mu_{\text{max}}(k) \approx 50 k^{2},
+\end{equation}
+
+<p>
+and for \(k=3\) sigmas we have:
+</p>
+
+\begin{equation}
+\mu_{\text{max}} = 441.
 \end{equation}
 
 <p>
 Thus the upper-bound on a program to be a candidate for being "bug free"
 is approximately 441 lines of code.
 </p>
+
+<div class="remark" id="orgdd424b5">
+<p>
+If we then use this estimate for the number of lines \(n\leq 50k^{2}\)
+for a <i>Binomial</i> distributed random variable (<b>NOT</b> a <i>negative</i>
+Binomial distributed random variable), then the probability of finding a
+bug within 3 sigmas of 0 bugs is greater than 50%.
+</p>
+
+</div>
+
+<div class="remark" id="orgee2e074">
+<p>
+Just a quick consistency check, we can use the <a href="https://en.wikipedia.org/wiki/Binomial_distribution#Poisson_approximation">Poisson approximation</a> to
+a Binomial distribution to find a heuristic upper bound on the number of
+lines of code to be \(n\leq 10/p\approx500\).
+</p>
+
+</div>
 
 <div id="outline-container-h-bb3c318e-1f27-4cde-a517-2b476e0b15b8" class="outline-2">
 <h2 id="h-bb3c318e-1f27-4cde-a517-2b476e0b15b8"><span class="section-number-2">1.</span> Observations</h2>
@@ -304,8 +338,8 @@ of lines of code \(N\) such that the probability of finding no more than
 The R code which let me solve this by brute force:
 </p>
 
-<div class="org-src-container">
-<pre class="src src-r">p_bug &lt;- 0.02
+<pre class="example" id="org3078586">
+p_bug &lt;- 0.02
 q_bug &lt;- 1 - p_bug
 
 sd_bug &lt;- sqrt(p_bug*q_bug) # sigma = sd_bug*sqrt(n)
@@ -321,7 +355,6 @@ guess(441)
 guess(533)
 # [1] 0.5002271
 </pre>
-</div>
 
 <p>
 This <code>guess</code> is not a monotonic function, but 533 seems to be the
@@ -332,20 +365,44 @@ greatest value of <code>n</code> such that <code>guess(n) &gt;= 0.5</code>.
 If we wanted to be more certain, we could modify the code:
 </p>
 
-<div class="org-src-container">
-<pre class="src src-r">guess &lt;- function(n, k=3) { pbinom(round(k*sd_bug*sqrt(n)), n, p_bug)}
+<pre class="example" id="org6fa637a">
+guess &lt;- function(n, k=3) { pbinom(round(k*sd_bug*sqrt(n)), n, p_bug)}
+
+expected_bugs &lt;- function(n) { p_bug*n }
+
+bug_sigma &lt;- function(n, k) { k*sd_bug*sqrt(n) }
+
 guess(1283, k=5) # expected bugs: 25.66
 # [1] 0.5000607
+bug_sigma(1283, 5)
+# [1] 25.07329
+
 guess(883, k=4) # expected bugs: 17.66
 # [1] 0.5001064
+bug_sigma(883, 4)
+# [1] 16.64058
+
 guess(533, k=3) # expected bugs: 10.66
 # [1] 0.5002271
+bug_sigma(533, 3)
+# [1] 9.696453
+
+## The case when bug_sigma(n, k) == expected_bugs(n, k)
+guess(441, k=3) # expected bugs: 8.82
+# [1] 0.6113548
+bug_sigma(441, 3)
+# [1] 8.82
+
 guess(283, k=2) # expected bugs: 5.66
 # [1] 0.5005881
+bug_sigma(283, 2)
+# [1] 4.710329
+
 guess(133, k=1) # expected bugs: 2.66
 # [1] 0.5018235
+bug_sigma(133, 1)
+# [1] 1.614559
 </pre>
-</div>
 
 <p>
 The moral: the fewer lines of code, the better.
@@ -386,7 +443,7 @@ this proof-checker ‘by hand’. We call this the <i>de Bruijn criterion</i>.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-15 Tue 10:14.</p>
+<p class="postamble">Last Updated 2023-08-20 Sun 09:21.</p>
 </div>
 </body>
 </html>
