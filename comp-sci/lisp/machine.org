@@ -178,6 +178,151 @@ level, a Lisp machine is a stack machine with some shortcuts and warts
 - Symbolics I-Machine [[http://bitsavers.trailing-edge.com/pdf/symbolics/I_Machine/Macroinstruction_Set.pdf][Macroinstruction Set]]
 - [[http://funcall.blogspot.com/2009/04/some-lisp-machine-minutia.html][Some Lisp Machine minutia]]
 
+*** Example Disassembles
+:PROPERTIES:
+:CUSTOM_ID: h-717e1c6b-b848-498a-9c37-564349e5ec9d
+:END:
+
+For the Ivory microprocessor
+
+#+begin_src lisp
+(defun example-count (predicate list)
+  (let ((count 0))
+    (dolist (i list count)
+      (when (funcall predicate i)
+        (incf count)))))
+#+end_src
+
+Would disassemble as ([[https://www.reddit.com/r/lisp/comments/2ws8o7/if_i_wanted_to_build_a_lisp_machine/cotpbiw/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button][reddit]]):
+
+#+begin_example
+Command: (disassemble (compile #'example-count))
+
+  0  ENTRY: 2 REQUIRED, 0 OPTIONAL      ;Creating PREDICATE and LIST
+  2  PUSH 0                             ;Creating COUNT
+  3  PUSH FP|3                          ;LIST 
+  4  PUSH NIL                           ;Creating I
+  5  BRANCH 15
+  6  SET-TO-CDR-PUSH-CAR FP|5
+  7  SET-SP-TO-ADDRESS-SAVE-TOS SP|-1
+ 10  START-CALL FP|2                    ;PREDICATE 
+ 11  PUSH FP|6                          ;I 
+ 12  FINISH-CALL-1-VALUE
+ 13  BRANCH-FALSE 15
+ 14  INCREMENT FP|4                     ;COUNT 
+ 15  ENDP FP|5
+ 16  BRANCH-FALSE 6
+ 17  SET-SP-TO-ADDRESS SP|-2
+ 20  RETURN-SINGLE-STACK
+#+end_example
+
+In the [[http://www.bitsavers.org/pdf/symbolics/software/genera_8/Symbolics_Common_Lisp_Language_Concepts.pdf][Genera 8 manual]],
+
+#+begin_src lisp
+(defun foo (array-1 array-2 n-elements)
+  (let ((a array-1)
+        (b array-2))
+    (declare (sys:array-register a b))
+    (dotimes (i n-elements)
+      (setf (aref b i) (aref a i)))))
+#+end_src
+
+Disassembles as:
+
+#+begin_example
+(disassemble 'foo)
+
+0 ENTRY: 3 REQUIRED, 0 OPTIONAL
+1 PUSH-LOCAL FP|0               ; ARRAY-1
+2 BUILTIN SETUP-1D-ARRAY TO 4   ; creating A(FP|3)
+3 PUSH-LOCAL FP|1               ; ARRAY-2
+4 BUILTIN SETUP-1D-ARRAY TO 4   ; creating B(FP|7)
+5 PUSH-LOCAL FP|2               ; N-ELEMENTS creating FP|11 (unnamed)
+6 PUSH-IMMED 0                  ; creating I(FP|12)
+7 BRANCH 15
+10 PUSH-LOCAL FP|12             ; I
+11 FAST-AREF FP|4               ; A
+12 PUSH-LOCAL FP|12             ; I
+13 FAST-ASET FP|8               ; B
+14 BUILTIN 1+LOCAL IGNORE FP|12 ; I
+15 PUSH-LOCAL FP|12             ; I
+16 PUSH-LOCAL FP|11
+17 BUILTIN INTERNAL-< STACK
+20 BRANCH-TRUE 10
+21 RETURN-NIL
+FOO
+#+end_example
+
+Another example from the manual, if we inline ~square~ in the following:
+
+#+begin_src lisp
+(defun square-sum (a b)(square (+ a b)))
+(defun square (x) (* x x))
+#+end_src
+
+Then ~square-sum~ disassembles like:
+
+#+begin_example
+0 ENTRY: 2 REQUIRED, 0 OPTIONAL
+1 PUSH-LOCAL FP|0               ;A
+2 BUILTIN +-INTERNAL STACK FP|1 ;B creating X(FP|2)
+3 PUSH-LOCAL FP|2               ;X
+4 PUSH-LOCAL FP|2               ;X
+5 BUILTIN *-INTERNAL STACK
+6 RETURN-STACK
+#+end_example
+
+For the MIT Cadr machine ([[https://www.takeoka.org/~take/ailabo/cadr/knight-lispm-macroinst-en.txt][reference]]),
+
+#+begin_src lisp
+(defun fact (x)
+  (cond ((zerop x) 1)
+        (t (* x (fact (1- x))))))
+#+end_src
+
+This compiles and disassembles to:
+
+#+begin_example
+(disassemble #'fact)
+
+22 NOVE D-PDL ARG|0 ;X
+23 MISC D-IGNORE ZEROP
+24 BR-NIL 26
+
+25 MOVE D-RETURN 'I
+26 MOVE D-PDL ARG|0  ;X
+27 CALL D-PDL FEF|10 ;@FUNCTION-CELL FACT
+30 MOVE D-PDL ARG|0  ;X
+31 MISC D-LAST 1-
+32 * PDL-POP
+33 MOVE D-RETURN PDL-POP
+#+end_example
+
+The explanation:
+
+#+begin_quote
+The first thing (line 22) is to push argument 0 (x) onto the stack, and
+(line 23) check if it is equal to zero. Line 23 uses the ~ZEROP~
+miscellaneous function, which sets the "indicators" to ~NIL~ if the
+quantity was not ~ZERO~.  Line 24 is a branch instruction which tests
+the "indicators"; if ~NIL~ is set, it will branch to 26. If ~NIL~ was
+not set (the number was zero), it falls through to line 25, which
+returns the value 1.
+
+If the number was not zero (the second clause of the ~COND~ in the
+source), then control passes to line 26, which pushes ~X~ on the PDL
+(first argument to the multiply on line 32). Next line 27 opens a call
+to ~FACT~. Line 30 subtracts 1 from ~X~ (with the ~1-~ miscellaneous
+function), and moves the result to "destination ~LAST~".  This result is
+thus the first and only argument to the recursive invocation of ~FACT~,
+the result of which is left on the PDL because of the destination field
+of the ~CALL~ instruction on line 27.
+
+Now ~(FACT (1- x))~ and ~X~ are on the PDL, and they are multiplied by
+the multiply instruction on line 32. It leaves its result on the PDL, to
+be found by line 33, which returns the result.
+#+end_quote
+
 ** Space Cadet Keyboard
 :PROPERTIES:
 :CUSTOM_ID: h-e54263f2-4f75-481d-b877-06aad9512b66

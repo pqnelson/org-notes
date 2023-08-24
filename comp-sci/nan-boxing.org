@@ -1,0 +1,52 @@
+#+TITLE: NaN Boxing
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-08-23T10:56:13-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Wednesday August 23, 2023 at 10:56AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-55385882-0ba1-4181-8cb2-ef3d7c2cfaec
+:END:
+
+The basic idea is that, if we are writing an interpreter or virtual
+machine, then how can we distinguish a pointer from...anything else?
+
+One idea is to just use a naive data structure encoding the possible
+values. At best, we would have an overhead of an additional 64-bits (on
+a 64-bit system), doubling the size of a pointer.
+
+But if we use a NaN, we can encode any 51-bit pointer (or 42-bit pointer
+and we get $2^{9}=512$ possible constants).
+
+There is another alternative, to use tagged pointers.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-7d6a332d-1eef-4a35-9ba1-28f0e9211547
+:END:
+
+- Albert Yang, [[https://albertnetymk.github.io/2016/08/06/nan_boxing/][NaN Boxing]] 6 Aug 2016
+- [[https://anniecherkaev.com/the-secret-life-of-nan][the secret life of NaN]]
+- Leonard Schütz [[https://leonardschuetz.ch/blog/nan-boxing/][Dynamic Typing and NaN Boxing]] 8 September 2020
+- [[https://piotrduperas.com/posts/nan-boxing][NaN boxing or how to make the world dynamic]]
+- [[http://ppkwok.blogspot.com/2012/11/java-cafe-1-never-write-nan-nan_24.html][Java Cafe 1: Never write ~NaN == NaN~ (they're not equal)]]
+- [[https://bernsteinbear.com/blog/compiling-a-lisp-2/][Compiling a Lisp: Integers]]
+- [[https://bernsteinbear.com/blog/compiling-a-lisp-3/][Compiling a Lisp: Booleans, characters, nil]]
+- Nikita Popov, [[https://www.npopov.com/2012/02/02/Pointer-magic-for-efficient-dynamic-value-representations.html][Pointer magic for efficient dynamic value representations]] 
+  2 February 2012
+- [[http://wingolog.org/archives/2011/05/18/value-representation-in-javascript-implementations][value representation in javascript implementations]] 18 May 2011
+- David Gudeman's "Representing Type Information in Dynamically Typed
+  Languages" October 1993 [[https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.39.4394&rep=rep1&type=pdf][PDF]]
+- https://webkit.org/blog/7846/concurrent-javascript-it-can-work/
+- https://stackoverflow.com/questions/57348783/how-does-v8-store-integers-like-5
+- https://stackoverflow.com/questions/16198700/using-the-extra-16-bits-in-64-bit-pointers
+- https://v8.dev/blog/pointer-compression
+- https://source.chromium.org/chromium/v8/v8.git/+/46afc4f9a6008c3880fcc00783b4210cb467aa9a:src/objects/smi.h;l=23
