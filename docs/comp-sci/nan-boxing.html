@@ -264,6 +264,7 @@
 <ul>
 <li><a href="#h-6b6285ee-a96e-42e1-b1ec-dd1a95184df7">3.1. Pointer Tagging</a></li>
 <li><a href="#h-eda564c0-559a-43dc-9a56-deacbe9a40b4">3.2. Pointer Tagging + Memory Management</a></li>
+<li><a href="#h-d246718d-172f-4309-b2a0-0474ac03ff74">3.3. Pointer Alignment</a></li>
 </ul>
 </li>
 <li><a href="#h-7d6a332d-1eef-4a35-9ba1-28f0e9211547">4. References</a>
@@ -366,6 +367,9 @@ For reference:
 <li>in May 2017, HP announced it built a computer with 160 Terabytes of RAM (<a href="https://www.bbc.com/news/technology-39936975">BBC</a>).</li>
 <li>The architectural specifications for Intel64 and AMD64 specify 52-bit
 pointer size for virtual memory addresses.</li>
+<li>ARMv8.2 has a larger VA space of up to 52-bits, before this ARM had
+48-bit virtual address size. (The bits 63:48 are set to 0 for
+user-space, and 1 for kernel space.)</li>
 </ul>
 
 <p>
@@ -388,8 +392,34 @@ We may or may not even need 8 bits for metadata (heck, 3 bits may suffice).
 The basic idea is that we will implement our own garbage collector,
 which basically allocates an "arena" of memory (a glorified array of
 contiguous bytes), then use our own "pointer" type (which is just an
-index to our array of contiguous bytes).
+index to our array of contiguous bytes). This basically rolls our own
+<a href="https://en.wikipedia.org/wiki/Virtual_address_space">Virtual address space</a>.
 </p>
+</div>
+</div>
+
+<div id="outline-container-h-d246718d-172f-4309-b2a0-0474ac03ff74" class="outline-3">
+<h3 id="h-d246718d-172f-4309-b2a0-0474ac03ff74"><span class="section-number-3">3.3.</span> Pointer Alignment</h3>
+<div class="outline-text-3" id="text-h-d246718d-172f-4309-b2a0-0474ac03ff74">
+<p>
+We can <a href="https://en.wikipedia.org/wiki/Data_structure_alignment">recall</a> that a memory address \(A\) is <dfn>n-byte aligned</dfn>
+when \(A\) is a multiple of \(n\). This means \(A\) has a minimum of
+\(\log_{2}(n)\) least-significant zeros when expressed in binary.
+</p>
+
+<p>
+So a 64-bit address (= 8-byte address) is aligned if at least
+\(\log_{2}(8)=3\) least-significant bits are zeros when expressed in binary.
+</p>
+
+<p>
+If we stipulate pointers are always from a <code>malloc</code> (and we are using a
+64-bit computer), then we have 3 bits which we can use for metadata.
+</p>
+
+<ul class="org-ul">
+<li>Max Bernstein, <a href="https://bernsteinbear.com/blog/small-objects/">Small objects and pointer tagging</a> 11 Feb 2021</li>
+</ul>
 </div>
 </div>
 </div>
@@ -432,7 +462,7 @@ Languages" October 1993 <a href="https://citeseerx.ist.psu.edu/viewdoc/download?
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-08-24 Thu 08:32.</p>
+<p class="postamble">Last Updated 2023-08-25 Fri 08:55.</p>
 </div>
 </body>
 </html>

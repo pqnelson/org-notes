@@ -102,6 +102,23 @@ contiguous bytes), then use our own "pointer" type (which is just an
 index to our array of contiguous bytes). This basically rolls our own
 [[https://en.wikipedia.org/wiki/Virtual_address_space][Virtual address space]].
 
+** Pointer Alignment
+:PROPERTIES:
+:CUSTOM_ID: h-d246718d-172f-4309-b2a0-0474ac03ff74
+:END:
+
+We can [[https://en.wikipedia.org/wiki/Data_structure_alignment][recall]] that a memory address $A$ is {{{dfn(n-byte aligned)}}}
+when $A$ is a multiple of $n$. This means $A$ has a minimum of
+$\log_{2}(n)$ least-significant zeros when expressed in binary.
+
+So a 64-bit address (= 8-byte address) is aligned if at least
+$\log_{2}(8)=3$ least-significant bits are zeros when expressed in binary.
+
+If we stipulate pointers are always from a ~malloc~ (and we are using a
+64-bit computer), then we have 3 bits which we can use for metadata.
+
+- Max Bernstein, [[https://bernsteinbear.com/blog/small-objects/][Small objects and pointer tagging]] 11 Feb 2021
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-7d6a332d-1eef-4a35-9ba1-28f0e9211547
