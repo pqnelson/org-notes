@@ -43,14 +43,14 @@ Also note there are about 2 or 3 dozen different types of an argument.
 
 1. ~car~,
 2. ~cdr~,
-3. ~doc:set-to-car~,
-4. ~doc:set-to-cdr~,
-5. ~doc:set-to-cdr-push-car~,
+3. ~set-to-car~,
+4. ~set-to-cdr~,
+5. ~set-to-cdr-push-car~,
 6. ~rplaca~,
 7. ~rplacd~,
-8. ~doc:rgetf~,
-9. ~zl:member~,
-10. ~zl:assoc~
+8. ~rgetf~,
+9. ~member~,
+10. ~assoc~
 
 ** car
 :PROPERTIES:
@@ -101,6 +101,338 @@ Basically ~(set-to-car arg)~ is the same as ~(set! arg (car arg))~.
 - ~(set-to-car <dtp-locative>)~ replaces the contents of the memory
   cells at location with its car
 
+** set-to-cdr
+:PROPERTIES:
+:CUSTOM_ID: h-13bbc361-d634-4592-8292-9d52aac3ca41
+:END:
+
+Basically ~(set-to-cdr arg)~ is the same as ~(set! arg (cdr arg))~
+
+- ~(set-to-cdr <dtp-list>)~
+- ~(set-to-cdr <dtp-locative>)~
+- ~(set-to-cdr <dtp-list-instance>)~
+- ~(set-to-cdr <dtp-nil>)~
+
+
+** set-to-cdr-push-car
+:PROPERTIES:
+:CUSTOM_ID: h-1e97e882-52ee-4b44-bac2-a21a22fd1abe
+:END:
+
+** rplaca
+:PROPERTIES:
+:CUSTOM_ID: h-0338c7ec-6fc5-4ca1-a625-3bd97da53f1a
+:END:
+
+~(rplaca arg1 arg2)~ replaces the car of arg1 with arg2, i.e., it's
+~(set! (car arg1) arg2)~.
+
+- ~arg1~ must be a dtp-list, dtp-locative, or dtp-list-instance
+- ~arg2~ can be anything
+  
+** rplacd
+:PROPERTIES:
+:CUSTOM_ID: h-dcd6252e-0eba-4c6f-9a69-23a6d6575391
+:END:
+
+~(rplacd arg1 arg2)~ replaces the cdr of arg1 with arg2, i.e.,
+~(set! (cdr arg1) arg2)~.
+
+- ~arg1~ must be a dtp-list, dtp-locative, or dtp-list-instance
+- ~arg2~ can be anything
+
+** rgetf
+:PROPERTIES:
+:CUSTOM_ID: h-8be6f967-6f3b-4346-ab77-6f0aa2a1d5d9
+:END:
+
+Interruptible instruction
+
+- ~(rgetf arg1 arg2)~
+- ~arg1~ is any data type
+- ~arg2~ is a dtp-list, dtp-nil, or dtp-list-instance
+
+Searches ~arg2~ 2 elements at a time, succeeding if the first element of
+the pair is EQL to ~arg1~, failing if there is no match.
+
+Upon failure, both values returned are nil.
+
+Upon success, the first value returned is the second element of the
+matching pair, and the second value returned is the tail of ~arg2~ whose
+~car~ is that second element.
+
+** member
+:PROPERTIES:
+:CUSTOM_ID: h-995c9e67-1be0-4b82-a377-ff95187596f2
+:END:
+
+- arg1 is any data type
+- arg2 is a dtp-list, dtp-nil, dtp-list-instance
+
+Returns ~nil~ or a tail of ~arg2~ whose ~car~ is ~eql~ to ~arg1~.
+
+This implements the ~cl:member~ function.
+
+** assoc
+:PROPERTIES:
+:CUSTOM_ID: h-c371f778-b6f0-41f2-9908-d2fdfeebb912
+:END:
+
+- arg1 is any data type
+- arg2 is a dtp-list, dtp-nil, dtp-list-instance
+
+Returns ~nil~ or an element of ~arg2~ whose ~car~ is ~eql~ to
+~arg1~. This implements the ~cl:assoc~ function.
+
+
+* Predicate functions
+:PROPERTIES:
+:CUSTOM_ID: h-ebf99c94-fc15-4654-b755-44d6ae5864a5
+:END:
+
+- Binary predicates
+  1. eq
+  2. eq-no-pop
+  3. eql
+  4. eql-no-pop
+  5. equal-number
+  6. equal-number-no-pop
+  7. greaterp
+  8. greaterp-no-pop
+  9. lessp
+  10. lessp-no-pop
+  11. logtest
+  12. logtest-no-pop
+  13. type-member-n (four instructions)
+  14. type-member-n-no-pop (four instructions)
+- Unary predicates
+  15. endp
+  16. plusp
+  17. minusp
+  18. zerop
+      
+
+* Numeric Operations
+:PROPERTIES:
+:CUSTOM_ID: h-4989fca9-0106-4d44-a109-7639b21ebd14
+:END:
+
+1. add
+2. sub
+3. unary-minus
+4. increment
+5. decrement
+6. multiply
+7. quotient
+8. ceiling
+9. floor
+10. truncate
+11. round
+12. remainder
+13. rational-quotient
+14. max
+15. min
+16. logand
+17. logior (bit-by-bit inclusive or)
+18. logxor
+19. ash (this is ~cl:ash~)
+20. rot
+21. lsh
+22. ~%32-bit-plus~
+23. ~%32-bit-difference~
+24. ~%multiply-double~
+25. ~%add-bignum-step~
+26. ~%sub-bignum-step~
+27. ~%divide-bignum-step~
+28. ~%lshc-bignum-step~
+29. ~%multiply-bignum-step~
+
+* Data-Movement Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-23899ad2-6caa-490a-a6aa-a20393731715
+:END:
+
+1. push
+2. pop
+3. movem
+4. push-n-nils
+5. push-address
+6. set-sp-to-address
+7. set-sp-to-address-save-tos
+8. push-address-sp-relative
+9. stack-bit
+10. stack-blt-address
+
+* Field-Extraction Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-3b1b345d-f35f-4288-a2b5-8ee6ce9b5156
+:END:
+
+1. ldb
+2. dpb
+3. char-ldb
+4. char-dpb
+5. %p-ldb
+6. %p-dpb
+7. %p-tag-ldb
+8. %p-tag-dpb
+
+* Array Operations
+:PROPERTIES:
+:CUSTOM_ID: h-702e78a1-fd19-4ff4-9336-a116a544c484
+:END:
+
+1. aref-1
+2. aset-1
+3. aloc-1
+4. setup-1d-array
+5. setup-force-ld-array
+6. fast-aref-l
+7. fast-aset-l
+8. array-leader
+9. store-array-leader
+10. aloc-leader
+
+* Branch and Loop Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-faa7f432-969a-48ec-b0ec-f950291942e8
+:END:
+
+1. branch
+2. branch-true
+3. branch-false
+4. branch-true-no-pop
+5. branch-false-no-pop
+6. branch·true-else-no-pop
+7. branch-false-else-no-pop
+8. branch-true-and-no-pop
+9. branch-false-and-no-pop
+10. branch-true-and-extra-pop
+11. branch-false-and-extra-pop (Pop twice if branch, pop once if no branch)
+12. branch-true-else-extra-pop (Pop once if branch, pop twice if no branch)
+13. branch-false-else-extra-pop
+14. branch-true·extra-pop
+15. branch-false-extra-pop
+16. ~branch-true-and-no-pop-else-no-pop-extra-pop~ is the same thing as ~branch-true~
+17. ~branch-false-and-no-pop-else-no-pop-extra-pop~ is the same thing as ~branch-false~
+18. loop-decrement-tos
+19. loop-increment-tos-less-than
+
+* Block Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-c147520d-37d3-490e-b89f-7aee72d02fa7
+:END:
+
+1. %block·n-read (four instructions)
+2. %block-n-read-shift (four instructions)
+3. %block-n-read-alu (four instructions)
+4. %block-n-read-test (four instructions)
+5. %block-n-write (four instructions)
+
+* Function-Calling Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-156c4efb-e6a9-441e-a656-826781d32626
+:END:
+
+1. dtp-call-compiled-even
+2. dtp-call-compiled-odd
+3. dtp-call-indirect
+4. dtp-call-generic
+5. dtp-call-compiled-even-prefetch
+6. dtp-call-compiled-odd-prefetch
+7. dtp-call-indirect-prefetch
+8. dtp-call-generic-prefetch
+9. start-call
+10. finish-call-n
+11. finish-call-apply-n
+12. finish-call-tos
+13. finish-call-apply-tos
+14. entry-rest-accepted
+15. entry-rest-not-accepted
+16. locate-locals
+17. return-single
+18. return-multiple
+19. return-kludge
+20. take-values
+
+* Binding Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-a8d90831-0710-4cf0-ae84-5b493fca1ea1
+:END:
+
+1. bind-Iocative-to-value
+2. bind-locative
+3. unbind-n
+4. ~%restore-binding-stack~
+
+* Catch Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-a781663f-2bda-4088-b3f2-e6bba3eda406
+:END:
+
+1. catch-open
+2. catch-close
+
+* Lexical Variable Accessors
+:PROPERTIES:
+:CUSTOM_ID: h-3fcb3079-7171-4951-93f2-83c8027f87eb
+:END:
+
+1. push-lexical-var-n (eight instructions)
+2. pop-lexical-var-n (eight instructions)
+3. movem-Iexical-var-n (eight instructions)
+
+* Instance Variable Accessors
+:PROPERTIES:
+:CUSTOM_ID: h-5fdb8f97-5a9d-49db-94ac-572c361ecd5d
+:END:
+
+1. push-instance-variable
+2. pop-instance-variable
+3. movem-instance-variable
+4. push-address-instance-variable
+5. push-instance-variable-ordered
+6. pop-instance-variable-ordered
+7. movem-instance-variable-ordered
+8. push-address-instance-variable-ordered
+9. ~%instance-ref~
+10. ~%instance-set~
+11. ~%instance-loc~
+
+
+
+* Sub primitive Instructions
+:PROPERTIES:
+:CUSTOM_ID: h-6ce93f65-7fee-4e24-9b15-2b4fa163a6fc
+:END:
+
+1. %ephemeralp
+2. %unsigned-lessp
+3. %unsigned-lessp-no-pop
+4. %allocate-list-block
+5. %allocate-structure-block
+6. %pointer-plus
+7. %pointer-difference
+8. %pointer-increment
+9. %read-internal-register
+10. %write-internal-register
+11. no-op
+12. %coprocessor-read
+13. %coprocessor-write
+14. %memory-read
+15. %memory-read-address
+16. %memory-write
+17. %tag
+18. %set-tag
+19. store-conditional
+20. %p-store-contents
+21. %set-cdr-code-n (two instructions)
+22. %merge-cdr-no-pop
+23. %generic-dispatch
+24. %message-dispatch
+25. %jump
+26. %check-preempt-request
+27. %halt
 
 * References
 :PROPERTIES:

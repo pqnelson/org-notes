@@ -224,9 +224,29 @@
 <li><a href="#h-98dda85e-dca6-4bd3-b512-19b71bea48a4">2.1. car</a></li>
 <li><a href="#h-e8dcab4f-54d1-49d4-b05b-d810b109d0f6">2.2. cdr</a></li>
 <li><a href="#h-d90284a3-ff81-4c3f-a60a-7a7173bcc7ba">2.3. set-to-car</a></li>
+<li><a href="#h-13bbc361-d634-4592-8292-9d52aac3ca41">2.4. set-to-cdr</a></li>
+<li><a href="#h-1e97e882-52ee-4b44-bac2-a21a22fd1abe">2.5. set-to-cdr-push-car</a></li>
+<li><a href="#h-0338c7ec-6fc5-4ca1-a625-3bd97da53f1a">2.6. rplaca</a></li>
+<li><a href="#h-dcd6252e-0eba-4c6f-9a69-23a6d6575391">2.7. rplacd</a></li>
+<li><a href="#h-8be6f967-6f3b-4346-ab77-6f0aa2a1d5d9">2.8. rgetf</a></li>
+<li><a href="#h-995c9e67-1be0-4b82-a377-ff95187596f2">2.9. member</a></li>
+<li><a href="#h-c371f778-b6f0-41f2-9908-d2fdfeebb912">2.10. assoc</a></li>
 </ul>
 </li>
-<li><a href="#h-ea649e86-e4bb-4287-aefc-822da69acef5">3. References</a></li>
+<li><a href="#h-ebf99c94-fc15-4654-b755-44d6ae5864a5">3. Predicate functions</a></li>
+<li><a href="#h-4989fca9-0106-4d44-a109-7639b21ebd14">4. Numeric Operations</a></li>
+<li><a href="#h-23899ad2-6caa-490a-a6aa-a20393731715">5. Data-Movement Instructions</a></li>
+<li><a href="#h-3b1b345d-f35f-4288-a2b5-8ee6ce9b5156">6. Field-Extraction Instructions</a></li>
+<li><a href="#h-702e78a1-fd19-4ff4-9336-a116a544c484">7. Array Operations</a></li>
+<li><a href="#h-faa7f432-969a-48ec-b0ec-f950291942e8">8. Branch and Loop Instructions</a></li>
+<li><a href="#h-c147520d-37d3-490e-b89f-7aee72d02fa7">9. Block Instructions</a></li>
+<li><a href="#h-156c4efb-e6a9-441e-a656-826781d32626">10. Function-Calling Instructions</a></li>
+<li><a href="#h-a8d90831-0710-4cf0-ae84-5b493fca1ea1">11. Binding Instructions</a></li>
+<li><a href="#h-a781663f-2bda-4088-b3f2-e6bba3eda406">12. Catch Instructions</a></li>
+<li><a href="#h-3fcb3079-7171-4951-93f2-83c8027f87eb">13. Lexical Variable Accessors</a></li>
+<li><a href="#h-5fdb8f97-5a9d-49db-94ac-572c361ecd5d">14. Instance Variable Accessors</a></li>
+<li><a href="#h-6ce93f65-7fee-4e24-9b15-2b4fa163a6fc">15. Sub primitive Instructions</a></li>
+<li><a href="#h-ea649e86-e4bb-4287-aefc-822da69acef5">16. References</a></li>
 </ul>
 </div>
 </div>
@@ -268,14 +288,14 @@ Also note there are about 2 or 3 dozen different types of an argument.
 <ol class="org-ol">
 <li><code>car</code>,</li>
 <li><code>cdr</code>,</li>
-<li><code>doc:set-to-car</code>,</li>
-<li><code>doc:set-to-cdr</code>,</li>
-<li><code>doc:set-to-cdr-push-car</code>,</li>
+<li><code>set-to-car</code>,</li>
+<li><code>set-to-cdr</code>,</li>
+<li><code>set-to-cdr-push-car</code>,</li>
 <li><code>rplaca</code>,</li>
 <li><code>rplacd</code>,</li>
-<li><code>doc:rgetf</code>,</li>
-<li><code>zl:member</code>,</li>
-<li><code>zl:assoc</code></li>
+<li><code>rgetf</code>,</li>
+<li><code>member</code>,</li>
+<li><code>assoc</code></li>
 </ol>
 </div>
 
@@ -349,11 +369,406 @@ cells at location with its car</li>
 </ul>
 </div>
 </div>
+
+<div id="outline-container-h-13bbc361-d634-4592-8292-9d52aac3ca41" class="outline-3">
+<h3 id="h-13bbc361-d634-4592-8292-9d52aac3ca41"><span class="section-number-3">2.4.</span> set-to-cdr</h3>
+<div class="outline-text-3" id="text-h-13bbc361-d634-4592-8292-9d52aac3ca41">
+<p>
+Basically <code>(set-to-cdr arg)</code> is the same as <code>(set! arg (cdr arg))</code>
+</p>
+
+<ul class="org-ul">
+<li><code>(set-to-cdr &lt;dtp-list&gt;)</code></li>
+<li><code>(set-to-cdr &lt;dtp-locative&gt;)</code></li>
+<li><code>(set-to-cdr &lt;dtp-list-instance&gt;)</code></li>
+<li><code>(set-to-cdr &lt;dtp-nil&gt;)</code></li>
+</ul>
+</div>
 </div>
 
 
+<div id="outline-container-h-1e97e882-52ee-4b44-bac2-a21a22fd1abe" class="outline-3">
+<h3 id="h-1e97e882-52ee-4b44-bac2-a21a22fd1abe"><span class="section-number-3">2.5.</span> set-to-cdr-push-car</h3>
+<div class="outline-text-3" id="text-h-1e97e882-52ee-4b44-bac2-a21a22fd1abe">
+</div>
+</div>
+
+<div id="outline-container-h-0338c7ec-6fc5-4ca1-a625-3bd97da53f1a" class="outline-3">
+<h3 id="h-0338c7ec-6fc5-4ca1-a625-3bd97da53f1a"><span class="section-number-3">2.6.</span> rplaca</h3>
+<div class="outline-text-3" id="text-h-0338c7ec-6fc5-4ca1-a625-3bd97da53f1a">
+<p>
+<code>(rplaca arg1 arg2)</code> replaces the car of arg1 with arg2, i.e., it's
+<code>(set! (car arg1) arg2)</code>.
+</p>
+
+<ul class="org-ul">
+<li><code>arg1</code> must be a dtp-list, dtp-locative, or dtp-list-instance</li>
+<li><code>arg2</code> can be anything</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-dcd6252e-0eba-4c6f-9a69-23a6d6575391" class="outline-3">
+<h3 id="h-dcd6252e-0eba-4c6f-9a69-23a6d6575391"><span class="section-number-3">2.7.</span> rplacd</h3>
+<div class="outline-text-3" id="text-h-dcd6252e-0eba-4c6f-9a69-23a6d6575391">
+<p>
+<code>(rplacd arg1 arg2)</code> replaces the cdr of arg1 with arg2, i.e.,
+<code>(set! (cdr arg1) arg2)</code>.
+</p>
+
+<ul class="org-ul">
+<li><code>arg1</code> must be a dtp-list, dtp-locative, or dtp-list-instance</li>
+<li><code>arg2</code> can be anything</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-8be6f967-6f3b-4346-ab77-6f0aa2a1d5d9" class="outline-3">
+<h3 id="h-8be6f967-6f3b-4346-ab77-6f0aa2a1d5d9"><span class="section-number-3">2.8.</span> rgetf</h3>
+<div class="outline-text-3" id="text-h-8be6f967-6f3b-4346-ab77-6f0aa2a1d5d9">
+<p>
+Interruptible instruction
+</p>
+
+<ul class="org-ul">
+<li><code>(rgetf arg1 arg2)</code></li>
+<li><code>arg1</code> is any data type</li>
+<li><code>arg2</code> is a dtp-list, dtp-nil, or dtp-list-instance</li>
+</ul>
+
+<p>
+Searches <code>arg2</code> 2 elements at a time, succeeding if the first element of
+the pair is EQL to <code>arg1</code>, failing if there is no match.
+</p>
+
+<p>
+Upon failure, both values returned are nil.
+</p>
+
+<p>
+Upon success, the first value returned is the second element of the
+matching pair, and the second value returned is the tail of <code>arg2</code> whose
+<code>car</code> is that second element.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-995c9e67-1be0-4b82-a377-ff95187596f2" class="outline-3">
+<h3 id="h-995c9e67-1be0-4b82-a377-ff95187596f2"><span class="section-number-3">2.9.</span> member</h3>
+<div class="outline-text-3" id="text-h-995c9e67-1be0-4b82-a377-ff95187596f2">
+<ul class="org-ul">
+<li>arg1 is any data type</li>
+<li>arg2 is a dtp-list, dtp-nil, dtp-list-instance</li>
+</ul>
+
+<p>
+Returns <code>nil</code> or a tail of <code>arg2</code> whose <code>car</code> is <code>eql</code> to <code>arg1</code>.
+</p>
+
+<p>
+This implements the <code>cl:member</code> function.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-c371f778-b6f0-41f2-9908-d2fdfeebb912" class="outline-3">
+<h3 id="h-c371f778-b6f0-41f2-9908-d2fdfeebb912"><span class="section-number-3">2.10.</span> assoc</h3>
+<div class="outline-text-3" id="text-h-c371f778-b6f0-41f2-9908-d2fdfeebb912">
+<ul class="org-ul">
+<li>arg1 is any data type</li>
+<li>arg2 is a dtp-list, dtp-nil, dtp-list-instance</li>
+</ul>
+
+<p>
+Returns <code>nil</code> or an element of <code>arg2</code> whose <code>car</code> is <code>eql</code> to
+<code>arg1</code>. This implements the <code>cl:assoc</code> function.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-h-ebf99c94-fc15-4654-b755-44d6ae5864a5" class="outline-2">
+<h2 id="h-ebf99c94-fc15-4654-b755-44d6ae5864a5"><span class="section-number-2">3.</span> Predicate functions</h2>
+<div class="outline-text-2" id="text-h-ebf99c94-fc15-4654-b755-44d6ae5864a5">
+<ul class="org-ul">
+<li>Binary predicates
+<ol class="org-ol">
+<li>eq</li>
+<li>eq-no-pop</li>
+<li>eql</li>
+<li>eql-no-pop</li>
+<li>equal-number</li>
+<li>equal-number-no-pop</li>
+<li>greaterp</li>
+<li>greaterp-no-pop</li>
+<li>lessp</li>
+<li>lessp-no-pop</li>
+<li>logtest</li>
+<li>logtest-no-pop</li>
+<li>type-member-n (four instructions)</li>
+<li>type-member-n-no-pop (four instructions)</li>
+</ol></li>
+<li>Unary predicates
+<ol class="org-ol">
+<li>endp</li>
+<li>plusp</li>
+<li>minusp</li>
+<li>zerop</li>
+</ol></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-h-4989fca9-0106-4d44-a109-7639b21ebd14" class="outline-2">
+<h2 id="h-4989fca9-0106-4d44-a109-7639b21ebd14"><span class="section-number-2">4.</span> Numeric Operations</h2>
+<div class="outline-text-2" id="text-h-4989fca9-0106-4d44-a109-7639b21ebd14">
+<ol class="org-ol">
+<li>add</li>
+<li>sub</li>
+<li>unary-minus</li>
+<li>increment</li>
+<li>decrement</li>
+<li>multiply</li>
+<li>quotient</li>
+<li>ceiling</li>
+<li>floor</li>
+<li>truncate</li>
+<li>round</li>
+<li>remainder</li>
+<li>rational-quotient</li>
+<li>max</li>
+<li>min</li>
+<li>logand</li>
+<li>logior (bit-by-bit inclusive or)</li>
+<li>logxor</li>
+<li>ash (this is <code>cl:ash</code>)</li>
+<li>rot</li>
+<li>lsh</li>
+<li><code>%32-bit-plus</code></li>
+<li><code>%32-bit-difference</code></li>
+<li><code>%multiply-double</code></li>
+<li><code>%add-bignum-step</code></li>
+<li><code>%sub-bignum-step</code></li>
+<li><code>%divide-bignum-step</code></li>
+<li><code>%lshc-bignum-step</code></li>
+<li><code>%multiply-bignum-step</code></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-23899ad2-6caa-490a-a6aa-a20393731715" class="outline-2">
+<h2 id="h-23899ad2-6caa-490a-a6aa-a20393731715"><span class="section-number-2">5.</span> Data-Movement Instructions</h2>
+<div class="outline-text-2" id="text-h-23899ad2-6caa-490a-a6aa-a20393731715">
+<ol class="org-ol">
+<li>push</li>
+<li>pop</li>
+<li>movem</li>
+<li>push-n-nils</li>
+<li>push-address</li>
+<li>set-sp-to-address</li>
+<li>set-sp-to-address-save-tos</li>
+<li>push-address-sp-relative</li>
+<li>stack-bit</li>
+<li>stack-blt-address</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-3b1b345d-f35f-4288-a2b5-8ee6ce9b5156" class="outline-2">
+<h2 id="h-3b1b345d-f35f-4288-a2b5-8ee6ce9b5156"><span class="section-number-2">6.</span> Field-Extraction Instructions</h2>
+<div class="outline-text-2" id="text-h-3b1b345d-f35f-4288-a2b5-8ee6ce9b5156">
+<ol class="org-ol">
+<li>ldb</li>
+<li>dpb</li>
+<li>char-ldb</li>
+<li>char-dpb</li>
+<li>%p-ldb</li>
+<li>%p-dpb</li>
+<li>%p-tag-ldb</li>
+<li>%p-tag-dpb</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-702e78a1-fd19-4ff4-9336-a116a544c484" class="outline-2">
+<h2 id="h-702e78a1-fd19-4ff4-9336-a116a544c484"><span class="section-number-2">7.</span> Array Operations</h2>
+<div class="outline-text-2" id="text-h-702e78a1-fd19-4ff4-9336-a116a544c484">
+<ol class="org-ol">
+<li>aref-1</li>
+<li>aset-1</li>
+<li>aloc-1</li>
+<li>setup-1d-array</li>
+<li>setup-force-ld-array</li>
+<li>fast-aref-l</li>
+<li>fast-aset-l</li>
+<li>array-leader</li>
+<li>store-array-leader</li>
+<li>aloc-leader</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-faa7f432-969a-48ec-b0ec-f950291942e8" class="outline-2">
+<h2 id="h-faa7f432-969a-48ec-b0ec-f950291942e8"><span class="section-number-2">8.</span> Branch and Loop Instructions</h2>
+<div class="outline-text-2" id="text-h-faa7f432-969a-48ec-b0ec-f950291942e8">
+<ol class="org-ol">
+<li>branch</li>
+<li>branch-true</li>
+<li>branch-false</li>
+<li>branch-true-no-pop</li>
+<li>branch-false-no-pop</li>
+<li>branch·true-else-no-pop</li>
+<li>branch-false-else-no-pop</li>
+<li>branch-true-and-no-pop</li>
+<li>branch-false-and-no-pop</li>
+<li>branch-true-and-extra-pop</li>
+<li>branch-false-and-extra-pop (Pop twice if branch, pop once if no branch)</li>
+<li>branch-true-else-extra-pop (Pop once if branch, pop twice if no branch)</li>
+<li>branch-false-else-extra-pop</li>
+<li>branch-true·extra-pop</li>
+<li>branch-false-extra-pop</li>
+<li><code>branch-true-and-no-pop-else-no-pop-extra-pop</code> is the same thing as <code>branch-true</code></li>
+<li><code>branch-false-and-no-pop-else-no-pop-extra-pop</code> is the same thing as <code>branch-false</code></li>
+<li>loop-decrement-tos</li>
+<li>loop-increment-tos-less-than</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-c147520d-37d3-490e-b89f-7aee72d02fa7" class="outline-2">
+<h2 id="h-c147520d-37d3-490e-b89f-7aee72d02fa7"><span class="section-number-2">9.</span> Block Instructions</h2>
+<div class="outline-text-2" id="text-h-c147520d-37d3-490e-b89f-7aee72d02fa7">
+<ol class="org-ol">
+<li>%block·n-read (four instructions)</li>
+<li>%block-n-read-shift (four instructions)</li>
+<li>%block-n-read-alu (four instructions)</li>
+<li>%block-n-read-test (four instructions)</li>
+<li>%block-n-write (four instructions)</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-156c4efb-e6a9-441e-a656-826781d32626" class="outline-2">
+<h2 id="h-156c4efb-e6a9-441e-a656-826781d32626"><span class="section-number-2">10.</span> Function-Calling Instructions</h2>
+<div class="outline-text-2" id="text-h-156c4efb-e6a9-441e-a656-826781d32626">
+<ol class="org-ol">
+<li>dtp-call-compiled-even</li>
+<li>dtp-call-compiled-odd</li>
+<li>dtp-call-indirect</li>
+<li>dtp-call-generic</li>
+<li>dtp-call-compiled-even-prefetch</li>
+<li>dtp-call-compiled-odd-prefetch</li>
+<li>dtp-call-indirect-prefetch</li>
+<li>dtp-call-generic-prefetch</li>
+<li>start-call</li>
+<li>finish-call-n</li>
+<li>finish-call-apply-n</li>
+<li>finish-call-tos</li>
+<li>finish-call-apply-tos</li>
+<li>entry-rest-accepted</li>
+<li>entry-rest-not-accepted</li>
+<li>locate-locals</li>
+<li>return-single</li>
+<li>return-multiple</li>
+<li>return-kludge</li>
+<li>take-values</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-a8d90831-0710-4cf0-ae84-5b493fca1ea1" class="outline-2">
+<h2 id="h-a8d90831-0710-4cf0-ae84-5b493fca1ea1"><span class="section-number-2">11.</span> Binding Instructions</h2>
+<div class="outline-text-2" id="text-h-a8d90831-0710-4cf0-ae84-5b493fca1ea1">
+<ol class="org-ol">
+<li>bind-Iocative-to-value</li>
+<li>bind-locative</li>
+<li>unbind-n</li>
+<li><code>%restore-binding-stack</code></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-a781663f-2bda-4088-b3f2-e6bba3eda406" class="outline-2">
+<h2 id="h-a781663f-2bda-4088-b3f2-e6bba3eda406"><span class="section-number-2">12.</span> Catch Instructions</h2>
+<div class="outline-text-2" id="text-h-a781663f-2bda-4088-b3f2-e6bba3eda406">
+<ol class="org-ol">
+<li>catch-open</li>
+<li>catch-close</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-3fcb3079-7171-4951-93f2-83c8027f87eb" class="outline-2">
+<h2 id="h-3fcb3079-7171-4951-93f2-83c8027f87eb"><span class="section-number-2">13.</span> Lexical Variable Accessors</h2>
+<div class="outline-text-2" id="text-h-3fcb3079-7171-4951-93f2-83c8027f87eb">
+<ol class="org-ol">
+<li>push-lexical-var-n (eight instructions)</li>
+<li>pop-lexical-var-n (eight instructions)</li>
+<li>movem-Iexical-var-n (eight instructions)</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-5fdb8f97-5a9d-49db-94ac-572c361ecd5d" class="outline-2">
+<h2 id="h-5fdb8f97-5a9d-49db-94ac-572c361ecd5d"><span class="section-number-2">14.</span> Instance Variable Accessors</h2>
+<div class="outline-text-2" id="text-h-5fdb8f97-5a9d-49db-94ac-572c361ecd5d">
+<ol class="org-ol">
+<li>push-instance-variable</li>
+<li>pop-instance-variable</li>
+<li>movem-instance-variable</li>
+<li>push-address-instance-variable</li>
+<li>push-instance-variable-ordered</li>
+<li>pop-instance-variable-ordered</li>
+<li>movem-instance-variable-ordered</li>
+<li>push-address-instance-variable-ordered</li>
+<li><code>%instance-ref</code></li>
+<li><code>%instance-set</code></li>
+<li><code>%instance-loc</code></li>
+</ol>
+</div>
+</div>
+
+
+
+<div id="outline-container-h-6ce93f65-7fee-4e24-9b15-2b4fa163a6fc" class="outline-2">
+<h2 id="h-6ce93f65-7fee-4e24-9b15-2b4fa163a6fc"><span class="section-number-2">15.</span> Sub primitive Instructions</h2>
+<div class="outline-text-2" id="text-h-6ce93f65-7fee-4e24-9b15-2b4fa163a6fc">
+<ol class="org-ol">
+<li>%ephemeralp</li>
+<li>%unsigned-lessp</li>
+<li>%unsigned-lessp-no-pop</li>
+<li>%allocate-list-block</li>
+<li>%allocate-structure-block</li>
+<li>%pointer-plus</li>
+<li>%pointer-difference</li>
+<li>%pointer-increment</li>
+<li>%read-internal-register</li>
+<li>%write-internal-register</li>
+<li>no-op</li>
+<li>%coprocessor-read</li>
+<li>%coprocessor-write</li>
+<li>%memory-read</li>
+<li>%memory-read-address</li>
+<li>%memory-write</li>
+<li>%tag</li>
+<li>%set-tag</li>
+<li>store-conditional</li>
+<li>%p-store-contents</li>
+<li>%set-cdr-code-n (two instructions)</li>
+<li>%merge-cdr-no-pop</li>
+<li>%generic-dispatch</li>
+<li>%message-dispatch</li>
+<li>%jump</li>
+<li>%check-preempt-request</li>
+<li>%halt</li>
+</ol>
+</div>
+</div>
+
 <div id="outline-container-h-ea649e86-e4bb-4287-aefc-822da69acef5" class="outline-2">
-<h2 id="h-ea649e86-e4bb-4287-aefc-822da69acef5"><span class="section-number-2">3.</span> References</h2>
+<h2 id="h-ea649e86-e4bb-4287-aefc-822da69acef5"><span class="section-number-2">16.</span> References</h2>
 <div class="outline-text-2" id="text-h-ea649e86-e4bb-4287-aefc-822da69acef5">
 <ul class="org-ul">
 <li>I-Machine <a href="http://www.bitsavers.org/pdf/symbolics/I_Machine/I-Machine%20Architecture%20Specification.pdf">Architecture Specification</a> documents all opcodes in the
@@ -367,7 +782,7 @@ documentation.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated 2023-08-30 Wed 16:14.</p>
 </div>
 </body>
 </html>
