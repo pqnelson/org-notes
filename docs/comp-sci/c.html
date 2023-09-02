@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Computer Science</title>
+<title>C Programming Language</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -209,114 +209,142 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../index.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Computer Science</h1>
+<h1 class="title">C Programming Language</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-14a377e2-c9d5-4e9d-8932-36d37c2faf5a">1. Overview</a></li>
+<li><a href="#h-414e26dd-b4dc-4212-8d7e-41dc60cd773b">2. Dereferencing NULL Pointer</a>
+<ul>
+<li><a href="#h-df00a2fd-d3ca-429c-8f91-21c0c6e022c8">2.1. On x86 Family Architecture</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 
-<div id="outline-container-h-6a112c05-acf6-43ab-893b-e71f4fa415c3" class="outline-2">
-<h2 id="h-6a112c05-acf6-43ab-893b-e71f4fa415c3">Overview</h2>
-<div class="outline-text-2" id="text-h-6a112c05-acf6-43ab-893b-e71f4fa415c3">
+<div id="outline-container-h-14a377e2-c9d5-4e9d-8932-36d37c2faf5a" class="outline-2">
+<h2 id="h-14a377e2-c9d5-4e9d-8932-36d37c2faf5a"><span class="section-number-2">1.</span> Overview</h2>
+<div class="outline-text-2" id="text-h-14a377e2-c9d5-4e9d-8932-36d37c2faf5a">
 <p>
-Computer science has emerged into a sprawling field. Although I am
-trying to focus on numerical analysis (to think further about
-solving math and physics problems), the entire domain of
-programming and computer science are rather fascinating.
+C is arguably the <i>lingua franca</i> of programming.
 </p>
 
 <p>
-Right now, I am working my way through the <code>scmutils</code> library used
-in <cite class="book-title">The Structure and Interpretation of Classical Mechanics</cite>.
-As I read through it, I'm thinking about how to implement the
-algorithms in Common Lisp.
+The "C Abstract Machine" is the hypothetical computer which is described
+by the C standard (C17 5.1.2.3 "Program execution"), which states:
 </p>
 
-<ul class="org-ul">
-<li><a href="apology.html">Apologia</a> on various random conventional choices I've been forced
-to make</li>
-<li><a href="numerical-analysis.html">Numerical Analysis</a> (<a href="numerical-analysis/index.html">topics</a>) for all my computational needs</li>
-<li><a href="literate-programming.html">Literate Programming</a> is one method to programming, as espoused by
-Donald Knuth</li>
-<li><a href="lisp.html">Lisp</a> (<a href="lisp/index.html">topics</a>) the second-oldest language around, is my preferred language
-for programming most things
-<ul class="org-ul">
-<li><a href="lisp/machine.html">Lisp Machine</a> lore (<a href="lisp/machine/index.html">topics</a>), partial history, sketchy and incomplete specifications</li>
-<li><a href="lisp/multiple-dispatch.html">Multiple Dispatch</a> for multimethods, which can be implemented in
-various different ways</li>
-<li><a href="lisp/generic-arithmetic.html">Generic Arithmetic</a> using multimethods for overloading operators</li>
-<li><a href="lisp/mal-2.html">Making a Lisp - Preliminaries</a> with implementing the base types</li>
-</ul></li>
-<li><a href="scheme.html">Scheme</a> (<a href="scheme/index.html">topics</a>) dialect of Lisp</li>
-<li><a href="raspberry-pi.html">Raspberry Pi log</a> - just documenting what I've done to my RPi</li>
-<li><a href="./tex.html">TeX and LaTeX notes</a></li>
-<li><a href="cas.html">Computer Algebra</a></li>
-<li><a href="geography.html">Geography on a computer</a> discussing how to encode a planet's geography
-on the computer</li>
-<li>Blub languages
-<ul class="org-ul">
-<li><a href="fortran.html">FORTRAN</a> (<a href="fortran/index.html">topics</a>) the language used for scientific computing and numerical analysis</li>
-<li><a href="c.html">C Programming Language</a></li>
-</ul></li>
-</ul>
-</div>
-
-<div id="outline-container-h-c0f56c51-edde-48de-83f0-8bf604b16da5" class="outline-3">
-<h3 id="h-c0f56c51-edde-48de-83f0-8bf604b16da5">Adjuncts to "Making a Lisp"</h3>
-<div class="outline-text-3" id="text-h-c0f56c51-edde-48de-83f0-8bf604b16da5">
-<ul class="org-ul">
-<li><a href="jvm.html">JVM notes</a></li>
-<li><a href="gc.html">Garbage Collectors</a></li>
-<li><a href="nan-boxing.html">NaN-Boxing</a> for storing pointers in a <code>NaN</code></li>
-<li><a href="assembly-language.html">Assembly Language</a></li>
-</ul>
-</div>
-</div>
-</div>
-
-<div id="outline-container-h-492fb6fe-e999-482c-9b70-2e473d0301e5" class="outline-2">
-<h2 id="h-492fb6fe-e999-482c-9b70-2e473d0301e5">Theorem Provers</h2>
-<div class="outline-text-2" id="text-h-492fb6fe-e999-482c-9b70-2e473d0301e5">
+<blockquote>
 <p>
-Theorem provers are a fascinating topic, which I love, so here's random
-notes.
+The semantic descriptions in this International Standard describe the
+behavior of an abstract machine in which issues of optimization are
+irrelevant.
+</p>
+</blockquote>
+
+<p>
+This abstract machine may, or may not, have any relation to actual
+hardware.
+</p>
+
+<p>
+The basic model is that there are two memory locations:
+</p>
+<ul class="org-ul">
+<li>The <dfn>stack</dfn> stores local variables and is cleaned up when the function
+call terminates</li>
+<li>The <dfn>heap</dfn> stores <code>malloc()</code> allocated results, must be
+freed, and is accessed by pointers. Loosely, this intuitively
+corresponds to RAM.</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-h-414e26dd-b4dc-4212-8d7e-41dc60cd773b" class="outline-2">
+<h2 id="h-414e26dd-b4dc-4212-8d7e-41dc60cd773b"><span class="section-number-2">2.</span> Dereferencing NULL Pointer</h2>
+<div class="outline-text-2" id="text-h-414e26dd-b4dc-4212-8d7e-41dc60cd773b">
+<p>
+This leads to "undefined behaviour" according to the C Standard. This
+means it depends on the CPU and other sordid details.
+</p>
+</div>
+
+<div id="outline-container-h-df00a2fd-d3ca-429c-8f91-21c0c6e022c8" class="outline-3">
+<h3 id="h-df00a2fd-d3ca-429c-8f91-21c0c6e022c8"><span class="section-number-3">2.1.</span> On x86 Family Architecture</h3>
+<div class="outline-text-3" id="text-h-df00a2fd-d3ca-429c-8f91-21c0c6e022c8">
+<p>
+But that doesn't stop us from writing some code like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span class="org-preprocessor">#include</span> <span class="org-string">&lt;stdlib.h&gt;</span>
+
+<span class="org-type">int</span> <span class="org-function-name">main</span>() {
+    <span class="org-type">int</span> *<span class="org-variable-name">x</span> = <span class="org-constant">NULL</span>;
+    *x = 5;
+    <span class="org-keyword">return</span> 0;
+}
+</pre>
+</div>
+
+<p>
+We then check this compiles (using GCC 8.3.0) to:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-asm"><span class="org-comment-delimiter">; </span><span class="org-comment">gcc -fverbose-asm -S null.c -o null.s -O1</span>
+<span class="org-function-name">main</span>:
+    <span class="org-keyword">subq</span>    $40, <span class="org-variable-name">%rsp</span>    <span class="org-comment-delimiter">;</span><span class="org-comment">,</span>
+    <span class="org-keyword">.seh_stackalloc</span> 40
+    <span class="org-keyword">.seh_endprologue</span>
+ <span class="org-comment-delimiter">; </span><span class="org-comment">null.c:3: int main() {</span>
+    <span class="org-keyword">call</span>    __main   <span class="org-comment-delimiter">;</span>
+ <span class="org-comment-delimiter">; </span><span class="org-comment">null.c:5:     *x = 5;</span>
+    <span class="org-keyword">movl</span>    $5, 0    <span class="org-comment-delimiter">;</span><span class="org-comment">, MEM[(int *)0B]</span>
+ <span class="org-comment-delimiter">; </span><span class="org-comment">null.c:7: }</span>
+    <span class="org-keyword">movl</span>    $0, <span class="org-variable-name">%eax</span>     <span class="org-comment-delimiter">;</span><span class="org-comment">,</span>
+    <span class="org-keyword">addq</span>    $40, <span class="org-variable-name">%rsp</span>    <span class="org-comment-delimiter">;</span><span class="org-comment">,</span>
+    <span class="org-keyword">ret</span>     
+</pre>
+</div>
+
+<p>
+The key line of code is the <code>movl $5, 0</code> which tries to store in the
+address at <code>0</code> the literal value <code>5</code>.
 </p>
 
 <ul class="org-ul">
-<li><a href="abstract-machines.html">Abstract Machines</a> (<a href="abstract-machines/index.html">topics</a>) as virtual machines for functional programming
-languages, began originally as pen-and-paper models of computer hardware
+<li>The pointers refer to a "virtual address", which is translated into
+"physical addresses" via the operating system (in most modern
+operating systems); this is done through paging</li>
+<li>When the translation fails, the CPU raises a <dfn>page fault exception</dfn>
 <ul class="org-ul">
-<li><a href="abstract-machines/secd.html">SECD Machine</a> the primordial abstract machine which started it all</li>
-<li><a href="abstract-machines/cam.html">Categorical Abstract Machine</a></li>
+<li>This triggers a transition from "user mode" to a specific location
+in the OS kernel's code, as defined by the
+<dfn>interrupt descriptor table</dfn></li>
 </ul></li>
-<li><a href="functional-lang.html">Functional languages</a>
+<li>The Operating System kernel regains control and must determine what to
+do based on the information from the exception and the process's page
+table.
 <ul class="org-ul">
-<li><a href="sml.html">Standard ML</a> (<a href="sml/index.html">topics</a>) the first "real" statically-typed functional programming language</li>
-<li><a href="haskell.html">Haskell</a>, the self-proclaimed purely functional programming language</li>
-</ul></li>
-<li><a href="theorem-provers.html">On Theorem Provers</a> (<a href="theorem-provers/index.html">topics</a>)
-<ul class="org-ul">
-<li><a href="theorem-provers/automath.html">Automath</a></li>
-<li><a href="theorem-provers/mizar.html">Mizar</a> (<a href="theorem-provers/mizar/index.html">topics</a>)</li>
-<li><a href="theorem-provers/hol-light.html">HOL Light</a> (<a href="theorem-provers/hol-light/index.html">topics</a>)</li>
-<li><a href="theorem-provers/coq.html">Coq</a></li>
-<li><a href="theorem-provers/isabelle.html">Isabelle</a></li>
+<li>Windows will (or used to) raise a <a href="https://learn.microsoft.com/en-us/windows/win32/debug/structured-exception-handling?redirectedfrom=MSDN">structured exception</a>.</li>
+<li>Linux 2.6 had this be a possible exploit, see
+<a href="https://web.archive.org/web/20160928150624/https://blogs.oracle.com/ksplice/entry/much_ado_about_null_exploiting1"> Much ado about NULL: Exploiting a kernel NULL dereference</a>.</li>
 </ul></li>
 </ul>
 </div>
-</div>
-
-<div id="outline-container-h-f4420910-2216-4a16-a000-e9a66ddcff2e" class="outline-2">
-<h2 id="h-f4420910-2216-4a16-a000-e9a66ddcff2e">Web Programming</h2>
-<div class="outline-text-2" id="text-h-f4420910-2216-4a16-a000-e9a66ddcff2e">
-<ul class="org-ul">
-<li><a href="mithril-js.html">Mithril.js</a> for SPA</li>
-</ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-09-02 Sat 07:03.</p>
+<p class="postamble">Last Updated 2023-09-02 Sat 07:34.</p>
 </div>
 </body>
 </html>

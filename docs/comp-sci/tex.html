@@ -206,27 +206,38 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -258,6 +269,7 @@
 </ul>
 </li>
 <li><a href="#h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6">4. Equation Indent</a></li>
+<li><a href="#h-cdd388f8-d89c-4cd0-a3d3-0c91c59cc4cc">5. AMSPPT</a></li>
 </ul>
 </div>
 </div>
@@ -266,8 +278,13 @@
 <h2 id="h-84848014-a2ce-403a-9dec-20a86af11ca5"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-84848014-a2ce-403a-9dec-20a86af11ca5">
 <p>
-These are random observations about TeX and LaTeX.
+These are random observations about TeX and LaTeX. Remember:
 </p>
+<ul class="org-ul">
+<li>6 pica = 1inch</li>
+<li>8.5 inches = 51 pica</li>
+<li>11 inches = 66 pica.</li>
+</ul>
 </div>
 </div>
 
@@ -608,7 +625,7 @@ for either situation.
 </p>
 
 
-<div id="org5bfc9ee" class="figure">
+<div id="org504c7b5" class="figure">
 <p><img src="../img/typing-relation-article-cls.png" alt="typing-relation-article-cls.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>Different variants in the typesetting of the typing relation.</p>
@@ -644,9 +661,25 @@ documents, and 2.5em for single column documents.
 </p>
 </div>
 </div>
+
+<div id="outline-container-h-cdd388f8-d89c-4cd0-a3d3-0c91c59cc4cc" class="outline-2">
+<h2 id="h-cdd388f8-d89c-4cd0-a3d3-0c91c59cc4cc"><span class="section-number-2">5.</span> AMSPPT</h2>
+<div class="outline-text-2" id="text-h-cdd388f8-d89c-4cd0-a3d3-0c91c59cc4cc">
+<ul class="org-ul">
+<li><code>\pagewidth{30pc}\pageheight{50.5pc}</code> (<a href="https://ctan.math.washington.edu/tex-archive/macros/amstex/amsppt.sty">source</a>)
+<ul class="org-ul">
+<li>Text width is 30pc = 5 inches</li>
+<li>Text height is 50.5pc = (8 + (1/3)) inches</li>
+</ul></li>
+<li>Inner margin appears to be 1 inch</li>
+<li>outer margin appears to be 1 inch(???)</li>
+<li><code>parindent</code> is 1pc.</li>
+</ul>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-03-09 Thu 09:55.</p>
+<p class="postamble">Last Updated 2023-09-02 Sat 06:43.</p>
 </div>
 </body>
 </html>

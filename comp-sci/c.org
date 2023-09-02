@@ -1,0 +1,99 @@
+#+TITLE: C Programming Language
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-09-02T06:49:39-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Saturday September  2, 2023 at  6:49AM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-14a377e2-c9d5-4e9d-8932-36d37c2faf5a
+:END:
+
+C is arguably the /lingua franca/ of programming.
+
+The "C Abstract Machine" is the hypothetical computer which is described
+by the C standard (C17 5.1.2.3 "Program execution"), which states:
+
+#+begin_quote
+The semantic descriptions in this International Standard describe the
+behavior of an abstract machine in which issues of optimization are
+irrelevant.
+#+end_quote
+
+This abstract machine may, or may not, have any relation to actual
+hardware.
+
+The basic model is that there are two memory locations:
+- The {{{dfn(stack)}}} stores local variables and is cleaned up when the function
+  call terminates
+- The {{{dfn(heap)}}} stores =malloc()= allocated results, must be
+  freed, and is accessed by pointers. Loosely, this intuitively
+  corresponds to RAM.
+
+
+* Dereferencing NULL Pointer
+:PROPERTIES:
+:CUSTOM_ID: h-414e26dd-b4dc-4212-8d7e-41dc60cd773b
+:END:
+
+This leads to "undefined behaviour" according to the C Standard. This
+means it depends on the CPU and other sordid details.
+
+** On x86 Family Architecture
+:PROPERTIES:
+:CUSTOM_ID: h-df00a2fd-d3ca-429c-8f91-21c0c6e022c8
+:END:
+
+But that doesn't stop us from writing some code like:
+
+#+begin_src c
+#include <stdlib.h>
+
+int main() {
+    int *x = NULL;
+    *x = 5;
+    return 0;
+}
+#+end_src
+
+We then check this compiles (using GCC 8.3.0) to:
+
+#+begin_src asm
+; gcc -fverbose-asm -S null.c -o null.s -O1
+main:
+	subq	$40, %rsp	 ;,
+	.seh_stackalloc	40
+	.seh_endprologue
+ ; null.c:3: int main() {
+	call	__main	 ;
+ ; null.c:5:     *x = 5;
+	movl	$5, 0	 ;, MEM[(int *)0B]
+ ; null.c:7: }
+	movl	$0, %eax	 ;,
+	addq	$40, %rsp	 ;,
+	ret	    
+#+end_src
+
+The key line of code is the =movl $5, 0= which tries to store in the
+address at =0= the literal value =5=.
+
+- The pointers refer to a "virtual address", which is translated into
+  "physical addresses" via the operating system (in most modern
+  operating systems); this is done through paging
+- When the translation fails, the CPU raises a {{{dfn(page fault exception)}}}
+  - This triggers a transition from "user mode" to a specific location
+    in the OS kernel's code, as defined by the
+    {{{dfn(interrupt descriptor table)}}}
+- The Operating System kernel regains control and must determine what to
+  do based on the information from the exception and the process's page
+  table.
+  - Windows will (or used to) raise a [[https://learn.microsoft.com/en-us/windows/win32/debug/structured-exception-handling?redirectedfrom=MSDN][structured exception]].
+  - Linux 2.6 had this be a possible exploit, see
+    [[https://web.archive.org/web/20160928150624/https://blogs.oracle.com/ksplice/entry/much_ado_about_null_exploiting1][ Much ado about NULL: Exploiting a kernel NULL dereference]].
