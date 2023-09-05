@@ -304,3 +304,43 @@ So a typical ID could look like \"Org-4nd91V40HI\"."
 
 ;; Avoid exporting the time as a comment in HTML files
 (setq org-export-time-stamp-file nil)
+
+;; For org-mode 9.6.8, they introduced a mathjax template upgrading
+;; Mathjax to version 3...which broke a lot of stuff. This fixes the
+;; broken things.
+(when (boundp 'org-html-mathjax-template)
+  (setq org-html-mathjax-template "<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '%MULTLINEWIDTH'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: '%TAGS',
+      tagSide: '%TAGSIDE',
+      tagIndent: '%TAGINDENT'
+    },
+    chtml: {
+      scale: %SCALE,
+      displayAlign: '%ALIGN',
+      displayIndent: '%INDENT'
+    },
+    svg: {
+      scale: %SCALE,
+      displayAlign: '%ALIGN',
+      displayIndent: '%INDENT'
+    },
+    output: {
+      font: '%FONT',
+      displayOverflow: '%OVERFLOW'
+    }
+  };
+</script>
+
+<script  type=\"text/javascript\"
+  id=\"MathJax-script\"
+  async
+  src=\"%PATH\">
+</script>"))
