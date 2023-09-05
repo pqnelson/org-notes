@@ -239,6 +239,8 @@
 <li><a href="#h-8a85bb78-4f0c-4595-86f8-a7f8c304f80b">4.2.1. Emacs 28</a></li>
 </ul>
 </li>
+<li><a href="#h-62fa7326-e681-447e-8ca0-0ff03c33e19a">4.3. Emacs 29</a></li>
+<li><a href="#h-4dec9f01-2e78-470a-b632-a4a88732e175">4.4. Checking Build Flags</a></li>
 </ul>
 </li>
 <li><a href="#h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9">5. Installing Common Lisp</a>
@@ -349,7 +351,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="orgcbd4f45">
+<pre class="example" id="org6108e7e">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -360,7 +362,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="org030c2bf">
+<pre class="example" id="org6da8de6">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -369,7 +371,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="org8f94a9d">
+<pre class="example" id="org3972a6d">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -570,6 +572,29 @@ When I byte-compile my <code>init.el</code> and my <code>./.emacs</code> file ju
 </div>
 </div>
 </div>
+
+<div id="outline-container-h-62fa7326-e681-447e-8ca0-0ff03c33e19a" class="outline-3">
+<h3 id="h-62fa7326-e681-447e-8ca0-0ff03c33e19a"><span class="section-number-3">4.3.</span> Emacs 29</h3>
+<div class="outline-text-3" id="text-h-62fa7326-e681-447e-8ca0-0ff03c33e19a">
+<p>
+For my Desktop, I tried:
+</p>
+
+<pre class="example" id="org5d630bc">
+$ ./configure --with-wide-int --with-x-toolkit=lucid --with-gnutls=ifavailable --with-m17n-flt --with-modules --with-json --with-threads --with-compress-install "CFLAGS=-O3 -pipe -mtune=native -march=native -fno-finite-math-only"
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-4dec9f01-2e78-470a-b632-a4a88732e175" class="outline-3">
+<h3 id="h-4dec9f01-2e78-470a-b632-a4a88732e175"><span class="section-number-3">4.4.</span> Checking Build Flags</h3>
+<div class="outline-text-3" id="text-h-4dec9f01-2e78-470a-b632-a4a88732e175">
+<p>
+If you have Emacs already, you can check what flags you enabled when you
+last ran <code>./configure</code> by examining the variable <code>system-configuration-options</code>.
+</p>
+</div>
+</div>
 </div>
 
 <div id="outline-container-h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9" class="outline-2">
@@ -663,7 +688,7 @@ I run into a problem compiling SBCL from the RPi package, experiencing
 an error (as of git commit <code>b430f314c</code>, date Wed Apr 20 03:46:44 2022 +0300):
 </p>
 
-<pre class="example" id="orge9e3ee8">
+<pre class="example" id="org3c334a2">
 ~/src/sbcl $ sh make.sh
 ...
 cc -g -Wall -Wundef -Wsign-compare -Wpointer-arith -O3 -std=gnu99 -fno-pie -I.  -c -o os-common.o os-common.c
@@ -909,7 +934,7 @@ command <code>/opt/vc/bin/vcgencmd measure_temp</code>. I've stuck this into a
 script:
 </p>
 
-<pre class="example" id="org1f80980">
+<pre class="example" id="org7ef4748">
 #!/bin/bash
 
 # ~/temperature.sh
@@ -932,7 +957,7 @@ I couldn't get Mizar working on my Raspberry Pi 2, and it does not work on
 Raspberry Pi 4B either. Get the latest version <a href="http://mizar.uwb.edu.pl/system/index.html#download">here</a> for Linux (ARM).
 </p>
 
-<pre class="example" id="org36de400">
+<pre class="example" id="org1d4552a">
 ~/src/$ mkdir mizar
 ~/src/$ cd mizar
 ~/src/mizar/$ wget mizar-&lt;version&gt;-arm-linux.tar
@@ -947,7 +972,7 @@ Raspberry Pi 4B either. Get the latest version <a href="http://mizar.uwb.edu.pl/
 When I try running, say, <code>mizf</code> on 32-bit mode, I get errors:
 </p>
 
-<pre class="example" id="org63aa381">
+<pre class="example" id="org40a3678">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char.miz
 Illegal instruction
 Illegal instruction
@@ -958,7 +983,7 @@ alex@raspberrypi:~/src/mizar-playground $
 <p>
 In 64-bit mode, I get errors:
 </p>
-<pre class="example" id="org52c96c0">
+<pre class="example" id="org20a75d7">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char
 /usr/local/bin/mizf: 8: makeenv: Exec format error
 /usr/local/bin/mizf: 13: errflag: Exec format error
@@ -979,7 +1004,7 @@ Raspberry Pi. The basic instructions:
 <b>Step 1: install Free Pascal.</b>
 </p>
 
-<pre class="example" id="orgd9d77ca">
+<pre class="example" id="org0b0447e">
 alex@raspberrypi:~$ sudo apt-get update
 alex@raspberrypi:~$ sudo apt-get upgrade
 alex@raspberrypi:~$ sudo apt-get install fpc
@@ -996,7 +1021,7 @@ binaries, but it installs the MML and documentation locally.
 If you tried using the pre-built binaries, then you can skip this step.
 </p>
 
-<pre class="example" id="org470aac3">
+<pre class="example" id="orgc04f514">
 alex@raspberrypi:~ $ cd src
 alex@raspberrypi:~/src $ mkdir mizar
 alex@raspberrypi:~/src $ cd mizar
@@ -1041,7 +1066,7 @@ changes are adding install instructions, the compile script, and
 adjusting two parameters in the code) and run the following commands:
 </p>
 
-<pre class="example" id="orgc038849">
+<pre class="example" id="orgca2cf91">
 alex@raspberrypi:~/src $ git clone https://github.com/CoghettoR/MizarSystem/
 alex@raspberrypi:~/src $ cd MizarSystem
 alex@raspberrypi:~/src/MizarSystem $ time sh compile_rpi.sh
@@ -1065,7 +1090,7 @@ To make Raspberry Pi 4 run in 64-bit mode, add the following line to the
 bottom of your <code>/boot/config.txt</code>:
 </p>
 
-<pre class="example" id="org5debcf7">
+<pre class="example" id="org9883b34">
 arm_64bit=1
 </pre>
 
@@ -1089,7 +1114,7 @@ arm_64bit=1
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-03-04 Sat 09:53.</p>
+<p class="postamble">Last Updated 2023-09-01 Fri 06:28.</p>
 </div>
 </body>
 </html>

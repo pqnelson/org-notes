@@ -206,27 +206,38 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -270,6 +281,7 @@
 <li><a href="#h-e5b7653c-61c9-4ab3-bc0d-7fc41f162ea9">Math.CO Combinatorics</a></li>
 <li><a href="#h-4f2e35f6-82de-4cb6-b32f-f6f39edd0b30">Math.CT Category Theory</a></li>
 <li><a href="#h-6db90c1a-f521-4efe-9c2a-fc00d37070b3">Math.DG Differential Geometry</a></li>
+<li><a href="#h-3886892d-739e-499e-89e0-0b5209831a30">Math.DS Dynamical Systems</a></li>
 <li><a href="#h-5f6e5a83-f5db-4e97-8cde-16ac0f77d9d1">Math.GR Group Theory</a>
 <ul>
 <li><a href="#h-301b95cc-a6a0-42c2-a61e-3f4f274e03f8">Algebraic Groups</a></li>
@@ -371,6 +383,9 @@ in search of our better selves? <br>
 <li>Gilles Barthe, Raphaëlle Crubillé, Ugo Dal Lago, Francesco Gavazzo,<br>
 "On Feller Continuity and Full Abstraction (Long Version)".<br>
 <a href="https://arxiv.org/abs/2207.10590">arXiv:2207.10590</a>, 41 pages</li>
+<li>Jonas Bayer, Aleksey. Gonus, Christoph Benzmüller, Dana S. Scott,<br>
+"Category Theory in Isabelle/HOL as a Basis for Meta-logical Investigation".<br>
+<a href="https://arxiv.org/abs/2306.09074">arXiv:2306.09074</a>, 15 pages.</li>
 <li>Martin Berger, Dominic P. Mulligan,<br>
 "A modest proposal: explicit support for foundational pluralism".<br>
 <a href="https://arxiv.org/abs/2302.10137">arXiv:2302.10137</a>, 18 pages.
@@ -397,6 +412,13 @@ of axiom of choice", or "purely constructive proof".</li>
 <li>Observes that higher-order resolution can fail faster (in finite
 time) than first-order resolution (which requires infinite time),
 and this may lead to a way to determine if a theory is consistent.</li>
+</ul></li>
+<li>Gilles Dowek,<br>
+"The Undecidability of Typability in the Lambda-Pi-Calculus".<br>
+<a href="https://arxiv.org/abs/2306.07599">arXiv:2306.07599</a>, 7 pages.
+<ul class="org-ul">
+<li>Specifically discusses the topic with the Elf programming language
+in mind.</li>
 </ul></li>
 <li>Ciarán Dunne, J. B. Wells,<br>
 "Isabelle/HOL/GST: A Formal Proof Environment for Generalized Set Theories".<br>
@@ -429,6 +451,9 @@ type systems.</li>
 <li>Robert Harper,<br>
 "An Equational Logical Framework for Type Theories".<br>
 <a href="https://arxiv.org/abs/2106.01484">arXiv:2106.01484</a>, 9 pages.</li>
+<li>Alex Hubers, J. Garrett Morris,<br>
+"Generic Programming with Extensible Data Types; Or, Making Ad Hoc Extensible Data Types Less Ad Hoc".<br>
+<a href="https://arxiv.org/abs/2307.08759">arXiv:2307.08759</a>, 29 pages.</li>
 <li>Patricia Johann, Enrico Ghiorzi, Daniel Jeffries,<br>
 "GADTs, Functoriality, Parametricity: Pick Two".<br>
 <a href="https://arxiv.org/abs/2105.03389">arXiv:2105.03389</a>, 16 pages.</li>
@@ -577,6 +602,9 @@ with integrals.</li>
 <li>Aravind Asok, Jean Fasel,<br>
 "Vector bundles on algebraic varieties".<br>
 <a href="https://arxiv.org/abs/2111.03107">arXiv:2111.03107</a>, 20 pages.</li>
+<li>J.-F. Pommaret,<br>
+"Differential Galois Theory and Hopf Algebras for Lie Pseudogroups".<br>
+<a href="https://arxiv.org/abs/2308.03759">arXiv:2308.03759</a>, 33 pages.</li>
 <li>Ravi Vakil's <a href="http://math.stanford.edu/~vakil/216blog/">Rising Sea</a> lecture notes</li>
 </ul>
 </div>
@@ -809,12 +837,26 @@ of Lie's third theorem using homotopic equivalence classes of paths.</li>
 </div>
 </div>
 
+<div id="outline-container-h-3886892d-739e-499e-89e0-0b5209831a30" class="outline-3">
+<h3 id="h-3886892d-739e-499e-89e0-0b5209831a30">Math.DS Dynamical Systems</h3>
+<div class="outline-text-3" id="text-h-3886892d-739e-499e-89e0-0b5209831a30">
+<ul class="org-ul">
+<li>Roberto Camassa, Richard M. McLaughlin,<br>
+"Tauberian identities and the connection to Wile E. Coyote physics".<br>
+<a href="https://arxiv.org/abs/2304.06127">arXiv:2304.06127</a>, 14 pages.</li>
+</ul>
+</div>
+</div>
+
 <div id="outline-container-h-5f6e5a83-f5db-4e97-8cde-16ac0f77d9d1" class="outline-3">
 <h3 id="h-5f6e5a83-f5db-4e97-8cde-16ac0f77d9d1">Math.GR Group Theory</h3>
 <div class="outline-text-3" id="text-h-5f6e5a83-f5db-4e97-8cde-16ac0f77d9d1">
 <ul class="org-ul">
 <li><a href="https://kourovka-notebook.org/">Kourovka Notebook</a> of unsolved problems in group theory</li>
 
+<li>Daniel Allcock, Tathagata Basak,<br>
+"The Deligne-Mostow 9-ball, and the monster".<br>
+<a href="https://arxiv.org/abs/2309.00148">arXiv:2309.00148</a>, 29 pages.</li>
 <li>Simon André, Vincent Guirardel,<br>
 "Finitely generated simple sharply 2-transitive groups".<br>
 <a href="https://arxiv.org/abs/2212.06020">arXiv:2212.06020</a>, 21 pages</li>
@@ -839,6 +881,9 @@ of Lie's third theorem using homotopic equivalence classes of paths.</li>
 <li>Jacques Darné, Martin Palmer, Arthur Soulié,<br>
 "When the lower central series stops".<br>
 <a href="https://arxiv.org/abs/2201.03542">arXiv:2201.03542</a>, 86 pages.</li>
+<li>Tevian Dray, Corinne A. Manogue, Robert A. Wilson,<br>
+"A New Division Algebra Representation of \(E_{6}\)".<br>
+<a href="https://arxiv.org/abs/2309.00078">arXiv:2309.00078</a>, 9 pages.</li>
 <li>Misha Gavrilovich,<br>
 "Expressing the statement of the Feit-Thompson theorem with diagrams in the category of finite groups".<br>
 <a href="https://arxiv.org/abs/1608.05927">arXiv:1608.05927</a>, 8 pages</li>
@@ -941,6 +986,12 @@ of Lie's third theorem using homotopic equivalence classes of paths.</li>
 <li>Peter M. Neumann,<br>
 "Primitive permutation groups of degree 3p".<br>
 <a href="https://arxiv.org/abs/2204.06926">arXiv:2204.06926</a>, 43 pages; unpublished manuscript from 1969.</li>
+<li>Peter M. Neumann,<br>
+"Infinite Permutation Groups".<br>
+<a href="https://arxiv.org/abs/2307.11564">arXiv:2307.11564</a>, lectures notes, 135 pages</li>
+<li>Wolfram Neutsch,<br>
+"Lyons Taming".<br>
+<a href="https://arxiv.org/abs/2307.11399">arXiv:2307.11399</a>, 42 pages.</li>
 <li>Parveen, Jitender Kumar, Siddharth Singh, Xuanlong Ma,<br>
 "Certain properties of the enhanced power graph associated with a finite group".<br>
 <a href="https://arxiv.org/abs/2207.05075">arXiv:2207.05075</a>, 8 pages.</li>
@@ -1035,6 +1086,14 @@ citation in the second draft.)</li>
 <li>Andrew Granville,<br>
 "Accepted proofs: Objective truth, or culturally robust".<br>
 <a href="https://arxiv.org/abs/2305.02115">arXiv:2305.02115</a>, 48 pages.</li>
+<li>Andrei Rodin,<br>
+"Kolmogorov's Calculus of Problems and Its Legacy".<br>
+<a href="https://arxiv.org/abs/2307.09202">arXiv:2307.09202</a>, 66 pages.
+<ul class="org-ul">
+<li>Kolmogorov discussed intuitionistic logic, not in terms of
+"propositions", but in terms of "problems"&#x2026;which is a <b>very clever</b>
+spin on things.</li>
+</ul></li>
 <li>Benjamin Sambale,<br>
 "An invitation to formal power series".<br>
 <a href="https://arxiv.org/abs/2205.00879">arXiv:2205.00879</a>, 61 pages.</li>
@@ -1397,9 +1456,22 @@ Navier-Stokes equations over surface simplicial meshes".<br>
 <h3 id="h-c21a4f00-2a6d-48a7-9a6a-f30ce1805d78">GR-QC General Relativity and Quantum Cosmology</h3>
 <div class="outline-text-3" id="text-h-c21a4f00-2a6d-48a7-9a6a-f30ce1805d78">
 <ul class="org-ul">
+<li>H. Andréka, J. X. Madarász, I. Németi, G. Székely,<br>
+"What are the numbers in which spacetime?".<br>
+<a href="https://arxiv.org/abs/1204.1350">arXiv:1204.1350</a>, 28 pages</li>
 <li>Robert Brandenberger, Paola C. M. Delgado, Alexander Ganz, Chunshan Lin,<br>
 "Graviton to Photon Conversion via Parametric Resonance".<br>
 <a href="https://arxiv.org/abs/2205.08767">arXiv:2205.08767</a>, 7 pages.</li>
+<li>Henrique Gomes, Tim Koslowski,<br>
+"Symmetry Doubling: Doubly General Relativity".<br>
+<a href="https://arxiv.org/abs/1206.4823">arXiv:1206.4823</a>, 24 pages.
+<ul class="org-ul">
+<li>"Doubly General Relativity" in one line: There is a hidden
+BRST-invariance in gravity due to Shape Dynamics</li>
+</ul></li>
+<li>Flavio Mercati,<br>
+"A Shape Dynamics Tutorial".<br>
+<a href="https://arxiv.org/abs/1409.0105">arXiv:1409.0105</a>, 133 pages.</li>
 <li>Aristotelis Panagiotopoulos, George Sparling, Marios Christodoulou,<br>
 "Incompleteness Theorems for Observables in General Relativity".<br>
 <a href="https://arxiv.org/abs/2305.04818">arXiv:2305.04818</a>, 5 pages.
@@ -1467,6 +1539,9 @@ the gravitational field.</li>
 <li>Argues massive Yang-Mills nonrenormalizability originates from
 longitudinal modes.</li>
 </ul></li>
+<li>A. Kempf,<br>
+"A Generalized Shannon Sampling Theorem, Fields at the Planck Scale as Bandlimited Signals".<br>
+<a href="https://arxiv.org/abs/hep-th/9905114">arXiv:hep-th/9905114</a></li>
 <li>Kirill Krasnov, <br>
 "SO(9) characterisation of the Standard Model gauge group". <br>
 <a href="https://arxiv.org/abs/1912.11282">arXiv:1912.11282</a>, 19 pages</li>
@@ -1513,6 +1588,18 @@ longitudinal modes.</li>
 <h3 id="h-6231092f-ce4a-46a0-989b-56b0da7277f7">MATH-PH Mathematical Physics</h3>
 <div class="outline-text-3" id="text-h-6231092f-ce4a-46a0-989b-56b0da7277f7">
 <ul class="org-ul">
+<li>Cecilia Flori,<br>
+"Review of the Topos Approach to Quantum Theory".<br>
+<a href="https://arxiv.org/abs/1106.5660">arXiv:1106.5660</a>, 24 pages.
+<ul class="org-ul">
+<li>Reviews Doering and Isham's approach to quantum theory using
+toposes, which was introduced in a series of papers:
+<a href="https://arxiv.org/abs/quant-ph/0703060">arXiv:quant-ph/0703060</a>, <a href="https://arxiv.org/abs/quant-ph/0703062">arXiv:quant-ph/0703062</a>,
+<a href="https://arxiv.org/abs/quant-ph/0703064">arXiv:quant-ph/0703064</a>, <a href="https://arxiv.org/abs/quant-ph/0703066">arXiv:quant-ph/0703066</a>,</li>
+<li>Kochen-Specker theorem in this framework:
+<a href="https://arxiv.org/abs/quant-ph/9803055">arXiv:quant-ph/9803055</a>, <a href="https://arxiv.org/abs/quant-ph/9808067">arXiv:quant-ph/9808067</a>,
+<a href="https://arxiv.org/abs/quant-ph/9911020">arXiv:quant-ph/9911020</a>, <a href="https://arxiv.org/abs/quant-ph/0107123">arXiv:quant-ph/0107123</a></li>
+</ul></li>
 <li>Jean Petitot,<br>
 "Noncommutative geometry and physics".<br>
 <a href="https://arxiv.org/abs/1505.00132">arXiv:1505.00132</a>, 38 pages.</li>
@@ -1527,13 +1614,27 @@ longitudinal modes.</li>
 <li>Brian C. Hall,<br>
 "Holomorphic Methods in Mathematical Physics".<br>
 <a href="https://arxiv.org/abs/quant-ph/9912054">arXiv:quant-ph/9912054</a>, 59 pages.</li>
+<li>Gerard 't Hooft,<br>
+"The Cellular Automaton Interpretation of Quantum Mechanics".<br>
+<a href="https://arxiv.org/abs/1405.1548">arXiv:1405.1548</a>, 259 pages.</li>
+<li>Daniela Frauchiger, Renato Renner,<br>
+"Quantum theory cannot consistently describe the use of itself".<br>
+<a href="https://arxiv.org/abs/1604.07422">arXiv:1604.07422</a>, 19 pages
+<ul class="org-ul">
+<li>See also: Alexandru Baltag, Sonja Smets,<br>
+"Logic meets Wigner's Friend (and their Friends)".<br>
+<a href="https://arxiv.org/abs/2307.01713">arXiv:2307.01713</a>, 27 pages.</li>
+</ul></li>
+<li>Igor Frolov, Albert Schwarz,<br>
+"Quantum mechanics and quantum field theory. Algebraic and geometric approaches".<br>
+<a href="https://arxiv.org/abs/2301.03804">arXiv:2301.03804</a>, 100 pages.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-05-24 Wed 10:02.</p>
+<p class="postamble">Last Updated 2023-09-05 Tue 08:23.</p>
 </div>
 </body>
 </html>
