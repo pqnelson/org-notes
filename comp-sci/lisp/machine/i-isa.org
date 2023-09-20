@@ -210,7 +210,49 @@ Returns ~nil~ or an element of ~arg2~ whose ~car~ is ~eql~ to
   16. plusp
   17. minusp
   18. zerop
-      
+
+** eq, eq-no-pop
+:PROPERTIES:
+:CUSTOM_ID: h-316cb757-fd1e-4631-938d-5844e24beb29
+:END:
+
+Operates on top two elements of the stack.
+
+- ~arg1~ any data type
+- ~arg2~ any data type
+
+Pushes ~t~ on the stack if the operands reference the same Lisp object;
+otherwise, pushes ~nil~ on the stack.
+
+The no-pop version leaves the first argument ~arg1~ on the stack. (So,
+presumably, ~arg2~ /is/ popped off the stack?)
+
+** eql, eql-no-pop
+:PROPERTIES:
+:CUSTOM_ID: h-1bdb6e09-99c2-44bc-9d85-44190a889e5e
+:END:
+
+Arguments:
+- ~arg1~ any data type
+- ~arg2~ any data type
+
+Returns ~t~ if the two arguments are ~eq~ or if they are numbers of the
+same type with the same value; otherwise returns ~nil~.
+
+Note: for ~dtp-single-float~, ~+0~ and ~-0~ are not ~eql~. Also ~(eql 0 0.0)~
+is false.
+
+** equal-number, equal-number-no-pop
+:PROPERTIES:
+:CUSTOM_ID: h-188d1518-b176-49ce-9c6b-67539e920b74
+:END:
+
+Tests if top two elements of the stack are equals as numeric
+quantities. Note that ~(equal-number 0 0.0)~ --- which is also written 
+as ~(= 0 0.0)~ --- is true, in contrast to ~(eql 0 0.0) which is false.
+
+The no-pop version leaves the first argument on the stack.
+
 
 * Numeric Operations
 :PROPERTIES:
@@ -329,6 +371,20 @@ Returns ~nil~ or an element of ~arg2~ whose ~car~ is ~eql~ to
 4. %block-n-read-test (four instructions)
 5. %block-n-write (four instructions)
 
+** %block-n-write
+:PROPERTIES:
+:CUSTOM_ID: h-7ebd551c-1cdc-439c-8f48-0d8b528f6d61
+:END:
+
+This takes 1 argument. It writes ~arg~ into the word addressed by the
+contents of the Block Address Register (BAR) specified by ~n~, where ~n~
+is an integer between 0 and 3 inclusive that is part of the opcode. All
+40 bits (including the cdr code) of this word are written into memory.
+
+The specified BAR is incremented as a side effect.
+
+If ~arg~ is immediate, the tag bits will specify ~dtp-fixnum~ and ~cdr-next~.
+
 * Function-Calling Instructions
 :PROPERTIES:
 :CUSTOM_ID: h-156c4efb-e6a9-441e-a656-826781d32626
@@ -360,7 +416,7 @@ Returns ~nil~ or an element of ~arg2~ whose ~car~ is ~eql~ to
 :CUSTOM_ID: h-a8d90831-0710-4cf0-ae84-5b493fca1ea1
 :END:
 
-1. bind-Iocative-to-value
+1. bind-locative-to-value
 2. bind-locative
 3. unbind-n
 4. ~%restore-binding-stack~
@@ -433,6 +489,54 @@ Returns ~nil~ or an element of ~arg2~ whose ~car~ is ~eql~ to
 25. %jump
 26. %check-preempt-request
 27. %halt
+
+** %allocate-list-block
+:PROPERTIES:
+:CUSTOM_ID: h-9b37c6f3-0355-41e8-84b7-6e7417c4e00b
+:END:
+
+Arguments:
+
+- ~arg1~ any type
+- ~arg2~ is a ~dtp-fixnum~
+
+Using three internal registers, named ~list-cache-area~,
+~list-cache-length~, and
+~list-cache-address~, this instruction:
+
+1. Takes an instruction exception (post trap) unless
+   ~(eq arg1 list-cache-area)~.
+2. Computes ~list-cache-length~ minus ~arg2~. Takes an instruction
+   exception if the result is negative. Stores the result into
+   ~list-cache-length~ unless an exception is taken.
+3. Pops the arguments and pushes the ~list-cache-address~. Writes the
+   ~list-cache-address~ into BAR-1 (Block-Address-Register-1). Sets the
+   control-register trap-mode field to ~(max 1 current-trap-mode)~ so that
+   there can be no interrupts until storage is initialized.
+   - There are 4 BAR registers; so if we wanted to write to the newly
+     allocated object, we would need to use ~%block-1-write~. (This then
+     increments the BAR-1 register to point at the next word allocated.)
+4. Stores (~list-cache-address~ + ~arg2~) into ~list-cache-address~ (~arg2~ must
+   be latched since the third step may overwrite its original location
+   in the stack).
+   
+
+This is useful for the implementation of the ~cons~ function (remember,
+~prog1~ is a macro which sequentially evaluates the forms, but returns
+the result of the first form):
+
+#+begin_src lisp
+(defun cons (car cdr)
+  (%set-cdr-code-normal car)
+  (%set-cdr-code-nil cdr)
+  (%make-pointer dtp-list
+                 (prog1 (%allocate-list-block default-cons-area 2)
+                        (%block-1-write car)
+                        (%block-1-write cdr))))
+#+end_src
+
+Note that ~%make-pointer~ is ~%set-tag~ with the arguments in reverse order.
+
 
 * References
 :PROPERTIES:

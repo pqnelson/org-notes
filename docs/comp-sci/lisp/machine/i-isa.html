@@ -233,7 +233,13 @@
 <li><a href="#h-c371f778-b6f0-41f2-9908-d2fdfeebb912">2.10. assoc</a></li>
 </ul>
 </li>
-<li><a href="#h-ebf99c94-fc15-4654-b755-44d6ae5864a5">3. Predicate functions</a></li>
+<li><a href="#h-ebf99c94-fc15-4654-b755-44d6ae5864a5">3. Predicate functions</a>
+<ul>
+<li><a href="#h-316cb757-fd1e-4631-938d-5844e24beb29">3.1. eq, eq-no-pop</a></li>
+<li><a href="#h-1bdb6e09-99c2-44bc-9d85-44190a889e5e">3.2. eql, eql-no-pop</a></li>
+<li><a href="#h-188d1518-b176-49ce-9c6b-67539e920b74">3.3. equal-number, equal-number-no-pop</a></li>
+</ul>
+</li>
 <li><a href="#h-4989fca9-0106-4d44-a109-7639b21ebd14">4. Numeric Operations</a></li>
 <li><a href="#h-23899ad2-6caa-490a-a6aa-a20393731715">5. Data-Movement Instructions</a></li>
 <li><a href="#h-3b1b345d-f35f-4288-a2b5-8ee6ce9b5156">6. Field-Extraction Instructions</a></li>
@@ -245,7 +251,11 @@
 <li><a href="#h-a781663f-2bda-4088-b3f2-e6bba3eda406">12. Catch Instructions</a></li>
 <li><a href="#h-3fcb3079-7171-4951-93f2-83c8027f87eb">13. Lexical Variable Accessors</a></li>
 <li><a href="#h-5fdb8f97-5a9d-49db-94ac-572c361ecd5d">14. Instance Variable Accessors</a></li>
-<li><a href="#h-6ce93f65-7fee-4e24-9b15-2b4fa163a6fc">15. Sub primitive Instructions</a></li>
+<li><a href="#h-6ce93f65-7fee-4e24-9b15-2b4fa163a6fc">15. Sub primitive Instructions</a>
+<ul>
+<li><a href="#h-9b37c6f3-0355-41e8-84b7-6e7417c4e00b">15.1. %allocate-list-block</a></li>
+</ul>
+</li>
 <li><a href="#h-ea649e86-e4bb-4287-aefc-822da69acef5">16. References</a></li>
 </ul>
 </div>
@@ -518,6 +528,68 @@ Returns <code>nil</code> or an element of <code>arg2</code> whose <code>car</cod
 </ol></li>
 </ul>
 </div>
+
+<div id="outline-container-h-316cb757-fd1e-4631-938d-5844e24beb29" class="outline-3">
+<h3 id="h-316cb757-fd1e-4631-938d-5844e24beb29"><span class="section-number-3">3.1.</span> eq, eq-no-pop</h3>
+<div class="outline-text-3" id="text-h-316cb757-fd1e-4631-938d-5844e24beb29">
+<p>
+Operates on top two elements of the stack.
+</p>
+
+<ul class="org-ul">
+<li><code>arg1</code> any data type</li>
+<li><code>arg2</code> any data type</li>
+</ul>
+
+<p>
+Pushes <code>t</code> on the stack if the operands reference the same Lisp object;
+otherwise, pushes <code>nil</code> on the stack.
+</p>
+
+<p>
+The no-pop version leaves the first argument <code>arg1</code> on the stack. (So,
+presumably, <code>arg2</code> <i>is</i> popped off the stack?)
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-1bdb6e09-99c2-44bc-9d85-44190a889e5e" class="outline-3">
+<h3 id="h-1bdb6e09-99c2-44bc-9d85-44190a889e5e"><span class="section-number-3">3.2.</span> eql, eql-no-pop</h3>
+<div class="outline-text-3" id="text-h-1bdb6e09-99c2-44bc-9d85-44190a889e5e">
+<p>
+Arguments:
+</p>
+<ul class="org-ul">
+<li><code>arg1</code> any data type</li>
+<li><code>arg2</code> any data type</li>
+</ul>
+
+<p>
+Returns <code>t</code> if the two arguments are <code>eq</code> or if they are numbers of the
+same type with the same value; otherwise returns <code>nil</code>.
+</p>
+
+<p>
+Note: for <code>dtp-single-float</code>, <code>+0</code> and <code>-0</code> are not <code>eql</code>. Also <code>(eql 0 0.0)</code>
+is false.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-188d1518-b176-49ce-9c6b-67539e920b74" class="outline-3">
+<h3 id="h-188d1518-b176-49ce-9c6b-67539e920b74"><span class="section-number-3">3.3.</span> equal-number, equal-number-no-pop</h3>
+<div class="outline-text-3" id="text-h-188d1518-b176-49ce-9c6b-67539e920b74">
+<p>
+Tests if top two elements of the stack are equals as numeric
+quantities. Note that <code>(equal-number 0 0.0)</code> &#x2014; which is also written 
+as <code>(= 0 0.0)</code> &#x2014; is true, in contrast to ~(eql 0 0.0) which is false.
+</p>
+
+<p>
+The no-pop version leaves the first argument on the stack.
+</p>
+</div>
+</div>
 </div>
 
 
@@ -682,7 +754,7 @@ Returns <code>nil</code> or an element of <code>arg2</code> whose <code>car</cod
 <h2 id="h-a8d90831-0710-4cf0-ae84-5b493fca1ea1"><span class="section-number-2">11.</span> Binding Instructions</h2>
 <div class="outline-text-2" id="text-h-a8d90831-0710-4cf0-ae84-5b493fca1ea1">
 <ol class="org-ol">
-<li>bind-Iocative-to-value</li>
+<li>bind-locative-to-value</li>
 <li>bind-locative</li>
 <li>unbind-n</li>
 <li><code>%restore-binding-stack</code></li>
@@ -765,6 +837,61 @@ Returns <code>nil</code> or an element of <code>arg2</code> whose <code>car</cod
 <li>%halt</li>
 </ol>
 </div>
+
+<div id="outline-container-h-9b37c6f3-0355-41e8-84b7-6e7417c4e00b" class="outline-3">
+<h3 id="h-9b37c6f3-0355-41e8-84b7-6e7417c4e00b"><span class="section-number-3">15.1.</span> %allocate-list-block</h3>
+<div class="outline-text-3" id="text-h-9b37c6f3-0355-41e8-84b7-6e7417c4e00b">
+<p>
+Arguments:
+</p>
+
+<ul class="org-ul">
+<li><code>arg1</code> any type</li>
+<li><code>arg2</code> is a <code>dtp-fixnum</code></li>
+</ul>
+
+<p>
+Using three internal registers, named <code>list-cache-area</code>,
+<code>list-cache-length</code>, and
+<code>list-cache-address</code>, this instruction:
+</p>
+
+<ol class="org-ol">
+<li>Takes an instruction exception (post trap) unless
+<code>(eq arg1 list-cache-area)</code>.</li>
+<li>Computes <code>list-cache-length</code> minus <code>arg2</code>. Takes an instruction
+exception if the result is negative. Stores the result into
+<code>list-cache-length</code> unless an exception is taken.</li>
+<li>Pops the arguments and pushes the <code>list-cache-address</code>. Writes the
+<code>list-cache-address</code> into BAR-1 (Block-Address-Register-1). Sets the
+control-register trap-mode field to <code>(max 1 current-trap-mode)</code> so that
+there can be no interrupts until storage is initialized.</li>
+<li>Stores (<code>list-cache-address</code> + <code>arg2</code>) into <code>list-cache-address</code> (<code>arg2</code> must
+be latched since the third step may overwrite its original location
+in the stack).</li>
+</ol>
+
+
+<p>
+This is useful for the implementation of the <code>cons</code> function.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">cons</span> (car cdr)
+  (%set-cdr-code-normal car)
+  (%set-cdr-code-nil cdr)
+  (%make-pointer dtp-list
+                 (<span class="org-keyword">prog1</span> (%allocate-list-block default-cons-area 2)
+                        (%block-1-write car)
+                        (%block-1-write cdr))))
+</pre>
+</div>
+
+<p>
+Note that <code>%make-pointer</code> is <code>%set-tag</code> with the arguments in reverse order.
+</p>
+</div>
+</div>
 </div>
 
 <div id="outline-container-h-ea649e86-e4bb-4287-aefc-822da69acef5" class="outline-2">
@@ -782,7 +909,7 @@ documentation.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-08-30 Wed 16:14.</p>
+<p class="postamble">Last Updated 2023-09-19 Tue 09:44.</p>
 </div>
 </body>
 </html>
