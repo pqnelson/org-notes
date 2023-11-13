@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Topology Rosetta Stone - Mizar</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Topology Rosetta Stone - Mizar</h1>
+
+<div id="outline-container-h-d8724669-cfaa-429c-a9da-1280e6d5c947" class="outline-2">
+<h2 id="h-d8724669-cfaa-429c-a9da-1280e6d5c947">Overview</h2>
+<div class="outline-text-2" id="text-h-d8724669-cfaa-429c-a9da-1280e6d5c947">
+<p>
+This is just enumerating results, in the order found in Munkres's
+<i>Topology</i>, and their corresponding formalization in Mizar.
+</p>
+
+<p>
+Some notions are implicit in Munkres's book, and Mizar gives us an
+explicit definition. To indicate this, I will use "implicit definition"
+as the label of the item.
+</p>
+
+<p>
+Probably the most important thing missing in Mizar is Urysohn's
+metrization theorem.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-e069398f-5504-4884-9001-8e6d9c2de541" class="outline-2">
+<h2 id="h-e069398f-5504-4884-9001-8e6d9c2de541">&sect;12 Topological Spaces</h2>
+<div class="outline-text-2" id="text-h-e069398f-5504-4884-9001-8e6d9c2de541">
+<ul class="org-ul">
+<li><p>
+<b>Definition.</b> A <dfn>Topology</dfn> on a set \(X\) is a family of
+subsets \(\mathcal{T}\) such that
+</p>
+<ol class="org-ol">
+<li>\(X\in\mathcal{T}\) and \(\emptyset\in\mathcal{T}\)</li>
+<li>for any family of subsets of \(\mathcal{T}\), their union is also in \(\mathcal{T}\)</li>
+<li>intersections of finitely man elements of \(\mathcal{T}\) are also in
+\(\mathcal{T}\)</li>
+</ol>
+
+<p>
+Together, \(X\) and a particular topology form a <dfn>Topological Space</dfn>
+</p>
+<ul class="org-ul">
+<li>The idiomatic Mizar formalization begins with defining the data as
+<a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#L1"><code>TopStruct</code></a> and the axioms as an attribute <a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#V2"><code>TopSpace-like</code></a>, then
+bundle them together as a <a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#NM1"><code>TopSpace</code></a>.</li>
+<li>Remember, for 1-sorted objects <code>X</code>, we write <code>[#] X</code> for the
+underlying set, and we write <code>{} X</code> for the empty subset of the
+underlying set.</li>
+<li>We don't actually need to specify \(\emptyset\in\mathcal{T}\) as this
+can be proven (<a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#T1"><code>PRE_TOPC:1</code></a>).</li>
+</ul></li>
+<li><b>Definition.</b> Given a topological space \((X, \mathcal{T})\) we say a
+subset \(U\subset X\) is <dfn>Open</dfn> if it is a member of the
+topology \(U\in\mathcal{T}\)
+(<a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#V3"><code>PRE_TOPC:def 2</code></a>)</li>
+<li>Example: the discrete topology (<a href="http://mizar.uwb.edu.pl/version/current/html/tdlat_3.html#V1"><code>TDLAT_3:def 1</code></a>) is just the powerset,
+and the ant-discrete topology (<a href="http://mizar.uwb.edu.pl/version/current/html/tdlat_3.html#V2"><code>TDLAT_3:def 2</code></a>) is just \(\{X,\emptyset\}\)</li>
+<li>Example: Finite-complement topology doesn't seem to be formalized in Mizar</li>
+<li><b>Definition.</b> Let \(\mathcal{T}_{1}\) and \(\mathcal{T}_{2}\) be
+topologies on the same set \(X\). Then we say \(\mathcal{T}_{1}\) is
+<dfn>Finer</dfn> than \(\mathcal{T}_{2}\) if
+\(\mathcal{T}_{1}\subset\mathcal{T}_{2}\) (<a href="http://mizar.uwb.edu.pl/version/current/html/setfam_1.html#R1"><code>SETFAM_1:def 2</code></a>) and we say
+\(\mathcal{T}_{2}\) is <dfn>Coarser</dfn> than \(\mathcal{T}_{1}\) (<a href="http://mizar.uwb.edu.pl/version/current/html/setfam_1.html#R2"><code>SETFAM_1:def 3</code></a>).</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-8cfbaa13-45c8-4c21-8abc-4617a54bbe0b" class="outline-2">
+<h2 id="h-8cfbaa13-45c8-4c21-8abc-4617a54bbe0b">&sect;13 Basis for Topologies</h2>
+<div class="outline-text-2" id="text-h-8cfbaa13-45c8-4c21-8abc-4617a54bbe0b">
+<ul class="org-ul">
+<li><b>Implicit Definition.</b> Let \(X\) be a non-empty set and \(A\) be a family
+of subsets of \(X\). We call the <dfn>Union Closure</dfn> of \(A\) to be a
+subset family of \(X\) denoted \(\operatorname{UniCl}(A)\) such that
+\(x\in\operatorname{UniCl}(A)\) iff there exists a family \(Y\) of subsets
+of \(X\) such that \(Y\subset A\) and \(x\in \bigcup Y\) (<a href="http://mizar.uwb.edu.pl/version/current/html/cantor_1.html#K1"><code>CANTOR_1:def 1</code></a>).</li>
+<li><b>Implicit Definition.</b> Let \(X\) be a non-empty set and \(A\) a family of
+subsets of \(X\). We call the <dfn>Finite-intersection closure</dfn> of
+\(A\) to be a subset family of \(X\) denoted \(\operatorname{FinMeetCl}(A)\)
+such that \(x\in\operatorname{FinMeetCl}(A)\) iff there is a family \(Y\)
+of subsets of \(X\) such that \(Y\subset A\) and \(Y\) is finite and
+\(x\in\bigcap Y\) (<a href="http://mizar.uwb.edu.pl/version/current/html/cantor_1.html#K2"><code>CANTOR_1:def 3</code></a>).</li>
+<li><p>
+<b>Definition.</b> Let \(X\) be a set. A <dfn>Basis</dfn> for some topology
+on \(X\) is a family \(\mathcal{B}\) of subsets of \(X\) such that
+</p>
+<ol class="org-ol">
+<li>for each \(x\in X\) there exists a \(B\in\mathcal{B}\) such that \(x\in B\)</li>
+<li>for each \(x\in X\) and \(B_{1},B_{2}\in\mathcal{B}\) such that
+\(x\in B_{1}\cap B_{2}\), there exists a \(B_{3}\in\mathcal{B}\) such that
+\(x\in B_{3}\) and \(B_{3}\subset B_{1}\cap B_{2}\).</li>
+</ol>
+
+<p>
+Then the <dfn>Topology Generated</dfn> by \(\mathcal{B}\) is defined as
+the family \(\mathcal{T}\) of subsets of \(X\) such that for each \(U\subset X\) we have
+\(U\in\mathcal{T}\) iff for each \(x\in X\) such that \(x\in U\) there
+exists a basis element \(B\in\mathcal{B}\) such that \(x\in B\subset U\).
+</p>
+<ul class="org-ul">
+<li>Mizar defines the basis for a topological space in <a href="http://mizar.uwb.edu.pl/version/current/html/cantor_1.html#NM1"><code>CANTOR_1</code></a> as a
+family of open sets (which makes it a subset of the topology) such
+that the topology is a subset of its union closure
+(<a href="http://mizar.uwb.edu.pl/version/current/html/cantor_1.html#V1"><code>CANTOR_1:def 2</code></a>) which is a fancy way to say its union closure is
+the topology.</li>
+</ul></li>
+<li><b>Lemma 13.1.</b> Let \(X\) be a set, \(\mathcal{B}\) a basis for a topology
+\(\mathcal{T}\) on \(X\). Then \(\mathcal{T}\) is the collection of all
+possible unions of elements of \(\mathcal{B}\) (i.e., \(\mathcal{T}\) is
+the union closure of \(\mathcal{B}\)). (This can be taken as the
+defining property of the basis, <a href="http://mizar.uwb.edu.pl/version/current/html/cantor_1.html#V1"><code>CANTOR_1:def 2</code></a>)</li>
+<li><b>Lemma 13.2.</b> Let \((X,\mathcal{T})\) be a topological space, let
+\(\mathcal{C}\) be a collection of subsets of \(X\). If for each \(x\in X\)
+and for each \(U\in\mathcal{T}\) such that \(x\in U\) there exists a
+\(C\in\mathcal{C}\) such that \(x\in U\subset C\), then \(\mathcal{C}\) is a
+basis for \((X, \mathcal{T})\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Lemma 13.3.</b> Let \(\mathcal{T}_{1}\), \(\mathcal{T}_{2}\) be topologies
+on \(X\) with bases \(\mathcal{B}_{1}\), \(\mathcal{B}_{2}\)
+respectively. Then \(\mathcal{T}_{2}\) is finer than \(\mathcal{T}_{1}\)
+if and only if for each \(x\in X\) and \(B_{1}\in\mathcal{B}_{1}\) there
+exists a \(B_{2}\in\mathcal{B}_{2}\) such that \(x\in B_{2}\) and
+\(B_{2}\subset B_{1}\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> The <dfn>Standard Topology</dfn> on \(\mathbb{R}\) is the
+topology generated by the basis \(\mathcal{B}=\{(a,b)\mid a,b\in\mathbb{R}\}\)
+given by all open intervals of \(\mathbb{R}\).
+<ul class="org-ul">
+<li>Mizar defines the real numbers equipped with the standard topology
+as the topological space <code>R^1</code> (<a href="http://mizar.uwb.edu.pl/version/current/html/topmetr.html#K3"><code>TOPMETR:def 6</code></a>).</li>
+</ul></li>
+<li>Neither the lower-limit topology (generated by all intervals \([a,b)\))
+nor the K-topology appear to be defined in Mizar. <span class="missing">Missing from Mizar</span></li>
+<li><b>Lemma 13.4.</b> \(\mathbb{R}_{\ell}\) and \(\mathbb{R}_{K}\) are finer than
+\(\mathbb{R}\), but incomparable to each other.</li>
+<li><p>
+<b>Definition.</b> A <dfn>Subbasis</dfn> (or <dfn>Prebasis</dfn>) \(\mathcal{S}\) for a topology on
+\(X\) is a collection of subsets of \(X\) such that \(\bigcup\mathcal{S}=X\)
+(<a href="http://mizar.uwb.edu.pl/version/current/html/cantor_1.html#NM2"><code>CANTOR_1</code></a> and <a href="http://mizar.uwb.edu.pl/version/current/html/cantor_1.html#V2"><code>CANTOR_1:def 4</code></a>).
+</p>
+
+<p>
+The <dfn>Topology Generated by a Prebasis</dfn> is the collection
+\(\mathcal{T}\) of arbitrary unions of finite intersections of subbasis
+elements. (<a href="http://mizar.uwb.edu.pl/version/current/html/cantor_1.html#T18"><code>CANTOR_1:18</code></a>)
+</p></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-60708636-c121-425e-8072-e0c766a712ab" class="outline-2">
+<h2 id="h-60708636-c121-425e-8072-e0c766a712ab">&sect;15 The Product Topology on \(X\times Y\)</h2>
+<div class="outline-text-2" id="text-h-60708636-c121-425e-8072-e0c766a712ab">
+<ul class="org-ul">
+<li><b>Definition.</b> Let \((X,\mathcal{T}_{X})\) and \((Y,\mathcal{T}_{Y})\) be
+topological spaces. The <dfn>Product Topology</dfn> on \(X\times Y\) is
+the topology having as its basis the collection \(\mathcal{B}\) of all
+sets of the form \(U\times V\) where \(U\in\mathcal{T}_{X}\) and \(V\in\mathcal{T}_{Y}\).
+We call \(X\times Y\) equipped with the product topology the
+<dfn>Product Space</dfn>.
+<ul class="org-ul">
+<li>The Cartesian product \(X\times Y\) of sets in Mizar is <code>[:X,Y:]</code></li>
+<li>The product space is defined in <a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_1.html#K2"><code>BORSUK_1:def 2</code></a></li>
+</ul></li>
+<li><b>Theorem 15.1.</b> Let \(\mathcal{B}\) be a basis for \((X,\mathcal{T}_{X})\)
+and \(\mathcal{C}\) be a basis for \((Y,\mathcal{T}_{Y})\). Then the
+collection \(\mathcal{D}=\{B\times C\mid B\in\mathcal{B},C\in\mathcal{C}\}\)
+is a basis for the product topology on \(X\times Y\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> The <dfn>Projection Maps</dfn> \(\pi_{1}\colon X\times Y\to X\)
+and \(\pi_{2}\colon X\times Y\to Y\) defined by \(\pi_{1}(x,y)=x\) and
+\(\pi_{2}(x,y)=y\) for \(x\in X\) and \(y\in Y\).
+<ul class="org-ul">
+<li>\(\pi_{1}\) is <code>pr1 (X,Y)</code> defined in <a href="http://mizar.uwb.edu.pl/version/current/html/funct_3.html#K7"><code>FUNCT_3:def 4</code></a></li>
+<li>\(\pi_{2}\) is <code>pr2 (X,Y)</code> in Mizar, defined in <a href="http://mizar.uwb.edu.pl/version/current/html/funct_3.html#K8"><code>FUNCT_3:def 5</code></a></li>
+<li>The induced projection mappings on the topologies are defined as
+<code>Pr1(X,Y)</code> and <code>Pr2(X,Y)</code> in <a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_1.html#K8"><code>BORSUK_1:def 4</code></a> and <a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_1.html#K9"><code>BORSUK_1:def 5</code></a>
+and its defining property may be found in Theorem <a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_1.html#T24"><code>BORSUK_1:24</code></a>.</li>
+</ul></li>
+<li><b>Theorem 15.2.</b> The collection \(\mathcal{S}=\{\pi_{1}^{-1}(U)\mid U\in\mathcal{T}_{X}\}\cup\{\pi_{2}^{-1}(V)\mid V\in\mathcal{T}_{Y}\}\)
+is a prebasis for the product topology on \(X\times Y\).
+<span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-28b0b9c0-626b-4f31-b897-d5df48d63e0f" class="outline-2">
+<h2 id="h-28b0b9c0-626b-4f31-b897-d5df48d63e0f">&sect;16 The Subspace Topology</h2>
+<div class="outline-text-2" id="text-h-28b0b9c0-626b-4f31-b897-d5df48d63e0f">
+<ul class="org-ul">
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space, let
+\(Y\subset X\). Then we define the <dfn>Subspace Topology</dfn> of \(Y\)
+consists of the collection \(\mathcal{T}_{Y}=\{Y\cap U\mid U\in\mathcal{T}\}\)
+and it forms a topology on \(Y\). We refer to the topological space
+\((Y,\mathcal{T}_{Y})\) as a <dfn>Subspace</dfn> of \(X\).
+<ul class="org-ul">
+<li>Mizar defines <code>SubSpace of T</code> in <a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#M1"><code>PRE_TOPC:def 4</code></a>.</li>
+</ul></li>
+<li><b>Lemma 16.1.</b> If \(\mathcal{B}\) is a basis for the topology of \(X\),
+then \(\mathcal{B}_{Y}=\{B\cap Y\mid B\in\mathcal{B}\}\) is a basis for
+the subspace topology of \(Y\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Lemma 16.2.</b> Let \((Y,\mathcal{T}_{\text{sub}})\) be a subspace of \((X,\mathcal{T})\). If \(U\) is open in \(Y\) and
+\(Y\) is open in \(X\), then \(U\) is open in \(X\). (<a href="http://mizar.uwb.edu.pl/version/current/html/tsep_1.html#T18"><code>TSEP_1:18</code></a> proves more
+than this)</li>
+<li><b>Theorem 16.3.</b> If \(A\) is a subspace of \(X\) and \(B\) is a subspace of
+\(Y\), then the product topology on \(A\times B\) is the same as the
+topology \(A\times B\) inherits as a subspace of \(X\times Y\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_3.html#T22"><code>BORSUK_3:22</code></a>)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-5b58c44d-594a-4956-9b0d-6cdc39eee2ad" class="outline-2">
+<h2 id="h-5b58c44d-594a-4956-9b0d-6cdc39eee2ad">&sect;17 Closed Sets and Limit Points</h2>
+<div class="outline-text-2" id="text-h-5b58c44d-594a-4956-9b0d-6cdc39eee2ad">
+<ul class="org-ul">
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space, let \(A\) be
+a subset of \(X\). We say \(A\) is <dfn>Closed</dfn> if its complement
+\(X\setminus A\) is open. (<a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#V4"><code>PRE_TOPC:def 3</code></a>)</li>
+<li><b>Theorem 17.1.</b> Let \((X,\mathcal{T})\) be a topological space. Then:
+<ol class="org-ol">
+<li>\(\emptyset\) is closed (registered in <a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#T27"><code>PRE_TOPC</code></a>)</li>
+<li>\(X\) is closed (registered in <a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#T12"><code>PRE_TOPC</code></a>)</li>
+<li>Arbitrary intersections of sets are closed (<a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#T14"><code>PRE_TOPC:14</code></a> and <a href="https://mizar.uwb.edu.pl/version/current/html/tops_2.html#T22"><code>TOPS_2:22</code></a>)</li>
+<li>Finite unions of closed sets are closed (<a href="http://mizar.uwb.edu.pl/version/current/html/tops_2.html#T21"><code>TOPS_2:21</code></a>)</li>
+</ol></li>
+<li><b>Theorem 17.2.</b> Let \((Y,\mathcal{T}_{\text{sub}})\) be a subspace of \((X,\mathcal{T})\). Then a set \(A\) is closed
+in \(Y\) iff there is a closed subset \(B\subset X\) such that \(A=B\cap Y\).
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 17.3.</b> Let \((Y,\mathcal{T}_{\text{sub}})\) be a subspace of \((X,\mathcal{T})\). If \(A\) is closed in \(Y\)
+and \(Y\) is closed in \(X\), then \(A\) is closed in \(X\).
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/tsep_1.html#T8"><code>TSEP_1:8</code></a> proves something more: let \(X_{0}\) is a subspace of \(X\),
+let \(A\subset X\), \(C\subset X\), and \(B\subset X_{0}\) be \(B=A\)
+considered as a subset of \(X_{0}\). If \(C\subset X_{0}\) and \(C\) is
+closed in \(X\), then \(A\) is closed in \(X\) iff \(B\) is closed in \(X_{0}\).</li>
+</ul></li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space, let \(A\) be
+a subset of \(X\).
+<ol class="org-ol">
+<li>The <dfn>Closure</dfn> of \(A\) is the subset \(\operatorname{Cl}(A)\)
+of \(X\) equal to the intersection of all closed subsets of \(X\)
+containing \(A\) (<a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#T16"><code>PRE_TOPC:16</code></a> proves the logical equivalence;
+<code>TOPS_1</code> registers it is a closed subset of \(X\).)
+<ul class="org-ul">
+<li><code>Cl A</code> is defined in <a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#K2"><code>PRE_TOPC:def 7</code></a></li>
+</ul></li>
+<li>The <dfn>Interior</dfn> of \(A\) is the subset
+\(\operatorname{Int}(A)\) of \(X\) equal to the union of all open
+subsets of \(X\) contained in \(X\) (<a href="http://mizar.uwb.edu.pl/version/current/html/tex_4.html#T3"><code>TEX_4:3</code></a> proves this logical equivalence)
+<ul class="org-ul">
+<li><code>Int A</code> is defined as \(X\setminus\operatorname{Cl}(X\setminus A)\) in
+<a href="http://mizar.uwb.edu.pl/version/current/html/tops_1.html#K1"><code>TOPS_1:def 1</code></a></li>
+</ul></li>
+</ol></li>
+<li><b>Theorem 17.4.</b> Let \((Y,\mathcal{T}_{\text{sub}})\) be a subspace of \((X,\mathcal{T})\). Let \(A\) be
+a subset of \(Y\), \(B\) a subset of \(X\) such that \(A=B\). Then
+\(\operatorname{Cl}(A)=\operatorname{Cl}(B)\cap Y\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 17.5.</b> Let \(A\) be a subset of \((X,\mathcal{T})\).
+<ol class="org-ol">
+<li>Then \(x\in\operatorname{Cl}(A)\) iff every open subset \(U\) of \(X\)
+containing \(x\) intersects \(A\) (this is the definition found in <a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#K2"><code>PRE_TOPC:def 7</code></a>)</li>
+<li>If \(\mathcal{B}\) is a basis generating \(\mathcal{T}\), then
+\(x\in\operatorname{Cl}(A)\) iff every basis element
+\(B\in\mathcal{B}\) containing \(x\in B\) intersects \(A\). <span class="missing">Missing from Mizar</span></li>
+</ol></li>
+<li><b>Definition.</b> If \(A\) is a subset of \((X,\mathcal{T})\) and if \(x\in X\),
+we say \(x\) is a <dfn>Limit Point</dfn> of \(A\) (or \(x\) is an
+<dfn>Accumulation Point</dfn> of \(A\)) if every neighborhood of \(x\)
+intersects \(A\) in some other point than \(x\) &#x2014; i.e., if \(x\in\operatorname{Cl}(A\setminus\{x\})\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/topgen_1.html#R1"><code>TOPGEN_1:def 2</code></a>)</li>
+<li><b>Implicit Definition.</b> The <dfn>Derivative</dfn> of a set \(A\) is the
+set of limit points of \(A\) and denoted
+\(\operatorname{Der}(A)\). (<a href="http://mizar.uwb.edu.pl/version/current/html/topgen_1.html#K2"><code>TOPGEN_1:def 3</code></a>)</li>
+<li><b>Theorem 17.6.</b> Let \(A\) be a subset of a topological space
+\((X,\mathcal{T})\). Let \(A'\) be the set of limit points of \(A\). Then
+\(A\cup A'=\operatorname{Cl}(A)\). (<a href="http://mizar.uwb.edu.pl/version/current/html/topgen_1.html#T29"><code>TOPGEN_1:29</code></a>)</li>
+<li><b>Corollary 17.7.</b> A subset of a topological space is closed iff it
+contains all its limit points (<a href="http://mizar.uwb.edu.pl/version/current/html/topgen_4.html#T3"><code>TOPGEN_4:3</code></a>)</li>
+<li><b>Definition.</b> A topological space \((X,\mathcal{T})\) is called
+<dfn>Hausdorff</dfn> (or \(T_{2}\)) if for each distinct pair of points
+\(x_{1},x_{2}\in X\) there exists open sets \(U_{1}\in\mathcal{T}\)
+and \(U_{2}\in\mathcal{T}\) such that \(x_{1}\in U_{1}\) and \(x_{2}\in U_{2}\)
+and \(U_{1}\cap U_{2}=\emptyset\).
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#V8"><code>PRE_TOPC:def 10</code></a> defines <code>T_2</code></li>
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#NV4"><code>COMPTS_1</code></a> introduces <code>Hausdorff</code> as a synonym for <code>T_2</code></li>
+</ul></li>
+<li><b>Theorem 17.8.</b> Every finite point set in a Hausdorff space
+\((X,\mathcal{T})\) is closed.
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/pcomps_1.html#T7"><code>PCOMPS_1:7</code></a> proves singleton subsets are closed, then we can use
+previous results to establish the claim.</li>
+</ul></li>
+<li><b>Implicit Definition.</b> The \(T_{1}\) property is defined and found in
+<a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#V7"><code>PRE_TOPC:def 9</code></a>.</li>
+<li><b>Theorem 17.9.</b> Let \((X,\mathcal{T})\) be a \(T_{1}\) space, let \(A\) be a
+subset of \(X\). Then a point \(x\) is a limit point of \(A\) iff every
+neighborhood of \(x\) contains infinitely many points of \(A\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 17.10.</b> If \((X,\mathcal{T})\) is a Hausdorff space, then a
+sequence of points converges to at most one point of \(X\).
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/frechet2.html#T24"><code>FRECHET_2:24</code></a> proves this</li>
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/frechet.html#V2"><code>FRECHET2:def 2</code></a> defined <code>convergent</code> for a sequence of points</li>
+</ul></li>
+<li><b>Theorem 17.11.</b>
+<ol class="org-ol">
+<li>Every simply ordered set is a Hausdorff space in the order
+topology. <span class="missing">Missing from Mizar</span></li>
+<li>The product of 2 Hausdorff spaces is a Hausdorff space (registered
+in <a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_2.html#FC7"><code>BORSUK_2</code></a>)</li>
+<li>A subspace of a Hausdorff space is Hausdorff (registered in <a href="http://mizar.uwb.edu.pl/version/current/html/jordan.html#CC5"><code>JORDAN</code></a>)</li>
+</ol></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-fa0dd80e-9205-49a1-9a43-d6508966bdd6" class="outline-2">
+<h2 id="h-fa0dd80e-9205-49a1-9a43-d6508966bdd6">&sect;18 Continuous Functions</h2>
+<div class="outline-text-2" id="text-h-fa0dd80e-9205-49a1-9a43-d6508966bdd6">
+<ul class="org-ul">
+<li><b>Definition.</b> Let \((X,\mathcal{T}_{X})\) and \((Y,\mathcal{T}_{Y})\) be
+topological spaces, \(f\colon X\to Y\) be a function. We say \(f\) is
+<dfn>Continuous</dfn> if for each \(V\in\mathcal{T}_{Y}\), its preimage
+under \(f\) is open in \(X\), i.e., \(f^{-1}(V)\in\mathcal{T}_{X}\)
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/tops_2.html#T43"><code>TOPS_2:43</code></a> proves this logical equivalence</li>
+</ul></li>
+<li><b>Theorem 18.1.</b> Let \((X,\mathcal{T}_{X})\) and \((Y,\mathcal{T}_{Y})\) be
+topological space, let \(f\colon X\to Y\). Then the following are
+logically equivalence:
+<ol class="org-ol">
+<li>\(f\) is continuous</li>
+<li>For every subset \(A\) of \(X\), we have
+\(f(\operatorname{Cl}(A))\subset\operatorname{Cl}(f(A))\) (<a href="http://mizar.uwb.edu.pl/version/current/html/tops_2.html#T45"><code>TOPS_2:45</code></a>)</li>
+<li>For every subset \(B\) of \(Y\), we have \(f^{-1}(Y)\) be closed in \(X\)
+(<a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#V5"><code>PRE_TOPC:def 6</code></a>)</li>
+<li>For each \(x\in X\) and \(V\in\mathcal{T}_{Y}\) containing \(f(x)\in V\),
+there is a \(U\in\mathcal{T}_{X}\) such that \(f(U)\subset V\)
+(<a href="http://mizar.uwb.edu.pl/version/current/html/tmap_1.html#T43"><code>TMAP_1:43</code></a>, <a href="http://mizar.uwb.edu.pl/version/current/html/tmap_1.html#T44"><code>TMAP_1:44</code></a>)</li>
+</ol></li>
+<li><p>
+<b>Definition.</b> Let \(f\colon X\to Y\) be a map of topological spaces. We
+call \(f\) a <dfn>Homeomorphism</dfn> if \(f\) is a bijection and \(f\) is
+continuous and \(f^{-1}\) is
+continuous. (<a href="http://mizar.uwb.edu.pl/version/current/html/tops_2.html#V3"><code>TOPS_2:def 5</code></a>)
+</p>
+
+<p>
+In this case, we say \(X\) and \(Y\) <dfn>are Homeomorphic</dfn>.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/t_0topsp.html#R1"><code>T_0TOPSP:def 1</code></a>)
+</p>
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_3.html#R2"><code>BORSUK_3</code></a> establishes reflexivity, symmetry of <code>are_homeomorphic</code></li>
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_3.html#T3"><code>BORSUK_3:3</code></a> proves transitivity of <code>are_homeomorphic</code>, establishing
+it is an equivalence relation</li>
+</ul></li>
+<li><b>Definition.</b> Let \((X,\mathcal{T}_{X})\) and \((Y,\mathcal{T}_{Y})\) be
+topological space, let \(f\colon X\to Y\) be a continuous function. We
+call \(f\) an <dfn>Embedding</dfn> if it is a homeomorphism onto its
+image \(f(X)\) considered as a subspace of \(Y\) equipped with the
+subspace topology.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/compact1.html#V6"><code>COMPACT1:def 7</code></a>)</li>
+<li><b>Theorem 18.2.</b> Let \((X,\mathcal{T}_{X})\), \((Y,\mathcal{T}_{Y})\),
+\((Z,\mathcal{T}_{Z})\) be topological spaces.
+<ol class="org-ol">
+<li>\(f\colon X\to Y\) mapping all of \(X\) to a single point is continuous
+(registered in <a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#FC5"><code>PRE_TOPC</code></a>)</li>
+<li>If \(A\) is a subspace of \(X\), then the inclusion mapping \(j\colon A\to X\)
+is continuous
+(<a href="http://mizar.uwb.edu.pl/version/current/html/tmap_1.html#T87"><code>TMAP_1:87</code></a>)</li>
+<li>If \(f\colon X\to Y\) and \(g\colon Y\to Z\) are both continuous,
+then \(g\circ f\colon X\to Z\) is continuous
+(<a href="http://mizar.uwb.edu.pl/version/current/html/tops_2.html#T46"><code>TOPS_2:46</code></a>)</li>
+<li>If \(f\colon X\to Y\) is continuous and \(A\) is a subspace of \(X\),
+then \(f|_{A}\colon A\to Y\) defined by \(f|_{A}(a)=f(a)\) for \(a\in A\)
+is continuous (registered in <a href="http://mizar.uwb.edu.pl/version/current/html/tmap_1.html#FC2"><code>TMAP_1</code></a>)</li>
+<li>If \(f\colon X\to Y\) is continuous and \(Z\) is a subspace of \(Y\)
+containing \(f(X)\subset Z\), then \(g\colon X\to Z\) defined by
+\(f(x)=g(x)\) for all \(x\in X\) is continuous</li>
+<li>If \(f\colon X\to Y\) is continuous and \(Z\) is a space with \(Y\) as a
+subspace of \(Z\), then the function \(h\colon X\to Z\) defined by
+\(h(x)=f(x)\) for each \(x\in X\) is continuous (this is just \(h=j\circ f\)
+and follows from previous results, see <a href="http://mizar.uwb.edu.pl/version/current/html/tmap_1.html#T86"><code>TMAP_1:86</code></a>)</li>
+<li>The map \(f\colon X\to Y\) is continuous if \(X\) can be written as the
+union of open sets \(U_{\alpha}\) such that \(f|_{U_{\alpha}}\) is
+continuous for each \(\alpha\) <span class="missing">Missing from Mizar</span></li>
+</ol></li>
+<li><b>Theorem 18.3</b> (Pasting Lemma). Let \((X,\mathcal{T}_{X})\) and \((Y,\mathcal{T}_{Y})\)
+be topological spaces.
+Let \(X=A\cup B\) where \(A\) and \(B\) are closed in \((X,\mathcal{T})\).
+Let \(f\colon A\to Y\) and \(g\colon B\to Y\)
+be continuous functions. If \(f(x)=g(x)\) for every \(x\in A\cap B\),
+then \(f\) and \(g\) combine to give a continuous function \(h\colon X\to Y\)
+by setting \(h(x)=f(x)\) if \(x\in A\) and \(h(x)=g(x)\) if \(x\in B\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/tmap_1.html#T134"><code>TMAP_1:134</code></a>)</li>
+<li><b>Theorem 18.4.</b> Let \((A, \mathcal{T}_{A})\), \((X,\mathcal{T}_{X})\), and \((Y,\mathcal{T}_{Y})\)
+be topological spaces.
+Let \(f\colon A\to X\times Y\) be defined by \(f(a)=(f_{1}(a),f_{2}(a))\).
+Then \(f\) is continuous iff the functions \(f_{1}\colon A\to X\) and
+\(f_{2}\colon A\to Y\) are continuous. <span class="missing">Missing from Mizar</span>
+<ul class="org-ul">
+<li>In Mizar, <code>f = &lt;:f1,f2:&gt;</code> according to <a href="http://mizar.uwb.edu.pl/version/current/html/funct_3.html#K13"><code>FUNCT_3:def 7</code></a>.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-f335489c-496a-47a3-85cf-a7742879c4a1" class="outline-2">
+<h2 id="h-f335489c-496a-47a3-85cf-a7742879c4a1">&sect;19 The Product Topology</h2>
+<div class="outline-text-2" id="text-h-f335489c-496a-47a3-85cf-a7742879c4a1">
+<ul class="org-ul">
+<li><b>Definition.</b> Let \(J\) be an indexing set. Given a set \(X\) we define a
+<dfn>J-tuple of X</dfn> to be a function \(\mathbf{x}\colon J\to X\). If
+\(\alpha\in J\), then we write \(x_{\alpha}\) instead of
+\(\mathbf{x}(\alpha)\) and this is called the <dfn>&alpha; coordinate of x</dfn>.
+The set of all \(J\) tuples of \(X\) is denoted \(X^{J}\).
+<ul class="org-ul">
+<li>This is just saying that \(\mathbf{x}\) is a function from \(J\) to \(X\),
+and it's the convention taken by Mizar.</li>
+</ul></li>
+<li><b>Definition.</b> Let \(\{A_{\alpha}\}_{\alpha\in J}\) be an indexed family
+of sets. The <dfn>Cartesian Product</dfn> of this indexed family,
+denoted \(\prod_{\alpha\in J}A_{\alpha}\), is defined to be the set of
+all \(J\) tuples \((x_{\alpha})_{\alpha\in J}\) elements of
+\(X=\bigcup_{\alpha\in J}A_{\alpha}\) such that \(x_{\alpha}\in A_{\alpha}\)
+for each \(\alpha\in J\). (<a href="http://mizar.uwb.edu.pl/version/current/html/card_3.html#K4"><code>CARD_3:def 5</code></a>)</li>
+<li><b>Definition.</b> Let \(\{X_{\alpha}\}_{\alpha\in J}\) be an indexed family
+of topological spaces. Let us take as a basis for a topology on the
+product set \(\prod_{\alpha\in J}X_{\alpha}\) the collections of the
+form \(\prod_{\alpha\in J}U_{\alpha}\) where \(U_{\alpha}\subset X_{\alpha}\)
+is open for each \(\alpha\in J\). The topology generated by this is
+called the <dfn>Box Topology</dfn>. <span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> Let \(\{X_{\alpha}\}_{\alpha\in J}\) be an indexed family
+of topological spaces. Let \(\mathcal{S}_{\beta}\) denote the collection
+\(\mathcal{S}_{\beta}=\{\pi^{-1}_{\beta}(U_{\beta})\mid U_{\beta}\subset X_{\beta}~\mbox{open}\}\)
+and let \(\mathcal{S}=\bigcup_{\beta\in J}\mathcal{S}_{\beta}\).
+The topology generated by the prebasis \(\mathcal{S}\) is called the
+<dfn>Product Topology</dfn> and the resulting topological space
+\((\prod_{\alpha\in J}X_{\alpha},\mathcal{T}_{\text{prod}})\) is called
+the <dfn>Product Space</dfn>.
+<ul class="org-ul">
+<li>(<a href="http://mizar.uwb.edu.pl/version/current/html/waybel18.html#K2"><code>WAYBEL18:def 2</code></a>) defines the prebasis for the product topology</li>
+<li>(<a href="http://mizar.uwb.edu.pl/version/current/html/waybel18.html#K3"><code>WAYBEL18:def 3</code></a>) defines the product space</li>
+</ul></li>
+<li><b>Theorem 19.1.</b> (Comparison of box and product topologies&#x2026;)</li>
+<li><b>Theorem 19.3.</b> Let \(A_{\alpha}\) be subspaces of \(X_{\alpha}\) for each
+\(\alpha\in J\). Then \(\prod A_{\alpha}\) is a subspace of \(\prod X_{\alpha}\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/tops_5.html#T82"><code>TOPS_5:82</code></a>)</li>
+<li><b>Theorem 19.4.</b> If each \(X_{\alpha}\) is a Hausdorff space, then
+\(\prod X_{\alpha}\) is a Hausdorff space in both the product and box
+topologies.
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#CC8"><code>PRE_TOPC</code></a> registers all Hausdorff spaces are \(T_{1}\) and
+<a href="http://mizar.uwb.edu.pl/version/current/html/yellow14.html#T38"><code>YELLOW14:38</code></a> proves the product of \(X_{\alpha}\) all being \(T_{1}\)
+is a \(T_{1}\) space.</li>
+</ul></li>
+<li><b>Theorem 19.5.</b> Let \(\{X_{\alpha}\}_{\alpha\in J}\) be a family of
+topological spaces, let \(A_{\alpha}\subset X_{\alpha}\) be a subset for each
+\(\alpha\in J\). If \(\prod X_{\alpha}\) is given either the box topology
+or product topology, then
+\(\prod\operatorname{Cl}(A_{\alpha}) = \operatorname{Cl}(\prod A_{\alpha})\).
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 19.6.</b> Let \(f\colon A\to\prod X_{\alpha}\) be given by the
+equation \(f(a)=(f_{\alpha}(a))_{\alpha\in J}\) where
+\(f_{\alpha}\colon A\to X_{\alpha}\)
+for each \(\alpha\). Let \(\prod X_{\alpha}\) be given the product
+topology. Then the function \(f\) is continuous iff each \(f_{\alpha}\) is
+continuous.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/waybel18.html#T6"><code>WAYBEL18:6</code></a>)</li>
+<li>Example 2: defines \(\mathbb{R}^{\omega}=\prod_{n\in\mathbb{N}}X_{n}\)
+where \(X_{n}=\mathbb{R}\).</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-7da00635-e423-4498-8466-88581c97674e" class="outline-2">
+<h2 id="h-7da00635-e423-4498-8466-88581c97674e">&sect;20 The Metric Topology</h2>
+<div class="outline-text-2" id="text-h-7da00635-e423-4498-8466-88581c97674e">
+<ul class="org-ul">
+<li><b>Definition.</b> Let \(X\) be a set. A <dfn>Metric</dfn> on \(X\) is a
+function \(d\colon X\times X\to\mathbb{R}\) satisfying:
+<ol class="org-ol">
+<li>\(d(x,x)\geq0\) for every \(x\in X\)</li>
+<li>\(d(x,y)=d(y,x)\) for every \(x,y\in X\)</li>
+<li>\(d(x,y)+d(y,z)\geq d(x,z)\) for every \(x,y,z\in X\)</li>
+</ol></li>
+<li>Given a metric \(d\) on a set \(X\), we call \((X,d)\) a <dfn>Metric Space</dfn>
+<ul class="org-ul">
+<li>As per idiomatic Mizar, <a href="http://mizar.uwb.edu.pl/version/current/html/metric_1.html#L1"><code>METRIC_1</code></a> defines <code>MetrStruct</code> which is the
+pair <code>(X,d)</code> and bundles the appropriate attributes atop it to form
+<code>MetrSpace</code> in a separate <a href="http://mizar.uwb.edu.pl/version/current/html/metric_1.html#NM1">definition</a>.</li>
+</ul></li>
+<li>We call \(d(a,b)\) the <dfn>distance</dfn> between \(a\) and \(b\)
+(<a href="http://mizar.uwb.edu.pl/version/current/html/metric_1.html#K1"><code>METRIC_1:def 1</code></a>)</li>
+<li><b>Definition.</b> Let \(d\) be a metric on \(X\), let \(\varepsilon\gt0\) be real,
+let \(x_{0}\in X\). We define the \(\varepsilon\) <dfn>Ball</dfn> centered
+at \(x_{0}\) to be the set
+\(B_{d}(x_{0},\varepsilon)=\{y\in X\mid d(x_{0},y)\lt\varepsilon\}\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/metric_1.html#K8"><code>METRIC_1:def 14</code></a>)</li>
+<li><b>Definition.</b> Let \((X,d)\) be a metric space. The collection
+\(\mathcal{B}=\{B_{d}(x,\varepsilon)\mid x_{0}\in X, \varepsilon\gt0\}\)
+forms the basis for the <dfn>Metric Topology</dfn> on \(X\) induced by
+\(d\).
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/pcomps_1.html#K2"><code>PCOMPS_1:def 4</code></a> gives the definition <code>Family_open_set</code> for the basis</li>
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/pcomps_1.html#K3"><code>PCOMPS_1:def 5</code></a> gives us the topological space
+\((X,\mathcal{T}_{\text{met}})\) for the metric space \((X,d)\).</li>
+</ul></li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space. We say \(X\)
+is <dfn>Metrizable</dfn> if there exists a metric \(d\) on \(X\) such that
+the metric topology induced by \(d\) is equal to the topology
+\(\mathcal{T}\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/pcomps_1.html#V3"><code>PCOMPS_1:def 8</code></a>)</li>
+<li><p>
+<b>Definition.</b> Let \((X,d)\) be a metric space. A subset \(A\subset X\)
+is called <dfn>Bounded</dfn> if there is some number \(M\gt0\) such that
+\(d(a_{1},a_{2})\leq M\) for every \(a_{1},a_{2}\in A\). (<a href="http://mizar.uwb.edu.pl/version/current/html/tbsp_1.html#V6"><code>TBSP_1:def 6</code></a>)
+</p>
+
+<p>
+If \(A\) is bounded and nonempty, the <dfn>Diameter</dfn> of \(A\) is
+defined to be \(\operatorname{diam}(A)=\sup\{d(a,b)\mid a,b\in A\}\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/tbsp_1.html#K2"><code>TBSP_1:def 8</code></a>)
+</p></li>
+<li><b>Theorem 20.1.</b> Let \((X,d)\) be a metric space. Let \(\bar{d}\colon X\times X\to\mathbb{R}\)
+be defined by \(\bar{d}(x,y)=\min\{d(x,y),1\}\).
+Then \(\bar{d}\) is a metric on \(X\) which induces the same metric
+topology as \(d\). <span class="missing">Missing from Mizar</span>
+<ul class="org-ul">
+<li>We call \(\bar{d}\) the <dfn>Standard Bounded Metric</dfn> associated
+with \(d\). There is a more general notion formalized in Mizar: if
+\(r\gt0\) is some real number, \(\bar{d}_{r}(x,y)=\min\{d(x,y),r\}\)
+is shown to be a metric in <a href="http://mizar.uwb.edu.pl/version/current/html/nagata_1.html#T31"><code>NAGATA_1:31</code></a>.</li>
+</ul></li>
+<li><p>
+<b>Definition.</b> Let \(\vec{x}=(x_{1},\dots,x_{n})\in\mathbb{R}^{n}\). We
+define the <dfn>Norm</dfn> of \(\vec{x}\) by
+\(\|\vec{x}\|=(x_{1}^{2}+\dots+x_{n}^{2})^{1/2}\). (<a href="http://mizar.uwb.edu.pl/version/current/html/euclid.html#K12"><code>EUCLID:def 5</code></a>)
+</p>
+
+<p>
+We define the <dfn>Euclidean Metric</dfn> (or <i>Pythagorean metric</i>)
+on \(\mathbb{R}^{n}\) by \(d(x,y) = \|x-y\|\). (<a href="http://mizar.uwb.edu.pl/version/current/html/euclid.html#K13"><code>EUCLID:def 6</code></a> and
+<a href="http://mizar.uwb.edu.pl/version/current/html/euclid.html#T21"><code>EUCLID:21</code></a> proves it is a metric)
+</p>
+
+<p>
+We define the \(\ell_{\infty}\) metric (or <i>Square Metric</i>) by
+\(\rho(x,y)=\max\{|x_{1}-y_{1}|, \dots, |x_{n}-y_{n}|\}\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/srings_5.html#K25"><code>SRINGS_5:def 20</code></a> and proves it is a metric on \(\mathbb{R}^{n}\) in
+<a href="http://mizar.uwb.edu.pl/version/current/html/srings_5.html#T95"><code>SRINGS_5:95</code></a>)
+</p>
+<ul class="org-ul">
+<li>Note: \((\mathbb{R}^{n}, d)\) as a metric space is defined as <code>Euclid n</code>
+(<a href="http://mizar.uwb.edu.pl/version/current/html/euclid.html#K14"><code>EUCLID:def 7</code></a>)</li>
+<li><code>TOP-REAL n</code> refers to \(\RR^{n}\) as a topological vector space whose
+underlying topological space coincides with that of the metric space
+topology induced by the Euclidean metric
+(<a href="http://mizar.uwb.edu.pl/version/current/html/euclid.html#K15"><code>EUCLID:def 8</code></a>)</li>
+</ul></li>
+<li><b>Lemma 20.2.</b> Let \(d_{1}\) and \(d_{2}\) be metrics on \(X\), let
+\(\mathcal{T}_{1}\) and \(\mathcal{T}_{2}\) be the associated metric
+topologies. Then \(\mathcal{T}_{1}\subset\mathcal{T}_{2}\) if and only
+if for each \(x\in X\) and \(\varepsilon\gt0\) there is a \(\delta\gt0\) such
+that \(B_{d_{1}}(x,\delta)\subset B_{d_{2}}(x,\varepsilon)\).
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 20.3.</b> The topologies induced by the Euclidean and square
+metrics on \(\mathbb{R}^{n}\) are the same as the product topology on \(\mathbb{R}^{n}\).
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/euclid_9.html#T28"><code>EUCLID_9:28</code></a> proves this for the Euclidean metric</li>
+<li><span class="missing">Missing from Mizar</span> for the square metric topology equivalent to the
+product topology</li>
+</ul></li>
+<li><b>Definition.</b> Let \(J\) be an indexing set, let
+\(\mathbf{x}=(x_{\alpha})_{\alpha\in J}\) and
+\(\mathbf{y}=(y_{\alpha})_{\alpha\in J}\) be points of
+\(\mathbb{R}^{J}\). We define a metric \(\bar{\rho}\) on \(\mathbb{R}^{J}\)
+by
+\(\bar{\rho}(\mathbf{x},\mathbf{y})=\sup\{\bar{d}(x_{\alpha},y_{\alpha})\mid\alpha\in J\}\)
+where \(\bar{d}\) is the standard bounded metric on \(\mathbb{R}\). This
+is called the <dfn>Uniform Metric</dfn> on \(\mathbb{R}^{J}\) and it
+induces the <dfn>Uniform Topology</dfn> on \(\mathbb{R}^{J}\).
+<ul class="org-ul">
+<li><span class="missing">Missing from Mizar</span> &#x2014; at least, in this particular formulation. I
+believe that it could be cobbled together using the <code>UNIFORM1</code>,
+<code>UNIFORM2</code>, and <code>UNIFORM3</code> articles.</li>
+</ul></li>
+<li><b>Theorem 20.4.</b> The uniform topology on \(\mathbb{R}^{J}\) is finer than
+the product topology but coareser than the box topology. Further, all
+three topologies are distinct when \(J\) is infinite.
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 20.5.</b> Let \(\bar{d}\) be the standard bounded metric on
+\(\mathbb{R}\). If \(\mathbf{x}\in\mathbb{R}^{\omega}\) and
+\(\mathbf{y}\in\mathbb{R}^{\omega}\), define
+\(D(\mathbf{x},\mathbf{y})=\sup\{\bar{d}(x_{n},y_{n})/n\mid n\in\mathbb{N}\}\).
+Then \(D\) is a metric on \(\mathbb{R}^{\omega}\) which induces the same
+topology as the product topology.
+<span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-8d911f16-fd7a-4676-987f-a02ef15357d6" class="outline-2">
+<h2 id="h-8d911f16-fd7a-4676-987f-a02ef15357d6">&sect;21 The Metric Topology (Continued)</h2>
+<div class="outline-text-2" id="text-h-8d911f16-fd7a-4676-987f-a02ef15357d6">
+<p>
+Several results are said very quickly in passing, without enumerating
+them within a theorem.
+</p>
+
+<ul class="org-ul">
+<li>If \(A\subset X\) is a subset of a metric space, then \(d\) restricts to a
+metric on \(A\). <span class="missing">Missing from Mizar</span></li>
+<li>Metric spaces are Hausdorff. (<a href="http://mizar.uwb.edu.pl/version/current/html/pcomps_1.html#T34"><code>PCOMPS_1:34</code></a>)</li>
+<li>Countable products of metrizable spaces are metrizable. <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 21.1.</b> Let \((X, d_{X})\) and \((Y,d_{Y})\) be metric spaces,
+let \(f\colon X\to Y\) be a function. Then \(f\) is continuous if and only
+if for each \(x\in X\) and \(\varepsilon\gt0\) there exists a \(\delta\gt0\)
+such that for every \(y\in X\) we have \(d_{X}(x,y)\lt\delta\) implies \(d_{Y}(f(x),f(y))\lt\varepsilon\).
+<span class="missing">Missing from Mizar</span></li>
+<li><p>
+<b>Lemma 21.2.</b> Let \((X,\mathcal{T})\) be a topological space, let
+\(A\subset X\) be a subset. If there is a sequence of points \((x_{n})\)
+of \(A\) converging to \(x\), then \(x\in\operatorname{Cl}(A)\). (<a href="http://mizar.uwb.edu.pl/version/current/html/frechet2.html#T13"><code>FRECHET2:13</code></a>)
+</p>
+
+<p>
+If \((X,\mathcal{T})\) is metrizable and \(x\in\operatorname{Cl}(A)\),
+then there exists a sequence of points \((x_{n})\) entirely in \(A\) which
+converges \(x_{n}\to x\). <span class="missing">Missing from Mizar</span>
+</p></li>
+<li><p>
+<b>Theorem 21.3.</b> Let \((X,\mathcal{T}_{X})\) and \((Y,\mathcal{T}_{Y})\) be
+topological spaces, let \(f\colon X\to Y\). If \(f\) is continuous, then
+every convergent sequence \(x_{n}\to x\) in \(X\) maps to a convergent
+sequence \(f(x_{n})\to f(x)\) in \(Y\). (<a href="http://mizar.uwb.edu.pl/version/current/html/frechet2.html#T12"><code>FRECHET2:12</code></a>)
+</p>
+
+<p>
+If \(X\) is metrizable and \(y_{n}\to y\) is a convergent sequence of
+points in \(Y\), then there exists a sequence \(x_{n}\to x\) of points of
+\(X\) such that \(f(x_{n})=y_{n}\) and \(f(x)=y\). <span class="missing">Missing from Mizar</span>
+</p></li>
+<li><b>Lemma 21.4.</b> Addition, subtraction, and multiplication are continuous
+functions \(\mathbb{R}\times\mathbb{R}\to\mathbb{R}\) and division is a
+continuous function of \(\mathbb{R}\times(\mathbb{R}\setminus\{0\})\to\mathbb{R}\).
+<ul class="org-ul">
+<li>This follows immediately from the definition of an <code>AffineMap</code>
+(<a href="http://mizar.uwb.edu.pl/version/current/html/fcont_1.html#K1"><code>FCONT_1:def 4</code></a>)
+which is registered as continuous; division is probably "obviously"
+determined to be continuous, using the identity map being continuous
+and using later results</li>
+</ul></li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space.
+We call \(X\) <dfn>First-Countable</dfn> if it has a countable basis at
+each of its points. (<a href="http://mizar.uwb.edu.pl/version/current/html/frechet.html#V1"><code>FRECHET:def 2</code></a>)</li>
+<li><b>Theorem 21.5.</b> Let \((X,\mathcal{T})\) be a topological space, let
+\(f,g\colon X\to\mathbb{R}\) be continuous functions. Then
+the functions \(f+g\), \(f-g\), \(fg\) defined by pointwise addition,
+subtraction, and multiplication are all continuous functions; further,
+if \(g(x)\neq0\) for every \(x\in X\), then \(f/g\) defined by pointwise
+division is continuous.
+(Registered in <a href="http://mizar.uwb.edu.pl/version/current/html/toprealc.html#FC30"><code>TOPREALC</code></a> and <a href="http://mizar.uwb.edu.pl/version/current/html/toprealc.html#FC33"><code>TOPREALC</code></a>)</li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space and \((Y,d)\)
+be a metric space, let \(f_{n}\colon X\to Y\) be a sequence of
+functions. We say \((f_{n})\) <dfn>Converges Uniformly</dfn> to the
+function \(f\colon X\to Y\) if for each \(\varepsilon\gt0\) there exists a
+positive integer \(N\) such that \(d(f_{n}(x),f(x))\lt\varepsilon\) for any
+\(n\gt N\) and \(x\in X\).
+<ul class="org-ul">
+<li>This seems to be a generalization idiosyncratic to Munkres;
+Mizar defines <code>is_uniformly_convergent_to</code>
+in <a href="http://mizar.uwb.edu.pl/version/current/html/mesfun9c.html#R1"><code>MESFUN9C:def 5</code></a> for real-valued functions on an arbitrary set \(X\).
+So I'm going to say this is kind-of <span class="missing">Missing from Mizar</span></li>
+</ul></li>
+<li><b>Theorem 21.6.</b> Let \((X,\mathcal{T})\) be a topological space and \((Y,d)\)
+be a metric space, let \(f_{n}\colon X\to Y\) be a sequence of
+functions. If \((f_{n})\) converges uniformly to \(f\), then \(f\) is
+continuous. <span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-1fe6af2b-bffd-4397-9ac1-611254545e30" class="outline-2">
+<h2 id="h-1fe6af2b-bffd-4397-9ac1-611254545e30">&sect;22 The Quotient Topology</h2>
+<div class="outline-text-2" id="text-h-1fe6af2b-bffd-4397-9ac1-611254545e30">
+<p>
+This is so highly idiosyncratic to Munkres, and I dislike his
+presentation of the material. The only place where quotient topological
+spaces seem to even be tangentially related to the material formalized
+is in the article <a href="http://mizar.uwb.edu.pl/version/current/html/t_1topsp.html"><code>T_1TOPSP</code></a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-d8ddf6d7-5366-4d94-82f1-fe9e3c98826a" class="outline-2">
+<h2 id="h-d8ddf6d7-5366-4d94-82f1-fe9e3c98826a">&sect;23 Connected Subspaces</h2>
+<div class="outline-text-2" id="text-h-d8ddf6d7-5366-4d94-82f1-fe9e3c98826a">
+<ul class="org-ul">
+<li><p>
+<b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space. A
+<dfn>Separation</dfn> of \(X\) is a pair \(U\), \(V\) of disjoint nonempty
+open subsets of \(X\) whose union is \(X\). (<a href="http://mizar.uwb.edu.pl/version/current/html/connsp_1.html#T3"><code>CONNSP_1:3</code></a>)
+</p>
+
+<p>
+The space \(X\) is called <dfn>Connected</dfn> if there does not exist a
+separation of \(X\).
+</p>
+<ul class="org-ul">
+<li>Mizar allows \(U\) and/or \(V\) to be empty sets in a separation</li>
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/connsp_1.html#V1"><code>CONNSP_1:def 2</code></a> says \(X\) is connected if it has a separation \(U\),
+\(V\) with \(V=\emptyset\).</li>
+</ul></li>
+<li><b>Theorem 23.3.</b> The union of a collection of connected subspaces of
+\(X\) that have a point in common are connected.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/connsp_1.html#T26"><code>CONNSP_1:26</code></a>)</li>
+<li><b>Theorem 23.4.</b> Let \(A\) be a connected subspace of \(X\), let \(B\) be a
+subspace of \(X\). If \(A\subset X\subset\operatorname{Cl}(A)\), then \(B\)
+is connected. (<a href="http://mizar.uwb.edu.pl/version/current/html/connsp_1.html#T18"><code>CONNSP_1:18</code></a>)</li>
+<li><b>Theorem 23.5.</b> The image of a connected space under a continuous map
+is connected. (<a href="http://mizar.uwb.edu.pl/version/current/html/connsp_1.html#T14"><code>CONNSP_1:14</code></a>)</li>
+<li><b>Theorem 23.6.</b> The product of finitely many connected spaces is a
+connected space. <span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-f13f44c0-0c4a-4410-90a0-c5fd63fe9ea2" class="outline-2">
+<h2 id="h-f13f44c0-0c4a-4410-90a0-c5fd63fe9ea2">&sect;24 Connected Subspaces of the Real Line</h2>
+<div class="outline-text-2" id="text-h-f13f44c0-0c4a-4410-90a0-c5fd63fe9ea2">
+<ul class="org-ul">
+<li><b>Definition.</b> A simply-ordered set \(L\) having more than one element is
+called a <dfn>Linear Continuum</dfn> if
+<ol class="org-ol">
+<li>\(L\) has the least upper bound property and</li>
+<li>if \(x\lt y\), there exists a \(z\in L\) such that
+\(x\lt z\) and
+\(z\lt y\).</li>
+</ol></li>
+<li>The notion of a "linear continuum" seems to be idiosyncratic to
+Munkres, hence it is <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 24.1.</b> If \(L\) is a linear continuum in the order topology,
+then \(L\) is connected and so are intervals are rays in \(L\).
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Corollary 24.2.</b> The real line \(\mathbb{R}\) is connected and so are
+intervals and rays in \(\mathbb{R}\).
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_5.html#T77"><code>BORSUK_5:77</code></a> proves closed intervals are connected and <a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_5.html#FC1">registers</a>
+that <code>R^1</code> is pathwise-connected</li>
+</ul></li>
+
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space, let
+\(x,y\in X\). Then a <dfn>Path</dfn> in \(X\) connecting \(x\) and \(y\) is a
+continuous function \(f\colon[a,b]\to X\) such that \(f(a)=x\) and
+\(f(b)=y\) (and \(a\lt b\)).
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_2.html#M1"><code>BORSUK_2:def 2</code></a> defines a path as a continuous function \(f\colon[0,1]\to X\)
+with \(f(0)=x\) and \(f(1)=y\).</li>
+</ul></li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space.
+We say \(X\) is <dfn>Path Connected</dfn> if every pair of points can be
+connected by a path.
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_2.html#V1"><code>BORSUK_2:def 3</code></a> gives the definition for pathwise connected using
+<a href="http://mizar.uwb.edu.pl/version/current/html/borsuk_2.html#R1"><code>BORSUK_2:def 1</code></a></li>
+</ul></li>
+<li>Example: Unit ball</li>
+<li>Example: unit sphere as a subset of the topological vector space
+\(\mathbb{R}^{n}\) is defined in <a href="http://mizar.uwb.edu.pl/version/current/html/topreal9.html#K3"><code>TOPREAL9:def 3</code></a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-769b045d-3e1b-4cfd-abe5-e2de62408b78" class="outline-2">
+<h2 id="h-769b045d-3e1b-4cfd-abe5-e2de62408b78">&sect;26 Compact Spaces</h2>
+<div class="outline-text-2" id="text-h-769b045d-3e1b-4cfd-abe5-e2de62408b78">
+<ul class="org-ul">
+<li><p>
+<b>Definition.</b> A collection \(\mathcal{A}\) of subsets of a space \((X,\mathcal{T})\) is
+said to <dfn>Cover</dfn> \(X\) if \(\bigcup\mathcal{A}=X\).
+</p>
+
+<p>
+When every element of \(\mathcal{A}\) is an open subset of \(X\), then we
+call \(\mathcal{A}\) an <dfn>Open Cover</dfn> of \(X\).
+</p>
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/setfam_1.html#M1"><code>SETFAM_1:def 11</code></a> defines a <code>Cover of X</code>, and
+Theorem <a href="http://mizar.uwb.edu.pl/version/current/html/setfam_1.html#T45"><code>SETFAM_1:45</code></a> establishes this logical equivalence</li>
+</ul></li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space. We say \(X\)
+is <dfn>Compact</dfn> if every open cover of \(X\) has a finite subcover.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#V1"><code>COMPTS_1:def 1</code></a>)
+<ul class="org-ul">
+<li>We can extend this notion to any subset \(A\) of \(X\), which is done in
+Definition <a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#V2"><code>COMPTS_1:def 4</code></a>.</li>
+</ul></li>
+<li><b>Lemma 26.1.</b> Let \(Y\) be a subspace of \((X,\mathcal{T})\).
+Then \(Y\) is compact if and only if every covering \(Y\) by open subsets
+of \(X\) contains a finite subcover.
+<ul class="org-ul">
+<li>(<a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#T2"><code>COMPTS_1:2</code></a>) appears to prove the claim</li>
+</ul></li>
+<li><b>Theorem 26.2.</b> Every closed subspace of a compact space is compact.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#T8"><code>COMPTS_1:8</code></a>)</li>
+<li><b>Theorem 26.3.</b> Every compact subspace of a Hausdorff space is closed.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#T7"><code>COMPTS_1:7</code></a>)</li>
+<li><b>Theorem 26.4.</b> If \(Y\) is a compact subspace of a Hausdorff space \(X\)
+and \(x_{0}\in X\) but \(x_{0}\notin Y\), then there exists disjoint open subsets
+\(U,V\subset X\) such that \(x_{0}\in U\) and \(Y\subset V\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#T6"><code>COMPTS_1:6</code></a>)</li>
+<li><b>Theorem 26.5.</b> The image of a compact space under a continuous
+mapping is compact.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#T15"><code>COMPTS_1:15</code></a>)</li>
+<li><b>Theorem 26.6.</b> Let \(f\colon X\to Y\) be a bijective continuous
+function. If \(X\) is compact and \(Y\) is Hausdorff, then \(f\) is a
+homeomorphism.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#T17"><code>COMPTS_1:17</code></a>)</li>
+<li><b>Theorem 26.7.</b> The product of finitely many compact spaces is
+compact.
+<ul class="org-ul">
+<li>Mizar proves a stronger theorem: the product of arbitrarily many
+compact spaces is compact. (<a href="http://mizar.uwb.edu.pl/version/current/html/yellow17.html#T23"><code>YELLOW17:23</code></a>)</li>
+</ul></li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space.
+A collection \(\mathcal{C}\) of subsets of \(X\) is said to have the
+<dfn>Finite Intersection Property</dfn> if every finite subcollection
+\(\{C_{1},\dots,C_{n}\}\) has a nonempty intersection
+\(C_{1}\cap\cdots\cap C_{n}\neq\emptyset\).
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/finset_1.html#V3"><code>FINSET_1:def 3</code></a> calls this <code>centered</code></li>
+</ul></li>
+<li><b>Theorem 26.9.</b> Let \((X,\mathcal{T})\) be a topological space.
+Then \(X\) is compact if and only if every collection \(\mathcal{C}\) of
+closed sets in \(X\) having the finite intersection property we have
+the intersection of elements of \(\mathcal{C}\) be nonempty
+\(\bigcap\mathcal{C}\neq\emptyset\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#T4"><code>COMPTS_1:4</code></a>)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-abe622fb-5fee-4a11-a40a-b288a9b80bfc" class="outline-2">
+<h2 id="h-abe622fb-5fee-4a11-a40a-b288a9b80bfc">&sect;27 Compact Subspaces of the Real Line</h2>
+<div class="outline-text-2" id="text-h-abe622fb-5fee-4a11-a40a-b288a9b80bfc">
+<ul class="org-ul">
+<li><b>Theorem 27.1.</b> Let \(X\) be a simply ordered set having the least upper
+bound property. In the order topology, each closed inteval of \(X\) is
+compact. <span class="missing">Missing from Mizar</span></li>
+<li><b>Corollary 27.2.</b> Closed intervals of \(\mathbb{R}\) are compact.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/heine.html#T4"><code>HEINE:4</code></a>)</li>
+<li><b>Theorem 27.3.</b> A subspace \(A\) of \(\mathbb{R}^{n}\) is compact if and
+only if it is closed and bounded in the Euclidean metric \(d\) or square
+metric \(\rho\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 27.4</b> (Extreme value theorem). Let \(f\colon X\to Y\) be a
+continuous function, let \(Y\) be an ordered set in the order
+topology. If \(X\) is compact, then there exist points \(c,d\in X\) such
+that every point \(x\in X\) satisfies \(f(c)\leq f(x)\leq f(d)\).
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> Let \((X,d)\) be a metric space, let \(A\subset X\) be
+non-empty. For each \(x\in X\), we define the <dfn>Distance</dfn> from
+\(x\) to \(A\) by the equation
+\(d(x,A)=\inf\{d(x,a)\mid a\in A\}\).
+<ul class="org-ul">
+<li>I think <a href="http://mizar.uwb.edu.pl/version/current/html/weierstr.html#K6"><code>WEIERSTR:def 6</code></a> formalizes this notion, we'd write
+<code>(dist_min A).x</code> instead of \(d(x,A)\).</li>
+</ul></li>
+<li><p>
+<b>Lemma 27.5</b> (Lebesgue Number Theorem). Let \(\mathcal{A}\) be an open
+covering of the metric space \((X,d)\). If \(X\) is compact, there is a
+\(\delta\gt0\) such taht for each subset of \(X\) having diameter less
+than \(\delta\), there exists an element of \(\mathcal{A}\) covering it.
+</p>
+
+<p>
+The number \(\delta\) is called a <dfn>Lebesgue number</dfn> for the
+covering \(\mathcal{A}\).
+</p>
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/uniform1.html#T6"><code>UNIFORM1:6</code></a> formalizes the theorem, the notion of a Lebesgue number
+is implicit.</li>
+</ul></li>
+<li><b>Definition.</b> A function of metric spaces
+\(f\colon(X,d_{X})\to(Y,d_{Y})\) is called <dfn>Uniformly Continuous</dfn>
+if for each \(\varepsilon\gt0\) there is a \(\delta\gt0\) such that for
+every \(x_{0},x_{1}\in X\) we have
+\(d_{X}(x_{0},x_{1})\lt\delta\) implies
+\(d_{Y}(f(x_{0}),f(x_{1}))\lt\varepsilon\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/uniform1.html#V1"><code>UNIFORM1:def 1</code></a>)</li>
+<li><b>Theorem 27.6</b> (Uniform continuity theorem). Let \(f\colon X\to Y\) be a
+continuous map of metric spaces. Then \(f\) is uniformly continuous.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/uniform1.html#T7"><code>UNIFORM1:7</code></a>)</li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a space, \(x_{0}\in X\) is called
+an <dfn>Isolated Point</dfn> of \(X\) if \(\{x_{0}\}\) is open.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/topgen_1.html#T23"><code>TOPGEN1:23</code></a>)</li>
+<li><b>Theorem 27.7.</b> Nonempty Hausdorff spaces with no isolated points are
+uncountable. <span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-abfbe16c-4501-4de0-bd33-8101d31909ce" class="outline-2">
+<h2 id="h-abfbe16c-4501-4de0-bd33-8101d31909ce">&sect;30 The Countability Axioms</h2>
+<div class="outline-text-2" id="text-h-abfbe16c-4501-4de0-bd33-8101d31909ce">
+<ul class="org-ul">
+<li><b>Definition.</b> If a space \((X,\mathcal{T})\) has a countable basis for
+its topology, then we say it is <dfn>Secound-Countable</dfn>.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/waybel23.html#V5"><code>WAYBEL23:def 6</code></a>)</li>
+<li><b>Theorem 30.2.</b> A subspace of a second-countable space is
+second-countable. The Cartesian product of countably many
+second-countable spaces is second-countable.
+<ul class="org-ul">
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/metrizts.html#FC5"><code>METRIZTS</code></a> registers the direct product \(X\times Y\) of
+second-countable spaces is second-countable</li>
+<li><a href="http://mizar.uwb.edu.pl/version/current/html/metrizts.html#FC6"><code>METRIZTS</code></a> registers subspaces of a second-countable space is second-countable</li>
+</ul></li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space,
+let \(A\subset X\) be a subset. We say \(A\) is <dfn>Dense</dfn> in \(X\) if
+\(\operatorname{Cl}(A)=X\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/tops_1.html#V1"><code>TOPS_1:def 3</code></a>)</li>
+<li><b>Definition.</b> A space is called <dfn>Lindelof</dfn> if every open
+covering contains a countable subcover.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/metrizts.html#V1"><code>METRIZTS:def 2</code></a>)</li>
+<li><b>Theorem 30.3.</b> Suppose \((X,\mathcal{T})\) is second-countable.
+<ol class="org-ol">
+<li>Every open covering of \(X\) contains a countable subcovering, i.e.,
+\(X\) is Lindelof.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/metrizts.html#CC8"><code>METRIZTS</code></a> registers this fact.)</li>
+<li>There exists a countable subset of \(X\) that is dense in \(X\)
+(<a href="http://mizar.uwb.edu.pl/version/current/html/topgen_4.html#T6"><code>TOPGEN_4:6</code></a> and <a href="http://mizar.uwb.edu.pl/version/current/html/topgen_4.html#T7"><code>TOPGEN_4:7</code></a> imply this result)</li>
+</ol></li>
+<li><b>Definition.</b> A space is called <dfn>Separable</dfn> if it has a
+countably dense subset. 
+(<a href="http://mizar.uwb.edu.pl/version/current/html/topgen_1.html#V7"><code>TOPGEN_1:def 13</code></a>)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-366f6135-1506-465a-9982-298d487a758d" class="outline-2">
+<h2 id="h-366f6135-1506-465a-9982-298d487a758d">&sect;31 The Separation Axioms</h2>
+<div class="outline-text-2" id="text-h-366f6135-1506-465a-9982-298d487a758d">
+<ul class="org-ul">
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space where every
+one-point subset of \(X\) is closed.
+<ol class="org-ol">
+<li>We call \(X\) <dfn>Regular</dfn> if any point \(x_{0}\) and
+closed subset \(B\subset X\) not containing \(x_{0}\notin B\), there
+exists open sets \(U\), \(V\) containing \(x_{0}\in U\) and \(B\subset V\)
+which are disjoint \(U\cap V=\emptyset\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#V9"><code>PRE_TOPC:def 11</code></a>)</li>
+<li>We call \(X\) <dfn>Normal</dfn> if every pair of disjoint closed
+subsets \(A\), \(B\) of \(X\) are contained in disjoint open subsets of
+\(X\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/pre_topc.html#V10"><code>PRE_TOPC:def 12</code></a>).</li>
+</ol></li>
+<li><b>Lemma 31.1.</b> Let \((X,\mathcal{T})\) be a topological space where every
+one-point subset of \(X\) is closed. Then:
+<ol class="org-ol">
+<li>\(X\) is regular if and only if for every point \(x\in X\) and open
+subset \(U\subset X\) which contains \(x\in U\), there exists a
+\(V\subset X\) open such that \(x\in V\) and
+\(\operatorname{Cl}(V)\subset U\). (<a href="http://mizar.uwb.edu.pl/version/current/html/urysohn1.html#T21"><code>URYSOHN1:21</code></a>)</li>
+<li>\(X\) is normal if and only if for every subset \(A\subset X\) closed
+and every \(U\subset X\) open, \(A\subset U\) implies there is an open
+\(V\subset X\) such that \(A\subset V\) and
+\(\operatorname{Cl}(V)\subset U\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/connsp_2.html#T20"><code>CONNSP_2:20</code></a>)</li>
+</ol></li>
+<li><b>Theorem 31.2.</b> We have the following results:
+<ol class="org-ol">
+<li>Subspaces of Hausdorff spaces are Hausdorff. (<a href="http://mizar.uwb.edu.pl/version/current/html/topmetr.html#T2"><code>TOPMETR:2</code></a>)</li>
+<li>Products of Hausdorff spaces are Hausdorff. <span class="missing">Missing from Mizar</span></li>
+<li>A subspace of regular spaces is regular. <span class="missing">Missing from Mizar</span></li>
+<li>Products of regular spaces is regular. <span class="missing">Missing from Mizar</span></li>
+</ol></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-6bb0e4a9-2d54-478f-bb30-d98f4d4525a1" class="outline-2">
+<h2 id="h-6bb0e4a9-2d54-478f-bb30-d98f4d4525a1">&sect;32 Normal Spaces</h2>
+<div class="outline-text-2" id="text-h-6bb0e4a9-2d54-478f-bb30-d98f4d4525a1">
+<ul class="org-ul">
+<li><b>Lemma 32.1.</b> Every regular space with a countable basis is normal.
+<ul class="org-ul">
+<li>You only need regular and Lindelof to be normal, and it's registered
+in <a href="http://mizar.uwb.edu.pl/version/current/html/metrizts.html#CC9"><code>METRIZTS</code></a></li>
+</ul></li>
+<li><b>Theorem 32.2.</b> Every metrizable space is normal.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/nagata_1.html#T15"><code>NAGATA_1:15</code></a>)</li>
+<li><b>Theorem 32.3.</b> Compact Hausdorff spaces are normal.
+(<a href="http://mizar.uwb.edu.pl/version/current/html/compts_1.html#T13"><code>COMPTS_1:13</code></a>)</li>
+<li><b>Theorem 32.4.</b> Well-ordered sets equipped with the order topology is
+normal. <span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-acab4555-c2b9-42c2-92f6-27b8489e9529" class="outline-2">
+<h2 id="h-acab4555-c2b9-42c2-92f6-27b8489e9529">&sect;33 Urysohn Lemma</h2>
+<div class="outline-text-2" id="text-h-acab4555-c2b9-42c2-92f6-27b8489e9529">
+<ul class="org-ul">
+<li><b>Theorem 33.1</b> (Urysohn Lemma). Let \((X,\mathcal{T})\) be a normal
+space,
+let \(A\) and \(B\) be closed subsets of \(X\). Let \([a,b]\) be a closed
+interval in the real line.
+Then there exists a continuous map \(f\colon X\to[a,b]\) such that
+(i) \(f(x)=a\) for all \(x\in A\),
+and (ii) \(f(x)=b\) for all \(x\in B\).
+(<a href="http://mizar.uwb.edu.pl/version/current/html/urysohn3.html#T20"><code>URYSOHN3:20</code></a>)</li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space; let \(A\)
+and \(B\) be subsets of \(X\). If there exists a continuous function
+\(f\colon X\to[0,1]\) such that \(f(A)=\{0\}\) and \(f(B)=\{1\}\), then we
+say \(A\) and \(B\) <dfn>can be separated by a continuous function</dfn>.
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> Let \((X,\mathcal{T})\) be a topological space. We say \(X\)
+is <dfn>Completely Regular</dfn> if one-point sets are closed in \(X\)
+and if for each \(x\in X\) and closed subsets \(A\subset X\) not
+containing \(x\notin A\), there exists a continuous \(f\colon X\to[0,1]\)
+such that \(f(x_{0})=1\) and \(f(A)=\{0\}\).
+<ul class="org-ul">
+<li>Mizar uses the term <code>Tychonoff</code> and it is defined in
+<a href="http://mizar.uwb.edu.pl/version/current/html/topgen_5.html#V1"><code>TOPGEN_5:def 4</code></a>.</li>
+</ul></li>
+<li><b>Theorem 33.2.</b> Subspaces of countably regular spaces are completely
+regular. Products of completely regular spaces are completely regular.
+<span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-fb013eb5-364a-4a9f-8cff-6228a9b3d538" class="outline-2">
+<h2 id="h-fb013eb5-364a-4a9f-8cff-6228a9b3d538">&sect;34 Urysohn Metrization Theorem</h2>
+<div class="outline-text-2" id="text-h-fb013eb5-364a-4a9f-8cff-6228a9b3d538">
+<ul class="org-ul">
+<li><b>Theorem 34.1</b> (Urysohn Metrization Theorem). Every regular space with
+a countable basis is metrizable. <span class="missing">Missing from Mizar</span></li>
+<li><p>
+<b>Theorem 34.2</b> (Embedding theorem). Let \((X,\mathcal{T})\) be a space
+where all singletons are closed. Suppose \(\{f_{\alpha}\}_{\alpha\in J}\) is a
+family of continuous functions \(f_{\alpha}\colon X\to\mathbb{R}\)
+satisfying the requirement that each point \(x_{0}\in X\) and each open
+set \(U\subset X\) containing \(x_{0}\in U\), there is an index \(\alpha\in
+  J\) such that \(f_{\alpha}\) is positive at \(x_{0}\) and vanishes outside
+\(U\).
+</p>
+
+<p>
+Then the function \(F\colon X\to\mathbb{R}^{J}\) defined by
+\(F(x)=(f_{\alpha}(x))_{\alpha\in J}\) is an embedding of \(X\) in
+\(\mathbb{R}^{J}\).
+If \(f_{\alpha}\) maps \(X\) onto the interval \([0,1]\) for each \(\alpha\),
+then \(F\) embeds \(X\) into \([0,1]^{J}\). <span class="missing">Missing from Mizar</span>
+</p></li>
+<li><b>Theorem 34.3.</b> A space \((X,\mathcal{T})\) is completely regular if and
+only if it is homeomorphic to \([0,1]^{J}\) for some \(J\). <span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2023-11-13 Mon 12:49.</p>
+</div>
+</body>
+</html>
