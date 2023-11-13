@@ -191,6 +191,82 @@ foo
 val it = () : unit
 #+end_example
 
+* ST Monad
+:PROPERTIES:
+:CUSTOM_ID: h-f871faf0-4a2a-4887-84df-94b30c0c96b1
+:END:
+
+Not to be confused with the ~State~ monad, the
+{{{dfn(State Transformer Monad)}}} abstracts away the concept of a
+stateful computation. This is the [[https://hackage.haskell.org/package/base-4.18.1.0/docs/Control-Monad-ST.html][~ST~ monad]] in Haskell, introduced in
+Launchbury and Jones's "Lazy Functional State Threads" (1994). The ST
+monad offers the following primitives:
+
+#+begin_src haskell
+return :: a -> ST s a
+(>>=)  :: ST s a -> (a -> ST s b) -> ST s b
+runST  :: (forall s. ST s a) -> a 
+newSTRef   :: a -> ST s (STRef s a)
+readSTRef  :: STRef s a -> ST s a
+writeSTRef :: STRef s a -> a -> ST s ()
+#+end_src
+
+Unlike the other monads thus discussed, the ~ST~ monad requires rank-2
+polymorphism. Why do we need it? Consider:
+
+#+begin_src haskell
+-- This is an error... but let's pretend for a moment...
+let a = runST $ newSTRef (15 :: Int)
+    b = runST $ writeSTRef a 20
+    c = runST $ readSTRef a
+in b `seq` c
+#+end_src
+
+If we even tried to get Haskell to evaluate this, it stops with
+evaluating ~a~, since it would read this as:
+
+#+begin_src haskell
+a = runST (newSTRef (15 :: Int) :: forall s. ST s (STRef s Int))
+#+end_src
+
+The result would have type ~STRef s Int~, which is "wrong" since the ~s~
+has "escaped" the ~forall~ in ~runST~.
+
+We should instead of done something like:
+
+#+begin_src haskell
+-- Fixed version, this works!
+example :: Int -> Int
+example x = runST $ do
+  a <- newSTRef x
+  writeSTRef a 20
+  readSTRef a
+{- de-sugared as:
+runST (newSTRef x >>= \a ->
+  writeSTRef a 20 >>
+  readSTRef a)
+-}
+#+end_src
+
+** Mutable References
+:PROPERTIES:
+:CUSTOM_ID: h-728063c4-42ba-44f2-8d5e-f0f49a4bccc9
+:END:
+
+Arguably, the /only/ state which is discussed in the Standard ML
+definition is mutable references. (Perhaps the case could be made that
+/environments/ managing bindings is another form of state, but it is one
+which we all accept.) How can we bundle "mutable references" up in a
+monadic way?
+
+Recall, the type signature for mutable references in Standard ML:
+
+#+begin_src sml
+ref : 'a -> 'a ref            (* "data constructor" *)
+(op !) : 'a ref -> 'a         (* dereferencing *)
+(op :=) : 'a ref * 'a -> unit (* updating *)
+#+end_src
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-e4b4aced-cb78-493a-8c35-a12e1492cf09
@@ -240,6 +316,7 @@ val it = () : unit
 - John Launchbury and Simon Peyton Jones,\\
   "Lazy Functional State Threads".\\
   1994 (discusses ~IO~ as a ~ST~ instance)
+  [[https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bcb80827317a37d7896d4c22e10a613548c4b440][Citeseerx]]
 - Edsko de Vries,\\
   [[https://www.well-typed.com/blog/2014/06/understanding-the-realworld/][Understanding the RealWorld]]
 - [[http://blog.ezyang.com/2011/05/unraveling-the-mystery-of-the-io-monad/][Unraveling the mystery of the IO monad]]

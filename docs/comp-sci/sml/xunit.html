@@ -259,8 +259,6 @@ a user-given message for details.
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-keyword">exception</span> AssertionFailure <span class="org-keyword">of</span> string;
 
-<span class="org-keyword">datatype</span> <span class="org-type-def">Assertion</span> = Assert <span class="org-keyword">of</span> string*bool;
-
 <span class="org-keyword">fun</span> <span class="org-function-name">assert</span> (msg : string) (is_success : bool) : unit =
     <span class="org-keyword">if</span> is_success <span class="org-keyword">then</span> () <span class="org-keyword">else</span> <span class="org-keyword">raise</span> AssertionFailure msg;
 </pre>
@@ -465,7 +463,7 @@ microseconds instead.
 Now we could run this on the example tests by doing something like:
 </p>
 
-<pre class="example" id="org13fcd4a">
+<pre class="example" id="org4d4fa5c">
 val ex_results = run_test ex_tests;
 
 report_results ex_results;
@@ -540,7 +538,7 @@ summing over the summaries of its constituents.
 Now we could check the summary of our toy test suite:
 </p>
 
-<pre class="example" id="org457cb84">
+<pre class="example" id="org3872ad9">
 summarize ex_results;
 
 (* SML/NJ produces:
@@ -561,7 +559,7 @@ test suite be contained in its own file. So I would love to write
 something like:
 </p>
 
-<pre class="example" id="org70ee099">
+<pre class="example" id="org24ae026">
 suite "FooBarTests";
 
 test "BaazTest1" fn () =&gt; (* ... *);
@@ -674,7 +672,7 @@ The output for a test suite which has no errors or failures would
 consist of two lines:
 </p>
 
-<pre class="example" id="orgd5d1a7b">
+<pre class="example" id="org1a314d7">
 Running &lt;file path&gt;
 Tests run: &lt;number&gt;, Failures: &lt;number&gt;, Errors: &lt;number&gt;, Skipped: &lt;number&gt;, Time elapsed: &lt;interval s - in &lt;file path&gt;
 </pre>
@@ -723,7 +721,7 @@ Now we can run this on our example test results, which will produce
 something like the following:
 </p>
 
-<pre class="example" id="orgfc8d9f1">
+<pre class="example" id="org99375cf">
 - JUnitTt.report ex_results;
 Running Arithmetic Tests
 Arithmetic test 2 FAIL: 1+1=3
@@ -748,7 +746,7 @@ in writing some SML code.
 Schematically, the XML output from JUnit looks like:
 </p>
 
-<pre class="example" id="orgc06b4df">
+<pre class="example" id="org52f1234">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!-- a description of the JUnit XML format and how Jenkins parses it. See also junit.xsd --&gt;
 
@@ -842,7 +840,7 @@ Schematically, the XML output from JUnit looks like:
 Ideally, my project should look like:
 </p>
 
-<pre class="example" id="org113693c">
+<pre class="example" id="org6259662">
 ├── src
 │   ├── main.sml
 │   └── foo.sml
@@ -883,7 +881,7 @@ files to compile in the <code>Makefile</code> (or equivalent) in the
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-26 Wed 12:30.</p>
+<p class="postamble">Last Updated 2023-09-25 Mon 08:59.</p>
 </div>
 </body>
 </html>

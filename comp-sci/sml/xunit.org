@@ -36,8 +36,6 @@ a user-given message for details.
 #+begin_src sml
 exception AssertionFailure of string;
 
-datatype Assertion = Assert of string*bool;
-
 fun assert (msg : string) (is_success : bool) : unit =
     if is_success then () else raise AssertionFailure msg;
 #+end_src

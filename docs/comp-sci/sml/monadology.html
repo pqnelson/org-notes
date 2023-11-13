@@ -226,10 +226,15 @@
 <li><a href="#h-9898e93b-cd74-49f3-95cc-681d75bca8a0">3.2. Standard ML Hackery</a></li>
 </ul>
 </li>
-<li><a href="#h-e4b4aced-cb78-493a-8c35-a12e1492cf09">4. References</a>
+<li><a href="#h-f871faf0-4a2a-4887-84df-94b30c0c96b1">4. ST Monad</a>
 <ul>
-<li><a href="#h-cac676fe-d364-4f03-9c2a-4750ce01619d">4.1. Monads in Haskell</a></li>
-<li><a href="#h-9ccaab01-de54-45dd-a3fc-f8c3deab52da">4.2. Monads in Functional Programming (in general)</a></li>
+<li><a href="#h-728063c4-42ba-44f2-8d5e-f0f49a4bccc9">4.1. Mutable References</a></li>
+</ul>
+</li>
+<li><a href="#h-e4b4aced-cb78-493a-8c35-a12e1492cf09">5. References</a>
+<ul>
+<li><a href="#h-cac676fe-d364-4f03-9c2a-4750ce01619d">5.1. Monads in Haskell</a></li>
+<li><a href="#h-9ccaab01-de54-45dd-a3fc-f8c3deab52da">5.2. Monads in Functional Programming (in general)</a></li>
 </ul>
 </li>
 </ul>
@@ -444,7 +449,7 @@ This typechecks fine, but it doesn't produce what we'd expect. For
 example, in Hamlet:
 </p>
 
-<pre class="example" id="org248df6a">
+<pre class="example" id="org91efd89">
 - putStr "foo";
 val it = IO _fn : unit IO
 - print "foo\n";
@@ -455,8 +460,84 @@ val it = () : unit
 </div>
 </div>
 
+<div id="outline-container-h-f871faf0-4a2a-4887-84df-94b30c0c96b1" class="outline-2">
+<h2 id="h-f871faf0-4a2a-4887-84df-94b30c0c96b1"><span class="section-number-2">4.</span> ST Monad</h2>
+<div class="outline-text-2" id="text-h-f871faf0-4a2a-4887-84df-94b30c0c96b1">
+<p>
+Not to be confused with the <code>State</code> monad, the
+<dfn>State Transformer Monad</dfn> abstracts away the concept of a
+stateful computation. This is the <a href="https://hackage.haskell.org/package/base-4.18.1.0/docs/Control-Monad-ST.html"><code>ST</code> monad</a> in Haskell, introduced in
+Launchbury and Jones's "Lazy Functional State Threads" (1994). The ST
+monad offers the following primitives:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-haskell-definition">return</span> <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s a
+(<span class="org-haskell-definition">&gt;&gt;=</span>)  <span class="org-haskell-operator">::</span> <span class="org-haskell-type">ST</span> s a <span class="org-haskell-operator">-&gt;</span> (a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s b) <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s b
+<span class="org-haskell-definition">runST</span>  <span class="org-haskell-operator">::</span> (<span class="org-haskell-keyword">forall</span> s<span class="org-haskell-operator">.</span> <span class="org-haskell-type">ST</span> s a) <span class="org-haskell-operator">-&gt;</span> a 
+<span class="org-haskell-definition">newSTRef</span>   <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s (<span class="org-haskell-type">STRef</span> s a)
+<span class="org-haskell-definition">readSTRef</span>  <span class="org-haskell-operator">::</span> <span class="org-haskell-type">STRef</span> s a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s a
+<span class="org-haskell-definition">writeSTRef</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">STRef</span> s a <span class="org-haskell-operator">-&gt;</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s <span class="org-haskell-constructor">()</span>
+</pre>
+</div>
+
+<p>
+Unlike the other monads thus discussed, the <code>ST</code> monad requires rank-2
+polymorphism. Why do we need it? Consider:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-comment-delimiter">-- </span><span class="org-comment">This is an error... but let's pretend for a moment...</span>
+<span class="org-haskell-keyword">let</span> a <span class="org-haskell-operator">=</span> runST <span class="org-haskell-operator">$</span> newSTRef (15 <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Int</span>)
+    b <span class="org-haskell-operator">=</span> runST <span class="org-haskell-operator">$</span> writeSTRef a 20
+    c <span class="org-haskell-operator">=</span> runST <span class="org-haskell-operator">$</span> readSTRef a
+<span class="org-haskell-keyword">in</span> b <span class="org-haskell-operator">`seq`</span> c
+</pre>
+</div>
+
+<p>
+If we even tried to get Haskell to evaluate this, it stops with
+evaluating <code>a</code>, since it would read this as:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-haskell-definition">a</span> <span class="org-haskell-operator">=</span> runST (newSTRef (15 <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Int</span>) <span class="org-haskell-operator">::</span> <span class="org-haskell-keyword">forall</span> s<span class="org-haskell-operator">.</span> <span class="org-haskell-type">ST</span> s (<span class="org-haskell-type">STRef</span> s <span class="org-haskell-type">Int</span>))
+</pre>
+</div>
+
+<p>
+The result would have type <code>STRef s Int</code>, which is "wrong" since the <code>s</code>
+has "escaped" the <code>forall</code> in <code>runST</code>.
+</p>
+</div>
+
+<div id="outline-container-h-728063c4-42ba-44f2-8d5e-f0f49a4bccc9" class="outline-3">
+<h3 id="h-728063c4-42ba-44f2-8d5e-f0f49a4bccc9"><span class="section-number-3">4.1.</span> Mutable References</h3>
+<div class="outline-text-3" id="text-h-728063c4-42ba-44f2-8d5e-f0f49a4bccc9">
+<p>
+Arguably, the <i>only</i> state which is discussed in the Standard ML
+definition is mutable references. (Perhaps the case could be made that
+<i>environments</i> managing bindings is another form of state, but it is one
+which we all accept.) How can we bundle "mutable references" up in a
+monadic way?
+</p>
+
+<p>
+Recall, the type signature for mutable references in Standard ML:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml">ref : 'a -&gt; 'a ref            <span class="org-comment-delimiter">(* </span><span class="org-comment">"data constructor"</span><span class="org-comment-delimiter"> *)</span>
+(<span class="org-keyword">op</span> !) : 'a ref -&gt; 'a         <span class="org-comment-delimiter">(* </span><span class="org-comment">dereferencing</span><span class="org-comment-delimiter"> *)</span>
+(<span class="org-keyword">op</span> :=) : 'a ref * 'a -&gt; unit <span class="org-comment-delimiter">(* </span><span class="org-comment">updating</span><span class="org-comment-delimiter"> *)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
 <div id="outline-container-h-e4b4aced-cb78-493a-8c35-a12e1492cf09" class="outline-2">
-<h2 id="h-e4b4aced-cb78-493a-8c35-a12e1492cf09"><span class="section-number-2">4.</span> References</h2>
+<h2 id="h-e4b4aced-cb78-493a-8c35-a12e1492cf09"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-e4b4aced-cb78-493a-8c35-a12e1492cf09">
 <ul class="org-ul">
 <li><a href="https://www.cl.cam.ac.uk/teaching//1819/ConceptsPL/lectures.pdf">Slides on Programming Languages</a>, pp. 220 <i>et seq.</i>, discuss Monads in
@@ -485,7 +566,7 @@ for <code>do</code>-notation in Standard ML.)</li>
 </div>
 
 <div id="outline-container-h-cac676fe-d364-4f03-9c2a-4750ce01619d" class="outline-3">
-<h3 id="h-cac676fe-d364-4f03-9c2a-4750ce01619d"><span class="section-number-3">4.1.</span> Monads in Haskell</h3>
+<h3 id="h-cac676fe-d364-4f03-9c2a-4750ce01619d"><span class="section-number-3">5.1.</span> Monads in Haskell</h3>
 <div class="outline-text-3" id="text-h-cac676fe-d364-4f03-9c2a-4750ce01619d">
 <ul class="org-ul">
 <li><a href="https://stackoverflow.com/q/39202738/1296973">Compilation of IORef and STRef</a></li>
@@ -505,7 +586,8 @@ In Proceedings of IFL2001.</li>
 <a href="http://www.cs.ox.ac.uk/jeremy.gibbons/publications/mr.pdf">Eprint</a> (2011)</li>
 <li>John Launchbury and Simon Peyton Jones,<br>
 "Lazy Functional State Threads".<br>
-1994 (discusses <code>IO</code> as a <code>ST</code> instance)</li>
+1994 (discusses <code>IO</code> as a <code>ST</code> instance)
+<a href="https://citeseerx.ist.psu.edu/document?repid=rep1&amp;type=pdf&amp;doi=bcb80827317a37d7896d4c22e10a613548c4b440">Citeseerx</a></li>
 <li>Edsko de Vries,<br>
 <a href="https://www.well-typed.com/blog/2014/06/understanding-the-realworld/">Understanding the RealWorld</a></li>
 <li><a href="http://blog.ezyang.com/2011/05/unraveling-the-mystery-of-the-io-monad/">Unraveling the mystery of the IO monad</a></li>
@@ -515,7 +597,7 @@ In Proceedings of IFL2001.</li>
 
 
 <div id="outline-container-h-9ccaab01-de54-45dd-a3fc-f8c3deab52da" class="outline-3">
-<h3 id="h-9ccaab01-de54-45dd-a3fc-f8c3deab52da"><span class="section-number-3">4.2.</span> Monads in Functional Programming (in general)</h3>
+<h3 id="h-9ccaab01-de54-45dd-a3fc-f8c3deab52da"><span class="section-number-3">5.2.</span> Monads in Functional Programming (in general)</h3>
 <div class="outline-text-3" id="text-h-9ccaab01-de54-45dd-a3fc-f8c3deab52da">
 <ul class="org-ul">
 <li>Philip Wadler,<br>
@@ -537,7 +619,7 @@ Equational Reasoning".<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-15 Wed 09:39.</p>
+<p class="postamble">Last Updated 2023-09-26 Tue 07:36.</p>
 </div>
 </body>
 </html>
