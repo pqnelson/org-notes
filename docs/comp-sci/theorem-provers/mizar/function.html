@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Topics - Mizar</title>
+<title>Function - Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -206,75 +206,142 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../mizar.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Topics - Mizar</h1>
-<ul class="org-ul">
-<li><a href="definitions.html">Definitions in Mizar</a>
-<ul class="org-ul">
-<li><a href="example-defs-finite-groups.html">Example Definitions</a> in Finite Group Theory</li>
-</ul></li>
-<li><a href="adjectives.html">Adjectives</a> in Mizar</li>
-<li><a href="schemes.html">Schemes</a></li>
-<li><a href="idiom.html">Idiomatic Mizar</a> from what I glean from the articles</li>
-<li>"Maps" or "analytical table of contents" for existing material in the MML:
-<ul class="org-ul">
-<li><a href="group-theory.html">Group Theory in Mizar</a></li>
-<li><a href="ring-theory.html">Ring Theory</a></li>
-<li><a href="topology.html">Point-set Topology</a> &#x2014; a rosetta stone</li>
-<li><a href="diff-geom.html">Differential Geometry</a></li>
-<li><a href="numbers.html">Number Systems in Mizar</a></li>
-</ul></li>
-<li>Outlines and sketches of potential topics to formalize:
-<ul class="org-ul">
-<li><a href="subgroup-series.html">Subgroup Series</a></li>
-<li><a href="matrix-groups.html">Matrix Groups</a></li>
-<li><a href="modules.html">Modules</a> and tensor products</li>
-<li><a href="lie.html">Lie Theory</a></li>
-<li><a href="algebraic-groups.html">Algebraic Groups</a></li>
-<li><a href="minimal-counterexample.html">Proof by Minimal Counter-Example</a> in finite group theory</li>
-</ul></li>
-<li><a href="element-of.html">"Element of" type</a></li>
-<li><a href="function.html">"Function of" type</a></li>
+<h1 class="title">Function - Mizar</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-c888a6ba-af90-4e56-b83f-f67a07d89ca9">1. Introduction</a></li>
+<li><a href="#h-26a2d1bb-1db8-46bd-b0db-e0174ba3969e">2. Mizar Implementation</a></li>
+<li><a href="#h-e5773fc3-f7fb-4860-a14b-605092eb89d9">3. Functions to Empty Sets</a></li>
 </ul>
+</div>
+</div>
 
+<div id="outline-container-h-c888a6ba-af90-4e56-b83f-f67a07d89ca9" class="outline-2">
+<h2 id="h-c888a6ba-af90-4e56-b83f-f67a07d89ca9"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-c888a6ba-af90-4e56-b83f-f67a07d89ca9">
 <p>
-Theoretical topics:
+In Mizar, if <code>A</code> and <code>B</code> are sets, we can form the type <code>Function of A,B</code>
+which describes something like \(f\colon A\to B\).
 </p>
 
-<ul class="org-ul">
-<li><a href="foundations.html">Mathematical Foundations of Mizar</a>, discussing the axiomatic set theory
-of Mizar</li>
-<li><a href="compile-anywhere.html">"Write Once, Compile Anywhere"</a> philosophy of foundations: can Mizar be
-"foundations independent"?</li>
-</ul>
-
 <p>
-Elsewhere:
+There is some subtlety here, because modern mathematics describes a
+function \(f\colon A\to B\) as a subset \(f\subset A\times B\) such that:
 </p>
 
-<ul class="org-ul">
-<li><a href="http://markun.cs.shinshu-u.ac.jp/kiso/projects/proofchecker/mizar/skeletons/toc.html">Skeletons</a> of various statements</li>
-<li><a href="http://markun.cs.shinshu-u.ac.jp/kiso/projects/proofchecker/mizar/mizardictionary1.htm">Dictionary of Mathematical Notations in Mizar</a></li>
-<li><a href="https://proofwiki.org/wiki/Category:Mizar_Articles">Proof Wiki pages</a> linked to Mizar proofs</li>
-<li>Historic examples of formalizing math in Mizar:
-<ul class="org-ul">
-<li><a href="http://mizar.uwb.edu.pl/milestones/borsuk.pdf">Borsuk</a> (1987)</li>
-<li><a href="http://mizar.uwb.edu.pl/milestones/heyting.pdf">Heyting</a> (1987)</li>
-</ul></li>
-<li>Discussion of empty types occurred over the years, I last stopped at
-<a href="http://mizar.uwb.edu.pl/forum/archive/0711/threads.html">Nov 2007</a> where there was a huge discussion
-<ul class="org-ul">
-<li>Freek Wiedijk, <a href="http://mizar.uwb.edu.pl/forum/archive/0210/msg00001.html">Why do Mizar types have to be non-empty?</a> Wed, 2 Oct 2002 11:46:30 +0200 (MET DST)</li>
-<li>Wiedijk, <a href="http://mizar.uwb.edu.pl/forum/archive/0311/msg00002.html">Re: [mizar] weak types</a>. Thu, 13 Nov 2003 09:44:10 +0100 (MET)</li>
-<li>Wiedijk, <a href="http://mizar.uwb.edu.pl/forum/archive/0711/msg00003.html">Once more: empty types</a>. Mon, 5 Nov 2007 14:13:21 +0100</li>
-</ul></li>
-</ul>
+<ol class="org-ol">
+<li>for each \(a\in A\), there exists a \(b\in B\) such that \((a,b)\in f\); and</li>
+<li>for each \(a\in A\) and \(b_{1},b_{2}\in B\), if \((a,b_{1})\in f\) and
+\((a,b_{2})\in f\), then we have \(b_{1} = b_{2}\)</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-26a2d1bb-1db8-46bd-b0db-e0174ba3969e" class="outline-2">
+<h2 id="h-26a2d1bb-1db8-46bd-b0db-e0174ba3969e"><span class="section-number-2">2.</span> Mizar Implementation</h2>
+<div class="outline-text-2" id="text-h-26a2d1bb-1db8-46bd-b0db-e0174ba3969e">
+<p>
+Mizar defines <code>Function of X,Y</code> as a <a href="http://mizar.uwb.edu.pl/version/current/html/funct_2.html#NM1"><code>quasi_total PartFunc of X,Y</code></a>.
+A <a href="http://mizar.uwb.edu.pl/version/current/html/partfun1.html#NM1"><code>PartFunc of X,Y</code></a> is defined as a <code>Function-like Relation of X,Y</code>,
+where <code>Function-like</code> literally encodes that second condition
+(uniqueness of image):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> X <span class="org-mizar-normal">be</span> set;
+  <span class="org-mizar-normal">attr</span> X <span class="org-mizar-normal">is</span> Function-like <span class="org-mizar-normal">means</span> :Def1: <span class="org-comment-delimiter">:: </span><span class="org-comment">FUNCT_1:def 1</span>
+  <span class="org-mizar-formula">for</span> x, y1, y2 <span class="org-mizar-formula">being</span> object
+  <span class="org-mizar-formula">st</span> [x,y1] in X <span class="org-mizar-formula">&amp;</span> [x,y2] in X
+  <span class="org-mizar-formula">holds</span> y1 = y2;
+<span class="org-mizar-block">end</span>;
+</pre>
+</div>
+
+<p>
+The <a href="http://mizar.uwb.edu.pl/version/current/html/relset_1.html#NM1"><code>Relation of X,Y</code></a> is just a <code>Subset of [:X,Y:]</code>
+(a subset of \(X\times Y\)).
+</p>
+
+<p>
+And <code>quasi_total</code> is defined as:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+  <span class="org-mizar-skeleton">let</span> X, Y <span class="org-mizar-normal">be</span> set;
+  <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-normal">be</span> Relation <span class="org-mizar-normal">of</span> X,Y;
+  <span class="org-mizar-normal">attr</span> R <span class="org-mizar-normal">is</span> quasi_total <span class="org-mizar-normal">means</span> :Def1: <span class="org-comment-delimiter">:: </span><span class="org-comment">FUNCT_2:def 1</span>
+  X = dom R <span class="org-mizar-normal">if</span> Y &lt;&gt; {}
+  <span class="org-mizar-normal">otherwise</span> R = {};
+  <span class="org-mizar-normal">consistency</span>;
+<span class="org-mizar-block">end</span>; 
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-e5773fc3-f7fb-4860-a14b-605092eb89d9" class="outline-2">
+<h2 id="h-e5773fc3-f7fb-4860-a14b-605092eb89d9"><span class="section-number-2">3.</span> Functions to Empty Sets</h2>
+<div class="outline-text-2" id="text-h-e5773fc3-f7fb-4860-a14b-605092eb89d9">
+<p>
+This means that \(f\colon X\to\emptyset\) is implicitly empty, and
+therefore equal to \(\operatorname{id}_{\emptyset}\). Mizar proves this in
+Theorem <a href="http://mizar.uwb.edu.pl/version/current/html/funct_2.html#T130"><code>FUNCT_2:130</code></a> (proving \(f\colon A\to\emptyset\implies f=\emptyset\)) and 
+Theorem <a href="http://mizar.uwb.edu.pl/version/current/html/relat_1.html#T55"><code>RELAT_1:55</code></a> (proving
+\(\operatorname{id}_{\emptyset}=\emptyset\)).
+</p>
+
+<p>
+Sadly, a consequence of this choice, is that we often will need to
+include premises like "For any \(f\colon X\to Y\) such that
+(\(Y=\emptyset\implies X=\emptyset\)) we have \(P[f]\)".</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="postamble">Last Updated 2023-11-14 Tue 09:26.</p>

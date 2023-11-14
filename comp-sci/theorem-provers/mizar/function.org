@@ -1,0 +1,78 @@
+#+TITLE: Function - Mizar
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-11-14T09:15:06-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Tuesday November 14, 2023 at  9:15AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-c888a6ba-af90-4e56-b83f-f67a07d89ca9
+:END:
+
+In Mizar, if ~A~ and ~B~ are sets, we can form the type ~Function of A,B~
+which describes something like $f\colon A\to B$.
+
+There is some subtlety here, because modern mathematics describes a
+function $f\colon A\to B$ as a subset $f\subset A\times B$ such that:
+
+1. for each $a\in A$, there exists a $b\in B$ such that $(a,b)\in f$; and
+2. for each $a\in A$ and $b_{1},b_{2}\in B$, if $(a,b_{1})\in f$ and
+   $(a,b_{2})\in f$, then we have $b_{1} = b_{2}$
+
+* Mizar Implementation
+:PROPERTIES:
+:CUSTOM_ID: h-26a2d1bb-1db8-46bd-b0db-e0174ba3969e
+:END:
+
+Mizar defines ~Function of X,Y~ as a [[http://mizar.uwb.edu.pl/version/current/html/funct_2.html#NM1][~quasi_total PartFunc of X,Y~]].
+A [[http://mizar.uwb.edu.pl/version/current/html/partfun1.html#NM1][~PartFunc of X,Y~]] is defined as a ~Function-like Relation of X,Y~,
+where ~Function-like~ literally encodes that second condition
+(uniqueness of image):
+
+#+begin_src mizar
+definition
+  let X be set;
+  attr X is Function-like means :Def1: :: FUNCT_1:def 1
+  for x, y1, y2 being object
+  st [x,y1] in X & [x,y2] in X
+  holds y1 = y2;
+end;
+#+end_src
+
+The [[http://mizar.uwb.edu.pl/version/current/html/relset_1.html#NM1][~Relation of X,Y~]] is just a ~Subset of [:X,Y:]~
+(a subset of $X\times Y$).
+
+And ~quasi_total~ is defined as:
+
+#+begin_src mizar
+definition
+  let X, Y be set;
+  let R be Relation of X,Y;
+  attr R is quasi_total means :Def1: :: FUNCT_2:def 1
+  X = dom R if Y <> {}
+  otherwise R = {};
+  consistency;
+end; 
+#+end_src
+
+* Functions to Empty Sets
+:PROPERTIES:
+:CUSTOM_ID: h-e5773fc3-f7fb-4860-a14b-605092eb89d9
+:END:
+
+This means that $f\colon X\to\emptyset$ is implicitly empty, and
+therefore equal to $\operatorname{id}_{\emptyset}$. Mizar proves this in
+Theorem [[http://mizar.uwb.edu.pl/version/current/html/funct_2.html#T130][~FUNCT_2:130~]] (proving $f\colon A\to\emptyset\implies f=\emptyset$) and 
+Theorem [[http://mizar.uwb.edu.pl/version/current/html/relat_1.html#T55][~RELAT_1:55~]] (proving
+$\operatorname{id}_{\emptyset}=\emptyset$).
+
+Sadly, a consequence of this choice, is that we often will need to
+include premises like "For any $f\colon X\to Y$ such that
+($Y=\emptyset\implies X=\emptyset$) we have $P[f]$".
