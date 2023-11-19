@@ -10,6 +10,20 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 # Created Thursday July 15, 2021 at  7:53AM
 
+* State# "Monad"
+:PROPERTIES:
+:CUSTOM_ID: h-a88d3e88-06bc-43ee-b041-a078412a4ce7
+:END:
+
+The ~IO~ Monad is ultimately ~State# RealWorld~
+
+- [[https://github.com/ghc/ghc/blob/42aa7fbd6cc51f7cd993621336e1c3fa8202ab1f/compiler/GHC/Builtin/Types/Prim.hs#L1145-L1159][Note]] in ~Prim.hs~ about the ~State#~ type constructor
+- [[https://github.com/ghc/ghc/blob/42aa7fbd6cc51f7cd993621336e1c3fa8202ab1f/libraries/ghc-prim/GHC/Magic.hs#L35][Apparently]] it lives in the ~GHC.Prim~ module.
+- [[https://github.com/ghc/ghc/blob/a7f9670e899bcbc87276446a1aac2304cade2b2f/compiler/GHC/Builtin/primops.txt.pp#L2759-L2769][primops]] notes that ~State#~ is represented by nothing at all, so
+  ~State# a~ is an empty type.
+- ~IO a~ is/was defined in [[https://github.com/ghc/ghc/blob/b73c9c5face16cc8bedf4168ce10770c7cc67f80/libraries/ghc-prim/GHC/Types.hs#L233][~GHC.Prim.Types~]] as
+  ~newtype IO a = IO (State# RealWorld -> (# State# RealWorld, a #))~.
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-35f73750-4ad3-4d3c-bdec-429eee81e731
