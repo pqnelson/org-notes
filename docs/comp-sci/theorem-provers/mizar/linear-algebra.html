@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Linear Algebra Rosetta Stone</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Linear Algebra Rosetta Stone</h1>
+
+<div id="outline-container-h-3799b2d3-78b9-435b-850b-60b7e94db637" class="outline-2">
+<h2 id="h-3799b2d3-78b9-435b-850b-60b7e94db637">Introduction</h2>
+<div class="outline-text-2" id="text-h-3799b2d3-78b9-435b-850b-60b7e94db637">
+<p>
+This is a Rosetta stone of the results as found in Axler's
+<cite class="book-title">Linear Algebra Done Right</cite>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-542e3e45-efca-42f4-bf1b-c5e8654ae7c3" class="outline-2">
+<h2 id="h-542e3e45-efca-42f4-bf1b-c5e8654ae7c3">Chapter 1 Vector Spaces</h2>
+<div class="outline-text-2" id="text-h-542e3e45-efca-42f4-bf1b-c5e8654ae7c3">
+</div>
+
+<div id="outline-container-h-820f20b0-6ac6-4596-be2b-e0394aa079e8" class="outline-3">
+<h3 id="h-820f20b0-6ac6-4596-be2b-e0394aa079e8">1A. \(\mathbb{R}^{n}\) and  \(\mathbb{C}^{n}\)</h3>
+<div class="outline-text-3" id="text-h-820f20b0-6ac6-4596-be2b-e0394aa079e8">
+</div>
+
+<div id="outline-container-h-b8342424-741a-4311-8595-c87ad897143d" class="outline-4">
+<h4 id="h-b8342424-741a-4311-8595-c87ad897143d">Complex Numbers</h4>
+<div class="outline-text-4" id="text-h-b8342424-741a-4311-8595-c87ad897143d">
+<ul class="org-ul">
+<li><b>Definition 1.1</b> (complex numbers, \(\mathbb{C}\))
+<ul class="org-ul">
+<li>A <dfn>Complex Number</dfn> is an ordered pair \((a,b)\) where
+\(a,b\in\mathbb{R}\). We write this as \(a + \mathrm{i}b\).
+<ul class="org-ul">
+<li>In Mizar, instead of working with the Cartesian product
+\(\mathbb{R}\times\mathbb{R}\), we use the product of an indexed
+family with two members \(X_{0}=\mathbb{R}\) and
+\(X_{1}=\mathbb{R}\). This is equivalent to the set
+\(z\in\hom(\{0,1\},\mathbb{R})\iff z\in\prod_{\alpha=0,1}X_{\alpha}\) 
+and this is precisely how Mizar defines complex numbers.</li>
+<li>Since this is kind of confusing, there is also the notation
+<code>[*a,b*]</code> for the complex number \(a+\mathrm{i}b\) which is defined
+in <a href="https://mizar.uwb.edu.pl/version/current/html/arytm_0.html#K5"><code>ARYTM_0:def 5</code></a>.</li>
+<li>Note that Mizar follows mathematical practice, and sets
+\(\mathbb{C}=\{(a,b)\in\mathbb{R}^{2}\mid b\neq0\}\cup\mathbb{R}\)
+so that \(\mathbb{R}\subset\mathbb{C}\) is true.</li>
+</ul></li>
+<li>The set of all complex numbers is denoted by
+\(\mathbb{C} = \{a+\mathrm{i}b\mid a,b\in\mathbb{R}\}\).
+<ul class="org-ul">
+<li>In Mizar, this is denoted <a href="https://mizar.uwb.edu.pl/version/current/html/numbers.html#K2"><code>COMPLEX</code></a> (and defined in <code>NUMBERS:def 2</code>)</li>
+</ul></li>
+<li>Addition and multiplication in \(\mathbb{C}\) are defined as:
+\((a + \mathrm{i}b)+(c+\mathrm{i}d) = (a+c)+\mathrm{i}(b+d)\)
+\((a + \mathrm{i}b)(c+\mathrm{i}d) = (ac-bd)+\mathrm{i}(ad+bc)\)
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K2"><code>XCMPLX_0:def 3</code></a> defines addition of complex numbers</li>
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K3"><code>XCMPLX_0:def 4</code></a> defines multiplication of complex numbers</li>
+</ul></li>
+</ul></li>
+<li>The choice of \(\mathrm{i}=(0,1)\) is due to Euler, and it is encoded in
+Mizar as <code>&lt;i&gt;</code> as defined in <a href="https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K1"><code>XCMPLEX_0:def 1</code></a></li>
+<li><b>Theorem 1.3.</b> Properties of Complex Arithmetic
+<ul class="org-ul">
+<li>Addition and multiplication are both commutative
+<ul class="org-ul">
+<li>This is built into the definition</li>
+</ul></li>
+<li>Addition is associative (<a href="https://mizar.uwb.edu.pl/version/current/html/xcmplx_1.html#1"><code>XCMPLX_1:1</code></a>)</li>
+<li>Multiplication is associative (<a href="https://mizar.uwb.edu.pl/version/current/html/xcmplx_1.html#T4"><code>XCMPLX_1:4</code></a>)</li>
+<li>0 is the additive identity &amp; 1 is the multiplicative identity (this
+is true thanks to using the real numbers)</li>
+<li>Every \(\alpha\in\mathbb{C}\) has a unique \(\beta\in\mathbb{C}\) such
+that \(\alpha+\beta=0\)
+<ul class="org-ul">
+<li>This is negation, and defined in <a href="https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K4"><code>XCMPLX_0:def 5</code></a></li>
+</ul></li>
+<li>Every \(\alpha\in\mathbb{C}\) has a unique \(\beta\in\mathbb{C}\) such
+that \(\alpha\beta=1\)
+<ul class="org-ul">
+<li>This is inversion and defined in <a href="https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K5"><code>XCMPLX_0:def 6</code></a></li>
+</ul></li>
+<li>Distributivity \(\lambda(\alpha+\beta)=\lambda\alpha + \lambda\beta\)
+for every \(\alpha,\beta,\lambda\in\mathbb{C}\)</li>
+</ul></li>
+<li><b>Definition 1.5.</b>
+<ul class="org-ul">
+<li>Subtraction is defined as \(\alpha-\beta=\alpha+(-\beta)\) (<a href="https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K6"><code>XCMPLX_0:def 7</code></a>)</li>
+<li>Division is defined as multiplying by the inverse of the denominator
+\(\alpha/\beta=\alpha\cdot\beta^{-1}\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K7"><code>XCMPLX_0:def 8</code></a>)</li>
+</ul></li>
+<li><b>Convention:</b> throughout the book, \(\mathbb{F}\) to stand for either
+\(\mathbb{R}\) or \(\mathbb{C}\).</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-f7ee189a-7ae4-4f51-b4ea-b79c32998363" class="outline-4">
+<h4 id="h-f7ee189a-7ae4-4f51-b4ea-b79c32998363">Lists</h4>
+<div class="outline-text-4" id="text-h-f7ee189a-7ae4-4f51-b4ea-b79c32998363">
+<ul class="org-ul">
+<li><b>Aside:</b> Mathematicians informally talk about lists and \(n\)
+tuples. This is formalized in Mizar using finite sequences in the
+<code>FINSEQ</code> series of articles.</li>
+<li><b>Definition 1.8.</b>
+<ul class="org-ul">
+<li>Let \(n\) be a non-negative integer. A <dfn>List</dfn> of length \(n\) is
+an ordered collection of \(n\) elements.
+<ul class="org-ul">
+<li>This is precisely formalized as a <a href="https://mizar.uwb.edu.pl/version/current/html/finseq_1.html#NM1"><code>FinSequence</code></a> in Mizar, which is
+a function whose domain is \(\{1,2,\dots,n\}\)</li>
+<li>We can also use the Mizar definition
+<a href="https://mizar.uwb.edu.pl/version/current/html/finseq_2.html#K4"><code>n-tuples_on F</code></a> to refer to the set of all \(n\) tuples
+(i.e., <code>FinSequence</code> of length \(n\)) with entries in \(F\)</li>
+</ul></li>
+<li>Two lists are equal if and only if they have the same elements in
+the same order.
+<ul class="org-ul">
+<li>This is precisely <a href="https://mizar.uwb.edu.pl/version/current/html/finseq_1.html#D17"><code>FINSEQ_1:def 17</code></a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-0fca0004-528d-4dea-9959-1f1f77350df5" class="outline-4">
+<h4 id="h-0fca0004-528d-4dea-9959-1f1f77350df5">\(\mathbb{F}^{n}\)</h4>
+<div class="outline-text-4" id="text-h-0fca0004-528d-4dea-9959-1f1f77350df5">
+<ul class="org-ul">
+<li><b>Definition 1.11.</b>
+<ul class="org-ul">
+<li>\(\mathbb{F}^{n}\) denotes the set of all lists of
+length \(n\) of elements of \(\mathbb{F}\)
+<ul class="org-ul">
+<li>In Mizar, this could be formalized as <code>Funcs(Seg n,COMPLEX)</code> or
+<code>Funcs(Seg n,REAL)</code></li>
+</ul></li>
+<li>If \((x_{1},\dots,x_{n})\in\mathbb{F}^{n}\) and \(k\in\{1,\dots,n\}\),
+then \(x_{k}\) is the \(k^{\text{th}}\) coordinate of \(x\).
+<ul class="org-ul">
+<li>In Mizar, this is denoted <code>x.k</code></li>
+</ul></li>
+</ul></li>
+<li><b>Definition 1.13.</b>
+Addition in \(\mathbb{F}^{n}\) is defined componentwise
+\((x_{1},\dots,x_{n})+(y_{1},\dots,y_{n})=(x_{1}+y_{1},\dots,x_{n}+y_{n})\).
+<ul class="org-ul">
+<li>This is formalized in <a href="https://mizar.uwb.edu.pl/version/current/html/fvsum_1.html#K3"><code>FVSUM_1:def 3</code></a>.</li>
+</ul></li>
+<li><b>Theorem 1.14</b> (Commutativity of addition in \(\mathbb{F}^{n}\)).
+If \(x,y\in\mathbb{F}^{n}\), then \(x+y=y+x\).
+<ul class="org-ul">
+<li>This is automatic with the registrations of <code>FVSUM_1</code></li>
+</ul></li>
+<li><b>Notation 1.15</b> (0).
+It's common to denote by 0 the list of length \(n\) whose entries are
+all zero.
+<ul class="org-ul">
+<li>In Mizar, we can denote this by <code>(n |-&gt; 0)</code> using <a href="https://mizar.uwb.edu.pl/version/current/html/finseq_2.html#K5"><code>FINSEQ_2:def 2</code></a></li>
+</ul></li>
+<li><b>Definition 1.17</b> (Additive inverse on \(\mathbb{F}^{n}\)).
+For \(x\in\mathbb{F}^{n}\), the <dfn>Additive Inverse</dfn> of \(x\),
+denoted \(-x\), is the element \(-x\in\mathbb{F}^{n}\) such that
+\(x+(-x)=0\).
+<ul class="org-ul">
+<li>This is definition <a href="https://mizar.uwb.edu.pl/version/current/html/fvsum_1.html#K5"><code>FVSUM_1:def 4</code></a></li>
+</ul></li>
+<li><b>Definition 1.18</b> (Scalar multiplication on \(\mathbb{F}^{n}\)).
+The <dfn>Product</dfn> of a number \(\lambda\in\mathbb{F}\) and a vector \(x=(x_{1},\dots,x_{n})\in\mathbb{F}^{n}\)
+is the vector obtained by multiplying componentwise by \(\lambda\):
+\(\lambda x=(\lambda x_{1},\dots,\lambda x_{n})\).
+<ul class="org-ul">
+<li>This is definition <a href="https://mizar.uwb.edu.pl/version/current/html/fvsum_1.html#K9"><code>FVSUM_1:def 6</code></a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-1f8560be-d80c-49e5-94e2-f55d13dcb275" class="outline-4">
+<h4 id="h-1f8560be-d80c-49e5-94e2-f55d13dcb275">Digression on Fields</h4>
+<div class="outline-text-4" id="text-h-1f8560be-d80c-49e5-94e2-f55d13dcb275">
+<p>
+Axler gives a brief digression about fields. I will take this
+opportunity to discuss Mizar's formalization <code>Field</code> of fields.
+</p>
+
+<p>
+Introductory linear algebra courses give the uninspiring definition of a
+field as something along the lines of:
+</p>
+
+<ul class="org-ul">
+<li><p>
+<b>Implicit Definition.</b> A <dfn>Field</dfn> consists of a set
+\(\mathbb{F}\) equipped with
+</p>
+<ul class="org-ul">
+<li>addition \(+\colon\mathbb{F}\times\mathbb{F}\to\mathbb{F}\)</li>
+<li>negation \(-\colon\mathbb{F}\to\mathbb{F}\)</li>
+<li>a constant \(0\in\mathbb{F}\)</li>
+<li>multiplication \(\,\cdot\,\colon\mathbb{F}\times\mathbb{F}\to\mathbb{F}\)</li>
+<li>inversion \((-)^{-1}\colon\mathbb{F}\to\mathbb{F}\) (Mizar denoted \(x^{-1}\) as <code>x"</code>)</li>
+<li>a constant \(1\in\mathbb{F}\)</li>
+</ul>
+
+<p>
+such that
+</p>
+
+<ul class="org-ul">
+<li>addition is commutative \(x+y=y+x\) (<a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V2"><code>Abelian</code></a>)</li>
+<li>addition is associative \(x+(y+z)=(x+y)+z\) (<a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V3"><code>add-associative</code></a>)</li>
+<li>zero is unit for addition: \(x+0=x\) (<a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V4"><code>right_zeroed</code></a>) and as a
+consequence of commutativity \(0+x=x\)</li>
+<li>negation gives additive inverse \(x+(-x)=0\) (<a href="https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#V10"><code>right_complementable</code></a>)</li>
+<li>multiplication is commutative \(xy=yx\) (<a href="https://mizar.uwb.edu.pl/version/current/html/group_1.html#V5"><code>commutative</code></a>)</li>
+<li>multiplication is associative \((xy)z=x(yz)\) (<a href="https://mizar.uwb.edu.pl/version/current/html/group_1.html#V3"><code>associative</code></a>)</li>
+<li>one is the unit for multiplication \(1\cdot x=x\cdot 1=x\) (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V4"><code>well-unital</code></a>)</li>
+<li>inversion is the multiplicative inverse when \(x\neq0\),
+\(x^{-1}\cdot x=1\) (<a href="https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#V33"><code>almost_left_invertible</code></a> = all nonzero elements are
+<a href="https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#V23"><code>left_invertible</code></a>) and then commutativity gives us \(x\cdot x^{-1}=1\)</li>
+<li>multiplication distributes over addition: \(x(y+z)=xy+xz\) (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V5"><code>distributive</code></a>)</li>
+</ul></li>
+</ul>
+
+<p>
+Later on, students learn there is a hierarchy of generalizations of
+fields (rings and things).
+</p>
+
+<p>
+Idiomatic Mizar defines a structure, then attaches adjectives to it to
+form a mathematical gadget. The underlying structure for fields
+coincides with rings (and things), and is formalize as <a href="https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#L6"><code>doubleLoopStr</code></a>
+in Mizar.
+</p>
+
+<div class="remark" id="org31e2823">
+<p>
+To American university students, this is an odd choice of
+name, but most of abstract algebra has only been standardized fairly
+recently &#x2014; it is not uncommon to find terms like "magma" and <a href="https://en.wikipedia.org/wiki/Quasigroup#Loops">loops</a> in
+Bourbaki and older literature. A "double loop" is then a set equipped
+with two loop structures.
+</p>
+
+<p>
+I also suspect that, since the Mizar project initially started working
+in Poland in the 1970s, it used the literature available to it. For
+example, Wanda Szmielew's <cite class="book-title">From Affine to Euclidean Geometry: An Axiomatic Approach</cite>
+formalizes the notions of loops, double loops, etc. The book is an
+impressive piece of mathematical writing, and little known in the West.
+</p>
+
+</div>
+
+<p>
+The bare minimum we need to formalize the notion of a field requires:
+</p>
+<ul class="org-ul">
+<li>a set \(F\)</li>
+<li>a function \(+\colon F\times F\to F\) (<code>addF</code> in Mizar)</li>
+<li>a function \(\cdot F\times F\to F\) (<code>multF</code> in Mizar)</li>
+<li>a constant \(1_{F}\in F\) (<code>OneF</code> in Mizar)</li>
+<li>another constant \(0_{F}\in F\) (<code>ZeroF</code> in Mizar).</li>
+</ul>
+
+<p>
+There are utility functions like <a href="https://mizar.uwb.edu.pl/version/current/html/struct_0.html#K4"><code>0.F</code></a> to refer to <code>the ZeroF of F</code>,
+and <a href="https://mizar.uwb.edu.pl/version/current/html/struct_0.html#K4"><code>1.F</code></a> for <code>the OneF of F</code>.
+</p>
+
+<p>
+Mizar then uses adjectives to define:
+</p>
+
+<ul class="org-ul">
+<li>a <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM3">Ring</a> is a nonempty double loop satisfying all the properties of a
+field <b><i>except</i></b> (1) the commutativity of multiplication and (2)
+almost left invertibility (i.e., every nonzero element of the field
+has a multiplicative inverse)</li>
+<li>a <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM4">Skew-Field</a> is a <a href="https://mizar.uwb.edu.pl/version/current/html/struct_0.html#V6"><code>nondegenerated</code></a> (i.e., \(0\neq 1\)) almost left
+invertible Ring</li>
+<li>a <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM5">Field</a> is a commutative Skew-Field</li>
+</ul>
+
+<p>
+If we want to consider the real numbers as a field, we would use
+<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#K2"><code>F_Real</code></a>.
+</p>
+
+<p>
+If we want to consider the complex numbers as a field, we would use
+<a href="https://mizar.uwb.edu.pl/version/current/html/complfld.html#K1"><code>F_Complex</code></a>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-174a9872-70d2-4480-b277-d54d59d38691" class="outline-3">
+<h3 id="h-174a9872-70d2-4480-b277-d54d59d38691">1B. Definition of Vector Spaces</h3>
+<div class="outline-text-3" id="text-h-174a9872-70d2-4480-b277-d54d59d38691">
+<ul class="org-ul">
+<li>We have a <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#L1"><code>ModuleStr</code></a> over some gadget \(F\) in Mizar be a structure
+consisting of:
+<ul class="org-ul">
+<li>an underlying set called the <code>carrier</code>,</li>
+<li>a binary operator <code>addF</code> on the <code>carrier</code> (corresponding to vector addition),</li>
+<li>a constant <code>ZeroF</code> belonging to the <code>carrier</code> (corresponding to the
+zero vector), and</li>
+<li>a function
+\(\mathtt{lmult}\colon F\times\mathtt{carrier}\to\mathtt{carrier}\)
+corresponding to scalar multiplication</li>
+</ul></li>
+<li><p>
+<b>Definition 1.20.</b>
+When \(\mathbb{F}\) is a field, we define a <dfn>Vector Space</dfn> over
+\(\mathbb{F}\) to consist of a set \(V\) equipped with
+</p>
+<ul class="org-ul">
+<li>a binary operator \(\cdot\colon\mathbb{F}\times V\to V\) called
+<i>scalar multiplication</i></li>
+<li>a binary operator \(+\colon V\times V\to V\) called /vector addition</li>
+<li>a constant \(0\in V\) called the <i>zero vector</i></li>
+</ul>
+
+<p>
+(i.e., it consists of a <code>ModuleStr</code> over \(\mathbb{F}\))
+such that
+</p>
+
+<ul class="org-ul">
+<li>commutativity of vector addition \(u+v=v+u\) for all \(u,v\in V\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V2"><code>Abelian</code></a>)</li>
+<li>associativity of vector addition \((u+v)+w=u+(v+w)\) for all \(u,v,w\in V\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V3"><code>add-associative</code></a>)</li>
+<li>associativity of scalar multiplication \(a\cdot(b\cdot v)=(ab)\cdot v\)
+for all \(a,b\in\mathbb{F}\) and \(v\in V\) (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V10"><code>scalar-associative</code></a>)</li>
+<li>additive identity \(v+0=v\) (<a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V4"><code>right_zeroed</code></a>) and by commutativity \(0+v=v\) for all \(v\in V\)</li>
+<li>additive inverse: for each \(v\in V\), there exists a \(w\in V\) such
+that \(v+w=0\) (i.e., every element is <a href="https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#V10"><code>right_complementable</code></a>)</li>
+<li>multiplicative identity: \(1\cdot v=v\) for all \(v\in V\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V11"><code>scalar-unital</code></a>)</li>
+<li>distributivity of scalar multiplication over vector addition:
+\(a\cdot(u+v)=(a\cdot u)+(a\cdot v)\) for all \(a\in\mathbb{F}\) and
+\(u,v\in V\) (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V8"><code>vector-distributive</code></a>)</li>
+<li>distributivity of scalar multiplication over scalar addition:
+\((a+b)\cdot v = (a\cdot v)+(b\cdot v)\)
+for all \(a,b\in\mathbb{F}\) and \(v\in V\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V9"><code>scalar-distributive</code></a>)</li>
+</ul></li>
+<li>This is precisely the definition of a <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM9"><code>VectSp of F</code></a> in Mizar</li>
+<li><b>Definition 1.21.</b>
+Elements of a vector space are called <dfn>Vectors</dfn>
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM8"><code>Vector</code></a> is defined thus, and <code>Scalar of VS</code> is shorthand for an
+element of <code>F</code> the field.</li>
+</ul></li>
+<li><b>Definition 1.22</b> (Real vector space, complex vector space).
+A vector space over \(\mathbb{R}\) is called a <dfn>Real Vector Space</dfn>, and
+a vector space over \(\mathbb{C}\) is called a <dfn>Complex Vector Space</dfn>.
+<ul class="org-ul">
+<li>In Mizar, when we specialize attention to real vector spaces, we
+refer to them as <a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#NM2"><code>RealLinearSpace</code></a></li>
+<li>For complex vector spaces, they are <a href="https://mizar.uwb.edu.pl/version/current/html/clvect_1.html#NM2"><code>ComplexLinearSpace</code></a></li>
+</ul></li>
+<li><b>Notation 1.24.</b>
+<ul class="org-ul">
+<li>If \(S\) is a set, then \(\mathbb{F}^{S}\) is the set of functions from
+\(S\) to \(\mathbb{F}\)
+<ul class="org-ul">
+<li>Mizar notation: <a href="https://mizar.uwb.edu.pl/version/current/html/funct_2.html#K1"><code>Funcs(S,the carrier of F)</code></a></li>
+</ul></li>
+<li>For \(f,g\in\mathbb{F}^{S}\), the sum \(f+g\mathbb{F}^{S}\) is defined
+by \((f+g)(x)=f(x)+g(x)\) for all \(x\in S\).
+<ul class="org-ul">
+<li>This is definition <a href="https://mizar.uwb.edu.pl/version/current/html/valued_1.html#K1"><code>VALUED_1:def 1</code></a></li>
+</ul></li>
+<li>If \(\lambda\in\mathbb{F}\) and \(f\in\mathbb{F}^{S}\), the product
+\(\lambda f\in\mathbb{F}^{S}\) is defined by \((\lambda f)(x)=\lambda f(x)\)
+for every \(x\in S\).
+<ul class="org-ul">
+<li>This is probably defined somewhere, I think <code>(S --&gt; {lambda}) [#] f</code>
+is a kludge solution</li>
+</ul></li>
+</ul></li>
+<li><b>Theorem 1.26</b> (Unique additive identity).
+A vector space has a unique additive identity. <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 1.27</b> (Unique additive inverse).
+Every element in a vector space has a unique additive inverse.
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T16"><code>VECTSP_1:16</code></a>)</li>
+<li><b>Theorem 1.30.</b> For each \(v\in V\), \(0\cdot v=0\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T14"><code>VECTSP_1:14</code></a>)</li>
+<li><b>Theorem 1.31.</b> For every \(a\in\mathbb{F}\), \(a\cdot 0=0\). (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_2.html#T30"><code>VECTSP_2:30</code></a>)</li>
+<li><b>Theorem 1.32.</b>
+For each \(v\in V\), \((-1)\cdot v = -v\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T14"><code>VECTSP_1:14</code></a>)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-9e2b8b08-bedb-4193-bc7c-ee8cd4b4573b" class="outline-3">
+<h3 id="h-9e2b8b08-bedb-4193-bc7c-ee8cd4b4573b">1C. Subspaces</h3>
+<div class="outline-text-3" id="text-h-9e2b8b08-bedb-4193-bc7c-ee8cd4b4573b">
+<ul class="org-ul">
+<li><b>Definition 1.33.</b>
+A subset \(U\subset V\) is called a <dfn>Subspace</dfn> of \(V\) if \(U\) is
+also a vector space with the same additive identity, addition, and
+scalar multiplication as on \(V\).
+<ul class="org-ul">
+<li>Mizar defines <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#M1"><code>Subspace of V</code></a> as restricting the addition and scalar
+multiplication to \(U\)</li>
+</ul></li>
+<li><b>Theorem 1.34</b> (Conditions for a Subspace).
+A subset \(U\) of \(V\) is a subspace of \(V\) if and only if \(U\) satisfies
+three conditions: (1) it contains the additive identity \(0\in U\),
+(2) closed under addition \(u,w\in U\) implies \(u+w\in U\), and
+(3) closed under scalar multiplication \(a\in\mathbb{F}\) and \(u\in U\)
+implies \(a\cdot u\in U\).
+<ul class="org-ul">
+<li>(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#T34"><code>VECTSP_4:34</code></a>)</li>
+</ul></li>
+<li><b>Implicit Examples.</b> The zero subspace (consisting only of the zero
+vector) is denoted <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#K1"><code>(0).V</code></a>; and \(V\) considered as a subspace of itself
+is <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#K2"><code>(Omega).V</code></a>.</li>
+<li><b>Implicit Definition.</b> If \(U\) and \(W\) are subspaces of \(V\), then \(U\cap W\)
+is a subspace of \(V\).
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#K2"><code>VECTSP_5:def 2</code></a></li>
+</ul></li>
+<li><b>Implicit Theorem.</b> Let \(U_{1}\), \(U_{2}\) be subspaces of \(V\).
+If the underlying set of \(U_{1}\) is a subset of the underlying set of
+\(U_{2}\), then \(U_{1}\) is a subspace of \(U_{2}\). (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#T27"><code>VECTSP_4:27</code></a>)</li>
+<li><b>Implicit Theorem.</b> Let \(U_{1}\), \(U_{2}\), \(U_{3}\) be subspaces of \(V\).
+If \(U_{1}\) is a subspace of \(U_{2}\) and \(U_{2}\) is a subspace of
+\(U_{3}\), then \(U_{1}\) is a subspace of \(U_{3}\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#T26"><code>VECTSP_4:26</code></a>)</li>
+</ul>
+</div>
+
+<div id="outline-container-h-a7ad4e83-ab15-468b-845c-b3b3c6087b58" class="outline-4">
+<h4 id="h-a7ad4e83-ab15-468b-845c-b3b3c6087b58">Sums of Subspaces</h4>
+<div class="outline-text-4" id="text-h-a7ad4e83-ab15-468b-845c-b3b3c6087b58">
+<ul class="org-ul">
+<li><b>Definition 1.36.</b>
+Suppose \(V_{1}\), &#x2026;, \(V_{m}\) are subspaces of \(V\).
+We define the <dfn>Sum</dfn> of \(V_{1}\), &#x2026;, \(V_{m}\) (denoted by
+\(V_{1}+ \dots + V_{m}\)) to be the set
+\(V_{1}+ \dots + V_{m} = \{v_{1} + \dots + v_{m}\mid v_{1}\in V_{1},\dots,v_{m}\in V_{m}\}\).
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#K1"><code>VECTSP_5:def 1</code></a></li>
+</ul></li>
+<li><b>Implicit Theorem.</b> We have for any subspaces \(V_{1}\) and \(V_{2}\) of \(V\),
+\(V_{1}+V_{2} = V_{2}+V_{1}\). (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T5"><code>VECTSP_5:5</code></a>)</li>
+<li><b>Implicit Theorem.</b> For any subspaces \(V_{1}\), \(V_{2}\), \(V_{3}\) of
+\(V\), we have
+\(V_{1}+(V_{2}+V_{3})=(V_{1}+V_{2})+V_{3}\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T6"><code>VECTSP_5:6</code></a>).</li>
+<li><b>Implicit Theorem.</b> For any subspaces \(V_{1}\) and \(V_{2}\) of \(V\),
+\(V_{1}\) is a subspace of \(V_{1}+V_{2}\) and \(V_{2}\) is a subspace of \(V_{1}+V_{2}\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T7"><code>VECTSP_5:7</code></a>)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-42b38ede-b986-45d1-83ea-802167e48bf4" class="outline-4">
+<h4 id="h-42b38ede-b986-45d1-83ea-802167e48bf4">Direct Sums</h4>
+<div class="outline-text-4" id="text-h-42b38ede-b986-45d1-83ea-802167e48bf4">
+<ul class="org-ul">
+<li><b>Definition 1.41.</b>
+Let \(V_{1}\), &#x2026;, \(V_{m}\) be subspaces of \(V\).
+The sum \(V_{1} + \dots + V_{m}\) is called a <dfn>Direct Sum</dfn> if
+each element of the sum can be written in only one way as a sum, and
+in that case we write \(V_{1}\oplus\dots\oplus V_{m}\).
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#R1"><code>VECTSP_5:def 4</code></a> defines <code>M is_the_direct_sum_of V1,V2</code> as a predicate</li>
+<li>Theorems <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T48"><code>VECTSP_5:48</code></a> and <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T49"><code>VECTSP_5:49</code></a> prove the logical
+equivalence of this definition and Mizar's definition.</li>
+</ul></li>
+<li><b>Theorem 1.45</b> (Conditions for a direct sum).
+Let \(V_{1}\), &#x2026;, \(V_{m}\) be subspaces of \(V\). Then
+\(V_{1} + \dots + V_{m}\) is a direct sum if and only if the only way to
+write \(0\) as a sum \(v_{1}+\dots+v_{m}\) (with \(v_{1}\in V_{1}\), &#x2026;,
+\(v_{m}\in V_{m}\)) is by taking each \(v_{k}=0\).
+<ul class="org-ul">
+<li><span class="missing">Missing from Mizar</span> but this can be easily deduced as a consequence from
+other results.</li>
+</ul></li>
+<li><b>Theorem 1.46</b> (Direct sum of two subspaces).
+Suppose \(U\) and \(W\) are subspaces of \(V\). Then \(U+W\) is a direct sum
+if and only if \(U\cap W=\{0\}\).
+<ul class="org-ul">
+<li>This is taken as the definition <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#R1"><code>VECTSP_5:def 4</code></a></li>
+</ul></li>
+<li><b>Implicit Theorem.</b> If \(V_{1}=V_{2}\oplus V_{3}\), then \(V_{1}=V_{3}\oplus V_{2}\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T41"><code>VECTSP_5:41</code></a>)</li>
+</ul>
+
+<div class="remark" id="org3880afb">
+<p>
+It's probably fruitful to define a [Mizar] functor for the direct sum of a
+family of vector spaces over the same field, using the universal
+property of coproduct objects. But I cannot think of an instance where
+it would be useful.
+</p>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-ccdf5a19-684f-44c8-a176-221c9a00d250" class="outline-2">
+<h2 id="h-ccdf5a19-684f-44c8-a176-221c9a00d250">Chapter 2 Finite-Dimensional Vector Spaces</h2>
+<div class="outline-text-2" id="text-h-ccdf5a19-684f-44c8-a176-221c9a00d250">
+</div>
+
+<div id="outline-container-h-380d3a5f-17a4-4edd-a8e8-ed23ac3189b9" class="outline-3">
+<h3 id="h-380d3a5f-17a4-4edd-a8e8-ed23ac3189b9">2A. Spans and Linear Independence</h3>
+<div class="outline-text-3" id="text-h-380d3a5f-17a4-4edd-a8e8-ed23ac3189b9">
+</div>
+
+<div id="outline-container-h-98a875af-e955-423b-9188-754fa928c76c" class="outline-4">
+<h4 id="h-98a875af-e955-423b-9188-754fa928c76c">Linear Combinations and Spans</h4>
+<div class="outline-text-4" id="text-h-98a875af-e955-423b-9188-754fa928c76c">
+<ul class="org-ul">
+<li><b>Definition 2.2.</b>
+Let \(v_{1}\), &#x2026;, \(v_{m}\) be vectors in \(V\).
+A <dfn>Linear Combination</dfn> of \(v_{1}\), &#x2026;, \(v_{m}\) is any vector
+of the form \(a_{1}v_{1}+\dots+a_{m}v_{m}\) where \(a_{1},\dots,a_{m}\in\mathbb{F}\).
+<ul class="org-ul">
+<li>Mizar appears to define the coefficients \(a_{1}\), &#x2026;, \(a_{m}\) for a
+particular linear combination as <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_6.html#M2"><code>LinearCombination of A</code></a> where \(A=\{v_{1},\dots,v_{m}\}\).
+See Theorem <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_6.html#T18"><code>VECTSP_6:18</code></a> for example.</li>
+</ul></li>
+<li><b>Definition 2.4.</b>
+The set of all linear combinations of a list of vectors \(v_{1}\), &#x2026;,
+\(v_{m}\) of \(V\) is called the <dfn>Span</dfn> of \(v_{1}\), &#x2026;, \(v_{m}\)
+and is denoted by \(\operatorname{span}(v_{1},\dots,v_{m})=\{a_{1}v_{1}+\dots+a_{m}v_{m}\mid a_{1},\dots,a_{m}\in\mathbb{F}\}\).
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#K1"><code>VECTSP_7:def 2</code></a> calls it <code>Lin</code></li>
+</ul></li>
+<li><b>Definition 2.9.</b> A vector space is called
+<dfn>Finite-Dimensional</dfn>
+if some finite list of vectors in it spans the space. 
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#V1"><code>MATRLIN:def 1</code></a> uses an equivalent condition, namely, that there is
+a finite linearly independent subset which spans the space.</li>
+</ul></li>
+<li><b>Definition 2.13.</b> A vector space is called
+<dfn>Infinite-DImensional</dfn> if it is not finite-dimensional.
+<span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-7b96ecaf-bd7a-4274-a290-a9a01c3eec78" class="outline-4">
+<h4 id="h-7b96ecaf-bd7a-4274-a290-a9a01c3eec78">Linear Independence</h4>
+<div class="outline-text-4" id="text-h-7b96ecaf-bd7a-4274-a290-a9a01c3eec78">
+<ul class="org-ul">
+<li><b>Definition 2.15.</b> A list of vectors \(v_{1}\), &#x2026;, \(v_{m}\) of \(V\) is
+called <dfn>Linearly Independent</dfn> if the only choice of
+coefficients \(a_{1},\dots,a_{m}\in\mathbb{F}\) which satisfies
+\(0 = a_{1}v_{1} + \dots + a_{m}v_{m}\) is \(a_{1}=\dots=a_{m}=0\).
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#V1"><code>VECTSP_7:def 1</code></a> formalizes <code>linearly-independent</code> for a set of vectors.</li>
+<li>\(\emptyset\) is registered as linearly independent in <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#FC1"><code>VECTSP_7</code></a></li>
+</ul></li>
+<li><b>Definition 2.17.</b> A list of vectors is called <dfn>Linearly Dependent</dfn>
+if it is not linearly independent.</li>
+<li><b>Theorem 2.19</b> (Linear dependence lemma).
+Let \(v_{1}\), &#x2026;, \(v_{m}\) be linearly dependent in \(V\). Then there
+exists a \(k\in\{1,\dots,m\}\) such that \(v_{k}\in\operatorname{span}(v_{1},\dots,v_{k-1})\).
+Further, if \(k\) satisfies the condition above, then
+\(\operatorname{span}(v_{1},\dots,v_{k-1},v_{k+1},\dots,v_{m})=\operatorname{span}(v_{1},\dots,v_{m})\).
+<ul class="org-ul">
+<li><span class="missing">Missing from Mizar</span> but I suspect it can be deduced from <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T14"><code>VECTSP_9:14</code></a></li>
+</ul></li>
+<li><b>Theorem 2.22.</b> In finite-dimensional vcetor spaces, the length of
+every linearly independent list of vectors is less than or equal to
+the length of every spanning set of vectors.
+<ul class="org-ul">
+<li>This seems to be deducible from <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#T19"><code>VECTSP_7:19</code></a> but is <span class="missing">Missing from Mizar</span></li>
+</ul></li>
+<li><b>Theorem 2.25</b> (finite-dimensional subspaces).
+Every subspace of a finite-dimensional vector space is finite-dimension.
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T24"><code>VECTSP_9:24</code></a>)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-09ad76d0-5a6a-45e9-8243-730112d9daaf" class="outline-3">
+<h3 id="h-09ad76d0-5a6a-45e9-8243-730112d9daaf">2B. Bases</h3>
+<div class="outline-text-3" id="text-h-09ad76d0-5a6a-45e9-8243-730112d9daaf">
+<ul class="org-ul">
+<li><b>Definition 2.26.</b> A <dfn>Basis</dfn> of \(V\) is a set of vectors of
+\(V\) that is linearly independent and spans \(V\).
+<ul class="org-ul">
+<li><code>VECTSP_7</code> defines <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#NM1"><code>Basis of V</code></a> is defined as a <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#V2"><code>base</code></a> <code>Subset of V</code>, which means it is
+linearly-independent and it spans <code>V</code>.</li>
+</ul></li>
+<li><b>Implicit Definition.</b> When we have an ordered list of vectors which
+spans \(V\), then we call that an <dfn>Ordered Basis</dfn>. Usually this
+is what people implicitly work with.
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#M1"><code>MATRLIN:def 2</code></a> formalizes <code>OrdBasis of V</code></li>
+</ul></li>
+<li><b>Theorem 2.30.</b> Every spanning list contains a basis as a subset. (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#T20"><code>VECTSP_7:20</code></a>)</li>
+<li><b>Theorem 2.31.</b> Every finite-dimensional vector space has a
+basis. (This is literally part of the definition of
+<code>finite-dimensional</code>, so it's redundant in Mizar.)</li>
+<li><b>Theorem 2.32.</b> Every linearly independent list of vectors in a
+finite-dimensional vector space can be extended to a basis of the
+vector space. (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#T19"><code>VECTSP_7:19</code></a>)</li>
+<li><b>Theorem 2.33.</b> Suppose \(V\) is a finite-dimensional space and \(U\) is a
+subspace of \(V\). Then there exists a subspace \(W\) of \(V\) such that
+\(V=U\oplus W\).
+<ul class="org-ul">
+<li>The subspace \(W\) is called the complement of \(U\), and is defined in
+<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#M1"><code>VECTSP_5:def 5</code></a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-f654065c-e6f6-4b11-bbb7-8a974f704a48" class="outline-3">
+<h3 id="h-f654065c-e6f6-4b11-bbb7-8a974f704a48">2C. Dimension</h3>
+<div class="outline-text-3" id="text-h-f654065c-e6f6-4b11-bbb7-8a974f704a48">
+<ul class="org-ul">
+<li><b>Theorem 2.34.</b> Any two bases of a finite-dimensional vector space
+have the same length.</li>
+<li><b>Definition 2.35.</b> The <dfn>Dimension</dfn> of a finite-dimensional
+vector space is the length of any basis of the vector space and is
+denoted \(\dim(V)\).
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#K1"><code>VECTSP_9:def 1</code></a> formalizes this</li>
+</ul></li>
+<li><b>Theorem 2.37.</b> If \(V\) is a finite-dimensional vector space and \(U\) is
+a subspace of \(V\), then \(\dim(U)\leq\dim(V)\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T25"><code>VECTSP_9:25</code></a>)</li>
+<li><b>Theorem 2.38.</b> Suppose \(V\) is finite-dimensional. Then every linearly
+independent list of vectors in \(V\) has length \(\dim(V)\) and is a basis
+of \(V\). (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T26"><code>VECTSP_9:26</code></a> is more general)</li>
+<li><b>Theorem 2.39.</b> Let \(V\) be finite-dimensional, \(U\) be a subspace of \(V\).
+If \(\dim(U)=\dim(V)\), then \(U=V\). (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T28"><code>VECTSP_9:28</code></a>)</li>
+<li><b>Theorem 2.43.</b> If \(V_{1}\) and \(V_{2}\) are subspaces of a
+finite-dimensional vector space, then
+\(\dim(V_{1}+V_{2})=\dim(V_{1})+\dim(V_{2}) - \dim(V_{1}\cap V_{2})\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T32"><code>VECTSP_9:32</code></a>)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-4706f12d-af00-418a-92be-d31c72853766" class="outline-2">
+<h2 id="h-4706f12d-af00-418a-92be-d31c72853766">Chapter 3 Linear Maps</h2>
+<div class="outline-text-2" id="text-h-4706f12d-af00-418a-92be-d31c72853766">
+</div>
+
+<div id="outline-container-h-f9c5c9ea-d756-4ba9-9bf1-49a069cc10b3" class="outline-3">
+<h3 id="h-f9c5c9ea-d756-4ba9-9bf1-49a069cc10b3">3A. Vector Spaces of Linear Maps</h3>
+<div class="outline-text-3" id="text-h-f9c5c9ea-d756-4ba9-9bf1-49a069cc10b3">
+</div>
+
+<div id="outline-container-h-ab71d5ec-d816-4323-b2e7-f056ba5819f0" class="outline-4">
+<h4 id="h-ab71d5ec-d816-4323-b2e7-f056ba5819f0">Definitions and Examples</h4>
+<div class="outline-text-4" id="text-h-ab71d5ec-d816-4323-b2e7-f056ba5819f0">
+<ul class="org-ul">
+<li><b>Definition 3.1.</b> Let \(V\), \(W\) be vector spaces over the same field \(\mathbb{F}\).
+A <dfn>Linear Map</dfn> from \(V\) to \(W\) is a function \(T\colon V\to W\)
+such that it is:
+<ul class="org-ul">
+<li><b>Additive:</b> \(T(u+v)=T(u)+T(v)\) for all \(u,v\in V\) (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V13"><code>additive</code></a>)</li>
+<li><b>Homogeneous:</b> \(T(\lambda v)=\lambda T(v)\) for all
+\(\lambda\in\mathbb{F}\) and \(v\in V\) (<a href="https://mizar.uwb.edu.pl/version/current/html/mod_2.html#V1"><code>homogeneous</code></a>)</li>
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/ranknull.html#NM1"><code>RANKNULL</code></a> defines <a href="https://mizar.uwb.edu.pl/version/current/html/ranknull.html#NM1"><code>linear-transformation of V,W</code></a> as an
+<code>additive homogeneous Function of V,W</code>.</li>
+</ul></li>
+<li></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8" class="outline-4">
+<h4 id="h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8">Algebraic Operations on \(L(V,W)\)</h4>
+<div class="outline-text-4" id="text-h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8">
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-98c27132-8546-446a-8ef7-c60c20bcff28" class="outline-3">
+<h3 id="h-98c27132-8546-446a-8ef7-c60c20bcff28">3B. Null Spaces and Ranges</h3>
+<div class="outline-text-3" id="text-h-98c27132-8546-446a-8ef7-c60c20bcff28">
+</div>
+
+<div id="outline-container-h-6f6d554e-c664-4957-97e9-dc5721a97f99" class="outline-4">
+<h4 id="h-6f6d554e-c664-4957-97e9-dc5721a97f99">Null Spaces and Injectivity</h4>
+<div class="outline-text-4" id="text-h-6f6d554e-c664-4957-97e9-dc5721a97f99">
+</div>
+</div>
+
+<div id="outline-container-h-98038eca-1e3c-4503-b834-3389a0e825cd" class="outline-4">
+<h4 id="h-98038eca-1e3c-4503-b834-3389a0e825cd">Range and Surjectivity</h4>
+<div class="outline-text-4" id="text-h-98038eca-1e3c-4503-b834-3389a0e825cd">
+</div>
+</div>
+
+<div id="outline-container-h-aca4326c-86bc-4991-a2e9-b6076552fdac" class="outline-4">
+<h4 id="h-aca4326c-86bc-4991-a2e9-b6076552fdac">Fundamental Theorem of Linear Maps</h4>
+<div class="outline-text-4" id="text-h-aca4326c-86bc-4991-a2e9-b6076552fdac">
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-e4124565-75bd-43c0-a5eb-4a5061eefc9f" class="outline-3">
+<h3 id="h-e4124565-75bd-43c0-a5eb-4a5061eefc9f">3C. Matrices</h3>
+<div class="outline-text-3" id="text-h-e4124565-75bd-43c0-a5eb-4a5061eefc9f">
+</div>
+
+<div id="outline-container-h-30355ddf-3e25-4b66-a06b-1dc9b3574a81" class="outline-4">
+<h4 id="h-30355ddf-3e25-4b66-a06b-1dc9b3574a81">Representing a Linear Map by a Matrix</h4>
+<div class="outline-text-4" id="text-h-30355ddf-3e25-4b66-a06b-1dc9b3574a81">
+</div>
+</div>
+
+<div id="outline-container-h-9930e894-2db2-4d0f-9944-d295cf2de9a5" class="outline-4">
+<h4 id="h-9930e894-2db2-4d0f-9944-d295cf2de9a5">Addition and Scalar Multiplication of Matrices</h4>
+<div class="outline-text-4" id="text-h-9930e894-2db2-4d0f-9944-d295cf2de9a5">
+</div>
+</div>
+
+<div id="outline-container-h-7ed6b163-ce5a-4001-922e-3f54b7794a1d" class="outline-4">
+<h4 id="h-7ed6b163-ce5a-4001-922e-3f54b7794a1d">Matrix Multiplication</h4>
+<div class="outline-text-4" id="text-h-7ed6b163-ce5a-4001-922e-3f54b7794a1d">
+</div>
+</div>
+
+<div id="outline-container-h-25209265-06a6-4144-83a6-27757040afc7" class="outline-4">
+<h4 id="h-25209265-06a6-4144-83a6-27757040afc7">Column-Row Factorization and Rank of a Matrix</h4>
+<div class="outline-text-4" id="text-h-25209265-06a6-4144-83a6-27757040afc7">
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-b56e3b65-7e3f-4d74-bfd0-60a135d74ca5" class="outline-3">
+<h3 id="h-b56e3b65-7e3f-4d74-bfd0-60a135d74ca5">3D. Invertibility and Isomorphisms</h3>
+<div class="outline-text-3" id="text-h-b56e3b65-7e3f-4d74-bfd0-60a135d74ca5">
+</div>
+
+<div id="outline-container-h-5714227b-82f5-4587-abdd-c19383a6b9e8" class="outline-4">
+<h4 id="h-5714227b-82f5-4587-abdd-c19383a6b9e8">Invertible Linear Maps</h4>
+<div class="outline-text-4" id="text-h-5714227b-82f5-4587-abdd-c19383a6b9e8">
+</div>
+</div>
+
+<div id="outline-container-h-614c4b38-c073-466d-8bfc-f01b329b73a9" class="outline-4">
+<h4 id="h-614c4b38-c073-466d-8bfc-f01b329b73a9">Isomorphic Vector Spaces</h4>
+<div class="outline-text-4" id="text-h-614c4b38-c073-466d-8bfc-f01b329b73a9">
+</div>
+</div>
+
+<div id="outline-container-h-153320cc-2523-41e4-88fa-bd64733c79aa" class="outline-4">
+<h4 id="h-153320cc-2523-41e4-88fa-bd64733c79aa">Linear Maps Thought of as Matrix Multiplication</h4>
+<div class="outline-text-4" id="text-h-153320cc-2523-41e4-88fa-bd64733c79aa">
+</div>
+</div>
+
+<div id="outline-container-h-cf3fc6fa-df96-4bc7-a0c5-8830f3f6935c" class="outline-4">
+<h4 id="h-cf3fc6fa-df96-4bc7-a0c5-8830f3f6935c">Change of Basis</h4>
+<div class="outline-text-4" id="text-h-cf3fc6fa-df96-4bc7-a0c5-8830f3f6935c">
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-0c43a4c8-9e42-42b7-9257-378d124af333" class="outline-3">
+<h3 id="h-0c43a4c8-9e42-42b7-9257-378d124af333">3E. Products and Quotients of Vector Spaces</h3>
+<div class="outline-text-3" id="text-h-0c43a4c8-9e42-42b7-9257-378d124af333">
+</div>
+
+<div id="outline-container-h-0d01fa68-3fe3-4e99-be22-6cf833a1dcc4" class="outline-4">
+<h4 id="h-0d01fa68-3fe3-4e99-be22-6cf833a1dcc4">Products of Vector Spaces</h4>
+<div class="outline-text-4" id="text-h-0d01fa68-3fe3-4e99-be22-6cf833a1dcc4">
+</div>
+</div>
+
+<div id="outline-container-h-b13d8b50-b13d-4d3c-af74-4b0308be8c17" class="outline-4">
+<h4 id="h-b13d8b50-b13d-4d3c-af74-4b0308be8c17">Quotient Spaces</h4>
+<div class="outline-text-4" id="text-h-b13d8b50-b13d-4d3c-af74-4b0308be8c17">
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-5700ba79-2cba-4eb2-82d2-33d2ca1ec17d" class="outline-3">
+<h3 id="h-5700ba79-2cba-4eb2-82d2-33d2ca1ec17d">3F. Duality</h3>
+<div class="outline-text-3" id="text-h-5700ba79-2cba-4eb2-82d2-33d2ca1ec17d">
+</div>
+
+<div id="outline-container-h-efb99066-3590-4e66-8ccc-7dcd67ef5ed0" class="outline-4">
+<h4 id="h-efb99066-3590-4e66-8ccc-7dcd67ef5ed0">Dual Space and Dual Map</h4>
+<div class="outline-text-4" id="text-h-efb99066-3590-4e66-8ccc-7dcd67ef5ed0">
+</div>
+</div>
+
+<div id="outline-container-h-71c23010-fe29-4e48-81df-2f1488f3e34b" class="outline-4">
+<h4 id="h-71c23010-fe29-4e48-81df-2f1488f3e34b">Null Space and Range of Dual of Linear Map</h4>
+<div class="outline-text-4" id="text-h-71c23010-fe29-4e48-81df-2f1488f3e34b">
+</div>
+</div>
+
+<div id="outline-container-h-29daf0bd-958f-47a7-9eaf-ad0231f6dfa4" class="outline-4">
+<h4 id="h-29daf0bd-958f-47a7-9eaf-ad0231f6dfa4">Matrix of Dual of Linear Map</h4>
+<div class="outline-text-4" id="text-h-29daf0bd-958f-47a7-9eaf-ad0231f6dfa4">
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-15a894da-e1d1-4892-8178-5084dae51937" class="outline-2">
+<h2 id="h-15a894da-e1d1-4892-8178-5084dae51937">Chapter 4 Polynomials</h2>
+<div class="outline-text-2" id="text-h-15a894da-e1d1-4892-8178-5084dae51937">
+</div>
+</div>
+
+<div id="outline-container-h-a5f35b0d-df10-4921-bfa4-e615dbcf9e84" class="outline-2">
+<h2 id="h-a5f35b0d-df10-4921-bfa4-e615dbcf9e84">Chapter 5 Eigenvalues and Eigenvectors</h2>
+<div class="outline-text-2" id="text-h-a5f35b0d-df10-4921-bfa4-e615dbcf9e84">
+</div>
+</div>
+
+<div id="outline-container-h-d5d9e9a6-eb68-40d8-bc4b-4203c74bab62" class="outline-2">
+<h2 id="h-d5d9e9a6-eb68-40d8-bc4b-4203c74bab62">Chapter 6 Inner Product Spaces</h2>
+<div class="outline-text-2" id="text-h-d5d9e9a6-eb68-40d8-bc4b-4203c74bab62">
+</div>
+</div>
+
+<div id="outline-container-h-6c414f25-c9cb-49a3-acf8-43ae9f084ef1" class="outline-2">
+<h2 id="h-6c414f25-c9cb-49a3-acf8-43ae9f084ef1">Chapter 7 Operators on Inner Product Spaces</h2>
+<div class="outline-text-2" id="text-h-6c414f25-c9cb-49a3-acf8-43ae9f084ef1">
+</div>
+</div>
+
+<div id="outline-container-h-aa05e670-151b-4aaa-8c9f-0bcc7b17383f" class="outline-2">
+<h2 id="h-aa05e670-151b-4aaa-8c9f-0bcc7b17383f">Chapter 8 Operators on Complex Vector Spaces</h2>
+<div class="outline-text-2" id="text-h-aa05e670-151b-4aaa-8c9f-0bcc7b17383f">
+</div>
+</div>
+
+<div id="outline-container-h-5af71d4d-ab0d-4533-8f23-a528d4fb3356" class="outline-2">
+<h2 id="h-5af71d4d-ab0d-4533-8f23-a528d4fb3356">Chapter 9 Multilinear Algebra and Determinants</h2>
+<div class="outline-text-2" id="text-h-5af71d4d-ab0d-4533-8f23-a528d4fb3356">
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2023-11-19 Sun 13:11.</p>
+</div>
+</body>
+</html>

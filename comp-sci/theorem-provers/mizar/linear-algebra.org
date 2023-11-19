@@ -1,0 +1,663 @@
+#+TITLE: Linear Algebra Rosetta Stone
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-11-19T07:32:53-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:nil toc:nil num:nil
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Sunday November 19, 2023 at  7:32AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-3799b2d3-78b9-435b-850b-60b7e94db637
+:END:
+
+This is a Rosetta stone of the results as found in Axler's
+{{{book-title(Linear Algebra Done Right)}}}.
+
+* Chapter 1 Vector Spaces
+:PROPERTIES:
+:CUSTOM_ID: h-542e3e45-efca-42f4-bf1b-c5e8654ae7c3
+:END:
+
+** 1A. $\mathbb{R}^{n}$ and  $\mathbb{C}^{n}$
+:PROPERTIES:
+:CUSTOM_ID: h-820f20b0-6ac6-4596-be2b-e0394aa079e8
+:END:
+
+*** Complex Numbers
+:PROPERTIES:
+:CUSTOM_ID: h-b8342424-741a-4311-8595-c87ad897143d
+:END:
+
+- *Definition 1.1* (complex numbers, $\mathbb{C}$)
+  - A {{{dfn(Complex Number)}}} is an ordered pair $(a,b)$ where
+    $a,b\in\mathbb{R}$. We write this as $a + \mathrm{i}b$.
+    - In Mizar, instead of working with the Cartesian product
+      $\mathbb{R}\times\mathbb{R}$, we use the product of an indexed
+      family with two members $X_{0}=\mathbb{R}$ and
+      $X_{1}=\mathbb{R}$. This is equivalent to the set
+      $z\in\hom(\{0,1\},\mathbb{R})\iff z\in\prod_{\alpha=0,1}X_{\alpha}$ 
+      and this is precisely how Mizar defines complex numbers.
+    - Since this is kind of confusing, there is also the notation
+      ~[*a,b*]~ for the complex number $a+\mathrm{i}b$ which is defined
+      in [[https://mizar.uwb.edu.pl/version/current/html/arytm_0.html#K5][~ARYTM_0:def 5~]].
+    - Note that Mizar follows mathematical practice, and sets
+      $\mathbb{C}=\{(a,b)\in\mathbb{R}^{2}\mid b\neq0\}\cup\mathbb{R}$
+      so that $\mathbb{R}\subset\mathbb{C}$ is true.
+  - The set of all complex numbers is denoted by
+    $\mathbb{C} = \{a+\mathrm{i}b\mid a,b\in\mathbb{R}\}$.
+    - In Mizar, this is denoted [[https://mizar.uwb.edu.pl/version/current/html/numbers.html#K2][~COMPLEX~]] (and defined in ~NUMBERS:def 2~)
+  - Addition and multiplication in $\mathbb{C}$ are defined as:
+    $(a + \mathrm{i}b)+(c+\mathrm{i}d) = (a+c)+\mathrm{i}(b+d)$
+    $(a + \mathrm{i}b)(c+\mathrm{i}d) = (ac-bd)+\mathrm{i}(ad+bc)$
+    - [[https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K2][~XCMPLX_0:def 3~]] defines addition of complex numbers
+    - [[https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K3][~XCMPLX_0:def 4~]] defines multiplication of complex numbers
+- The choice of $\mathrm{i}=(0,1)$ is due to Euler, and it is encoded in
+  Mizar as ~<i>~ as defined in [[https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K1][~XCMPLEX_0:def 1~]]
+- *Theorem 1.3.* Properties of Complex Arithmetic
+  - Addition and multiplication are both commutative
+    - This is built into the definition
+  - Addition is associative ([[https://mizar.uwb.edu.pl/version/current/html/xcmplx_1.html#1][~XCMPLX_1:1~]])
+  - Multiplication is associative ([[https://mizar.uwb.edu.pl/version/current/html/xcmplx_1.html#T4][~XCMPLX_1:4~]])
+  - 0 is the additive identity & 1 is the multiplicative identity (this
+    is true thanks to using the real numbers)
+  - Every $\alpha\in\mathbb{C}$ has a unique $\beta\in\mathbb{C}$ such
+    that $\alpha+\beta=0$
+    - This is negation, and defined in [[https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K4][~XCMPLX_0:def 5~]]
+  - Every $\alpha\in\mathbb{C}$ has a unique $\beta\in\mathbb{C}$ such
+    that $\alpha\beta=1$
+    - This is inversion and defined in [[https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K5][~XCMPLX_0:def 6~]]
+  - Distributivity $\lambda(\alpha+\beta)=\lambda\alpha + \lambda\beta$
+    for every $\alpha,\beta,\lambda\in\mathbb{C}$
+- *Definition 1.5.*
+  - Subtraction is defined as $\alpha-\beta=\alpha+(-\beta)$ ([[https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K6][~XCMPLX_0:def 7~]])
+  - Division is defined as multiplying by the inverse of the denominator
+    $\alpha/\beta=\alpha\cdot\beta^{-1}$
+    ([[https://mizar.uwb.edu.pl/version/current/html/xcmplx_0.html#K7][~XCMPLX_0:def 8~]])
+- *Convention:* throughout the book, $\mathbb{F}$ to stand for either
+  $\mathbb{R}$ or $\mathbb{C}$.
+  
+*** Lists
+:PROPERTIES:
+:CUSTOM_ID: h-f7ee189a-7ae4-4f51-b4ea-b79c32998363
+:END:
+
+- *Aside:* Mathematicians informally talk about lists and $n$
+  tuples. This is formalized in Mizar using finite sequences in the
+  ~FINSEQ~ series of articles.
+- *Definition 1.8.*
+  - Let $n$ be a non-negative integer. A {{{dfn(List)}}} of length $n$ is
+    an ordered collection of $n$ elements.
+    - This is precisely formalized as a [[https://mizar.uwb.edu.pl/version/current/html/finseq_1.html#NM1][~FinSequence~]] in Mizar, which is
+      a function whose domain is $\{1,2,\dots,n\}$
+    - We can also use the Mizar definition
+      [[https://mizar.uwb.edu.pl/version/current/html/finseq_2.html#K4][~n-tuples_on F~]] to refer to the set of all $n$ tuples
+      (i.e., ~FinSequence~ of length $n$) with entries in $F$
+  - Two lists are equal if and only if they have the same elements in
+    the same order.
+    - This is precisely [[https://mizar.uwb.edu.pl/version/current/html/finseq_1.html#D17][~FINSEQ_1:def 17~]]
+
+*** $\mathbb{F}^{n}$
+:PROPERTIES:
+:CUSTOM_ID: h-0fca0004-528d-4dea-9959-1f1f77350df5
+:END:
+
+- *Definition 1.11.*
+  - $\mathbb{F}^{n}$ denotes the set of all lists of
+    length $n$ of elements of $\mathbb{F}$
+    - In Mizar, this could be formalized as ~Funcs(Seg n,COMPLEX)~ or
+      ~Funcs(Seg n,REAL)~
+  - If $(x_{1},\dots,x_{n})\in\mathbb{F}^{n}$ and $k\in\{1,\dots,n\}$,
+    then $x_{k}$ is the $k^{\text{th}}$ coordinate of $x$.
+    - In Mizar, this is denoted ~x.k~
+- *Definition 1.13.*
+  Addition in $\mathbb{F}^{n}$ is defined componentwise
+  $(x_{1},\dots,x_{n})+(y_{1},\dots,y_{n})=(x_{1}+y_{1},\dots,x_{n}+y_{n})$.
+  - This is formalized in [[https://mizar.uwb.edu.pl/version/current/html/fvsum_1.html#K3][~FVSUM_1:def 3~]].
+- *Theorem 1.14* (Commutativity of addition in $\mathbb{F}^{n}$).
+  If $x,y\in\mathbb{F}^{n}$, then $x+y=y+x$.
+  - This is automatic with the registrations of ~FVSUM_1~
+- *Notation 1.15* (0).
+  It's common to denote by 0 the list of length $n$ whose entries are
+  all zero.
+  - In Mizar, we can denote this by ~(n |-> 0)~ using [[https://mizar.uwb.edu.pl/version/current/html/finseq_2.html#K5][~FINSEQ_2:def 2~]]
+- *Definition 1.17* (Additive inverse on $\mathbb{F}^{n}$).
+  For $x\in\mathbb{F}^{n}$, the {{{dfn(Additive Inverse)}}} of $x$,
+  denoted $-x$, is the element $-x\in\mathbb{F}^{n}$ such that
+  $x+(-x)=0$.
+  - This is definition [[https://mizar.uwb.edu.pl/version/current/html/fvsum_1.html#K5][~FVSUM_1:def 4~]] 
+- *Definition 1.18* (Scalar multiplication on $\mathbb{F}^{n}$).
+  The {{{dfn(Product)}}} of a number $\lambda\in\mathbb{F}$ and a vector $x=(x_{1},\dots,x_{n})\in\mathbb{F}^{n}$
+  is the vector obtained by multiplying componentwise by $\lambda$:
+  $\lambda x=(\lambda x_{1},\dots,\lambda x_{n})$.
+  - This is definition [[https://mizar.uwb.edu.pl/version/current/html/fvsum_1.html#K9][~FVSUM_1:def 6~]]
+
+*** Digression on Fields
+:PROPERTIES:
+:CUSTOM_ID: h-1f8560be-d80c-49e5-94e2-f55d13dcb275
+:END:
+
+Axler gives a brief digression about fields. I will take this
+opportunity to discuss Mizar's formalization ~Field~ of fields.
+
+Introductory linear algebra courses give the uninspiring definition of a
+field as something along the lines of:
+
+- *Implicit Definition.* A {{{dfn(Field)}}} consists of a set
+  $\mathbb{F}$ equipped with
+  - addition $+\colon\mathbb{F}\times\mathbb{F}\to\mathbb{F}$
+  - negation $-\colon\mathbb{F}\to\mathbb{F}$
+  - a constant $0\in\mathbb{F}$
+  - multiplication $\,\cdot\,\colon\mathbb{F}\times\mathbb{F}\to\mathbb{F}$
+  - inversion $(-)^{-1}\colon\mathbb{F}\to\mathbb{F}$ (Mizar denoted $x^{-1}$ as ~x"~)
+  - a constant $1\in\mathbb{F}$
+
+  such that
+
+  - addition is commutative $x+y=y+x$ ([[https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V2][~Abelian~]])
+  - addition is associative $x+(y+z)=(x+y)+z$ ([[https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V3][~add-associative~]])
+  - zero is unit for addition: $x+0=x$ ([[https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V4][~right_zeroed~]]) and as a
+    consequence of commutativity $0+x=x$
+  - negation gives additive inverse $x+(-x)=0$ ([[https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#V10][~right_complementable~]])
+  - multiplication is commutative $xy=yx$ ([[https://mizar.uwb.edu.pl/version/current/html/group_1.html#V5][~commutative~]])
+  - multiplication is associative $(xy)z=x(yz)$ ([[https://mizar.uwb.edu.pl/version/current/html/group_1.html#V3][~associative~]])
+  - one is the unit for multiplication $1\cdot x=x\cdot 1=x$ ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V4][~well-unital~]])
+  - inversion is the multiplicative inverse when $x\neq0$,
+    $x^{-1}\cdot x=1$ ([[https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#V33][~almost_left_invertible~]] = all nonzero elements are
+    [[https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#V23][~left_invertible~]]) and then commutativity gives us $x\cdot x^{-1}=1$
+  - multiplication distributes over addition: $x(y+z)=xy+xz$ ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V5][~distributive~]])
+
+Later on, students learn there is a hierarchy of generalizations of
+fields (rings and things).
+
+Idiomatic Mizar defines a structure, then attaches adjectives to it to
+form a mathematical gadget. The underlying structure for fields
+coincides with rings (and things), and is formalize as [[https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#L6][~doubleLoopStr~]]
+in Mizar.
+
+#+begin_remark
+To American university students, this is an odd choice of
+name, but most of abstract algebra has only been standardized fairly
+recently --- it is not uncommon to find terms like "magma" and [[https://en.wikipedia.org/wiki/Quasigroup#Loops][loops]] in
+Bourbaki and older literature. A "double loop" is then a set equipped
+with two loop structures.
+
+I also suspect that, since the Mizar project initially started working
+in Poland in the 1970s, it used the literature available to it. For
+example, Wanda Szmielew's {{{book-title(From Affine to Euclidean Geometry: An Axiomatic Approach)}}}
+formalizes the notions of loops, double loops, etc. The book is an
+impressive piece of mathematical writing, and little known in the West.
+#+end_remark
+
+The bare minimum we need to formalize the notion of a field requires:
+- a set $F$
+- a function $+\colon F\times F\to F$ (~addF~ in Mizar)
+- a function $\cdot F\times F\to F$ (~multF~ in Mizar)
+- a constant $1_{F}\in F$ (~OneF~ in Mizar)
+- another constant $0_{F}\in F$ (~ZeroF~ in Mizar).
+
+There are utility functions like [[https://mizar.uwb.edu.pl/version/current/html/struct_0.html#K4][~0.F~]] to refer to ~the ZeroF of F~,
+and [[https://mizar.uwb.edu.pl/version/current/html/struct_0.html#K4][~1.F~]] for ~the OneF of F~.
+
+Mizar then uses adjectives to define:
+
+- a [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM3][Ring]] is a nonempty double loop satisfying all the properties of a
+  field */except/* (1) the commutativity of multiplication and (2)
+  almost left invertibility (i.e., every nonzero element of the field
+  has a multiplicative inverse)
+- a [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM4][Skew-Field]] is a [[https://mizar.uwb.edu.pl/version/current/html/struct_0.html#V6][~nondegenerated~]] (i.e., $0\neq 1$) almost left
+  invertible Ring
+- a [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM5][Field]] is a commutative Skew-Field
+
+If we want to consider the real numbers as a field, we would use
+[[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#K2][~F_Real~]].
+
+If we want to consider the complex numbers as a field, we would use
+[[https://mizar.uwb.edu.pl/version/current/html/complfld.html#K1][~F_Complex~]].
+
+** 1B. Definition of Vector Spaces
+:PROPERTIES:
+:CUSTOM_ID: h-174a9872-70d2-4480-b277-d54d59d38691
+:END:
+
+- We have a [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#L1][~ModuleStr~]] over some gadget $F$ in Mizar be a structure
+  consisting of:
+  - an underlying set called the ~carrier~,
+  - a binary operator ~addF~ on the ~carrier~ (corresponding to vector addition),
+  - a constant ~ZeroF~ belonging to the ~carrier~ (corresponding to the
+    zero vector), and
+  - a function
+    $\mathtt{lmult}\colon F\times\mathtt{carrier}\to\mathtt{carrier}$
+    corresponding to scalar multiplication
+- *Definition 1.20.*
+  When $\mathbb{F}$ is a field, we define a {{{dfn(Vector Space)}}} over
+  $\mathbb{F}$ to consist of a set $V$ equipped with
+  - a binary operator $\cdot\colon\mathbb{F}\times V\to V$ called
+    /scalar multiplication/
+  - a binary operator $+\colon V\times V\to V$ called /vector addition
+  - a constant $0\in V$ called the /zero vector/
+
+  (i.e., it consists of a ~ModuleStr~ over $\mathbb{F}$)
+  such that
+
+  - commutativity of vector addition $u+v=v+u$ for all $u,v\in V$
+    ([[https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V2][~Abelian~]])
+  - associativity of vector addition $(u+v)+w=u+(v+w)$ for all $u,v,w\in V$
+    ([[https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V3][~add-associative~]])
+  - associativity of scalar multiplication $a\cdot(b\cdot v)=(ab)\cdot v$
+    for all $a,b\in\mathbb{F}$ and $v\in V$ ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V10][~scalar-associative~]])
+  - additive identity $v+0=v$ ([[https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V4][~right_zeroed~]]) and by commutativity $0+v=v$ for all $v\in V$
+  - additive inverse: for each $v\in V$, there exists a $w\in V$ such
+    that $v+w=0$ (i.e., every element is [[https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#V10][~right_complementable~]])
+  - multiplicative identity: $1\cdot v=v$ for all $v\in V$
+    ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V11][~scalar-unital~]])
+  - distributivity of scalar multiplication over vector addition:
+    $a\cdot(u+v)=(a\cdot u)+(a\cdot v)$ for all $a\in\mathbb{F}$ and
+    $u,v\in V$ ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V8][~vector-distributive~]])
+  - distributivity of scalar multiplication over scalar addition:
+    $(a+b)\cdot v = (a\cdot v)+(b\cdot v)$
+    for all $a,b\in\mathbb{F}$ and $v\in V$
+    ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V9][~scalar-distributive~]])
+- This is precisely the definition of a [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM9][~VectSp of F~]] in Mizar
+- *Definition 1.21.*
+  Elements of a vector space are called {{{dfn(Vectors)}}}
+  - [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM8][~Vector~]] is defined thus, and ~Scalar of VS~ is shorthand for an
+    element of ~F~ the field.
+- *Definition 1.22* (Real vector space, complex vector space).
+  A vector space over $\mathbb{R}$ is called a {{{dfn(Real Vector Space)}}}, and
+  a vector space over $\mathbb{C}$ is called a {{{dfn(Complex Vector Space)}}}.
+  - In Mizar, when we specialize attention to real vector spaces, we
+    refer to them as [[https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#NM2][~RealLinearSpace~]]
+  - For complex vector spaces, they are [[https://mizar.uwb.edu.pl/version/current/html/clvect_1.html#NM2][~ComplexLinearSpace~]]
+- *Notation 1.24.*
+  - If $S$ is a set, then $\mathbb{F}^{S}$ is the set of functions from
+    $S$ to $\mathbb{F}$
+    - Mizar notation: [[https://mizar.uwb.edu.pl/version/current/html/funct_2.html#K1][~Funcs(S,the carrier of F)~]]
+  - For $f,g\in\mathbb{F}^{S}$, the sum $f+g\mathbb{F}^{S}$ is defined
+    by $(f+g)(x)=f(x)+g(x)$ for all $x\in S$.
+    - This is definition [[https://mizar.uwb.edu.pl/version/current/html/valued_1.html#K1][~VALUED_1:def 1~]]
+  - If $\lambda\in\mathbb{F}$ and $f\in\mathbb{F}^{S}$, the product
+    $\lambda f\in\mathbb{F}^{S}$ is defined by $(\lambda f)(x)=\lambda f(x)$
+    for every $x\in S$.
+    - This is probably defined somewhere, I think ~(S --> {lambda}) [#] f~
+      is a kludge solution
+- *Theorem 1.26* (Unique additive identity).
+  A vector space has a unique additive identity. {{{missing()}}}
+- *Theorem 1.27* (Unique additive inverse).
+  Every element in a vector space has a unique additive inverse.
+  ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T16][~VECTSP_1:16~]])
+- *Theorem 1.30.* For each $v\in V$, $0\cdot v=0$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T14][~VECTSP_1:14~]])
+- *Theorem 1.31.* For every $a\in\mathbb{F}$, $a\cdot 0=0$. ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_2.html#T30][~VECTSP_2:30~]])
+- *Theorem 1.32.*
+  For each $v\in V$, $(-1)\cdot v = -v$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T14][~VECTSP_1:14~]])
+  
+** 1C. Subspaces
+:PROPERTIES:
+:CUSTOM_ID: h-9e2b8b08-bedb-4193-bc7c-ee8cd4b4573b
+:END:
+
+- *Definition 1.33.*
+  A subset $U\subset V$ is called a {{{dfn(Subspace)}}} of $V$ if $U$ is
+  also a vector space with the same additive identity, addition, and
+  scalar multiplication as on $V$.
+  - Mizar defines [[https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#M1][~Subspace of V~]] as restricting the addition and scalar
+    multiplication to $U$
+- *Theorem 1.34* (Conditions for a Subspace).
+  A subset $U$ of $V$ is a subspace of $V$ if and only if $U$ satisfies
+  three conditions: (1) it contains the additive identity $0\in U$,
+  (2) closed under addition $u,w\in U$ implies $u+w\in U$, and
+  (3) closed under scalar multiplication $a\in\mathbb{F}$ and $u\in U$
+  implies $a\cdot u\in U$.
+  - ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#T34][~VECTSP_4:34~]])
+- *Implicit Examples.* The zero subspace (consisting only of the zero
+  vector) is denoted [[https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#K1][~(0).V~]]; and $V$ considered as a subspace of itself
+  is [[https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#K2][~(Omega).V~]].
+- *Implicit Definition.* If $U$ and $W$ are subspaces of $V$, then $U\cap W$
+  is a subspace of $V$.
+  - [[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#K2][~VECTSP_5:def 2~]]
+- *Implicit Theorem.* Let $U_{1}$, $U_{2}$ be subspaces of $V$.
+  If the underlying set of $U_{1}$ is a subset of the underlying set of
+  $U_{2}$, then $U_{1}$ is a subspace of $U_{2}$. ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#T27][~VECTSP_4:27~]])
+- *Implicit Theorem.* Let $U_{1}$, $U_{2}$, $U_{3}$ be subspaces of $V$.
+  If $U_{1}$ is a subspace of $U_{2}$ and $U_{2}$ is a subspace of
+  $U_{3}$, then $U_{1}$ is a subspace of $U_{3}$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#T26][~VECTSP_4:26~]])
+
+*** Sums of Subspaces
+:PROPERTIES:
+:CUSTOM_ID: h-a7ad4e83-ab15-468b-845c-b3b3c6087b58
+:END:
+
+- *Definition 1.36.*
+  Suppose $V_{1}$, ..., $V_{m}$ are subspaces of $V$.
+  We define the {{{dfn(Sum)}}} of $V_{1}$, ..., $V_{m}$ (denoted by
+  $V_{1}+ \dots + V_{m}$) to be the set
+  $V_{1}+ \dots + V_{m} = \{v_{1} + \dots + v_{m}\mid v_{1}\in V_{1},\dots,v_{m}\in V_{m}\}$.
+  - [[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#K1][~VECTSP_5:def 1~]]
+- *Implicit Theorem.* We have for any subspaces $V_{1}$ and $V_{2}$ of $V$,
+  $V_{1}+V_{2} = V_{2}+V_{1}$. ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T5][~VECTSP_5:5~]])
+- *Implicit Theorem.* For any subspaces $V_{1}$, $V_{2}$, $V_{3}$ of
+  $V$, we have
+  $V_{1}+(V_{2}+V_{3})=(V_{1}+V_{2})+V_{3}$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T6][~VECTSP_5:6~]]).
+- *Implicit Theorem.* For any subspaces $V_{1}$ and $V_{2}$ of $V$,
+  $V_{1}$ is a subspace of $V_{1}+V_{2}$ and $V_{2}$ is a subspace of $V_{1}+V_{2}$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T7][~VECTSP_5:7~]])
+  
+*** Direct Sums
+:PROPERTIES:
+:CUSTOM_ID: h-42b38ede-b986-45d1-83ea-802167e48bf4
+:END:
+
+- *Definition 1.41.*
+  Let $V_{1}$, ..., $V_{m}$ be subspaces of $V$.
+  The sum $V_{1} + \dots + V_{m}$ is called a {{{dfn(Direct Sum)}}} if
+  each element of the sum can be written in only one way as a sum, and
+  in that case we write $V_{1}\oplus\dots\oplus V_{m}$.
+  - [[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#R1][~VECTSP_5:def 4~]] defines ~M is_the_direct_sum_of V1,V2~ as a predicate
+  - Theorems [[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T48][~VECTSP_5:48~]] and [[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T49][~VECTSP_5:49~]] prove the logical
+    equivalence of this definition and Mizar's definition.
+- *Theorem 1.45* (Conditions for a direct sum).
+  Let $V_{1}$, ..., $V_{m}$ be subspaces of $V$. Then
+  $V_{1} + \dots + V_{m}$ is a direct sum if and only if the only way to
+  write $0$ as a sum $v_{1}+\dots+v_{m}$ (with $v_{1}\in V_{1}$, ...,
+  $v_{m}\in V_{m}$) is by taking each $v_{k}=0$.
+  - {{{missing()}}} but this can be easily deduced as a consequence from
+    other results.
+- *Theorem 1.46* (Direct sum of two subspaces).
+  Suppose $U$ and $W$ are subspaces of $V$. Then $U+W$ is a direct sum
+  if and only if $U\cap W=\{0\}$.
+  - This is taken as the definition [[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#R1][~VECTSP_5:def 4~]] 
+- *Implicit Theorem.* If $V_{1}=V_{2}\oplus V_{3}$, then $V_{1}=V_{3}\oplus V_{2}$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T41][~VECTSP_5:41~]])
+
+#+begin_remark
+It's probably fruitful to define a [Mizar] functor for the direct sum of a
+family of vector spaces over the same field, using the universal
+property of coproduct objects. But I cannot think of an instance where
+it would be useful.
+#+end_remark
+
+* Chapter 2 Finite-Dimensional Vector Spaces
+:PROPERTIES:
+:CUSTOM_ID: h-ccdf5a19-684f-44c8-a176-221c9a00d250
+:END:
+
+** 2A. Spans and Linear Independence
+:PROPERTIES:
+:CUSTOM_ID: h-380d3a5f-17a4-4edd-a8e8-ed23ac3189b9
+:END:
+
+*** Linear Combinations and Spans
+:PROPERTIES:
+:CUSTOM_ID: h-98a875af-e955-423b-9188-754fa928c76c
+:END:
+
+- *Definition 2.2.*
+  Let $v_{1}$, ..., $v_{m}$ be vectors in $V$.
+  A {{{dfn(Linear Combination)}}} of $v_{1}$, ..., $v_{m}$ is any vector
+  of the form $a_{1}v_{1}+\dots+a_{m}v_{m}$ where $a_{1},\dots,a_{m}\in\mathbb{F}$.
+  - Mizar appears to define the coefficients $a_{1}$, ..., $a_{m}$ for a
+    particular linear combination as [[https://mizar.uwb.edu.pl/version/current/html/vectsp_6.html#M2][~LinearCombination of A~]] where $A=\{v_{1},\dots,v_{m}\}$.
+    See Theorem [[https://mizar.uwb.edu.pl/version/current/html/vectsp_6.html#T18][~VECTSP_6:18~]] for example.
+- *Definition 2.4.*
+  The set of all linear combinations of a list of vectors $v_{1}$, ...,
+  $v_{m}$ of $V$ is called the {{{dfn(Span)}}} of $v_{1}$, ..., $v_{m}$
+  and is denoted by $\operatorname{span}(v_{1},\dots,v_{m})=\{a_{1}v_{1}+\dots+a_{m}v_{m}\mid a_{1},\dots,a_{m}\in\mathbb{F}\}$.
+  - [[https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#K1][~VECTSP_7:def 2~]] calls it ~Lin~
+- *Definition 2.9.* A vector space is called
+  {{{dfn(Finite-Dimensional)}}}
+  if some finite list of vectors in it spans the space. 
+  - [[https://mizar.uwb.edu.pl/version/current/html/matrlin.html#V1][~MATRLIN:def 1~]] uses an equivalent condition, namely, that there is
+    a finite linearly independent subset which spans the space.
+- *Definition 2.13.* A vector space is called
+  {{{dfn(Infinite-DImensional)}}} if it is not finite-dimensional.
+  {{{missing()}}}
+
+*** Linear Independence
+:PROPERTIES:
+:CUSTOM_ID: h-7b96ecaf-bd7a-4274-a290-a9a01c3eec78
+:END:
+
+- *Definition 2.15.* A list of vectors $v_{1}$, ..., $v_{m}$ of $V$ is
+  called {{{dfn(Linearly Independent)}}} if the only choice of
+  coefficients $a_{1},\dots,a_{m}\in\mathbb{F}$ which satisfies
+  $0 = a_{1}v_{1} + \dots + a_{m}v_{m}$ is $a_{1}=\dots=a_{m}=0$.
+  - [[https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#V1][~VECTSP_7:def 1~]] formalizes ~linearly-independent~ for a set of vectors.
+  - $\emptyset$ is registered as linearly independent in [[https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#FC1][~VECTSP_7~]]
+- *Definition 2.17.* A list of vectors is called {{{dfn(Linearly Dependent)}}}
+  if it is not linearly independent.
+- *Theorem 2.19* (Linear dependence lemma).
+  Let $v_{1}$, ..., $v_{m}$ be linearly dependent in $V$. Then there
+  exists a $k\in\{1,\dots,m\}$ such that $v_{k}\in\operatorname{span}(v_{1},\dots,v_{k-1})$.
+  Further, if $k$ satisfies the condition above, then
+  $\operatorname{span}(v_{1},\dots,v_{k-1},v_{k+1},\dots,v_{m})=\operatorname{span}(v_{1},\dots,v_{m})$.
+  - {{{missing()}}} but I suspect it can be deduced from [[https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T14][~VECTSP_9:14~]]
+- *Theorem 2.22.* In finite-dimensional vcetor spaces, the length of
+  every linearly independent list of vectors is less than or equal to
+  the length of every spanning set of vectors.
+  - This seems to be deducible from [[https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#T19][~VECTSP_7:19~]] but is {{{missing()}}}
+- *Theorem 2.25* (finite-dimensional subspaces).
+  Every subspace of a finite-dimensional vector space is finite-dimension.
+  ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T24][~VECTSP_9:24~]])
+
+** 2B. Bases
+:PROPERTIES:
+:CUSTOM_ID: h-09ad76d0-5a6a-45e9-8243-730112d9daaf
+:END:
+
+- *Definition 2.26.* A {{{dfn(Basis)}}} of $V$ is a set of vectors of
+  $V$ that is linearly independent and spans $V$.
+  - ~VECTSP_7~ defines [[https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#NM1][~Basis of V~]] is defined as a [[https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#V2][~base~]] ~Subset of V~, which means it is
+    linearly-independent and it spans ~V~.
+- *Implicit Definition.* When we have an ordered list of vectors which
+  spans $V$, then we call that an {{{dfn(Ordered Basis)}}}. Usually this
+  is what people implicitly work with.
+  - [[https://mizar.uwb.edu.pl/version/current/html/matrlin.html#M1][~MATRLIN:def 2~]] formalizes ~OrdBasis of V~
+- *Theorem 2.30.* Every spanning list contains a basis as a subset. ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#T20][~VECTSP_7:20~]])
+- *Theorem 2.31.* Every finite-dimensional vector space has a
+  basis. (This is literally part of the definition of
+  ~finite-dimensional~, so it's redundant in Mizar.)
+- *Theorem 2.32.* Every linearly independent list of vectors in a
+  finite-dimensional vector space can be extended to a basis of the
+  vector space. ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_7.html#T19][~VECTSP_7:19~]])
+- *Theorem 2.33.* Suppose $V$ is a finite-dimensional space and $U$ is a
+  subspace of $V$. Then there exists a subspace $W$ of $V$ such that
+  $V=U\oplus W$.
+  - The subspace $W$ is called the complement of $U$, and is defined in
+    [[https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#M1][~VECTSP_5:def 5~]]
+  
+** 2C. Dimension
+:PROPERTIES:
+:CUSTOM_ID: h-f654065c-e6f6-4b11-bbb7-8a974f704a48
+:END:
+
+- *Theorem 2.34.* Any two bases of a finite-dimensional vector space
+  have the same length.
+- *Definition 2.35.* The {{{dfn(Dimension)}}} of a finite-dimensional
+  vector space is the length of any basis of the vector space and is
+  denoted $\dim(V)$.
+  - [[https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#K1][~VECTSP_9:def 1~]] formalizes this
+- *Theorem 2.37.* If $V$ is a finite-dimensional vector space and $U$ is
+  a subspace of $V$, then $\dim(U)\leq\dim(V)$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T25][~VECTSP_9:25~]])
+- *Theorem 2.38.* Suppose $V$ is finite-dimensional. Then every linearly
+  independent list of vectors in $V$ has length $\dim(V)$ and is a basis
+  of $V$. ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T26][~VECTSP_9:26~]] is more general)
+- *Theorem 2.39.* Let $V$ be finite-dimensional, $U$ be a subspace of $V$.
+  If $\dim(U)=\dim(V)$, then $U=V$. ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T28][~VECTSP_9:28~]])
+- *Theorem 2.43.* If $V_{1}$ and $V_{2}$ are subspaces of a
+  finite-dimensional vector space, then
+  $\dim(V_{1}+V_{2})=\dim(V_{1})+\dim(V_{2}) - \dim(V_{1}\cap V_{2})$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_9.html#T32][~VECTSP_9:32~]])
+
+* Chapter 3 Linear Maps
+:PROPERTIES:
+:CUSTOM_ID: h-4706f12d-af00-418a-92be-d31c72853766
+:END:
+
+** 3A. Vector Spaces of Linear Maps
+:PROPERTIES:
+:CUSTOM_ID: h-f9c5c9ea-d756-4ba9-9bf1-49a069cc10b3
+:END:
+
+*** Definitions and Examples
+:PROPERTIES:
+:CUSTOM_ID: h-ab71d5ec-d816-4323-b2e7-f056ba5819f0
+:END:
+
+- *Definition 3.1.* Let $V$, $W$ be vector spaces over the same field $\mathbb{F}$.
+  A {{{dfn(Linear Map)}}} from $V$ to $W$ is a function $T\colon V\to W$
+  such that it is:
+  - *Additive:* $T(u+v)=T(u)+T(v)$ for all $u,v\in V$ ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V13][~additive~]])
+  - *Homogeneous:* $T(\lambda v)=\lambda T(v)$ for all
+    $\lambda\in\mathbb{F}$ and $v\in V$ ([[https://mizar.uwb.edu.pl/version/current/html/mod_2.html#V1][~homogeneous~]])
+  - [[https://mizar.uwb.edu.pl/version/current/html/ranknull.html#NM1][~RANKNULL~]] defines [[https://mizar.uwb.edu.pl/version/current/html/ranknull.html#NM1][~linear-transformation of V,W~]] as an
+    ~additive homogeneous Function of V,W~.
+- 
+*** Algebraic Operations on $L(V,W)$
+:PROPERTIES:
+:CUSTOM_ID: h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8
+:END:
+
+** 3B. Null Spaces and Ranges
+:PROPERTIES:
+:CUSTOM_ID: h-98c27132-8546-446a-8ef7-c60c20bcff28
+:END:
+
+*** Null Spaces and Injectivity
+:PROPERTIES:
+:CUSTOM_ID: h-6f6d554e-c664-4957-97e9-dc5721a97f99
+:END:
+
+*** Range and Surjectivity
+:PROPERTIES:
+:CUSTOM_ID: h-98038eca-1e3c-4503-b834-3389a0e825cd
+:END:
+
+*** Fundamental Theorem of Linear Maps
+:PROPERTIES:
+:CUSTOM_ID: h-aca4326c-86bc-4991-a2e9-b6076552fdac
+:END:
+
+** 3C. Matrices
+:PROPERTIES:
+:CUSTOM_ID: h-e4124565-75bd-43c0-a5eb-4a5061eefc9f
+:END:
+
+*** Representing a Linear Map by a Matrix
+:PROPERTIES:
+:CUSTOM_ID: h-30355ddf-3e25-4b66-a06b-1dc9b3574a81
+:END:
+
+*** Addition and Scalar Multiplication of Matrices
+:PROPERTIES:
+:CUSTOM_ID: h-9930e894-2db2-4d0f-9944-d295cf2de9a5
+:END:
+
+*** Matrix Multiplication
+:PROPERTIES:
+:CUSTOM_ID: h-7ed6b163-ce5a-4001-922e-3f54b7794a1d
+:END:
+
+*** Column-Row Factorization and Rank of a Matrix
+:PROPERTIES:
+:CUSTOM_ID: h-25209265-06a6-4144-83a6-27757040afc7
+:END:
+
+** 3D. Invertibility and Isomorphisms
+:PROPERTIES:
+:CUSTOM_ID: h-b56e3b65-7e3f-4d74-bfd0-60a135d74ca5
+:END:
+
+*** Invertible Linear Maps
+:PROPERTIES:
+:CUSTOM_ID: h-5714227b-82f5-4587-abdd-c19383a6b9e8
+:END:
+
+*** Isomorphic Vector Spaces
+:PROPERTIES:
+:CUSTOM_ID: h-614c4b38-c073-466d-8bfc-f01b329b73a9
+:END:
+
+*** Linear Maps Thought of as Matrix Multiplication
+:PROPERTIES:
+:CUSTOM_ID: h-153320cc-2523-41e4-88fa-bd64733c79aa
+:END:
+
+*** Change of Basis
+:PROPERTIES:
+:CUSTOM_ID: h-cf3fc6fa-df96-4bc7-a0c5-8830f3f6935c
+:END:
+
+** 3E. Products and Quotients of Vector Spaces
+:PROPERTIES:
+:CUSTOM_ID: h-0c43a4c8-9e42-42b7-9257-378d124af333
+:END:
+
+*** Products of Vector Spaces
+:PROPERTIES:
+:CUSTOM_ID: h-0d01fa68-3fe3-4e99-be22-6cf833a1dcc4
+:END:
+
+*** Quotient Spaces
+:PROPERTIES:
+:CUSTOM_ID: h-b13d8b50-b13d-4d3c-af74-4b0308be8c17
+:END:
+
+** 3F. Duality
+:PROPERTIES:
+:CUSTOM_ID: h-5700ba79-2cba-4eb2-82d2-33d2ca1ec17d
+:END:
+
+*** Dual Space and Dual Map
+:PROPERTIES:
+:CUSTOM_ID: h-efb99066-3590-4e66-8ccc-7dcd67ef5ed0
+:END:
+
+*** Null Space and Range of Dual of Linear Map
+:PROPERTIES:
+:CUSTOM_ID: h-71c23010-fe29-4e48-81df-2f1488f3e34b
+:END:
+
+*** Matrix of Dual of Linear Map
+:PROPERTIES:
+:CUSTOM_ID: h-29daf0bd-958f-47a7-9eaf-ad0231f6dfa4
+:END:
+
+* Chapter 4 Polynomials
+:PROPERTIES:
+:CUSTOM_ID: h-15a894da-e1d1-4892-8178-5084dae51937
+:END:
+
+* Chapter 5 Eigenvalues and Eigenvectors
+:PROPERTIES:
+:CUSTOM_ID: h-a5f35b0d-df10-4921-bfa4-e615dbcf9e84
+:END:
+
+* Chapter 6 Inner Product Spaces
+:PROPERTIES:
+:CUSTOM_ID: h-d5d9e9a6-eb68-40d8-bc4b-4203c74bab62
+:END:
+
+* Chapter 7 Operators on Inner Product Spaces
+:PROPERTIES:
+:CUSTOM_ID: h-6c414f25-c9cb-49a3-acf8-43ae9f084ef1
+:END:
+
+* Chapter 8 Operators on Complex Vector Spaces
+:PROPERTIES:
+:CUSTOM_ID: h-aa05e670-151b-4aaa-8c9f-0bcc7b17383f
+:END:
+
+* Chapter 9 Multilinear Algebra and Determinants
+:PROPERTIES:
+:CUSTOM_ID: h-5af71d4d-ab0d-4533-8f23-a528d4fb3356
+:END:
