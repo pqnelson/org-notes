@@ -480,7 +480,7 @@ coincides with rings (and things), and is formalize as <a href="https://mizar.uw
 in Mizar.
 </p>
 
-<div class="remark" id="org31e2823">
+<div class="remark" id="org8f1ca78">
 <p>
 To American university students, this is an odd choice of
 name, but most of abstract algebra has only been standardized fairly
@@ -741,7 +741,7 @@ if and only if \(U\cap W=\{0\}\).
 (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T41"><code>VECTSP_5:41</code></a>)</li>
 </ul>
 
-<div class="remark" id="org3880afb">
+<div class="remark" id="org4189007">
 <p>
 It's probably fruitful to define a [Mizar] functor for the direct sum of a
 family of vector spaces over the same field, using the universal
@@ -922,13 +922,64 @@ such that it is:
 <li><a href="https://mizar.uwb.edu.pl/version/current/html/ranknull.html#NM1"><code>RANKNULL</code></a> defines <a href="https://mizar.uwb.edu.pl/version/current/html/ranknull.html#NM1"><code>linear-transformation of V,W</code></a> as an
 <code>additive homogeneous Function of V,W</code>.</li>
 </ul></li>
-<li></li>
+<li><b>Notation 3.2.</b> Let \(V\), \(W\) be vector spaces over \(\mathbb{F}\)
+<ol class="org-ol">
+<li>The set of linear maps from \(V\) to \(W\) is denoted \(\mathcal{L}(V,W)\)</li>
+<li>The set of linear maps from \(V\) to \(V\) is denoted \(\mathcal{L}(V)=\mathcal{L}(V,V)\)</li>
+</ol></li>
+<li><b>Examples 3.3.</b>
+<ol class="org-ol">
+<li>The zero map \(V\to W\) sending every vector to the zero vector of
+\(W\) is linear. <span class="missing">Missing from Mizar</span></li>
+<li>The identity operator \(\id\colon V\to V\) is linear. <span class="missing">Missing from Mizar</span></li>
+</ol></li>
+<li><b>Theorem 3.4.</b> Suppose \(v_{1}\), &#x2026;, \(v_{n}\) is a basis for \(V\) and
+\(w_{1}\), &#x2026;, \(w_{n}\) is a basis for \(W\). Then there exists a linear
+transformation \(T\colon V\to W\) such that \(T(v_{i})=w_{i}\) for each
+\(i=1,\dots,n\).
+<span class="missing">Missing from Mizar</span></li>
 </ul>
 </div>
 </div>
+
 <div id="outline-container-h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8" class="outline-4">
 <h4 id="h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8">Algebraic Operations on \(L(V,W)\)</h4>
 <div class="outline-text-4" id="text-h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8">
+<ul class="org-ul">
+<li><p>
+<b>Definition 3.5.</b> Suppose \(S\), \(T\in\mathcal{L}(V,W)\). Then we define
+their sum \(S+T\) to be the linear transformation defined by
+\((S+T)(v)=S(v)+T(v)\) for every \(v\in
+  V\). (<a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#K3"><code>MATRLIN:def 3</code></a>)
+</p>
+
+<p>
+When \(\lambda\in\mathbb{F}\), we define the product \(\lambda S\) as the
+linear transformation defined by \((\lambda S)(v)=\lambda\cdot S(v)\)
+for every \(v\in V\). (<a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#K4"><code>MATRLIN:def 4</code></a>)
+</p></li>
+<li><b>Theorem 3.6.</b> With these operations we just defined,
+\(\mathcal{L}(V,W)\) forms a vector space over \(\mathbb{F}\).</li>
+<li><b>Definition 3.7.</b> Let \(S\in\mathcal{U,W}\), \(T\in\mathcal{L}(V,U)\). We define the
+<dfn>Composition</dfn> of linear operators \(S\circ T\) to be defined as
+\((S\circ T)(v)=S(T(v))\) for every \(v\in V\).
+<ul class="org-ul">
+<li>This is handled for free using composition of functions in
+Mizar. Composition is originally defined for arbitrary relations in
+<a href="https://mizar.uwb.edu.pl/version/current/html/relat_1.html#K3"><code>RELAT_1:def 8</code></a>.</li>
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#T43"><code>MATRLIN2</code></a> explicitly coerces the types</li>
+</ul></li>
+<li><b>Theorem 3.8.</b>
+<ul class="org-ul">
+<li>Associativity: \((T_{1}\circ T_{2})\circ T_{3}=T_{1}\circ (T_{2}\circ T_{3})\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/relat_1.html#T36"><code>RELAT_1:36</code></a>)</li>
+<li>Identity: \(T\circ I=I\circ T=T\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/funct_2.html#T17"><code>FUNCT_2:17</code></a>)</li>
+<li>\((S_{1}+S_{2})\circ T=(S_{1}\circ T) + (S_{2}\circ T)\) <span class="missing">Missing from Mizar</span></li>
+</ul></li>
+<li><b>Theorem 3.10.</b> Let \(T\colon V\to W\) be a linear transformation. Then
+\(T(0)=0\). (<a href="https://mizar.uwb.edu.pl/version/current/html/ranknull.html#T9"><code>RANKNULL:9</code></a>)</li>
+</ul>
 </div>
 </div>
 </div>
@@ -941,18 +992,86 @@ such that it is:
 <div id="outline-container-h-6f6d554e-c664-4957-97e9-dc5721a97f99" class="outline-4">
 <h4 id="h-6f6d554e-c664-4957-97e9-dc5721a97f99">Null Spaces and Injectivity</h4>
 <div class="outline-text-4" id="text-h-6f6d554e-c664-4957-97e9-dc5721a97f99">
+<ul class="org-ul">
+<li><b>Definition 3.11.</b> Let \(T\in\mathcal{L}(V,W)\) be a linear
+transformation. We define the <dfn>Null Space</dfn> of \(T\) (or, the
+"kernel" of \(T\)) denoted \(\operatorname{null}(T)\) or \(\ker(T)\), is the
+subset of \(V\) consisting of vectors which \(T\) maps to \(0\), i.e.,
+\(\ker(T)=\{v\in V\mid T(v)=0\}\). (<a href="https://mizar.uwb.edu.pl/version/current/html/ranknull.html#K1"><code>RANKNULL:def 1</code></a>)</li>
+<li><b>Theorem 3.13.</b> The null space is actually a subspace. (Mizar noted
+this in its definition.)</li>
+<li><b>Definition 3.14.</b> A function \(T\colon V\to W\) is called
+<dfn>Injective</dfn> (or "one-to-one") if \(T(u)=T(v)\) implies \(u=v\)
+for any \(u,v\in V\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/funct_1.html#V2"><code>FUNCT_1:def 4</code></a>)</li>
+<li><b>Theorem 3.15</b> (Injectivity \(\iff\) null space equals \(\{0\}\)).
+Let \(T\in\mathcal{L}(V,W)\) be a linear transformation.
+Then \(T\) is injective if and only if \(\ker(T)=\{0\}\).
+<ul class="org-ul">
+<li>The forward direction is proven in (<a href="https://mizar.uwb.edu.pl/version/current/html/ranknull.html#T15"><code>RANKNULL:15</code></a>)</li>
+<li>The backward direction is obvious as a consequence of the rank-null
+theorem, but explicitly stated is <span class="missing">Missing from Mizar</span></li>
+</ul></li>
+</ul>
 </div>
 </div>
 
 <div id="outline-container-h-98038eca-1e3c-4503-b834-3389a0e825cd" class="outline-4">
 <h4 id="h-98038eca-1e3c-4503-b834-3389a0e825cd">Range and Surjectivity</h4>
 <div class="outline-text-4" id="text-h-98038eca-1e3c-4503-b834-3389a0e825cd">
+<ul class="org-ul">
+<li><b>Definition 3.16.</b> Let \(T\in\mathcal{L}(V,W)\) be a linear
+transformation. The <dfn>Range</dfn> of \(T\) is the subset \(W\)
+consisting of the elements that are equal to \(T(v)\) for some \(v\in V\);
+i.e.,
+\(\operatorname{range}(T)=\{T(v)\mid v\in V\}\).
+<ul class="org-ul">
+<li>This is also known as the <dfn>Image</dfn> of \(T\) and is defined in
+<a href="https://mizar.uwb.edu.pl/version/current/html/ranknull.html#K3"><code>RANKNULL:def 2</code></a>.</li>
+</ul></li>
+<li><b>Theorem 3.18.</b> If \(T\in\mathcal{L}(V,W)\), then
+\(\operatorname{range}(T)\) is a subspace of \(W\). (This is handled
+already in the definition in Mizar.)</li>
+<li><b>Definition 3.19.</b> A function \(f\colon X\to Y\) is called
+<dfn>Surjective</dfn> (or <dfn>Onto</dfn>) if its range is equal to
+\(W\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/funct_2.html#V2"><code>FUNCT_2:def 3</code></a>)</li>
+</ul>
 </div>
 </div>
 
 <div id="outline-container-h-aca4326c-86bc-4991-a2e9-b6076552fdac" class="outline-4">
 <h4 id="h-aca4326c-86bc-4991-a2e9-b6076552fdac">Fundamental Theorem of Linear Maps</h4>
 <div class="outline-text-4" id="text-h-aca4326c-86bc-4991-a2e9-b6076552fdac">
+<ul class="org-ul">
+<li><b>Theorem 3.21</b> (Fundamental theorem of linear maps).
+Suppose \(V\) is finite-dimensional vector space, and let
+\(T\in\mathcal{L}(V,W)\). Then the range is finite-dimensional and
+\(\dim(V)=\dim\ker(T)+\dim\operatorname{range}(T)\).
+<ul class="org-ul">
+<li>The \(\dim\ker(T)\) is called the <dfn>Nullity</dfn> of \(T\) and the
+\(\dim\operatorname{range}(T)\) is called the <dfn>Rank</dfn> of \(T\)</li>
+<li>(<a href="https://mizar.uwb.edu.pl/version/current/html/ranknull.html#T44"><code>RANKNULL:44</code></a>) proves this theorem</li>
+<li>(<a href="https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#T43"><code>MATRLIN2:43</code></a>) proves both directions of this theorem for vector
+spaces over fields</li>
+</ul></li>
+<li><b>Theorem 3.22.</b> Suppose \(V\) and \(W\) are finite-dimensional vector
+spaces over \(\mathbb{F}\).
+If \(\dim(V)\gt\dim(W)\), then there is no linear map from \(V\) to \(W\)
+that is injective.
+<ul class="org-ul">
+<li><span class="missing">Missing from Mizar</span> But it can be proven quickly from <a href="https://mizar.uwb.edu.pl/version/current/html/ranknull.html#T45"><code>RANKNULL:45</code></a></li>
+</ul></li>
+<li><b>Theorem 3.24.</b> Suppose \(V\) and \(W\) are finite-dimensional vector
+spaces over \(\mathbb{F}\).
+If \(\dim(V)\lt\dim(W)\), then there is no linear map from \(V\) to \(W\)
+that is surjective. <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 3.26.</b> A homogeneous system of linear equations with more
+variables than equations has nonzero solutions. <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 3.28.</b> An inhomogeneous system of linear equations with more
+equations than variables has no solution for some choice of the
+constant terms. <span class="missing">Missing from Mizar</span></li>
+</ul>
 </div>
 </div>
 </div>
@@ -965,18 +1084,98 @@ such that it is:
 <div id="outline-container-h-30355ddf-3e25-4b66-a06b-1dc9b3574a81" class="outline-4">
 <h4 id="h-30355ddf-3e25-4b66-a06b-1dc9b3574a81">Representing a Linear Map by a Matrix</h4>
 <div class="outline-text-4" id="text-h-30355ddf-3e25-4b66-a06b-1dc9b3574a81">
+<ul class="org-ul">
+<li><b>Definition 3.29.</b>
+Suppose \(m\) and \(n\) are <del>nonnegative integers</del> natural numbers. A <dfn>m-by-n Matrix</dfn>
+\(A\) is an array of elements of \(\mathbb{F}\) with \(m\) rows and \(n\)
+columns.
+The notation \(A_{j,k}\) refers to the entry in row \(j\) and column \(k\)
+of \(A\).
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/matrix_0.html#NM2"><code>MATRIX_0</code></a> defines <code>Matrix of m,n,D</code> for entries in a non-empty set \(D\)</li>
+<li>The <code>n</code> is encoded as the <code>width M</code> for an m-by-n matrix \(M\)</li>
+<li>The <code>m</code> is encoded as <code>len (dom M)</code> for an m-by-n matrix \(M\)</li>
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/matrix_0.html#K2"><code>MATRIX_0:def 4</code></a> encodes the possible index pairs for a matrix as
+<code>Index M</code></li>
+<li>\(A_{i,j}\) is encoded in Mizar as <code>A * (i,j)</code>
+(<a href="https://mizar.uwb.edu.pl/version/current/html/matrix_0.html#K3"><code>MATRIX_0:def 5</code></a>)</li>
+</ul></li>
+<li><b>Implicit notion.</b> Let \(A\) and \(B\) are both m-by-n matrices.
+If \(A_{i,j}=B_{i,j}\) for every \(i\) and \(j\), then \(A=M\) (<a href="https://mizar.uwb.edu.pl/version/current/html/matrix_0.html#T21"><code>MATRIX_0:21</code></a>)</li>
+<li><b>Definition 3.31</b> (Matrix of a Linear Map). Let \(T\in\mathcal{L}(V,W)\)
+be a linear transformation, let \(v_{1}\), &#x2026;, \(v_{m}\) be a basis of
+\(V\) and \(w_{1}\), &#x2026;, \(w_{n}\) be a basis for \(W\).
+The <dfn>Matrix</dfn> of \(T\) with respect to these bases is the m-by-n
+matrix whose entries \(A_{i,j}\) are defined by:
+\(T(v_{k})=A_{1,k}w_{1} + \dots + A_{m,k}w_{k}\).
+This is denoted \(\mathcal{M}(T)\) for the matrix.
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#K1"><code>MATRLIN2</code></a> redefines <code>AutMt</code> to give the associated matrix for a
+linear operator</li>
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#K3"><code>MATRLIN2:def 2</code></a> defines <code>AutEqMt</code> for linear operators</li>
+</ul></li>
+<li><b>Implicit Example.</b> The identity linear transformation corresponds
+to the identity matrix. (<a href="https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#T28"><code>MATRLIN2:28</code></a>)</li>
+<li><b>Implicit Definition.</b>
+For any matrix of suitable dimension, we can find a linear
+transformation between vector spaces of suitable dimensions. This is
+the inverse operation of finding the matrix associated to a linear
+transformation and particular choice of bases.
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#K4"><code>MATRLIN2:def 3</code></a> defines this as <code>Mx2Tran</code></li>
+</ul></li>
+</ul>
 </div>
 </div>
 
 <div id="outline-container-h-9930e894-2db2-4d0f-9944-d295cf2de9a5" class="outline-4">
 <h4 id="h-9930e894-2db2-4d0f-9944-d295cf2de9a5">Addition and Scalar Multiplication of Matrices</h4>
 <div class="outline-text-4" id="text-h-9930e894-2db2-4d0f-9944-d295cf2de9a5">
+<ul class="org-ul">
+<li><b>Definition 3.34.</b> The <dfn>Sum of two matrices</dfn> of the same size
+is the matrix obtained by componentwise addition.</li>
+<li><b>Theorem 3.35.</b> Suppose \(S,T\in\mathcal{L}(V,W)\).
+Then \(\mathcal{M}(S+T)=\mathcal{M}(S)+\mathcal{M}(T)\).
+<ul class="org-ul">
+<li>In this form, it is <a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#T42"><code>MATRLIN:42</code></a> and
+the inverse operation is proven in <a href="https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#T37"><code>MATRLIN2:37</code></a></li>
+</ul></li>
+<li><b>Definition 3.36</b> (Scalar multiplication of matrices).
+We can define scalar multiplication of a matrix by simply multiplying
+every component by (the same) scalar.
+(<a href="https://mizar.uwb.edu.pl/version/current/html/matrix_3.html#K6"><code>MATRIX_3:def 5</code></a>)</li>
+<li><b>Theorem 3.38.</b> Let \(\lambda\in\mathbb{F}\) and \(T\in\mathcal{L}(V,W)\).
+Then \(\mathcal{M}(\lambda T) =\lambda \mathcal{M}(T)\). (<a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#T43"><code>MATRLIN:43</code></a>)</li>
+<li><b>Notation 3.39.</b> For positive integers \(m\) and \(n\), we denote the set
+of all m-by-n matrices with entries in \(\mathbb{F}\) by
+\(\mathbb{F}^{m,n}\).
+<ul class="org-ul">
+<li>Mizar calls the <i>set</i> of square n-by-n matrices as <code>n-Matrices_over K</code>
+(<a href="https://mizar.uwb.edu.pl/version/current/html/matrix_1.html#K1"><code>MATRIX_1:def 1</code></a>)</li>
+</ul></li>
+<li><b>Theorem 3.40.</b> For positive integers \(m\) and \(n\), the collection
+\(\mathbb{F}^{m,n}\) with matrix addition and scalar multiplication
+forms a finite-dimensional vector space over \(\mathbb{F}\) of dimension
+\(mn\). <span class="missing">Missing from Mizar</span></li>
+</ul>
 </div>
 </div>
 
 <div id="outline-container-h-7ed6b163-ce5a-4001-922e-3f54b7794a1d" class="outline-4">
 <h4 id="h-7ed6b163-ce5a-4001-922e-3f54b7794a1d">Matrix Multiplication</h4>
 <div class="outline-text-4" id="text-h-7ed6b163-ce5a-4001-922e-3f54b7794a1d">
+<ul class="org-ul">
+<li><b>Definition 3.41</b> (Matrix multiplication).
+Let \(A\) be an m-by-n matrix and \(B\) is an n-by-p matrix.
+The <dfn>Product</dfn> \(AB\) is the m-by-p matrix whose components are
+given by \((AB)_{i,k} = \sum_{j}A_{i,j}B_{j,k}\). (<a href="https://mizar.uwb.edu.pl/version/current/html/matrix_3.html#K4"><code>MATRIX_3:def 4</code></a>)</li>
+
+<li><b>Theorem 3.43.</b> Let \(T\in\mathcal{L}(U,V)\) and \(S\in\mathcal{L}(V,W)\),
+then \(\mathcal{M}(S\circ T)=\mathcal{M}(S)\mathcal{S}(T)\).
+<ul class="org-ul">
+<li>I think this is <a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#T41"><code>MATRLIN:41</code></a>, but I might be mistaken&#x2026;</li>
+</ul></li>
+</ul>
 </div>
 </div>
 
@@ -995,21 +1194,105 @@ such that it is:
 <div id="outline-container-h-5714227b-82f5-4587-abdd-c19383a6b9e8" class="outline-4">
 <h4 id="h-5714227b-82f5-4587-abdd-c19383a6b9e8">Invertible Linear Maps</h4>
 <div class="outline-text-4" id="text-h-5714227b-82f5-4587-abdd-c19383a6b9e8">
+<ul class="org-ul">
+<li><b>Definition 3.59.</b>
+<ol class="org-ol">
+<li>A linear map \(T\in\mathcal{L}(V,W)\) is called <dfn>Invertible</dfn>
+if there exists a \(S\in\mathcal{L}(W,V)\) such that \(S\circ T\) is
+the identity operator on \(V\) and \(T\circ S\) is the identity
+operation on \(W\). <span class="missing">Missing from Mizar</span></li>
+<li>A linear map \(S\in\mathcal{L}(W,V)\) satisfying \(T\circ S = I\)
+and \(S\circ T = I\) is called the <dfn>Inverse</dfn> of \(T\) &#x2014;
+Mizar says \(S\) <dfn>is Reverse of</dfn> \(T\). <span class="missing">Missing from Mizar</span></li>
+</ol></li>
+</ul>
+
+
+<p>
+The analogous definitions for matrices is found in (<a href="https://mizar.uwb.edu.pl/version/current/html/matrix_6.html#V1"><code>MATRIX_6:def 3</code></a>)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/matrix_6.html#R2"><code>MATRIX_6:def 2</code></a>)
+</p>
+<ul class="org-ul">
+<li><b>Theorem 3.60.</b> An invertible linear map has a unique inverse.
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Notation 3.61.</b> We denote the inverse of \(T\) by \(T^{-1}\).
+<ul class="org-ul">
+<li>Mizar convention uses the notation <code>T"</code> for \(T^{-1}\)</li>
+</ul></li>
+<li><b>Theorem 3.63.</b> A linear map is invertible if and only if it is
+injective and surjective.
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/funct_2.html#T25"><code>FUNCT_2:25</code></a> proves this in general</li>
+</ul></li>
+<li><b>Theorem 3.65.</b> Suppose \(V\) and \(W\) are finite-dimensional vector
+spaces and \(\dim(V)=\dim(W)\), and \(T\in\mathcal{L}(V,W)\). Then
+\(T\) is invertible iff \(T\) is injective iff \(T\) is surjective.
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 3.68.</b> Suppose \(V\) and \(W\) are finite-dimensional vector
+spaces and \(\dim(V)=\dim(W)\), and \(S\in\mathcal{L}(V,W)\) and
+\(T\in\mathcal{L}(W,V)\).
+Then \(S\circ T=I\) if and only if \(T\circ S=I\). <span class="missing">Missing from Mizar</span></li>
+</ul>
 </div>
 </div>
 
 <div id="outline-container-h-614c4b38-c073-466d-8bfc-f01b329b73a9" class="outline-4">
 <h4 id="h-614c4b38-c073-466d-8bfc-f01b329b73a9">Isomorphic Vector Spaces</h4>
 <div class="outline-text-4" id="text-h-614c4b38-c073-466d-8bfc-f01b329b73a9">
+<ul class="org-ul">
+<li><b>Definition 3.69.</b>
+<ol class="org-ol">
+<li>An <dfn>Isomorphism</dfn> is an invertible linear map.</li>
+<li>Two vector spaces are called <dfn>Isomorphic</dfn> if there is an
+isomorphism from one vector space to another.</li>
+</ol></li>
+</ul>
+<div class="remark" id="org443d4fd">
+<p>
+Since not all vector spaces are isomorphic, if we tried to define a
+new <code>mode Isomorphism of V,W</code>, then we couldn't prove existence. This
+is why Mizar typically uses a predicate <code>V,W are_isomorphic</code> to mean
+there exists (in this case) a linear bijective function.
+</p>
+
+</div>
+<ul class="org-ul">
+<li>There doesn't seem to be <code>are_isomorphic</code> defined for vector spaces,
+so I'm marking this as <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 3.70.</b> Two finite-dimensional vector spaces over \(\mathbb{F}\)
+are isomorphic if and only if they have the same dimension. <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 3.71.</b> Suppose \(v_{1}\), &#x2026;, \(v_{m}\) is a basis of \(V\) and
+\(w_{1}\), &#x2026;, \(w_{n}\) is a basis of \(W\). Then \(\mathcal{M}\) is an
+isomorphism of \(\mathcal{L}(V,W)\) and \(\mathbb{F}^{m,n}\).
+<ul class="org-ul">
+<li><span class="missing">Missing from Mizar</span> but I think <code>MATRLIN</code> and <code>MATRLIN2</code> does a lot of
+the heavy lifting here.</li>
+</ul></li>
+<li><b>Theorem 3.72.</b> Suppose \(V\) and \(W\) are finite-dimensional vector
+spaces. Then \(\mathcal{L}(V,W)\) is finite-dimensional and
+\(\dim\mathcal{L}(V,W)=(\dim V)(\dim W)\). <span class="missing">Missing from Mizar</span></li>
+</ul>
 </div>
 </div>
 
 <div id="outline-container-h-153320cc-2523-41e4-88fa-bd64733c79aa" class="outline-4">
 <h4 id="h-153320cc-2523-41e4-88fa-bd64733c79aa">Linear Maps Thought of as Matrix Multiplication</h4>
 <div class="outline-text-4" id="text-h-153320cc-2523-41e4-88fa-bd64733c79aa">
+<ul class="org-ul">
+<li><b>Definition 3.73.</b>
+Let \(v\in V\) and suppose \(b_{1}\), &#x2026;, \(b_{n}\) be a basis for
+\(V\). Then we can form the <dfn>Matrix</dfn> associated to \(v\) relative
+to the basis by the n-by-1 matrix \(\mathcal{M}(v)=v_{1}b_{1}+\dots+v_{n}b_{n}\)
+where the scalars \(v_{1},\dots,v_{n}\in\mathbb{V}\) are the components
+of the n-vector.
+<ul class="org-ul">
+<li>This appears to be defined in <a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#T41"><code>MATRLIN:def 7</code></a> as <code>v |-- b1</code> instead
+of \(\mathcal{M}(v)\).</li>
+</ul></li>
+<li></li>
+</ul>
 </div>
 </div>
-
 <div id="outline-container-h-cf3fc6fa-df96-4bc7-a0c5-8830f3f6935c" class="outline-4">
 <h4 id="h-cf3fc6fa-df96-4bc7-a0c5-8830f3f6935c">Change of Basis</h4>
 <div class="outline-text-4" id="text-h-cf3fc6fa-df96-4bc7-a0c5-8830f3f6935c">
@@ -1097,7 +1380,7 @@ such that it is:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-11-19 Sun 13:11.</p>
+<p class="postamble">Last Updated 2023-11-22 Wed 18:39.</p>
 </div>
 </body>
 </html>

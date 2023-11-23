@@ -521,11 +521,49 @@ it would be useful.
     $\lambda\in\mathbb{F}$ and $v\in V$ ([[https://mizar.uwb.edu.pl/version/current/html/mod_2.html#V1][~homogeneous~]])
   - [[https://mizar.uwb.edu.pl/version/current/html/ranknull.html#NM1][~RANKNULL~]] defines [[https://mizar.uwb.edu.pl/version/current/html/ranknull.html#NM1][~linear-transformation of V,W~]] as an
     ~additive homogeneous Function of V,W~.
-- 
+- *Notation 3.2.* Let $V$, $W$ be vector spaces over $\mathbb{F}$
+  1. The set of linear maps from $V$ to $W$ is denoted $\mathcal{L}(V,W)$
+  2. The set of linear maps from $V$ to $V$ is denoted $\mathcal{L}(V)=\mathcal{L}(V,V)$
+- *Examples 3.3.*
+  1. The zero map $V\to W$ sending every vector to the zero vector of
+     $W$ is linear. {{{missing()}}}
+  2. The identity operator $\id\colon V\to V$ is linear. {{{missing()}}}
+- *Theorem 3.4.* Suppose $v_{1}$, ..., $v_{n}$ is a basis for $V$ and
+  $w_{1}$, ..., $w_{n}$ is a basis for $W$. Then there exists a linear
+  transformation $T\colon V\to W$ such that $T(v_{i})=w_{i}$ for each
+  $i=1,\dots,n$.
+  {{{missing()}}}
+
 *** Algebraic Operations on $L(V,W)$
 :PROPERTIES:
 :CUSTOM_ID: h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8
 :END:
+
+- *Definition 3.5.* Suppose $S$, $T\in\mathcal{L}(V,W)$. Then we define
+  their sum $S+T$ to be the linear transformation defined by
+  $(S+T)(v)=S(v)+T(v)$ for every $v\in
+  V$. ([[https://mizar.uwb.edu.pl/version/current/html/matrlin.html#K3][~MATRLIN:def 3~]])
+
+  When $\lambda\in\mathbb{F}$, we define the product $\lambda S$ as the
+  linear transformation defined by $(\lambda S)(v)=\lambda\cdot S(v)$
+  for every $v\in V$. ([[https://mizar.uwb.edu.pl/version/current/html/matrlin.html#K4][~MATRLIN:def 4~]])
+- *Theorem 3.6.* With these operations we just defined,
+  $\mathcal{L}(V,W)$ forms a vector space over $\mathbb{F}$.
+- *Definition 3.7.* Let $S\in\mathcal{U,W}$, $T\in\mathcal{L}(V,U)$. We define the
+  {{{dfn(Composition)}}} of linear operators $S\circ T$ to be defined as
+  $(S\circ T)(v)=S(T(v))$ for every $v\in V$.
+  - This is handled for free using composition of functions in
+    Mizar. Composition is originally defined for arbitrary relations in
+    [[https://mizar.uwb.edu.pl/version/current/html/relat_1.html#K3][~RELAT_1:def 8~]].
+  - [[https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#T43][~MATRLIN2~]] explicitly coerces the types
+- *Theorem 3.8.*
+  - Associativity: $(T_{1}\circ T_{2})\circ T_{3}=T_{1}\circ (T_{2}\circ T_{3})$
+    ([[https://mizar.uwb.edu.pl/version/current/html/relat_1.html#T36][~RELAT_1:36~]])
+  - Identity: $T\circ I=I\circ T=T$
+    ([[https://mizar.uwb.edu.pl/version/current/html/funct_2.html#T17][~FUNCT_2:17~]])
+  - $(S_{1}+S_{2})\circ T=(S_{1}\circ T) + (S_{2}\circ T)$ {{{missing}}}
+- *Theorem 3.10.* Let $T\colon V\to W$ be a linear transformation. Then
+  $T(0)=0$. ([[https://mizar.uwb.edu.pl/version/current/html/ranknull.html#T9][~RANKNULL:9~]])
 
 ** 3B. Null Spaces and Ranges
 :PROPERTIES:
@@ -537,15 +575,72 @@ it would be useful.
 :CUSTOM_ID: h-6f6d554e-c664-4957-97e9-dc5721a97f99
 :END:
 
+- *Definition 3.11.* Let $T\in\mathcal{L}(V,W)$ be a linear
+  transformation. We define the {{{dfn(Null Space)}}} of $T$ (or, the
+  "kernel" of $T$) denoted $\operatorname{null}(T)$ or $\ker(T)$, is the
+  subset of $V$ consisting of vectors which $T$ maps to $0$, i.e.,
+  $\ker(T)=\{v\in V\mid T(v)=0\}$. ([[https://mizar.uwb.edu.pl/version/current/html/ranknull.html#K1][~RANKNULL:def 1~]])
+- *Theorem 3.13.* The null space is actually a subspace. (Mizar noted
+  this in its definition.)
+- *Definition 3.14.* A function $T\colon V\to W$ is called
+  {{{dfn(Injective)}}} (or "one-to-one") if $T(u)=T(v)$ implies $u=v$
+  for any $u,v\in V$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/funct_1.html#V2][~FUNCT_1:def 4~]])
+- *Theorem 3.15* (Injectivity $\iff$ null space equals $\{0\}$).
+  Let $T\in\mathcal{L}(V,W)$ be a linear transformation.
+  Then $T$ is injective if and only if $\ker(T)=\{0\}$.
+  - The forward direction is proven in ([[https://mizar.uwb.edu.pl/version/current/html/ranknull.html#T15][~RANKNULL:15~]])
+  - The backward direction is obvious as a consequence of the rank-null
+    theorem, but explicitly stated is {{{missing()}}}
+
 *** Range and Surjectivity
 :PROPERTIES:
 :CUSTOM_ID: h-98038eca-1e3c-4503-b834-3389a0e825cd
 :END:
 
+- *Definition 3.16.* Let $T\in\mathcal{L}(V,W)$ be a linear
+  transformation. The {{{dfn(Range)}}} of $T$ is the subset $W$
+  consisting of the elements that are equal to $T(v)$ for some $v\in V$;
+  i.e.,
+  $\operatorname{range}(T)=\{T(v)\mid v\in V\}$.
+  - This is also known as the {{{dfn(Image)}}} of $T$ and is defined in
+    [[https://mizar.uwb.edu.pl/version/current/html/ranknull.html#K3][~RANKNULL:def 2~]].
+- *Theorem 3.18.* If $T\in\mathcal{L}(V,W)$, then
+  $\operatorname{range}(T)$ is a subspace of $W$. (This is handled
+  already in the definition in Mizar.)
+- *Definition 3.19.* A function $f\colon X\to Y$ is called
+  {{{dfn(Surjective)}}} (or {{{dfn(Onto)}}}) if its range is equal to
+  $W$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/funct_2.html#V2][~FUNCT_2:def 3~]])
+
 *** Fundamental Theorem of Linear Maps
 :PROPERTIES:
 :CUSTOM_ID: h-aca4326c-86bc-4991-a2e9-b6076552fdac
 :END:
+
+- *Theorem 3.21* (Fundamental theorem of linear maps).
+  Suppose $V$ is finite-dimensional vector space, and let
+  $T\in\mathcal{L}(V,W)$. Then the range is finite-dimensional and
+  $\dim(V)=\dim\ker(T)+\dim\operatorname{range}(T)$.
+  - The $\dim\ker(T)$ is called the {{{dfn(Nullity)}}} of $T$ and the
+    $\dim\operatorname{range}(T)$ is called the {{{dfn(Rank)}}} of $T$
+  - ([[https://mizar.uwb.edu.pl/version/current/html/ranknull.html#T44][~RANKNULL:44~]]) proves this theorem
+  - ([[https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#T43][~MATRLIN2:43~]]) proves both directions of this theorem for vector
+    spaces over fields
+- *Theorem 3.22.* Suppose $V$ and $W$ are finite-dimensional vector
+  spaces over $\mathbb{F}$.
+  If $\dim(V)\gt\dim(W)$, then there is no linear map from $V$ to $W$
+  that is injective.
+  - {{{missing()}}} But it can be proven quickly from [[https://mizar.uwb.edu.pl/version/current/html/ranknull.html#T45][~RANKNULL:45~]]
+- *Theorem 3.24.* Suppose $V$ and $W$ are finite-dimensional vector
+  spaces over $\mathbb{F}$.
+  If $\dim(V)\lt\dim(W)$, then there is no linear map from $V$ to $W$
+  that is surjective. {{{missing()}}}
+- *Theorem 3.26.* A homogeneous system of linear equations with more
+  variables than equations has nonzero solutions. {{{missing()}}}
+- *Theorem 3.28.* An inhomogeneous system of linear equations with more
+  equations than variables has no solution for some choice of the
+  constant terms. {{{missing()}}}
 
 ** 3C. Matrices
 :PROPERTIES:
@@ -557,16 +652,81 @@ it would be useful.
 :CUSTOM_ID: h-30355ddf-3e25-4b66-a06b-1dc9b3574a81
 :END:
 
+- *Definition 3.29.*
+  Suppose $m$ and $n$ are +nonnegative integers+ natural numbers. A {{{dfn(m-by-n Matrix)}}}
+  $A$ is an array of elements of $\mathbb{F}$ with $m$ rows and $n$
+  columns.
+  The notation $A_{j,k}$ refers to the entry in row $j$ and column $k$
+  of $A$.
+  - [[https://mizar.uwb.edu.pl/version/current/html/matrix_0.html#NM2][~MATRIX_0~]] defines ~Matrix of m,n,D~ for entries in a non-empty set $D$
+  - The ~n~ is encoded as the ~width M~ for an m-by-n matrix $M$
+  - The ~m~ is encoded as ~len (dom M)~ for an m-by-n matrix $M$
+  - [[https://mizar.uwb.edu.pl/version/current/html/matrix_0.html#K2][~MATRIX_0:def 4~]] encodes the possible index pairs for a matrix as
+    ~Index M~
+  - $A_{i,j}$ is encoded in Mizar as ~A * (i,j)~
+    ([[https://mizar.uwb.edu.pl/version/current/html/matrix_0.html#K3][~MATRIX_0:def 5~]])
+- *Implicit notion.* Let $A$ and $B$ are both m-by-n matrices.
+  If $A_{i,j}=B_{i,j}$ for every $i$ and $j$, then $A=M$ ([[https://mizar.uwb.edu.pl/version/current/html/matrix_0.html#T21][~MATRIX_0:21~]])
+- *Definition 3.31* (Matrix of a Linear Map). Let $T\in\mathcal{L}(V,W)$
+  be a linear transformation, let $v_{1}$, ..., $v_{m}$ be a basis of
+  $V$ and $w_{1}$, ..., $w_{n}$ be a basis for $W$.
+  The {{{dfn(Matrix)}}} of $T$ with respect to these bases is the m-by-n
+  matrix whose entries $A_{i,j}$ are defined by:
+  $T(v_{k})=A_{1,k}w_{1} + \dots + A_{m,k}w_{k}$.
+  This is denoted $\mathcal{M}(T)$ for the matrix.
+  - [[https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#K1][~MATRLIN2~]] redefines ~AutMt~ to give the associated matrix for a
+    linear operator
+  - [[https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#K3][~MATRLIN2:def 2~]] defines ~AutEqMt~ for linear operators
+- *Implicit Example.* The identity linear transformation corresponds
+  to the identity matrix. ([[https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#T28][~MATRLIN2:28~]])
+- *Implicit Definition.*
+  For any matrix of suitable dimension, we can find a linear
+  transformation between vector spaces of suitable dimensions. This is
+  the inverse operation of finding the matrix associated to a linear
+  transformation and particular choice of bases.
+  - [[https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#K4][~MATRLIN2:def 3~]] defines this as ~Mx2Tran~
+
 *** Addition and Scalar Multiplication of Matrices
 :PROPERTIES:
 :CUSTOM_ID: h-9930e894-2db2-4d0f-9944-d295cf2de9a5
 :END:
 
+- *Definition 3.34.* The {{{dfn(Sum of two matrices)}}} of the same size
+  is the matrix obtained by componentwise addition.
+- *Theorem 3.35.* Suppose $S,T\in\mathcal{L}(V,W)$.
+  Then $\mathcal{M}(S+T)=\mathcal{M}(S)+\mathcal{M}(T)$.
+  - In this form, it is [[https://mizar.uwb.edu.pl/version/current/html/matrlin.html#T42][~MATRLIN:42~]] and
+    the inverse operation is proven in [[https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#T37][~MATRLIN2:37~]]
+- *Definition 3.36* (Scalar multiplication of matrices).
+  We can define scalar multiplication of a matrix by simply multiplying
+  every component by (the same) scalar.
+  ([[https://mizar.uwb.edu.pl/version/current/html/matrix_3.html#K6][~MATRIX_3:def 5~]])
+- *Theorem 3.38.* Let $\lambda\in\mathbb{F}$ and $T\in\mathcal{L}(V,W)$.
+  Then $\mathcal{M}(\lambda T) =\lambda \mathcal{M}(T)$. ([[https://mizar.uwb.edu.pl/version/current/html/matrlin.html#T43][~MATRLIN:43~]])
+- *Notation 3.39.* For positive integers $m$ and $n$, we denote the set
+  of all m-by-n matrices with entries in $\mathbb{F}$ by
+  $\mathbb{F}^{m,n}$.
+  - Mizar calls the /set/ of square n-by-n matrices as ~n-Matrices_over K~
+    ([[https://mizar.uwb.edu.pl/version/current/html/matrix_1.html#K1][~MATRIX_1:def 1~]])
+- *Theorem 3.40.* For positive integers $m$ and $n$, the collection
+  $\mathbb{F}^{m,n}$ with matrix addition and scalar multiplication
+  forms a finite-dimensional vector space over $\mathbb{F}$ of dimension
+  $mn$. {{{missing()}}}
+  
 *** Matrix Multiplication
 :PROPERTIES:
 :CUSTOM_ID: h-7ed6b163-ce5a-4001-922e-3f54b7794a1d
 :END:
 
+- *Definition 3.41* (Matrix multiplication).
+  Let $A$ be an m-by-n matrix and $B$ is an n-by-p matrix.
+  The {{{dfn(Product)}}} $AB$ is the m-by-p matrix whose components are
+  given by $(AB)_{i,k} = \sum_{j}A_{i,j}B_{j,k}$. ([[https://mizar.uwb.edu.pl/version/current/html/matrix_3.html#K4][~MATRIX_3:def 4~]])
+
+- *Theorem 3.43.* Let $T\in\mathcal{L}(U,V)$ and $S\in\mathcal{L}(V,W)$,
+  then $\mathcal{M}(S\circ T)=\mathcal{M}(S)\mathcal{S}(T)$.
+  - I think this is [[https://mizar.uwb.edu.pl/version/current/html/matrlin.html#T41][~MATRLIN:41~]], but I might be mistaken...
+  
 *** Column-Row Factorization and Rank of a Matrix
 :PROPERTIES:
 :CUSTOM_ID: h-25209265-06a6-4144-83a6-27757040afc7
@@ -582,16 +742,89 @@ it would be useful.
 :CUSTOM_ID: h-5714227b-82f5-4587-abdd-c19383a6b9e8
 :END:
 
+- *Definition 3.59.*
+  1. A linear map $T\in\mathcal{L}(V,W)$ is called {{{dfn(Invertible)}}}
+     if there exists a $S\in\mathcal{L}(W,V)$ such that $S\circ T$ is
+     the identity operator on $V$ and $T\circ S$ is the identity
+     operation on $W$. {{{missing()}}}
+  2. A linear map $S\in\mathcal{L}(W,V)$ satisfying $T\circ S = I$
+     and $S\circ T = I$ is called the {{{dfn(Inverse)}}} of $T$ ---
+     Mizar says $S$ {{{dfn(is Reverse of)}}} $T$. {{{missing()}}}
+    
+
+  The analogous definitions for matrices is found in ([[https://mizar.uwb.edu.pl/version/current/html/matrix_6.html#V1][~MATRIX_6:def 3~]])
+  ([[https://mizar.uwb.edu.pl/version/current/html/matrix_6.html#R2][~MATRIX_6:def 2~]])
+- *Theorem 3.60.* An invertible linear map has a unique inverse.
+  {{{missing()}}}
+- *Notation 3.61.* We denote the inverse of $T$ by $T^{-1}$.
+  - Mizar convention uses the notation ~T"~ for $T^{-1}$
+- *Theorem 3.63.* A linear map is invertible if and only if it is
+  injective and surjective.
+  - [[https://mizar.uwb.edu.pl/version/current/html/funct_2.html#T25][~FUNCT_2:25~]] proves this in general
+- *Theorem 3.65.* Suppose $V$ and $W$ are finite-dimensional vector
+  spaces and $\dim(V)=\dim(W)$, and $T\in\mathcal{L}(V,W)$. Then
+  $T$ is invertible iff $T$ is injective iff $T$ is surjective.
+  {{{missing()}}}
+- *Theorem 3.68.* Suppose $V$ and $W$ are finite-dimensional vector
+  spaces and $\dim(V)=\dim(W)$, and $S\in\mathcal{L}(V,W)$ and
+  $T\in\mathcal{L}(W,V)$.
+  Then $S\circ T=I$ if and only if $T\circ S=I$. {{{missing()}}}
+  
 *** Isomorphic Vector Spaces
 :PROPERTIES:
 :CUSTOM_ID: h-614c4b38-c073-466d-8bfc-f01b329b73a9
 :END:
+
+- *Definition 3.69.*
+  1. An {{{dfn(Isomorphism)}}} is an invertible linear map.
+  2. Two vector spaces are called {{{dfn(Isomorphic)}}} if there is an
+     isomorphism from one vector space to another.
+#+begin_remark
+Since not all vector spaces are isomorphic, if we tried to define a
+new ~mode Isomorphism of V,W~, then we couldn't prove existence. This
+is why Mizar typically uses a predicate ~V,W are_isomorphic~ to mean
+there exists (in this case) a linear bijective function.
+#+end_remark
+- There doesn't seem to be ~are_isomorphic~ defined for vector spaces,
+  so I'm marking this as {{{missing()}}}
+- *Theorem 3.70.* Two finite-dimensional vector spaces over $\mathbb{F}$
+  are isomorphic if and only if they have the same dimension. {{{missing()}}}
+- *Theorem 3.71.* Suppose $v_{1}$, ..., $v_{m}$ is a basis of $V$ and
+  $w_{1}$, ..., $w_{n}$ is a basis of $W$. Then $\mathcal{M}$ is an
+  isomorphism of $\mathcal{L}(V,W)$ and $\mathbb{F}^{m,n}$.
+  - {{{missing()}}} but I think ~MATRLIN~ and ~MATRLIN2~ does a lot of
+    the heavy lifting here.
+- *Theorem 3.72.* Suppose $V$ and $W$ are finite-dimensional vector
+  spaces. Then $\mathcal{L}(V,W)$ is finite-dimensional and
+  $\dim\mathcal{L}(V,W)=(\dim V)(\dim W)$. {{{missing()}}}
 
 *** Linear Maps Thought of as Matrix Multiplication
 :PROPERTIES:
 :CUSTOM_ID: h-153320cc-2523-41e4-88fa-bd64733c79aa
 :END:
 
+- *Definition 3.73.*
+  Let $v\in V$ and suppose $b_{1}$, ..., $b_{n}$ be a basis for
+  $V$. Then we can form the {{{dfn(Matrix)}}} associated to $v$ relative
+  to the basis by the n-by-1 matrix $\mathcal{M}(v)=v_{1}b_{1}+\dots+v_{n}b_{n}$
+  where the scalars $v_{1},\dots,v_{n}\in\mathbb{V}$ are the components
+  of the n-vector.
+  - This appears to be defined in [[https://mizar.uwb.edu.pl/version/current/html/matrlin.html#T41][~MATRLIN:def 7~]] as ~v |-- b1~ instead
+    of $\mathcal{M}(v)$.
+- *Theorem 3.75.* Let $T\in\mathcal{L}(V,W)$ and let $v_{1}$, ...,
+  $v_{n}$ be a basis for $V$. Then the $k^{th}$ column of
+  $\mathcal{M}(T)$ is precisely $\mathcal{M}(Tv_{k})$.
+  - This is precisely how [[https://mizar.uwb.edu.pl/version/current/html/matrlin.html#K10][~AutMt~]] is defined
+- *Theorem 3.76.* Let $T\in\mathcal{L}(V,W)$ and let $v_{1}$, ...,
+  $v_{n}$ be a basis for $V$. Let $w_{1}$, ..., $w_{m}$ be a basis for
+  $W$. Then $\mathcal{M}(Tv)=\mathcal{M}(T)\mathcal{M}(v)$
+  - {{{missing()}}} but the row-vector version is proven in [[https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#T32][~MATRLIN2:32~]]
+- *Theorem 3.78.*
+  Suppose $V$ and $W$ are finite-dimensional vector spaces and
+  $T\in\mathcal{L}(V,W)$. The $\dim(\operatorname{range}(T))$ is equal
+  to the column rank of $\mathcal{M}(T)$.
+  {{{missing()}}}
+  
 *** Change of Basis
 :PROPERTIES:
 :CUSTOM_ID: h-cf3fc6fa-df96-4bc7-a0c5-8830f3f6935c
