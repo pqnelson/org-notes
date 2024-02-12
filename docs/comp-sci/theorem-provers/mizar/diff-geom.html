@@ -206,27 +206,41 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -257,10 +271,19 @@ of atlases or charts (so far as I can tell, at least).
 <ul class="org-ul">
 <li><a href="http://mizar.org/version/current/html/mfold_0.html"><code>mfold_0</code></a> on <a href="http://mizar.org/fm/2014-22/pdf22-2/mfold_0.pdf">topological manifolds</a> is a retcon, retroactively
 introducing a notion of a locally Euclidean space which covers
-manifolds with and without boundary.</li>
+manifolds with and without boundary.
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/mfold_0.html#V1"><code>locally_euclidean</code></a> means for every point \(p\in M\) there exists a
+neighborhood \(p\in U\subset M\) such that there exists an
+\(n\in\mathbb{N}\) such that \(M|_{U}\) is homeomorphic to the
+n-dimensional disk.</li>
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/mfold_0.html#NM1"><code>topological_manifold</code></a> is a non-empty Hausdorff second-countable
+locally-Euclidean topological space</li>
+</ul></li>
 <li><a href="http://mizar.org/version/current/html/mfold_1.html"><code>mfold_1</code></a> formalizes
 <a href="http://mizar.org/fm/2011-19/pdf19-1/mfold_1.pdf">the definition of topological manifolds</a> following Jack Lee.
 <ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/mfold_1.html#T8"><code>MFOLD_1:8</code></a> proves the unit ball and \(\mathbb{R}^{n}\) are homeomorphic</li>
 <li><a href="http://mizar.org/version/current/html/connsp_2.html"><code>connsp_2</code></a> formalizes notions related to being a neighborhood to a
 point in a topological space, which is used when defining the
 attribute <code>locally_euclidean</code> (<code>MFOLD_0:def2</code>).</li>
@@ -361,7 +384,7 @@ sure how necessary they are to begin with&#x2026;</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-08-18 Thu 11:53.</p>
+<p class="postamble">Last Updated 2023-11-28 Tue 08:44.</p>
 </div>
 </body>
 </html>
