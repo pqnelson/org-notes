@@ -1,0 +1,110 @@
+#+TITLE: Julia
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2024-02-28T12:10:32-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Wednesday February 28, 2024 at 12:10PM
+
+* Getting Started with Emacs
+:PROPERTIES:
+:CUSTOM_ID: h-acf36da9-8ddd-40ce-9c0b-61a5640e243a
+:END:
+
+Download Julia and put it somewhere. You don't install a compiler or
+interpreter the same way you do for, say, Python. It's executed locally.
+
+#+begin_example
+~$ mkdir -p src/julia/
+~$ cd src/julia/
+~/src/julia/$ wget https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.1-linux-x86_64.tar.gz
+~/src/julia/$ tar zxvf julia-1.10.1-linux-x86_64.tar.gz 
+#+end_example
+
+Then you append to your =~/.bashrc= file:
+
+#+begin_src bash
+# Julia
+export PATH="$PATH:/home/alex/src/julia/julia-1.10.1/bin"
+#+end_src
+
+Source your bashrc again, and you should be able to start working with
+Julia.
+
+I couldn't ever get Julia's LSP working with Emacs, so I decided to work
+with [[https://github.com/gcv/julia-snail][Julia-snail]]. On Debian systems, it helps to install ~libvterm-dev~
+on the command line, then add to your init file:
+
+#+begin_src elisp
+(use-package vterm
+  :ensure t)
+
+(use-package julia-mode
+  :ensure t)
+
+(use-package julia-snail
+  :ensure t
+  :hook (julia-mode . julia-snail-mode))
+
+;; I hate this, but julia-snail just couldn't find the binary!
+(setq julia-snail-executable "/home/alex/src/julia/julia-1.10.1/bin/julia")
+#+end_src
+
+To run a REPL, you can just use ~C-c C-z~ in Emacs.
+
+* Starting a project
+:PROPERTIES:
+:CUSTOM_ID: h-1783780d-fd6d-4857-8d0e-2efd05c5f8f0
+:END:
+
+To start a new project, run Julia in the parent directory for the
+project, the run the code:
+
+#+begin_src julia
+] 
+pkg > generate MyProject
+#+end_src
+
+This will create the following files and subdirectories:
+
+#+begin_example
+MyProject/
+├── Project.toml
+└── src
+    └── MyProject.jl
+#+end_example
+
+It's good practice to create a subdirectory for unit tests (and it's
+insane to program without unit testing your code), as well as a
+directory for your documentation. We can do it in Julia by switching to
+"shell mode" (typing in ~;~) then we can ~mkdir~:
+
+#+begin_src julia
+;
+shell> mkdir -p MyProject/{docs,test}
+shell> cd MyProject
+#+end_src
+
+Switch back to Julia and activate the project:
+
+#+begin_src julia
+shell> cd MyProject
+]
+pkg > activate .
+(MyProject) pkg >
+#+end_src
+
+Now we can start working on our project.
+
+* Interesting Stuff
+:PROPERTIES:
+:CUSTOM_ID: h-d96858ea-30cd-4dad-888a-4863446ec7d6
+:END:
+
+- [[https://book.sciml.ai/][Parallel Computing and Scientific Machine Learning (SciML): Methods and Applications]]
+  --- SciML is a fun project
