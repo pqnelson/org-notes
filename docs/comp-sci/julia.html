@@ -220,7 +220,8 @@
 <ul>
 <li><a href="#h-acf36da9-8ddd-40ce-9c0b-61a5640e243a">1. Getting Started with Emacs</a></li>
 <li><a href="#h-1783780d-fd6d-4857-8d0e-2efd05c5f8f0">2. Starting a project</a></li>
-<li><a href="#h-d96858ea-30cd-4dad-888a-4863446ec7d6">3. Interesting Stuff</a></li>
+<li><a href="#h-b7360b0d-4c81-46e6-b0c8-f2bf72eba12a">3. Docstrings</a></li>
+<li><a href="#h-d96858ea-30cd-4dad-888a-4863446ec7d6">4. Interesting Stuff</a></li>
 </ul>
 </div>
 </div>
@@ -233,7 +234,7 @@ Download Julia and put it somewhere. You don't install a compiler or
 interpreter the same way you do for, say, Python. It's executed locally.
 </p>
 
-<pre class="example" id="orgf7e5a86">
+<pre class="example" id="org71f1037">
 ~$ mkdir -p src/julia/
 ~$ cd src/julia/
 ~/src/julia/$ wget https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.1-linux-x86_64.tar.gz
@@ -301,7 +302,7 @@ pkg &gt; generate MyProject
 This will create the following files and subdirectories:
 </p>
 
-<pre class="example" id="org4006f7f">
+<pre class="example" id="org9c0ddfd">
 MyProject/
 ├── Project.toml
 └── src
@@ -340,18 +341,50 @@ Now we can start working on our project.
 </div>
 </div>
 
+<div id="outline-container-h-b7360b0d-4c81-46e6-b0c8-f2bf72eba12a" class="outline-2">
+<h2 id="h-b7360b0d-4c81-46e6-b0c8-f2bf72eba12a"><span class="section-number-2">3.</span> Docstrings</h2>
+<div class="outline-text-2" id="text-h-b7360b0d-4c81-46e6-b0c8-f2bf72eba12a">
+<p>
+Docstrings are <a href="https://docs.julialang.org/en/v1/manual/documentation/">well-documented</a> and should be used whenever possible.
+</p>
+
+<p>
+There are also "admonitions" which look like <code>!!! admonition</code>
+or <code>!!! admonition "Name"</code>. The available admonitions are: danger, warning, info/note, tip.
+They start a 4-spaced indented section of documentation which elaborates
+on various aspects of the thing being documented.
+</p>
+</div>
+</div>
+
 <div id="outline-container-h-d96858ea-30cd-4dad-888a-4863446ec7d6" class="outline-2">
-<h2 id="h-d96858ea-30cd-4dad-888a-4863446ec7d6"><span class="section-number-2">3.</span> Interesting Stuff</h2>
+<h2 id="h-d96858ea-30cd-4dad-888a-4863446ec7d6"><span class="section-number-2">4.</span> Interesting Stuff</h2>
 <div class="outline-text-2" id="text-h-d96858ea-30cd-4dad-888a-4863446ec7d6">
 <ul class="org-ul">
 <li><a href="https://book.sciml.ai/">Parallel Computing and Scientific Machine Learning (SciML): Methods and Applications</a>
 &#x2014; SciML is a fun project</li>
+<li><a href="https://github.com/domluna/JuliaFormatter.jl">JuliaFormatter</a> to enforce a style guide
+<ul class="org-ul">
+<li><a href="https://docs.sciml.ai/SciMLStyle/stable/">SciML Style guide</a></li>
+</ul></li>
+<li>Design by contract seems difficult in Julia, but there are at least
+two libraries worth examining further:
+<ul class="org-ul">
+<li><a href="https://github.com/ghaetinger/DesignByContract.jl">DesignByContract.jl</a> allows design-by-contract</li>
+<li><a href="https://github.com/zenna/Spec.jl">Spec.jl</a> similarly allows for annotating functions with <code>@pre</code> and
+<code>@post</code> conditions</li>
+</ul></li>
+<li><a href="https://nextjournal.com/jbieler/adding-static-type-checking-to-julia-in-100-lines-of-code/">Adding static type checking to Julia in 100 lines of code</a></li>
+<li><a href="https://m3g.github.io/JuliaNotes.jl/stable/immutable/">Mutability in Julia</a> is not as intuitive as it should be&#x2026;</li>
+<li>Jeff Bezanson, Stefan Karpinski, Viral B. Shah, Alan Edelman,<br>
+"Julia: A Fast Dynamic Language for Technical Computing".<br>
+<a href="https://arxiv.org/abs/1209.5145">arXiv:1209.5145</a>, 27 pages; initial design document</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2024-03-01 Fri 09:45.</p>
+<p class="postamble">Last Updated 2024-03-21 Thu 10:37.</p>
 </div>
 </body>
 </html>
