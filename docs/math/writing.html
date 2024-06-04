@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Writing Mathematics</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Writing Mathematics</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-6a990418-85d7-4714-b7ee-20043a38da59">1. Steenrod, Halmos, Schiffer, Dieudonne, "How to write mathematics"</a>
+<ul>
+<li><a href="#h-9ec74949-7351-48f9-a21f-d280d8f656aa">1.1. Steenrod's essay</a>
+<ul>
+<li><a href="#h-348f482d-88c6-4725-80fb-0552de84f428">1.1.1. Expository problems of formal structure</a></li>
+<li><a href="#h-2eb40d30-9038-4870-b479-b2f1fd0043a5">1.1.2. The informal structure</a></li>
+<li><a href="#h-9da8c34a-1936-4d01-9485-75e08b860ea0">1.1.3. Successive Refinements</a></li>
+</ul>
+</li>
+<li><a href="#h-d767e507-f335-4eac-b937-89968dff4e2a">1.2. Halmos's Essay</a></li>
+<li><a href="#h-80a67b77-d30c-4544-a2db-ce2d3d4c5692">1.3. Menahem M Schiffer's Essay</a></li>
+<li><a href="#h-c2d89fe2-64b5-4ac8-a048-fecb8a294a8c">1.4. Dieudonne's Essay</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+These are random notes from various places, and my experiences at
+writing mathematics.
+</p>
+
+<div id="outline-container-h-6a990418-85d7-4714-b7ee-20043a38da59" class="outline-2">
+<h2 id="h-6a990418-85d7-4714-b7ee-20043a38da59"><span class="section-number-2">1.</span> Steenrod, Halmos, Schiffer, Dieudonne, "How to write mathematics"</h2>
+<div class="outline-text-2" id="text-h-6a990418-85d7-4714-b7ee-20043a38da59">
+</div>
+
+<div id="outline-container-h-9ec74949-7351-48f9-a21f-d280d8f656aa" class="outline-3">
+<h3 id="h-9ec74949-7351-48f9-a21f-d280d8f656aa"><span class="section-number-3">1.1.</span> Steenrod's essay</h3>
+<div class="outline-text-3" id="text-h-9ec74949-7351-48f9-a21f-d280d8f656aa">
+<ul class="org-ul">
+<li>Steenrod distinguishes <dfn>formal structure</dfn> in mathematical
+writing from <dfn>informal structure</dfn> and asserts "This division
+of the material should be conspicuously maintained in any mathematical
+presentation" because it makes the logical structure clear.
+<ul class="org-ul">
+<li>Formal structure: definitions, theorems, proofs</li>
+<li>Informal structure: motivations, analogies, examples,
+"metamathematical explanations"</li>
+</ul></li>
+<li>The primary purpose of a book is to present the formal structure.</li>
+<li>A secondary purpose (almost as important) is to offer the reader a
+method whereby they can fit the new structure into what they already
+know. It is here, in this secondary purpose, that authors exhibit
+greatest variations in skil and art.
+<ul class="org-ul">
+<li>What are the basic questions that will be answered?</li>
+<li>What are the crucial examples that motivate development?</li>
+<li>What are vaguely formulated principles from which the entire theory
+seems to unroll effortlessly?</li>
+</ul></li>
+<li>Huge danger in writing <i>about</i> mathematics instead of <i>doing it</i></li>
+</ul>
+</div>
+
+<div id="outline-container-h-348f482d-88c6-4725-80fb-0552de84f428" class="outline-4">
+<h4 id="h-348f482d-88c6-4725-80fb-0552de84f428"><span class="section-number-4">1.1.1.</span> Expository problems of formal structure</h4>
+<div class="outline-text-4" id="text-h-348f482d-88c6-4725-80fb-0552de84f428">
+<ul class="org-ul">
+<li>"Normal readers" start at the beginning, read every page, all the way
+until the end.</li>
+<li>"Grasshopper readers" read a book to fill gaps in knowledge</li>
+</ul>
+
+<blockquote>
+<p>
+The needs of the grasshoppers are served by a good map of the
+territory, an adequate directory, numerous sign posts, and an index
+of locations. By a <i>map</i> I mean an outline of the results of the book,
+such as can be given in an introductory chapter (see the next section
+where this is discussed). By a <i>directory</i> I mean the table of contents;
+to be adequate, it should contain section headings as well as chapter
+titles. (By a <i>section</i> I mean a unit whose average length is three to
+five pages.) The <i>sign posts</i> are the chapter titles, section headings,
+the paragraph headings such as Definition, Theorem, etc., and the
+numbers of these and other important statements.
+</p>
+</blockquote>
+
+<ul class="org-ul">
+<li>Steenrod vociferously advocates paragraph numbering, with the numbers
+living in the left margin (apparently he believes this makes it easier
+to locate the paragraph): "Actually it would be most convenient to
+have the numbers appear in the left margins, but this requires
+exceptionally expensive setting of type. The next best procedure is to
+use boldface numbers close to the left margin. Authors must deal
+firmly with editors who complain of the ugliness of the boldface
+splotches running down the page."</li>
+<li>If we recall our reading habits, most mathematicians are grasshoppers
+(or so Steenrod asserts). So we should write for grasshoppers.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-2eb40d30-9038-4870-b479-b2f1fd0043a5" class="outline-4">
+<h4 id="h-2eb40d30-9038-4870-b479-b2f1fd0043a5"><span class="section-number-4">1.1.2.</span> The informal structure</h4>
+<div class="outline-text-4" id="text-h-2eb40d30-9038-4870-b479-b2f1fd0043a5">
+<ul class="org-ul">
+<li>With informal structure, the restrictions are minimal and guidelines
+are difficult to discern.</li>
+<li>The introductory parts discuss the following kinds of informal
+material:
+<ol class="org-ol">
+<li>brief reviews of background material to set the stage,</li>
+<li>presentation of motivations or leading questions,</li>
+<li>considerations of examples to derive conjectures,</li>
+<li>rough descriptions of examples to be obtained and methods to be used,</li>
+<li>an outline of the book by chapters.</li>
+</ol></li>
+<li>Informal items which follow related formal material:
+<ol class="org-ol">
+<li>connections with other subjects,</li>
+<li>discussions of alternative treatments, and</li>
+<li>historical comments.</li>
+</ol></li>
+<li>Weyl's <i>The Classical Groups</i> is cited as exemplary in providing
+historical notes and bibliographical references.</li>
+<li>Do we really need an introductory chapter?</li>
+<li>There are two ways a student learns material, which anachronistically
+seem to correspond to bottom-up programmind and top-down programming:
+<ol class="org-ol">
+<li>(Bottom-up) Ask the reader to examine hte lumber, bricks, and small structural
+members out of which the building is to be made, then to make
+subassemblies, and finally erect the building from these.</li>
+<li>(Top-down) Describe the building roughly but globally and provide a
+framework for viewing it, then examine the construction of the
+building in detail.</li>
+</ol></li>
+<li>Steenrod advocates the "top-down" approach to exposition which he
+calls "successive refinement".</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-9da8c34a-1936-4d01-9485-75e08b860ea0" class="outline-4">
+<h4 id="h-9da8c34a-1936-4d01-9485-75e08b860ea0"><span class="section-number-4">1.1.3.</span> Successive Refinements</h4>
+<div class="outline-text-4" id="text-h-9da8c34a-1936-4d01-9485-75e08b860ea0">
+<ul class="org-ul">
+<li>This is an incomplete section, and it's unclear what Steenrod is
+really advocating here.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-d767e507-f335-4eac-b937-89968dff4e2a" class="outline-3">
+<h3 id="h-d767e507-f335-4eac-b937-89968dff4e2a"><span class="section-number-3">1.2.</span> Halmos's Essay</h3>
+<div class="outline-text-3" id="text-h-d767e507-f335-4eac-b937-89968dff4e2a">
+<p>
+This is probably the most famous entry in the book, and can be found if
+you google for it. The essay spans pages 19&#x2013;48 (so, roughly 29 of the
+64 pages of the book, nearly half the book is Halmos's essay!). The
+essay consists of 21 sections, beginning with section 0 "Preface".
+</p>
+
+<ol class="org-ol">
+<li>Have something to say
+<ul class="org-ul">
+<li>The problem is to communicate an idea. To do so, and to do it
+clearly, you must:
+<ul class="org-ul">
+<li>have something to say,</li>
+<li>have someone to say it to,</li>
+<li>organize what you want to say,</li>
+<li>arrange it in the order you want it said in,</li>
+<li>write it, rewrite it, re-rewrite it several times,</li>
+<li>be willing to think hard about it and work hard on the mechanical
+details (e.g., diction, notation, punctuation, etc.).</li>
+</ul></li>
+<li>That's basically it.</li>
+</ul></li>
+<li>Say something
+<ul class="org-ul">
+<li>Problem 1: you have nothing to say.</li>
+<li>Problem 2: you have too much to say.
+<ul class="org-ul">
+<li>Calculus textbooks have this problem because "calculus" isn't a
+single subject, it's an alloy: a mixture of
+many interesting subjects.</li>
+</ul></li>
+<li>"To have something to say is by far the most important ingredient
+of good exposition".</li>
+</ul></li>
+<li>Speak to someone
+<ul class="org-ul">
+<li>This determines:
+<ul class="org-ul">
+<li>the amount of motivation you need to put in,</li>
+<li>the extent of informality you may allow yourself,</li>
+<li>the fussiness of the detail that is necessary,</li>
+<li>the number of times things have to be repeated.</li>
+</ul></li>
+<li>All writing is influenced by the audience. But given the audience,
+an author's problem is then to communicate with it as best they can.</li>
+<li>Anticipate and avoid the reader's difficulties.</li>
+</ul></li>
+<li>Organize first
+<ul class="org-ul">
+<li>Organize and arrange the material so as to (a) minimize the resistance
+and maximize the insight of the reader, (b) keep the reader on
+track with no unintended distractions.</li>
+<li>Why prefer a book over a stack of papers?
+<ul class="org-ul">
+<li>Efficient and pleasant arrangement</li>
+<li>Emphasis where emphasis is needed</li>
+<li>Indication of interconnections</li>
+<li>Description of examples and counter-examples on which the theory
+is based.</li>
+</ul></li>
+<li>These are precisely "organization".</li>
+<li>Once you know what you want to say (and to whom you want to say
+it), the next step is to make an outline.</li>
+<li>To organize a subject means: to decide what the main headings and
+subheadings are, what goes under each, and what are the connections
+among them. (A diagram of the organization is a graph, probably a
+tree, but not a linear chain.) There are many ways to organize a
+subject.
+<ul class="org-ul">
+<li>We then arrange the results of the method of organization in a
+linear fashion.</li>
+<li>Organization &gt; Arrangement.</li>
+</ul></li>
+<li>The preparation of an outline can take years (or, at the very
+least, many weeks).</li>
+<li>Halmos remarks that when he does his daily work, he daydreams about
+the project, and as ideas occur he jots them down on loose slips of
+paper then places them "helter-skelter" in a folder. Ideas could be
+what fields of math to include, it could be a proof, it may be a
+witticism. Then when Halmos writes, he "plays solitaire" with the
+slips in the folder. (Page 25, first full paragraph of the page.)</li>
+<li>"What to put in?" is as important as what to leave out.</li>
+</ul></li>
+<li>Think about the alphabet</li>
+<li>Write in spirals</li>
+<li>Organize always</li>
+<li>Write good English</li>
+<li>Honesty is the best policy</li>
+<li>Down with the irrelevant and the trivial</li>
+<li>Do and do not repeat</li>
+<li>The editorial we is not all bad</li>
+<li>Use words correctly</li>
+<li>Use technical terms correctly</li>
+<li>Resist symbols</li>
+<li>Use symbols correctly</li>
+<li>All communication is exposition</li>
+<li>Defend your style</li>
+<li>Stop</li>
+<li>The last word</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-80a67b77-d30c-4544-a2db-ce2d3d4c5692" class="outline-3">
+<h3 id="h-80a67b77-d30c-4544-a2db-ce2d3d4c5692"><span class="section-number-3">1.3.</span> Menahem M Schiffer's Essay</h3>
+<div class="outline-text-3" id="text-h-80a67b77-d30c-4544-a2db-ce2d3d4c5692">
+<ol class="org-ol">
+<li>Schiffer writes "more as a reader&#x2026;than as an author". But there is
+no universal prescription for writing in a clear, informative,
+attractive manner.</li>
+<li>When planning, the author must determine their audience and what
+amount (and type) of information the author wishes to
+transmit. Schiffer partitions the space of writing into four types of
+expositions: research paper, monograph, survey, textbooks.</li>
+<li><b>Research Paper.</b>
+<ul class="org-ul">
+<li>Generous quotation of sources, clear stating of facts used, precise
+definitions, complete proofs (if proofs are given at all).</li>
+<li>It is very important to write a good introduction. You must help
+the reader determine if the paper is relevant to their research as
+quickly as possible.</li>
+</ul></li>
+<li><b>Monographs.</b>
+<ul class="org-ul">
+<li>Requires much more planning and attention than the research paper.</li>
+<li>Since monographs have a longer lifetime than research papers, it's
+more important to plan and write well.</li>
+<li>A monograph should include the background and motivation for basic
+concepts, the growth of ideas and methods, more detailed proofs
+should be provided, an extensive bibliography is a must.</li>
+<li>A good introductory chapter should whet the appetite of the reader.</li>
+<li>A historic and genetic approach may yield a good general guideline
+for organizing the monograph.</li>
+<li>A monograph is not written to show how erudite and clever the
+author is, but to teach the reader some new material.</li>
+</ul></li>
+<li><b>Surveys.</b>
+<ul class="org-ul">
+<li>A survey is an invitation to a field of research, not an introduction.</li>
+<li>Motivation, background, history, and problems should be displayed.</li>
+</ul></li>
+<li><b>Textbooks.</b> (This is the longest, or second longest, section of the piece)
+<ul class="org-ul">
+<li>Schiffer restricts discussion to writing advanced textbooks for
+senior or graduate level.</li>
+<li>The purpose of a textbook is to take a student (with a specific
+amount of preparation) and introduce them to a new field of
+mathematical endeavor. Therefore the presupposed knowledge of the
+reader should be precisely realized, and the treatment of the
+textbook takes this carefully into consideration.</li>
+<li>The textbook should rise from the known to the unknown in easy
+steps. It should start from the special and intuitive to the
+general and abstract.</li>
+<li>Applications and examples should be generously given.</li>
+<li>A real textbook should contain more material than could be covered
+in a single course. This allows teachers a certain amount of
+flexibility when using the textbook.</li>
+<li>"The main desideratum would be that the solution to all significant
+problems in the exercise section should be given, or at least
+hinted at."</li>
+<li>The textbook author should "aim for clear and interesting
+exposition rather than for completeness or novelty."</li>
+</ul></li>
+<li>Now, instead of discussing "what book to write", Schiffer turns to
+the question "How to write it?"
+<ul class="org-ul">
+<li>Plans change and the production of any book is a process of
+successive approximation.</li>
+<li>The worst moment in preparation of a book (or any writing) is the
+first moment staring at a blank sheet.</li>
+<li>Schiffer's advice: start with a chapter which interests you the
+most, in which you think you can be most original and helpful.</li>
+<li>Then ask yourself what material is needed to bridge from the
+presupposed knowledge of the reader to that chapter you've just
+written?</li>
+<li>The auxiliary chapters are probably dry, unintersting, and consists
+of most of the text you've written. These chapters have to be
+fleshed out. "The important principle is that no chapter shall be
+entirely auxiliary and be the servant of some other chapter."</li>
+<li>Schiffer contrasts this to how Polya writes his books. Polya uses a
+system which Polya calls "skeleton writing". Prepare the book
+according to your plan, but in a very sketch and incomplete
+way. Once the skeleton is ready, flesh it out and bring it to life.</li>
+<li>Use the manuscript as the basis for a course to test (1) the clearness
+of exposition and (2) the logic of the arrangement.</li>
+<li>Final advice: "Enjoy your writing and relax while doing so. Write
+in a natural style and leave the officialese and formal style to
+administrators and government departments."</li>
+</ul></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-h-c2d89fe2-64b5-4ac8-a048-fecb8a294a8c" class="outline-3">
+<h3 id="h-c2d89fe2-64b5-4ac8-a048-fecb8a294a8c"><span class="section-number-3">1.4.</span> Dieudonne's Essay</h3>
+<div class="outline-text-3" id="text-h-c2d89fe2-64b5-4ac8-a048-fecb8a294a8c">
+<ul class="org-ul">
+<li>This is a short essay (a mere 3 pages!) disagreeing with everything
+Steenrod advocates.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2024-06-04 Tue 10:38.</p>
+</div>
+</body>
+</html>
