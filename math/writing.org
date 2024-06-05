@@ -35,7 +35,7 @@ writing mathematics.
 - A secondary purpose (almost as important) is to offer the reader a
   method whereby they can fit the new structure into what they already
   know. It is here, in this secondary purpose, that authors exhibit
-  greatest variations in skil and art.
+  greatest variations in skill and art.
   - What are the basic questions that will be answered?
   - What are the crucial examples that motivate development?
   - What are vaguely formulated principles from which the entire theory
@@ -72,6 +72,12 @@ numbers of these and other important statements.
   use boldface numbers close to the left margin. Authors must deal
   firmly with editors who complain of the ugliness of the boldface
   splotches running down the page."
+  - Actually, thinking about this some more, I would argue that the
+    number should be in the "outer margin" for books (and in footnote
+    size), and/or following the dictionary with the "start section" and
+    "final section" [if different] in the header of the page. This would
+    satisfy the desire for "quickly being able to locate a paragraph by
+    number".  
 - If we recall our reading habits, most mathematicians are grasshoppers
   (or so Steenrod asserts). So we should write for grasshoppers.
 
@@ -184,8 +190,41 @@ essay consists of 21 sections, beginning with section 0 "Preface".
      slips in the folder. (Page 25, first full paragraph of the page.)
    - "What to put in?" is as important as what to leave out.
 5. Think about the alphabet
+   - Think hard about the symbols you use, the notation used, because if
+     it's adopted...then it's impossible to change.
+   - Halmos says he writes tables of notation before writing a book,
+     with different letters in different fonts and what they correspond to.
+   - Personally, I'm not as pessimistic as Halmos. When he says
+     something like "Who would dare write 'Let 6 be a group.'?", well
+     finite group theorists do this! So perhaps we should not be quite
+     as paranoid as Halmos when it comes to notation, but we should
+     abstract away notational choices as LaTeX macros.
 6. Write in spirals
+   - It's impossible to know what to write until after it's done. You
+     know what to put in chapter 1 (or how it should've been written)
+     only once you've completed your draft and have moved on to
+     chapter 2. But once you've finished chapter 2, you realize how much
+     better it could have been if you had only written Chapter 1
+     slightly differently.
+   - Halmos says this is fine and natural, and that the correct order
+     for writing a book is: 1, 2; 1, 2, 3; 1, 2, 3, 4; etc.
+   - But the first step in writing, rewriting, re-rewriting, etc., is
+     writing.
+   - "There is no better incentive for writing a good book than a bad book."
+   - In the first draft of each chapter, Halmos recommends that "you
+     spill your heart, write quickly, violate all rules, write with hate
+     or with pride, be snide, be confused, be 'funny' if you must, be
+     unclear, be ungrammatical---just keep on writing."
+   - Do not edit, but rewrite.
 7. Organize always
+   - Spiral writing goes hand-in-hand with spiral organizing
+   - Review the material introduced in section 1 in future sections (as
+     examples, limitations, generalizations, etc.). The material in
+     sections 1 and 2 should be reviewed in section 3 (as examples,
+     counter-examples, epitomizing various properties, etc.), and so on.
+   - But in this process, you may realize there are important examples
+     which should have been given in section 1 for use later on
+   - This seems to be the gist of "spiral organizing"
 8. Write good English
 9. Honesty is the best policy
 10. Down with the irrelevant and the trivial
@@ -285,3 +324,66 @@ essay consists of 21 sections, beginning with section 0 "Preface".
 
 - This is a short essay (a mere 3 pages!) disagreeing with everything
   Steenrod advocates.
+
+* Knuth, Larrabee, Roberts, "Mathematical Writing"
+:PROPERTIES:
+:CUSTOM_ID: h-3b77b4ed-12c1-4e96-b7dc-f4c6f448fc1b
+:END:
+
+This is a bunch of lecture notes, with all the shorthand and frustrating
+cryptic ambiguity that lecture notes possess. The lectures have been
+thrown up on [[https://youtube.com/playlist?list=PLABJEFgj0PWV22nvw3YKXvR_n1NB6fn5D&feature=shared][Youtube]] (and [[https://youtube.com/playlist?list=PLOdeqCXq1tXihn5KmyB2YTOqgxaUkcNYG&feature=shared][here]]). A draft [[https://jmlr.csail.mit.edu/reviewing-papers/knuth_mathematical_writing.pdf][PDF]] is online too.
+
+** Lecture 10: Presenting Algorithms
+:PROPERTIES:
+:CUSTOM_ID: h-6a57ac3a-c0d6-4d90-be37-3c4961d24ccd
+:END:
+
+There's frustratingly little of use in this lecture.
+
+*** About Algorithms
+:PROPERTIES:
+:CUSTOM_ID: h-0289f012-bf77-4cfa-8dea-76e6f2ccbaf4
+:END:
+
+My personal observations, reading Knuth's /Art of Computer Programming/,
+is that the book is written about assembly programs. The "algorithm"
+environments are really extended comments about the programs, rephrased
+in complete generality so it resembles Theorems and could be applied in
+any programming language. (I say this after having read a good chunk of
+the book without even glancing at the MIXAL code; then revisiting the
+books intent on learning MIXAL to transcribe some IBM-704 assembly.)
+
+The numbered steps in the algorithms are useful when keeping track of
+"where we are" in a MIXAL program.
+
+The parenthetical remarks are invariants used in a formal proof of
+correctness.
+
+*** About ~WEB~
+:PROPERTIES:
+:CUSTOM_ID: h-cc41d351-971a-4d9b-82f6-69e4cb294a2f
+:END:
+
+Knuth introduces the ~WEB~ system in this lecture. It's based on two
+principles of writing:
+
+1. The correct way to explain a complex thing is to break it into parts
+   and then explaineach part;
+2. Things should be explained twice (formally and informally).
+
+These two principles naturally led to programs made of modules that
+begin with text (informal explanation) and finish with Pascal (formal
+explanation).
+
+** Lecture 11: Literate Programming
+:PROPERTIES:
+:CUSTOM_ID: h-cb32061d-d5c9-49fd-911f-43369b0d4638
+:END:
+
+A lot of rules about Pascal programming in ~WEB~. Perhaps the only gem
+in this lecture is: "We are trying to convey an intuition of what is going on, so a high-level account
+is much more helpful."
+
+Each module/section/chunk of code should be manageable in size. Knuth
+thinks about a dozen lines of code is just about the right size.
