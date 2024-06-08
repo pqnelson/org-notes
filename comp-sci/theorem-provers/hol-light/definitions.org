@@ -11,6 +11,32 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 # Created Wednesday January 26, 2022 at 11:55AM
 
+* Type definitions
+:PROPERTIES:
+:CUSTOM_ID: h-f6088acc-34a8-43eb-8a2b-c669e56b25b2
+:END:
+
+New types are introduced by a rule of type definition, that it is
+bijective with a nonempty subset of an existing type.
+
+* Constant Definitions
+:PROPERTIES:
+:CUSTOM_ID: h-f9cb0405-7e7c-41d0-9b14-2201bd45c00b
+:END:
+
+Constants are introduced using a rule of constant definition,
+~new_definition~, as found in [[https://github.com/jrh13/hol-light/blob/master/drule.ml#L563-L576][~drule.ml~]]
+
+Given some closed term (with some suitable restrictions on type
+variables) $t$ and a fresh constant name $c$ we can define $c$ and get
+the new theorem:
+\begin{equation}
+\vdash c = t
+\end{equation}
+
+Both terms and type definitions give conservative extensions and so in
+particular preserve logical consistency.
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-54b7a3cc-a2ca-485a-b833-1f9ced3968c4
@@ -19,6 +45,10 @@
 - Rob Arthan,\\
   "HOL Constant Definition Done Right".\\
   [[http://www.lemma-one.com/papers/hcddr.pdf][PDF]], /ITP 2014: Interactive Theorem Proving/, Springer pp 531-536
+- Rob Arthan,\\
+  "On Definitions of Constants and Types in HOL".\\
+  /Journal of Automated Reasoning/ *56* (2016) 205--219\\
+  {{{doi(10.1007/s10817-016-9366-4)}}}
 - Freek Wiedijk,\\
   "Stateless HOL".\\
   {{{arXiv(1103.3322)}}}, 15 pages

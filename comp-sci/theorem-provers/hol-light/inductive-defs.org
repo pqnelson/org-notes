@@ -1,0 +1,64 @@
+#+TITLE: Inductive Definitions - HOL Light
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2024-06-08T07:25:51-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Saturday June  8, 2024 at  7:25AM
+
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: h-dfd74fd6-e287-4aaf-8196-93bfe9ad768e
+:END:
+
+I understand that:
+
+#+begin_quote
+The ~new_inductive_definition~ function automates inductive
+definitions, using a Knaster-Tarski type derivation under the
+surface. It can cope with infinitary definitions, parameters, and
+user-defined monotone operators.
+#+end_quote
+
+The ~new_inductive_definition~ function returns three theorems:
+
+1. A "rule" theorem (the inductively defined predicate is closed under
+   the rules)
+2. An "induction" [or minimality] theorem asserting the inductively
+   defined predicate is the last such predicate;
+3. A "cases" theorem that each element arises by virtue of one of the
+   rules.
+
+This is programmed up in [[https://github.com/jrh13/hol-light/blob/master/ind_defs.ml][~ind_defs.ml~]] in about 380 lines of code.
+
+* Inductive Types
+:PROPERTIES:
+:CUSTOM_ID: h-c22c371c-e38d-44de-8df7-c1111083984b
+:END:
+
+This takes quite a bit more work than inductive predicates, it's defined
+in [[https://github.com/jrh13/hol-light/blob/master/ind_types.ml][~ind_types.ml~]] as ~define_type~.
+
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-fadbb41e-1c76-4d0a-b224-fcf3f8c2d948
+:END:
+
+- Thomas F. Mehlam,\\
+  "Automating recursive type definitions in higher order logic".\\
+  UCAM-CL-TR-146, September 1988, [[https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-146.html][Eprint]].
+- Thomas F. Melham,\\
+  "A Package for Inductive Relation Definitions in HOL".
+  /Proceedings Of The 1991 International Workshop On The Hol Theorem Proving System And Its Applications/,
+  1991, [[https://www.cs.ox.ac.uk/tom.melham/pub/00596299.pdf][PDF]]
+- Juanito Camilleri, Tom Melham,\\
+  "Reasoning with inductively defined relations in the HOL theorem prover".\\
+  Tech Report 265, Cambridge University Dept. of Computer Science,
+  August 1992,
+  [[https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-265.html][eprint]]
+

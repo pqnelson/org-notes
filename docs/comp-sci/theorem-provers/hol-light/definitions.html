@@ -206,6 +206,38 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -218,18 +250,58 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-54b7a3cc-a2ca-485a-b833-1f9ced3968c4">1. References</a></li>
+<li><a href="#h-f6088acc-34a8-43eb-8a2b-c669e56b25b2">1. Type definitions</a></li>
+<li><a href="#h-f9cb0405-7e7c-41d0-9b14-2201bd45c00b">2. Constant Definitions</a></li>
+<li><a href="#h-54b7a3cc-a2ca-485a-b833-1f9ced3968c4">3. References</a></li>
 </ul>
 </div>
 </div>
 
+<div id="outline-container-h-f6088acc-34a8-43eb-8a2b-c669e56b25b2" class="outline-2">
+<h2 id="h-f6088acc-34a8-43eb-8a2b-c669e56b25b2"><span class="section-number-2">1.</span> Type definitions</h2>
+<div class="outline-text-2" id="text-h-f6088acc-34a8-43eb-8a2b-c669e56b25b2">
+<p>
+New types are introduced by a rule of type definition, that it is
+bijective with a nonempty subset of an existing type.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-f9cb0405-7e7c-41d0-9b14-2201bd45c00b" class="outline-2">
+<h2 id="h-f9cb0405-7e7c-41d0-9b14-2201bd45c00b"><span class="section-number-2">2.</span> Constant Definitions</h2>
+<div class="outline-text-2" id="text-h-f9cb0405-7e7c-41d0-9b14-2201bd45c00b">
+<p>
+Constants are introduced using a rule of constant definition,
+<code>new_definition</code>, as found in <a href="https://github.com/jrh13/hol-light/blob/master/drule.ml#L563-L576"><code>drule.ml</code></a>
+</p>
+
+<p>
+Given some closed term (with some suitable restrictions on type
+variables) \(t\) and a fresh constant name \(c\) we can define \(c\) and get
+the new theorem:
+</p>
+\begin{equation}
+\vdash c = t
+\end{equation}
+
+<p>
+Both terms and type definitions give conservative extensions and so in
+particular preserve logical consistency.
+</p>
+</div>
+</div>
+
 <div id="outline-container-h-54b7a3cc-a2ca-485a-b833-1f9ced3968c4" class="outline-2">
-<h2 id="h-54b7a3cc-a2ca-485a-b833-1f9ced3968c4"><span class="section-number-2">1.</span> References</h2>
+<h2 id="h-54b7a3cc-a2ca-485a-b833-1f9ced3968c4"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-54b7a3cc-a2ca-485a-b833-1f9ced3968c4">
 <ul class="org-ul">
 <li>Rob Arthan,<br>
 "HOL Constant Definition Done Right".<br>
 <a href="http://www.lemma-one.com/papers/hcddr.pdf">PDF</a>, <i>ITP 2014: Interactive Theorem Proving</i>, Springer pp 531-536</li>
+<li>Rob Arthan,<br>
+"On Definitions of Constants and Types in HOL".<br>
+<i>Journal of Automated Reasoning</i> <b>56</b> (2016) 205&#x2013;219<br>
+doi:<a href="https://doi.org/10.1007/s10817-016-9366-4">10.1007/s10817-016-9366-4</a></li>
 <li>Freek Wiedijk,<br>
 "Stateless HOL".<br>
 <a href="https://arxiv.org/abs/1103.3322">arXiv:1103.3322</a>, 15 pages</li>
@@ -238,7 +310,7 @@
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-26 Wed 11:57.</p>
+<p class="postamble">Last Updated 2024-06-08 Sat 08:07.</p>
 </div>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Topics - HOL Light</title>
+<title>Inductive Definitions - HOL Light</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -209,20 +209,89 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="../hol-light.html"> UP </a>
+ <a accesskey="h" href="./index.html"> UP </a>
  |
  <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Topics - HOL Light</h1>
-<ul class="org-ul">
-<li><a href="compile.html">Compiling HOL Light</a></li>
-<li><a href="definitions.html">Definitions in HOL Light</a></li>
-<li><a href="inductive-defs.html">Inductive Definitions</a></li>
-<li><a href="group-theory.html">Group Theory</a> in HOL Light</li>
+<h1 class="title">Inductive Definitions - HOL Light</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-dfd74fd6-e287-4aaf-8196-93bfe9ad768e">1. Overview</a></li>
+<li><a href="#h-c22c371c-e38d-44de-8df7-c1111083984b">2. Inductive Types</a></li>
+<li><a href="#h-fadbb41e-1c76-4d0a-b224-fcf3f8c2d948">3. References</a></li>
 </ul>
 </div>
+</div>
+
+<div id="outline-container-h-dfd74fd6-e287-4aaf-8196-93bfe9ad768e" class="outline-2">
+<h2 id="h-dfd74fd6-e287-4aaf-8196-93bfe9ad768e"><span class="section-number-2">1.</span> Overview</h2>
+<div class="outline-text-2" id="text-h-dfd74fd6-e287-4aaf-8196-93bfe9ad768e">
+<p>
+I understand that:
+</p>
+
+<blockquote>
+<p>
+The <code>new_inductive_definition</code> function automates inductive
+definitions, using a Knaster-Tarski type derivation under the
+surface. It can cope with infinitary definitions, parameters, and
+user-defined monotone operators.
+</p>
+</blockquote>
+
+<p>
+The <code>new_inductive_definition</code> function returns three theorems:
+</p>
+
+<ol class="org-ol">
+<li>A "rule" theorem (the inductively defined predicate is closed under
+the rules)</li>
+<li>An "induction" [or minimality] theorem asserting the inductively
+defined predicate is the last such predicate;</li>
+<li>A "cases" theorem that each element arises by virtue of one of the
+rules.</li>
+</ol>
+
+<p>
+This is programmed up in <a href="https://github.com/jrh13/hol-light/blob/master/ind_defs.ml"><code>ind_defs.ml</code></a> in about 380 lines of code.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-c22c371c-e38d-44de-8df7-c1111083984b" class="outline-2">
+<h2 id="h-c22c371c-e38d-44de-8df7-c1111083984b"><span class="section-number-2">2.</span> Inductive Types</h2>
+<div class="outline-text-2" id="text-h-c22c371c-e38d-44de-8df7-c1111083984b">
+<p>
+This takes quite a bit more work than inductive predicates, it's defined
+in <a href="https://github.com/jrh13/hol-light/blob/master/ind_types.ml"><code>ind_types.ml</code></a> as <code>define_type</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-fadbb41e-1c76-4d0a-b224-fcf3f8c2d948" class="outline-2">
+<h2 id="h-fadbb41e-1c76-4d0a-b224-fcf3f8c2d948"><span class="section-number-2">3.</span> References</h2>
+<div class="outline-text-2" id="text-h-fadbb41e-1c76-4d0a-b224-fcf3f8c2d948">
+<ul class="org-ul">
+<li>Thomas F. Mehlam,<br>
+"Automating recursive type definitions in higher order logic".<br>
+UCAM-CL-TR-146, September 1988, <a href="https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-146.html">Eprint</a>.</li>
+<li>Thomas F. Melham,<br>
+"A Package for Inductive Relation Definitions in HOL".
+<i>Proceedings Of The 1991 International Workshop On The Hol Theorem Proving System And Its Applications</i>,
+1991, <a href="https://www.cs.ox.ac.uk/tom.melham/pub/00596299.pdf">PDF</a></li>
+<li>Juanito Camilleri, Tom Melham,<br>
+"Reasoning with inductively defined relations in the HOL theorem prover".<br>
+Tech Report 265, Cambridge University Dept. of Computer Science,
+August 1992,
+<a href="https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-265.html">eprint</a></li>
+</ul>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2024-06-08 Sat 07:52.</p>
+<p class="postamble">Last Updated 2024-06-08 Sat 08:15.</p>
 </div>
 </body>
 </html>
