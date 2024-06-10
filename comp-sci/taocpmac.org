@@ -233,8 +233,34 @@ enough. But you could imagine something like a ~\begin{mixal}[4]...\end{mixal}~
 environment taking an optional parameter for the number of columns,
 which would be nice.
 
+A few explicit notes worth mentioning:
+
+- ~\underspecial~ is used to underline comments referencing steps in an
+  associated algorithm; Knuth breaks the underlining when there is a
+  "descender" (like the curly part of a lowercase "g" or "j" or "y")
+- ~\small~ is approximately LaTeX counterpart of ~\ninepoint~
+- ~\mc~ is for medium caps (as opposed to ~\sc~), and I honestly don't
+  know why ~\mc~ is used for these logos instead of ~\sc~ or anything
+  else (but after working with Times New Roman font for a while, ~\mc~
+  formatting of FORTRAN looks much nicer than ~\textsc{Fortran}~...);
+- I have had great difficulty getting these macros to work nicely with
+  page breaks in LaTeX, but perhaps I'm just an idiot
+
 #+begin_src tex
-% taocpmac.tex lines 894 et seq.
+% taocpmac.tex lines 876 et seq.
+\def\CEE/{{\mc C\spacefactor1000}}% the C programming language
+\def\FORTRAN/{{\mc FORTRAN\spacefactor1000}}% ditto for the older guy
+\def\ALGOL/{{\mc ALGOL\spacefactor1000}}
+\def\COBOL/{{\mc COBOL\spacefactor1000}}
+\def\MIX{{\tt MIX\spacefactor1000}}
+\def\MMIX{{\tt MMIX\spacefactor1000}}
+\def\mm{\kern-.2em\'{}\kern-.1em} % modifies a section number, for MMIX changes
+\def\rA{\hbox{\rm rA}}
+\def\rX{\hbox{\rm rX}}
+\def\rAX{\hbox{\rm rAX}}
+\def\rI{\hbox{\rm rI}}
+\def\rJ{\hbox{\rm rJ}}
+
 % to typeset assembly code, use:
 %  \mixtwo   for opcode and address
 %  \mixthree for location, opcode, and address
