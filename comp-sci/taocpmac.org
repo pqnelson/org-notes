@@ -179,6 +179,70 @@ Subsubsections are "runin".
 There are no levels of organization below subsubsections (there are no
 "subsubsubsections", or anything "smaller").
 
+** LaTeX Code using Titlesec
+:PROPERTIES:
+:CUSTOM_ID: h-bac92a12-bd8d-4ec2-b466-6f2be5224bad
+:END:
+
+Using the ~titlesec~ package, we can format chapters, sections,
+subsections, and subsubsections to resemble their counterparts in
+/The Art of Computer Programming/ as follows:
+
+#+begin_src latex
+\usepackage{titlesec}
+\font\titlefont=cmssbx10 scaled\magstep2
+\def\starred{}
+\def\starit{\def\starred{\llap{*}}}
+\usepackage{titlesec}
+% "\large" is 12-point when the main font is 10-point
+\titleformat{\chapter}[display]
+            {\titlefont} % format
+            {\large\sffamily\MakeUppercase{\chaptertitlename} \thechapter} % label
+            {6pc} % sep 
+            {\filleft\MakeUppercase} % before
+\titleformat{name=\chapter,numberless}[display]
+            {\titlefont} % format
+            {} % label
+            {6pc} % sep
+            {\filleft} % before
+
+% Use the fact that a normal space is computed using font dimensions
+% see: https://tex.stackexchange.com/a/229642/14751
+\titleformat{\section}%[block]
+            {\bfseries\sffamily} % format
+            {\starred\thesection.\def\starred{}} % label
+            {2\fontdimen2\font plus\fontdimen3\font minus\fontdimen4\font} % sep
+            {\MakeUppercase} % before
+
+\titleformat{\subsection}%[block]
+            {\bfseries\sffamily} % format
+            {\starred\thesubsection.\def\starred{}} % label
+            {2\fontdimen2\font plus\fontdimen3\font minus\fontdimen4\font} % sep
+            {} % before
+
+% Runin subsubsections, with a period added (if missing)
+\makeatletter
+\def\@addpunct#1{%
+  \relax\ifhmode
+    \ifnum\spacefactor>\@m \else#1\fi
+  \fi}
+\titleformat{\subsubsection}[runin]
+            {\normalfont\bfseries} % format
+            {\starred\thesubsubsection.\def\starred{}} % label
+            {0.5em} % sep = \enspace
+            {} % before
+            [\@addpunct{.}]
+\makeatother
+\newskip\xskipamount
+\xskipamount=7pt plus 3pt minus 4pt
+\titlespacing*{\chapter}{0pt}{0pt}{2pc plus 1 pc minus 1 pc}
+\titlespacing*{\section}{0pt}{1cm plus 1pc minus 5pt}{\smallskipamount}
+\titlespacing*{\subsection}{0pt}{\bigskipamount}{\smallskipamount}
+\titlespacing*{\subsubsection}{0pt}{\bigskipamount}{\xskipamount\ignorespaces}
+\setcounter{secnumdepth}{3}
+#+end_src
+
+
 * Algorithms
 :PROPERTIES:
 :CUSTOM_ID: h-9e2d1b7e-68d0-4dc3-a7e2-38a9adee2270

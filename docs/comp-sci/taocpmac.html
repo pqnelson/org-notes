@@ -220,7 +220,11 @@
 <ul>
 <li><a href="#h-efc467a0-c443-4dfb-b6b3-9bb97a4612db">1. Introduction</a></li>
 <li><a href="#h-26063e28-b037-428f-8b9a-fefe73f40821">2. Page Layout</a></li>
-<li><a href="#h-0867aa6b-4cb8-4482-8fc7-7e427943a486">3. Chapter, Section, Subsection formatting</a></li>
+<li><a href="#h-0867aa6b-4cb8-4482-8fc7-7e427943a486">3. Chapter, Section, Subsection formatting</a>
+<ul>
+<li><a href="#h-bac92a12-bd8d-4ec2-b466-6f2be5224bad">3.1. LaTeX Code using Titlesec</a></li>
+</ul>
+</li>
 <li><a href="#h-9e2d1b7e-68d0-4dc3-a7e2-38a9adee2270">4. Algorithms</a></li>
 <li><a href="#h-507a9a50-3ecd-4d11-aa07-9ab084779d0e">5. MIXAL</a></li>
 </ul>
@@ -426,7 +430,74 @@ There are no levels of organization below subsubsections (there are no
 "subsubsubsections", or anything "smaller").
 </p>
 </div>
+
+<div id="outline-container-h-bac92a12-bd8d-4ec2-b466-6f2be5224bad" class="outline-3">
+<h3 id="h-bac92a12-bd8d-4ec2-b466-6f2be5224bad"><span class="section-number-3">3.1.</span> LaTeX Code using Titlesec</h3>
+<div class="outline-text-3" id="text-h-bac92a12-bd8d-4ec2-b466-6f2be5224bad">
+<p>
+Using the <code>titlesec</code> package, we can format chapters, sections,
+subsections, and subsubsections to resemble their counterparts in
+<i>The Art of Computer Programming</i> as follows:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-latex"><span class="org-keyword">\usepackage</span>{<span class="org-builtin">titlesec</span>}
+<span class="org-keyword">\font\titlefont</span>=cmssbx10 scaled<span class="org-keyword">\magstep</span>2
+<span class="org-keyword">\def</span>\<span class="org-function-name">starred</span>{}
+<span class="org-keyword">\def</span>\<span class="org-function-name">starit</span>{<span class="org-keyword">\def\starred</span>{<span class="org-keyword">\llap</span>{*}}}
+<span class="org-keyword">\usepackage</span>{<span class="org-builtin">titlesec</span>}
+<span class="org-comment-delimiter">% </span><span class="org-comment">"\large" is 12-point when the main font is 10-point</span>
+<span class="org-keyword">\titleformat</span>{<span class="org-keyword">\chapter</span>}[display]
+            {<span class="org-keyword">\titlefont</span>} <span class="org-comment">% format</span>
+            {<span class="org-keyword">\large\sffamily\MakeUppercase</span>{<span class="org-keyword">\chaptertitlename</span>} <span class="org-keyword">\thechapter</span>} <span class="org-comment">% label</span>
+            {6pc} <span class="org-comment">% sep </span>
+            {<span class="org-keyword">\filleft\MakeUppercase</span>} <span class="org-comment">% before</span>
+<span class="org-keyword">\titleformat</span>{name=<span class="org-keyword">\chapter</span>,numberless}[display]
+            {<span class="org-keyword">\titlefont</span>} <span class="org-comment">% format</span>
+            {} <span class="org-comment">% label</span>
+            {6pc} <span class="org-comment">% sep</span>
+            {<span class="org-keyword">\filleft</span>} <span class="org-comment">% before</span>
+
+<span class="org-comment-delimiter">% </span><span class="org-comment">Use the fact that a normal space is computed using font dimensions</span>
+<span class="org-comment-delimiter">% </span><span class="org-comment">see: https://tex.stackexchange.com/a/229642/14751</span>
+<span class="org-keyword">\titleformat</span>{<span class="org-keyword">\section</span>}<span class="org-comment">%[block]</span>
+            {<span class="org-keyword">\bfseries</span><span class="org-bold"><span class="org-keyword">\sffamily</span></span>} <span class="org-comment">% format</span>
+            {<span class="org-keyword">\starred\thesection</span>.<span class="org-keyword">\def\starred</span>{}} <span class="org-comment">% label</span>
+            {2<span class="org-keyword">\fontdimen</span>2<span class="org-keyword">\font</span> plus<span class="org-keyword">\fontdimen</span>3<span class="org-keyword">\font</span> minus<span class="org-keyword">\fontdimen</span>4<span class="org-keyword">\font</span>} <span class="org-comment">% sep</span>
+            {<span class="org-keyword">\MakeUppercase</span>} <span class="org-comment">% before</span>
+
+<span class="org-keyword">\titleformat</span>{<span class="org-keyword">\subsection</span>}<span class="org-comment">%[block]</span>
+            {<span class="org-keyword">\bfseries</span><span class="org-bold"><span class="org-keyword">\sffamily</span></span>} <span class="org-comment">% format</span>
+            {<span class="org-keyword">\starred\thesubsection</span>.<span class="org-keyword">\def\starred</span>{}} <span class="org-comment">% label</span>
+            {2<span class="org-keyword">\fontdimen</span>2<span class="org-keyword">\font</span> plus<span class="org-keyword">\fontdimen</span>3<span class="org-keyword">\font</span> minus<span class="org-keyword">\fontdimen</span>4<span class="org-keyword">\font</span>} <span class="org-comment">% sep</span>
+            {} <span class="org-comment">% before</span>
+
+<span class="org-comment-delimiter">% </span><span class="org-comment">Runin subsubsections, with a period added (if missing)</span>
+<span class="org-keyword">\makeatletter</span>
+<span class="org-keyword">\def</span>\<span class="org-function-name">@addpunct</span>#1{<span class="org-comment">%</span>
+  <span class="org-keyword">\relax\ifhmode</span>
+    <span class="org-keyword">\ifnum\spacefactor</span>&gt;<span class="org-keyword">\@m</span> <span class="org-keyword">\else</span>#1<span class="org-keyword">\fi</span>
+  <span class="org-keyword">\fi</span>}
+<span class="org-keyword">\titleformat</span>{<span class="org-keyword">\subsubsection</span>}[runin]
+            {<span class="org-keyword">\normalfont\bfseries</span>} <span class="org-comment">% format</span>
+            {<span class="org-keyword">\starred\thesubsubsection</span>.<span class="org-keyword">\def\starred</span>{}} <span class="org-comment">% label</span>
+            {0.5em} <span class="org-comment">% sep = \enspace</span>
+            {} <span class="org-comment">% before</span>
+            [<span class="org-keyword">\@addpunct</span>{.}]
+<span class="org-keyword">\makeatother</span>
+<span class="org-keyword">\newskip\xskipamount</span>
+<span class="org-keyword">\xskipamount</span>=7pt plus 3pt minus 4pt
+<span class="org-keyword">\titlespacing*</span>{<span class="org-keyword">\chapter</span>}{0pt}{0pt}{2pc plus 1 pc minus 1 pc}
+<span class="org-keyword">\titlespacing*</span>{<span class="org-keyword">\section</span>}{0pt}{1cm plus 1pc minus 5pt}{<span class="org-keyword">\smallskipamount</span>}
+<span class="org-keyword">\titlespacing*</span>{<span class="org-keyword">\subsection</span>}{0pt}{<span class="org-keyword">\bigskipamount</span>}{<span class="org-keyword">\smallskipamount</span>}
+<span class="org-keyword">\titlespacing*</span>{<span class="org-keyword">\subsubsection</span>}{0pt}{<span class="org-keyword">\bigskipamount</span>}{<span class="org-keyword">\xskipamount\ignorespaces</span>}
+<span class="org-keyword">\setcounter</span>{<span class="org-variable-name">secnumdepth</span>}{3}
+</pre>
 </div>
+</div>
+</div>
+</div>
+
 
 <div id="outline-container-h-9e2d1b7e-68d0-4dc3-a7e2-38a9adee2270" class="outline-2">
 <h2 id="h-9e2d1b7e-68d0-4dc3-a7e2-38a9adee2270"><span class="section-number-2">4.</span> Algorithms</h2>
@@ -498,6 +569,12 @@ A few explicit notes worth mentioning:
 associated algorithm; Knuth breaks the underlining when there is a
 "descender" (like the curly part of a lowercase "g" or "j" or "y")</li>
 <li><code>\small</code> is approximately LaTeX counterpart of <code>\ninepoint</code></li>
+<li><code>\mc</code> is for medium caps (as opposed to <code>\sc</code>), and I honestly don't
+know why <code>\mc</code> is used for these logos instead of <code>\sc</code> or anything
+else (but after working with Times New Roman font for a while, <code>\mc</code>
+formatting of FORTRAN looks much nicer than <code>\textsc{Fortran}</code>&#x2026;);</li>
+<li>I have had great difficulty getting these macros to work nicely with
+page breaks in LaTeX, but perhaps I'm just an idiot</li>
 </ul>
 
 <div class="org-src-container">
@@ -613,7 +690,7 @@ associated algorithm; Knuth breaks the underlining when there is a
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2024-06-07 Fri 08:56.</p>
+<p class="postamble">Last Updated 2024-06-12 Wed 09:28.</p>
 </div>
 </body>
 </html>
