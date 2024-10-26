@@ -1,0 +1,161 @@
+#+TITLE: Assembly Language
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2023-08-30T07:51:52-07:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Wednesday August 30, 2023 at  7:51AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-885c96f1-0b3b-420e-ad0d-82e51ac2b87b
+:END:
+
+Assembly language is the "highest low-level language" and an umbrella
+term for human readable code which is machine dependent. There are no
+variables, we work with the registers and memory directly.
+
+The syntax for assembly language varies depending on the CPU
+architecture *and assembler.* (For example, there are two different
+assembly language syntaxes for x86 assembly: the Intel syntax [commonly
+used in DOS and Windows] and the AT&T syntax [commonly used everywhere
+else].) It appears the main families of CPU architectures currently
+available are: x86, x64, and ARM. *Be careful.*
+
+* x86 Architectures
+:PROPERTIES:
+:CUSTOM_ID: h-18d9032e-b74d-4210-b8cd-2ee72674b81c
+:END:
+
+The registers originally were 16-bit, later became 32-bit and prefixed
+by ~E~, and then 64-bit registers were prefixed with ~R~.
+There are several special purposes registers:
+
+- Accumulator registers: AX, EAX
+- Counter registers (for loops and strings): CL, CH, CX, ECX, RCX
+- Base index: BL, BH, BX, EBX
+- Stack pointer: SP, ESP, RSP
+- Frame pointer (a.k.a., stack base pointer): BP, EBP, RBP
+- Source index for string operations: SI, ESI, RSI
+- Destination index for string operations: DI, EDI, RDI
+- Instruction pointer: IP, EIP, RIP
+
+Following Bryant and O'Hallaron, we will write:
+
+- $E_{a}$ for a generic register name, its value is denoted $R[E_{a}]$
+  - Examples: ~EAX~ (resp. ~%EAX~) for Intel (resp. AT&T) syntax
+- $Imm$ for an immediate value, which can be used as a memory address
+  whose contents is denoted $M[Imm]$
+  - Example: ~0x8048d8e~, ~42~, etc.
+- $(E_{a})$ for indirect addressing, i.e., using a register's value as
+  the memory address and obtaining the contents at that address, i.e., $M[R[E_{a}]]$
+- $Imm(E_{a}, E_{i}, s)$ for scaled addressing, accessing the contents
+  of the memory address
+  $M[Imm+R[E_{a}]+(R[E_{i}]\cdot s)]$
+
+Then there are about a million different instructions for the x86
+family.
+
+** Functions Using the C Calling Convention
+:PROPERTIES:
+:CUSTOM_ID: h-c418607a-4f8f-4a1e-97b3-029f1133dfa4
+:END:
+
+Compilers will take a high-level language and compile it down into
+assembly (or directly into machine code). C will usually preserve the
+function name, or mangle it in some consistent manner. For example,
+
+#+begin_src c
+/* exchange.c */
+int exchange(int *xp, int *yp)
+{
+    int x = *xp;
+    ,*xp = *yp;
+    ,*yp = x;
+    return x;
+}
+#+end_src
+
+When we compile it using 
+~gcc -O0 -fverbose-asm -S -o exchange.S exchange.c~, the assembly code:
+
+#+begin_src asm
+exchange:
+.LFB0:
+	.cfi_startproc
+	endbr64	
+	pushq	%rbp	#
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp	#,
+	.cfi_def_cfa_register 6
+	movq	%rdi, -24(%rbp)	# xp, xp
+	movq	%rsi, -32(%rbp)	# yp, yp
+# exchange.c:3:     int x = *xp;
+	movq	-24(%rbp), %rax	# xp, tmp85
+	movl	(%rax), %eax	# *xp_3(D), tmp86
+	movl	%eax, -4(%rbp)	# tmp86, x
+# exchange.c:4:     *xp = *yp;
+	movq	-32(%rbp), %rax	# yp, tmp87
+	movl	(%rax), %edx	# *yp_5(D), _1
+# exchange.c:4:     *xp = *yp;
+	movq	-24(%rbp), %rax	# xp, tmp88
+	movl	%edx, (%rax)	# _1, *xp_3(D)
+# exchange.c:5:     *yp = x;
+	movq	-32(%rbp), %rax	# yp, tmp89
+	movl	-4(%rbp), %edx	# x, tmp90
+	movl	%edx, (%rax)	# tmp90, *yp_5(D)
+# exchange.c:6:     return x;
+	movl	-4(%rbp), %eax	# x, _8
+# exchange.c:7: }
+	popq	%rbp	#
+	.cfi_def_cfa 7, 8
+	ret	
+	.cfi_endproc
+#+end_src
+
+Roughly what happens in this code:
+- We look up the address ~*xp~ which corresponds to the contents of ~-24(%rbp)~,
+  then store it in ~%rax~, we take the value stored in memory at that
+  address and store it in ~%eax~, and assign that to ~x~ which
+  corresponds in assembly as ~-4(%rbp)~
+- We look up ~*yp~ which corresponds to ~-32(%rbp)~ which is the address
+  ~yp~ points to, then store that address in ~%rax~, and look up its
+  contents in memory and store it in ~%edx~
+- We then look up the address of ~xp~ and store it in ~%rax~, then
+  update the value of $M[E_{rax}]$ to be the value of ~%edx~ (i.e., the
+  value of ~*yp~)
+- We take the address of ~yp~ and store it in ~%rax~, we take the value
+  of ~x~ and store it in ~%edx~, and then update the contents of
+  $M[E_{rax}]$ to be the value of ~%edx~ (i.e., the value of ~x~)
+- The return value is stored in ~%eax~
+- We cleanup the function call, i.e., we ~pop %rbp~ to restore the base
+  pointer and ~ret~ to end the function call.
+
+  
+* References
+:PROPERTIES:
+:CUSTOM_ID: h-c646a439-0d6d-49bd-8598-9839024f00d8
+:END:
+
+- Zeyuan Hu, [[https://zhu45.org/posts/2017/Jul/30/understanding-how-function-call-works/][Understanding how function call works]], 30 July 2017
+- Jonathan Bartlett, [[https://download-mirror.savannah.gnu.org/releases/pgubook/ProgrammingGroundUp-1-0-booksize.pdf][Programming from the Ground Up]]
+- Randal Bryant and David O'Hallaron,
+  {{{book-title(Computer Systems: A Programmer's Perspective)}}}.
+  Third edition, see especially section 3.7. (DO NOT GET the
+  international paperback edition, it's riddled with errors.)
+
+** MMIX Assembly Language
+:PROPERTIES:
+:CUSTOM_ID: h-05df87a3-ed27-4236-85c3-1e1d020bdac9
+:END:
+
+- Donald Knuth, {{{book-title(Art of Computer Programming)}}}, volume 1,
+  Fascicles 1
+- [[http://mmix.cs.hm.edu/doc/mmix-doc.pdf][Introduction to MMIXAL]]
+- [[http://mmix.cs.hm.edu/doc/mmixal.pdf][Documentation for MMIXAL emulator]]
