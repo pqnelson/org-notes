@@ -1,0 +1,85 @@
+#+TITLE: Documentation Generator
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2024-11-05T08:41:20-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Tuesday November  5, 2024 at  8:41AM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-6486c44a-1561-440e-a6bc-60e918ec29ab
+:END:
+
+The idea of documentation generators seem to date back to 1995 with
+Javadoc.
+
+The basic idea is that "special" comments will generate HTML (or PDF
+or...) documentation files when processed by a documentation generator.
+
+Originally, Javadoc was motivated by placing this documentation on the
+"World Wide Web". Therefore, using HTML in the comments was an obvious
+design decision.
+
+However, it seems we now realize...that's not the best idea. The general
+consensus appears to have rallied around using Markdown for the
+documentation comments.
+
+In short, the basic ingredients:
+
+- Some way to demarcate a comment as a documentation comment. Javadoc
+  uses =/** ... */=, and this seems to be a common convention.
+- A choice of markup for the content of the documentation comment. This
+  is usually some flavor of Markdown, but Javadoc's shadow looms large
+  even today.
+  - Consider how you'll link to other identifiers. I've seen some
+    Markdown systems use =[`identifier`]= (the identifier surrounded by
+    backticks within square brackets)
+- A program to read a source file, seek out the documentation comments,
+  and determine what it is documenting exactly.
+
+* Intent for Programs
+:PROPERTIES:
+:CUSTOM_ID: h-e1e4d1f9-3121-4de4-a134-aeb211cfce8b
+:END:
+
+The intent of a documentation comment is to document the API, the
+contract for the function (or class or whatever).
+
+*It is not literate programming.*
+
+It's the quickest way to say to another programmer, "Here's how to use
+this function."
+
+* For proof assistants
+:PROPERTIES:
+:CUSTOM_ID: h-f7ae7610-74c5-4464-b364-eb65bbd1f304
+:END:
+
+With proof assistants, the usefulness of documentation comments is to
+communicate the "subjective substratum" --- the informal discussions of
+motivation, analogies, problems, examples, intuitions, false leads, etc.
+
+This plays a very different role than in a program. But it is very
+important.
+
+Without these, a proof script lacks "texture" (as linguists would call
+it): it's just a grocery list of propositions.
+
+* References and examples
+:PROPERTIES:
+:CUSTOM_ID: h-d1788d97-eb8b-4649-8fff-2da0e8566dcc
+:END:
+
+- [[https://third-bit.com/sdxjs/doc-generator/][Implementing a Documentation Generator for Javascript]]
+- [[https://package.elm-lang.org/help/documentation-format#:~:text=A%20documentation%20comment%20starts%20%7B%2D%7C,typical%20use%20of%20the%20function][Elm's doc comment conventions]]
+- [[https://ocaml.org/manual/5.2/ocamldoc.html][ocamldoc]] for a different take
+- [[https://rosettacode.org/wiki/Documentation][Rosetta Code comparison]] of doc comment conventions
+- [[https://peps.python.org/pep-0257/][PEP-257]] for docstring conventions in Python
+- [[https://openjdk.org/jeps/467][JEP-467]] for proposal of Markdown documentation comments in Java
+- Ashn's [[https://www.ashn.dev/blog/2020-01-21-creating-cdoc-part-1.html][Crafting Cdoc]] blog post series
