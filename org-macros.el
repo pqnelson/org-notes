@@ -47,7 +47,7 @@
   )
 (use-package haskell-mode)
 (use-package sml-mode)
-(use-package ob-sml)
+;;(use-package ob-sml)
 ;; (require 'ob-sml nil 'noerror)
 (use-package htmlize) ;; apparently needed to export CSS syntax highlighting
 

@@ -1,0 +1,296 @@
+#+TITLE: Bjorken and Drell - Reading notes
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2024-11-09T08:49:00-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5 num:2
+#+HTML_DOCTYPE: html5
+# Created Saturday November  9, 2024 at  8:49AM
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+
+These are my reading notes on Bjorken and Drell's
+{{{book-title(Relativistic Quantum Mechanics)}}} and
+{{{book-title(Relativistic Quantum Field Theory)}}}.
+The organization uses their chapter and section names.
+
+I will also use their equation numbering (which seems to be numbered
+within chapters).
+
+I am deliberating whether I should use their West-coast metric
+conventions, or use my preferred East-coast metric conventions.
+
+* The Dirac Equation
+:PROPERTIES:
+:CUSTOM_ID: h-12715b37-7cbd-48b9-b370-2157e3f8da42
+:END:
+
+** Formulation of Relativistic Quantum Theory
+:PROPERTIES:
+:CUSTOM_ID: h-b1ab5d0b-757e-4820-ac19-8a64bb1c7024
+:END:
+
+- Requirement of relativity: laws of motion valid in one inertial
+  system must be true in all inertial systems.
+- A "correct quantum theory" should satisfy this requirement of relativity.
+- Mathematically: a relativistic quantum theory must be formulated in
+  a Lorentz covariant form.
+- Review of the principles of nonrelativistic quantum mechanics (they
+  cite Pauli's "Handbuch der Physik"; Schiff's {{{book-title(Quantum Mechanics)}}},
+  second ed., McGraw-Hill, 1955; Dirac's {{{book-title(Principles of Quantum Mechanics)}}},
+  fourth ed., Oxford University Press, 1958):
+  1. A physical system is described by a state function $\Phi$. This
+     is usually written explicitly using coordinates $\psi(q,s,t)$
+     which is a complex function of coordinates $q=(q_{1},\dots,q_{m})$, time $t$, and any
+     additional degrees of freedom $s$ (like spin).
+
+     This has no direct physical interpretation. Instead,
+     $|\psi(q,s,t)|^{2}\geq0$ is interpreted as the probability of the
+     system having values $(q,s)$ at time $t$. This requires the sum
+     of all $|\psi(q,s,t)|^{2}$ to be finite.
+  2. Every physical observable is represented by a linear Hermitian
+     operator. In particular, the canonical momentum $p_{i}$ the
+     operator in coordinate-space is $p_{i} \to -\I\hbar\partial/\partial q_{i}$.
+  3. A physical system is in an eigenstate of the operator $\Omega$ if
+     \begin{equation*}\tag{1.1}
+     \Omega\Phi_{n}=\omega_{n}\Phi_{n}
+     \end{equation*}
+     where $\Phi_{n}$ is the n-th
+     eigenstate corresponding to eigenvalue $\omega_{n}$. For
+     Hermitian operators, $\omega_{n}$ is real.
+
+     We can write this in local coordinates as
+     $\Omega(q,s,t)\psi_{n}(q,s,t)=\omega_{n}\psi_{n}(q,s,t)$.
+  4. Expansion postulate: an arbitrary wave function for a physical
+     system can be expanded in a complete orthognormal set of
+     eigenfunctions $\psi_{n}$ of a complete set of commuting
+     operators $\Omega_{n}$. We write this as
+     $\psi = \sum_{n}a_{n}\psi_{n}$
+     where the requirement of orthonormality is
+     $$\sum_{s}\int\psi^{*}_{n}(q_{1},\dots,s,\dots,t)\psi_{m}(q_{1},\dots,s,\dots,t)\,\D q_{1}\dots=\delta_{m,n}$$
+     (this is how they write it, it's a little ambiguous).
+     The coefficients $a_{n}$, we interpret $|a_{n}|^{2}$ as the
+     probability of finding the system in this eigenstate.
+  5. The result of a measurement of a physical observable is any one
+     of its eigenvalues.
+  6. The development ofa physical system is expressed by the
+     Schrodinger equation
+     \begin{equation*}\tag{1.2}
+     \I\hbar\partial_{t}\psi = H\psi
+     \end{equation*}
+     where $\partial_{t} = \partial/\partial t$.
+
+     A closed system has no explicit time dependence, so
+     $\partial_{t}\psi=0$ for closed systems.
+
+     Corollary (superposition principle): linearity of $H$ and
+     conservation of probability from the Hermitian property of $H$:
+     \begin{align*}\tag{1.3}
+     &\frac{\D}{\D t}\sum_{s}\int\psi^{*}\psi(\D q_{1}\cdots)\\
+     &=\frac{\I}{\hbar}\sum_{s}\int[(H\psi)^{\ast}\psi-\psi^{\ast}(H\psi)](\D q_{1}\cdots)\\
+     &=0
+     \end{align*}
+- These six principles are taken to underpin quantum theory, the goal
+  will be to maintain them.
+
+** Early Attempts
+:PROPERTIES:
+:CUSTOM_ID: h-e9387302-f616-41ec-9bb6-1f402b758648
+:END:
+
+- The free particle has its Hamiltonian be
+  \begin{equation*}\tag{1.4}
+  H = \frac{p^{2}}{2m}.
+  \end{equation*}
+- The quantum counterpart takes
+  \begin{equation*}\tag{1.5}
+  H\to\I\hbar\partial_{t},\quad\vec{p}\to-\I\hbar\vec{\nabla}
+  \end{equation*}
+- Thus we obtain the nonrelativistic Schrodinger equation
+  \begin{equation*}\tag{1.6}
+  \I\hbar\partial_{t}\psi(q,t) = \frac{-\hbar^{2}}{2m}\nabla^{2}\psi(q,t).
+  \end{equation*}
+- Equations (1.4) and (1.6) are noncovariant and therefore
+  unsatisfactory for relativistic quantum mechanics. I.e., the
+  left-hand sides and right-hand sides transform differently under
+  Lorentz transformations.
+- The total energy $E$ and the momenta $(p_{x},p_{y},p_{z})$ transform
+  as components of a contravariant 4-vector
+  \begin{equation*}
+  p^{\mu} = (p^{0},p^{1},p^{2},p^{3}) = \left(\frac{E}{c},p_{x},p_{y},p_{z}\right)
+  \end{equation*}
+  of invariant length
+  \begin{equation*}\tag{1.7}
+  \sum^{3}_{\mu=0}p^{\mu}p^{\mu} \equiv p_{\mu}p^{\mu} = \frac{\BDpos E^{2}}{c^{2}}\BDminus\vec{p}\cdot\vec{p}\equiv\BDpos m^{2}c^{2}
+  \end{equation*}
+  where $m$ is the rest mass of the particle, and $c$ is the speed of
+  light in a vacuum.
+- The operator prescription is asserted to be Lorentz covariant, since
+  $p^{\mu}\to\I\hbar\partial/\partial x_{\mu}$.
+- The relativistic Hamiltonian for a free particle is
+  \begin{equation*}\tag{1.8}
+  H = \sqrt{\vec{p}\cdot\vec{p}c^{2} + m^{2}c^{4}}
+  \end{equation*}
+  Therefore the relativistic counterpart to the Schrodinger equation
+  would be
+  \begin{equation*}\tag{1.9}
+  \I\hbar\partial_{t}\psi = \sqrt{-\hbar^{2}c^{2}\nabla^{2} + m^{2}c^{4}}\psi
+  \end{equation*}
+  where $\nabla^{2}$ is the Laplacian operator. The right-hand side of
+  Equation (1.9) is non-local: if we take the series expansion of it,
+  we have infinitely many derivatives (which results in non-local behaviour).
+- The trick is to rewrite Equation (1.9) as
+  \begin{equation*}\tag{1.10}
+  H^{2} = c^{2}\vec{p}\cdot\vec{p} + m^{2}c^{4}
+  \end{equation*}
+  Equivalently, iterate Equation (1.9) using the fact if $[A,B]=0$
+  then $A\psi=B\psi$ implies $A^{2}\psi=B^{2}\psi$, which gives us
+  \begin{equation*}
+  -\hbar^{2}\partial_{t}^{2}\psi = (-\hbar^{2}c^{2}\nabla^{2}+m^{2}c^{4})\psi.
+  \end{equation*}
+  We can see this is the classical wave equation
+  \begin{equation*}\tag{1.11}
+  [\Box + (mc/\hbar)^{2}]\psi = 0,\quad\mbox{where}\quad\Box=\partial_{\mu}\partial^{\mu}
+  \end{equation*}
+  - Note that this is the {{{define(Klein-Gordon Equation)}}}.
+- In squaring the energy relation, we have introduced extraneous
+  negative-energy root $H=-\sqrt{c^{2}\vec{p}\cdot\vec{p}+m^{2}c^{4}}$.
+  So we no longer have positive-definite energy, and introduced the
+  difficulty of extra negative-energy solutions. We'll address this in
+  Chapter 5. (Spoiler: they're antiparticles.)
+- Let us study Equations (1.10) and (1.11). Our first task: construct
+  a conserved current. In analogy to the non-relativistic case,
+  multiply $\psi^{\ast}$ by (1.11), then subtracting $\psi$ times the
+  complex-conjugate equation, i.e.,
+  \begin{align*}
+  \psi^{\ast}\left[\Box + (mc/\hbar)^{2}\right]\psi - \psi\left[\Box + (mc/\hbar)^{2}\right]\psi^{\ast} &= 0\\
+  \nabla^{\mu}(\psi^{\ast}\nabla_{\mu}\psi - \psi\nabla_{\mu}\psi^{\ast}) &= 0
+  \end{align*}
+  Or equivalently
+  \begin{equation*}\tag{1.12}
+  \partial_{t}\left[\frac{\I\hbar}{2mc^{2}}\left(\psi^{\ast}\partial_{t}\psi-\psi\partial_{t}\psi^{\ast}\right)\right]+\frac{\hbar}{2\I m}\vec{\nabla}\cdot\left[\psi^{\ast}(\vec{\nabla}\psi)-\psi(\vec{\nabla}\psi^{\ast})\right]=0.
+  \end{equation*}
+- We would like to interpret
+  \begin{equation*}
+  \frac{\I\hbar}{2mc^{2}}\left(\psi^{\ast}\partial_{t}\psi-\psi\partial_{t}\psi^{\ast}\right)=\rho
+  \end{equation*}
+  as a probability density. But this is imposible: it is not a
+  positive-definite expression.
+- Therefore, following Dirac, we abandon Equation (1.11) in the hope
+  of finding an equation which is first-order in the time derivative.
+
+** The Dirac Equation
+:PROPERTIES:
+:CUSTOM_ID: h-9c0bf147-d058-4998-bb58-bbfe083e4aac
+:END:
+
+- This section seems to have been imitated everywhere, introduce some
+  matrix coefficients, which turn out to be the Gamma matrices.
+- We have
+  \begin{equation*}\tag{1.13}
+  \I\hbar\partial_{t}\psi = \frac{\hbar c}{\I}\left(\alpha_{1}\partial_{x^{1}}+\alpha_{2}\partial_{x^{2}}+\alpha\partial_{x^{3}}\right)\psi+\beta m c^{2}\psi\equiv H\psi
+  \end{equation*}
+  where the $\alpha_{i}$ and $\beta$ are $N\times N$ matrices.
+  - This equation is precisely the {{{dfn(Dirac Equation)}}}.
+- The requirements for this equation to make sense:
+  1. We should recover the energy-momentum relation $E^{2}=p^{2}c^{2}+m^{2}c^{4}$
+  2. It must allow for a continuity equation and a probability
+     interpretation for the wave function $\psi$
+  3. It must be Lorentz covariant
+- We will check the first two requirements.
+- If we iterate Equation (1.13), we end up with
+  \begin{align*}
+  -\hbar^{2}\partial_{t}^{2}\psi &= -\hbar^{2}c^{2}\sum^{3}_{i,j=1}\frac{\alpha_{i}\alpha_{j}+\alpha_{j}\alpha_{i}}{2}\partial_{i}\partial_{j}\psi\\
+  &\qquad + \frac{\hbar m c^{3}}{\I}\sum^{3}_{i=1}(\alpha_{i}\beta+\beta\alpha_{i})\partial_{i}\psi\\
+  &\qquad + \beta^{2}m^{2}c^{4}\psi.
+  \end{align*}
+  This requires the four matrices $\alpha_{i}$, $\beta$ obey:
+  \begin{equation*} \tag{1.16}
+  \left.\begin{array}{rcl}
+  \alpha_{i}\alpha_{j}+\alpha_{j}\alpha_{i} &=& 2\delta_{i,j}\\
+  \alpha_{i}\beta+\beta\alpha_{i} &=& 0\\
+  \alpha_{i}^{2}=\beta^{2}&=&1
+  \end{array}\right\}
+  \end{equation*}
+- *Claim:* $N=4$ is the smallest dimension for the matrices. 
+  - From $\alpha_{i}^{2}=\beta^{2}=1$ in Eq (1.16), the eigenvalues of
+    $\alpha_{i}$ and $\beta$ must be $\pm1$.
+  - From the anticommutation properties, it follows that the trace
+    vanishes, i.e., $\tr(\alpha_{i})=0$ and $\tr(\beta)=0$.
+  - Taken together, this means the number of $-1$ eigenvalues must be
+    equal to the number of $+1$ eigenvalues, which means we must have
+    $N$ be an even number.
+  - When $N=2$, there are only three anticommuting matrices (the Pauli
+    matrices). We need four anticommuting matrices. So this can't work.
+  - When $N=4$, we have the possibility
+    \begin{equation*}\tag{1.17}
+    \alpha_{i} = \begin{bmatrix} 0 & \sigma_{i}\\ \sigma_{i} & 0\end{bmatrix},\qquad\beta=\begin{bmatrix}1&0\\ 0&-1\end{bmatrix}
+    \end{equation*}
+    where the $\sigma_{i}$ are the familiar Pauli matrices, and
+    $\beta$ consists of $2\times 2$ identity matrices (or its negation).
+- Thus we recover the familiar energy-momentum relations, which
+  finishes the first task we setup for ourselves.
+- *Goal 2:* now we want to consider the differential law of conservation.
+- We introduce the Hermitian conjugate wave functions
+  $\psi^{\dagger}=(\psi^{\ast}_{1},\dots,\psi^{\ast}_{4})$ and
+  left-multiply Equation (1.13) by $\psi^{\dagger}$ to obtain
+  \begin{equation*}\tag{1.18}
+  \I\hbar\psi^{\dagger}\partial_{t}\psi = -\I\hbar c\sum^{3}_{k=1}\psi^{\dagger}\alpha_{k}\partial_{k}\psi+mc^{2}\psi^{\dagger}\beta\psi.
+  \end{equation*}
+- Now form the Hermitian conjugate of Equation (1.13), then multiply
+  on the right by $\psi$:
+  \begin{equation*}\tag{1.19}
+  -\I\hbar(\partial_{t}\psi^{\dagger})\psi = \I\hbar c\sum^{3}_{k=1}(\partial_{k}\psi^{\dagger})\alpha_{k}\psi+mc^{2}\psi^{\dagger}\beta\psi,
+  \end{equation*}
+  where $\alpha_{i}^{\dagger}=\alpha_{i}$ and $\beta^{\dagger}=\beta$.
+- Subtracting (1.19) from (1.18) gives us
+  \begin{equation*}
+  \I\hbar\partial_{t}(\psi^{\dagger}\psi)=-\I\hbar c\sum^{3}_{k=1}\partial_{k}(\psi^{\dagger}\alpha_{k}\psi),
+  \end{equation*}
+  or
+  \begin{equation*}\tag{1.20}
+  \partial_{t}\rho + \vec{\nabla}\cdot\vec{j}=0.
+  \end{equation*}
+  We identify the probability density
+  \begin{equation*}\tag{1.21}
+  \rho = \psi^{\dagger}\psi= \sum^{4}_{\sigma=1}\psi^{\ast}_{\sigma}\psi_{\sigma}
+  \end{equation*}
+  and the probability current with three components:
+  \begin{equation*}\tag{1.22}
+  j^{k} = c\psi^{\ast}\alpha^{k}\psi.
+  \end{equation*}
+- Integrating Equation (1.20) over all space, and using Green's
+  theorem, we find
+  \begin{equation*}\tag{1.23}
+  \partial_{t}\int\psi^{\dagger}\psi\,\D^{3}x = 0,
+  \end{equation*}
+  which encourages a tentative interpretation of $\rho$ as a
+  positive-definite probability density.
+- We need to show that $\vec{j}$ transforms as a 3-vector under
+  spatial rotations. We must show that $(\rho,\vec{j})$ transforms as
+  a 4-vector under Lorentz transformations. Also, we must show that
+  the Dirac equation (1.13) is Lorentz covariant.
+  
+** Nonrelativistic Correspondence
+:PROPERTIES:
+:CUSTOM_ID: h-d70ace27-4b3c-4710-bf69-f87d755a0d1b
+:END:
+
+- There are two problems facing us now:
+  1. Establish the Lorentz invariance of the Dirac equation, and
+  2. Check that the equation makes physical sense.
+- We will check the Dirac equation makes physical sense.
+- When a free electron is at rest, Equation (1.13) reduces to
+  \begin{equation*}
+  \I\hbar\partial_{t}\psi = \beta mc^{2}\psi,
+  \end{equation*}
+  since the de Broglie wavelength is infinitely large and the wave
+  function is uniform over all space.
+
+  
+* Lorentz Covariance of the Dirac Equation
+:PROPERTIES:
+:CUSTOM_ID: h-43055381-a20c-4120-9f7b-82c26583e611
+:END:
