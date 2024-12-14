@@ -294,3 +294,337 @@ conventions, or use my preferred East-coast metric conventions.
 :PROPERTIES:
 :CUSTOM_ID: h-43055381-a20c-4120-9f7b-82c26583e611
 :END:
+
+** Covariant form of the Dirac Equation
+:PROPERTIES:
+:CUSTOM_ID: h-1c54f957-f7a0-4697-a67a-1acd5fa312b2
+:END:
+
+- Review of what is meant by a "Lorentz transformation"
+  - Let $O$ and $O'$ be two observers in different inertial reference
+    frames which describe the same physical event with different
+    spacetime coordinates.
+  - The rule relating the coordinates $x^{\mu}$ which observer $O$
+    describes the event, to the coordinates $(x^{\mu})'$ which
+    observer $O'$ describes the same event, is given by the Lorentz
+    transformation between the two sets of coordinates:
+    \begin{equation*}\tag{2.1}
+    (x^{\nu})' = \sum^{3}_{\mu=0}{a^{\nu}}_{\mu}x^{\mu}\equiv {a^{\nu}}_{\mu}x^{\mu}
+    \end{equation*}
+    This is a linear homogeneous transformation, and the coefficients
+    ${a^{\nu}}_{\mu}$ depend only upon the relative velocities and
+    spatial orientations of the reference frames of $O$ and $O'$.
+    - Note: Equation (2.1) describes familiar matrix multiplication
+      taught in elementary linear algebra. Here $x^{\mu}$ describes a
+      column vector, and ${a^{\nu}}_{\mu}$ describes a matrix with
+      $\mu$ indexing rows, $\nu$ indexing columns. Einstein summation
+      convention here is just describing familiar matrix multiplication.
+  - The basic invariant of the Lorentz transformation is the proper
+    time interval
+    \begin{equation*}\tag{2.2}
+    \D s^{2}=g_{\mu\nu}\,\D x^{\mu}\D x^{\nu}
+    \end{equation*}
+    (Note that $\D s=c\,\D\tau$ gives us the "infinitesimal" proper
+    time interval $\D\tau$ explicitly.) This is derived from the
+    physical observation that the velocity of light is constant in a vacuum.
+  - Now equations (2.1) and (2.2) taken together leads us to the
+    condition on the coefficients that
+    \begin{equation*}\tag{2.3}
+    {a_{\mu}}^{\nu}{a^{\mu}}_{\sigma}={\delta^{\nu}}_{\sigma}
+    \end{equation*}
+    where ${\delta^{\nu}}_{\sigma}$ is the Kronecker delta (1 when
+    $\nu=\sigma$, and 0 otherwise).
+  - There are two classes of Lorentz transformations, since Equations
+    (2.1) and (2.3) implies $\det({a^{\mu}}_{\nu})=\pm1$. When the
+    determinant is positive, we have {{{dfn(Proper Lorentz Transformations)}}};
+    otherwise, the determinant is negative, and we call it an
+    {{{dfn(Improper Lorentz Transformation)}}}.
+  - Proper Lorentz transformations.
+    - These form a subgroup: if $A$ is a proper Lorentz
+      transformation, then $A^{-1}$ is a proper Lorentz
+      transformation; further, if $A$ and $B$ are proper Lorentz
+      transformations, then $AB$ is another proper Lorentz
+      transformation. The identity matrix is a proper Lorentz
+      transformation describing the case when $O=O'$.
+      (We should check associativity, but we know
+      matrix multiplication is associative.)
+  - Improper Lorentz transformations are the discrete transformations
+    of space inversion and time inversion (possibly composed with
+    proper Lorentz transformations).
+    - Improper Lorentz transformations cannot be built out of
+      infinitesimal Lorentz transformations.
+- Now, we want to construct a correspondence relating a given set of
+  observations of a Dirac particle made by observers $O$ and $O'$ in
+  their respective reference frame.
+  - We have wave functions $\psi(x)$ used by observer $O$, and $\psi'(x')$ used by
+    observer $O'$.
+  - We seek a transformation law relating these two wave functions to
+    each other. Specifically, for $O'$ to compute $\psi'(x')$ from $\psi(x)$.
+  - Lorentz covariance requires this transformation yield wave
+    functions which are solutions of Dirac equations of the same form
+    in the primed as well as unprimed reference frame.
+  - This invariance expresses the Lorentz invariance of the underlying
+    momentum shell
+    \begin{equation*}
+    p^{\mu}p_{\mu}=m^{2}c^{2}.
+    \end{equation*}
+  - *Gamma matrices.* Towards this end, we introduce the notation
+    \begin{equation*}
+    \gamma^{0}=\beta,\quad\gamma^{i}=\beta\alpha_{i}.
+    \end{equation*}
+    Then we have Dirac's equation be
+    \begin{equation*}\tag{2.4}
+    \I\hbar\left(\gamma^{0}\partial_{0}+\gamma^{1}\partial_{1}+\dots+\gamma^{3}\partial_{3}\right)\psi-mc\psi=0.
+    \end{equation*}
+  - We see the defining relations from Equation (1.16) is:
+    \begin{equation*}\tag{2.5}
+    \gamma^{\mu}\gamma^{\nu}+\gamma^{\nu}\gamma^{\mu}=2g^{\mu\nu}\mathbf{1}
+    \end{equation*}
+    where $\mathbf{1}$ is the $4\times 4$ identity matrix
+  - The $\gamma^{i}$ are anti-Hermitian and $(\gamma^{i})^{2}=-\mathbf{1}$.
+  - The $\gamma^{0}$ is Hermitian.
+  - The representation from Equation (1.17) gives us
+    \begin{equation*}\tag{2.6}
+    \gamma^{i}=\begin{bmatrix}0 & \sigma^{i}\\-\sigma^{i}&0\end{bmatrix},\quad
+    \gamma^{0}=\begin{bmatrix}1 & 0\\ 0 & -1\end{bmatrix}.
+    \end{equation*}
+  - *Feynman slash notation.* We have
+    \begin{equation*}
+    \cancel{A} = \gamma^{\mu}A_{\mu} = g_{\mu\nu}\gamma^{\mu}A^{\nu} = \gamma^{0}A^{0}-\vec{\gamma}\cdot\vec{A},
+    \end{equation*}
+    so we have in particular
+    \begin{equation*}
+    \cancel{\nabla} = \gamma^{\mu}\partial_{\mu} = \frac{\gamma^{0}}{c}\partial_{t}+\vec{\gamma}\cdot\vec{\nabla}.
+    \end{equation*}
+  - We can then simplify the Dirac Equation (2.4) to:
+    \begin{equation*}\tag{2.7}
+    (\I\hbar\cancel{\nabla} - mc)\psi = 0
+    \end{equation*}
+    Or, using $p^{\mu}=\I\hbar\partial_{\mu}$
+    \begin{equation*}\tag{2.8}
+    (\cancel{p} - mc)\psi = 0
+    \end{equation*}
+  - We can add electromagnetic interaction according to the "minimal"
+    substitution from Equation (1.25):
+    \begin{equation*}
+    \left(\cancel{p} - \frac{e\cancel{A}}{c}  - mc\right)\psi = 0
+    \end{equation*}
+    This does not affect concerns of covariance, since both $p^{\mu}$
+    and $A^{\mu}$ are 4-vectors.
+
+** Proof of Covariance
+:PROPERTIES:
+:CUSTOM_ID: h-7713296f-781b-422b-90d0-bd0a6ddd2bbd
+:END:
+
+- To prove the Dirac equation is Lorentz covariant, we need to prove
+  two things:
+  1. We need an explicit way to compute $\psi'(x')$ for observer $O'$
+     given $\psi(x)$ from observer $O$, which describes the same
+     physical state.
+  2. According to the principle of relativity, $\psi'(x')$ will be a
+     solution of an Equation which takes of the form of (2.7) in the
+     primed system
+     \begin{equation*}
+     \left(\I\hbar\widetilde{\gamma}^{\mu}\frac{\partial}{\partial x^{\mu\prime}} - mc\right)\psi'(x') = 0
+     \end{equation*}
+     where $\widetilde{\gamma}^{\mu}$ satisfy the same anticommutation
+     relations of Equation (2.5), which means
+     $\widetilde{\gamma}^{0\dagger}=\widetilde{\gamma}^{0}$ and
+     $\widetilde{\gamma}^{i\dagger}=-\widetilde{\gamma}^{i}$. (This is
+     required for the Hamiltonian operator to be Hermitian.)
+     It turns out these are equivalent up to a unitary transformation
+     $U$,
+     \begin{equation*}
+     \widetilde{\gamma}_{\mu}=U^{\dagger}\gamma_{\mu}U,\quad U^{\dagger}=U^{-1}
+     \end{equation*}
+     (it's a straightforward but lengthy proof)
+     - These $U$ matrices have constant components.
+     - We can therefore "pull out" the constant $U$ matrices, and the
+       Dirac equation in $O'$ frame becomes
+       \begin{equation*}\tag{2.9}
+       \left(\I\hbar\gamma^{\mu}\frac{\partial}{\partial x^{\mu\prime}} - mc\right)\psi'(x') = 0
+       \end{equation*}
+       where Bjorken and Drell write the first term as $\cancel{p}' = \I\hbar\gamma^{\mu}\partial'_{\mu}$
+- We'd like the transformation from $\psi$ to $\psi'$ be linear. What
+  does this require?
+  - To be explicit, we would like
+    \begin{equation*}\tag{2.10}
+    \psi'(x')=\psi'(ax)=S(a)\psi(x)=S(a)\psi(a^{-1}x')
+    \end{equation*}
+    where $S(a)$ is a $4\times 4$ matrix parametrized by $a$, and
+    $S(a)$ operates on the four-component column vector $\psi(x)$. The
+    $S(a)$ depends only on the relative velocities and spatial
+    orientations of $O$ and $O'$.
+  - Further, $S$ must have an inverse, so if $O$ knows $\psi'(x')$
+    which $O'$ uses to describe the observations of a given state,
+    observer $O$ may construct their own wave function $\psi(x)$ by
+    \begin{equation*}\tag{2.11}
+    \psi(x) = S^{-1}(a)\psi'(x') = S^{-1}(a)\psi'(ax)
+    \end{equation*}
+    Then using Equation (2.10), we can rewrite this as
+    \begin{equation*}
+    \psi(x) = S(a^{-1})\psi'(ax).
+    \end{equation*}
+    Therefore we obtain the identification
+    \begin{equation*}
+    S(a^{-1}) = S^{-1}(a).
+    \end{equation*}
+  - Now...how to find $S$?
+  - Start with the Dirac equation for observer $O$ (Eq (2.7)) and try
+    to rewrite it in terms of $\psi'(x')$ using Equation (2.11):
+    \begin{equation*}\tag{2.7'}
+    \left(\I\hbar\gamma^{\mu}\frac{\partial}{\partial x^{\mu}}-mc\right)\psi(x)=0
+    \end{equation*}
+    then using Equation (2.11)
+    \begin{equation*}
+    \left(\I\hbar\gamma^{\mu}\frac{\partial}{\partial x^{\mu}}-mc\right)S^{-1}(a)\psi'(x')=0.
+    \end{equation*}
+    Since $S^{-1}(a)$ is constant with respect to $x^{\mu}$, we can
+    pull it inside the parentheses, and multiply on the left by $S(a)$
+    to get:
+    \begin{equation*}
+    \left(\I\hbar S(a)\gamma^{\mu}S^{-1}(a)\frac{\partial}{\partial x^{\mu}}-mc\right)\psi'(x')=0.
+    \end{equation*}
+    - Note that $S(a)$ and $S^{-1}(a)$ cannot be pulled past a $\gamma$
+      matrix, since they act on gamma matrices.
+  - We then can use Equation (2.1) to rewrite the partial derivative
+    operator as (using the chain rule)
+    \begin{equation*}
+    \frac{\partial}{\partial x^{\mu}} = \frac{\partial x'^{\nu}}{\partial x^{\mu}}\frac{\partial}{\partial x'^{\nu}}={a^{\nu}}_{\mu}\frac{\partial}{\partial x'^{\nu}}.
+    \end{equation*}
+  - We combine these previous two steps together to obtain the Dirac
+    equation as:
+    \begin{equation*}
+    \left(\I\hbar S(a)\gamma^{\mu}S^{-1}(a){a^{\nu}}_{\mu}\frac{\partial}{\partial x'^{\nu}}-mc\right)\psi'(x')=0.
+    \end{equation*}
+    This is form-invariant (i.e., identical with Equation (2.9)),
+    provided an $S$ can be found such that
+    \begin{equation*}
+    S(a)\gamma^{\mu}S^{-1}(a){a^{\nu}}_{\mu} = \gamma^{\nu},
+    \end{equation*}
+    or equivalently,
+    \begin{equation*}\tag{2.12}
+    S^{-1}(a)\gamma^{\nu}S(a) = {a^{\nu}}_{\mu}\gamma^{\mu}.
+    \end{equation*}
+    - Once we find a solution to Equation (2.12), we will have
+      established the covariance of the Dirac equation.
+    - *Terminology:* a wave function transforming according to
+      Equations (2.10) and (2.12) are called a four-component Lorentz spinor.
+- Goal: construct $S$. The trick is to construct $S$ for infinitesimal
+  proper Lorentz transformations. (This is a common trick studying Lie
+  groups from Lie algebras.)
+  - We take
+    \begin{equation*}\tag{2.13a}
+    {a^{\nu}}_{\mu} = {g^{\nu}}_{\mu} + \Delta{\omega^{\nu}}_{\mu}
+    \end{equation*}
+    with
+    \begin{equation*}\tag{2.13b}
+    \Delta\omega^{\nu\mu} = -\Delta\omega^{\mu\nu}
+    \end{equation*}
+    infinitesimal (so quadratic and higher-order terms of
+    $\Delta\omega$ are dropped).
+  - *Exercise:* prove if $\mu$, $\nu=1,\dots,N$ that $\Delta\omega^{\mu\nu}$
+    has $N(N-1)/2$ independent components. (Hint: look at the
+    diagonal, then look at the off-diagonal.)
+  - Each of the six independent nonvanishing $\Delta\omega^{\mu\nu}$
+    generates an infinitesimal Lorentz transformation.
+  - $\Delta\omega^{01}=\Delta\beta$ describes a transformation for a
+    coordinate system moving with velocity $c\,\Delta\beta$ in the $x$
+    direction.
+  - $\Delta{\omega^{1}}_{2}=\Delta\varphi$ for a rotation through an
+    angle $\Delta\varphi$ about the $z$-axis, and so on.
+  - Expanding $S$ in powers of $\Delta\omega^{\nu\mu}$, and keeping
+    only the linear terms in the infinitesimal generators, we have
+    \begin{equation*}\tag{2.14}
+    S = \mathbf{1} - \frac{\I}{4}\sigma_{\mu\nu}\,\Delta\omega^{\mu\nu},\quad\mbox{and}\quad S^{-1} = \mathbf{1} + \frac{\I}{4}\sigma_{\mu\nu}\,\Delta\omega^{\mu\nu}
+    \end{equation*}
+    with $\sigma_{\mu\nu}=-\sigma_{\nu\mu}$ by (2.13b).
+  - Each of the six coefficients $\sigma_{\mu\nu}$ is really a
+    $4\times 4$ matrix, as are the transformation $S$ and the unit
+    matrix $\mathbf{1}$.
+  - Inserting Equations (2.13) and (2.14) into Equation (2.12) and
+    keeping first-order terms in $\Delta\omega^{\mu\nu}$, we find
+    \begin{equation*}
+    \Delta{\omega^{\nu}}_{\mu}\,\gamma^{\mu} = \frac{-\I}{4}(\Delta\omega)^{\alpha\beta}(\gamma^{\nu}\sigma_{\alpha\beta}-\sigma_{\alpha\beta}\gamma^{\nu}).
+    \end{equation*}
+    Careful: the right-hand side does not necessarily vanish,
+    multiplication of matrices is not commutative.
+  - From the antisymmetry of the generators $\Delta\omega^{\mu\nu}$ it
+    follows that
+    \begin{equation*}\tag{2.15}
+    2\I({g^{\nu}}_{\alpha}\gamma_{\beta}-{g^{\nu}}_{\beta}\gamma_{\alpha})=[\gamma^{\nu},\sigma_{\alpha\beta}]
+    \end{equation*}
+    where the right-hand side is the commutator $[A,B]=AB-BA$.
+  - The problem of establishing proper Lorentz covariance of the Dirac
+    equation is now reduced to finding six matrices
+    $\sigma_{\alpha\beta}$ satisfying Equation (2.15).
+  - Simplest guess:
+    \begin{equation*}\tag{2.16}
+    \sigma_{\mu\nu}=\frac{\I}{2}[\gamma_{\mu},\gamma_{\nu}].
+    \end{equation*}
+    - Then using Equation (2.14), $S$ for an infinitesimal
+      transformation is given by
+      \begin{equation*}\tag{2.17}
+      S = \mathbf{1} + \frac{1}{8}[\gamma_{\mu},\gamma_{\nu}]\,\Delta\omega^{\mu\nu} = \mathbf{1} - \frac{\I}{4}\sigma_{\mu\nu}\,\Delta\omega^{\mu\nu}
+      \end{equation*}
+    - We can then build our way up to a finite Lorentz transformation
+      by iterating a succession of infinitesimal Lorentz
+      transformations (the trick transforming Lie algebras to Lie groups).
+    - I am going to skip the intermediate steps and jump to the
+      conclusion. The trick is that we can rotate the Lorentz boost to
+      be along the $x$-axis, taking
+      \begin{equation*}\tag{2.19}
+      {I^{\nu}}_{\mu} = \begin{bmatrix} 0 & -1 & 0 & 0\\
+      -1 & 0 & 0 & 0\\
+       0 & 0 & 0 & 0\\
+       0 & 0 & 0 & 0
+      \end{bmatrix}
+      \end{equation*}
+      There are 6 different possible ${I^{\nu}}_{\mu}$ matrices (3 for
+      boosts along the $x$, $y$, $z$ axes; and 3 for spatial rotations
+      about each axis). This allows us to write
+      \begin{equation*}\tag{2.18}
+      \Delta{\omega^{\nu}}_{\mu} = (\Delta\omega_{(n)}){(I_{(n)})^{\nu}}_{\mu}
+      \end{equation*}
+      where $\Delta\omega_{(n)}$ is the infinitesimal "angle of
+      rotation" parameter, and $n$ keeps track of which possible $I$
+      matrix we're working with. We'll work through one possible case
+      in some detail, the other cases are "obvious".
+    - Lorentz transformation for uniform relative $x$-axis motion
+      (using Lie algebra to Lie group relations)
+      \begin{align*}
+      x^{\nu'} &= {(\exp(\omega I))^{\nu}}_{\mu}x^{\mu}\\
+      &= {(\cosh(\omega I) + \sinh(\omega I))^{\nu}}_{\mu}x^{\mu}\\
+      &= {(\mathbf{1} - I^{2} + I^{2}\cosh(\omega) + I\sinh(\omega))^{\nu}}_{\mu}x^{\mu}
+      \end{align*}
+    - The individual components for this:
+      \begin{equation*}\tag{2.20}
+      \begin{bmatrix}x^{0\prime}\\x^{1\prime}\\x^{2\prime}\\x^{3\prime}\end{bmatrix}
+      = \begin{bmatrix} \cosh(\omega) & -\sinh(\omega) & 0 & 0\\
+        -\sinh(\omega) & \cosh(\omega) & 0 & 0\\
+       0 & 0 & 0 & 0\\
+       0 & 0 & 0 & 0
+       \end{bmatrix}
+      \begin{bmatrix}x^{0}\\x^{1}\\x^{2}\\x^{3}\end{bmatrix}
+      \end{equation*}
+      Or if you prefer:
+      \begin{equation*}\tag{2.21}
+      \left.\begin{array}{rcl}
+      x^{0\prime} &=& (\cosh(\omega))(x^{0} - x^{1}\tanh(\omega))\\
+      x^{1\prime} &=& (\cosh(\omega))(x^{1} - x^{0}\tanh(\omega))\\
+      x^{2\prime} &=& x^{2}\\
+      x^{3\prime} &=& x^{3}
+      \end{array}\right\}
+      \end{equation*}
+      where $\tanh(\omega)=\beta$ and $\cosh(\omega) = 1/\sqrt{1-\beta^{2}}$.
+  - Finite spinor transformation $S$ may be determined using Equations
+    (2.14) and (2.18) as
+    \begin{align*}
+    \psi'(x') &= S\psi(x)\\
+              &= \exp\left(\frac{-\I}{4}\omega\sigma_{\mu\nu}I^{\mu\nu}_{(n)}\right)\psi(x)\tag{2.22}
+    \end{align*}
+    
+
+
+
