@@ -40,6 +40,260 @@ struct
 end;
 #+end_src
 
+
+* Monad Transformers
+:PROPERTIES:
+:CUSTOM_ID: h-efcc55de-4064-4d52-ac07-fe7b4f2efe0c
+:END:
+
+I'm going to stick with the signature for a "generic" monad:
+
+#+begin_src sml
+signature MONAD = sig
+  type 'a m;
+  val return : 'a -> 'a m;
+  val bind : 'a m -> ('a -> 'b m) -> 'b m;
+  val exec : 'a m -> 'a;
+end;
+#+end_src
+
+** Reader Monad and Transformer
+:PROPERTIES:
+:CUSTOM_ID: h-455d86fa-703b-4583-be03-710369a37dfd
+:END:
+
+We typically want to have a way to read a fixed configuration
+environment, which is handled by the reader macro. We want the ~env~
+type to be transparently ascribed, which requires some tricky
+signature constraint.
+
+Using ~where type t1 = t2~ in the opaquely ascribed signature allows
+us to make ~t1~ "publicly transparent".
+
+Also note that this is "lazy-ish" since the ~exec~ occurs within the body
+of the ~bind~ function.
+
+#+begin_src sml
+signature READER_MONAD = sig
+  type env;
+  val init_env : env;
+  include MONAD;
+  val map : ('a -> 'b) -> 'a m -> 'b m;
+  val ask : env m;
+end;
+
+functor Reader(type Env
+               val init_Env : Env) :> READER_MONAD
+                                        where type env = Env =
+struct
+  type env = Env;
+  val init_env = init_Env;
+  datatype 'a m = Reader of (env -> 'a);
+
+  fun exec (Reader r) = r init_env;
+
+  fun return a = Reader (fn _ => a);
+
+  fun bind (Reader r) k = Reader (fn e =>
+                                   let
+                                     val (Reader r') = k (r e);
+                                   in
+                                     (r' e)
+                                   end);
+  
+  fun map f (Reader r) = Reader (f o r);
+
+  val ask = Reader (fn x => x);
+end;
+#+end_src
+
+And as a transformer...
+
+#+begin_src sml
+signature READER_T = sig
+  type env;
+  include MONAD;
+  val ask : env m;
+end;
+
+functor ReaderT(structure M : MONAD
+                type Env
+                val init_Env : Env) :> READER_T
+                                       where type env = Env =
+struct
+  type env = Env;
+  datatype 'a m = ReaderT of (env -> 'a M.m);
+
+  fun exec (ReaderT r) = M.exec (r init_Env);
+
+  fun return a = ReaderT (fn _ => M.return a);
+
+  fun bind (ReaderT m) k =
+    ReaderT (fn e =>
+                let
+                  val a = M.exec (m e);
+                  val (ReaderT b) = k a;
+                in
+                  b e
+                end);
+
+  val ask = ReaderT M.return;
+end;
+#+end_src
+
+** Writer Monad and Transformer
+:PROPERTIES:
+:CUSTOM_ID: h-3569211a-5aeb-477e-ba03-0bf9ab045c9b
+:END:
+
+A lazy writer would have its type be ~unit -> 'a * string~,
+and an eager writer would just be ~'a * string~.
+
+More generally, we could replace ~string~ with any monoid. 
+
+#+begin_src sml
+signature WRITER_MONAD = sig
+  include MONAD;
+  val get_log : 'a m -> string;
+  val tell : string -> unit m;
+end;
+
+structure Writer :> WRITER_MONAD = struct
+  type 'a m = 'a * string;
+
+  fun return x = (x, "");
+
+  fun bind (x, s1) f =
+    let
+      val (y, s2) = f x;
+    in
+      (y, s1 ^ s2)
+    end;
+
+  fun exec (x,_) = x;
+
+  fun get_log (_, s) = s;
+  
+  fun tell s = ((), s);
+end;
+#+end_src
+
+As a monad transformer, we would have something like:
+
+#+begin_src sml
+signature WRITER_T = sig
+  structure M : MONAD;
+  include MONAD;
+  val get_log : 'a m -> string;
+  val tell : string -> unit m;
+end;
+
+functor WriterT(M : MONAD) :> WRITER_T = struct
+  structure M = M;
+  datatype 'a m = WriterT of ('a * string) M.m;
+
+  fun exec (WriterT m) =
+    case M.exec m of
+        (ans,_) => ans;
+
+  fun get_log (WriterT m) =
+    case M.exec m of
+        (_,log) => log;
+
+  fun return (a : 'a) = WriterT (M.return (a, ""));
+  
+  fun bind m f =
+    let
+      val a = (exec m);
+      val s1 = get_log m;
+      val m' = f a;
+      val b = exec m';
+      val s2 = get_log m';
+    in
+      WriterT (M.return (b, s1 ^ s2))
+    end;
+
+  fun tell w = WriterT (M.return ((), w));
+end;
+#+end_src
+
+Again, we should generalize this from using strings to an arbitrary
+monoid. 
+
+** Exception Monad and Transformer
+:PROPERTIES:
+:CUSTOM_ID: h-24a6c87a-4b3b-48da-99d6-4d5867ccdf73
+:END:
+
+In Standard ML, we can use the ~exn~ type for exceptions rather than
+allowing the user to provide one...well, in full generality, we could
+simply use a type variable (and then instantiate it to ~exn~ for the
+exception monad).
+
+#+begin_src sml
+structure ExceptionMonad : MONAD = struct
+  datatype 'a m = V of 'a
+                | E of exn;
+
+  fun return a = V a;
+
+  fun bind m f = case m of
+                     (E e) => (E e)
+                   | (V a) => f a;
+  fun exec (V a) = a;
+end;
+#+end_src
+
+But if we wanted to parametrize the "success" branch as a monad, then
+we need to use a monad transformer instead (NOTE: this is *not* a
+~MONAD~ instance unless we fix the type of exceptions, but then ~catch~ would be
+impossible to implement using Standard ML's type system):
+
+#+begin_src sml
+signature EXCEPTION_T = sig
+  type ('a, 'e) outcome;
+  structure M : MONAD;
+
+  val return : 'a -> ('a, 'e) outcome M.m;
+  val exec : ('a, 'e) outcome M.m -> 'a;
+  val bind : ('a,'e) outcome M.m ->
+             ('a -> ('b,'e) outcome M.m) ->
+             ('b,'e) outcome M.m;
+  val throw : 'e -> ('a,'e) outcome M.m;
+  val catch : ('a,'e1) outcome M.m ->
+              ('e1 -> ('a,'e2) outcome M.m) ->
+              ('a,'e2) outcome M.m;
+end;
+
+(* datatype ('a,'b) Either = Ok of 'a | Err of 'b; *)
+
+functor ExceptionT(M : MONAD) :> EXCEPTION_T = struct
+  datatype ('a, 'e) outcome = V of 'a | E of 'e;
+  structure M : MONAD = M;
+
+  fun exec m = case M.exec m of
+                   (V a) => a;
+  
+  fun return a = M.return (V a);
+
+  fun bind m f = M.bind m (fn (E e) => M.return (E e)
+                            | (V x) => f x);
+
+  fun lift x = M.bind x (fn v => M.return (V v));
+
+  fun exec m = M.exec (M.bind m (fn (V x) => M.return x));
+
+  fun throw e = M.return (E e);
+
+  fun catch m f = M.bind m (fn (E e) => f e
+                             | (V v) => M.return (V v));
+end;
+#+end_src
+
+This is all a horrible idea, since Standard ML has exception handling
+built into it. Ostensibly, we could cobble these two things together,
+but that's a belt-and-suspenders "solution".
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-058d3bd2-eb33-4e56-af11-bed47e911f77
@@ -57,6 +311,7 @@ end;
 - Martin Grabmuller,\\
   "Monad Transformers Step by Step".\\
   [[https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.596&rep=rep1&type=pdf][Citeseer]] 2006 draft.
+- Haskell's [[https://hub.darcs.net/ross/transformers/browse/Control/Monad/Trans][transformers]] library
 
 ** OCaml Implementations
 :PROPERTIES:

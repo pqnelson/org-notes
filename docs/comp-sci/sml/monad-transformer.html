@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -219,9 +234,16 @@
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-7d7a975d-ae99-43e2-adf1-a2d273feb5e8">1. Introduction</a></li>
-<li><a href="#h-058d3bd2-eb33-4e56-af11-bed47e911f77">2. References</a>
+<li><a href="#h-efcc55de-4064-4d52-ac07-fe7b4f2efe0c">2. Monad Transformers</a>
 <ul>
-<li><a href="#h-789c6184-637c-45ae-aad1-2d06b8d95754">2.1. OCaml Implementations</a></li>
+<li><a href="#h-455d86fa-703b-4583-be03-710369a37dfd">2.1. Reader Monad and Transformer</a></li>
+<li><a href="#h-3569211a-5aeb-477e-ba03-0bf9ab045c9b">2.2. Writer Monad and Transformer</a></li>
+<li><a href="#h-24a6c87a-4b3b-48da-99d6-4d5867ccdf73">2.3. Exception Monad and Transformer</a></li>
+</ul>
+</li>
+<li><a href="#h-058d3bd2-eb33-4e56-af11-bed47e911f77">3. References</a>
+<ul>
+<li><a href="#h-789c6184-637c-45ae-aad1-2d06b8d95754">3.1. OCaml Implementations</a></li>
 </ul>
 </li>
 </ul>
@@ -262,8 +284,293 @@ functor. For example,
 </div>
 </div>
 
+
+<div id="outline-container-h-efcc55de-4064-4d52-ac07-fe7b4f2efe0c" class="outline-2">
+<h2 id="h-efcc55de-4064-4d52-ac07-fe7b4f2efe0c"><span class="section-number-2">2.</span> Monad Transformers</h2>
+<div class="outline-text-2" id="text-h-efcc55de-4064-4d52-ac07-fe7b4f2efe0c">
+<p>
+I'm going to stick with the signature for a "generic" monad:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">MONAD</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">type</span> 'a <span class="org-type-def">m</span>;
+  <span class="org-keyword">val</span> <span class="org-variable-name">return</span> : 'a -&gt; 'a m;
+  <span class="org-keyword">val</span> <span class="org-variable-name">bind</span> : 'a m -&gt; ('a -&gt; 'b m) -&gt; 'b m;
+  <span class="org-keyword">val</span> <span class="org-variable-name">exec</span> : 'a m -&gt; 'a;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-455d86fa-703b-4583-be03-710369a37dfd" class="outline-3">
+<h3 id="h-455d86fa-703b-4583-be03-710369a37dfd"><span class="section-number-3">2.1.</span> Reader Monad and Transformer</h3>
+<div class="outline-text-3" id="text-h-455d86fa-703b-4583-be03-710369a37dfd">
+<p>
+We typically want to have a way to read a fixed configuration
+environment, which is handled by the reader macro. We want the <code>env</code>
+type to be transparently ascribed, which requires some tricky
+signature constraint.
+</p>
+
+<p>
+Using <code>where type t1 = t2</code> in the opaquely ascribed signature allows
+us to make <code>t1</code> "publicly transparent".
+</p>
+
+<p>
+Also note that this is "lazy-ish" since the <code>exec</code> occurs within the body
+of the <code>bind</code> function.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">READER_MONAD</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">env</span>;
+  <span class="org-keyword">val</span> <span class="org-variable-name">init_env</span> : env;
+  <span class="org-keyword">include</span> MONAD;
+  <span class="org-keyword">val</span> <span class="org-variable-name">map</span> : ('a -&gt; 'b) -&gt; 'a m -&gt; 'b m;
+  <span class="org-keyword">val</span> <span class="org-variable-name">ask</span> : env m;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">functor</span> <span class="org-module-def">Reader</span>(<span class="org-keyword">type</span> <span class="org-type-def">Env</span>
+               <span class="org-keyword">val</span> <span class="org-variable-name">init_Env</span> : Env) :&gt; READER_MONAD
+                                        <span class="org-keyword">where</span> <span class="org-keyword">type</span> <span class="org-type-def">env</span> = Env =
+<span class="org-keyword">struct</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">env</span> = Env;
+  <span class="org-keyword">val</span> <span class="org-variable-name">init_env</span> = init_Env;
+  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">m</span> = Reader <span class="org-keyword">of</span> (env -&gt; 'a);
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">exec</span> (Reader r) = r init_env;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> a = Reader (<span class="org-keyword">fn</span> _ =&gt; a);
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> (Reader r) k = Reader (<span class="org-keyword">fn</span> e =&gt;
+                                   <span class="org-keyword">let</span>
+                                     <span class="org-keyword">val</span> (Reader r') = k (r e)<span class="org-highlight-beyond-fill-column">;</span>
+                                   <span class="org-keyword">in</span>
+                                     (r' e)
+                                   <span class="org-keyword">end</span>);
+  
+  <span class="org-keyword">fun</span> <span class="org-function-name">map</span> f (Reader r) = Reader (f <span class="org-keyword">o</span> r);
+
+  <span class="org-keyword">val</span> <span class="org-variable-name">ask</span> = Reader (<span class="org-keyword">fn</span> x =&gt; x);
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+And as a transformer&#x2026;
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">READER_T</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">env</span>;
+  <span class="org-keyword">include</span> MONAD;
+  <span class="org-keyword">val</span> <span class="org-variable-name">ask</span> : env m;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">functor</span> <span class="org-module-def">ReaderT</span>(<span class="org-keyword">structure</span> <span class="org-module-def">M</span> : MONAD
+                <span class="org-keyword">type</span> <span class="org-type-def">Env</span>
+                <span class="org-keyword">val</span> <span class="org-variable-name">init_Env</span> : Env) :&gt; READER_T
+                                       <span class="org-keyword">where</span> <span class="org-keyword">type</span> <span class="org-type-def">env</span> = Env =
+<span class="org-keyword">struct</span>
+  <span class="org-keyword">type</span> <span class="org-type-def">env</span> = Env;
+  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">m</span> = ReaderT <span class="org-keyword">of</span> (env -&gt; 'a M.m);
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">exec</span> (ReaderT r) = M.exec (r init_Env);
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> a = ReaderT (<span class="org-keyword">fn</span> _ =&gt; M.return a);
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> (ReaderT m) k =
+    ReaderT (<span class="org-keyword">fn</span> e =&gt;
+                <span class="org-keyword">let</span>
+                  <span class="org-keyword">val</span> <span class="org-variable-name">a</span> = M.exec (m e);
+                  <span class="org-keyword">val</span> (ReaderT b) = k a;
+                <span class="org-keyword">in</span>
+                  b e
+                <span class="org-keyword">end</span>);
+
+  <span class="org-keyword">val</span> <span class="org-variable-name">ask</span> = ReaderT M.return;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-3569211a-5aeb-477e-ba03-0bf9ab045c9b" class="outline-3">
+<h3 id="h-3569211a-5aeb-477e-ba03-0bf9ab045c9b"><span class="section-number-3">2.2.</span> Writer Monad and Transformer</h3>
+<div class="outline-text-3" id="text-h-3569211a-5aeb-477e-ba03-0bf9ab045c9b">
+<p>
+A lazy writer would have its type be <code>unit -&gt; 'a * string</code>,
+and an eager writer would just be <code>'a * string</code>.
+</p>
+
+<p>
+More generally, we could replace <code>string</code> with any monoid. 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">WRITER_MONAD</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">include</span> MONAD;
+  <span class="org-keyword">val</span> <span class="org-variable-name">get_log</span> : 'a m -&gt; string;
+  <span class="org-keyword">val</span> <span class="org-variable-name">tell</span> : string -&gt; unit m;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">structure</span> <span class="org-module-def">Writer</span> :&gt; WRITER_MONAD = <span class="org-keyword">struct</span>
+  <span class="org-keyword">type</span> 'a <span class="org-type-def">m</span> = 'a * string;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> x = (x, <span class="org-string">""</span>);
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> (x, s1) f =
+    <span class="org-keyword">let</span>
+      <span class="org-keyword">val</span> (y, s2) = f x;
+    <span class="org-keyword">in</span>
+      (y, s1 ^ s2)
+    <span class="org-keyword">end</span>;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">exec</span> (x,_) = x;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">get_log</span> (_, s) = s;
+  
+  <span class="org-keyword">fun</span> <span class="org-function-name">tell</span> s = ((), s);
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+As a monad transformer, we would have something like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">WRITER_T</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">structure</span> <span class="org-module-def">M</span> : MONAD;
+  <span class="org-keyword">include</span> MONAD;
+  <span class="org-keyword">val</span> <span class="org-variable-name">get_log</span> : 'a m -&gt; string;
+  <span class="org-keyword">val</span> <span class="org-variable-name">tell</span> : string -&gt; unit m;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">functor</span> <span class="org-module-def">WriterT</span>(M : MONAD) :&gt; WRITER_T = <span class="org-keyword">struct</span>
+  <span class="org-keyword">structure</span> <span class="org-module-def">M</span> = M;
+  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">m</span> = WriterT <span class="org-keyword">of</span> ('a * string) M.m;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">exec</span> (WriterT m) =
+    <span class="org-keyword">case</span> M.exec m <span class="org-keyword">of</span>
+        (ans,_) =&gt; ans;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">get_log</span> (WriterT m) =
+    <span class="org-keyword">case</span> M.exec m <span class="org-keyword">of</span>
+        (_,log) =&gt; log;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> (a : 'a) = WriterT (M.return (a, <span class="org-string">""</span>));
+  
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> m f =
+    <span class="org-keyword">let</span>
+      <span class="org-keyword">val</span> <span class="org-variable-name">a</span> = (exec m);
+      <span class="org-keyword">val</span> <span class="org-variable-name">s1</span> = get_log m;
+      <span class="org-keyword">val</span> <span class="org-variable-name">m'</span> = f a;
+      <span class="org-keyword">val</span> <span class="org-variable-name">b</span> = exec m';
+      <span class="org-keyword">val</span> <span class="org-variable-name">s2</span> = get_log m';
+    <span class="org-keyword">in</span>
+      WriterT (M.return (b, s1 ^ s2))
+    <span class="org-keyword">end</span>;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">tell</span> w = WriterT (M.return ((), w));
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Again, we should generalize this from using strings to an arbitrary
+monoid. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-24a6c87a-4b3b-48da-99d6-4d5867ccdf73" class="outline-3">
+<h3 id="h-24a6c87a-4b3b-48da-99d6-4d5867ccdf73"><span class="section-number-3">2.3.</span> Exception Monad and Transformer</h3>
+<div class="outline-text-3" id="text-h-24a6c87a-4b3b-48da-99d6-4d5867ccdf73">
+<p>
+In Standard ML, we can use the <code>exn</code> type for exceptions rather than
+allowing the user to provide one&#x2026;well, in full generality, we could
+simply use a type variable (and then instantiate it to <code>exn</code> for the
+exception monad).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">ExceptionMonad</span> : MONAD = <span class="org-keyword">struct</span>
+  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">m</span> = V <span class="org-keyword">of</span> 'a
+                | E <span class="org-keyword">of</span> exn;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> a = V a;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> m f = <span class="org-keyword">case</span> m <span class="org-keyword">of</span>
+                     (E e) =&gt; (E e)
+                   | (V a) =&gt; f a;
+  <span class="org-keyword">fun</span> <span class="org-function-name">exec</span> (V a) = a;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+But if we wanted to parametrize the "success" branch as a monad, then
+we need to use a monad transformer instead (NOTE: this is <b>not</b> a
+<code>MONAD</code> instance unless we fix the type of exceptions, but then <code>catch</code> would be
+impossible to implement using Standard ML's type system):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">EXCEPTION_T</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">type</span> ('a, 'e) <span class="org-type-def">outcome</span>;
+  <span class="org-keyword">structure</span> <span class="org-module-def">M</span> : MONAD;
+
+  <span class="org-keyword">val</span> <span class="org-variable-name">return</span> : 'a -&gt; ('a, 'e) outcome M.m;
+  <span class="org-keyword">val</span> <span class="org-variable-name">exec</span> : ('a, 'e) outcome M.m -&gt; 'a;
+  <span class="org-keyword">val</span> <span class="org-variable-name">bind</span> : ('a,'e) outcome M.m -&gt;
+             ('a -&gt; ('b,'e) outcome M.m) -&gt;
+             ('b,'e) outcome M.m;
+  <span class="org-keyword">val</span> <span class="org-variable-name">throw</span> : 'e -&gt; ('a,'e) outcome M.m;
+  <span class="org-keyword">val</span> <span class="org-variable-name">catch</span> : ('a,'e1) outcome M.m -&gt;
+              ('e1 -&gt; ('a,'e2) outcome M.m) -&gt;
+              ('a,'e2) outcome M.m;
+<span class="org-keyword">end</span>;
+
+<span class="org-comment-delimiter">(* </span><span class="org-comment">datatype ('a,'b) Either = Ok of 'a | Err of 'b;</span><span class="org-comment-delimiter"> *)</span>
+
+<span class="org-keyword">functor</span> <span class="org-module-def">ExceptionT</span>(M : MONAD) :&gt; EXCEPTION_T = <span class="org-keyword">struct</span>
+  <span class="org-keyword">datatype</span> ('a, 'e) <span class="org-type-def">outcome</span> = V <span class="org-keyword">of</span> 'a | E <span class="org-keyword">of</span> 'e;
+  <span class="org-keyword">structure</span> <span class="org-module-def">M</span> : MONAD = M;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">exec</span> m = <span class="org-keyword">case</span> M.exec m <span class="org-keyword">of</span>
+                   (V a) =&gt; a;
+  
+  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> a = M.return (V a);
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> m f = M.bind m (<span class="org-keyword">fn</span> (E e) =&gt; M.return (E e)
+                            | (V x) =&gt; f x);
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">lift</span> x = M.bind x (<span class="org-keyword">fn</span> v =&gt; M.return (V v));
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">exec</span> m = M.exec (M.bind m (<span class="org-keyword">fn</span> (V x) =&gt; M.return x));
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">throw</span> e = M.return (E e);
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">catch</span> m f = M.bind m (<span class="org-keyword">fn</span> (E e) =&gt; f e
+                             | (V v) =&gt; M.return (V v));
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+This is all a horrible idea, since Standard ML has exception handling
+built into it. Ostensibly, we could cobble these two things together,
+but that's a belt-and-suspenders "solution".
+</p>
+</div>
+</div>
+</div>
+
 <div id="outline-container-h-058d3bd2-eb33-4e56-af11-bed47e911f77" class="outline-2">
-<h2 id="h-058d3bd2-eb33-4e56-af11-bed47e911f77"><span class="section-number-2">2.</span> References</h2>
+<h2 id="h-058d3bd2-eb33-4e56-af11-bed47e911f77"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-058d3bd2-eb33-4e56-af11-bed47e911f77">
 <ul class="org-ul">
 <li>Sheng Liang, Paul Hudak, Mark Jones,<br>
@@ -278,11 +585,12 @@ Polymorphism".<br>
 <li>Martin Grabmuller,<br>
 "Monad Transformers Step by Step".<br>
 <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.596&amp;rep=rep1&amp;type=pdf">Citeseer</a> 2006 draft.</li>
+<li>Haskell's <a href="https://hub.darcs.net/ross/transformers/browse/Control/Monad/Trans">transformers</a> library</li>
 </ul>
 </div>
 
 <div id="outline-container-h-789c6184-637c-45ae-aad1-2d06b8d95754" class="outline-3">
-<h3 id="h-789c6184-637c-45ae-aad1-2d06b8d95754"><span class="section-number-3">2.1.</span> OCaml Implementations</h3>
+<h3 id="h-789c6184-637c-45ae-aad1-2d06b8d95754"><span class="section-number-3">3.1.</span> OCaml Implementations</h3>
 <div class="outline-text-3" id="text-h-789c6184-637c-45ae-aad1-2d06b8d95754">
 <ul class="org-ul">
 <li>Łukasz Stafiniak,<br>
@@ -302,7 +610,7 @@ monadic programming".<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-07-08 Fri 14:12.</p>
+<p class="postamble">Last Updated 2025-02-20 Thu 12:37.</p>
 </div>
 </body>
 </html>
