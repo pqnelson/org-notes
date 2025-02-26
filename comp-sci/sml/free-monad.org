@@ -211,6 +211,11 @@ functor Monadify(M : MONAD) = struct
 end;
 #+end_src
 
+(If you do not want this, you can modify the implementation of the
+~Free~ functor to add ~fun bind m f = join (map f m);~ as the last
+declaration of the structure. This will make the public-facing ~bind~
+function what the user would expect/hope.)
+
 Now we can put all these pieces together to form the free monad
 describing IO side effects we prescribed:
 

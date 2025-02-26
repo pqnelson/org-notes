@@ -456,7 +456,7 @@ The free monoid is precisely the list. The analogy with free monads
 should be:
 </p>
 
-<pre class="example" id="org0903ada">
+<pre class="example" id="org8f5e97b">
 datatype 'a list =          nil | cons of 'a * 'a list;
 (* structure F : FUNCTOR *)
 datatype 'a Free = Return of 'a | Join of ('a Free) F.t;
@@ -523,6 +523,13 @@ something like the following:
 <span class="org-keyword">end</span>;
 </pre>
 </div>
+
+<p>
+(If you do not want this, you can modify the implementation of the
+<code>Free</code> functor to add <code>fun bind m f = join (map f m);</code> as the last
+declaration of the structure. This will make the public-facing <code>bind</code>
+function what the user would expect/hope.)
+</p>
 
 <p>
 Now we can put all these pieces together to form the free monad
@@ -605,7 +612,7 @@ Standard ML as found in Andrew Gordon's PhD dissertation.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2025-02-25 Tue 16:17.</p>
+<p class="postamble">Last Updated 2025-02-25 Tue 16:33.</p>
 </div>
 </body>
 </html>

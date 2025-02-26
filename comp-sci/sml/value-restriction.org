@@ -11,6 +11,25 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 # Created Wednesday September 13, 2023 at  8:03AM
 
+* Basic Idea
+:PROPERTIES:
+:CUSTOM_ID: h-12e36b74-3f90-418c-952c-39f409dd2c5d
+:END:
+
+We run into problems when we try to have let-polymorphism with mutable
+references. This was the subject of Mads Tofte's PhD dissertation back
+in the 1980s.
+
+The solution first proposed was to distinguish imperative type
+variables from applicative type variables. This turned out to be a
+nightmare in practice.
+
+Then Wright discovered that let-expressions usually bind values to
+local variables, and this would allow us to avoid the problems
+discussed in Tofte's dissertation. It was adopted in the 1997
+Definition of Standard ML (see the use of nonexpansive expressions,
+which are "syntactical values").
+
 * References
 :PROPERTIES:
 :CUSTOM_ID: h-2a084f7a-8ad0-41c0-a077-8faf832bdeb9
