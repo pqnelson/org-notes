@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Free Monads - SML</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Free Monads - SML</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-d40ee261-e0d6-4991-9643-dd465129632e">1. Overview</a></li>
+<li><a href="#h-77ec8efc-07fa-4faa-b0d3-52077da95d9a">2. Functors in SML</a></li>
+<li><a href="#h-39916d46-ea6d-4955-bda1-2e7a30a9742c">3. Free Monads</a>
+<ul>
+<li><a href="#h-0744c31b-75ad-4322-a576-13930453262f">3.1. Monad signature</a></li>
+<li><a href="#h-21c5ddfd-166b-4d71-a374-b0957f4c2c33">3.2. Free Monad Signature</a></li>
+<li><a href="#h-f82f46d4-0bb4-4502-bc6e-f429a310b41a">3.3. Compared to Free Monoid</a></li>
+<li><a href="#h-2cf63700-06e7-4bb3-90d4-ad0e0c659760">3.4. Example: IO</a></li>
+<li><a href="#h-30769603-579e-490f-9b5f-415be5f52488">3.5. Example usage of IO Free Monad</a></li>
+</ul>
+</li>
+<li><a href="#h-0a2734cf-f3b6-433b-9422-343aac57d70f">4. References</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-d40ee261-e0d6-4991-9643-dd465129632e" class="outline-2">
+<h2 id="h-d40ee261-e0d6-4991-9643-dd465129632e"><span class="section-number-2">1.</span> Overview</h2>
+<div class="outline-text-2" id="text-h-d40ee261-e0d6-4991-9643-dd465129632e">
+<p>
+The basic idea underlying free monads is to start with an endofunctor
+\(f\) and then turn it into a monad, just as the free group starts with
+a set then turns it into a group.
+</p>
+
+<p>
+Free monads are useful when it comes into describing side-effects
+monadically. 
+</p>
+
+<p>
+Haskell takes this idea and runs with it.
+</p>
+
+<p>
+We will see how this works in Standard ML.
+</p>
+</div>
+</div>
+<div id="outline-container-h-77ec8efc-07fa-4faa-b0d3-52077da95d9a" class="outline-2">
+<h2 id="h-77ec8efc-07fa-4faa-b0d3-52077da95d9a"><span class="section-number-2">2.</span> Functors in SML</h2>
+<div class="outline-text-2" id="text-h-77ec8efc-07fa-4faa-b0d3-52077da95d9a">
+<p>
+A <code>Functor</code> (not to be confused with the builtin <code>functor</code> keyword in
+the module language) is a structure adhering to the following
+signature:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">FUNCTOR</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>;
+  <span class="org-keyword">val</span> <span class="org-variable-name">map</span> : ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+That's all we need. There are two functor laws, which are inspired by
+category theory. If <code>F</code> is a functor, then&#x2026;
+</p>
+
+<ul class="org-ul">
+<li>unit law: <code>F.map id == id</code></li>
+<li>preserves composition: <code>F.map (g o f) = (F.map g) o (F.map f)</code></li>
+</ul>
+
+<p>
+Ta-duh!
+</p>
+</div>
+</div>
+<div id="outline-container-h-39916d46-ea6d-4955-bda1-2e7a30a9742c" class="outline-2">
+<h2 id="h-39916d46-ea6d-4955-bda1-2e7a30a9742c"><span class="section-number-2">3.</span> Free Monads</h2>
+<div class="outline-text-2" id="text-h-39916d46-ea6d-4955-bda1-2e7a30a9742c">
+</div>
+<div id="outline-container-h-0744c31b-75ad-4322-a576-13930453262f" class="outline-3">
+<h3 id="h-0744c31b-75ad-4322-a576-13930453262f"><span class="section-number-3">3.1.</span> Monad signature</h3>
+<div class="outline-text-3" id="text-h-0744c31b-75ad-4322-a576-13930453262f">
+<p>
+Just to review, we have the following signature for monads in Standard ML:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">MONAD</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">include</span> FUNCTOR;
+  <span class="org-keyword">val</span> <span class="org-variable-name">return</span> : 'a -&gt; 'a t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">bind</span> : 'a t -&gt; ('a -&gt; 'b t) -&gt; 'b t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">join</span> : 'a t t -&gt; 'a t;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+We may or may not need the <code>exec</code> function to <i>perform</i> the computation abstracted
+away by the monad.
+</p>
+</div>
+</div>
+<div id="outline-container-h-21c5ddfd-166b-4d71-a374-b0957f4c2c33" class="outline-3">
+<h3 id="h-21c5ddfd-166b-4d71-a374-b0957f4c2c33"><span class="section-number-3">3.2.</span> Free Monad Signature</h3>
+<div class="outline-text-3" id="text-h-21c5ddfd-166b-4d71-a374-b0957f4c2c33">
+<p>
+A free monad will take a <code>Functor</code>, and turn it into a monad. The
+<code>Functor</code> is kept as a field of the structure.
+</p>
+
+<p>
+Intuitively, a free monad is generated by a "join" operation (or
+"multiplication") operation. It suffices to describe this using a
+datatype with <code>Return of 'a</code> and <code>Join of 'a t F.t</code>, so the operations
+"stack" as we'd expect from a free gadget.
+</p>
+
+<p>
+We then have the following signature:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">FREE_MONAD</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">structure</span> <span class="org-module-def">F</span> : FUNCTOR;
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">probably should rename the constructors to the more</span>
+<span class="org-comment">  intuitive RETURN of 'a | JOIN of ('a t) F.t</span>
+<span class="org-comment">  since $\mu$ corresponds to the `join` function for a monad.</span>
+<span class="org-comment">  This `JOIN` constructor wraps the "outer" functor as a</span>
+<span class="org-comment">  placeholder.</span><span class="org-comment-delimiter"> *)</span>
+  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = Return <span class="org-keyword">of</span> 'a
+                | Join <span class="org-keyword">of</span> ('a t) F.t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">return</span> : 'a -&gt; 'a t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">bind</span> : 'a t -&gt; ('a -&gt; 'b t) -&gt; 'b t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">join</span> : 'a t t -&gt; 'a t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">map</span> : ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">lift</span> : 'a F.t -&gt; 'a t;
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">lift is analogous to (fn x =&gt; [x])</span><span class="org-comment-delimiter"> *)</span>
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">fun lift x = Join (F.fmap Return x);</span><span class="org-comment-delimiter"> *)</span>
+
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">val fold : ('a F.t -&gt; 'a) -&gt; 'a m -&gt; 'a;</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-comment-delimiter">(* </span><span class="org-comment">fun fold _ (Return a) = a</span>
+<span class="org-comment">     | fold f (Join x) = f (F.fmap (fold f) x);</span>
+<span class="org-comment-delimiter">*)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Note that we need to "hack" the SML module system to make this a
+functor. The type alias <code>type 'a t = 'a m</code> accomplishes this. See Bob
+Harper's <a href="https://www.cs.cmu.edu/~rwh/isml/book.pdf">Programming in SML</a>, Section 18.1, for details. (We could have
+written something like <code>include MONAD; include FUNCTOR where type 'a
+t = 'a m</code> in the signature, but it would not change the implementation
+as a structure or functor).
+</p>
+
+<p>
+Here <code>Return</code> and <code>Join</code> are [data] constructors for the free monad
+generated by the Functor <code>F</code>.
+</p>
+
+<p>
+The bind function (which tells us everything we'd want to know about
+a monad) is (where we include the <code>where type...</code> clause to make
+public the underlying functor's type):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">Free</span>(F : FUNCTOR) :&gt; FREE_MONAD
+                               <span class="org-keyword">where</span> <span class="org-keyword">type</span> 'a <span class="org-type-def">F.t</span> = 'a F.t
+                                 = <span class="org-keyword">struct</span>
+  <span class="org-keyword">structure</span> <span class="org-module-def">F</span> = F;
+  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = Return <span class="org-keyword">of</span> 'a
+                | Join <span class="org-keyword">of</span> ('a t) F.t;
+  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> x = Return x;
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> (Return x) f = f x
+    | bind (Join x) f = Join (F.map (<span class="org-keyword">fn</span> m =&gt; bind m f) x);
+  <span class="org-keyword">fun</span> <span class="org-function-name">map</span> f m = bind m (<span class="org-keyword">fn</span> x =&gt; return (f x));
+  <span class="org-keyword">fun</span> <span class="org-function-name">lift</span> f = Join (F.map return f);
+  <span class="org-keyword">fun</span> <span class="org-function-name">join</span> m = bind m (<span class="org-keyword">fn</span> x =&gt; x);
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-h-f82f46d4-0bb4-4502-bc6e-f429a310b41a" class="outline-3">
+<h3 id="h-f82f46d4-0bb4-4502-bc6e-f429a310b41a"><span class="section-number-3">3.3.</span> Compared to Free Monoid</h3>
+<div class="outline-text-3" id="text-h-f82f46d4-0bb4-4502-bc6e-f429a310b41a">
+<p>
+The free monoid is precisely the list. The analogy with free monads
+should be:
+</p>
+
+<pre class="example" id="org0903ada">
+datatype 'a list =          nil | cons of 'a * 'a list;
+(* structure F : FUNCTOR *)
+datatype 'a Free = Return of 'a | Join of ('a Free) F.t;
+</pre>
+</div>
+</div>
+<div id="outline-container-h-2cf63700-06e7-4bb3-90d4-ad0e0c659760" class="outline-3">
+<h3 id="h-2cf63700-06e7-4bb3-90d4-ad0e0c659760"><span class="section-number-3">3.4.</span> Example: IO</h3>
+<div class="outline-text-3" id="text-h-2cf63700-06e7-4bb3-90d4-ad0e0c659760">
+<p>
+We can use the free monad to describe a simple IO monad. Where to
+start?
+</p>
+
+<p>
+First we need to construct a functor with the various operations we'd
+like to perform. For now, simply printing a string to the screen and
+reading a string from <code>stdIn</code> suffices:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">A functor describing the operations with side-effects in IO</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column"> *)</span></span>
+<span class="org-keyword">structure</span> <span class="org-module-def">IO_Op</span> = <span class="org-keyword">struct</span>
+  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = Print <span class="org-keyword">of</span> (string * 'a)
+                | Read <span class="org-keyword">of</span> (string -&gt; 'a);
+  <span class="org-keyword">fun</span> <span class="org-function-name">map</span> f (Print (s,k)) = Print (s, f k)
+    | map f (Read k) = Read (<span class="org-keyword">fn</span> s =&gt; f (k s));
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+We will also have a <code>read_line</code> function which we need to implement
+(it's straightforward):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">read_line</span> () =
+  <span class="org-keyword">case</span> TextIO.inputLine TextIO.stdIn <span class="org-keyword">of</span>
+      SOME s =&gt; s
+    | NONE =&gt; <span class="org-string">""</span>;
+</pre>
+</div>
+
+<p>
+Now we can recall the <code>bind</code> function may be defined in terms of the
+monadic <code>join</code> operation and the functor's <code>map</code> operation. To recover
+this for the free monad (which any programmer <i>using</i> this library
+would expect as the intended behaviour &#x2014; see, e.g., Bartosz
+Milewski's <a href="https://github.com/hmemcpy/milewski-ctfp-pdf/releases/download/v1.3.0/category-theory-for-programmers.pdf">Category Theory for Programmers</a>, section 20.2), we need
+something like the following:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">Monadify</span>(M : MONAD) = <span class="org-keyword">struct</span>
+  <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span> = 'a M.t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">map</span> = M.map;
+  <span class="org-keyword">val</span> <span class="org-variable-name">return</span> = M.return;
+  <span class="org-keyword">val</span> <span class="org-variable-name">join</span> = M.join;
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">The `bind` operation is induced by the monadic `join` and</span>
+<span class="org-comment">  the functorial `map`, as category theory dictates.</span><span class="org-comment-delimiter"> *)</span>
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> m f = join (map f m);
+  <span class="org-keyword">fun</span> <span class="org-function-name">seq</span> m n = bind m (<span class="org-keyword">fn</span> _ =&gt; n);
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+Now we can put all these pieces together to form the free monad
+describing IO side effects we prescribed:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">local</span>
+  <span class="org-keyword">structure</span> <span class="org-module-def">FreeIO</span> = Free(IO_Op);
+  <span class="org-keyword">structure</span> <span class="org-module-def">Io_</span> = Monadify(FreeIO);
+<span class="org-keyword">in</span>
+  <span class="org-keyword">structure</span> <span class="org-module-def">Job</span> : <span class="org-keyword">sig</span>
+      <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = <span class="org-keyword">datatype</span> <span class="org-type-def">FreeIO.t</span>
+      <span class="org-keyword">val</span> <span class="org-variable-name">bind</span>: 'a t -&gt; ('a -&gt; 'b t) -&gt; 'b t
+      <span class="org-keyword">val</span> <span class="org-variable-name">join</span>: 'a t t -&gt; 'a t
+      <span class="org-keyword">val</span> <span class="org-variable-name">map</span>: ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t
+      <span class="org-keyword">val</span> <span class="org-variable-name">return</span>: 'a -&gt; 'a t
+      <span class="org-keyword">val</span> <span class="org-variable-name">seq</span>: 'a t -&gt; 'b t -&gt; 'b t
+      <span class="org-keyword">val</span> <span class="org-variable-name">unsafePerform</span>: 'a t -&gt; 'a
+  <span class="org-keyword">end</span> = <span class="org-keyword">struct</span>
+    <span class="org-keyword">open</span> Io_;
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">datatype replication to make the constructors public</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = <span class="org-keyword">datatype</span> <span class="org-type-def">FreeIO.t</span>;
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">execute the monad</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">fun</span> <span class="org-function-name">unsafePerform</span> (Return x) = x
+      | unsafePerform (Join f) =
+        <span class="org-keyword">case</span> f <span class="org-keyword">of</span>
+            (IO_Op.Print (s, k)) =&gt; (print s;
+                                     unsafePerform k)
+          | (IO_Op.Read k) =&gt; unsafePerform (k (read_line()));
+  <span class="org-keyword">end</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-h-30769603-579e-490f-9b5f-415be5f52488" class="outline-3">
+<h3 id="h-30769603-579e-490f-9b5f-415be5f52488"><span class="section-number-3">3.5.</span> Example usage of IO Free Monad</h3>
+<div class="outline-text-3" id="text-h-30769603-579e-490f-9b5f-415be5f52488">
+<p>
+We can now use the previous machinations in a toy example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">infix</span> &gt;&gt; &gt;&gt;=
+<span class="org-keyword">fun</span> ((m : 'a Job.t) &gt;&gt;= (n : 'a -&gt; 'b Job.t)) = Job.bind m n;
+<span class="org-keyword">fun</span> (m &gt;&gt; n) = Job.bind m (<span class="org-keyword">fn</span> _ =&gt; n);
+
+<span class="org-keyword">fun</span> <span class="org-function-name">print_string</span> msg =
+  Job.Join (IO_Op.Print (msg, Job.Return ()));
+<span class="org-keyword">val</span> <span class="org-variable-name">read_string</span> =
+  Job.Join (IO_Op.Read (<span class="org-keyword">fn</span> msg =&gt; Job.Return msg));
+<span class="org-keyword">fun</span> <span class="org-function-name">main</span> () =
+  (print_string <span class="org-string">"What's your name? "</span>) &gt;&gt;
+    (read_string &gt;&gt;= (<span class="org-keyword">fn</span> name =&gt; 
+                       (print_string <span class="org-string">"Hello, "</span>) &gt;&gt;
+                         (print_string name)));
+
+Job.unsafePerform (main ());
+</pre>
+</div>
+
+<p>
+This isn't terribly different than the IO Monad implemented in
+Standard ML as found in Andrew Gordon's PhD dissertation.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-h-0a2734cf-f3b6-433b-9422-343aac57d70f" class="outline-2">
+<h2 id="h-0a2734cf-f3b6-433b-9422-343aac57d70f"><span class="section-number-2">4.</span> References</h2>
+<div class="outline-text-2" id="text-h-0a2734cf-f3b6-433b-9422-343aac57d70f">
+<ul class="org-ul">
+<li><a href="https://okmij.org/ftp/Computation/free-monad.html">Free and Freer Monads: Putting Monads Back into Closet</a></li>
+<li><a href="https://www.haskellforall.com/2012/06/you-could-have-invented-free-monads.html">Why Free Monads Matter</a></li>
+<li><a href="https://underscore.io/blog/posts/2015/04/23/deriving-the-free-monad.html">Deriving the Free Monad</a></li>
+<li><a href="http://rgrinberg.com/posts/free-monads-in-the-wild-ocaml/">Free Monads in the Wild - OCaml Edition</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2025-02-25 Tue 16:17.</p>
+</div>
+</body>
+</html>

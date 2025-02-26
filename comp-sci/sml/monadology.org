@@ -19,12 +19,49 @@
 Monads provide a way to reason about side-effects in an equational way.
 Basically a monad encodes a computation.
 
+The idea is that if we have a notion of an impure function, let us denote this
+using a squiggly arrow =T1 ~> T2=, and a notion of a pure function,
+let us denote this the normal way =T1 -> T2=, then how do we curry
+impure functions?
+
+To be concrete, we have =f : a * b ~> c=, then would currying this
+produce =g : a ~> (b ~> c)= or would it be =h : a -> (b ~> c)=?
+
+The honest answer is the latter, we would just defer any side effects
+produced by =f= until /both/ arguments are provided.
+
+Monads provide a type constructor for /abstracting away/ the side
+effects. This is done by writing =f : a ~> b=,
+then using the isomorphism
+~a * unit == a~
+will give us the isomorphic function
+=f2 : a * unit ~> b=.
+So far, so good. Then we curry to produce the function
+=g2 : a -> (unit ~> b)=.
+We /now/ introduce a type constructor ='a m= for the monad, and we can
+have
+=g2' : a -> b m=.
+
+Composing "impure" functions is handled by monad's =bind= function,
+which Haskell denotes by ~x >>= f~.
+
+Standard ML usually also requires an ~exec : 'a m -> 'a~ function to,
+you know, actually execute the computation abstracted away by the monad.
+
+The ='a m= type abstracts away the different kinds of side effects (or
+impure stuff) for the computation. This is discussed in Wadler and
+Thiemann's "The marriage of effects and monads" (viz., pg 2 "The
+marriage of effects and monads").
+
 #+begin_src sml
 signature MONAD =
 sig
-    type 'a m;
-    val return : 'a -> 'a m;
-    val >>= : 'a m * ('a -> 'b m) -> 'b m;
+  type 'a m;
+  val return : 'a -> 'a m;
+  val >>= : 'a m * ('a -> 'b m) -> 'b m;
+  val bind : 'a m -> ('a -> 'b m) -> 'b m;
+  (* m >>= f   =   bind m f *)
+  val exec : 'a m -> 'a;
 end;
 #+end_src
 
@@ -191,6 +228,32 @@ foo
 val it = () : unit
 #+end_example
 
+The trick is to use a monad:
+
+#+begin_src sml
+signature JOB_MONAD = sig
+  include MONAD;
+  val getStr : int -> TextIO.vector m;
+  val putStr : string -> unit m;
+end;
+
+structure Job :> JOB_MONAD = struct
+  datatype 'a m = JOB of unit -> 'a;
+
+  fun exec (JOB f) = f ();
+
+  fun return x = JOB (fn _ => x);
+
+  fun (JOB f) >>= q = JOB (fn _ => exec (q (f ())));
+
+  fun bind (JOB f) q = JOB (fn _ => exec (q (f ())));
+
+  fun getStr n = JOB (fn _ => TextIO.inputN(TextIO.stdIn, n));
+
+  fun putStr s = JOB (fn _ => print s);
+end;
+#+end_src
+
 * ST Monad
 :PROPERTIES:
 :CUSTOM_ID: h-f871faf0-4a2a-4887-84df-94b30c0c96b1
@@ -292,6 +355,16 @@ ref : 'a -> 'a ref            (* "data constructor" *)
   (It was discussed on a [[https://keens.github.io/blog/2016/10/10/smldemonado/][blog]], if you can read Japanese...also see [[https://github.com/br0ns/PreML][PreML]]
   for ~do~-notation in Standard ML.)
 - HOL4 [[https://github.com/HOL-Theorem-Prover/HOL/tree/7e6911ab3c3bf9dfac6f0ef0a0bcecf3ae285e44/src/portableML/monads][Monads]] implementing ~ST~, ~error~, ~reader~, among other monads.
+
+** Effects
+:PROPERTIES:
+:CUSTOM_ID: h-7716c92a-29f7-42f2-ab2f-a7192e30466e
+:END:
+
+- Philip Wadler and Peter Thiemann,
+  "The marriage of effects and monads".\\
+  /ACM Transactions on Computational Logic (TOCL)/ *4* no.1 (2003): 1-32.
+  [[https://homepages.inf.ed.ac.uk/wadler/papers/effectstocl/effectstocl.pdf][PDF]]
 
 ** Monads in Haskell
 :PROPERTIES:

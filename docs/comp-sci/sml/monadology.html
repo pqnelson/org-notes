@@ -6,7 +6,7 @@
 <title>Monadology</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -233,14 +248,14 @@
 </li>
 <li><a href="#h-e4b4aced-cb78-493a-8c35-a12e1492cf09">5. References</a>
 <ul>
-<li><a href="#h-cac676fe-d364-4f03-9c2a-4750ce01619d">5.1. Monads in Haskell</a></li>
-<li><a href="#h-9ccaab01-de54-45dd-a3fc-f8c3deab52da">5.2. Monads in Functional Programming (in general)</a></li>
+<li><a href="#h-7716c92a-29f7-42f2-ab2f-a7192e30466e">5.1. Effects</a></li>
+<li><a href="#h-cac676fe-d364-4f03-9c2a-4750ce01619d">5.2. Monads in Haskell</a></li>
+<li><a href="#h-9ccaab01-de54-45dd-a3fc-f8c3deab52da">5.3. Monads in Functional Programming (in general)</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-fc1853e3-fe90-45e5-b000-ecc1cad4ed65" class="outline-2">
 <h2 id="h-fc1853e3-fe90-45e5-b000-ecc1cad4ed65"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-fc1853e3-fe90-45e5-b000-ecc1cad4ed65">
@@ -249,18 +264,68 @@ Monads provide a way to reason about side-effects in an equational way.
 Basically a monad encodes a computation.
 </p>
 
+<p>
+The idea is that if we have a notion of an impure function, let us denote this
+using a squiggly arrow <code>T1 ~&gt; T2</code>, and a notion of a pure function,
+let us denote this the normal way <code>T1 -&gt; T2</code>, then how do we curry
+impure functions?
+</p>
+
+<p>
+To be concrete, we have <code>f : a * b ~&gt; c</code>, then would currying this
+produce <code>g : a ~&gt; (b ~&gt; c)</code> or would it be <code>h : a -&gt; (b ~&gt; c)</code>?
+</p>
+
+<p>
+The honest answer is the latter, we would just defer any side effects
+produced by <code>f</code> until <i>both</i> arguments are provided.
+</p>
+
+<p>
+Monads provide a type constructor for <i>abstracting away</i> the side
+effects. This is done by writing <code>f : a ~&gt; b</code>,
+then using the isomorphism
+<code>a * unit == a</code>
+will give us the isomorphic function
+<code>f2 : a * unit ~&gt; b</code>.
+So far, so good. Then we curry to produce the function
+<code>g2 : a -&gt; (unit ~&gt; b)</code>.
+We <i>now</i> introduce a type constructor <code>'a m</code> for the monad, and we can
+have
+<code>g2' : a -&gt; b m</code>.
+</p>
+
+<p>
+Composing "impure" functions is handled by monad's <code>bind</code> function,
+which Haskell denotes by <code>x &gt;&gt;= f</code>.
+</p>
+
+<p>
+Standard ML usually also requires an <code>exec : 'a m -&gt; 'a</code> function to,
+you know, actually execute the computation abstracted away by the monad.
+</p>
+
+<p>
+The <code>'a m</code> type abstracts away the different kinds of side effects (or
+impure stuff) for the computation. This is discussed in Wadler and
+Thiemann's "The marriage of effects and monads" (viz., pg 2 "The
+marriage of effects and monads").
+</p>
+
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">MONAD</span> =
 <span class="org-keyword">sig</span>
-    <span class="org-keyword">type</span> 'a <span class="org-type-def">m</span>;
-    <span class="org-keyword">val</span> <span class="org-variable-name">return</span> : 'a -&gt; 'a m;
-    <span class="org-keyword">val</span> &gt;&gt;= : 'a m * ('a -&gt; 'b m) -&gt; 'b m;
+  <span class="org-keyword">type</span> 'a <span class="org-type-def">m</span>;
+  <span class="org-keyword">val</span> <span class="org-variable-name">return</span> : 'a -&gt; 'a m;
+  <span class="org-keyword">val</span> &gt;&gt;= : 'a m * ('a -&gt; 'b m) -&gt; 'b m;
+  <span class="org-keyword">val</span> <span class="org-variable-name">bind</span> : 'a m -&gt; ('a -&gt; 'b m) -&gt; 'b m;
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">m &gt;&gt;= f   =   bind m f</span><span class="org-comment-delimiter"> *)</span>
+  <span class="org-keyword">val</span> <span class="org-variable-name">exec</span> : 'a m -&gt; 'a;
 <span class="org-keyword">end</span>;
 </pre>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-b106ae0d-9e48-4b83-946a-196e0a157a3c" class="outline-2">
 <h2 id="h-b106ae0d-9e48-4b83-946a-196e0a157a3c"><span class="section-number-2">2.</span> State Monad</h2>
 <div class="outline-text-2" id="text-h-b106ae0d-9e48-4b83-946a-196e0a157a3c">
@@ -290,7 +355,6 @@ The state monad encodes a computation <code>state -&gt; (a, state)</code>.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-ae2fffc8-6678-42d4-ac03-0bf3c39d9b28" class="outline-2">
 <h2 id="h-ae2fffc8-6678-42d4-ac03-0bf3c39d9b28"><span class="section-number-2">3.</span> Input Output Monad</h2>
 <div class="outline-text-2" id="text-h-ae2fffc8-6678-42d4-ac03-0bf3c39d9b28">
@@ -308,7 +372,6 @@ The intuition (but seeming lie?) is that: Haskell uses
 So <code>type IO a = RealWorld -&gt; (RealWorld, a)</code>?
 </p>
 </div>
-
 <div id="outline-container-h-08a4f52f-3779-44f3-981f-8d68675beb2c" class="outline-3">
 <h3 id="h-08a4f52f-3779-44f3-981f-8d68675beb2c"><span class="section-number-3">3.1.</span> How Haskell Does it&#x2026;</h3>
 <div class="outline-text-3" id="text-h-08a4f52f-3779-44f3-981f-8d68675beb2c">
@@ -429,7 +492,6 @@ This delegates the heavy lifting to <a href="https://github.com/ghc/ghc/blob/061
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-9898e93b-cd74-49f3-95cc-681d75bca8a0" class="outline-3">
 <h3 id="h-9898e93b-cd74-49f3-95cc-681d75bca8a0"><span class="section-number-3">3.2.</span> Standard ML Hackery</h3>
 <div class="outline-text-3" id="text-h-9898e93b-cd74-49f3-95cc-681d75bca8a0">
@@ -449,17 +511,45 @@ This typechecks fine, but it doesn't produce what we'd expect. For
 example, in Hamlet:
 </p>
 
-<pre class="example" id="org91efd89">
+<pre class="example" id="org2bac577">
 - putStr "foo";
 val it = IO _fn : unit IO
 - print "foo\n";
 foo
 val it = () : unit
 </pre>
-</div>
-</div>
-</div>
 
+<p>
+The trick is to use a monad:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">JOB_MONAD</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">include</span> MONAD;
+  <span class="org-keyword">val</span> <span class="org-variable-name">getStr</span> : int -&gt; TextIO.vector m;
+  <span class="org-keyword">val</span> <span class="org-variable-name">putStr</span> : string -&gt; unit m;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">structure</span> <span class="org-module-def">Job</span> :&gt; JOB_MONAD = <span class="org-keyword">struct</span>
+  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">m</span> = JOB <span class="org-keyword">of</span> unit -&gt; 'a;
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">exec</span> (JOB f) = f ();
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> x = JOB (<span class="org-keyword">fn</span> _ =&gt; x);
+
+  <span class="org-keyword">fun</span> (JOB f) &gt;&gt;= q = JOB (<span class="org-keyword">fn</span> _ =&gt; exec (q (f ())));
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> (JOB f) q = JOB (<span class="org-keyword">fn</span> _ =&gt; exec (q (f ())));
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">getStr</span> n = JOB (<span class="org-keyword">fn</span> _ =&gt; TextIO.inputN(TextIO.stdIn, n));
+
+  <span class="org-keyword">fun</span> <span class="org-function-name">putStr</span> s = JOB (<span class="org-keyword">fn</span> _ =&gt; print s);
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+</div>
+</div>
+</div>
 <div id="outline-container-h-f871faf0-4a2a-4887-84df-94b30c0c96b1" class="outline-2">
 <h2 id="h-f871faf0-4a2a-4887-84df-94b30c0c96b1"><span class="section-number-2">4.</span> ST Monad</h2>
 <div class="outline-text-2" id="text-h-f871faf0-4a2a-4887-84df-94b30c0c96b1">
@@ -509,8 +599,26 @@ evaluating <code>a</code>, since it would read this as:
 The result would have type <code>STRef s Int</code>, which is "wrong" since the <code>s</code>
 has "escaped" the <code>forall</code> in <code>runST</code>.
 </p>
-</div>
 
+<p>
+We should instead of done something like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span class="org-comment-delimiter">-- </span><span class="org-comment">Fixed version, this works!</span>
+<span class="org-haskell-definition">example</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Int</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Int</span>
+<span class="org-haskell-definition">example</span> x <span class="org-haskell-operator">=</span> runST <span class="org-haskell-operator">$</span> <span class="org-haskell-keyword">do</span>
+  a <span class="org-haskell-operator">&lt;-</span> newSTRef x
+  writeSTRef a 20
+  readSTRef a
+<span class="org-comment-delimiter">{- </span><span class="org-comment">de-sugared as:</span>
+<span class="org-comment">runST (newSTRef x &gt;&gt;= \a -&gt;</span>
+<span class="org-comment">  writeSTRef a 20 &gt;&gt;</span>
+<span class="org-comment">  readSTRef a)</span>
+<span class="org-comment-delimiter">-}</span>
+</pre>
+</div>
+</div>
 <div id="outline-container-h-728063c4-42ba-44f2-8d5e-f0f49a4bccc9" class="outline-3">
 <h3 id="h-728063c4-42ba-44f2-8d5e-f0f49a4bccc9"><span class="section-number-3">4.1.</span> Mutable References</h3>
 <div class="outline-text-3" id="text-h-728063c4-42ba-44f2-8d5e-f0f49a4bccc9">
@@ -535,7 +643,6 @@ Recall, the type signature for mutable references in Standard ML:
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-e4b4aced-cb78-493a-8c35-a12e1492cf09" class="outline-2">
 <h2 id="h-e4b4aced-cb78-493a-8c35-a12e1492cf09"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-e4b4aced-cb78-493a-8c35-a12e1492cf09">
@@ -564,9 +671,19 @@ for <code>do</code>-notation in Standard ML.)</li>
 <li>HOL4 <a href="https://github.com/HOL-Theorem-Prover/HOL/tree/7e6911ab3c3bf9dfac6f0ef0a0bcecf3ae285e44/src/portableML/monads">Monads</a> implementing <code>ST</code>, <code>error</code>, <code>reader</code>, among other monads.</li>
 </ul>
 </div>
-
+<div id="outline-container-h-7716c92a-29f7-42f2-ab2f-a7192e30466e" class="outline-3">
+<h3 id="h-7716c92a-29f7-42f2-ab2f-a7192e30466e"><span class="section-number-3">5.1.</span> Effects</h3>
+<div class="outline-text-3" id="text-h-7716c92a-29f7-42f2-ab2f-a7192e30466e">
+<ul class="org-ul">
+<li>Philip Wadler and Peter Thiemann,
+"The marriage of effects and monads".<br>
+<i>ACM Transactions on Computational Logic (TOCL)</i> <b>4</b> no.1 (2003): 1-32.
+<a href="https://homepages.inf.ed.ac.uk/wadler/papers/effectstocl/effectstocl.pdf">PDF</a></li>
+</ul>
+</div>
+</div>
 <div id="outline-container-h-cac676fe-d364-4f03-9c2a-4750ce01619d" class="outline-3">
-<h3 id="h-cac676fe-d364-4f03-9c2a-4750ce01619d"><span class="section-number-3">5.1.</span> Monads in Haskell</h3>
+<h3 id="h-cac676fe-d364-4f03-9c2a-4750ce01619d"><span class="section-number-3">5.2.</span> Monads in Haskell</h3>
 <div class="outline-text-3" id="text-h-cac676fe-d364-4f03-9c2a-4750ce01619d">
 <ul class="org-ul">
 <li><a href="https://stackoverflow.com/q/39202738/1296973">Compilation of IORef and STRef</a></li>
@@ -594,10 +711,8 @@ In Proceedings of IFL2001.</li>
 </ul>
 </div>
 </div>
-
-
 <div id="outline-container-h-9ccaab01-de54-45dd-a3fc-f8c3deab52da" class="outline-3">
-<h3 id="h-9ccaab01-de54-45dd-a3fc-f8c3deab52da"><span class="section-number-3">5.2.</span> Monads in Functional Programming (in general)</h3>
+<h3 id="h-9ccaab01-de54-45dd-a3fc-f8c3deab52da"><span class="section-number-3">5.3.</span> Monads in Functional Programming (in general)</h3>
 <div class="outline-text-3" id="text-h-9ccaab01-de54-45dd-a3fc-f8c3deab52da">
 <ul class="org-ul">
 <li>Philip Wadler,<br>
@@ -619,7 +734,7 @@ Equational Reasoning".<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-09-26 Tue 07:36.</p>
+<p class="postamble">Last Updated 2025-02-23 Sun 14:08.</p>
 </div>
 </body>
 </html>
