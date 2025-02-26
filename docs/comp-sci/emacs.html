@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-12-31 Sat 09:10 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs</title>
@@ -194,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 </head>
@@ -219,25 +233,30 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orge7d2e82">1. Building Emacs</a>
+<li><a href="#org53f471a">1. Building Emacs</a>
 <ul>
-<li><a href="#orgfde25e1">1.1. On Windows</a></li>
+<li><a href="#org31731b0">1.1. On Windows</a></li>
+</ul>
+</li>
+<li><a href="#org3aad6a4">2. Architecture</a>
+<ul>
+<li><a href="#org928c22f">2.1. Text Editor Architecture</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge7d2e82" class="outline-2">
-<h2 id="orge7d2e82"><span class="section-number-2">1.</span> Building Emacs</h2>
+<div id="outline-container-org53f471a" class="outline-2">
+<h2 id="org53f471a"><span class="section-number-2">1.</span> Building Emacs</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Compiling Emacs from scratch does not seem to be well documented.
 </p>
 </div>
 
-<div id="outline-container-orgfde25e1" class="outline-3">
-<h3 id="orgfde25e1"><span class="section-number-3">1.1.</span> On Windows</h3>
+<div id="outline-container-org31731b0" class="outline-3">
+<h3 id="org31731b0"><span class="section-number-3">1.1.</span> On Windows</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 There are two ways to go about this: either use Mingw, or use the
@@ -254,7 +273,7 @@ For WSL, I use Ubuntu WSL. Although I could just use the package
 provided, I build it from scratch. My shell looks something like:
 </p>
 
-<pre class="example" id="orgb6999b1">
+<pre class="example" id="org2616162">
 ~ $ mkdir -p src/
 ~ $ cd src
 ~/src/ $ git clone https://git.savannah.gnu.org/git/emacs.git
@@ -270,9 +289,66 @@ provided, I build it from scratch. My shell looks something like:
 </div>
 </div>
 </div>
+
+<div id="outline-container-org3aad6a4" class="outline-2">
+<h2 id="org3aad6a4"><span class="section-number-2">2.</span> Architecture</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>Richard Stallman's <a href="https://www.gnu.org/software/emacs/emacs-paper.html">1981 Emacs Paper</a></li>
+<li><a href="https://chrismennie.ca/EMACS-Conceptual-Architecture.pdf">Conceptual Views of EMACS’s Architecture (PDF)</a></li>
+<li><a href="https://www.finseth.com/craft/">Craft of Text Editing</a></li>
+<li>Greenberg's <a href="https://multicians.org/mepap.html">Multics Emacs: The History, Design and Implementation</a></li>
+<li><a href="https://corwin.bru.st/2024-01-09-emacs-devel-design-and-architecture/">Emacs Devel: Design and Architecture</a></li>
+<li><a href="https://lists.gnu.org/archive/html/emacs-devel/2010-07/msg00315.html">https://lists.gnu.org/archive/html/emacs-devel/2010-07/msg00315.html</a></li>
+<li><a href="https://github.com/DavidSatimeWallin/openemacs">https://github.com/DavidSatimeWallin/openemacs</a></li>
+</ul>
+</div>
+
+<div id="outline-container-org928c22f" class="outline-3">
+<h3 id="org928c22f"><span class="section-number-3">2.1.</span> Text Editor Architecture</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+More generally, we could examine the architecture of a "generic" text
+editor.
+</p>
+
+<ul class="org-ul">
+<li>Finseth's dissertation "Theory and practice of text editors, or, A cookbook for an Emacs" <a href="https://dspace.mit.edu/handle/1721.1/15905">https://dspace.mit.edu/handle/1721.1/15905</a></li>
+<li><a href="https://viewsourcecode.org/snaptoken/kilo/">https://viewsourcecode.org/snaptoken/kilo/</a>
+<ul class="org-ul">
+<li><a href="https://viewsourcecode.org/snaptoken/similarTutorials.html">https://viewsourcecode.org/snaptoken/similarTutorials.html</a></li>
+<li><a href="https://antirez.com/news/108">https://antirez.com/news/108</a></li>
+</ul></li>
+<li><a href="https://www.fltk.org/doc-1.1/editor.html">https://www.fltk.org/doc-1.1/editor.html</a></li>
+<li><a href="https://prosemirror.net/docs/guide/">https://prosemirror.net/docs/guide/</a></li>
+<li><a href="https://marijnhaverbeke.nl/blog/prosemirror.html">https://marijnhaverbeke.nl/blog/prosemirror.html</a></li>
+<li><a href="https://aosabook.org/en/v1/eclipse.html">https://aosabook.org/en/v1/eclipse.html</a></li>
+<li><a href="http://doc.cat-v.org/plan_9/4th_edition/papers/sam/">http://doc.cat-v.org/plan_9/4th_edition/papers/sam/</a></li>
+<li><a href="http://doc.cat-v.org/plan_9/4th_edition/papers/acme/">http://doc.cat-v.org/plan_9/4th_edition/papers/acme/</a></li>
+<li><a href="https://ecc-comp.blogspot.com/2015/05/a-brief-glance-at-how-5-text-editors.html">https://ecc-comp.blogspot.com/2015/05/a-brief-glance-at-how-5-text-editors.html</a></li>
+<li><a href="https://bitbucket.org/danielbarry/saxoperatingsystem/src/master/PROGRAMS/EDIT/EDIT.ASM">https://bitbucket.org/danielbarry/saxoperatingsystem/src/master/PROGRAMS/EDIT/EDIT.ASM</a></li>
+<li><a href="https://raphlinus.github.io/xi/2020/06/27/xi-retrospective.html">https://raphlinus.github.io/xi/2020/06/27/xi-retrospective.html</a></li>
+<li><a href="https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation">https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation</a></li>
+<li><a href="https://texteditors.org/cgi-bin/wiki.pl?DesigningTextEditors">https://texteditors.org/cgi-bin/wiki.pl?DesigningTextEditors</a></li>
+</ul>
+
+
+<p>
+More projects
+</p>
+
+<ul class="org-ul">
+<li><a href="https://github.com/practical-tutorials/project-based-learning">https://github.com/practical-tutorials/project-based-learning</a></li>
+<li><a href="https://github.com/AlgoryL/Projects-from-Scratch">https://github.com/AlgoryL/Projects-from-Scratch</a></li>
+<li><a href="https://brennan.io/2015/01/16/write-a-shell-in-c/">https://brennan.io/2015/01/16/write-a-shell-in-c/</a></li>
+<li><a href="https://austinhenley.com/blog/morechallengingprojects.html">https://austinhenley.com/blog/morechallengingprojects.html</a></li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-12-18 Sun 09:58.</p>
+<p class="postamble">Last Updated 2025-02-17 Mon 09:15.</p>
 </div>
 </body>
 </html>
