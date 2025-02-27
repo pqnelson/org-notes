@@ -138,39 +138,13 @@ The ~bind~ implementation amounts to more of a ~map~ than anything else.
 ~Free(F)~ as a monad; we can redefine ~fun bind m f = join (map f m)~
 at the end of the functor structure's body to avoid this.)
 
-Also observe we include the ~where type...~ clause to make
-public the underlying functor's type:
-
-#+begin_src sml
-functor Free(F : FUNCTOR) :> FREE_MONAD
-                               where type 'a F.t = 'a F.t
-                                 = struct
-  structure F = F;
-  datatype 'a t = Return of 'a
-                | Join of ('a t) F.t;
-
-  (* return : 'a -> 'a t *)
-  fun return x = Return x;
-
-  (* bind : 'a t -> ('a -> 'b t) -> 'b t
-   KLUDGE: requires cleaning up with the Monadify functor *)
-  fun bind (Return x) f = f x
-    | bind (Join x) f = Join (F.map (fn m => bind m f) x);
-
-  (* map : ('a -> 'b) -> 'a t -> 'b t *)
-  fun map f m = bind m (fn x => return (f x));
-  
-  (* lift : 'a F.t -> 'a t *)
-  fun lift f = Join (F.map return f);
-
-  (* join : 'a t t -> 'a t *)
-  fun join m = bind m (fn x => x);
-end;
-#+end_src
-
 Another way to approach this is to first implement the ~map~ function,
 then the ~join~ function, and then the ~bind~ function follows as the
-default implementation as:
+default implementation as ~bind m f = join (map f m)~ (see, e.g., Bartosz
+Milewski's [[https://github.com/hmemcpy/milewski-ctfp-pdf/releases/download/v1.3.0/category-theory-for-programmers.pdf][Category Theory for Programmers]], section 20.2).
+
+Also observe we include the ~where type...~ clause to make
+public the underlying functor's type:
 
 #+begin_src sml
 functor Free(F : FUNCTOR) :> FREE_MONAD
@@ -198,9 +172,6 @@ end;
 This is actually a bit more explicit than the Haskell type signatures,
 since Haskell does not distinguish which instance each ~fmap~ comes from.
 
-Furthermore, this uses the /correct/ implementation of ~bind~ which
-avoids requiring the ~Monadify~ functor below.
-
 ** Compared to Free Monoid
 :PROPERTIES:
 :CUSTOM_ID: h-f82f46d4-0bb4-4502-bc6e-f429a310b41a
@@ -225,7 +196,33 @@ start?
 
 First we need to construct a functor with the various operations we'd
 like to perform. For now, simply printing a string to the screen and
-reading a string from ~stdIn~ suffices:
+reading a string from ~stdIn~ suffices.
+
+We encode this as a datatype
+by making each operation with a signature like
+~Foo : A -> B -> C -> Z IO.t~
+corresponds to a data constructor
+=FooOp of A * B * C * (Z -> 'a)=.
+This is the idiom for using free monads in functional programming: we
+have a functor describing the syntax tree for an embedded DSL, and we
+translate the type signature for each operation in the DSL into a type
+for the data constructor's payload as we have just sketched.
+
+One caveat: if ~Z = unit~ (as would happen with =print_line=), then we
+can replace =Z -> 'a= with just ~'a~. 
+
+#+begin_danger
+There is some difficulty with IORef operations. The operations would
+be:
+- =newIORef : 'a -> ('a IORef) IO.t=
+- =readIORef : 'a IORef -> 'a IO.t=
+- =writeIORef : 'a IORef -> 'a -> unit IO.t=
+
+The type variable ='a= appearing in these operations are not
+quantified, and that causes problems. This requires working with
+multiple bound type variables ~datatype ('a,'b) t = ...~, which then
+will not match the expected signature for a functor.
+#+end_danger
 
 #+begin_src sml
 (* A functor describing the operations with side-effects in IO
@@ -253,39 +250,12 @@ fun read_line () =
     | NONE => "";
 #+end_src
 
-Now we can recall the ~bind~ function may be defined in terms of the
-monadic ~join~ operation and the functor's ~map~ operation. To recover
-this for the free monad (which any programmer /using/ this library
-would expect as the intended behaviour --- see, e.g., Bartosz
-Milewski's [[https://github.com/hmemcpy/milewski-ctfp-pdf/releases/download/v1.3.0/category-theory-for-programmers.pdf][Category Theory for Programmers]], section 20.2), we need
-something like the following:
-
-#+begin_src sml
-(* post hoc patch to initial attempt at Free(...) functor *)
-functor Monadify(M : MONAD) = struct
-  type 'a t = 'a M.t;
-  val map = M.map;
-  val return = M.return;
-  val join = M.join;
-  (* The `bind` operation is induced by the monadic `join` and
-  the functorial `map`, as category theory dictates. *)
-  fun bind m f = join (map f m);
-  fun then m n = bind m (fn _ => n);
-end;
-#+end_src
-
-(If you do not want this, you can modify the implementation of the
-~Free~ functor to add ~fun bind m f = join (map f m);~ as the last
-declaration of the structure. This will make the public-facing ~bind~
-function what the user would expect/hope.)
-
 Now we can put all these pieces together to form the free monad
 describing IO side effects we prescribed:
 
 #+begin_src sml
 local
   structure FreeIO = Free(IO_Op);
-  structure Io_ = Monadify(FreeIO);
 in
   structure Job : sig
       datatype t = datatype FreeIO.t
@@ -295,7 +265,7 @@ in
       val return: 'a -> 'a t
       val unsafePerform: 'a t -> 'a
   end = struct
-    open Io_;
+    open FreeIO;
     (* datatype replication to make the constructors public *)
     datatype t = datatype FreeIO.t;
     (* execute the monad *)

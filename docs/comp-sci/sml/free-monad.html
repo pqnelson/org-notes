@@ -449,42 +449,15 @@ at the end of the functor structure's body to avoid this.)
 </p>
 
 <p>
-Also observe we include the <code>where type...</code> clause to make
-public the underlying functor's type:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">Free</span>(F : FUNCTOR) :&gt; FREE_MONAD
-                               <span class="org-keyword">where</span> <span class="org-keyword">type</span> 'a <span class="org-type-def">F.t</span> = 'a F.t
-                                 = <span class="org-keyword">struct</span>
-  <span class="org-keyword">structure</span> <span class="org-module-def">F</span> = F;
-  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = Return <span class="org-keyword">of</span> 'a
-                | Join <span class="org-keyword">of</span> ('a t) F.t;
-
-  <span class="org-comment-delimiter">(* </span><span class="org-comment">return : 'a -&gt; 'a t</span><span class="org-comment-delimiter"> *)</span>
-  <span class="org-keyword">fun</span> <span class="org-function-name">return</span> x = Return x;
-
-  <span class="org-comment-delimiter">(* </span><span class="org-comment">bind : 'a t -&gt; ('a -&gt; 'b t) -&gt; 'b t</span>
-<span class="org-comment">   KLUDGE: requires cleaning up with the Monadify functor</span><span class="org-comment-delimiter"> *)</span>
-  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> (Return x) f = f x
-    | bind (Join x) f = Join (F.map (<span class="org-keyword">fn</span> m =&gt; bind m f) x);
-
-  <span class="org-comment-delimiter">(* </span><span class="org-comment">map : ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t</span><span class="org-comment-delimiter"> *)</span>
-  <span class="org-keyword">fun</span> <span class="org-function-name">map</span> f m = bind m (<span class="org-keyword">fn</span> x =&gt; return (f x));
-  
-  <span class="org-comment-delimiter">(* </span><span class="org-comment">lift : 'a F.t -&gt; 'a t</span><span class="org-comment-delimiter"> *)</span>
-  <span class="org-keyword">fun</span> <span class="org-function-name">lift</span> f = Join (F.map return f);
-
-  <span class="org-comment-delimiter">(* </span><span class="org-comment">join : 'a t t -&gt; 'a t</span><span class="org-comment-delimiter"> *)</span>
-  <span class="org-keyword">fun</span> <span class="org-function-name">join</span> m = bind m (<span class="org-keyword">fn</span> x =&gt; x);
-<span class="org-keyword">end</span>;
-</pre>
-</div>
-
-<p>
 Another way to approach this is to first implement the <code>map</code> function,
 then the <code>join</code> function, and then the <code>bind</code> function follows as the
-default implementation as:
+default implementation as <code>bind m f = join (map f m)</code> (see, e.g., Bartosz
+Milewski's <a href="https://github.com/hmemcpy/milewski-ctfp-pdf/releases/download/v1.3.0/category-theory-for-programmers.pdf">Category Theory for Programmers</a>, section 20.2).
+</p>
+
+<p>
+Also observe we include the <code>where type...</code> clause to make
+public the underlying functor's type:
 </p>
 
 <div class="org-src-container">
@@ -515,11 +488,6 @@ default implementation as:
 This is actually a bit more explicit than the Haskell type signatures,
 since Haskell does not distinguish which instance each <code>fmap</code> comes from.
 </p>
-
-<p>
-Furthermore, this uses the <i>correct</i> implementation of <code>bind</code> which
-avoids requiring the <code>Monadify</code> functor below.
-</p>
 </div>
 </div>
 <div id="outline-container-h-f82f46d4-0bb4-4502-bc6e-f429a310b41a" class="outline-3">
@@ -530,7 +498,7 @@ The free monoid is precisely the list. The analogy with free monads
 should be:
 </p>
 
-<pre class="example" id="org603dd10">
+<pre class="example" id="orgb4c8a19">
 datatype 'a list =          nil | cons of 'a * 'a list;
 (* structure F : FUNCTOR *)
 datatype 'a Free = Return of 'a | Join of ('a Free) F.t;
@@ -548,8 +516,45 @@ start?
 <p>
 First we need to construct a functor with the various operations we'd
 like to perform. For now, simply printing a string to the screen and
-reading a string from <code>stdIn</code> suffices:
+reading a string from <code>stdIn</code> suffices.
 </p>
+
+<p>
+We encode this as a datatype
+by making each operation with a signature like
+<code>Foo : A -&gt; B -&gt; C -&gt; Z IO.t</code>
+corresponds to a data constructor
+<code>FooOp of A * B * C * (Z -&gt; 'a)</code>.
+This is the idiom for using free monads in functional programming: we
+have a functor describing the syntax tree for an embedded DSL, and we
+translate the type signature for each operation in the DSL into a type
+for the data constructor's payload as we have just sketched.
+</p>
+
+<p>
+One caveat: if <code>Z = unit</code> (as would happen with <code>print_line</code>), then we
+can replace <code>Z -&gt; 'a</code> with just <code>'a</code>. 
+</p>
+
+<div class="danger" id="org3561427">
+<p>
+There is some difficulty with IORef operations. The operations would
+be:
+</p>
+<ul class="org-ul">
+<li><code>newIORef : 'a -&gt; ('a IORef) IO.t</code></li>
+<li><code>readIORef : 'a IORef -&gt; 'a IO.t</code></li>
+<li><code>writeIORef : 'a IORef -&gt; 'a -&gt; unit IO.t</code></li>
+</ul>
+
+<p>
+The type variable <code>'a</code> appearing in these operations are not
+quantified, and that causes problems. This requires working with
+multiple bound type variables <code>datatype ('a,'b) t = ...</code>, which then
+will not match the expected signature for a functor.
+</p>
+
+</div>
 
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">A functor describing the operations with side-effects in IO</span>
@@ -582,37 +587,6 @@ We will also have a <code>read_line</code> function which we need to implement
 </div>
 
 <p>
-Now we can recall the <code>bind</code> function may be defined in terms of the
-monadic <code>join</code> operation and the functor's <code>map</code> operation. To recover
-this for the free monad (which any programmer <i>using</i> this library
-would expect as the intended behaviour &#x2014; see, e.g., Bartosz
-Milewski's <a href="https://github.com/hmemcpy/milewski-ctfp-pdf/releases/download/v1.3.0/category-theory-for-programmers.pdf">Category Theory for Programmers</a>, section 20.2), we need
-something like the following:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">post hoc patch to initial attempt at Free(...) functor</span><span class="org-comment-delimiter"> *)</span>
-<span class="org-keyword">functor</span> <span class="org-module-def">Monadify</span>(M : MONAD) = <span class="org-keyword">struct</span>
-  <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span> = 'a M.t;
-  <span class="org-keyword">val</span> <span class="org-variable-name">map</span> = M.map;
-  <span class="org-keyword">val</span> <span class="org-variable-name">return</span> = M.return;
-  <span class="org-keyword">val</span> <span class="org-variable-name">join</span> = M.join;
-  <span class="org-comment-delimiter">(* </span><span class="org-comment">The `bind` operation is induced by the monadic `join` and</span>
-<span class="org-comment">  the functorial `map`, as category theory dictates.</span><span class="org-comment-delimiter"> *)</span>
-  <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> m f = join (map f m);
-  <span class="org-keyword">fun</span> <span class="org-function-name">then</span> m n = bind m (<span class="org-keyword">fn</span> _ =&gt; n);
-<span class="org-keyword">end</span>;
-</pre>
-</div>
-
-<p>
-(If you do not want this, you can modify the implementation of the
-<code>Free</code> functor to add <code>fun bind m f = join (map f m);</code> as the last
-declaration of the structure. This will make the public-facing <code>bind</code>
-function what the user would expect/hope.)
-</p>
-
-<p>
 Now we can put all these pieces together to form the free monad
 describing IO side effects we prescribed:
 </p>
@@ -620,7 +594,6 @@ describing IO side effects we prescribed:
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-keyword">local</span>
   <span class="org-keyword">structure</span> <span class="org-module-def">FreeIO</span> = Free(IO_Op);
-  <span class="org-keyword">structure</span> <span class="org-module-def">Io_</span> = Monadify(FreeIO);
 <span class="org-keyword">in</span>
   <span class="org-keyword">structure</span> <span class="org-module-def">Job</span> : <span class="org-keyword">sig</span>
       <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = <span class="org-keyword">datatype</span> <span class="org-type-def">FreeIO.t</span>
@@ -630,7 +603,7 @@ describing IO side effects we prescribed:
       <span class="org-keyword">val</span> <span class="org-variable-name">return</span>: 'a -&gt; 'a t
       <span class="org-keyword">val</span> <span class="org-variable-name">unsafePerform</span>: 'a t -&gt; 'a
   <span class="org-keyword">end</span> = <span class="org-keyword">struct</span>
-    <span class="org-keyword">open</span> Io_;
+    <span class="org-keyword">open</span> FreeIO;
     <span class="org-comment-delimiter">(* </span><span class="org-comment">datatype replication to make the constructors public</span><span class="org-comment-delimiter"> *)</span>
     <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = <span class="org-keyword">datatype</span> <span class="org-type-def">FreeIO.t</span>;
     <span class="org-comment-delimiter">(* </span><span class="org-comment">execute the monad</span><span class="org-comment-delimiter"> *)</span>
@@ -726,7 +699,7 @@ Some subtleties around the sensationalist hype about Free Monads:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2025-02-26 Wed 17:01.</p>
+<p class="postamble">Last Updated 2025-02-26 Wed 17:35.</p>
 </div>
 </body>
 </html>
