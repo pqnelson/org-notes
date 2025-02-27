@@ -1,0 +1,88 @@
+#+TITLE: Monoids - SML
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2025-02-26T12:30:40-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+# Created Wednesday February 26, 2025 at 12:30PM
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: h-492023b4-1b77-4ed8-9660-1f9d2b4fd946
+:END:
+
+A monoid can be seen as a generalization of lists or strings. It's
+a typeclass (see Haskell's [[https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Monoid.html][Data.Monoid]]), so it is implemented in
+Standard ML by a signature which is transparently ascribed to a
+structure (if at all):
+
+#+begin_src sml
+signature MONOID = sig
+  type 'a t;
+  val empty : 'a t;
+  val append : 'a t -> 'a t -> 'a t;
+  val concat : 'a t list -> 'a t;
+  (* fun concat xs = List.foldr append empty xs *)
+end;
+#+end_src
+
+The laws it needs to satisfy:
+
+- Identity laws: ~append x empty = x~ and ~append empty x = x~
+- Associativity: ~append (append x y) z = append x (append y z)~
+- Concatenation: ~concat = foldr append empty~
+  
+...and that's it.
+
+#+begin_danger
+Care must be taken with the signature, since Haskell is more flexible
+in its ability to allow quantifiers. If we want to be faithful to
+Haskell, we should have our signature's first line be ~type t;~
+without any type variable. But then we couldn't implement a ~ListMonoid~,
+since the ~list~ type constructor requires 1 type variable whereas
+~type t~ has zero type variables (and $0\neq1$ which causes Standard
+ML to believe this is not a valid type definition).
+
+On the other hand, if we take ~type 'a t;~ (as we did) in the first
+line of the ~signature MONOID~, then we have a phantom type when
+dealing with strings.
+
+Given the choice between making lists not monoids or phantom types for
+string monoids, the latter seems less bad (but not ideal).
+#+end_danger
+
+* Examples
+:PROPERTIES:
+:CUSTOM_ID: h-1c7f1f90-13d9-42e4-90d7-b09ee66f98ae
+:END:
+
+** Built-in structures
+:PROPERTIES:
+:CUSTOM_ID: h-a5e46519-34d4-4cd2-8a47-4504d6afd416
+:END:
+
+We can "hack" the ~List~ and ~String~ structures to make them satisfy
+the monoid signature.
+
+#+begin_src sml
+structure List = struct
+  open List;
+  type 'a t = 'a list;
+  val empty = nil;
+  fun append xs ys = xs @ ys;
+end;
+
+structure String = struct
+  open String;
+  type 'a t = string;
+  val empty : 'a t = "";
+  fun append (xs : 'a t) (ys : 'a t) : 'a t = xs ^ ys;
+end;
+#+end_src
+
+This is obviously not as elegant as what could be found in Haskell.

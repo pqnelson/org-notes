@@ -27,15 +27,143 @@ necessary. We can then implement this as a signature:
 
 #+begin_src sml
 signature FUNCTOR = sig
-    type 'a f;
-    val fmap : ('a -> 'b) -> 'a f -> 'b f;
+  type 'a t;
+  val map : ('a -> 'b) -> 'a t -> 'b t;
 end;
 #+end_src
 
 There are two constraints to a functor:
 
-1. ~fmap id = id~ it preserves the identity function, and
-2. ~fmap (f o g) = (fmap f) o (fmap g)~ it preserves composition.
+1. ~map id = id~ it preserves the identity function, and
+2. ~map (f o g) = (map f) o (map g)~ it preserves composition.
+
+*Note:* I will refer to a module adhering to this signature
+generically as a FUNCTOR or a ~FUNCTOR~, whereas the Standard ML
+parametrized structure is "functor" (all lower case) and Category
+Theoretic notions will use functor (or "Functor" if it starts a
+sentence). 
+
+** Usefulness as AST
+:PROPERTIES:
+:CUSTOM_ID: h-0b3c4178-81eb-4994-a1f4-7c40f426bbb8
+:END:
+
+The basic use for a ~FUNCTOR~ is to encode an abstract syntax
+tree. Then the ~map~ function just transforms the leafs somehow.
+
+For example, the syntax tree for propositional logic:
+
+#+begin_src sml
+structure Formula = struct
+  datatype 'a t = Verum
+                | Falsum
+                | Atom of 'a
+                | Not of 'a t
+                | And of ('a t) * ('a t)
+                | Or of ('a t) * ('a t)
+                | Implies of ('a t) * ('a t)
+                | Iff of ('a t) * ('a t);
+  fun map f Verum = Verum
+    | map f Falsum = Falsum
+    | map f (Atom a) = Atom (f a)
+    | map f (Not a) = Not (map f a) 
+    | map f (And (a1,a2)) = And (map f a1, map f a2)
+    | map f (Or (a1,a2)) = Or (map f a1, map f a2)
+    | map f (Implies (a1,a2)) = Implies (map f a1, map f a2)
+    | map f (Iff (a1,a2)) = Iff (map f a1, map f a2); 
+end;
+#+end_src
+
+Observe that we did not ascribe the ~FUNCTOR~ signature to this,
+because it would "hide" the constructors ~And~, ~Or~, ~Verum~, and so
+on. But we can still use ~Formula~ wherever a ~FUNCTOR~ is needed.
+
+** Example 2: Operations for a Free Monad
+:PROPERTIES:
+:CUSTOM_ID: h-3e328d54-e563-4e88-a4ff-1a8ebe37deb9
+:END:
+
+Another use for functors is to provide the "menu" of possible
+operations for some effect, which will be handled by a
+[[file:free-monad.org][free monad]].
+
+For example, IO with "just" reading or writing a string to the screen
+can be handled simple as:
+
+#+begin_src sml
+(* A functor describing the operations with side-effects in IO *)
+structure IO_Op = struct
+  datatype 'a t = Print of (string * 'a)
+                | Read of (string -> 'a);
+  fun map f (Print (s,k)) = Print (s, f k)
+    | map f (Read k) = Read (fn s => f (k s));
+end;
+#+end_src
+
+* Applicative Functors
+:PROPERTIES:
+:CUSTOM_ID: h-d95e552a-0535-41e0-8850-adfc8ff15fd0
+:END:
+
+One step towards monads is to consider /applicative/ functors. This
+seems to originate from the paper:
+
+- Conor McBride and Ross Paterson,\\
+  "Applicative Programming with Effects".\\
+  /Journal of Functional Programming/ *18* no.1 (2008), pages 1-13. 
+  [[https://www.staff.city.ac.uk/~ross/papers/Applicative.html][Eprint]]
+
+This allows us to describe effects (side-effects like IO, etc.)
+without dragging up the baroque framework of monads.
+
+It's a typeclass, so we describe it using a signature. (See Haskell's
+[[https://hackage.haskell.org/package/base-4.21.0.0/docs/Control-Applicative.html#t:Applicative][Control.Applicative]] typeclass definition.) An applicative
+functor /is/ still a functor, so we ~include FUNCTOR~ and add more
+operations to the signature.
+
+#+begin_src sml
+signature APPLICATIVE = sig
+  include FUNCTOR;
+  (* Our "ap" is Haskell's <*> *)
+  val ap : ('a -> 'b) t -> 'a t -> 'b t;
+  val pure : 'a -> 'a t;
+  (* ...and possibly other quality-of-life functions. *)
+end;
+#+end_src
+
+This satisfies the following laws:
+
+- Identity: ~ap (pure id) u = u~
+- Composition: ~ap (pure o) (ap u (ap v w)) = ap u (ap v w)~
+- Morphism: ~ap (pure f) (pure x) = pure (f x)~
+- Interchange: ~ap u (pure x) = ap (pure (fn f => f x)) u~
+
+...in addition to the laws required for a functor.
+
+It's common in Haskell to use ~f <*> x = ap f x~, and also introduce:
+#+begin_src sml
+(* in APPLICATIVE *)
+val <$> : ('a -> 'b) * 'a t -> 'b t;
+
+(* implemented as: *)
+fun (f <$> u) = ap (pure f) u;
+#+end_src
+
+Similarly, Haskell has ~liftA2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> c t~
+as well as sequencing operators
+~(*>) : 'a t -> 'b t -> 'b t~
+and
+~(<*) : 'a t -> 'b t -> 'a t~. The sequencing operators evaluates the
+expressions to its left and right, then returns the value on the left
+or right.
+
+** Monads and Applicatives
+:PROPERTIES:
+:CUSTOM_ID: h-9becc52f-1573-44ae-adf2-9c1a868c6890
+:END:
+
+Modern Haskell uses the hierarchy that monads are applicatives, and
+applicatives are functors.
 
 * References
 :PROPERTIES:

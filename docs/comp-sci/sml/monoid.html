@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Functors in SML</title>
+<title>Monoids - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
@@ -221,6 +221,41 @@
 \newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -228,143 +263,117 @@
  |
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Functors in SML</h1>
+<h1 class="title">Monoids - SML</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-48e173de-b89d-4e1a-8753-a621a025b0e5">1. Basic Idea</a>
+<li><a href="#h-492023b4-1b77-4ed8-9660-1f9d2b4fd946">1. Introduction</a></li>
+<li><a href="#h-1c7f1f90-13d9-42e4-90d7-b09ee66f98ae">2. Examples</a>
 <ul>
-<li><a href="#h-0b3c4178-81eb-4994-a1f4-7c40f426bbb8">1.1. Usefulness as AST</a></li>
-<li><a href="#h-3e328d54-e563-4e88-a4ff-1a8ebe37deb9">1.2. Example 2: Operations for a Free Monad</a></li>
+<li><a href="#h-a5e46519-34d4-4cd2-8a47-4504d6afd416">2.1. Built-in structures</a></li>
 </ul>
 </li>
-<li><a href="#h-191faef2-3b83-46a7-8433-0d9e2ce7692e">2. References</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-h-48e173de-b89d-4e1a-8753-a621a025b0e5" class="outline-2">
-<h2 id="h-48e173de-b89d-4e1a-8753-a621a025b0e5"><span class="section-number-2">1.</span> Basic Idea</h2>
-<div class="outline-text-2" id="text-h-48e173de-b89d-4e1a-8753-a621a025b0e5">
+<div id="outline-container-h-492023b4-1b77-4ed8-9660-1f9d2b4fd946" class="outline-2">
+<h2 id="h-492023b4-1b77-4ed8-9660-1f9d2b4fd946"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-492023b4-1b77-4ed8-9660-1f9d2b4fd946">
 <p>
-A functor in ML means a "parametrized module". It's an unfortunate
-choice of words, because "functor" has come to mean something completely
-different in functional programming. I will discuss that "something
-completely different" implemented in Standard ML.
-</p>
-
-<p>
-In Haskell, the <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-Functor.html">functor</a> class consists of the <code>fmap</code> function and the
-<code>&lt;$</code> infix operator. I do not believe the <code>&lt;$</code> infix operator is
-necessary. We can then implement this as a signature:
+A monoid can be seen as a generalization of lists or strings. It's
+a typeclass (see Haskell's <a href="https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Monoid.html">Data.Monoid</a>), so it is implemented in
+Standard ML by a signature which is transparently ascribed to a
+structure (if at all):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">FUNCTOR</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">MONOID</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>;
-  <span class="org-keyword">val</span> <span class="org-variable-name">map</span> : ('a -&gt; 'b) -&gt; 'a t -&gt; 'b t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">append</span> : 'a t -&gt; 'a t -&gt; 'a t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">concat</span> : 'a t list -&gt; 'a t;
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">fun concat xs = List.foldr append empty xs</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
 </pre>
 </div>
 
 <p>
-There are two constraints to a functor:
+The laws it needs to satisfy:
 </p>
 
-<ol class="org-ol">
-<li><code>map id = id</code> it preserves the identity function, and</li>
-<li><code>map (f o g) = (map f) o (map g)</code> it preserves composition.</li>
-</ol>
-
-<p>
-<b>Note:</b> I will refer to a module adhering to this signature
-generically as a FUNCTOR or a <code>FUNCTOR</code>, whereas the Standard ML
-parametrized structure is "functor" (all lower case) and Category
-Theoretic notions will use functor (or "Functor" if it starts a
-sentence). 
-</p>
-</div>
-<div id="outline-container-h-0b3c4178-81eb-4994-a1f4-7c40f426bbb8" class="outline-3">
-<h3 id="h-0b3c4178-81eb-4994-a1f4-7c40f426bbb8"><span class="section-number-3">1.1.</span> Usefulness as AST</h3>
-<div class="outline-text-3" id="text-h-0b3c4178-81eb-4994-a1f4-7c40f426bbb8">
-<p>
-The basic use for a <code>FUNCTOR</code> is to encode an abstract syntax
-tree. Then the <code>map</code> function just transforms the leafs somehow.
-</p>
-
-<p>
-For example, the syntax tree for propositional logic:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">Formula</span> = <span class="org-keyword">struct</span>
-  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = Verum
-                | Falsum
-                | Atom <span class="org-keyword">of</span> 'a
-                | Not <span class="org-keyword">of</span> 'a t
-                | And <span class="org-keyword">of</span> ('a t) * ('a t)
-                | Or <span class="org-keyword">of</span> ('a t) * ('a t)
-                | Implies <span class="org-keyword">of</span> ('a t) * ('a t)
-                | Iff <span class="org-keyword">of</span> ('a t) * ('a t);
-  <span class="org-keyword">fun</span> <span class="org-function-name">map</span> f Verum = Verum
-    | map f Falsum = Falsum
-    | map f (Atom a) = Atom (f a)
-    | map f (Not a) = Not (map f a) 
-    | map f (And (a1,a2)) = And (map f a1, map f a2)
-    | map f (Or (a1,a2)) = Or (map f a1, map f a2)
-    | map f (Implies (a1,a2)) = Implies (map f a1, map f a2)
-    | map f (Iff (a1,a2)) = Iff (map f a1, map f a2); 
-<span class="org-keyword">end</span>;
-</pre>
-</div>
-
-<p>
-Observe that we did not ascribe the <code>FUNCTOR</code> signature to this,
-because it would "hide" the constructors <code>And</code>, <code>Or</code>, <code>Verum</code>, and so
-on. But we can still use <code>Formula</code> wherever a <code>FUNCTOR</code> is needed.
-</p>
-</div>
-</div>
-<div id="outline-container-h-3e328d54-e563-4e88-a4ff-1a8ebe37deb9" class="outline-3">
-<h3 id="h-3e328d54-e563-4e88-a4ff-1a8ebe37deb9"><span class="section-number-3">1.2.</span> Example 2: Operations for a Free Monad</h3>
-<div class="outline-text-3" id="text-h-3e328d54-e563-4e88-a4ff-1a8ebe37deb9">
-<p>
-Another use for functors is to provide the "menu" of possible
-operations for some effect, which will be handled by a
-<a href="free-monad.html">free monad</a>.
-</p>
-
-<p>
-For example, IO with "just" reading or writing a string to the screen
-can be handled simple as:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">A functor describing the operations with side-effects in IO</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column"> *)</span></span>
-<span class="org-keyword">structure</span> <span class="org-module-def">IO_Op</span> = <span class="org-keyword">struct</span>
-  <span class="org-keyword">datatype</span> 'a <span class="org-type-def">t</span> = Print <span class="org-keyword">of</span> (string * 'a)
-                | Read <span class="org-keyword">of</span> (string -&gt; 'a);
-  <span class="org-keyword">fun</span> <span class="org-function-name">map</span> f (Print (s,k)) = Print (s, f k)
-    | map f (Read k) = Read (<span class="org-keyword">fn</span> s =&gt; f (k s));
-<span class="org-keyword">end</span>;
-</pre>
-</div>
-</div>
-</div>
-</div>
-<div id="outline-container-h-191faef2-3b83-46a7-8433-0d9e2ce7692e" class="outline-2">
-<h2 id="h-191faef2-3b83-46a7-8433-0d9e2ce7692e"><span class="section-number-2">2.</span> References</h2>
-<div class="outline-text-2" id="text-h-191faef2-3b83-46a7-8433-0d9e2ce7692e">
 <ul class="org-ul">
-<li><a href="https://jobjo.github.io/2018/01/28/implicit-functors.html">Implicit Functors</a> in OCaml</li>
-<li>Joel Björnson, <a href="https://blog.shaynefletcher.org/2017/05/more-type-classes-in-ocaml.html">More type classes</a> which implements functors, monoids,
-and applicatives in OCaml</li>
+<li>Identity laws: <code>append x empty = x</code> and <code>append empty x = x</code></li>
+<li>Associativity: <code>append (append x y) z = append x (append y z)</code></li>
+<li>Concatenation: <code>concat = foldr append empty</code></li>
 </ul>
+
+<p>
+&#x2026;and that's it.
+</p>
+
+<div class="danger" id="orgd427058">
+<p>
+Care must be taken with the signature, since Haskell is more flexible
+in its ability to allow quantifiers. If we want to be faithful to
+Haskell, we should have our signature's first line be <code>type t;</code>
+without any type variable. But then we couldn't implement a <code>ListMonoid</code>,
+since the <code>list</code> type constructor requires 1 type variable whereas
+<code>type t</code> has zero type variables (and \(0\neq1\) which causes Standard
+ML to believe this is not a valid type definition).
+</p>
+
+<p>
+On the other hand, if we take <code>type 'a t;</code> (as we did) in the first
+line of the <code>signature MONOID</code>, then we have a phantom type when
+dealing with strings.
+</p>
+
+<p>
+Given the choice between making lists not monoids or phantom types for
+string monoids, the latter seems less bad (but not ideal).
+</p>
+
+</div>
+</div>
+</div>
+<div id="outline-container-h-1c7f1f90-13d9-42e4-90d7-b09ee66f98ae" class="outline-2">
+<h2 id="h-1c7f1f90-13d9-42e4-90d7-b09ee66f98ae"><span class="section-number-2">2.</span> Examples</h2>
+<div class="outline-text-2" id="text-h-1c7f1f90-13d9-42e4-90d7-b09ee66f98ae">
+</div>
+<div id="outline-container-h-a5e46519-34d4-4cd2-8a47-4504d6afd416" class="outline-3">
+<h3 id="h-a5e46519-34d4-4cd2-8a47-4504d6afd416"><span class="section-number-3">2.1.</span> Built-in structures</h3>
+<div class="outline-text-3" id="text-h-a5e46519-34d4-4cd2-8a47-4504d6afd416">
+<p>
+We can "hack" the <code>List</code> and <code>String</code> structures to make them satisfy
+the monoid signature.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">List</span> = <span class="org-keyword">struct</span>
+  <span class="org-keyword">open</span> List;
+  <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span> = 'a list;
+  <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = nil;
+  <span class="org-keyword">fun</span> <span class="org-function-name">append</span> xs ys = xs @ ys;
+<span class="org-keyword">end</span>;
+
+<span class="org-keyword">structure</span> <span class="org-module-def">String</span> = <span class="org-keyword">struct</span>
+  <span class="org-keyword">open</span> String;
+  <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span> = string;
+  <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t = <span class="org-string">""</span>;
+  <span class="org-keyword">fun</span> <span class="org-function-name">append</span> (xs : 'a t) (ys : 'a t) : 'a t = xs ^ ys;
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+This is obviously not as elegant as what could be found in Haskell.</p>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2025-02-26 Wed 12:27.</p>
+<p class="postamble">Last Updated 2025-02-26 Wed 17:15.</p>
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>IO Monad - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -218,19 +233,103 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-3a1304a4-9f78-4564-b60a-5f38eb8f88be">1. Introduction</a></li>
-<li><a href="#h-71c727eb-aa16-440b-85a9-e791f7171c2a">2. Using Modules</a></li>
-<li><a href="#h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8">3. References</a></li>
+<li><a href="#h-7aca0398-7884-42b1-a3db-8b6a356abd42">1. Introduction</a></li>
+<li><a href="#h-3a1304a4-9f78-4564-b60a-5f38eb8f88be">2. Andrew Gordon's IO Monad</a></li>
+<li><a href="#h-71c727eb-aa16-440b-85a9-e791f7171c2a">3. Using Modules</a></li>
+<li><a href="#h-2b6d3956-2f50-46ce-a3b8-858cb3d84533">4. Concluding Remarks</a></li>
+<li><a href="#h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8">5. References</a></li>
 </ul>
 </div>
 </div>
+<div id="outline-container-h-7aca0398-7884-42b1-a3db-8b6a356abd42" class="outline-2">
+<h2 id="h-7aca0398-7884-42b1-a3db-8b6a356abd42"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-7aca0398-7884-42b1-a3db-8b6a356abd42">
+<p>
+We typically abstract away effects in a monad, and IO is one of the
+most basic effects for programmers.
+</p>
 
+<p>
+Recall the basic idea for using monads: if we have a function with a
+side-effect (like printing a message to the screen), then let us
+denote its type with a squiggle arrow <code>f : A ~&gt; B</code>. Pure functions
+without side-effects would be written as <code>pure_fn : A -&gt; B</code> with the
+usual arrow.
+</p>
+
+<p>
+Suppose now that we wanted to curry a function with a side-effect
+<code>f : A * B ~&gt; C</code>, what would its type look like? We would guess it
+either looks like <code>g : A -&gt; (B ~&gt; C)</code> or <code>h : A ~&gt; (B ~&gt; C)</code>.
+We would also expect applying only one argument would not produce any
+side-effect, only when both arguments are provided would a side-effect
+be produced. This would be the first case, <code>g : A -&gt; (B ~&gt; C)</code> describes
+<code>f : A * B ~&gt; C</code> curried.
+</p>
+
+<p>
+Now, we can recall <code>() * A</code> is isomorphic as a type to <code>A</code>. This means
+that <code>f : A ~&gt; B</code> is isomorphic to a function with type <code>f2 : A * () ~&gt; B</code>.
+Currying this function gives us <code>g2 : A -&gt; (() ~&gt; B)</code>. Now we
+introduce a monad with type
+<code>B impure = () ~&gt; B</code>
+which means we have our impure function isomorphic to
+the pure function <code>g2 : A2 -&gt; B impure</code>.
+</p>
+
+<p>
+For IO operations, the monadic bind amounts to ordering the IO
+operations and executing them in the order given. <b>For our purposes</b>
+in this exploration, it suffices to explore teletype IO (i.e.,
+printing a string to the terminal, reading text from the keyboard, and
+nothing else).
+</p>
+
+<div class="remark" id="org8b44730">
+<p>
+In an eager language, the IO monad is a <i>weak</i> monad. This is proven
+in chapter 8 of Andrew Gordon's PhD dissertation. Think about the
+situation when a bottom value has been encountered, but will not be
+needed in the next IO operation. Lazy languages can carry on without a
+problem. Eager languages cannot.
+</p>
+
+<p>
+However, <a href="https://okmij.org/ftp/Haskell/index.html#lazyIO-not-True">lazy IO breaks equational reasoning</a>&#x2026;which is pretty much
+why we would want monadic IO (for the equational reasoning!).
+</p>
+
+</div>
+
+<div class="puzzle" id="org37684ec">
+<p>
+The IO monad makes sense for a single-core processor, but how would we
+extend this to work with multiple threads executed in parallel?
+</p>
+
+</div>
+
+<p>
+Our implementation will also be incomplete compared to what, say,
+Haskell offers. There are avenues for further investigation.
+</p>
+
+<div class="puzzle" id="orgff17616">
+<p>
+Would it be possible to extend the IO monad implemented in Standard ML
+to include IORef operations? If so, could we do it without relying on
+native <code>ref</code> types?
+</p>
+
+</div>
+</div>
+</div>
 <div id="outline-container-h-3a1304a4-9f78-4564-b60a-5f38eb8f88be" class="outline-2">
-<h2 id="h-3a1304a4-9f78-4564-b60a-5f38eb8f88be"><span class="section-number-2">1.</span> Introduction</h2>
+<h2 id="h-3a1304a4-9f78-4564-b60a-5f38eb8f88be"><span class="section-number-2">2.</span> Andrew Gordon's IO Monad</h2>
 <div class="outline-text-2" id="text-h-3a1304a4-9f78-4564-b60a-5f38eb8f88be">
 <p>
 We can construct the IO Monad in Standard ML, which has been done in
-Gordon's PhD thesis. There the construction uses an abstract type:
+Andrew Gordon's PhD thesis. There the construction uses an abstract type:
 </p>
 
 <div class="org-src-container">
@@ -244,7 +343,7 @@ Gordon's PhD thesis. There the construction uses an abstract type:
     <span class="org-comment-delimiter">(* </span><span class="org-comment">(&gt;&gt;=) : 'a Job * ('a -&gt; 'b Job) -&gt; 'b Job</span><span class="org-comment-delimiter"> *)</span>
     <span class="org-keyword">fun</span> (JOB f) &gt;&gt;= q = JOB (<span class="org-keyword">fn</span> _ =&gt; exec (q (f ())))
     <span class="org-comment-delimiter">(* </span><span class="org-comment">getStr : int -&gt; TextIO.vector Job</span><span class="org-comment-delimiter"> *)</span>
-    <span class="org-keyword">fun</span> <span class="org-function-name">getStr</span> n      = JOB (<span class="org-keyword">fn</span> _ =&gt; TextIO.inputN(TextIO.stdIn, n))
+    <span class="org-keyword">fun</span> <span class="org-function-name">getStr</span> n      = JOB (<span class="org-keyword">fn</span> _ =&gt; TextIO.inputN(TextIO.stdI<span class="org-highlight-beyond-fill-column">n, n))</span>
     <span class="org-comment-delimiter">(* </span><span class="org-comment">putStr : string -&gt; unit Job</span><span class="org-comment-delimiter"> *)</span>
     <span class="org-keyword">fun</span> <span class="org-function-name">putStr</span> s      = JOB (<span class="org-keyword">fn</span> _ =&gt; print s)
 <span class="org-keyword">end</span>
@@ -270,9 +369,8 @@ Gordon's PhD thesis. There the construction uses an abstract type:
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-71c727eb-aa16-440b-85a9-e791f7171c2a" class="outline-2">
-<h2 id="h-71c727eb-aa16-440b-85a9-e791f7171c2a"><span class="section-number-2">2.</span> Using Modules</h2>
+<h2 id="h-71c727eb-aa16-440b-85a9-e791f7171c2a"><span class="section-number-2">3.</span> Using Modules</h2>
 <div class="outline-text-2" id="text-h-71c727eb-aa16-440b-85a9-e791f7171c2a">
 <p>
 We can encode the IO Monad using SML's Module system. The signature for
@@ -309,14 +407,44 @@ implementation details are straightforward.
 </p>
 </div>
 </div>
+<div id="outline-container-h-2b6d3956-2f50-46ce-a3b8-858cb3d84533" class="outline-2">
+<h2 id="h-2b6d3956-2f50-46ce-a3b8-858cb3d84533"><span class="section-number-2">4.</span> Concluding Remarks</h2>
+<div class="outline-text-2" id="text-h-2b6d3956-2f50-46ce-a3b8-858cb3d84533">
+<p>
+We can also implement an IO monad using <a href="free-monad.html">Free monads</a>, since free monads
+provide a way to abstract away impure functions inside a pure
+monad. This would not be performant in Haskell.
+</p>
 
+<p>
+But there is also a way to implement an IO monad using
+<a href="monad-transformer.html">monad transformers</a>. This is what the <a href="https://hackage.haskell.org/package/pure-io-0.2.1/docs/PureIO.html">PureIO</a> proof-of-concept library
+does in Haskell.
+</p>
+
+<div class="puzzle" id="orga282f15">
+<p>
+We have so far not discussed blocking IO too much, but that's because
+blocking IO comes about from threads and multiple
+processes. Essentially <i>something else</i> is reading or writing to a
+file (or stream or socket or&#x2026;) and we have to wait until the
+resource is free. When will it become important to model this in an IO
+monad?
+</p>
+
+</div>
+</div>
+</div>
 <div id="outline-container-h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8" class="outline-2">
-<h2 id="h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8"><span class="section-number-2">3.</span> References</h2>
+<h2 id="h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-dc98edfb-d404-43d2-8c9b-c3f61d74fff8">
 <ul class="org-ul">
 <li>Andrew Gordon,<br>
 "Functional Programming and Input/Output".<br>
 Ph.D. Thesis, Cambridge, 1994; <a href="https://www.microsoft.com/en-us/research/publication/functional-programming-input-output/">Eprint</a>.</li>
+<li>Andrew Gordon,<br>
+"PFL+: A Kernal Scheme for Functions I/O".<br>
+UCAM tech report 160, dated February 1989 <a href="https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-160.pdf">PDF</a></li>
 <li>Simon Peyton Jones,<br>
 "Tackling the awkward squad: monadic input/output, concurrency,
 exceptions, and foreign-language calls in Haskell".<br>
@@ -327,12 +455,14 @@ in <i>Engineering theories of software construction</i>, IOS Press, 2001;
 semantics for the IO part and some denotational semantics for a lazy
 lambda calculus.</li>
 </ul></li>
+<li><a href="https://hackage.haskell.org/package/pure-io-0.2.1/docs/PureIO.html">PureIO</a> &#x2014; a pedagogical IO monad implemented in Haskell</li>
+<li><a href="https://github.com/noughtmare/free-io/blob/main/src/System/IO/Free.hs">free-io/Free.hs</a> implementation using Free monads</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-27 Mon 07:43.</p>
+<p class="postamble">Last Updated 2025-02-26 Wed 16:56.</p>
 </div>
 </body>
 </html>
