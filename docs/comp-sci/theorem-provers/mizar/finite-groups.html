@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:48 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Example Definitions Finite Groups - Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -189,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -245,7 +273,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-3514a396-c340-41d5-97f5-7fe965d4519c" class="outline-2">
 <h2 id="h-3514a396-c340-41d5-97f5-7fe965d4519c"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-3514a396-c340-41d5-97f5-7fe965d4519c">
@@ -256,7 +283,6 @@ hard part of the formalizations is the proof of existence and uniqueness
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8" class="outline-2">
 <h2 id="h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8"><span class="section-number-2">2.</span> G Has Characteristic p</h2>
 <div class="outline-text-2" id="text-h-2e5a9e76-d90b-4603-ac16-2df78d4fc0a8">
@@ -264,7 +290,7 @@ hard part of the formalizations is the proof of existence and uniqueness
 These definitions are taken from <a href="https://arxiv.org/abs/1906.07216">arXiv:1906.07216</a>.
 </p>
 
-<div class="definition" id="orgd980574">
+<div class="definition" id="orgbe19d7e">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group whose order is
 divisible by \(p\). A <dfn>$p$-local subgroup</dfn> is one that looks like
@@ -298,7 +324,7 @@ normalizer of a subgroup is defined to be a strict subgroup.) For this
 reason, we needed to check <code>the multMagma of IT = Normalizer P</code>.
 </p>
 
-<div class="definition" id="org41e4f34">
+<div class="definition" id="orgf3d659e">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group, \(L\leq G\) be a subgroup.
 We say \(K\) <dfn>has Characteristic \(p\)</dfn> if
@@ -323,7 +349,7 @@ This introduces a new predicate, <code>has_characteristic p</code> for a subgrou
 </pre>
 </div>
 
-<div class="definition" id="org74495b3">
+<div class="definition" id="orga96e633">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group.
 We say \(G\) <dfn>has local Characteristic \(p\)</dfn> if
@@ -351,7 +377,7 @@ Characteristic.)
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-11 Mon 08:45.</p>
+<p class="postamble">Last Updated: Sat, 9 Apr 2022 11:09:05 -0700
 </div>
 </body>
 </html>

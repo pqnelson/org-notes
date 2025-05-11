@@ -6,7 +6,7 @@
 <title>Car</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -265,7 +294,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-6d3d6c49-4157-4f61-ad3e-012b151dddb4" class="outline-2">
 <h2 id="h-6d3d6c49-4157-4f61-ad3e-012b151dddb4"><span class="section-number-2">1.</span> Acceleration</h2>
 <div class="outline-text-2" id="text-h-6d3d6c49-4157-4f61-ad3e-012b151dddb4">
@@ -322,7 +350,6 @@ f(t) = \begin{cases}\omega t & 0\leq t\leq t_{1}\\
 where the shift time is \(T-t_{1}\) on the order of 1 second.
 </p>
 </div>
-
 <div id="outline-container-h-4b0d51e1-cd44-4f51-898e-6c3beb12e2b8" class="outline-3">
 <h3 id="h-4b0d51e1-cd44-4f51-898e-6c3beb12e2b8"><span class="section-number-3">1.1.</span> Typical Transmission</h3>
 <div class="outline-text-3" id="text-h-4b0d51e1-cd44-4f51-898e-6c3beb12e2b8">
@@ -384,7 +411,6 @@ heuristic.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-aca32486-387f-48f3-8a82-dfc088fd3b92" class="outline-3">
 <h3 id="h-aca32486-387f-48f3-8a82-dfc088fd3b92"><span class="section-number-3">1.2.</span> Typical Differential</h3>
 <div class="outline-text-3" id="text-h-aca32486-387f-48f3-8a82-dfc088fd3b92">
@@ -393,7 +419,6 @@ The differential gear ratio is usually around 4:1.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-74f793ed-6ec6-49a7-9ae5-72bc29a1eddf" class="outline-3">
 <h3 id="h-74f793ed-6ec6-49a7-9ae5-72bc29a1eddf"><span class="section-number-3">1.3.</span> Typical Tire Size</h3>
 <div class="outline-text-3" id="text-h-74f793ed-6ec6-49a7-9ae5-72bc29a1eddf">
@@ -402,7 +427,6 @@ We usually have tire radius be around 0.400 meters.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-3bac94c0-c13e-4a9a-aaf7-788a309c94cd" class="outline-3">
 <h3 id="h-3bac94c0-c13e-4a9a-aaf7-788a309c94cd"><span class="section-number-3">1.4.</span> Drag and Rolling Resistance</h3>
 <div class="outline-text-3" id="text-h-3bac94c0-c13e-4a9a-aaf7-788a309c94cd">
@@ -412,7 +436,6 @@ On the road, rolling resistance is negligible. But drag force is not!
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-e2f8c9f3-edfc-4147-9d39-d08964f0514b" class="outline-3">
 <h3 id="h-e2f8c9f3-edfc-4147-9d39-d08964f0514b"><span class="section-number-3">1.5.</span> Exact Solution For Drag in 1-Dimension</h3>
 <div class="outline-text-3" id="text-h-e2f8c9f3-edfc-4147-9d39-d08964f0514b">
@@ -476,7 +499,6 @@ surprisingly when we plug in realistic values for our parameters&#x2026;we
 obtain real values (i.e., the values produced are real numbers).
 </p>
 </div>
-
 <div id="outline-container-h-e5c51425-73d8-43f6-99c3-84b34e515f1d" class="outline-4">
 <h4 id="h-e5c51425-73d8-43f6-99c3-84b34e515f1d"><span class="section-number-4">1.5.1.</span> When Shifting Gears</h4>
 <div class="outline-text-4" id="text-h-e5c51425-73d8-43f6-99c3-84b34e515f1d">
@@ -510,7 +532,6 @@ v(t) = \frac{v_{0}}{v_{0}c_{d}t + 1}.
 \end{equation}
 </div>
 </div>
-
 <div id="outline-container-h-18a9a972-c789-4885-9a42-2d74d00e7d34" class="outline-4">
 <h4 id="h-18a9a972-c789-4885-9a42-2d74d00e7d34"><span class="section-number-4">1.5.2.</span> Complete Solution</h4>
 <div class="outline-text-4" id="text-h-18a9a972-c789-4885-9a42-2d74d00e7d34">
@@ -519,7 +540,6 @@ We can then use these two general solutions to form piecewise the
 behaviour of the vehicle as it is shifting gears.
 </p>
 </div>
-
 <div id="outline-container-h-b4b62d7b-5364-4127-99a6-846b29f5455d" class="outline-5">
 <h5 id="h-b4b62d7b-5364-4127-99a6-846b29f5455d"><span class="section-number-5">1.5.2.1.</span> Asymptotic Behaviour of Bessel Functions</h5>
 <div class="outline-text-5" id="text-h-b4b62d7b-5364-4127-99a6-846b29f5455d">
@@ -554,7 +574,6 @@ we have \(f(t)\approx (it/2)^{\alpha}/\Gamma(1+\alpha)\) and for larger
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-9918be2d-4724-460a-b5b0-9b123c23fd28" class="outline-2">
 <h2 id="h-9918be2d-4724-460a-b5b0-9b123c23fd28"><span class="section-number-2">2.</span> Actual Solution</h2>
 <div class="outline-text-2" id="text-h-9918be2d-4724-460a-b5b0-9b123c23fd28">
@@ -600,7 +619,6 @@ to have acceleration due to the engine be linear in time, then the
 preceding section's scratchwork should be used instead.
 </p>
 </div>
-
 <div id="outline-container-h-5416a814-365f-4b88-bf66-6f5211ba72c7" class="outline-3">
 <h3 id="h-5416a814-365f-4b88-bf66-6f5211ba72c7"><span class="section-number-3">2.1.</span> Asymptotic Approximation</h3>
 <div class="outline-text-3" id="text-h-5416a814-365f-4b88-bf66-6f5211ba72c7">
@@ -650,7 +668,7 @@ v_{s}(t)\approx \frac{a_{n}t^{3} + v_{0}}{4 + c_{d}v_{0}t}.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-08-02 Tue 12:32.</p>
+<p class="postamble">Last Updated: Tue, 2 Aug 2022 12:34:11 -0700
 </div>
 </body>
 </html>

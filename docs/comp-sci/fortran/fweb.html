@@ -6,7 +6,7 @@
 <title>FWEB - Fortran</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -188,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -229,7 +244,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-14b2d0de-79be-4c2b-bc55-6e94bf3ac551" class="outline-2">
 <h2 id="h-14b2d0de-79be-4c2b-bc55-6e94bf3ac551"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-14b2d0de-79be-4c2b-bc55-6e94bf3ac551">
@@ -242,7 +256,7 @@ we may change the language freely as we program. For example, we could
 start with Fortran 90 using <code>&amp;</code> for line continuations by writing:
 </p>
 
-<pre class="example" id="org2e0b115">
+<pre class="example" id="orga27ea56">
 @n9[-n&amp;]
 </pre>
 
@@ -256,7 +270,6 @@ Three things happen in this:
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-34dbdfe6-cbb2-414d-a06d-f5f47732fa19" class="outline-2">
 <h2 id="h-34dbdfe6-cbb2-414d-a06d-f5f47732fa19"><span class="section-number-2">2.</span> Markup</h2>
 <div class="outline-text-2" id="text-h-34dbdfe6-cbb2-414d-a06d-f5f47732fa19">
@@ -272,7 +285,7 @@ Un-named sections are started by writing <code>@</code> followed by a space, but
 practice they typically have their own line.
 </p>
 
-<pre class="example" id="orgb25a578">
+<pre class="example" id="org374e759">
 @ INTRODUCTION.
 This is an example of a named section.
 
@@ -280,7 +293,6 @@ This is an example of a named section.
 This is an un-numbered section.
 </pre>
 </div>
-
 <div id="outline-container-h-bb4663b9-becf-4f6f-86ee-9c445efd9579" class="outline-3">
 <h3 id="h-bb4663b9-becf-4f6f-86ee-9c445efd9579"><span class="section-number-3">2.1.</span> Code Chunks</h3>
 <div class="outline-text-3" id="text-h-bb4663b9-becf-4f6f-86ee-9c445efd9579">
@@ -291,7 +303,6 @@ code chunks are started by something like <code>@&lt;Global variables@&gt;=...</
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-667c3094-b49f-41e3-a35a-67a84c49f33d" class="outline-3">
 <h3 id="h-667c3094-b49f-41e3-a35a-67a84c49f33d"><span class="section-number-3">2.2.</span> Writing to multiple files</h3>
 <div class="outline-text-3" id="text-h-667c3094-b49f-41e3-a35a-67a84c49f33d">
@@ -301,7 +312,7 @@ If we want to split up code among several files, we can do so with the
 example:
 </p>
 
-<pre class="example" id="orgc8c9d61">
+<pre class="example" id="org2ead6f2">
 @c
 @* INTRO.
 We assume command-line redirection into \.{test.h} (`\.{-=test.h}').
@@ -324,7 +335,6 @@ with this design it will all go into \.{test.h}.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-b7a65be1-125b-4583-9813-87a55fdb937e" class="outline-2">
 <h2 id="h-b7a65be1-125b-4583-9813-87a55fdb937e"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-b7a65be1-125b-4583-9813-87a55fdb937e">
@@ -336,7 +346,7 @@ with this design it will all go into \.{test.h}.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-30 Fri 08:36.</p>
+<p class="postamble">Last Updated: Fri, 29 Apr 2022 09:50:03 -0700
 </div>
 </body>
 </html>

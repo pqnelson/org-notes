@@ -6,7 +6,7 @@
 <title>Group Theory in Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -251,7 +280,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-2ee11eae-9c96-4924-b78c-f735667f49fd" class="outline-2">
 <h2 id="h-2ee11eae-9c96-4924-b78c-f735667f49fd"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-2ee11eae-9c96-4924-b78c-f735667f49fd">
@@ -266,7 +294,6 @@ then it splinters into specialist subjects.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-9f5cf940-9a00-4b52-886d-f414fb02838d" class="outline-2">
 <h2 id="h-9f5cf940-9a00-4b52-886d-f414fb02838d"><span class="section-number-2">2.</span> Group Theory</h2>
 <div class="outline-text-2" id="text-h-9f5cf940-9a00-4b52-886d-f414fb02838d">
@@ -311,7 +338,6 @@ have <code>mode sequence of X is Function of NAT,X</code></li>
 </ul></li>
 </ul>
 </div>
-
 <div id="outline-container-h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7" class="outline-3">
 <h3 id="h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7"><span class="section-number-3">2.1.</span> Definitions</h3>
 <div class="outline-text-3" id="text-h-9a4b3e2e-01b9-42a2-a500-bd576e9efca7">
@@ -324,7 +350,7 @@ This is also extended to, for a group \(G\), subsets \(A\subset G\)
 we'd have <code>A"</code> be the collection of <code>g"</code> for <code>g in A</code>, i.e.,
 \(A^{-1}=\{g^{-1}|g\in A\}\); see line 57 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>
 </p>
-<pre class="example" id="orgcb89a39">
+<pre class="example" id="orga12f4bd">
 let G be Group;
 let A be Subset of G;
 func A " -&gt; Subset of G equals :: GROUP_2:def 1
@@ -338,7 +364,7 @@ underlying set of \(G\) equal to the set underlying \(H\)</li>
 The trivial subgroup of \(G\) is denoted <code>(1).G</code>, defined on line 1258
 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> as
 </p>
-<pre class="example" id="org0af9b5a">
+<pre class="example" id="orgdfe0e11">
   func (1).G -&gt; strict Subgroup of G means
   :Def7:
   the carrier of it = {1_G};
@@ -418,7 +444,7 @@ usually write as \(\langle A\rangle\)</li>
 <li><p>
 Frattini subgroup is tricky. Relevant code starts around 1371 of  <a href="http://mizar.org/version/current/html/group_4.html"><code>group_4.miz</code></a>
 </p>
-<pre class="example" id="orgebf3856">
+<pre class="example" id="orge706b4c">
 ::$N Frattini subgroup
   func Phi(G) -&gt; strict Subgroup of G means
   :Def7:
@@ -496,7 +522,6 @@ of <a href="http://mizar.org/version/current/html/group_9.html"><code>group_9.mi
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-71dc116b-6bab-4e06-9d8a-ab7a6a7dd9fc" class="outline-3">
 <h3 id="h-71dc116b-6bab-4e06-9d8a-ab7a6a7dd9fc"><span class="section-number-3">2.2.</span> Product Groups</h3>
 <div class="outline-text-3" id="text-h-71dc116b-6bab-4e06-9d8a-ab7a6a7dd9fc">
@@ -543,8 +568,6 @@ function with <code>dom g = I</code>).</li>
 </ul>
 </div>
 </div>
-
-
 <div id="outline-container-h-2a6b701b-cdd4-4958-9a40-b98df09ff271" class="outline-3">
 <h3 id="h-2a6b701b-cdd4-4958-9a40-b98df09ff271"><span class="section-number-3">2.3.</span> Specific Groups</h3>
 <div class="outline-text-3" id="text-h-2a6b701b-cdd4-4958-9a40-b98df09ff271">
@@ -564,7 +587,6 @@ work with <code>Group_of_Perm n</code>.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-e33b09d4-26e4-44e8-b68b-31bf539a87b4" class="outline-3">
 <h3 id="h-e33b09d4-26e4-44e8-b68b-31bf539a87b4"><span class="section-number-3">2.4.</span> Representation Theory</h3>
 <div class="outline-text-3" id="text-h-e33b09d4-26e4-44e8-b68b-31bf539a87b4">
@@ -610,7 +632,7 @@ which ensures the <code>Function of G,(Funcs (E,E))</code> is multiplicative</li
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-03 Fri 09:32.</p>
+<p class="postamble">Last Updated: Mon, 13 Feb 2023 11:04:10 -0800
 </div>
 </body>
 </html>

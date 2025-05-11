@@ -6,7 +6,7 @@
 <title>Haskell</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 </head>
@@ -218,17 +233,34 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-35f73750-4ad3-4d3c-bdec-429eee81e731">1. References</a>
+<li><a href="#h-a88d3e88-06bc-43ee-b041-a078412a4ce7">1. State# "Monad"</a></li>
+<li><a href="#h-35f73750-4ad3-4d3c-bdec-429eee81e731">2. References</a>
 <ul>
-<li><a href="#h-070ae1ee-843d-41d0-9486-0f04016d6fda">1.1. Type Checking</a></li>
+<li><a href="#h-070ae1ee-843d-41d0-9486-0f04016d6fda">2.1. Type Checking</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
+<div id="outline-container-h-a88d3e88-06bc-43ee-b041-a078412a4ce7" class="outline-2">
+<h2 id="h-a88d3e88-06bc-43ee-b041-a078412a4ce7"><span class="section-number-2">1.</span> State# "Monad"</h2>
+<div class="outline-text-2" id="text-h-a88d3e88-06bc-43ee-b041-a078412a4ce7">
+<p>
+The <code>IO</code> Monad is ultimately <code>State# RealWorld</code>
+</p>
 
+<ul class="org-ul">
+<li><a href="https://github.com/ghc/ghc/blob/42aa7fbd6cc51f7cd993621336e1c3fa8202ab1f/compiler/GHC/Builtin/Types/Prim.hs#L1145-L1159">Note</a> in <code>Prim.hs</code> about the <code>State#</code> type constructor</li>
+<li><a href="https://github.com/ghc/ghc/blob/42aa7fbd6cc51f7cd993621336e1c3fa8202ab1f/libraries/ghc-prim/GHC/Magic.hs#L35">Apparently</a> it lives in the <code>GHC.Prim</code> module.</li>
+<li><a href="https://github.com/ghc/ghc/blob/a7f9670e899bcbc87276446a1aac2304cade2b2f/compiler/GHC/Builtin/primops.txt.pp#L2759-L2769">primops</a> notes that <code>State#</code> is represented by nothing at all, so
+<code>State# a</code> is an empty type.</li>
+<li><code>IO a</code> is/was defined in <a href="https://github.com/ghc/ghc/blob/b73c9c5face16cc8bedf4168ce10770c7cc67f80/libraries/ghc-prim/GHC/Types.hs#L233"><code>GHC.Prim.Types</code></a> as
+<code>newtype IO a = IO (State# RealWorld -&gt; (# State# RealWorld, a #))</code>.</li>
+</ul>
+</div>
+</div>
 <div id="outline-container-h-35f73750-4ad3-4d3c-bdec-429eee81e731" class="outline-2">
-<h2 id="h-35f73750-4ad3-4d3c-bdec-429eee81e731"><span class="section-number-2">1.</span> References</h2>
+<h2 id="h-35f73750-4ad3-4d3c-bdec-429eee81e731"><span class="section-number-2">2.</span> References</h2>
 <div class="outline-text-2" id="text-h-35f73750-4ad3-4d3c-bdec-429eee81e731">
 <ul class="org-ul">
 <li>Ben Lynn's <a href="https://crypto.stanford.edu/~blynn/compiler/socrates.html">notes on Haskell compiler</a></li>
@@ -236,10 +268,8 @@
 <a href="https://www.cs.ox.ac.uk/publications/publication3788-abstract.html">THE DESIGN AND IMPLEMENTATION OF PROGRAMMING LANGUAGES</a></li>
 </ul>
 </div>
-
-
 <div id="outline-container-h-070ae1ee-843d-41d0-9486-0f04016d6fda" class="outline-3">
-<h3 id="h-070ae1ee-843d-41d0-9486-0f04016d6fda"><span class="section-number-3">1.1.</span> Type Checking</h3>
+<h3 id="h-070ae1ee-843d-41d0-9486-0f04016d6fda"><span class="section-number-3">2.1.</span> Type Checking</h3>
 <div class="outline-text-3" id="text-h-070ae1ee-843d-41d0-9486-0f04016d6fda">
 <ul class="org-ul">
 <li>Dimitrios Vytiniotis, Simon Peyton Jones, Tom Schrijvers, Martin Sulzmann,<br>
@@ -252,7 +282,7 @@
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-08-09 Mon 18:44.</p>
+<p class="postamble">Last Updated: Sun, 19 Nov 2023 06:40:22 -0800
 </div>
 </body>
 </html>

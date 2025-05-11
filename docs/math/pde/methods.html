@@ -6,7 +6,7 @@
 <title>Methods of Solving PDEs</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -270,12 +299,10 @@ expansions [13,20,21], and use of conservation laws to obtain exact
 solutions [22–24].
 </p>
 </blockquote>
-
 <div id="outline-container-h-f9fcc069-0b1d-4a4e-9438-80c476b81a00" class="outline-2">
 <h2 id="h-f9fcc069-0b1d-4a4e-9438-80c476b81a00"><span class="section-number-2">1.</span> Group Symmetry Methods</h2>
 <div class="outline-text-2" id="text-h-f9fcc069-0b1d-4a4e-9438-80c476b81a00">
 </div>
-
 <div id="outline-container-h-07109b40-d0f9-43c8-af78-5b0e1aed7ba9" class="outline-3">
 <h3 id="h-07109b40-d0f9-43c8-af78-5b0e1aed7ba9"><span class="section-number-3">1.1.</span> Classical Symmetries</h3>
 <div class="outline-text-3" id="text-h-07109b40-d0f9-43c8-af78-5b0e1aed7ba9">
@@ -295,7 +322,6 @@ Kluwer, 1998.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-10abac87-d348-4d33-afd2-f2ca13f2ead4" class="outline-3">
 <h3 id="h-10abac87-d348-4d33-afd2-f2ca13f2ead4"><span class="section-number-3">1.2.</span> Nonclassical Symmetry Reduction</h3>
 <div class="outline-text-3" id="text-h-10abac87-d348-4d33-afd2-f2ca13f2ead4">
@@ -311,7 +337,6 @@ In: <i>CRC Handbook of Lie Group Analysis of Differential Equations</i>, vol.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-bf2360c2-34c8-4826-a3b8-e61811ed61c5" class="outline-3">
 <h3 id="h-bf2360c2-34c8-4826-a3b8-e61811ed61c5"><span class="section-number-3">1.3.</span> Approximate Symmetries</h3>
 <div class="outline-text-3" id="text-h-bf2360c2-34c8-4826-a3b8-e61811ed61c5">
@@ -340,7 +365,6 @@ original differential equation.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-82fab9ef-80d3-446d-b9c2-0592f9b69129" class="outline-2">
 <h2 id="h-82fab9ef-80d3-446d-b9c2-0592f9b69129"><span class="section-number-2">2.</span> Differential Constraints</h2>
 <div class="outline-text-2" id="text-h-82fab9ef-80d3-446d-b9c2-0592f9b69129">
@@ -358,7 +382,6 @@ simpler (integrable) equation, called a <i>differential constraint</i>."
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-82511732-d06f-4171-a4aa-63f6eded2106" class="outline-2">
 <h2 id="h-82511732-d06f-4171-a4aa-63f6eded2106"><span class="section-number-2">3.</span> Clarkson-Kruskal method</h2>
 <div class="outline-text-2" id="text-h-82511732-d06f-4171-a4aa-63f6eded2106">
@@ -381,7 +404,6 @@ exact solutions to nonlinear PDEs". <br>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-428184a8-896b-4f4a-b3ff-3e545baa634b" class="outline-2">
 <h2 id="h-428184a8-896b-4f4a-b3ff-3e545baa634b"><span class="section-number-2">4.</span> Functional Separation of Variables</h2>
 <div class="outline-text-2" id="text-h-428184a8-896b-4f4a-b3ff-3e545baa634b">
@@ -463,7 +485,7 @@ approach, new solutions of diffusion-type equations". <br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 12:12:32 -0700
 </div>
 </body>
 </html>

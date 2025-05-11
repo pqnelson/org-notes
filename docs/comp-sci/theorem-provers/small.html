@@ -6,7 +6,7 @@
 <title>On Kernel Size</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -308,7 +337,7 @@ Thus the upper-bound on a program to be a candidate for being "bug free"
 is approximately 441 lines of code.
 </p>
 
-<div class="remark" id="orgdd424b5">
+<div class="remark" id="org0b66db8">
 <p>
 If we then use this estimate for the number of lines \(n\leq 50k^{2}\)
 for a <i>Binomial</i> distributed random variable (<b>NOT</b> a <i>negative</i>
@@ -318,7 +347,7 @@ bug within 3 sigmas of 0 bugs is greater than 50%.
 
 </div>
 
-<div class="remark" id="orgee2e074">
+<div class="remark" id="org05fd617">
 <p>
 Just a quick consistency check, we can use the <a href="https://en.wikipedia.org/wiki/Binomial_distribution#Poisson_approximation">Poisson approximation</a> to
 a Binomial distribution to find a heuristic upper bound on the number of
@@ -326,7 +355,6 @@ lines of code to be \(n\leq 10/p\approx500\).
 </p>
 
 </div>
-
 <div id="outline-container-h-bb3c318e-1f27-4cde-a517-2b476e0b15b8" class="outline-2">
 <h2 id="h-bb3c318e-1f27-4cde-a517-2b476e0b15b8"><span class="section-number-2">1.</span> Observations</h2>
 <div class="outline-text-2" id="text-h-bb3c318e-1f27-4cde-a517-2b476e0b15b8">
@@ -338,7 +366,7 @@ of lines of code \(N\) such that the probability of finding no more than
 The R code which let me solve this by brute force:
 </p>
 
-<pre class="example" id="org3078586">
+<pre class="example" id="org5bb9036">
 p_bug &lt;- 0.02
 q_bug &lt;- 1 - p_bug
 
@@ -365,7 +393,7 @@ greatest value of <code>n</code> such that <code>guess(n) &gt;= 0.5</code>.
 If we wanted to be more certain, we could modify the code:
 </p>
 
-<pre class="example" id="org6fa637a">
+<pre class="example" id="orgc5d449e">
 guess &lt;- function(n, k=3) { pbinom(round(k*sd_bug*sqrt(n)), n, p_bug)}
 
 expected_bugs &lt;- function(n) { p_bug*n }
@@ -387,7 +415,7 @@ guess(533, k=3) # expected bugs: 10.66
 bug_sigma(533, 3)
 # [1] 9.696453
 
-## The case when bug_sigma(n, k) == expected_bugs(n, k)
+## The case when bug_sigma(n, 3) == expected_bugs(n, 3)
 guess(441, k=3) # expected bugs: 8.82
 # [1] 0.6113548
 bug_sigma(441, 3)
@@ -409,7 +437,6 @@ The moral: the fewer lines of code, the better.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-cec1260a-9145-4c6f-8a09-c3ad0fd3fbcb" class="outline-2">
 <h2 id="h-cec1260a-9145-4c6f-8a09-c3ad0fd3fbcb"><span class="section-number-2">2.</span> References</h2>
 <div class="outline-text-2" id="text-h-cec1260a-9145-4c6f-8a09-c3ad0fd3fbcb">
@@ -443,7 +470,7 @@ this proof-checker ‘by hand’. We call this the <i>de Bruijn criterion</i>.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-08-20 Sun 09:21.</p>
+<p class="postamble">Last Updated: Sun, 20 Aug 2023 09:28:53 -0700
 </div>
 </body>
 </html>

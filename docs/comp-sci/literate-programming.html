@@ -6,7 +6,7 @@
 <title>Literate Programming</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -280,7 +309,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-8ab8f913-16f8-4655-9fef-2984e405acc7" class="outline-2">
 <h2 id="h-8ab8f913-16f8-4655-9fef-2984e405acc7"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-8ab8f913-16f8-4655-9fef-2984e405acc7">
@@ -311,7 +339,6 @@ abstract away the methods used, or some other fancy trick.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-517e67e5-c13f-472b-b4dc-7ceeb9c86a0c" class="outline-2">
 <h2 id="h-517e67e5-c13f-472b-b4dc-7ceeb9c86a0c"><span class="section-number-2">2.</span> Knuth's Web and CWeb</h2>
 <div class="outline-text-2" id="text-h-517e67e5-c13f-472b-b4dc-7ceeb9c86a0c">
@@ -338,7 +365,6 @@ the same style of chunks, labels, etc., but used C code instead of
 Pascal.
 </p>
 </div>
-
 <div id="outline-container-h-1408ab8a-c9fd-4a50-b93d-0e4b0ac3c89b" class="outline-3">
 <h3 id="h-1408ab8a-c9fd-4a50-b93d-0e4b0ac3c89b"><span class="section-number-3">2.1.</span> Intention: Communicate with Human Beings</h3>
 <div class="outline-text-3" id="text-h-1408ab8a-c9fd-4a50-b93d-0e4b0ac3c89b">
@@ -373,7 +399,6 @@ programming. It's probably for this reason that literate
 programming never caught on.
 </p>
 </div>
-
 <div id="outline-container-h-710723e4-3bb5-497a-aaf6-68ba5b6a0eeb" class="outline-4">
 <h4 id="h-710723e4-3bb5-497a-aaf6-68ba5b6a0eeb"><span class="section-number-4">2.1.1.</span> Discussion of Variables</h4>
 <div class="outline-text-4" id="text-h-710723e4-3bb5-497a-aaf6-68ba5b6a0eeb">
@@ -401,7 +426,6 @@ discouraging the discussion of variables <i>in the body</i> of a chunk.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-456c7846-6740-468d-90c9-84c11b770736" class="outline-4">
 <h4 id="h-456c7846-6740-468d-90c9-84c11b770736"><span class="section-number-4">2.1.2.</span> "Psychologically correct order"</h4>
 <div class="outline-text-4" id="text-h-456c7846-6740-468d-90c9-84c11b770736">
@@ -432,13 +456,13 @@ Knuth writes:
 Putting this another way, it is much better from a psychological
 standpoint to write
 </p>
-<pre class="example" id="org15188a3">
+<pre class="example" id="org3c90bdb">
 loop until found ... ; found; ... repeat
 </pre>
 <p>
 than to write
 </p>
-<pre class="example" id="org2153d00">
+<pre class="example" id="org731655a">
 search: while true do
 begin ... ; leave search; ... end.
 </pre>
@@ -460,7 +484,6 @@ a manner which is readily understandable and conceptually simple.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-a6abaffd-932d-4741-a3d6-d732ba429779" class="outline-3">
 <h3 id="h-a6abaffd-932d-4741-a3d6-d732ba429779"><span class="section-number-3">2.2.</span> Style</h3>
 <div class="outline-text-3" id="text-h-a6abaffd-932d-4741-a3d6-d732ba429779">
@@ -510,7 +533,6 @@ definitions or formats)</li>
 </ul></li>
 </ul>
 </div>
-
 <div id="outline-container-h-4b97e024-6fc1-4fac-b928-82098bb2cab0" class="outline-4">
 <h4 id="h-4b97e024-6fc1-4fac-b928-82098bb2cab0"><span class="section-number-4">2.2.1.</span> Naming Sections</h4>
 <div class="outline-text-4" id="text-h-4b97e024-6fc1-4fac-b928-82098bb2cab0">
@@ -545,7 +567,6 @@ in a restrained but natural manner.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-bac38627-9fb2-460c-9acc-bdc741cf76e0" class="outline-2">
 <h2 id="h-bac38627-9fb2-460c-9acc-bdc741cf76e0"><span class="section-number-2">3.</span> Misinterpretations of Knuth</h2>
 <div class="outline-text-2" id="text-h-bac38627-9fb2-460c-9acc-bdc741cf76e0">
@@ -566,7 +587,6 @@ similar lines as Jupyter.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-d4aa6d45-44e0-43db-bcc7-297a3b080e4d" class="outline-2">
 <h2 id="h-d4aa6d45-44e0-43db-bcc7-297a3b080e4d"><span class="section-number-2">4.</span> My own experiences</h2>
 <div class="outline-text-2" id="text-h-d4aa6d45-44e0-43db-bcc7-297a3b080e4d">
@@ -596,7 +616,6 @@ really six or seven stars, and I get to cluster them together in a
 way that is natural for org-mode.
 </p>
 </div>
-
 <div id="outline-container-h-d1c72354-2668-4c9f-90ee-db891005b151" class="outline-3">
 <h3 id="h-d1c72354-2668-4c9f-90ee-db891005b151"><span class="section-number-3">4.1.</span> Thoughts on Making a Lisp</h3>
 <div class="outline-text-3" id="text-h-d1c72354-2668-4c9f-90ee-db891005b151">
@@ -635,7 +654,6 @@ corner, etc.), analogous to Knuth's chunks.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-981d7f99-032c-4580-883a-9b4df7d0e8b5" class="outline-3">
 <h3 id="h-981d7f99-032c-4580-883a-9b4df7d0e8b5"><span class="section-number-3">4.2.</span> Open Questions</h3>
 <div class="outline-text-3" id="text-h-981d7f99-032c-4580-883a-9b4df7d0e8b5">
@@ -644,7 +662,6 @@ There are a few things I'm uncertain about how to handle with
 literate programming.
 </p>
 </div>
-
 <div id="outline-container-h-2c1bf083-d4c3-4a43-add0-2de462546fe3" class="outline-4">
 <h4 id="h-2c1bf083-d4c3-4a43-add0-2de462546fe3"><span class="section-number-4">4.2.1.</span> What <i>is</i> the "Best" Order for Human Understanding?</h4>
 <div class="outline-text-4" id="text-h-2c1bf083-d4c3-4a43-add0-2de462546fe3">
@@ -665,7 +682,6 @@ into talking to the computer.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-64445936-a883-421c-a50a-d79e5307b025" class="outline-4">
 <h4 id="h-64445936-a883-421c-a50a-d79e5307b025"><span class="section-number-4">4.2.2.</span> "Explanation"?</h4>
 <div class="outline-text-4" id="text-h-64445936-a883-421c-a50a-d79e5307b025">
@@ -730,7 +746,6 @@ doi:<a href="https://doi.org/10.1145/6592.6594">10.1145/6592.6594</a>.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-a49ed96b-653c-43ac-86a9-2635b03b5a5b" class="outline-4">
 <h4 id="h-a49ed96b-653c-43ac-86a9-2635b03b5a5b"><span class="section-number-4">4.2.3.</span> Contracts</h4>
 <div class="outline-text-4" id="text-h-a49ed96b-653c-43ac-86a9-2635b03b5a5b">
@@ -748,7 +763,6 @@ Hoare triple annotation.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-948bb08f-7ac3-4cb1-b0b0-73a4899d366c" class="outline-4">
 <h4 id="h-948bb08f-7ac3-4cb1-b0b0-73a4899d366c"><span class="section-number-4">4.2.4.</span> Literate Proofs</h4>
 <div class="outline-text-4" id="text-h-948bb08f-7ac3-4cb1-b0b0-73a4899d366c">
@@ -776,7 +790,6 @@ check the annotations, but this doesn't seem friendly.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-54bc9d7c-f664-4f12-b9f9-635153bfd7be" class="outline-2">
 <h2 id="h-54bc9d7c-f664-4f12-b9f9-635153bfd7be"><span class="section-number-2">5.</span> Notes on Noweb</h2>
 <div class="outline-text-2" id="text-h-54bc9d7c-f664-4f12-b9f9-635153bfd7be">
@@ -820,7 +833,6 @@ begin/end document environment</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-ddc775f3-b8ee-41c1-9e9a-5e72c11c81fd" class="outline-2">
 <h2 id="h-ddc775f3-b8ee-41c1-9e9a-5e72c11c81fd"><span class="section-number-2">6.</span> Knuth's "Structured Programming with GOTO"</h2>
 <div class="outline-text-2" id="text-h-ddc775f3-b8ee-41c1-9e9a-5e72c11c81fd">
@@ -838,7 +850,7 @@ least as badly structured. Dijkstra pointed this out already in 1968 [21],
 saying:
 </p>
 
-<pre class="example" id="org88c96ae">
+<pre class="example" id="orga2b325b">
     The exercise to translate an arbitrary flow diagram more or less 
     mechanically into a jumpless one, however, is not to be recommended.
     Then the resulting flow diagram cannot be expected to be more
@@ -890,7 +902,6 @@ to avoid the <code>goto</code>'s temptations toward complications.
 Emphasis in bold is mine.
 </p>
 </div>
-
 <div id="outline-container-h-da35167c-aed5-4551-82ec-fdf174bf17fa" class="outline-3">
 <h3 id="h-da35167c-aed5-4551-82ec-fdf174bf17fa"><span class="section-number-3">6.1.</span> "Structured" &#x2014; Data and Control</h3>
 <div class="outline-text-3" id="text-h-da35167c-aed5-4551-82ec-fdf174bf17fa">
@@ -919,7 +930,6 @@ suspect a good "first approximation" would be an assertion expected to hold.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-fb99dcb5-3e60-4150-b601-f23ea9e55b9d" class="outline-3">
 <h3 id="h-fb99dcb5-3e60-4150-b601-f23ea9e55b9d"><span class="section-number-3">6.2.</span> Different Levels of Abstraction</h3>
 <div class="outline-text-3" id="text-h-fb99dcb5-3e60-4150-b601-f23ea9e55b9d">
@@ -962,7 +972,6 @@ not important except as it relates to other data.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-0d908a8a-fa3e-4ae8-86cb-f54cefb65dfb" class="outline-2">
 <h2 id="h-0d908a8a-fa3e-4ae8-86cb-f54cefb65dfb"><span class="section-number-2">7.</span> References</h2>
 <div class="outline-text-2" id="text-h-0d908a8a-fa3e-4ae8-86cb-f54cefb65dfb">
@@ -985,7 +994,7 @@ doi:<a href="https://doi.org/10.1145/6592.6594">10.1145/6592.6594</a>.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-26 Sun 09:31.</p>
+<p class="postamble">Last Updated: Sun, 26 Feb 2023 09:36:02 -0800
 </div>
 </body>
 </html>

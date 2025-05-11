@@ -239,7 +239,12 @@
 <li><a href="#h-3e328d54-e563-4e88-a4ff-1a8ebe37deb9">1.2. Example 2: Operations for a Free Monad</a></li>
 </ul>
 </li>
-<li><a href="#h-191faef2-3b83-46a7-8433-0d9e2ce7692e">2. References</a></li>
+<li><a href="#h-d95e552a-0535-41e0-8850-adfc8ff15fd0">2. Applicative Functors</a>
+<ul>
+<li><a href="#h-9becc52f-1573-44ae-adf2-9c1a868c6890">2.1. Monads and Applicatives</a></li>
+</ul>
+</li>
+<li><a href="#h-191faef2-3b83-46a7-8433-0d9e2ce7692e">3. References</a></li>
 </ul>
 </div>
 </div>
@@ -352,8 +357,93 @@ can be handled simple as:
 </div>
 </div>
 </div>
+<div id="outline-container-h-d95e552a-0535-41e0-8850-adfc8ff15fd0" class="outline-2">
+<h2 id="h-d95e552a-0535-41e0-8850-adfc8ff15fd0"><span class="section-number-2">2.</span> Applicative Functors</h2>
+<div class="outline-text-2" id="text-h-d95e552a-0535-41e0-8850-adfc8ff15fd0">
+<p>
+One step towards monads is to consider <i>applicative</i> functors. This
+seems to originate from the paper:
+</p>
+
+<ul class="org-ul">
+<li>Conor McBride and Ross Paterson,<br>
+"Applicative Programming with Effects".<br>
+<i>Journal of Functional Programming</i> <b>18</b> no.1 (2008), pages 1-13. 
+<a href="https://www.staff.city.ac.uk/~ross/papers/Applicative.html">Eprint</a></li>
+</ul>
+
+<p>
+This allows us to describe effects (side-effects like IO, etc.)
+without dragging up the baroque framework of monads.
+</p>
+
+<p>
+It's a typeclass, so we describe it using a signature. (See Haskell's
+<a href="https://hackage.haskell.org/package/base-4.21.0.0/docs/Control-Applicative.html#t:Applicative">Control.Applicative</a> typeclass definition.) An applicative
+functor <i>is</i> still a functor, so we <code>include FUNCTOR</code> and add more
+operations to the signature.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">APPLICATIVE</span> = <span class="org-keyword">sig</span>
+  <span class="org-keyword">include</span> FUNCTOR;
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">Our "ap" is Haskell's &lt;*&gt;</span><span class="org-comment-delimiter"> *)</span>
+  <span class="org-keyword">val</span> <span class="org-variable-name">ap</span> : ('a -&gt; 'b) t -&gt; 'a t -&gt; 'b t;
+  <span class="org-keyword">val</span> <span class="org-variable-name">pure</span> : 'a -&gt; 'a t;
+  <span class="org-comment-delimiter">(* </span><span class="org-comment">...and possibly other quality-of-life functions.</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">end</span>;
+</pre>
+</div>
+
+<p>
+This satisfies the following laws:
+</p>
+
+<ul class="org-ul">
+<li>Identity: <code>ap (pure id) u = u</code></li>
+<li>Composition: <code>ap (pure o) (ap u (ap v w)) = ap u (ap v w)</code></li>
+<li>Morphism: <code>ap (pure f) (pure x) = pure (f x)</code></li>
+<li>Interchange: <code>ap u (pure x) = ap (pure (fn f =&gt; f x)) u</code></li>
+</ul>
+
+<p>
+&#x2026;in addition to the laws required for a functor.
+</p>
+
+<p>
+It's common in Haskell to use <code>f &lt;*&gt; x = ap f x</code>, and also introduce:
+</p>
+<div class="org-src-container">
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">in APPLICATIVE</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">val</span> &lt;$&gt; : ('a -&gt; 'b) * 'a t -&gt; 'b t;
+
+<span class="org-comment-delimiter">(* </span><span class="org-comment">implemented as:</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">fun</span> (f &lt;$&gt; u) = ap (pure f) u;
+</pre>
+</div>
+
+<p>
+Similarly, Haskell has <code>liftA2 : ('a -&gt; 'b -&gt; 'c) -&gt; 'a t -&gt; 'b t -&gt; c t</code>
+as well as sequencing operators
+<code>(*&gt;) : 'a t -&gt; 'b t -&gt; 'b t</code>
+and
+<code>(&lt;*) : 'a t -&gt; 'b t -&gt; 'a t</code>. The sequencing operators evaluates the
+expressions to its left and right, then returns the value on the left
+or right.
+</p>
+</div>
+<div id="outline-container-h-9becc52f-1573-44ae-adf2-9c1a868c6890" class="outline-3">
+<h3 id="h-9becc52f-1573-44ae-adf2-9c1a868c6890"><span class="section-number-3">2.1.</span> Monads and Applicatives</h3>
+<div class="outline-text-3" id="text-h-9becc52f-1573-44ae-adf2-9c1a868c6890">
+<p>
+Modern Haskell uses the hierarchy that monads are applicatives, and
+applicatives are functors.
+</p>
+</div>
+</div>
+</div>
 <div id="outline-container-h-191faef2-3b83-46a7-8433-0d9e2ce7692e" class="outline-2">
-<h2 id="h-191faef2-3b83-46a7-8433-0d9e2ce7692e"><span class="section-number-2">2.</span> References</h2>
+<h2 id="h-191faef2-3b83-46a7-8433-0d9e2ce7692e"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-191faef2-3b83-46a7-8433-0d9e2ce7692e">
 <ul class="org-ul">
 <li><a href="https://jobjo.github.io/2018/01/28/implicit-functors.html">Implicit Functors</a> in OCaml</li>
@@ -364,7 +454,7 @@ and applicatives in OCaml</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2025-02-26 Wed 12:27.</p>
+<p class="postamble">Last Updated: Wed, 26 Feb 2025 17:16:04 -0800
 </div>
 </body>
 </html>

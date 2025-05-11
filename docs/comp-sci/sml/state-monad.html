@@ -6,7 +6,7 @@
 <title>State Monad - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -238,7 +253,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-21196b9d-c2a1-4a15-b646-1952d4cd028d" class="outline-2">
 <h2 id="h-21196b9d-c2a1-4a15-b646-1952d4cd028d"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-21196b9d-c2a1-4a15-b646-1952d4cd028d">
@@ -268,7 +282,6 @@ We can view this as a generalization of the <a href="io-monad.html">IO Monad</a>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-3a45c708-3600-4240-bb9f-98fb0c39c3d4" class="outline-2">
 <h2 id="h-3a45c708-3600-4240-bb9f-98fb0c39c3d4"><span class="section-number-2">2.</span> Heuristic Derivation</h2>
 <div class="outline-text-2" id="text-h-3a45c708-3600-4240-bb9f-98fb0c39c3d4">
@@ -313,7 +326,7 @@ What we do is:
 
   <span class="org-comment-delimiter">(* </span><span class="org-comment">"k" for "kontinuation"</span><span class="org-comment-delimiter"> *)</span>
   <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> act k = state (<span class="org-keyword">fn</span> st =&gt;
-                             <span class="org-keyword">let</span> <span class="org-keyword">val</span> (x, st') = runState act st
+                             <span class="org-keyword">let</span> <span class="org-keyword">val</span> (x, st') = runState act s<span class="org-highlight-beyond-fill-column">t</span>
                              <span class="org-keyword">in</span> runState (k x) st'
                              <span class="org-keyword">end</span>);
 <span class="org-keyword">end</span>;
@@ -324,7 +337,6 @@ What we do is:
 Probably a more honest answer is to have <code>State of {runState : 's -&gt; 'a*'s}</code>.
 </p>
 </div>
-
 <div id="outline-container-h-4f2f2ebc-0571-43b9-9429-f16a012eef2b" class="outline-3">
 <h3 id="h-4f2f2ebc-0571-43b9-9429-f16a012eef2b"><span class="section-number-3">2.1.</span> Stack Computation</h3>
 <div class="outline-text-3" id="text-h-4f2f2ebc-0571-43b9-9429-f16a012eef2b">
@@ -347,7 +359,7 @@ The bind function composes state-transition functions:
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">f : top-of-stack -&gt; State</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> (State st) f = State (<span class="org-keyword">fn</span> s =&gt; <span class="org-keyword">let</span> <span class="org-keyword">val</span> (x, s') = st s
-                                           <span class="org-keyword">val</span> (State st') = f x
+                                           <span class="org-keyword">val</span> (State st') = f<span class="org-highlight-beyond-fill-column"> x</span>
                                        <span class="org-keyword">in</span> st' s'
                                        <span class="org-keyword">end</span>);
 </pre>
@@ -386,12 +398,10 @@ Boston University, course CS 320.</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-9da84a55-fed7-479b-b77d-cc8946784019" class="outline-2">
 <h2 id="h-9da84a55-fed7-479b-b77d-cc8946784019"><span class="section-number-2">3.</span> Implementation Details</h2>
 <div class="outline-text-2" id="text-h-9da84a55-fed7-479b-b77d-cc8946784019">
 </div>
-
 <div id="outline-container-h-b150c671-a8b9-46f4-b2b1-936468b47cf3" class="outline-3">
 <h3 id="h-b150c671-a8b9-46f4-b2b1-936468b47cf3"><span class="section-number-3">3.1.</span> Higher-Order Types</h3>
 <div class="outline-text-3" id="text-h-b150c671-a8b9-46f4-b2b1-936468b47cf3">
@@ -433,7 +443,6 @@ What we should do is define a monad transformer as a functor.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-1ceb984d-54d3-4718-8883-56e5cf4ef952" class="outline-2">
 <h2 id="h-1ceb984d-54d3-4718-8883-56e5cf4ef952"><span class="section-number-2">4.</span> OCaml Implementation</h2>
 <div class="outline-text-2" id="text-h-1ceb984d-54d3-4718-8883-56e5cf4ef952">
@@ -462,8 +471,6 @@ Cambridge L28 taught in 2014&#x2013;2015 has, in its
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d" class="outline-2">
 <h2 id="h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-72a8f2e2-f6a2-46c0-b102-d676ec871a0d">
@@ -483,9 +490,6 @@ Polymorphism".<br>
 Blog post dated July 12, 2020.</li>
 </ul>
 </div>
-
-
-
 <div id="outline-container-h-789c6184-637c-45ae-aad1-2d06b8d95754" class="outline-3">
 <h3 id="h-789c6184-637c-45ae-aad1-2d06b8d95754"><span class="section-number-3">5.1.</span> OCaml Implementations</h3>
 <div class="outline-text-3" id="text-h-789c6184-637c-45ae-aad1-2d06b8d95754">
@@ -505,7 +509,7 @@ monadic programming".<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-14 Tue 10:48.</p>
+<p class="postamble">Last Updated: Thu, 16 Feb 2023 08:41:43 -0800
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>ST Monad - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -225,7 +240,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-c16ea4f8-e7de-4f67-ace7-ca6922719bb7" class="outline-2">
 <h2 id="h-c16ea4f8-e7de-4f67-ace7-ca6922719bb7"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-c16ea4f8-e7de-4f67-ace7-ca6922719bb7">
@@ -276,7 +290,6 @@ abstracting away a stateful computation.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-cfde934a-2d81-4a8a-9ca9-f32cac8f8247" class="outline-2">
 <h2 id="h-cfde934a-2d81-4a8a-9ca9-f32cac8f8247"><span class="section-number-2">2.</span> Implementation</h2>
 <div class="outline-text-2" id="text-h-cfde934a-2d81-4a8a-9ca9-f32cac8f8247">
@@ -312,8 +325,6 @@ If we fix <code>'s = unit</code>, then we recover the IO monad.
 </p>
 </div>
 </div>
-
-
 <div id="outline-container-h-4a64d26f-a2aa-45f5-827c-564893f38717" class="outline-2">
 <h2 id="h-4a64d26f-a2aa-45f5-827c-564893f38717"><span class="section-number-2">3.</span> Example with Standard ML Regions</h2>
 <div class="outline-text-2" id="text-h-4a64d26f-a2aa-45f5-827c-564893f38717">
@@ -358,7 +369,7 @@ given lexical block:
 
 <span class="org-keyword">structure</span> <span class="org-module-def">T</span> = Region(<span class="org-keyword">struct</span>
   <span class="org-keyword">type</span> <span class="org-type-def">t</span> = int
-  <span class="org-keyword">fun</span> <span class="org-function-name">f</span> resource = ( <span class="org-comment-delimiter">(* </span><span class="org-comment">this function forms the body of the "region"</span><span class="org-comment-delimiter"> *)</span>
+  <span class="org-keyword">fun</span> <span class="org-function-name">f</span> resource = ( <span class="org-comment-delimiter">(* </span><span class="org-comment">this function forms the body of the "r</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">egion"</span></span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column"> *)</span></span>
     6
   )
 <span class="org-keyword">end</span>)
@@ -386,7 +397,7 @@ with the phantom type:
 <pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">RMONAD</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> ('s, 'a, 'r) <span class="org-type-def">m</span>
   <span class="org-keyword">val</span> <span class="org-variable-name">ret</span>: ('s * 'r) -&gt; 'a -&gt; ('s, 'a, 'r) m
-  <span class="org-keyword">val</span> <span class="org-variable-name">bnd</span>: ('s, 'a, 'r) m * ('a * 'r -&gt; ('s, 'b, 'r) m) -&gt; ('s, 'b, 'r) m
+  <span class="org-keyword">val</span> <span class="org-variable-name">bnd</span>: ('s, 'a, 'r) m * ('a * 'r -&gt; ('s, 'b, 'r) m) -&gt; ('s<span class="org-highlight-beyond-fill-column">, 'b, 'r) m</span>
   <span class="org-keyword">val</span> <span class="org-variable-name">get</span>: 's -&gt; ('s, 'a, 'r) m -&gt; 'a * 'r
 <span class="org-keyword">end</span>
 
@@ -402,7 +413,7 @@ with the phantom type:
 <span class="org-keyword">signature</span> <span class="org-interface-def">MBLOCK</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> <span class="org-type-def">t</span>
   <span class="org-keyword">val</span> <span class="org-variable-name">f</span>:(t -&gt; ('s, t, 'r) RMonad.m)  <span class="org-comment-delimiter">(* </span><span class="org-comment">return</span><span class="org-comment-delimiter"> *)</span>
-         * ('r -&gt; ('s, string, 'r) RMonad.m) <span class="org-comment-delimiter">(* </span><span class="org-comment">operations on r</span><span class="org-comment-delimiter"> *)</span>
+         * ('r -&gt; ('s, string, 'r) RMonad.m) <span class="org-comment-delimiter">(* </span><span class="org-comment">operations on </span><span class="org-comment"><span class="org-highlight-beyond-fill-column">r</span></span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column"> *)</span></span>
         -&gt; ('s, t, 'r) RMonad.m
 <span class="org-keyword">end</span>
 
@@ -411,12 +422,12 @@ with the phantom type:
   <span class="org-keyword">val</span> <span class="org-variable-name">run</span>:unit -&gt; t
 <span class="org-keyword">end</span>
 
-<span class="org-keyword">functor</span> <span class="org-module-def">MRegion</span>(B:MBLOCK) :&gt; MREGION <span class="org-keyword">where</span> <span class="org-keyword">type</span> <span class="org-type-def">t</span> = B.t = <span class="org-keyword">struct</span>
+<span class="org-keyword">functor</span> <span class="org-module-def">MRegion</span>(B:MBLOCK) :&gt; MREGION <span class="org-keyword">where</span> <span class="org-keyword">type</span> <span class="org-type-def">t</span> = B.t = stru<span class="org-highlight-beyond-fill-column">ct</span>
   <span class="org-keyword">type</span> <span class="org-type-def">t</span> = B.t
   <span class="org-keyword">datatype</span> <span class="org-type-def">phan</span> = Phan
   <span class="org-keyword">fun</span> <span class="org-function-name">run</span> () = <span class="org-keyword">let</span>
-    <span class="org-keyword">val</span> (ret, res) = RMonad.get Phan (B.f(RMonad.ret(Phan, <span class="org-string">"RESOURCE"</span>),
-                                     (<span class="org-keyword">fn</span> r =&gt; RMonad.ret(Phan, <span class="org-string">"RESOURCE"</span>) r)))
+    <span class="org-keyword">val</span> (ret, res) = RMonad.get Phan (B.f(RMonad.ret(Phan, <span class="org-string">"RE</span><span class="org-string"><span class="org-highlight-beyond-fill-column">SOURCE"</span></span><span class="org-highlight-beyond-fill-column">),</span>
+                                     (<span class="org-keyword">fn</span> r =&gt; RMonad.ret(Phan,<span class="org-highlight-beyond-fill-column"> </span><span class="org-string"><span class="org-highlight-beyond-fill-column">"RESOURCE"</span></span><span class="org-highlight-beyond-fill-column">) r)))</span>
   <span class="org-keyword">in</span>
     print(<span class="org-string">"closing "</span> ^ res ^ <span class="org-string">"\n"</span>) ; ret
   <span class="org-keyword">end</span>
@@ -464,7 +475,6 @@ closures can't run the code that works on it. At least, I think so.
 </blockquote>
 </div>
 </div>
-
 <div id="outline-container-h-ba354002-0dc7-4384-9654-f2076a75d496" class="outline-2">
 <h2 id="h-ba354002-0dc7-4384-9654-f2076a75d496"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-ba354002-0dc7-4384-9654-f2076a75d496">
@@ -480,13 +490,18 @@ PLDI '94, <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/1
 <li>Stephanie Weirich,<br>
 <a href="https://www.seas.upenn.edu/~cis552/17fa/lectures/stub/STMonad.html">The ST and IO Monads</a>.<br>
 CIS552 lecture, UPenn, 2017 Fall Quarter.</li>
-<li></li>
+<li>Koen Jacobs, Dominique Devriese, Amin Timany,<br>
+"Purity of an ST monad: full abstraction by semantically typed
+back-translation".<br>
+<i>Proceedings of ACM on Programming Languages</i>
+<b>6</b> no.1 (2022) 1&#x2013;27
+doi:<a href="https://doi.org/10.1145/3527326">10.1145/3527326</a></li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-14 Tue 10:15.</p>
+<p class="postamble">Last Updated: Mon, 13 Nov 2023 12:52:22 -0800
 </div>
 </body>
 </html>

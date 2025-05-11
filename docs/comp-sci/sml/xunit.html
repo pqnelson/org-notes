@@ -6,7 +6,7 @@
 <title>XUnit Framework - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -229,7 +244,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4" class="outline-2">
 <h2 id="h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-17acfd50-8920-4d5e-9f98-7a2ab1d80dd4">
@@ -244,7 +258,6 @@ We will have one <b>test suite</b> per file, which consists of many <b>test case
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-303d6523-5b1b-4c46-8586-fc19dd362eeb" class="outline-2">
 <h2 id="h-303d6523-5b1b-4c46-8586-fc19dd362eeb"><span class="section-number-2">2.</span> First Draft</h2>
 <div class="outline-text-2" id="text-h-303d6523-5b1b-4c46-8586-fc19dd362eeb">
@@ -303,9 +316,9 @@ tests.
     = (assertion()
        <span class="org-keyword">handle</span> AssertionFailure msg =&gt; print (concat [<span class="org-string">"Test "</span>,
                                                      name,
-                                                     <span class="org-string">" failed: "</span>,
+                                                     <span class="org-string">" failed:</span><span class="org-string"><span class="org-highlight-beyond-fill-column"> "</span></span><span class="org-highlight-beyond-fill-column">,</span>
                                                      msg])
-            | e =&gt; print (concat [<span class="org-string">"Unhandled exception in test"</span>,
+            | e =&gt; print (concat [<span class="org-string">"Unhandled exception in test</span><span class="org-string"><span class="org-highlight-beyond-fill-column">"</span></span><span class="org-highlight-beyond-fill-column">,</span>
                                   name,
                                   <span class="org-string">": "</span>,
                                   exnMessage e]))
@@ -334,15 +347,14 @@ Now we could run this on some example tests:
 
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">ex_tests</span> = suite <span class="org-string">"Arithmetic Tests"</span>
-                     [test <span class="org-string">"Arithmetic test 1"</span> (<span class="org-keyword">fn</span> () =&gt; assert <span class="org-string">"1+1=2"</span> (1+1=2)),
-                      test <span class="org-string">"Arithmetic test 2"</span> (<span class="org-keyword">fn</span> () =&gt; assert <span class="org-string">"1+1=3"</span> (1+1=3))];
+                     [test <span class="org-string">"Arithmetic test 1"</span> (<span class="org-keyword">fn</span> () =&gt; asser<span class="org-highlight-beyond-fill-column">t </span><span class="org-string"><span class="org-highlight-beyond-fill-column">"1+1=2"</span></span><span class="org-highlight-beyond-fill-column"> (1+1=2)),</span>
+                      test <span class="org-string">"Arithmetic test 2"</span> (<span class="org-keyword">fn</span> () =&gt; asser<span class="org-highlight-beyond-fill-column">t </span><span class="org-string"><span class="org-highlight-beyond-fill-column">"1+1=3"</span></span><span class="org-highlight-beyond-fill-column"> (1+1=3))];</span>
 
 run ex_tests;
 </pre>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b" class="outline-2">
 <h2 id="h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b"><span class="section-number-2">3.</span> Refactoring Test Results and Test Reporting</h2>
 <div class="outline-text-2" id="text-h-158b0714-cfc3-4cc3-b0d3-03d00dc5140b">
@@ -372,8 +384,8 @@ track of possibly nested test suites).
                      | TestFail <span class="org-keyword">of</span> string
                      | TestException <span class="org-keyword">of</span> exn;
 
-<span class="org-keyword">datatype</span> <span class="org-type-def">TestResult</span> = ResultCase <span class="org-keyword">of</span> string*Time.time*TestOutcome
-                    | ResultSuite <span class="org-keyword">of</span> string*Time.time*(TestResult list);
+<span class="org-keyword">datatype</span> <span class="org-type-def">TestResult</span> = ResultCase <span class="org-keyword">of</span> string*Time.time*TestOutco<span class="org-highlight-beyond-fill-column">me</span>
+                    | ResultSuite <span class="org-keyword">of</span> string*Time.time*(TestRes<span class="org-highlight-beyond-fill-column">ult list);</span>
 </pre>
 </div>
 
@@ -389,10 +401,10 @@ We can now modify our <code>run</code> function to produce a <code>TestResult</c
   <span class="org-keyword">case</span> test <span class="org-keyword">of</span>
       (TestCase (case_name, assertion)) =&gt;
       ((assertion();
-        ResultCase (case_name, (Time.-)(Time.now(), start), TestSuccess))
+        ResultCase (case_name, (Time.-)(Time.now(), start), Te<span class="org-highlight-beyond-fill-column">stSuccess))</span>
        <span class="org-keyword">handle</span> AssertionFailure msg =&gt; ResultCase (case_name,
-                                                  (Time.-)(Time.now(), start),
-                                                  TestFail msg)
+                                                  (Time.-)(Tim<span class="org-highlight-beyond-fill-column">e.now(), start),</span>
+                                                  TestFail msg<span class="org-highlight-beyond-fill-column">)</span>
             | e =&gt; ResultCase (case_name,
                                (Time.-)(Time.now(), start),
                                TestException e))
@@ -423,8 +435,8 @@ microseconds instead.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">`Time.fmt n interval` will produce a string representation of the</span>
-<span class="org-comment">number of seconds in the interval, to `n` digits after the decimal</span>
+<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">`Time.fmt n interval` will produce a string representation </span><span class="org-comment"><span class="org-highlight-beyond-fill-column">of the</span></span>
+<span class="org-comment">number of seconds in the interval, to `n` digits after the dec</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">imal</span></span>
 <span class="org-comment">point.</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">intervalToString</span> (dt : Time.time) : string =
     Time.fmt 3 dt;
@@ -449,12 +461,12 @@ microseconds instead.
        | (TestException e) =&gt; print (concat [<span class="org-string">"Test "</span>,
                                              name,
                                              <span class="org-string">" ("</span>,
-                                             intervalToString dt,
-                                             <span class="org-string">"): UNHANDLED EXCEPTION "</span>,
+                                             intervalToString <span class="org-highlight-beyond-fill-column">dt,</span>
+                                             <span class="org-string">"): UNHANDLED EXC</span><span class="org-string"><span class="org-highlight-beyond-fill-column">EPTION "</span></span><span class="org-highlight-beyond-fill-column">,</span>
                                              exnMessage e,
                                              <span class="org-string">"\n"</span>]))
   | report_results (ResultSuite (name,dt,outcomes)) =
-    (print (concat [<span class="org-string">"Suite "</span>, name, <span class="org-string">" ("</span>, intervalToString dt, <span class="org-string">")\n"</span>]);
+    (print (concat [<span class="org-string">"Suite "</span>, name, <span class="org-string">" ("</span>, intervalToString dt,<span class="org-highlight-beyond-fill-column"> </span><span class="org-string"><span class="org-highlight-beyond-fill-column">")\n"</span></span><span class="org-highlight-beyond-fill-column">]);</span>
      app report_results outcomes);
 </pre>
 </div>
@@ -463,7 +475,7 @@ microseconds instead.
 Now we could run this on the example tests by doing something like:
 </p>
 
-<pre class="example" id="org4d4fa5c">
+<pre class="example" id="orga6a74e0">
 val ex_results = run_test ex_tests;
 
 report_results ex_results;
@@ -481,7 +493,6 @@ So far, so good!
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-6c77fd79-b060-4a5b-971b-0f99b3736c54" class="outline-2">
 <h2 id="h-6c77fd79-b060-4a5b-971b-0f99b3736c54"><span class="section-number-2">4.</span> Summarize results</h2>
 <div class="outline-text-2" id="text-h-6c77fd79-b060-4a5b-971b-0f99b3736c54">
@@ -494,7 +505,7 @@ record type to track the number of successes, failures, and errors.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">ResultSummary</span> = {success : int, fail : int, errors : int};
+<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">ResultSummary</span> = {success : int, fail : int, errors : int}<span class="org-highlight-beyond-fill-column">;</span>
 
 <span class="org-keyword">val</span> <span class="org-variable-name">no_results</span> = {success=0, fail=0, errors=0};
 </pre>
@@ -509,7 +520,7 @@ will be used to fold them all together.
 
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">merge_summaries</span> (({success=s1, fail=f1, errors=e1},
-                     {success=s2, fail=f2, errors=e2}) : ResultSummary*ResultSummary)
+                     {success=s2, fail=f2, errors=e2}) : Resul<span class="org-highlight-beyond-fill-column">tSummary*ResultSummary)</span>
     : ResultSummary
     = {success = s1+s2,
        fail = f1 + f2,
@@ -538,7 +549,7 @@ summing over the summaries of its constituents.
 Now we could check the summary of our toy test suite:
 </p>
 
-<pre class="example" id="org3872ad9">
+<pre class="example" id="orgf00acb8">
 summarize ex_results;
 
 (* SML/NJ produces:
@@ -548,7 +559,6 @@ val it = {errors=0,fail=1,success=1} : {errors:int, fail:int, success:int}
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-b341cf44-e93f-418f-b0d4-2bc8dcba2674" class="outline-2">
 <h2 id="h-b341cf44-e93f-418f-b0d4-2bc8dcba2674"><span class="section-number-2">5.</span> Quality of life helper functions</h2>
 <div class="outline-text-2" id="text-h-b341cf44-e93f-418f-b0d4-2bc8dcba2674">
@@ -559,7 +569,7 @@ test suite be contained in its own file. So I would love to write
 something like:
 </p>
 
-<pre class="example" id="org24ae026">
+<pre class="example" id="orgfc3211a">
 suite "FooBarTests";
 
 test "BaazTest1" fn () =&gt; (* ... *);
@@ -601,7 +611,7 @@ suite to the running list of all suites in a helper function:
     <span class="org-keyword">let</span>
         <span class="org-keyword">val</span> (name, tests) = !current_suite
     <span class="org-keyword">in</span>
-        all_suites := (TestSuite (name, tests)) :: (!all_suites);
+        all_suites := (TestSuite (name, tests)) :: (!all_suite<span class="org-highlight-beyond-fill-column">s);</span>
         current_suite := (name, [])
     <span class="org-keyword">end</span>;
 </pre>
@@ -627,13 +637,12 @@ list of tests.
     <span class="org-keyword">let</span>
         <span class="org-keyword">val</span> (suite_name, tests) = !current_suite
     <span class="org-keyword">in</span>
-        current_suite := (suite_name, (TestCase (name, assertion))::tests)
+        current_suite := (suite_name, (TestCase (name, asserti<span class="org-highlight-beyond-fill-column">on))::tests)</span>
     <span class="org-keyword">end</span>;
 </pre>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-a7123449-f3a8-4555-8ad2-416c6423d04d" class="outline-2">
 <h2 id="h-a7123449-f3a8-4555-8ad2-416c6423d04d"><span class="section-number-2">6.</span> Reporter Module</h2>
 <div class="outline-text-2" id="text-h-a7123449-f3a8-4555-8ad2-416c6423d04d">
@@ -672,7 +681,7 @@ The output for a test suite which has no errors or failures would
 consist of two lines:
 </p>
 
-<pre class="example" id="org1a314d7">
+<pre class="example" id="org67bb85e">
 Running &lt;file path&gt;
 Tests run: &lt;number&gt;, Failures: &lt;number&gt;, Errors: &lt;number&gt;, Skipped: &lt;number&gt;, Time elapsed: &lt;interval s - in &lt;file path&gt;
 </pre>
@@ -684,7 +693,7 @@ package this together in <code>JUnitTt</code>, a structure writing to the termin
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">count_tests_run</span> ({success=s1, fail=f1, errors=e1} : ResultSummary)
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">count_tests_run</span> ({success=s1, fail=f1, errors=e1} : Result<span class="org-highlight-beyond-fill-column">Summary)</span>
     = s1 + f1 + e1;
 
 <span class="org-keyword">structure</span> <span class="org-module-def">JUnitTt</span> : REPORTER = <span class="org-keyword">struct</span>
@@ -693,7 +702,7 @@ package this together in <code>JUnitTt</code>, a structure writing to the termin
   <span class="org-keyword">fun</span> <span class="org-function-name">report</span> (ResultCase (name, dt, outcome)) =
       (<span class="org-keyword">case</span> outcome <span class="org-keyword">of</span>
            (TestFail msg) =&gt; print (name^<span class="org-string">" FAIL: "</span>^msg^<span class="org-string">"\n"</span>)
-         | (TestException e) =&gt; print (name^<span class="org-string">" ERROR: "</span>^(exnMessage e)^<span class="org-string">"\n"</span>)
+         | (TestException e) =&gt; print (name^<span class="org-string">" ERROR: "</span>^(exnMes<span class="org-highlight-beyond-fill-column">sage e)^</span><span class="org-string"><span class="org-highlight-beyond-fill-column">"\n"</span></span><span class="org-highlight-beyond-fill-column">)</span>
          | _ =&gt; ())
   | report (r <span class="org-keyword">as</span> (ResultSuite (name, dt, results))) =
     <span class="org-keyword">let</span>
@@ -701,13 +710,13 @@ package this together in <code>JUnitTt</code>, a structure writing to the termin
     <span class="org-keyword">in</span>
         (print (<span class="org-string">"Running "</span>^name^<span class="org-string">"\n"</span>);
          app report results;
-         print (concat [<span class="org-string">"Tests run: "</span>, Int.toString (count_tests_run summary),
+         print (concat [<span class="org-string">"Tests run: "</span>, Int.toString (count_tes<span class="org-highlight-beyond-fill-column">ts_run summary),</span>
                         <span class="org-string">", "</span>,
-                        <span class="org-string">"Failures: "</span>, Int.toString (#fail summary),
+                        <span class="org-string">"Failures: "</span>, Int.toString (#fail summ<span class="org-highlight-beyond-fill-column">ary),</span>
                         <span class="org-string">", "</span>,
-                        <span class="org-string">"Errors: "</span>, Int.toString (#errors summary),
+                        <span class="org-string">"Errors: "</span>, Int.toString (#errors summ<span class="org-highlight-beyond-fill-column">ary),</span>
                         <span class="org-string">", "</span>,
-                        <span class="org-comment-delimiter">(* </span><span class="org-comment">"Skipped: ", #skipped summary, " ",</span><span class="org-comment-delimiter"> *)</span>
+                        <span class="org-comment-delimiter">(* </span><span class="org-comment">"Skipped: ", #skipped summary, " ",</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column"> *)</span></span>
                         <span class="org-string">"Time elapsed: "</span>, intervalToString dt,
                         <span class="org-string">" - in "</span>, name,
                         <span class="org-string">"\n"</span>]))
@@ -721,7 +730,7 @@ Now we can run this on our example test results, which will produce
 something like the following:
 </p>
 
-<pre class="example" id="org99375cf">
+<pre class="example" id="org738673a">
 - JUnitTt.report ex_results;
 Running Arithmetic Tests
 Arithmetic test 2 FAIL: 1+1=3
@@ -730,7 +739,6 @@ val it = () : JUnitTt.t
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-2bb3e70c-7422-4378-aa81-43996c8bfdff" class="outline-2">
 <h2 id="h-2bb3e70c-7422-4378-aa81-43996c8bfdff"><span class="section-number-2">7.</span> XML Output</h2>
 <div class="outline-text-2" id="text-h-2bb3e70c-7422-4378-aa81-43996c8bfdff">
@@ -746,7 +754,7 @@ in writing some SML code.
 Schematically, the XML output from JUnit looks like:
 </p>
 
-<pre class="example" id="org52f1234">
+<pre class="example" id="orgb58d5a1">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!-- a description of the JUnit XML format and how Jenkins parses it. See also junit.xsd --&gt;
 
@@ -832,7 +840,6 @@ Schematically, the XML output from JUnit looks like:
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-fbfa4c45-7cfd-4022-beea-f3b0eb05d944" class="outline-2">
 <h2 id="h-fbfa4c45-7cfd-4022-beea-f3b0eb05d944"><span class="section-number-2">8.</span> Test Discovery</h2>
 <div class="outline-text-2" id="text-h-fbfa4c45-7cfd-4022-beea-f3b0eb05d944">
@@ -840,7 +847,7 @@ Schematically, the XML output from JUnit looks like:
 Ideally, my project should look like:
 </p>
 
-<pre class="example" id="org6259662">
+<pre class="example" id="org9d059ff">
 ├── src
 │   ├── main.sml
 │   └── foo.sml
@@ -881,7 +888,7 @@ files to compile in the <code>Makefile</code> (or equivalent) in the
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-09-25 Mon 08:59.</p>
+<p class="postamble">Last Updated: Mon, 13 Nov 2023 12:52:22 -0800
 </div>
 </body>
 </html>

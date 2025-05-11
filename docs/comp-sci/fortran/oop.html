@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:48 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OOP - Fortran</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -189,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -235,7 +249,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-10f0e026-89b2-4198-84a2-d976447b9c29" class="outline-2">
 <h2 id="h-10f0e026-89b2-4198-84a2-d976447b9c29"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-10f0e026-89b2-4198-84a2-d976447b9c29">
@@ -251,7 +264,6 @@ to:
 <li><b>Method</b> is a subroutine or function associated with a field</li>
 </ul>
 </div>
-
 <div id="outline-container-h-44f6fdc8-df76-49c9-b6a7-2ca77fe8e874" class="outline-3">
 <h3 id="h-44f6fdc8-df76-49c9-b6a7-2ca77fe8e874"><span class="section-number-3">1.1.</span> Example</h3>
 <div class="outline-text-3" id="text-h-44f6fdc8-df76-49c9-b6a7-2ca77fe8e874">
@@ -286,7 +298,6 @@ private, we could do the following:
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-6e233a7e-cfa0-4223-b81e-defa204fee0f" class="outline-3">
 <h3 id="h-6e233a7e-cfa0-4223-b81e-defa204fee0f"><span class="section-number-3">1.2.</span> Suggestions</h3>
 <div class="outline-text-3" id="text-h-6e233a7e-cfa0-4223-b81e-defa204fee0f">
@@ -303,7 +314,6 @@ will change my mind soon enough)</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-fcdb78ab-1759-4d37-b29c-d384b32a41e6" class="outline-2">
 <h2 id="h-fcdb78ab-1759-4d37-b29c-d384b32a41e6"><span class="section-number-2">2.</span> Constructors</h2>
 <div class="outline-text-2" id="text-h-fcdb78ab-1759-4d37-b29c-d384b32a41e6">
@@ -311,12 +321,11 @@ will change my mind soon enough)</li>
 There are a few default constructors provided:
 </p>
 
-<pre class="example" id="org85a9d01">
+<pre class="example" id="orgbc0e2b3">
 Shape(0, .false., 3, 7) ! Initialize with positional arguments
 Shape(x = 5, color = 33, y = 1, filled = .false.) ! keyword arguments
 </pre>
 </div>
-
 <div id="outline-container-h-4bfc7d66-b7b9-4698-b446-6fbc2acfdf8e" class="outline-3">
 <h3 id="h-4bfc7d66-b7b9-4698-b446-6fbc2acfdf8e"><span class="section-number-3">2.1.</span> Custom Constructor</h3>
 <div class="outline-text-3" id="text-h-4bfc7d66-b7b9-4698-b446-6fbc2acfdf8e">
@@ -351,7 +360,6 @@ constructor to <code>new_shape(x, y, color)</code>:
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-9b804fc7-e478-4c73-a8e5-244aff6c331f" class="outline-2">
 <h2 id="h-9b804fc7-e478-4c73-a8e5-244aff6c331f"><span class="section-number-2">3.</span> Binding Methods to a Class</h2>
 <div class="outline-text-2" id="text-h-9b804fc7-e478-4c73-a8e5-244aff6c331f">
@@ -389,8 +397,6 @@ use <code>area</code>.
 </p>
 </div>
 </div>
-
-
 <div id="outline-container-h-4325448d-5390-4936-9522-3259eb10632a" class="outline-2">
 <h2 id="h-4325448d-5390-4936-9522-3259eb10632a"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-4325448d-5390-4936-9522-3259eb10632a">
@@ -401,7 +407,7 @@ use <code>area</code>.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-10 Thu 14:29.</p>
+<p class="postamble">Last Updated: Mon, 7 Feb 2022 16:47:28 -0800
 </div>
 </body>
 </html>

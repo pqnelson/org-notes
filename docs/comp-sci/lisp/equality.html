@@ -6,7 +6,7 @@
 <title>Equality Testing</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -232,7 +247,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-b9635bbe-00f6-4e97-b1e6-5c95aa7fb43d" class="outline-2">
 <h2 id="h-b9635bbe-00f6-4e97-b1e6-5c95aa7fb43d"><span class="section-number-2">1.</span> Built-In Equality Predicates</h2>
 <div class="outline-text-2" id="text-h-b9635bbe-00f6-4e97-b1e6-5c95aa7fb43d">
@@ -277,7 +291,6 @@ to terminate!</li>
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-52709629-23a4-48bb-a4e7-3f095de33492" class="outline-2">
 <h2 id="h-52709629-23a4-48bb-a4e7-3f095de33492"><span class="section-number-2">2.</span> Egal Operator</h2>
 <div class="outline-text-2" id="text-h-52709629-23a4-48bb-a4e7-3f095de33492">
@@ -305,7 +318,6 @@ introducing a function <code>EGAL</code>. The basic template is as follows:
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-757d8938-0379-490c-a8a8-a0b42265ee35" class="outline-3">
 <h3 id="h-757d8938-0379-490c-a8a8-a0b42265ee35"><span class="section-number-3">2.1.</span> Numbers</h3>
 <div class="outline-text-3" id="text-h-757d8938-0379-490c-a8a8-a0b42265ee35">
@@ -334,7 +346,6 @@ types <b>must agree</b>.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-02bbd24f-7f74-40b4-b66e-3094ff2ea51c" class="outline-3">
 <h3 id="h-02bbd24f-7f74-40b4-b66e-3094ff2ea51c"><span class="section-number-3">2.2.</span> Vectors and Strings</h3>
 <div class="outline-text-3" id="text-h-02bbd24f-7f74-40b4-b66e-3094ff2ea51c">
@@ -365,7 +376,6 @@ Otherwise, the predicate is false.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-e3823fb5-4a3c-4b51-9eb5-16718fa6f5e4" class="outline-3">
 <h3 id="h-e3823fb5-4a3c-4b51-9eb5-16718fa6f5e4"><span class="section-number-3">2.3.</span> Function Equality</h3>
 <div class="outline-text-3" id="text-h-e3823fb5-4a3c-4b51-9eb5-16718fa6f5e4">
@@ -392,7 +402,6 @@ checks if the funtion and the environments are equal.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-afa01056-eef2-4131-95af-d0240e382644" class="outline-3">
 <h3 id="h-afa01056-eef2-4131-95af-d0240e382644"><span class="section-number-3">2.4.</span> Hash Tables</h3>
 <div class="outline-text-3" id="text-h-afa01056-eef2-4131-95af-d0240e382644">
@@ -406,7 +415,8 @@ I just implement this using:
        (<span class="org-keyword">with-hash-table-iterator</span> (iterator x)
          (<span class="org-keyword">loop</span> (<span class="org-keyword">multiple-value-bind</span> (entry-p key value) (iterator)
                  (<span class="org-keyword">if</span> entry-p
-                     (egal (gethash key y) value)
+                     (<span class="org-keyword">unless</span> (egal (gethash key y) value)
+                       (<span class="org-keyword">return</span>))
                      (<span class="org-keyword">return</span> t)))))))
 </pre>
 </div>
@@ -416,7 +426,6 @@ This is probably not as good as <code>equalp</code>.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-7d95f200-7c07-4f8a-96c5-92cc18e760d1" class="outline-3">
 <h3 id="h-7d95f200-7c07-4f8a-96c5-92cc18e760d1"><span class="section-number-3">2.5.</span> Streams</h3>
 <div class="outline-text-3" id="text-h-7d95f200-7c07-4f8a-96c5-92cc18e760d1">
@@ -434,7 +443,6 @@ to pointer equality.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-58159f72-2820-42e6-ba5e-a9334322d19a" class="outline-2">
 <h2 id="h-58159f72-2820-42e6-ba5e-a9334322d19a"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-58159f72-2820-42e6-ba5e-a9334322d19a">
@@ -449,7 +457,7 @@ to pointer equality.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-07-27 Thu 16:30.</p>
+<p class="postamble">Last Updated: Fri, 28 Jul 2023 06:50:51 -0700
 </div>
 </body>
 </html>

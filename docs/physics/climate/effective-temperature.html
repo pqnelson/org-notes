@@ -6,7 +6,7 @@
 <title>Effective Temperature</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -235,7 +264,6 @@
  <a accesskey="H" href="../../index.html"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">Effective Temperature</h1>
-
 <div id="outline-container-h-126b94b0-bfb9-4b5f-9768-8b8446cb87a0" class="outline-2">
 <h2 id="h-126b94b0-bfb9-4b5f-9768-8b8446cb87a0"><span class="section-number-2">1.</span> Problem</h2>
 <div class="outline-text-2" id="text-h-126b94b0-bfb9-4b5f-9768-8b8446cb87a0">
@@ -246,12 +274,10 @@ no atmosphere.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-266f1897-6dd7-4e7b-9dd1-e8692ab5764d" class="outline-2">
 <h2 id="h-266f1897-6dd7-4e7b-9dd1-e8692ab5764d"><span class="section-number-2">2.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-266f1897-6dd7-4e7b-9dd1-e8692ab5764d">
 </div>
-
 <div id="outline-container-h-47370783-5efa-4873-9124-8a68f2bb5669" class="outline-3">
 <h3 id="h-47370783-5efa-4873-9124-8a68f2bb5669"><span class="section-number-3">2.1.</span> Computing the Approximate Temperature of the Earth</h3>
 <div class="outline-text-3" id="text-h-47370783-5efa-4873-9124-8a68f2bb5669">
@@ -369,7 +395,6 @@ would receive decreasing radiance hence decreasing temperature
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-a13603ef-a461-4b77-8b8f-8aa80e31ad7f" class="outline-2">
 <h2 id="h-a13603ef-a461-4b77-8b8f-8aa80e31ad7f"><span class="section-number-2">3.</span> Remark: Explicit Formula</h2>
 <div class="outline-text-2" id="text-h-a13603ef-a461-4b77-8b8f-8aa80e31ad7f">
@@ -444,7 +469,7 @@ be near.</p>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-08-30 Tue 09:05.</p>
+<p class="postamble">Last Updated: Mon, 12 Sep 2022 08:35:49 -0700
 </div>
 </body>
 </html>

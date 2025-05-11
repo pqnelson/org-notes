@@ -6,7 +6,7 @@
 <title>Lisp Machines</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -255,7 +270,6 @@ The LISP machine now permits LISP programmers to abandon bra and fig-leaf.
 &#x2013; Alan Perlis, Epigrams in Programming, ACM SIGPLAN Sept. 1982
 </p>
 </blockquote>
-
 <div id="outline-container-h-e0067fee-1487-4f43-99bc-2af55f5f3c57" class="outline-2">
 <h2 id="h-e0067fee-1487-4f43-99bc-2af55f5f3c57"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-e0067fee-1487-4f43-99bc-2af55f5f3c57">
@@ -272,7 +286,6 @@ For more in-depth discussion on specific topics, I have relegated the
 discussion <a href="machine/index.html">to their own articles</a>.
 </p>
 </div>
-
 <div id="outline-container-h-08565fbc-5bf5-4aa6-a5c0-ab0dc437f62e" class="outline-3">
 <h3 id="h-08565fbc-5bf5-4aa6-a5c0-ab0dc437f62e"><span class="section-number-3">1.1.</span> Open Questions</h3>
 <div class="outline-text-3" id="text-h-08565fbc-5bf5-4aa6-a5c0-ab0dc437f62e">
@@ -284,12 +297,10 @@ what features are necessary?
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-7d217b7b-003a-43fa-a2fd-514ee28fcfcd" class="outline-2">
 <h2 id="h-7d217b7b-003a-43fa-a2fd-514ee28fcfcd"><span class="section-number-2">2.</span> History of Lisp Machines</h2>
 <div class="outline-text-2" id="text-h-7d217b7b-003a-43fa-a2fd-514ee28fcfcd">
 </div>
-
 <div id="outline-container-h-a5537df0-6a80-4d60-bff4-47a43d84c009" class="outline-3">
 <h3 id="h-a5537df0-6a80-4d60-bff4-47a43d84c009"><span class="section-number-3">2.1.</span> Origins (1973&#x2013;1979)</h3>
 <div class="outline-text-3" id="text-h-a5537df0-6a80-4d60-bff4-47a43d84c009">
@@ -348,7 +359,6 @@ Daniel Weinreb,
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-2bf56502-28a3-4081-88b1-6a2b67910703" class="outline-3">
 <h3 id="h-2bf56502-28a3-4081-88b1-6a2b67910703"><span class="section-number-3">2.2.</span> Commercialization (1980&#x2013;????)</h3>
 <div class="outline-text-3" id="text-h-2bf56502-28a3-4081-88b1-6a2b67910703">
@@ -388,13 +398,10 @@ to its earlier 1985 CPU as the "MegaChip" processor.
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-7619fcfa-cefa-480d-820e-50b65e710c55" class="outline-2">
 <h2 id="h-7619fcfa-cefa-480d-820e-50b65e710c55"><span class="section-number-2">3.</span> Architecture</h2>
 <div class="outline-text-2" id="text-h-7619fcfa-cefa-480d-820e-50b65e710c55">
 </div>
-
 <div id="outline-container-h-385d7dc0-08a2-4cc4-bf7f-d76195d876af" class="outline-3">
 <h3 id="h-385d7dc0-08a2-4cc4-bf7f-d76195d876af"><span class="section-number-3">3.1.</span> CPU</h3>
 <div class="outline-text-3" id="text-h-385d7dc0-08a2-4cc4-bf7f-d76195d876af">
@@ -427,7 +434,6 @@ Interlisp used a <a href="https://en.wikipedia.org/wiki/MOS_Technology_6502">MOS
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-c2cfc5b6-f062-4ea0-aa84-63c997f984cf" class="outline-3">
 <h3 id="h-c2cfc5b6-f062-4ea0-aa84-63c997f984cf"><span class="section-number-3">3.2.</span> Instruction Set</h3>
 <div class="outline-text-3" id="text-h-c2cfc5b6-f062-4ea0-aa84-63c997f984cf">
@@ -454,7 +460,6 @@ Manuscript, dated 1979.</li>
 <li><a href="http://funcall.blogspot.com/2009/04/some-lisp-machine-minutia.html">Some Lisp Machine minutia</a></li>
 </ul>
 </div>
-
 <div id="outline-container-h-717e1c6b-b848-498a-9c37-564349e5ec9d" class="outline-4">
 <h4 id="h-717e1c6b-b848-498a-9c37-564349e5ec9d"><span class="section-number-4">3.2.1.</span> Example Disassembles</h4>
 <div class="outline-text-4" id="text-h-717e1c6b-b848-498a-9c37-564349e5ec9d">
@@ -475,7 +480,7 @@ For the Ivory microprocessor
 Would disassemble as (<a href="https://www.reddit.com/r/lisp/comments/2ws8o7/if_i_wanted_to_build_a_lisp_machine/cotpbiw/?utm_source=share&amp;utm_medium=web3x&amp;utm_name=web3xcss&amp;utm_term=1&amp;utm_content=share_button">reddit</a>):
 </p>
 
-<pre class="example" id="org926541f">
+<pre class="example" id="org873def4">
 Command: (disassemble (compile #'example-count))
 
   0  ENTRY: 2 REQUIRED, 0 OPTIONAL      ;Creating PREDICATE and LIST
@@ -514,7 +519,7 @@ In the <a href="http://www.bitsavers.org/pdf/symbolics/software/genera_8/Symboli
 Disassembles as:
 </p>
 
-<pre class="example" id="orgb085781">
+<pre class="example" id="org900ebef">
 (disassemble 'foo)
 
 0 ENTRY: 3 REQUIRED, 0 OPTIONAL
@@ -552,7 +557,7 @@ Another example from the manual, if we inline <code>square</code> in the followi
 Then <code>square-sum</code> disassembles like:
 </p>
 
-<pre class="example" id="org667e522">
+<pre class="example" id="org08fa589">
 0 ENTRY: 2 REQUIRED, 0 OPTIONAL
 1 PUSH-LOCAL FP|0               ;A
 2 BUILTIN +-INTERNAL STACK FP|1 ;B creating X(FP|2)
@@ -577,7 +582,7 @@ For the MIT Cadr machine (<a href="https://www.takeoka.org/~take/ailabo/cadr/kni
 This compiles and disassembles to:
 </p>
 
-<pre class="example" id="orgcfc9c0d">
+<pre class="example" id="org0e55263">
 (disassemble #'fact)
 
 22 NOVE D-PDL ARG|0 ;X
@@ -628,7 +633,6 @@ be found by line 33, which returns the result.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-e54263f2-4f75-481d-b877-06aad9512b66" class="outline-3">
 <h3 id="h-e54263f2-4f75-481d-b877-06aad9512b66"><span class="section-number-3">3.3.</span> Space Cadet Keyboard</h3>
 <div class="outline-text-3" id="text-h-e54263f2-4f75-481d-b877-06aad9512b66">
@@ -655,7 +659,6 @@ Retrocomputing Stackexchange thread</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-9f2e825d-7df2-4461-8c2d-6ecc749eeda2" class="outline-2">
 <h2 id="h-9f2e825d-7df2-4461-8c2d-6ecc749eeda2"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-9f2e825d-7df2-4461-8c2d-6ecc749eeda2">
@@ -672,7 +675,7 @@ and Daniel Weinreb reminisce about Lisp Machines.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-08-22 Tue 12:51.</p>
+<p class="postamble">Last Updated: Thu, 24 Aug 2023 07:44:58 -0700
 </div>
 </body>
 </html>

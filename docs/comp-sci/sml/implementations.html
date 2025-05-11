@@ -6,7 +6,7 @@
 <title>Implementations - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -237,7 +252,6 @@
 This is just a cursory "How to build [SML implementation] on Raspberry
 Pi" post.
 </p>
-
 <div id="outline-container-h-542dda25-92a9-4242-981a-326396c9d891" class="outline-2">
 <h2 id="h-542dda25-92a9-4242-981a-326396c9d891"><span class="section-number-2">1.</span> Poly/ML</h2>
 <div class="outline-text-2" id="text-h-542dda25-92a9-4242-981a-326396c9d891">
@@ -247,7 +261,7 @@ simply compile bytecode, which will run considerably slower. The basic
 steps <a href="https://www.polyml.org/download.html">seems to be:</a>
 </p>
 
-<pre class="example" id="org106948e">
+<pre class="example" id="org6ebcfeb">
 ~/src/$ git clone https://github.com/polyml/polyml.git
 ~/src/polyml/$ cd polyml
 ~/src/polyml/$ ./configure
@@ -272,7 +286,6 @@ drastically.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-a474e941-9a4f-45e9-bf6c-0434934dfe24" class="outline-2">
 <h2 id="h-a474e941-9a4f-45e9-bf6c-0434934dfe24"><span class="section-number-2">2.</span> MLton</h2>
 <div class="outline-text-2" id="text-h-a474e941-9a4f-45e9-bf6c-0434934dfe24">
@@ -296,7 +309,7 @@ computer. Basically, on my x64 machine with 12GB of RAM, I ran the
 following:
 </p>
 
-<pre class="example" id="orgcd3c0bd">
+<pre class="example" id="org3350aaa">
 alex@x64:~/src/$ git clone https://github.com/mlton/mlton
 alex@x64:~/src/$ cd mlton
 alex@x64:~/src/mlton/$ make
@@ -330,7 +343,6 @@ might want to follow <a href="http://web.archive.org/web/20160404025901/http://j
 <li><a href="http://www.mlton.org/pipermail/mlton-devel/2007-June/029877.html">Re: Cross compile on ARM successful</a> MLton mailing list thread</li>
 </ul>
 </div>
-
 <div id="outline-container-h-c96a1a4f-8997-4297-b4a6-4d2446fac78d" class="outline-3">
 <h3 id="h-c96a1a4f-8997-4297-b4a6-4d2446fac78d"><span class="section-number-3">2.1.</span> On Raspberry Pi</h3>
 <div class="outline-text-3" id="text-h-c96a1a4f-8997-4297-b4a6-4d2446fac78d">
@@ -349,7 +361,6 @@ mode. In fact, this borked my installation, and I had to reinstall
 Raspbian lite.
 </p>
 </div>
-
 <div id="outline-container-h-d3cc257f-9ad7-4953-9db1-abbed247e1f7" class="outline-4">
 <h4 id="h-d3cc257f-9ad7-4953-9db1-abbed247e1f7"><span class="section-number-4">2.1.1.</span> Remote Compiling</h4>
 <div class="outline-text-4" id="text-h-d3cc257f-9ad7-4953-9db1-abbed247e1f7">
@@ -357,7 +368,7 @@ Raspbian lite.
 The exact failure is during the <code>remote--make-all</code> step:
 </p>
 
-<pre class="example" id="org6d8fc7b">
+<pre class="example" id="org6d909fb">
 Compiling mlton
 "/tmp/mlton-20210117.153942-gb1f1f0f09/boot/bin/mlton" \
 	@MLton ram-slop 0.7  gc-summary -- \
@@ -380,7 +391,6 @@ make: *** [Makefile:666: remote--make-all] Error 2
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515" class="outline-2">
 <h2 id="h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515"><span class="section-number-2">3.</span> SML/NJ</h2>
 <div class="outline-text-2" id="text-h-bb7d9bf3-a0a6-49d5-9e9c-dd3d65df7515">
@@ -399,7 +409,6 @@ This is yet another incentive to upgrade to a 64-bit Raspberry Pi&#x2026;
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-8bee04cc-0008-4a29-af61-8d0d0203aeb3" class="outline-2">
 <h2 id="h-8bee04cc-0008-4a29-af61-8d0d0203aeb3"><span class="section-number-2">4.</span> MLKit</h2>
 <div class="outline-text-2" id="text-h-8bee04cc-0008-4a29-af61-8d0d0203aeb3">
@@ -416,7 +425,7 @@ removed to support Javascript.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-28 Fri 09:13.</p>
+<p class="postamble">Last Updated: Fri, 28 Jan 2022 14:27:26 -0800
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>Landau Notation</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -254,7 +283,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-a6b2d477-0f66-42ad-87b1-34c71ed87bb3" class="outline-2">
 <h2 id="h-a6b2d477-0f66-42ad-87b1-34c71ed87bb3"><span class="section-number-2">1.</span> Squiggle</h2>
 <div class="outline-text-2" id="text-h-a6b2d477-0f66-42ad-87b1-34c71ed87bb3">
@@ -282,7 +310,6 @@ get a \(g(x)\) such that \(f(x)\sim g(x)\) as \(x\to x_{0}\), since
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-2d2e2472-d0ac-469a-9549-320e6836a4f1" class="outline-2">
 <h2 id="h-2d2e2472-d0ac-469a-9549-320e6836a4f1"><span class="section-number-2">2.</span> Big Oh</h2>
 <div class="outline-text-2" id="text-h-2d2e2472-d0ac-469a-9549-320e6836a4f1">
@@ -312,7 +339,6 @@ Alternatively, we could consider the condition
 \limsup_{x\to a} \frac{\left|f(x)\right|}{g(x)}\lt\infty.
 \end{equation}
 </div>
-
 <div id="outline-container-h-e989156f-3fb2-43dc-9c3c-4085253a51e9" class="outline-3">
 <h3 id="h-e989156f-3fb2-43dc-9c3c-4085253a51e9"><span class="section-number-3">2.1.</span> Arithmetic</h3>
 <div class="outline-text-3" id="text-h-e989156f-3fb2-43dc-9c3c-4085253a51e9">
@@ -348,7 +374,6 @@ The set of \(\mathcal{O}(g)\) functions form a convex cone.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-ec7f016b-ef74-4ffe-bd71-bbf97381df85" class="outline-3">
 <h3 id="h-ec7f016b-ef74-4ffe-bd71-bbf97381df85"><span class="section-number-3">2.2.</span> Notation</h3>
 <div class="outline-text-3" id="text-h-ec7f016b-ef74-4ffe-bd71-bbf97381df85">
@@ -375,7 +400,6 @@ asymptotic analysis.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-5e909c63-57da-43a6-b84b-581b11b3185c" class="outline-2">
 <h2 id="h-5e909c63-57da-43a6-b84b-581b11b3185c"><span class="section-number-2">3.</span> Little Oh</h2>
 <div class="outline-text-2" id="text-h-5e909c63-57da-43a6-b84b-581b11b3185c">
@@ -399,7 +423,6 @@ We see \(\sin(x)\ll 1\) and \(\sin(x)\sim x\) as \(x\to 0\).
 
 </div>
 </div>
-
 <div id="outline-container-h-280d775b-511a-4404-8516-02fdcefa8b4a" class="outline-3">
 <h3 id="h-280d775b-511a-4404-8516-02fdcefa8b4a"><span class="section-number-3">3.1.</span> Arithmetic</h3>
 <div class="outline-text-3" id="text-h-280d775b-511a-4404-8516-02fdcefa8b4a">
@@ -428,7 +451,7 @@ If \(f=\mathcal{o}(g)\) and if \(g=\mathcal{o}(h)\), then \(f=\mathcal{o}(h)\).
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 17:39:55 -0700
 </div>
 </body>
 </html>

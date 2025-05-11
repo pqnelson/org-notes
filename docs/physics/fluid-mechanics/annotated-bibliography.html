@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Annotated Bibliography</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -189,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -267,7 +295,6 @@
 See also Fairbairn and Macdonald's <a href="https://www.math.ubc.ca/~cbm/projects/fluids_biblio/fluids_biblio.html">Bibliography of Fluid Dynamics Books</a>,
 which lists a number of useful books within several domains of fluids.
 </p>
-
 <div id="outline-container-h-0ca4682d-9f77-433c-9f71-f1361e535886" class="outline-2">
 <h2 id="h-0ca4682d-9f77-433c-9f71-f1361e535886"><span class="section-number-2">1.</span> Intermediate linear algebra</h2>
 <div class="outline-text-2" id="text-h-0ca4682d-9f77-433c-9f71-f1361e535886">
@@ -333,7 +360,6 @@ job discussing floating point in chapter 13</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-a8bb56ef-6f42-4fd3-8b1f-5d974a9531aa" class="outline-3">
 <h3 id="h-a8bb56ef-6f42-4fd3-8b1f-5d974a9531aa"><span class="section-number-3">3.2.</span> Numerical Linear Algebra</h3>
 <div class="outline-text-3" id="text-h-a8bb56ef-6f42-4fd3-8b1f-5d974a9531aa">
@@ -354,7 +380,6 @@ algebra, then this is as necessary as a dictionary to a writer.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-0ae24c9b-81d7-4117-9d89-d3cae353886e" class="outline-3">
 <h3 id="h-0ae24c9b-81d7-4117-9d89-d3cae353886e"><span class="section-number-3">3.3.</span> Numerical Differential Equations</h3>
 <div class="outline-text-3" id="text-h-0ae24c9b-81d7-4117-9d89-d3cae353886e">
@@ -364,7 +389,6 @@ numerically (finite difference schemes, finite element method, and
 finite volume method)
 </p>
 </div>
-
 <div id="outline-container-h-5f57c166-ec6b-44e7-b55f-b1e9a2e57013" class="outline-4">
 <h4 id="h-5f57c166-ec6b-44e7-b55f-b1e9a2e57013"><span class="section-number-4">3.3.1.</span> Finite Difference Method</h4>
 <div class="outline-text-4" id="text-h-5f57c166-ec6b-44e7-b55f-b1e9a2e57013">
@@ -390,7 +414,6 @@ I have yet to read, but I am excited to begin it soon.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-f32b60e6-dc2f-4273-b52a-33631029b311" class="outline-4">
 <h4 id="h-f32b60e6-dc2f-4273-b52a-33631029b311"><span class="section-number-4">3.3.2.</span> Finite Volume Method</h4>
 <div class="outline-text-4" id="text-h-f32b60e6-dc2f-4273-b52a-33631029b311">
@@ -411,7 +434,6 @@ used by LeVeque's CLAWPACK library.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-538e1ab5-fe19-4aec-80a5-da1b444c4c41" class="outline-4">
 <h4 id="h-538e1ab5-fe19-4aec-80a5-da1b444c4c41"><span class="section-number-4">3.3.3.</span> Finite Element Method</h4>
 <div class="outline-text-4" id="text-h-538e1ab5-fe19-4aec-80a5-da1b444c4c41">
@@ -435,7 +457,6 @@ transforms the problem to one of linear algebra.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-22bb7fa2-f402-4b16-b36b-860ba9496967" class="outline-4">
 <h4 id="h-22bb7fa2-f402-4b16-b36b-860ba9496967"><span class="section-number-4">3.3.4.</span> Spectral Methods</h4>
 <div class="outline-text-4" id="text-h-22bb7fa2-f402-4b16-b36b-860ba9496967">
@@ -487,8 +508,6 @@ Cambridge University Press, Cambridge, U.K., 2007.</li>
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-79eebd81-d355-4a58-b827-c2dab6f8f762" class="outline-2">
 <h2 id="h-79eebd81-d355-4a58-b827-c2dab6f8f762"><span class="section-number-2">4.</span> Basic Fluids</h2>
 <div class="outline-text-2" id="text-h-79eebd81-d355-4a58-b827-c2dab6f8f762">
@@ -534,7 +553,6 @@ Referenced by several syllabi, it's a picture book of various flows.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-d29dcbeb-f755-41c1-8bb0-77f7e115dfd4" class="outline-2">
 <h2 id="h-d29dcbeb-f755-41c1-8bb0-77f7e115dfd4"><span class="section-number-2">5.</span> Numerical Methods for Fluids</h2>
 <div class="outline-text-2" id="text-h-d29dcbeb-f755-41c1-8bb0-77f7e115dfd4">
@@ -553,7 +571,6 @@ If interested, the reader may consult Galdi's 2-volume
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-ee42a495-78bb-4ac1-9544-bee33e6f197a" class="outline-2">
 <h2 id="h-ee42a495-78bb-4ac1-9544-bee33e6f197a"><span class="section-number-2">6.</span> Navier&#x2013;Stokes Equations</h2>
 <div class="outline-text-2" id="text-h-ee42a495-78bb-4ac1-9544-bee33e6f197a">
@@ -574,10 +591,6 @@ existence, uniqueness, and regularity of solutions to Navier-Stokes.</li>
 </ul>
 </div>
 </div>
-
-
-
-
 <div id="outline-container-h-0697d22a-8246-4e68-a12f-cb3a5a502eb6" class="outline-2">
 <h2 id="h-0697d22a-8246-4e68-a12f-cb3a5a502eb6"><span class="section-number-2">7.</span> Syllabi</h2>
 <div class="outline-text-2" id="text-h-0697d22a-8246-4e68-a12f-cb3a5a502eb6">
@@ -640,7 +653,7 @@ Springer-Verlag, 1988.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-07 Thu 08:47.</p>
+<p class="postamble">Last Updated: Fri, 8 Apr 2022 11:22:46 -0700
 </div>
 </body>
 </html>

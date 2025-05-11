@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:48 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Group Theory</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -189,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -251,7 +279,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-16cb29fa-d710-45fe-bbfd-74624a830335" class="outline-2">
 <h2 id="h-16cb29fa-d710-45fe-bbfd-74624a830335"><span class="section-number-2">1.</span> Symmetries of an Object</h2>
 <div class="outline-text-2" id="text-h-16cb29fa-d710-45fe-bbfd-74624a830335">
@@ -260,7 +287,6 @@ Suppose we have an object (like a regular polygon in a plane). What is a
 "symmetry" of our object?
 </p>
 </div>
-
 <div id="outline-container-h-125cc380-7cb2-4b12-bde3-a4376c66cbd8" class="outline-3">
 <h3 id="h-125cc380-7cb2-4b12-bde3-a4376c66cbd8"><span class="section-number-3">1.1.</span> Necessary Qualities of a Symmetry</h3>
 <div class="outline-text-3" id="text-h-125cc380-7cb2-4b12-bde3-a4376c66cbd8">
@@ -287,7 +313,6 @@ but also \(((f\circ h)\circ g)(x) = g(x)\) imply \(f=g\). Hence
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-6638c825-c302-4979-a35c-929236617ab9" class="outline-3">
 <h3 id="h-6638c825-c302-4979-a35c-929236617ab9"><span class="section-number-3">1.2.</span> A Collection of Symmetries</h3>
 <div class="outline-text-3" id="text-h-6638c825-c302-4979-a35c-929236617ab9">
@@ -310,7 +335,7 @@ This gives us grounds for generalizing these qualities into an abstract
 notion of a group.
 </p>
 
-<div class="definition" id="org0a238a9">
+<div class="definition" id="org8500d44">
 <p>
 A <dfn>Group</dfn> consists of a set \(G\) equipped with
 </p>
@@ -370,7 +395,6 @@ symmetry amounts to permuting the roots of the polynomial.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-e3daf161-ad97-4ded-a7c4-8b0740f76b48" class="outline-2">
 <h2 id="h-e3daf161-ad97-4ded-a7c4-8b0740f76b48"><span class="section-number-2">2.</span> Notes to Self</h2>
 <div class="outline-text-2" id="text-h-e3daf161-ad97-4ded-a7c4-8b0740f76b48">
@@ -382,7 +406,7 @@ category of topological spaces is a topological group, a group object
 internal to the category of manifolds is a [real] Lie group, etc.).
 </p>
 
-<div class="remark" id="orgcbfed70">
+<div class="remark" id="orge660e6d">
 <p>
 The group object internal to <span class="cat">Grp</span> the category of groups is
 itself an Abelian group. This is a corollary of the Eckmann&#x2013;Hilton
@@ -394,7 +418,7 @@ argument.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-14 Mon 14:50.</p>
+<p class="postamble">Last Updated: Mon, 14 Feb 2022 14:50:30 -0800
 </div>
 </body>
 </html>

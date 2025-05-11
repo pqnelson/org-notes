@@ -6,7 +6,7 @@
 <title>TeX Notes</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,14 +205,31 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 <script>
   window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
     tex: {
       ams: {
         multlineWidth: '85%'
       },
+      inlineMath: {'[+]': [['$', '$']]},
       tags: 'ams',
       tagSide: 'right',
       tagIndent: '.8em'
@@ -233,7 +251,7 @@
   };
 </script>
 
-<script
+<script  type="text/javascript"
   id="MathJax-script"
   async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -270,10 +288,10 @@
 </li>
 <li><a href="#h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6">4. Equation Indent</a></li>
 <li><a href="#h-cdd388f8-d89c-4cd0-a3d3-0c91c59cc4cc">5. AMSPPT</a></li>
+<li><a href="#org6f401f1">6. References and Links</a></li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-84848014-a2ce-403a-9dec-20a86af11ca5" class="outline-2">
 <h2 id="h-84848014-a2ce-403a-9dec-20a86af11ca5"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-84848014-a2ce-403a-9dec-20a86af11ca5">
@@ -287,7 +305,6 @@ These are random observations about TeX and LaTeX. Remember:
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-f706e3fa-e88f-4439-9095-907b9b20d0e2" class="outline-2">
 <h2 id="h-f706e3fa-e88f-4439-9095-907b9b20d0e2"><span class="section-number-2">2.</span> Poor Man's LaTeX</h2>
 <div class="outline-text-2" id="text-h-f706e3fa-e88f-4439-9095-907b9b20d0e2">
@@ -295,8 +312,12 @@ These are random observations about TeX and LaTeX. Remember:
 I've been curious about how LaTeX is built out of TeX macros for a while
 now. These are just some observations about it.
 </p>
-</div>
 
+<p>
+Also see the <a href="https://ctan.org/pkg/miniltx">miniltx</a> package which reproduces a fragment of LaTeX in
+plain TeX. Also of interest would be <code>eplain</code> (for plain TeX users).
+</p>
+</div>
 <div id="outline-container-h-61eb6d82-0759-480a-ac89-743dd455f86d" class="outline-3">
 <h3 id="h-61eb6d82-0759-480a-ac89-743dd455f86d"><span class="section-number-3">2.1.</span> Environments</h3>
 <div class="outline-text-3" id="text-h-61eb6d82-0759-480a-ac89-743dd455f86d">
@@ -334,7 +355,6 @@ one needs to redefine <code>\bye</code> to be something like:
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-d37b46ee-efb8-4b81-8c1c-0afc91010dbb" class="outline-4">
 <h4 id="h-d37b46ee-efb8-4b81-8c1c-0afc91010dbb"><span class="section-number-4">2.1.1.</span> What LaTeX does</h4>
 <div class="outline-text-4" id="text-h-d37b46ee-efb8-4b81-8c1c-0afc91010dbb">
@@ -345,7 +365,7 @@ In <code>latex.ltx</code> around lines 4400, we find
 <div class="org-src-container">
 <pre class="src src-tex"><span class="org-keyword">\DeclareRobustCommand\begin</span>[1]{<span class="org-comment">%</span>
 <span class="org-function-name">  \@ifundefined{#1}</span><span class="org-comment">%</span>
-<span class="org-function-name">    {\def\reserved@a{\@latex@error{Environment #1 undefined}\@eha</span>}}<span class="org-comment">%</span>
+<span class="org-function-name">    {\def\reserved@a{\@latex@error{Environment #1 undefined}\@eha}</span>}<span class="org-comment">%</span>
     {<span class="org-keyword">\def\reserved@a</span>{<span class="org-keyword">\def\@currenvir</span>{#1}<span class="org-comment">%</span>
      <span class="org-keyword">\edef\@currenvline</span>{<span class="org-keyword">\on@line</span>}<span class="org-comment">%</span>
      <span class="org-keyword">\csname</span> #1<span class="org-keyword">\endcsname</span>}}<span class="org-comment">%</span>
@@ -389,7 +409,6 @@ In <code>latex.ltx</code> around lines 4400, we find
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-481e8d2b-e5e1-41be-a892-ebba10a94b60" class="outline-3">
 <h3 id="h-481e8d2b-e5e1-41be-a892-ebba10a94b60"><span class="section-number-3">2.2.</span> Equations</h3>
 <div class="outline-text-3" id="text-h-481e8d2b-e5e1-41be-a892-ebba10a94b60">
@@ -441,7 +460,6 @@ The implementation is fairly straightforward.
 <h2 id="h-9003bdc5-57ad-4ef9-aa76-5b45c8f1f8ab"><span class="section-number-2">3.</span> Math Gallery</h2>
 <div class="outline-text-2" id="text-h-9003bdc5-57ad-4ef9-aa76-5b45c8f1f8ab">
 </div>
-
 <div id="outline-container-h-024d8f89-6eec-4422-8e82-ba3e2e15a117" class="outline-3">
 <h3 id="h-024d8f89-6eec-4422-8e82-ba3e2e15a117"><span class="section-number-3">3.1.</span> Normal Ordering Operators</h3>
 <div class="outline-text-3" id="text-h-024d8f89-6eec-4422-8e82-ba3e2e15a117">
@@ -452,7 +470,6 @@ at least <a href="https://tex.stackexchange.com/q/214347">once</a> on tex.stacke
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-952ca320-c41f-4992-8f2f-03b63e69c307" class="outline-3">
 <h3 id="h-952ca320-c41f-4992-8f2f-03b63e69c307"><span class="section-number-3">3.2.</span> Tractatus Numbering in Plain TeX</h3>
 <div class="outline-text-3" id="text-h-952ca320-c41f-4992-8f2f-03b63e69c307">
@@ -604,7 +621,6 @@ Spam and eggs test!
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-2ab9f828-de66-4dc2-bdc6-a38f891557ad" class="outline-3">
 <h3 id="h-2ab9f828-de66-4dc2-bdc6-a38f891557ad"><span class="section-number-3">3.3.</span> Typing Relation</h3>
 <div class="outline-text-3" id="text-h-2ab9f828-de66-4dc2-bdc6-a38f891557ad">
@@ -625,7 +641,7 @@ for either situation.
 </p>
 
 
-<div id="org504c7b5" class="figure">
+<div id="org5e7dd82" class="figure">
 <p><img src="../img/typing-relation-article-cls.png" alt="typing-relation-article-cls.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>Different variants in the typesetting of the typing relation.</p>
@@ -647,7 +663,6 @@ tex.stackexchange is very enlightening</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6" class="outline-2">
 <h2 id="h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6"><span class="section-number-2">4.</span> Equation Indent</h2>
 <div class="outline-text-2" id="text-h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6">
@@ -661,7 +676,6 @@ documents, and 2.5em for single column documents.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-cdd388f8-d89c-4cd0-a3d3-0c91c59cc4cc" class="outline-2">
 <h2 id="h-cdd388f8-d89c-4cd0-a3d3-0c91c59cc4cc"><span class="section-number-2">5.</span> AMSPPT</h2>
 <div class="outline-text-2" id="text-h-cdd388f8-d89c-4cd0-a3d3-0c91c59cc4cc">
@@ -677,9 +691,18 @@ documents, and 2.5em for single column documents.
 </ul>
 </div>
 </div>
+<div id="outline-container-org6f401f1" class="outline-2">
+<h2 id="org6f401f1"><span class="section-number-2">6.</span> References and Links</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li><a href="https://pretextbook.org/documentation.html">PreTeXt</a> is a library(?) for authors who want to write a LaTeX
+document and generate PDF, ebook, and HTML output.</li>
+</ul>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-09-02 Sat 06:43.</p>
+<p class="postamble">Last Updated: Sun, 11 May 2025 09:14:21 -0700
 </div>
 </body>
 </html>

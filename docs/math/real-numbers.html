@@ -6,7 +6,7 @@
 <title>Real Numbers</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -267,7 +296,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-1a0e3ff4-f83e-4637-ad16-b848fcb32889" class="outline-2">
 <h2 id="h-1a0e3ff4-f83e-4637-ad16-b848fcb32889"><span class="section-number-2">1.</span> Number Systems</h2>
 <div class="outline-text-2" id="text-h-1a0e3ff4-f83e-4637-ad16-b848fcb32889">
@@ -276,7 +304,6 @@ The real numbers are typically taught as the final "target" in a
 sequence of number systems.
 </p>
 </div>
-
 <div id="outline-container-h-3a91fd92-2fce-4fc9-9fc3-56229d9a3726" class="outline-3">
 <h3 id="h-3a91fd92-2fce-4fc9-9fc3-56229d9a3726"><span class="section-number-3">1.1.</span> Natural Numbers</h3>
 <div class="outline-text-3" id="text-h-3a91fd92-2fce-4fc9-9fc3-56229d9a3726">
@@ -284,7 +311,6 @@ sequence of number systems.
 We can begin with the natural numbers.
 </p>
 </div>
-
 <div id="outline-container-h-b0bf181e-49a5-40e3-bfc0-b1b710be5791" class="outline-4">
 <h4 id="h-b0bf181e-49a5-40e3-bfc0-b1b710be5791"><span class="section-number-4">1.1.1.</span> Peano Arithmetic</h4>
 <div class="outline-text-4" id="text-h-b0bf181e-49a5-40e3-bfc0-b1b710be5791">
@@ -323,7 +349,6 @@ Multiplication could similarly be defined inductively:
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-b5d8cdcb-8c2b-4219-a090-9e5d5c9c2174" class="outline-4">
 <h4 id="h-b5d8cdcb-8c2b-4219-a090-9e5d5c9c2174"><span class="section-number-4">1.1.2.</span> Axioms</h4>
 <div class="outline-text-4" id="text-h-b5d8cdcb-8c2b-4219-a090-9e5d5c9c2174">
@@ -354,7 +379,6 @@ or \(b = 0\)</dd>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-377d11f6-9421-4224-bb23-65bfe678316f" class="outline-3">
 <h3 id="h-377d11f6-9421-4224-bb23-65bfe678316f"><span class="section-number-3">1.2.</span> Integers</h3>
 <div class="outline-text-3" id="text-h-377d11f6-9421-4224-bb23-65bfe678316f">
@@ -384,7 +408,6 @@ surplus, the second as a deficit.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-95b8e0bc-d3f5-4e9e-9789-f168e8e54ea2" class="outline-3">
 <h3 id="h-95b8e0bc-d3f5-4e9e-9789-f168e8e54ea2"><span class="section-number-3">1.3.</span> Rational Numbers</h3>
 <div class="outline-text-3" id="text-h-95b8e0bc-d3f5-4e9e-9789-f168e8e54ea2">
@@ -411,7 +434,6 @@ rational numbers formally from the integers, but that's tedious.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-fff97fc0-1878-49ee-9040-36ab02b2f9a3" class="outline-3">
 <h3 id="h-fff97fc0-1878-49ee-9040-36ab02b2f9a3"><span class="section-number-3">1.4.</span> Real Numbers</h3>
 <div class="outline-text-3" id="text-h-fff97fc0-1878-49ee-9040-36ab02b2f9a3">
@@ -430,7 +452,6 @@ three I'm aware of:
 The latter seems the most direct way to get cooking.
 </p>
 </div>
-
 <div id="outline-container-h-69e02083-6b6c-4e65-a429-3ac76ee71a8d" class="outline-4">
 <h4 id="h-69e02083-6b6c-4e65-a429-3ac76ee71a8d"><span class="section-number-4">1.4.1.</span> Axioms</h4>
 <div class="outline-text-4" id="text-h-69e02083-6b6c-4e65-a429-3ac76ee71a8d">
@@ -480,7 +501,6 @@ notions. Again, we don't need it for our purposes.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-4fed6c46-045e-47d5-a733-af8ad46ca34e" class="outline-3">
 <h3 id="h-4fed6c46-045e-47d5-a733-af8ad46ca34e"><span class="section-number-3">1.5.</span> Transcendental and Algebraic Numbers</h3>
 <div class="outline-text-3" id="text-h-4fed6c46-045e-47d5-a733-af8ad46ca34e">
@@ -526,7 +546,6 @@ them are not really even "used" in practice.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-842c7308-3999-4bb3-9c26-f77e07103242" class="outline-3">
 <h3 id="h-842c7308-3999-4bb3-9c26-f77e07103242"><span class="section-number-3">1.6.</span> Definable Real Numbers</h3>
 <div class="outline-text-3" id="text-h-842c7308-3999-4bb3-9c26-f77e07103242">
@@ -591,7 +610,6 @@ way?
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-388452a6-a114-401d-b69d-8f42e86dba55" class="outline-2">
 <h2 id="h-388452a6-a114-401d-b69d-8f42e86dba55"><span class="section-number-2">2.</span> Scientific Notation</h2>
 <div class="outline-text-2" id="text-h-388452a6-a114-401d-b69d-8f42e86dba55">
@@ -621,7 +639,6 @@ which propagate in our calculations. The entire field of
 <a href="../comp-sci/numerical-analysis.html">Numerical Analysis</a> studies this matter.
 </p>
 </div>
-
 <div id="outline-container-h-1cc9f972-bff9-490f-b31b-3c66c9cdf012" class="outline-3">
 <h3 id="h-1cc9f972-bff9-490f-b31b-3c66c9cdf012"><span class="section-number-3">2.1.</span> Binary</h3>
 <div class="outline-text-3" id="text-h-1cc9f972-bff9-490f-b31b-3c66c9cdf012">
@@ -650,7 +667,7 @@ computing a series approximation for \(\log(m)\).
 We can extract the components for a float in Common Lisp by
 </p>
 
-<pre class="example" id="ex-lisp">
+<pre id="ex-lisp" class="example">
 USER =&gt; (multiple-value-bind (mantissa expon sign)
 (decode-float f)
   (scale-float mantissa expon))
@@ -669,7 +686,6 @@ I've delegated discussion of this number system in
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-fbae1e82-b1d1-46f5-8e08-4d1d6f7774d2" class="outline-2">
 <h2 id="h-fbae1e82-b1d1-46f5-8e08-4d1d6f7774d2"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-fbae1e82-b1d1-46f5-8e08-4d1d6f7774d2">
@@ -685,7 +701,7 @@ giving us the reals.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-11 Tue 13:15.</p>
+<p class="postamble">Last Updated: Tue, 11 Jan 2022 13:15:52 -0800
 </div>
 </body>
 </html>

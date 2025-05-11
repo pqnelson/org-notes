@@ -6,7 +6,7 @@
 <title>Axiomatic Foundations - Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -254,7 +283,6 @@ couple articles in the current MML:
 <li><a href="http://mizar.org/version/current/html/tarski_a.html"><code>tarski_a</code></a> for the axiom stating the existence of a Grothendieck
 universe containing a given set</li>
 </ul>
-
 <div id="outline-container-h-c2f2f1d1-85b8-4681-8e17-f7c769190b7a" class="outline-2">
 <h2 id="h-c2f2f1d1-85b8-4681-8e17-f7c769190b7a"><span class="section-number-2">1.</span> ZF Axioms in Mizar</h2>
 <div class="outline-text-2" id="text-h-c2f2f1d1-85b8-4681-8e17-f7c769190b7a">
@@ -285,7 +313,7 @@ for \(x\) being object holds<br>
 for \(x, y, z\) being object st \(P_{1}[x,y]\) &amp; \(P_{1}[x,z]\) holds \(y = z\)</dd>
 </dl>
 
-<div class="remark" id="org37dbff5">
+<div class="remark" id="orga46988b">
 <p>
 The axiom of regularity may look a little strange, but remember: if we
 have \(\forall X((\exists x, P[x,X])\implies Q[X])\), then this is
@@ -294,7 +322,7 @@ logically equivalent to \(\forall X\forall x(P[x,X]\implies Q[X])\).
 
 </div>
 
-<div class="remark" id="org6e5a0d7">
+<div class="remark" id="orgc5afaac">
 <p>
 The axiom schema of specification can be <a href="https://en.wikipedia.org/wiki/Axiom_schema_of_specification#Relation_to_the_axiom_schema_of_replacement">derived</a> from the schema of
 replacement. 
@@ -302,7 +330,7 @@ replacement.
 
 </div>
 
-<div class="remark" id="org9e270dd">
+<div class="remark" id="org4f41f85">
 <p>
 Mizar just <i>defines</i> the unordered pair \(\{X,Y\}\) for any \(X\), \(Y\) in
 <a href="http://mizar.org/version/current/html/tarski.html#K2"><code>TARSKI:def 2</code></a>&#x2026;but uses the axiom of pairing to justify its existence.
@@ -367,10 +395,6 @@ Mathematics</i>:
 </ul>
 </div>
 </div>
-
-
-
-
 <div id="outline-container-h-19880ad7-0dd3-4edc-9499-fa95d9b870f2" class="outline-2">
 <h2 id="h-19880ad7-0dd3-4edc-9499-fa95d9b870f2"><span class="section-number-2">2.</span> Soft Types Examples: Subsets</h2>
 <div class="outline-text-2" id="text-h-19880ad7-0dd3-4edc-9499-fa95d9b870f2">
@@ -427,7 +451,7 @@ we have <code>x in Y</code>.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-08-09 Wed 09:08.</p>
+<p class="postamble">Last Updated: Mon, 14 Aug 2023 07:21:24 -0700
 </div>
 </body>
 </html>

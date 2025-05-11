@@ -6,7 +6,7 @@
 <title>Infinities</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -253,7 +282,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-5fcbc798-db30-462d-a27b-f72463fcdb16" class="outline-2">
 <h2 id="h-5fcbc798-db30-462d-a27b-f72463fcdb16"><span class="section-number-2">1.</span> Real Infinity</h2>
 <div class="outline-text-2" id="text-h-5fcbc798-db30-462d-a27b-f72463fcdb16">
@@ -262,7 +290,7 @@ There are two infinities on the real number line, positive and
 negative infinity. In Lisp, these are represented by the constants
 </p>
 
-<pre class="example" id="ex-lisp-infty">
+<pre id="ex-lisp-infty" class="example">
 GSLL:+POSITIVE-INFINITY+
 
 GSLL:+NEGATIVE-INFINITY+
@@ -274,7 +302,6 @@ a label for nonconvergent series?). As far as computation is
 concerned, it acts like a number.
 </p>
 </div>
-
 <div id="outline-container-h-96a7c44d-37d7-47b7-b9f5-d1a61046afac" class="outline-3">
 <h3 id="h-96a7c44d-37d7-47b7-b9f5-d1a61046afac"><span class="section-number-3">1.1.</span> IEEE Floating Point</h3>
 <div class="outline-text-3" id="text-h-96a7c44d-37d7-47b7-b9f5-d1a61046afac">
@@ -312,7 +339,6 @@ All other operations produce a <code>NaN</code> ("Not-a-Number") special value.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-7200bf6a-9a3e-4f8b-b62e-693a46d22564" class="outline-3">
 <h3 id="h-7200bf6a-9a3e-4f8b-b62e-693a46d22564"><span class="section-number-3">1.2.</span> Extended Real Numbers</h3>
 <div class="outline-text-3" id="text-h-7200bf6a-9a3e-4f8b-b62e-693a46d22564">
@@ -349,7 +375,6 @@ Prove or find a counter-example: the extended reals form a monoid.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-e283f7af-bd02-4836-a659-5f6713eb49e5" class="outline-3">
 <h3 id="h-e283f7af-bd02-4836-a659-5f6713eb49e5"><span class="section-number-3">1.3.</span> Projective Real Number Line</h3>
 <div class="outline-text-3" id="text-h-e283f7af-bd02-4836-a659-5f6713eb49e5">
@@ -380,8 +405,6 @@ they're both mapped to the North pole.
 </p>
 </div>
 </div>
-
-
 <div id="outline-container-h-d7baa693-13dc-46bf-b09e-f335603570d5" class="outline-3">
 <h3 id="h-d7baa693-13dc-46bf-b09e-f335603570d5"><span class="section-number-3">1.4.</span> Hyperreal and Infinitesimals</h3>
 <div class="outline-text-3" id="text-h-d7baa693-13dc-46bf-b09e-f335603570d5">
@@ -411,7 +434,6 @@ juice is worth the squeeze.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-a531f251-74c6-4411-9af9-00c23e551476" class="outline-2">
 <h2 id="h-a531f251-74c6-4411-9af9-00c23e551476"><span class="section-number-2">2.</span> Complex Infinity</h2>
 <div class="outline-text-2" id="text-h-a531f251-74c6-4411-9af9-00c23e551476">
@@ -453,13 +475,13 @@ But the following operations are undefined:
 \widetilde{\infty}\times0=0\times\widetilde{\infty}=\mathtt{NaN}
 \end{equation}
 
-<div class="puzzle" id="orgb7a8674">
+<div class="puzzle" id="org58da89b">
 <p>
 Is this equivalent to defining \(\widetilde{\infty}=\lim_{w\to0}w^{-1}\)?
 </p>
 
 </div>
-<div class="puzzle" id="orgde5d0a5">
+<div class="puzzle" id="org2c8b5c4">
 <p>
 Are these equations consistent? Do they lead to a contradiction?
 </p>
@@ -467,7 +489,6 @@ Are these equations consistent? Do they lead to a contradiction?
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-02fd2774-db86-4ec4-aa92-2257c9c0c77a" class="outline-2">
 <h2 id="h-02fd2774-db86-4ec4-aa92-2257c9c0c77a"><span class="section-number-2">3.</span> History</h2>
 <div class="outline-text-2" id="text-h-02fd2774-db86-4ec4-aa92-2257c9c0c77a">
@@ -484,7 +505,6 @@ only things Weierstrass published in 1876).</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-92c628a0-014d-40ef-9356-8ec5dfa417b3" class="outline-2">
 <h2 id="h-92c628a0-014d-40ef-9356-8ec5dfa417b3"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-92c628a0-014d-40ef-9356-8ec5dfa417b3">
@@ -498,7 +518,7 @@ only things Weierstrass published in 1876).</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Mon, 31 May 2021 11:46:00 -0700
 </div>
 </body>
 </html>

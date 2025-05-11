@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-12-31 Sat 09:10 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -194,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -253,7 +281,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7" class="outline-2">
 <h2 id="h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7"><span class="section-number-2">1.</span> Useful Definitions</h2>
 <div class="outline-text-2" id="text-h-6bd8d47a-d34f-4cfa-b541-e1cf3bcac9f7">
@@ -267,7 +294,6 @@ meaning \(X\subseteq Y\iff (\forall x, x\in X\implies x\in Y)\))</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89" class="outline-2">
 <h2 id="h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89"><span class="section-number-2">2.</span> Random</h2>
 <div class="outline-text-2" id="text-h-19c0ab35-60e3-4d69-9ec4-9eb1bf8cef89">
@@ -276,12 +302,10 @@ meaning \(X\subseteq Y\iff (\forall x, x\in X\implies x\in Y)\))</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09" class="outline-2">
 <h2 id="h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09"><span class="section-number-2">3.</span> Lessons Learned</h2>
 <div class="outline-text-2" id="text-h-afdc709c-b5e8-4cb9-9cee-81984c7a3c09">
 </div>
-
 <div id="outline-container-h-c0226382-31df-4572-891b-e9ae20a09b98" class="outline-3">
 <h3 id="h-c0226382-31df-4572-891b-e9ae20a09b98"><span class="section-number-3">3.1.</span> Vocabulary Files</h3>
 <div class="outline-text-3" id="text-h-c0226382-31df-4572-891b-e9ae20a09b98">
@@ -290,7 +314,7 @@ When defining new terms, well, we should get started by doing something
 like:
 </p>
 
-<pre class="example" id="orgdde2479">
+<pre class="example" id="orge8e0405">
 user@computer:~/$ mkdir -p work/first-article/
 user@computer:~/$ cd work/first-article/
 user@computer:~/work/first-article/$ mkdir DICT
@@ -304,7 +328,7 @@ Now for a "Hello World" type Mizar file: just create a new predicate
 sticking one line in it:
 </p>
 
-<pre class="example" id="org74943e5">
+<pre class="example" id="org26bddb8">
 Rfoobar
 </pre>
 
@@ -312,7 +336,7 @@ Rfoobar
 Then in <code>first-article/TEXT/TMP.miz</code> we would have:
 </p>
 
-<pre class="example" id="org788f310">
+<pre class="example" id="org2a95239">
 environ
 vocabularies TMP; :: this is important! Without it, you get an error
 
@@ -335,7 +359,6 @@ include <code>foobar</code> as a predicate in your vocabulary file.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-db11b193-c42a-415b-b960-c4efc7dacd50" class="outline-2">
 <h2 id="h-db11b193-c42a-415b-b960-c4efc7dacd50"><span class="section-number-2">4.</span> Installing on Raspberry Pi</h2>
 <div class="outline-text-2" id="text-h-db11b193-c42a-415b-b960-c4efc7dacd50">
@@ -344,7 +367,7 @@ This was surprisingly simple. I usually keep source code related stuff
 in <code>~/src/</code>, so here's the bash commands that got me cooking:
 </p>
 
-<pre class="example" id="orgc9b4998">
+<pre class="example" id="org970e048">
 alex@pi:~$ cd src
 alex@pi:~/src/$ mkdir mizar
 alex@pi:~/src/$ cd mizar
@@ -369,19 +392,18 @@ alex@pi:~/src/mizar$ sudo ./install.sh --default
 Then I added one line of code to my <code>~/.bash_profile</code>:
 </p>
 
-<pre class="example" id="org641ba57">
+<pre class="example" id="org9dc81c5">
 # at the end of ~/.bash_profile
 MIZFILES=/usr/local/share/mizar
 </pre>
 
 <p>
-And, <i>voilà/, once we've =source ~</i>.bash<sub>profile</sub>= we'll be able to start
+And, <i>voilà</i>, once we've <code>source ~/.bash_profile</code> we'll be able to start
 proving in no time. Unfortunately, I still have problems trying to get
 it working on my Raspberry Pi.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-d045530e-55fb-44e0-af41-03ffc4e5720a" class="outline-2">
 <h2 id="h-d045530e-55fb-44e0-af41-03ffc4e5720a"><span class="section-number-2">5.</span> Exporting MIZFILES on Linux</h2>
 <div class="outline-text-2" id="text-h-d045530e-55fb-44e0-af41-03ffc4e5720a">
@@ -391,7 +413,7 @@ followed by <code>export MIZFILES</code>
 to my <code>.bashrc</code>; instead I needed to add a line to <code>/etc/environment</code>, namely:
 </p>
 
-<pre class="example" id="orgd84cc90">
+<pre class="example" id="org1a15f6d">
 # in /etc/environment, at the end
 MIZFILES=/usr/local/share/mizar
 </pre>
@@ -403,7 +425,6 @@ file in Emacs with <code>C-c Ret</code>.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-5b2a23b4-8625-4b20-a0b0-a13c66678638" class="outline-2">
 <h2 id="h-5b2a23b4-8625-4b20-a0b0-a13c66678638"><span class="section-number-2">6.</span> References</h2>
 <div class="outline-text-2" id="text-h-5b2a23b4-8625-4b20-a0b0-a13c66678638">
@@ -418,7 +439,7 @@ worth reading</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-12-31 Sat 08:23.</p>
+<p class="postamble">Last Updated: Wed, 4 May 2022 12:58:46 -0700
 </div>
 </body>
 </html>

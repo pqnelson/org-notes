@@ -6,7 +6,7 @@
 <title>I-Machine Instruction Set</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 </head>
@@ -245,7 +260,11 @@
 <li><a href="#h-3b1b345d-f35f-4288-a2b5-8ee6ce9b5156">6. Field-Extraction Instructions</a></li>
 <li><a href="#h-702e78a1-fd19-4ff4-9336-a116a544c484">7. Array Operations</a></li>
 <li><a href="#h-faa7f432-969a-48ec-b0ec-f950291942e8">8. Branch and Loop Instructions</a></li>
-<li><a href="#h-c147520d-37d3-490e-b89f-7aee72d02fa7">9. Block Instructions</a></li>
+<li><a href="#h-c147520d-37d3-490e-b89f-7aee72d02fa7">9. Block Instructions</a>
+<ul>
+<li><a href="#h-7ebd551c-1cdc-439c-8f48-0d8b528f6d61">9.1. %block-n-write</a></li>
+</ul>
+</li>
 <li><a href="#h-156c4efb-e6a9-441e-a656-826781d32626">10. Function-Calling Instructions</a></li>
 <li><a href="#h-a8d90831-0710-4cf0-ae84-5b493fca1ea1">11. Binding Instructions</a></li>
 <li><a href="#h-a781663f-2bda-4088-b3f2-e6bba3eda406">12. Catch Instructions</a></li>
@@ -260,7 +279,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-f1194003-5e7e-4081-b3f6-4325d1b4c155" class="outline-2">
 <h2 id="h-f1194003-5e7e-4081-b3f6-4325d1b4c155"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-f1194003-5e7e-4081-b3f6-4325d1b4c155">
@@ -291,7 +309,6 @@ Also note there are about 2 or 3 dozen different types of an argument.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-401ecacb-5505-4e97-8913-2d800ee91e10" class="outline-2">
 <h2 id="h-401ecacb-5505-4e97-8913-2d800ee91e10"><span class="section-number-2">2.</span> List-Function Operations</h2>
 <div class="outline-text-2" id="text-h-401ecacb-5505-4e97-8913-2d800ee91e10">
@@ -308,7 +325,6 @@ Also note there are about 2 or 3 dozen different types of an argument.
 <li><code>assoc</code></li>
 </ol>
 </div>
-
 <div id="outline-container-h-98dda85e-dca6-4bd3-b512-19b71bea48a4" class="outline-3">
 <h3 id="h-98dda85e-dca6-4bd3-b512-19b71bea48a4"><span class="section-number-3">2.1.</span> car</h3>
 <div class="outline-text-3" id="text-h-98dda85e-dca6-4bd3-b512-19b71bea48a4">
@@ -339,7 +355,6 @@ If the type of arg is dtp-nil, this pushes <code>nil</code> onto the stack.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-e8dcab4f-54d1-49d4-b05b-d810b109d0f6" class="outline-3">
 <h3 id="h-e8dcab4f-54d1-49d4-b05b-d810b109d0f6"><span class="section-number-3">2.2.</span> cdr</h3>
 <div class="outline-text-3" id="text-h-e8dcab4f-54d1-49d4-b05b-d810b109d0f6">
@@ -363,7 +378,6 @@ TOS Register effects: valid afer
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-d90284a3-ff81-4c3f-a60a-7a7173bcc7ba" class="outline-3">
 <h3 id="h-d90284a3-ff81-4c3f-a60a-7a7173bcc7ba"><span class="section-number-3">2.3.</span> set-to-car</h3>
 <div class="outline-text-3" id="text-h-d90284a3-ff81-4c3f-a60a-7a7173bcc7ba">
@@ -379,7 +393,6 @@ cells at location with its car</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-13bbc361-d634-4592-8292-9d52aac3ca41" class="outline-3">
 <h3 id="h-13bbc361-d634-4592-8292-9d52aac3ca41"><span class="section-number-3">2.4.</span> set-to-cdr</h3>
 <div class="outline-text-3" id="text-h-13bbc361-d634-4592-8292-9d52aac3ca41">
@@ -395,14 +408,11 @@ Basically <code>(set-to-cdr arg)</code> is the same as <code>(set! arg (cdr arg)
 </ul>
 </div>
 </div>
-
-
 <div id="outline-container-h-1e97e882-52ee-4b44-bac2-a21a22fd1abe" class="outline-3">
 <h3 id="h-1e97e882-52ee-4b44-bac2-a21a22fd1abe"><span class="section-number-3">2.5.</span> set-to-cdr-push-car</h3>
 <div class="outline-text-3" id="text-h-1e97e882-52ee-4b44-bac2-a21a22fd1abe">
 </div>
 </div>
-
 <div id="outline-container-h-0338c7ec-6fc5-4ca1-a625-3bd97da53f1a" class="outline-3">
 <h3 id="h-0338c7ec-6fc5-4ca1-a625-3bd97da53f1a"><span class="section-number-3">2.6.</span> rplaca</h3>
 <div class="outline-text-3" id="text-h-0338c7ec-6fc5-4ca1-a625-3bd97da53f1a">
@@ -417,7 +427,6 @@ Basically <code>(set-to-cdr arg)</code> is the same as <code>(set! arg (cdr arg)
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-dcd6252e-0eba-4c6f-9a69-23a6d6575391" class="outline-3">
 <h3 id="h-dcd6252e-0eba-4c6f-9a69-23a6d6575391"><span class="section-number-3">2.7.</span> rplacd</h3>
 <div class="outline-text-3" id="text-h-dcd6252e-0eba-4c6f-9a69-23a6d6575391">
@@ -432,7 +441,6 @@ Basically <code>(set-to-cdr arg)</code> is the same as <code>(set! arg (cdr arg)
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-8be6f967-6f3b-4346-ab77-6f0aa2a1d5d9" class="outline-3">
 <h3 id="h-8be6f967-6f3b-4346-ab77-6f0aa2a1d5d9"><span class="section-number-3">2.8.</span> rgetf</h3>
 <div class="outline-text-3" id="text-h-8be6f967-6f3b-4346-ab77-6f0aa2a1d5d9">
@@ -462,7 +470,6 @@ matching pair, and the second value returned is the tail of <code>arg2</code> wh
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-995c9e67-1be0-4b82-a377-ff95187596f2" class="outline-3">
 <h3 id="h-995c9e67-1be0-4b82-a377-ff95187596f2"><span class="section-number-3">2.9.</span> member</h3>
 <div class="outline-text-3" id="text-h-995c9e67-1be0-4b82-a377-ff95187596f2">
@@ -480,7 +487,6 @@ This implements the <code>cl:member</code> function.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-c371f778-b6f0-41f2-9908-d2fdfeebb912" class="outline-3">
 <h3 id="h-c371f778-b6f0-41f2-9908-d2fdfeebb912"><span class="section-number-3">2.10.</span> assoc</h3>
 <div class="outline-text-3" id="text-h-c371f778-b6f0-41f2-9908-d2fdfeebb912">
@@ -496,8 +502,6 @@ Returns <code>nil</code> or an element of <code>arg2</code> whose <code>car</cod
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-ebf99c94-fc15-4654-b755-44d6ae5864a5" class="outline-2">
 <h2 id="h-ebf99c94-fc15-4654-b755-44d6ae5864a5"><span class="section-number-2">3.</span> Predicate functions</h2>
 <div class="outline-text-2" id="text-h-ebf99c94-fc15-4654-b755-44d6ae5864a5">
@@ -528,7 +532,6 @@ Returns <code>nil</code> or an element of <code>arg2</code> whose <code>car</cod
 </ol></li>
 </ul>
 </div>
-
 <div id="outline-container-h-316cb757-fd1e-4631-938d-5844e24beb29" class="outline-3">
 <h3 id="h-316cb757-fd1e-4631-938d-5844e24beb29"><span class="section-number-3">3.1.</span> eq, eq-no-pop</h3>
 <div class="outline-text-3" id="text-h-316cb757-fd1e-4631-938d-5844e24beb29">
@@ -552,7 +555,6 @@ presumably, <code>arg2</code> <i>is</i> popped off the stack?)
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-1bdb6e09-99c2-44bc-9d85-44190a889e5e" class="outline-3">
 <h3 id="h-1bdb6e09-99c2-44bc-9d85-44190a889e5e"><span class="section-number-3">3.2.</span> eql, eql-no-pop</h3>
 <div class="outline-text-3" id="text-h-1bdb6e09-99c2-44bc-9d85-44190a889e5e">
@@ -575,7 +577,6 @@ is false.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-188d1518-b176-49ce-9c6b-67539e920b74" class="outline-3">
 <h3 id="h-188d1518-b176-49ce-9c6b-67539e920b74"><span class="section-number-3">3.3.</span> equal-number, equal-number-no-pop</h3>
 <div class="outline-text-3" id="text-h-188d1518-b176-49ce-9c6b-67539e920b74">
@@ -591,8 +592,6 @@ The no-pop version leaves the first argument on the stack.
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-4989fca9-0106-4d44-a109-7639b21ebd14" class="outline-2">
 <h2 id="h-4989fca9-0106-4d44-a109-7639b21ebd14"><span class="section-number-2">4.</span> Numeric Operations</h2>
 <div class="outline-text-2" id="text-h-4989fca9-0106-4d44-a109-7639b21ebd14">
@@ -629,7 +628,6 @@ The no-pop version leaves the first argument on the stack.
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-23899ad2-6caa-490a-a6aa-a20393731715" class="outline-2">
 <h2 id="h-23899ad2-6caa-490a-a6aa-a20393731715"><span class="section-number-2">5.</span> Data-Movement Instructions</h2>
 <div class="outline-text-2" id="text-h-23899ad2-6caa-490a-a6aa-a20393731715">
@@ -647,7 +645,6 @@ The no-pop version leaves the first argument on the stack.
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-3b1b345d-f35f-4288-a2b5-8ee6ce9b5156" class="outline-2">
 <h2 id="h-3b1b345d-f35f-4288-a2b5-8ee6ce9b5156"><span class="section-number-2">6.</span> Field-Extraction Instructions</h2>
 <div class="outline-text-2" id="text-h-3b1b345d-f35f-4288-a2b5-8ee6ce9b5156">
@@ -663,7 +660,6 @@ The no-pop version leaves the first argument on the stack.
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-702e78a1-fd19-4ff4-9336-a116a544c484" class="outline-2">
 <h2 id="h-702e78a1-fd19-4ff4-9336-a116a544c484"><span class="section-number-2">7.</span> Array Operations</h2>
 <div class="outline-text-2" id="text-h-702e78a1-fd19-4ff4-9336-a116a544c484">
@@ -681,7 +677,6 @@ The no-pop version leaves the first argument on the stack.
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-faa7f432-969a-48ec-b0ec-f950291942e8" class="outline-2">
 <h2 id="h-faa7f432-969a-48ec-b0ec-f950291942e8"><span class="section-number-2">8.</span> Branch and Loop Instructions</h2>
 <div class="outline-text-2" id="text-h-faa7f432-969a-48ec-b0ec-f950291942e8">
@@ -691,7 +686,7 @@ The no-pop version leaves the first argument on the stack.
 <li>branch-false</li>
 <li>branch-true-no-pop</li>
 <li>branch-false-no-pop</li>
-<li>branchÂ·true-else-no-pop</li>
+<li>branch·true-else-no-pop</li>
 <li>branch-false-else-no-pop</li>
 <li>branch-true-and-no-pop</li>
 <li>branch-false-and-no-pop</li>
@@ -699,7 +694,7 @@ The no-pop version leaves the first argument on the stack.
 <li>branch-false-and-extra-pop (Pop twice if branch, pop once if no branch)</li>
 <li>branch-true-else-extra-pop (Pop once if branch, pop twice if no branch)</li>
 <li>branch-false-else-extra-pop</li>
-<li>branch-trueÂ·extra-pop</li>
+<li>branch-true·extra-pop</li>
 <li>branch-false-extra-pop</li>
 <li><code>branch-true-and-no-pop-else-no-pop-extra-pop</code> is the same thing as <code>branch-true</code></li>
 <li><code>branch-false-and-no-pop-else-no-pop-extra-pop</code> is the same thing as <code>branch-false</code></li>
@@ -708,20 +703,37 @@ The no-pop version leaves the first argument on the stack.
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-c147520d-37d3-490e-b89f-7aee72d02fa7" class="outline-2">
 <h2 id="h-c147520d-37d3-490e-b89f-7aee72d02fa7"><span class="section-number-2">9.</span> Block Instructions</h2>
 <div class="outline-text-2" id="text-h-c147520d-37d3-490e-b89f-7aee72d02fa7">
 <ol class="org-ol">
-<li>%blockÂ·n-read (four instructions)</li>
+<li>%block·n-read (four instructions)</li>
 <li>%block-n-read-shift (four instructions)</li>
 <li>%block-n-read-alu (four instructions)</li>
 <li>%block-n-read-test (four instructions)</li>
 <li>%block-n-write (four instructions)</li>
 </ol>
 </div>
-</div>
+<div id="outline-container-h-7ebd551c-1cdc-439c-8f48-0d8b528f6d61" class="outline-3">
+<h3 id="h-7ebd551c-1cdc-439c-8f48-0d8b528f6d61"><span class="section-number-3">9.1.</span> %block-n-write</h3>
+<div class="outline-text-3" id="text-h-7ebd551c-1cdc-439c-8f48-0d8b528f6d61">
+<p>
+This takes 1 argument. It writes <code>arg</code> into the word addressed by the
+contents of the Block Address Register (BAR) specified by <code>n</code>, where <code>n</code>
+is an integer between 0 and 3 inclusive that is part of the opcode. All
+40 bits (including the cdr code) of this word are written into memory.
+</p>
 
+<p>
+The specified BAR is incremented as a side effect.
+</p>
+
+<p>
+If <code>arg</code> is immediate, the tag bits will specify <code>dtp-fixnum</code> and <code>cdr-next</code>.
+</p>
+</div>
+</div>
+</div>
 <div id="outline-container-h-156c4efb-e6a9-441e-a656-826781d32626" class="outline-2">
 <h2 id="h-156c4efb-e6a9-441e-a656-826781d32626"><span class="section-number-2">10.</span> Function-Calling Instructions</h2>
 <div class="outline-text-2" id="text-h-156c4efb-e6a9-441e-a656-826781d32626">
@@ -749,7 +761,6 @@ The no-pop version leaves the first argument on the stack.
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-a8d90831-0710-4cf0-ae84-5b493fca1ea1" class="outline-2">
 <h2 id="h-a8d90831-0710-4cf0-ae84-5b493fca1ea1"><span class="section-number-2">11.</span> Binding Instructions</h2>
 <div class="outline-text-2" id="text-h-a8d90831-0710-4cf0-ae84-5b493fca1ea1">
@@ -761,7 +772,6 @@ The no-pop version leaves the first argument on the stack.
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-a781663f-2bda-4088-b3f2-e6bba3eda406" class="outline-2">
 <h2 id="h-a781663f-2bda-4088-b3f2-e6bba3eda406"><span class="section-number-2">12.</span> Catch Instructions</h2>
 <div class="outline-text-2" id="text-h-a781663f-2bda-4088-b3f2-e6bba3eda406">
@@ -771,7 +781,6 @@ The no-pop version leaves the first argument on the stack.
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-3fcb3079-7171-4951-93f2-83c8027f87eb" class="outline-2">
 <h2 id="h-3fcb3079-7171-4951-93f2-83c8027f87eb"><span class="section-number-2">13.</span> Lexical Variable Accessors</h2>
 <div class="outline-text-2" id="text-h-3fcb3079-7171-4951-93f2-83c8027f87eb">
@@ -782,7 +791,6 @@ The no-pop version leaves the first argument on the stack.
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-5fdb8f97-5a9d-49db-94ac-572c361ecd5d" class="outline-2">
 <h2 id="h-5fdb8f97-5a9d-49db-94ac-572c361ecd5d"><span class="section-number-2">14.</span> Instance Variable Accessors</h2>
 <div class="outline-text-2" id="text-h-5fdb8f97-5a9d-49db-94ac-572c361ecd5d">
@@ -801,9 +809,6 @@ The no-pop version leaves the first argument on the stack.
 </ol>
 </div>
 </div>
-
-
-
 <div id="outline-container-h-6ce93f65-7fee-4e24-9b15-2b4fa163a6fc" class="outline-2">
 <h2 id="h-6ce93f65-7fee-4e24-9b15-2b4fa163a6fc"><span class="section-number-2">15.</span> Sub primitive Instructions</h2>
 <div class="outline-text-2" id="text-h-6ce93f65-7fee-4e24-9b15-2b4fa163a6fc">
@@ -837,7 +842,6 @@ The no-pop version leaves the first argument on the stack.
 <li>%halt</li>
 </ol>
 </div>
-
 <div id="outline-container-h-9b37c6f3-0355-41e8-84b7-6e7417c4e00b" class="outline-3">
 <h3 id="h-9b37c6f3-0355-41e8-84b7-6e7417c4e00b"><span class="section-number-3">15.1.</span> %allocate-list-block</h3>
 <div class="outline-text-3" id="text-h-9b37c6f3-0355-41e8-84b7-6e7417c4e00b">
@@ -865,7 +869,12 @@ exception if the result is negative. Stores the result into
 <li>Pops the arguments and pushes the <code>list-cache-address</code>. Writes the
 <code>list-cache-address</code> into BAR-1 (Block-Address-Register-1). Sets the
 control-register trap-mode field to <code>(max 1 current-trap-mode)</code> so that
-there can be no interrupts until storage is initialized.</li>
+there can be no interrupts until storage is initialized.
+<ul class="org-ul">
+<li>There are 4 BAR registers; so if we wanted to write to the newly
+allocated object, we would need to use <code>%block-1-write</code>. (This then
+increments the BAR-1 register to point at the next word allocated.)</li>
+</ul></li>
 <li>Stores (<code>list-cache-address</code> + <code>arg2</code>) into <code>list-cache-address</code> (<code>arg2</code> must
 be latched since the third step may overwrite its original location
 in the stack).</li>
@@ -873,7 +882,9 @@ in the stack).</li>
 
 
 <p>
-This is useful for the implementation of the <code>cons</code> function.
+This is useful for the implementation of the <code>cons</code> function (remember,
+<code>prog1</code> is a macro which sequentially evaluates the forms, but returns
+the result of the first form):
 </p>
 
 <div class="org-src-container">
@@ -893,7 +904,6 @@ Note that <code>%make-pointer</code> is <code>%set-tag</code> with the arguments
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-ea649e86-e4bb-4287-aefc-822da69acef5" class="outline-2">
 <h2 id="h-ea649e86-e4bb-4287-aefc-822da69acef5"><span class="section-number-2">16.</span> References</h2>
 <div class="outline-text-2" id="text-h-ea649e86-e4bb-4287-aefc-822da69acef5">
@@ -909,7 +919,7 @@ documentation.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-09-19 Tue 09:44.</p>
+<p class="postamble">Last Updated: Wed, 20 Sep 2023 08:19:14 -0700
 </div>
 </body>
 </html>

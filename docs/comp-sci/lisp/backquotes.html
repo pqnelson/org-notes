@@ -6,7 +6,7 @@
 <title>Backquotes - Lisp</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -252,7 +281,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-b18d5fb1-085d-4dd6-a5ad-08a2d47c3e93" class="outline-2">
 <h2 id="h-b18d5fb1-085d-4dd6-a5ad-08a2d47c3e93"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-b18d5fb1-085d-4dd6-a5ad-08a2d47c3e93">
@@ -306,7 +334,6 @@ of <code>my-list</code> into a backquoted expression.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-158b0f1a-1cae-415f-890f-b53237db1f4a" class="outline-2">
 <h2 id="h-158b0f1a-1cae-415f-890f-b53237db1f4a"><span class="section-number-2">2.</span> Basic Rules</h2>
 <div class="outline-text-2" id="text-h-158b0f1a-1cae-415f-890f-b53237db1f4a">
@@ -350,7 +377,6 @@ using (for example) <code>nconc</code> instead of <code>append</code>.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-15fb9b5a-3dd2-4f9a-bb8b-9a3d194548c0" class="outline-2">
 <h2 id="h-15fb9b5a-3dd2-4f9a-bb8b-9a3d194548c0"><span class="section-number-2">3.</span> Nested Backquotes</h2>
 <div class="outline-text-2" id="text-h-15fb9b5a-3dd2-4f9a-bb8b-9a3d194548c0">
@@ -400,7 +426,6 @@ We replace <code>B</code> with its value (this "consumes" one comma, prefixing t
 value with a comma).
 </p>
 </div>
-
 <div id="outline-container-h-77bde178-1a00-4477-981f-62ac5ee54991" class="outline-3">
 <h3 id="h-77bde178-1a00-4477-981f-62ac5ee54991"><span class="section-number-3">3.1.</span> Idiom: comma-quote-comma</h3>
 <div class="outline-text-3" id="text-h-77bde178-1a00-4477-981f-62ac5ee54991">
@@ -424,7 +449,6 @@ as a symbol.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-79514d56-ea6d-4263-a2d1-626cafe84e6e" class="outline-3">
 <h3 id="h-79514d56-ea6d-4263-a2d1-626cafe84e6e"><span class="section-number-3">3.2.</span> Nested Splicing</h3>
 <div class="outline-text-3" id="text-h-79514d56-ea6d-4263-a2d1-626cafe84e6e">
@@ -453,7 +477,6 @@ as a symbol.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-6c738640-21a3-4a1c-8ad3-18cd9fbb1faa" class="outline-2">
 <h2 id="h-6c738640-21a3-4a1c-8ad3-18cd9fbb1faa"><span class="section-number-2">4.</span> Caution: Compiler Dependence</h2>
 <div class="outline-text-2" id="text-h-6c738640-21a3-4a1c-8ad3-18cd9fbb1faa">
@@ -506,7 +529,6 @@ what we'd naively expect:
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-203674ea-a03f-45bf-9a94-6cb8bdc77f2e" class="outline-2">
 <h2 id="h-203674ea-a03f-45bf-9a94-6cb8bdc77f2e"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-203674ea-a03f-45bf-9a94-6cb8bdc77f2e">
@@ -521,7 +543,7 @@ what we'd naively expect:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-08-14 Mon 10:20.</p>
+<p class="postamble">Last Updated: Mon, 14 Aug 2023 17:22:02 -0700
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>Linear Algebra Rosetta Stone</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,14 +205,31 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 <script>
   window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
     tex: {
       ams: {
         multlineWidth: '85%'
       },
+      inlineMath: {'[+]': [['$', '$']]},
       tags: 'ams',
       tagSide: 'right',
       tagIndent: '.8em'
@@ -233,7 +251,7 @@
   };
 </script>
 
-<script
+<script  type="text/javascript"
   id="MathJax-script"
   async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -246,7 +264,6 @@
  <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">Linear Algebra Rosetta Stone</h1>
-
 <div id="outline-container-h-3799b2d3-78b9-435b-850b-60b7e94db637" class="outline-2">
 <h2 id="h-3799b2d3-78b9-435b-850b-60b7e94db637">Introduction</h2>
 <div class="outline-text-2" id="text-h-3799b2d3-78b9-435b-850b-60b7e94db637">
@@ -256,17 +273,14 @@ This is a Rosetta stone of the results as found in Axler's
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-542e3e45-efca-42f4-bf1b-c5e8654ae7c3" class="outline-2">
 <h2 id="h-542e3e45-efca-42f4-bf1b-c5e8654ae7c3">Chapter 1 Vector Spaces</h2>
 <div class="outline-text-2" id="text-h-542e3e45-efca-42f4-bf1b-c5e8654ae7c3">
 </div>
-
 <div id="outline-container-h-820f20b0-6ac6-4596-be2b-e0394aa079e8" class="outline-3">
 <h3 id="h-820f20b0-6ac6-4596-be2b-e0394aa079e8">1A. \(\mathbb{R}^{n}\) and  \(\mathbb{C}^{n}\)</h3>
 <div class="outline-text-3" id="text-h-820f20b0-6ac6-4596-be2b-e0394aa079e8">
 </div>
-
 <div id="outline-container-h-b8342424-741a-4311-8595-c87ad897143d" class="outline-4">
 <h4 id="h-b8342424-741a-4311-8595-c87ad897143d">Complex Numbers</h4>
 <div class="outline-text-4" id="text-h-b8342424-741a-4311-8595-c87ad897143d">
@@ -339,7 +353,6 @@ for every \(\alpha,\beta,\lambda\in\mathbb{C}\)</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-f7ee189a-7ae4-4f51-b4ea-b79c32998363" class="outline-4">
 <h4 id="h-f7ee189a-7ae4-4f51-b4ea-b79c32998363">Lists</h4>
 <div class="outline-text-4" id="text-h-f7ee189a-7ae4-4f51-b4ea-b79c32998363">
@@ -367,7 +380,6 @@ the same order.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-0fca0004-528d-4dea-9959-1f1f77350df5" class="outline-4">
 <h4 id="h-0fca0004-528d-4dea-9959-1f1f77350df5">\(\mathbb{F}^{n}\)</h4>
 <div class="outline-text-4" id="text-h-0fca0004-528d-4dea-9959-1f1f77350df5">
@@ -420,7 +432,6 @@ is the vector obtained by multiplying componentwise by \(\lambda\):
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-1f8560be-d80c-49e5-94e2-f55d13dcb275" class="outline-4">
 <h4 id="h-1f8560be-d80c-49e5-94e2-f55d13dcb275">Digression on Fields</h4>
 <div class="outline-text-4" id="text-h-1f8560be-d80c-49e5-94e2-f55d13dcb275">
@@ -480,7 +491,7 @@ coincides with rings (and things), and is formalize as <a href="https://mizar.uw
 in Mizar.
 </p>
 
-<div class="remark" id="org8f1ca78">
+<div class="remark" id="org5782ed9">
 <p>
 To American university students, this is an odd choice of
 name, but most of abstract algebra has only been standardized fairly
@@ -541,7 +552,6 @@ If we want to consider the complex numbers as a field, we would use
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-174a9872-70d2-4480-b277-d54d59d38691" class="outline-3">
 <h3 id="h-174a9872-70d2-4480-b277-d54d59d38691">1B. Definition of Vector Spaces</h3>
 <div class="outline-text-3" id="text-h-174a9872-70d2-4480-b277-d54d59d38691">
@@ -643,7 +653,6 @@ For each \(v\in V\), \((-1)\cdot v = -v\).
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-9e2b8b08-bedb-4193-bc7c-ee8cd4b4573b" class="outline-3">
 <h3 id="h-9e2b8b08-bedb-4193-bc7c-ee8cd4b4573b">1C. Subspaces</h3>
 <div class="outline-text-3" id="text-h-9e2b8b08-bedb-4193-bc7c-ee8cd4b4573b">
@@ -682,7 +691,6 @@ If \(U_{1}\) is a subspace of \(U_{2}\) and \(U_{2}\) is a subspace of
 (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_4.html#T26"><code>VECTSP_4:26</code></a>)</li>
 </ul>
 </div>
-
 <div id="outline-container-h-a7ad4e83-ab15-468b-845c-b3b3c6087b58" class="outline-4">
 <h4 id="h-a7ad4e83-ab15-468b-845c-b3b3c6087b58">Sums of Subspaces</h4>
 <div class="outline-text-4" id="text-h-a7ad4e83-ab15-468b-845c-b3b3c6087b58">
@@ -707,7 +715,6 @@ We define the <dfn>Sum</dfn> of \(V_{1}\), &#x2026;, \(V_{m}\) (denoted by
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-42b38ede-b986-45d1-83ea-802167e48bf4" class="outline-4">
 <h4 id="h-42b38ede-b986-45d1-83ea-802167e48bf4">Direct Sums</h4>
 <div class="outline-text-4" id="text-h-42b38ede-b986-45d1-83ea-802167e48bf4">
@@ -741,7 +748,7 @@ if and only if \(U\cap W=\{0\}\).
 (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_5.html#T41"><code>VECTSP_5:41</code></a>)</li>
 </ul>
 
-<div class="remark" id="org4189007">
+<div class="remark" id="org484d5b2">
 <p>
 It's probably fruitful to define a [Mizar] functor for the direct sum of a
 family of vector spaces over the same field, using the universal
@@ -754,17 +761,14 @@ it would be useful.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-ccdf5a19-684f-44c8-a176-221c9a00d250" class="outline-2">
 <h2 id="h-ccdf5a19-684f-44c8-a176-221c9a00d250">Chapter 2 Finite-Dimensional Vector Spaces</h2>
 <div class="outline-text-2" id="text-h-ccdf5a19-684f-44c8-a176-221c9a00d250">
 </div>
-
 <div id="outline-container-h-380d3a5f-17a4-4edd-a8e8-ed23ac3189b9" class="outline-3">
 <h3 id="h-380d3a5f-17a4-4edd-a8e8-ed23ac3189b9">2A. Spans and Linear Independence</h3>
 <div class="outline-text-3" id="text-h-380d3a5f-17a4-4edd-a8e8-ed23ac3189b9">
 </div>
-
 <div id="outline-container-h-98a875af-e955-423b-9188-754fa928c76c" class="outline-4">
 <h4 id="h-98a875af-e955-423b-9188-754fa928c76c">Linear Combinations and Spans</h4>
 <div class="outline-text-4" id="text-h-98a875af-e955-423b-9188-754fa928c76c">
@@ -798,7 +802,6 @@ a finite linearly independent subset which spans the space.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-7b96ecaf-bd7a-4274-a290-a9a01c3eec78" class="outline-4">
 <h4 id="h-7b96ecaf-bd7a-4274-a290-a9a01c3eec78">Linear Independence</h4>
 <div class="outline-text-4" id="text-h-7b96ecaf-bd7a-4274-a290-a9a01c3eec78">
@@ -834,7 +837,6 @@ Every subspace of a finite-dimensional vector space is finite-dimension.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-09ad76d0-5a6a-45e9-8243-730112d9daaf" class="outline-3">
 <h3 id="h-09ad76d0-5a6a-45e9-8243-730112d9daaf">2B. Bases</h3>
 <div class="outline-text-3" id="text-h-09ad76d0-5a6a-45e9-8243-730112d9daaf">
@@ -868,7 +870,6 @@ subspace of \(V\). Then there exists a subspace \(W\) of \(V\) such that
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-f654065c-e6f6-4b11-bbb7-8a974f704a48" class="outline-3">
 <h3 id="h-f654065c-e6f6-4b11-bbb7-8a974f704a48">2C. Dimension</h3>
 <div class="outline-text-3" id="text-h-f654065c-e6f6-4b11-bbb7-8a974f704a48">
@@ -897,17 +898,14 @@ finite-dimensional vector space, then
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-4706f12d-af00-418a-92be-d31c72853766" class="outline-2">
 <h2 id="h-4706f12d-af00-418a-92be-d31c72853766">Chapter 3 Linear Maps</h2>
 <div class="outline-text-2" id="text-h-4706f12d-af00-418a-92be-d31c72853766">
 </div>
-
 <div id="outline-container-h-f9c5c9ea-d756-4ba9-9bf1-49a069cc10b3" class="outline-3">
 <h3 id="h-f9c5c9ea-d756-4ba9-9bf1-49a069cc10b3">3A. Vector Spaces of Linear Maps</h3>
 <div class="outline-text-3" id="text-h-f9c5c9ea-d756-4ba9-9bf1-49a069cc10b3">
 </div>
-
 <div id="outline-container-h-ab71d5ec-d816-4323-b2e7-f056ba5819f0" class="outline-4">
 <h4 id="h-ab71d5ec-d816-4323-b2e7-f056ba5819f0">Definitions and Examples</h4>
 <div class="outline-text-4" id="text-h-ab71d5ec-d816-4323-b2e7-f056ba5819f0">
@@ -941,7 +939,6 @@ transformation \(T\colon V\to W\) such that \(T(v_{i})=w_{i}\) for each
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8" class="outline-4">
 <h4 id="h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8">Algebraic Operations on \(L(V,W)\)</h4>
 <div class="outline-text-4" id="text-h-cf0adbb9-9cfe-4a8e-b479-9ee1b0d11be8">
@@ -983,12 +980,10 @@ Mizar. Composition is originally defined for arbitrary relations in
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-98c27132-8546-446a-8ef7-c60c20bcff28" class="outline-3">
 <h3 id="h-98c27132-8546-446a-8ef7-c60c20bcff28">3B. Null Spaces and Ranges</h3>
 <div class="outline-text-3" id="text-h-98c27132-8546-446a-8ef7-c60c20bcff28">
 </div>
-
 <div id="outline-container-h-6f6d554e-c664-4957-97e9-dc5721a97f99" class="outline-4">
 <h4 id="h-6f6d554e-c664-4957-97e9-dc5721a97f99">Null Spaces and Injectivity</h4>
 <div class="outline-text-4" id="text-h-6f6d554e-c664-4957-97e9-dc5721a97f99">
@@ -1015,7 +1010,6 @@ theorem, but explicitly stated is <span class="missing">Missing from Mizar</span
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-98038eca-1e3c-4503-b834-3389a0e825cd" class="outline-4">
 <h4 id="h-98038eca-1e3c-4503-b834-3389a0e825cd">Range and Surjectivity</h4>
 <div class="outline-text-4" id="text-h-98038eca-1e3c-4503-b834-3389a0e825cd">
@@ -1039,7 +1033,6 @@ already in the definition in Mizar.)</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-aca4326c-86bc-4991-a2e9-b6076552fdac" class="outline-4">
 <h4 id="h-aca4326c-86bc-4991-a2e9-b6076552fdac">Fundamental Theorem of Linear Maps</h4>
 <div class="outline-text-4" id="text-h-aca4326c-86bc-4991-a2e9-b6076552fdac">
@@ -1075,12 +1068,10 @@ constant terms. <span class="missing">Missing from Mizar</span></li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-e4124565-75bd-43c0-a5eb-4a5061eefc9f" class="outline-3">
 <h3 id="h-e4124565-75bd-43c0-a5eb-4a5061eefc9f">3C. Matrices</h3>
 <div class="outline-text-3" id="text-h-e4124565-75bd-43c0-a5eb-4a5061eefc9f">
 </div>
-
 <div id="outline-container-h-30355ddf-3e25-4b66-a06b-1dc9b3574a81" class="outline-4">
 <h4 id="h-30355ddf-3e25-4b66-a06b-1dc9b3574a81">Representing a Linear Map by a Matrix</h4>
 <div class="outline-text-4" id="text-h-30355ddf-3e25-4b66-a06b-1dc9b3574a81">
@@ -1127,7 +1118,6 @@ transformation and particular choice of bases.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-9930e894-2db2-4d0f-9944-d295cf2de9a5" class="outline-4">
 <h4 id="h-9930e894-2db2-4d0f-9944-d295cf2de9a5">Addition and Scalar Multiplication of Matrices</h4>
 <div class="outline-text-4" id="text-h-9930e894-2db2-4d0f-9944-d295cf2de9a5">
@@ -1160,7 +1150,6 @@ forms a finite-dimensional vector space over \(\mathbb{F}\) of dimension
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-7ed6b163-ce5a-4001-922e-3f54b7794a1d" class="outline-4">
 <h4 id="h-7ed6b163-ce5a-4001-922e-3f54b7794a1d">Matrix Multiplication</h4>
 <div class="outline-text-4" id="text-h-7ed6b163-ce5a-4001-922e-3f54b7794a1d">
@@ -1178,19 +1167,16 @@ then \(\mathcal{M}(S\circ T)=\mathcal{M}(S)\mathcal{S}(T)\).
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-25209265-06a6-4144-83a6-27757040afc7" class="outline-4">
 <h4 id="h-25209265-06a6-4144-83a6-27757040afc7">Column-Row Factorization and Rank of a Matrix</h4>
 <div class="outline-text-4" id="text-h-25209265-06a6-4144-83a6-27757040afc7">
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-b56e3b65-7e3f-4d74-bfd0-60a135d74ca5" class="outline-3">
 <h3 id="h-b56e3b65-7e3f-4d74-bfd0-60a135d74ca5">3D. Invertibility and Isomorphisms</h3>
 <div class="outline-text-3" id="text-h-b56e3b65-7e3f-4d74-bfd0-60a135d74ca5">
 </div>
-
 <div id="outline-container-h-5714227b-82f5-4587-abdd-c19383a6b9e8" class="outline-4">
 <h4 id="h-5714227b-82f5-4587-abdd-c19383a6b9e8">Invertible Linear Maps</h4>
 <div class="outline-text-4" id="text-h-5714227b-82f5-4587-abdd-c19383a6b9e8">
@@ -1235,7 +1221,6 @@ Then \(S\circ T=I\) if and only if \(T\circ S=I\). <span class="missing">Missing
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-614c4b38-c073-466d-8bfc-f01b329b73a9" class="outline-4">
 <h4 id="h-614c4b38-c073-466d-8bfc-f01b329b73a9">Isomorphic Vector Spaces</h4>
 <div class="outline-text-4" id="text-h-614c4b38-c073-466d-8bfc-f01b329b73a9">
@@ -1247,7 +1232,7 @@ Then \(S\circ T=I\) if and only if \(T\circ S=I\). <span class="missing">Missing
 isomorphism from one vector space to another.</li>
 </ol></li>
 </ul>
-<div class="remark" id="org443d4fd">
+<div class="remark" id="orga66b207">
 <p>
 Since not all vector spaces are isomorphic, if we tried to define a
 new <code>mode Isomorphism of V,W</code>, then we couldn't prove existence. This
@@ -1274,7 +1259,6 @@ spaces. Then \(\mathcal{L}(V,W)\) is finite-dimensional and
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-153320cc-2523-41e4-88fa-bd64733c79aa" class="outline-4">
 <h4 id="h-153320cc-2523-41e4-88fa-bd64733c79aa">Linear Maps Thought of as Matrix Multiplication</h4>
 <div class="outline-text-4" id="text-h-153320cc-2523-41e4-88fa-bd64733c79aa">
@@ -1289,7 +1273,23 @@ of the n-vector.
 <li>This appears to be defined in <a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#T41"><code>MATRLIN:def 7</code></a> as <code>v |-- b1</code> instead
 of \(\mathcal{M}(v)\).</li>
 </ul></li>
-<li></li>
+<li><b>Theorem 3.75.</b> Let \(T\in\mathcal{L}(V,W)\) and let \(v_{1}\), &#x2026;,
+\(v_{n}\) be a basis for \(V\). Then the \(k^{th}\) column of
+\(\mathcal{M}(T)\) is precisely \(\mathcal{M}(Tv_{k})\).
+<ul class="org-ul">
+<li>This is precisely how <a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#K10"><code>AutMt</code></a> is defined</li>
+</ul></li>
+<li><b>Theorem 3.76.</b> Let \(T\in\mathcal{L}(V,W)\) and let \(v_{1}\), &#x2026;,
+\(v_{n}\) be a basis for \(V\). Let \(w_{1}\), &#x2026;, \(w_{m}\) be a basis for
+\(W\). Then \(\mathcal{M}(Tv)=\mathcal{M}(T)\mathcal{M}(v)\)
+<ul class="org-ul">
+<li><span class="missing">Missing from Mizar</span> but the row-vector version is proven in <a href="https://mizar.uwb.edu.pl/version/current/html/matrlin2.html#T32"><code>MATRLIN2:32</code></a></li>
+</ul></li>
+<li><b>Theorem 3.78.</b>
+Suppose \(V\) and \(W\) are finite-dimensional vector spaces and
+\(T\in\mathcal{L}(V,W)\). The \(\dim(\operatorname{range}(T))\) is equal
+to the column rank of \(\mathcal{M}(T)\).
+<span class="missing">Missing from Mizar</span></li>
 </ul>
 </div>
 </div>
@@ -1299,42 +1299,35 @@ of \(\mathcal{M}(v)\).</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-0c43a4c8-9e42-42b7-9257-378d124af333" class="outline-3">
 <h3 id="h-0c43a4c8-9e42-42b7-9257-378d124af333">3E. Products and Quotients of Vector Spaces</h3>
 <div class="outline-text-3" id="text-h-0c43a4c8-9e42-42b7-9257-378d124af333">
 </div>
-
 <div id="outline-container-h-0d01fa68-3fe3-4e99-be22-6cf833a1dcc4" class="outline-4">
 <h4 id="h-0d01fa68-3fe3-4e99-be22-6cf833a1dcc4">Products of Vector Spaces</h4>
 <div class="outline-text-4" id="text-h-0d01fa68-3fe3-4e99-be22-6cf833a1dcc4">
 </div>
 </div>
-
 <div id="outline-container-h-b13d8b50-b13d-4d3c-af74-4b0308be8c17" class="outline-4">
 <h4 id="h-b13d8b50-b13d-4d3c-af74-4b0308be8c17">Quotient Spaces</h4>
 <div class="outline-text-4" id="text-h-b13d8b50-b13d-4d3c-af74-4b0308be8c17">
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-5700ba79-2cba-4eb2-82d2-33d2ca1ec17d" class="outline-3">
 <h3 id="h-5700ba79-2cba-4eb2-82d2-33d2ca1ec17d">3F. Duality</h3>
 <div class="outline-text-3" id="text-h-5700ba79-2cba-4eb2-82d2-33d2ca1ec17d">
 </div>
-
 <div id="outline-container-h-efb99066-3590-4e66-8ccc-7dcd67ef5ed0" class="outline-4">
 <h4 id="h-efb99066-3590-4e66-8ccc-7dcd67ef5ed0">Dual Space and Dual Map</h4>
 <div class="outline-text-4" id="text-h-efb99066-3590-4e66-8ccc-7dcd67ef5ed0">
 </div>
 </div>
-
 <div id="outline-container-h-71c23010-fe29-4e48-81df-2f1488f3e34b" class="outline-4">
 <h4 id="h-71c23010-fe29-4e48-81df-2f1488f3e34b">Null Space and Range of Dual of Linear Map</h4>
 <div class="outline-text-4" id="text-h-71c23010-fe29-4e48-81df-2f1488f3e34b">
 </div>
 </div>
-
 <div id="outline-container-h-29daf0bd-958f-47a7-9eaf-ad0231f6dfa4" class="outline-4">
 <h4 id="h-29daf0bd-958f-47a7-9eaf-ad0231f6dfa4">Matrix of Dual of Linear Map</h4>
 <div class="outline-text-4" id="text-h-29daf0bd-958f-47a7-9eaf-ad0231f6dfa4">
@@ -1342,37 +1335,31 @@ of \(\mathcal{M}(v)\).</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-15a894da-e1d1-4892-8178-5084dae51937" class="outline-2">
 <h2 id="h-15a894da-e1d1-4892-8178-5084dae51937">Chapter 4 Polynomials</h2>
 <div class="outline-text-2" id="text-h-15a894da-e1d1-4892-8178-5084dae51937">
 </div>
 </div>
-
 <div id="outline-container-h-a5f35b0d-df10-4921-bfa4-e615dbcf9e84" class="outline-2">
 <h2 id="h-a5f35b0d-df10-4921-bfa4-e615dbcf9e84">Chapter 5 Eigenvalues and Eigenvectors</h2>
 <div class="outline-text-2" id="text-h-a5f35b0d-df10-4921-bfa4-e615dbcf9e84">
 </div>
 </div>
-
 <div id="outline-container-h-d5d9e9a6-eb68-40d8-bc4b-4203c74bab62" class="outline-2">
 <h2 id="h-d5d9e9a6-eb68-40d8-bc4b-4203c74bab62">Chapter 6 Inner Product Spaces</h2>
 <div class="outline-text-2" id="text-h-d5d9e9a6-eb68-40d8-bc4b-4203c74bab62">
 </div>
 </div>
-
 <div id="outline-container-h-6c414f25-c9cb-49a3-acf8-43ae9f084ef1" class="outline-2">
 <h2 id="h-6c414f25-c9cb-49a3-acf8-43ae9f084ef1">Chapter 7 Operators on Inner Product Spaces</h2>
 <div class="outline-text-2" id="text-h-6c414f25-c9cb-49a3-acf8-43ae9f084ef1">
 </div>
 </div>
-
 <div id="outline-container-h-aa05e670-151b-4aaa-8c9f-0bcc7b17383f" class="outline-2">
 <h2 id="h-aa05e670-151b-4aaa-8c9f-0bcc7b17383f">Chapter 8 Operators on Complex Vector Spaces</h2>
 <div class="outline-text-2" id="text-h-aa05e670-151b-4aaa-8c9f-0bcc7b17383f">
 </div>
 </div>
-
 <div id="outline-container-h-5af71d4d-ab0d-4533-8f23-a528d4fb3356" class="outline-2">
 <h2 id="h-5af71d4d-ab0d-4533-8f23-a528d4fb3356">Chapter 9 Multilinear Algebra and Determinants</h2>
 <div class="outline-text-2" id="text-h-5af71d4d-ab0d-4533-8f23-a528d4fb3356">
@@ -1380,7 +1367,7 @@ of \(\mathcal{M}(v)\).</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-11-22 Wed 18:39.</p>
+<p class="postamble">Last Updated: Thu, 23 Nov 2023 08:06:40 -0800
 </div>
 </body>
 </html>

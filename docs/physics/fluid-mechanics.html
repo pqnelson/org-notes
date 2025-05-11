@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Fluid Dynamics</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -189,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 </head>
@@ -220,15 +234,15 @@
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-0892a9ce-f478-4e0e-a808-ae12b3d265aa">1. Overview</a></li>
-<li><a href="#h-4651770a-1851-4f2e-b22c-141ee36d584e">2. References</a>
+<li><a href="#h-66191b67-1bb9-416b-8bf3-025542461f97">2. Euler Fluid</a></li>
+<li><a href="#h-4651770a-1851-4f2e-b22c-141ee36d584e">3. References</a>
 <ul>
-<li><a href="#h-45f73710-501c-4f3c-aeb1-93208f7edadf">2.1. Recommendations/Lookup</a></li>
+<li><a href="#h-45f73710-501c-4f3c-aeb1-93208f7edadf">3.1. Recommendations/Lookup</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-0892a9ce-f478-4e0e-a808-ae12b3d265aa" class="outline-2">
 <h2 id="h-0892a9ce-f478-4e0e-a808-ae12b3d265aa"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-0892a9ce-f478-4e0e-a808-ae12b3d265aa">
@@ -258,9 +272,36 @@ anything lately.
 </p>
 </div>
 </div>
+<div id="outline-container-h-66191b67-1bb9-416b-8bf3-025542461f97" class="outline-2">
+<h2 id="h-66191b67-1bb9-416b-8bf3-025542461f97"><span class="section-number-2">2.</span> Euler Fluid</h2>
+<div class="outline-text-2" id="text-h-66191b67-1bb9-416b-8bf3-025542461f97">
+<p>
+For inviscuous fluid, we use Euler's equations for the equations of
+motion. This is really a sort of nonlocal Poisson equation.
+</p>
 
+<ul class="org-ul">
+<li>Peter Constantin,<br>
+"The Euler equations and nonlocal conservative Riccati equations".<br>
+<i>International Mathematics Research Notices</i> <b>2000</b> no.9 (2000)
+pp.455&#x2013;465 Pages 455–465,
+doi:<a href="https://doi.org/10.1155/S1073792800000258">10.1155/S1073792800000258</a>
+<a href="http://web.math.princeton.edu/~const/ricF.pdf">Eprint</a></li>
+<li>Peter Constantin,<br>
+"On the Euler Equations of Incompressible Fluids".<br>
+<i>Bulletin of the AMS</i> <b>44</b> no.4 (2007) pp.603&#x2013;621
+<a href="https://www.ams.org/journals/bull/2007-44-04/S0273-0979-07-01184-6/S0273-0979-07-01184-6.pdf">PDF</a> and <a href="http://web.math.princeton.edu/~const/eule.pdf">Eprint</a></li>
+<li>P. Constantin,<br>
+"Euler equations, Navier-Stokes equations and turbulence".<br>
+<a href="https://web.math.princeton.edu/~const/cim.pdf">PDF</a></li>
+<li>C. Bardos, E. Titi,<br>
+"Euler equations of incompressible ideal fluids".<br>
+<a href="https://users.mccme.ru/ansobol/otarie/slides/Russ-Math-Surveys-Euler-Bardos.pdf">PDF</a></li>
+</ul>
+</div>
+</div>
 <div id="outline-container-h-4651770a-1851-4f2e-b22c-141ee36d584e" class="outline-2">
-<h2 id="h-4651770a-1851-4f2e-b22c-141ee36d584e"><span class="section-number-2">2.</span> References</h2>
+<h2 id="h-4651770a-1851-4f2e-b22c-141ee36d584e"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-4651770a-1851-4f2e-b22c-141ee36d584e">
 <ul class="org-ul">
 <li>Stephen Childress,<br>
@@ -278,9 +319,8 @@ This is my primary reference.</li>
 Lecture notes <a href="http://www.macs.hw.ac.uk/~simonm/fluidsnotes.pdf">pdf</a>, 2014, 74 pages.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-45f73710-501c-4f3c-aeb1-93208f7edadf" class="outline-3">
-<h3 id="h-45f73710-501c-4f3c-aeb1-93208f7edadf"><span class="section-number-3">2.1.</span> Recommendations/Lookup</h3>
+<h3 id="h-45f73710-501c-4f3c-aeb1-93208f7edadf"><span class="section-number-3">3.1.</span> Recommendations/Lookup</h3>
 <div class="outline-text-3" id="text-h-45f73710-501c-4f3c-aeb1-93208f7edadf">
 <ul class="org-ul">
 <li>George Batchelor,<br>
@@ -305,7 +345,7 @@ AMS Publishers.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-07 Thu 12:32.</p>
+<p class="postamble">Last Updated: Mon, 24 Apr 2023 09:16:49 -0700
 </div>
 </body>
 </html>

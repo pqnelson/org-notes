@@ -6,7 +6,7 @@
 <title>Coq</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -253,7 +282,6 @@
 <p>
 What happens we you combine Automath and LCF? You get Coq.
 </p>
-
 <div id="outline-container-h-cecb52b6-8035-498e-92de-ed293e597846" class="outline-2">
 <h2 id="h-cecb52b6-8035-498e-92de-ed293e597846"><span class="section-number-2">1.</span> Basics</h2>
 <div class="outline-text-2" id="text-h-cecb52b6-8035-498e-92de-ed293e597846">
@@ -267,7 +295,7 @@ propositions.
 Generic definitions look like:
 </p>
 
-<pre class="example" id="org00acdd4">
+<pre class="example" id="org669ce02">
 Definition my_new_term : Type :=
   (* body *).
 </pre>
@@ -281,7 +309,7 @@ We can ask Coq to evaluate a term by writing <code>Compute &lt;term&gt;.</code>
 There are also theorems.
 </p>
 
-<pre class="example" id="org7d2d038">
+<pre class="example" id="orgb9b10e4">
 Theorem ex_arith_thm : forall (n : nat), n + 0 = n.
 Proof.
   (* ... *)
@@ -300,7 +328,6 @@ arguments with implicit types are just given <code>x</code>.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-906b2122-c941-47f2-aeee-76f4f01d2743" class="outline-2">
 <h2 id="h-906b2122-c941-47f2-aeee-76f4f01d2743"><span class="section-number-2">2.</span> Booleans and Propositions</h2>
 <div class="outline-text-2" id="text-h-906b2122-c941-47f2-aeee-76f4f01d2743">
@@ -310,7 +337,6 @@ booleans (data types which have two values).
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-5dcf2f86-3ffd-417a-8b1c-80586b495595" class="outline-2">
 <h2 id="h-5dcf2f86-3ffd-417a-8b1c-80586b495595"><span class="section-number-2">3.</span> Tactics</h2>
 <div class="outline-text-2" id="text-h-5dcf2f86-3ffd-417a-8b1c-80586b495595">
@@ -366,7 +392,6 @@ referring to a proposition to invert.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-d2755cca-4bd3-4e61-8fa8-cedbb1371c14" class="outline-2">
 <h2 id="h-d2755cca-4bd3-4e61-8fa8-cedbb1371c14"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-d2755cca-4bd3-4e61-8fa8-cedbb1371c14">
@@ -379,14 +404,14 @@ ITP - Interactive Theorem Proving, First International Conference - 2010, Jul 20
 <li>Ralf Jung,
 "Exponential blowup when using unbundled typeclasses to model algebraic hierarchies".
 <a href="https://www.ralfj.de/blog/2019/05/15/typeclasses-exponential-blowup.html">Blog post</a>.</li>
+<li>Richard Feldman's gist about <a href="https://gist.github.com/rtfeldman/77fb430ee57b42f5f2ca973a3992532f">Rewriting Coq in Zig</a></li>
+<li><a href="https://certicoq.org/">Certicoq</a> compiles Coq to C</li>
 </ul>
-
 
 <p>
 See also <a href="https://gitlab.mpi-sws.org/iris/stdpp/-/blob/master/theories/base.v#L310-314">base.v</a> for <code>Params</code>.
 </p>
 </div>
-
 <div id="outline-container-h-04884a18-26b5-4208-a05c-a22d6a78a93e" class="outline-3">
 <h3 id="h-04884a18-26b5-4208-a05c-a22d6a78a93e"><span class="section-number-3">4.1.</span> Tutorials</h3>
 <div class="outline-text-3" id="text-h-04884a18-26b5-4208-a05c-a22d6a78a93e">
@@ -402,7 +427,7 @@ Its a Coq tutorial, and a textbook akin to <i>TAPL</i>.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-06-17 Fri 09:27.</p>
+<p class="postamble">Last Updated: Fri, 14 Mar 2025 10:03:10 -0700
 </div>
 </body>
 </html>

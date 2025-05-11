@@ -6,7 +6,7 @@
 <title>Statically-Typed Functional Languages</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -253,7 +282,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-bad31a31-f627-4de0-b7c9-dbe712e888c2" class="outline-2">
 <h2 id="h-bad31a31-f627-4de0-b7c9-dbe712e888c2"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-bad31a31-f627-4de0-b7c9-dbe712e888c2">
@@ -273,7 +301,6 @@ This will give the "floor model" of such languages, then we can add more
 bells and whistles and syntactic sugar.
 </p>
 </div>
-
 <div id="outline-container-h-5c4e0c0e-eedc-4802-bc43-74642393fcd9" class="outline-3">
 <h3 id="h-5c4e0c0e-eedc-4802-bc43-74642393fcd9"><span class="section-number-3">1.1.</span> What are "algebraic data types"?</h3>
 <div class="outline-text-3" id="text-h-5c4e0c0e-eedc-4802-bc43-74642393fcd9">
@@ -340,7 +367,6 @@ specifically
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-b20aaf69-4fb7-4614-a19a-442edd5a9f74" class="outline-2">
 <h2 id="h-b20aaf69-4fb7-4614-a19a-442edd5a9f74"><span class="section-number-2">2.</span> GHC Core</h2>
 <div class="outline-text-2" id="text-h-b20aaf69-4fb7-4614-a19a-442edd5a9f74">
@@ -373,7 +399,6 @@ Haskell does with its intermediate Core language:
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-d55708ac-878a-42f2-b451-31ec087fed7e" class="outline-3">
 <h3 id="h-d55708ac-878a-42f2-b451-31ec087fed7e"><span class="section-number-3">2.1.</span> Prenex Polymorphism</h3>
 <div class="outline-text-3" id="text-h-d55708ac-878a-42f2-b451-31ec087fed7e">
@@ -405,7 +430,6 @@ decidable type checking (it's known to be undecidable).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-4c425055-f94d-4575-817f-44ea5d738e90" class="outline-2">
 <h2 id="h-4c425055-f94d-4575-817f-44ea5d738e90"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-4c425055-f94d-4575-817f-44ea5d738e90">
@@ -423,7 +447,7 @@ decidable type checking (it's known to be undecidable).
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-07-15 Fri 09:11.</p>
+<p class="postamble">Last Updated: Fri, 22 Jul 2022 12:36:18 -0700
 </div>
 </body>
 </html>

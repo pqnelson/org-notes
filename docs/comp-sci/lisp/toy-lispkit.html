@@ -6,7 +6,7 @@
 <title>Toy LispKit Compiler</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -234,7 +249,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3" class="outline-2">
 <h2 id="h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-193c100a-f7f9-4a3f-9d00-2c4f8b55ebc3">
@@ -246,7 +260,6 @@ fragment, then I will write the compiler for the Lisp fragment.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41" class="outline-2">
 <h2 id="h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41"><span class="section-number-2">2.</span> Lisp Primitives</h2>
 <div class="outline-text-2" id="text-h-ddf13874-2d98-40eb-a7e7-7ba20eee7b41">
@@ -283,7 +296,6 @@ numeric value of <code>&lt;exp&gt;</code></li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-5d573b7e-8dcb-4490-9781-ca307200782f" class="outline-2">
 <h2 id="h-5d573b7e-8dcb-4490-9781-ca307200782f"><span class="section-number-2">3.</span> Compiling to SECD</h2>
 <div class="outline-text-2" id="text-h-5d573b7e-8dcb-4490-9781-ca307200782f">
@@ -294,7 +306,6 @@ We basically want to examine how a function <code>compile(exp, namelist)</code>
 is inductively defined.
 </p>
 </div>
-
 <div id="outline-container-h-e8d4c07b-1a2b-4398-8ec8-f027194e3471" class="outline-3">
 <h3 id="h-e8d4c07b-1a2b-4398-8ec8-f027194e3471"><span class="section-number-3">3.1.</span> Helper Functions</h3>
 <div class="outline-text-3" id="text-h-e8d4c07b-1a2b-4398-8ec8-f027194e3471">
@@ -342,7 +353,6 @@ return the pair <code>(p . q)</code> encoding its position.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-732b7cb4-396b-4469-839e-7a45e8636baa" class="outline-3">
 <h3 id="h-732b7cb4-396b-4469-839e-7a45e8636baa"><span class="section-number-3">3.2.</span> Compile SExpression</h3>
 <div class="outline-text-3" id="text-h-732b7cb4-396b-4469-839e-7a45e8636baa">
@@ -410,7 +420,6 @@ bytecode <code>c</code>
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-9a92a2ad-41fc-452d-a0d5-dae117769683" class="outline-4">
 <h4 id="h-9a92a2ad-41fc-452d-a0d5-dae117769683"><span class="section-number-4">3.2.1.</span> Compiling Let-expressions</h4>
 <div class="outline-text-4" id="text-h-9a92a2ad-41fc-452d-a0d5-dae117769683">
@@ -445,7 +454,6 @@ We have the ancillary functions when compiling <code>(let ...)</code>.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-8c101aab-be9e-4cb3-82ff-cd053abae6b0" class="outline-2">
 <h2 id="h-8c101aab-be9e-4cb3-82ff-cd053abae6b0"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-8c101aab-be9e-4cb3-82ff-cd053abae6b0">
@@ -460,7 +468,7 @@ PalmPilot.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 12:12:32 -0700
 </div>
 </body>
 </html>

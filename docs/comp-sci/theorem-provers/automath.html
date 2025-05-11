@@ -6,7 +6,7 @@
 <title>Automath</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -262,7 +291,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-dd38ce5b-94f5-4c8b-8c6b-c84a6cbc91e1" class="outline-2">
 <h2 id="h-dd38ce5b-94f5-4c8b-8c6b-c84a6cbc91e1"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-dd38ce5b-94f5-4c8b-8c6b-c84a6cbc91e1">
@@ -277,7 +305,6 @@ A proof script for Automath is called a "Book", its statements are called "Lines
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-0310fe71-5442-47c9-9665-a69fee68b8ec" class="outline-2">
 <h2 id="h-0310fe71-5442-47c9-9665-a69fee68b8ec"><span class="section-number-2">2.</span> Expressions</h2>
 <div class="outline-text-2" id="text-h-0310fe71-5442-47c9-9665-a69fee68b8ec">
@@ -310,7 +337,6 @@ caveat that if <code>d</code> is an abbreviation with <code>n&gt;k</code> parame
 <code>x_n=c_k</code>).
 </p>
 </div>
-
 <div id="outline-container-h-af6d8dbd-1125-4b8a-bc54-5658fb760ae8" class="outline-3">
 <h3 id="h-af6d8dbd-1125-4b8a-bc54-5658fb760ae8"><span class="section-number-3">2.1.</span> Order of Evaluation</h3>
 <div class="outline-text-3" id="text-h-af6d8dbd-1125-4b8a-bc54-5658fb760ae8">
@@ -321,7 +347,6 @@ we first evaluate <code>f(e_1, ..., e_n)</code> and then apply the result as the
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-d1315b98-5921-4b87-bb9a-8930e362a4fe" class="outline-3">
 <h3 id="h-d1315b98-5921-4b87-bb9a-8930e362a4fe"><span class="section-number-3">2.2.</span> Terms, Types, Kinds</h3>
 <div class="outline-text-3" id="text-h-d1315b98-5921-4b87-bb9a-8930e362a4fe">
@@ -338,7 +363,6 @@ call them "terms" nowadays)</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-f030f1fd-6994-4e53-9c90-ba2590ababbf" class="outline-3">
 <h3 id="h-f030f1fd-6994-4e53-9c90-ba2590ababbf"><span class="section-number-3">2.3.</span> Comments</h3>
 <div class="outline-text-3" id="text-h-f030f1fd-6994-4e53-9c90-ba2590ababbf">
@@ -354,7 +378,6 @@ forms:
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-bd13716b-85fb-49fb-aa9f-cb9ce920a0ca" class="outline-2">
 <h2 id="h-bd13716b-85fb-49fb-aa9f-cb9ce920a0ca"><span class="section-number-2">3.</span> Lines</h2>
 <div class="outline-text-2" id="text-h-bd13716b-85fb-49fb-aa9f-cb9ce920a0ca">
@@ -393,7 +416,6 @@ Note to self: the modern syntax for lines, as used in Coq (and friends),
 is something more like <code>&lt;context&gt; &lt;turnstile&gt; &lt;identifier&gt; : &lt;expr&gt; := ...</code>
 </p>
 </div>
-
 <div id="outline-container-h-b5abaff3-85ff-4170-97d0-1cc0910e8376" class="outline-3">
 <h3 id="h-b5abaff3-85ff-4170-97d0-1cc0910e8376"><span class="section-number-3">3.1.</span> Contexts</h3>
 <div class="outline-text-3" id="text-h-b5abaff3-85ff-4170-97d0-1cc0910e8376">
@@ -414,7 +436,7 @@ the context to be empty by just writing <code>&lt;turnstile&gt;</code>.
 Consider the following (adapted from Freek Wiedijk's formalization of
 <a href="http://www.cs.ru.nl/~freek/zfc-etc/holl.aut">HOL Light's logic</a>):
 </p>
-<pre class="example" id="org2f33fa3">
+<pre class="example" id="org9be0ad7">
   * type : TYPE := PRIM    # sets the context to be initial empty context
   * bool : type := PRIM
   * A : type := ---        # sets the context to be A
@@ -438,21 +460,20 @@ context ending at <code>A</code>, creating a new context <code>A:type, B:type</c
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-bd7926f4-2d6f-4a2d-b322-0edd3f6debcb" class="outline-3">
 <h3 id="h-bd7926f4-2d6f-4a2d-b322-0edd3f6debcb"><span class="section-number-3">3.2.</span> Lambda Abstraction as Block Openers</h3>
 <div class="outline-text-3" id="text-h-bd7926f4-2d6f-4a2d-b322-0edd3f6debcb">
 <p>
 The kernel interprets a line of the form
 </p>
-<pre class="example" id="orgcef400f">
+<pre class="example" id="orgaa456e7">
 a * [x:T] b := ... : T'
 </pre>
 
 <p>
 as two lines:
 </p>
-<pre class="example" id="orga87b38c">
+<pre class="example" id="org7d15f3f">
 a * x := --- : T
 x * b := ... : T'
 </pre>
@@ -464,7 +485,6 @@ discussion on this.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-bc217b30-656f-4ed2-8c35-f8cdcf806fbe" class="outline-2">
 <h2 id="h-bc217b30-656f-4ed2-8c35-f8cdcf806fbe"><span class="section-number-2">4.</span> Quasi-Expressions</h2>
 <div class="outline-text-2" id="text-h-bc217b30-656f-4ed2-8c35-f8cdcf806fbe">
@@ -475,7 +495,7 @@ have a proposition be a 2-expression ("type") of the form <code>p : PROP</code>.
 predicate would parametrize this by a "term":
 </p>
 
-<pre class="example" id="org751dd87">
+<pre class="example" id="orgdd58e50">
    * T : TYPE := ---
  T * [x:T]predicate : [x:T]PROP := PN
 </pre>
@@ -489,7 +509,7 @@ But is <code>[x:T]PROP</code> a valid expression? De Bruijn calls such a thing a
 <p>
 Quantifiers can be written down easily as:
 </p>
-<pre class="example" id="org2fdcc48">
+<pre class="example" id="org97ded47">
 T * [p:[z:T]PROP] forall : PROP := p
   * [a:PROP][b:PROP] imp:PROP := [x:a]b
   * false : PROP := PRIM
@@ -501,7 +521,6 @@ We use de Morgan's laws to express existential quantification in terms
 of negating the universal quantifier.
 </p>
 </div>
-
 <div id="outline-container-h-a556e9fe-7d03-4392-8c2e-0c42c86bd2be" class="outline-3">
 <h3 id="h-a556e9fe-7d03-4392-8c2e-0c42c86bd2be"><span class="section-number-3">4.1.</span> Type Inclusion</h3>
 <div class="outline-text-3" id="text-h-a556e9fe-7d03-4392-8c2e-0c42c86bd2be">
@@ -515,7 +534,6 @@ saw how <code>T : [x,T']TYPE</code> and <code>T:TYPE</code>, but <code>[x,T']TYP
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-f6a441e8-cce8-442d-9811-2a989e4284b7" class="outline-2">
 <h2 id="h-f6a441e8-cce8-442d-9811-2a989e4284b7"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-f6a441e8-cce8-442d-9811-2a989e4284b7">
@@ -561,7 +579,7 @@ extensions".<br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-03-09 Thu 09:28.</p>
+<p class="postamble">Last Updated: Sat, 11 Mar 2023 09:06:36 -0800
 </div>
 </body>
 </html>

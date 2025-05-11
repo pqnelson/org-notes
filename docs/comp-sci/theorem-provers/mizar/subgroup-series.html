@@ -6,7 +6,7 @@
 <title>Subgroup Series - Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -188,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -251,7 +280,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-e5583d34-8606-4622-bc9a-3b915cb5eb4a" class="outline-2">
 <h2 id="h-e5583d34-8606-4622-bc9a-3b915cb5eb4a"><span class="section-number-2">1.</span> Subgroup Series</h2>
 <div class="outline-text-2" id="text-h-e5583d34-8606-4622-bc9a-3b915cb5eb4a">
@@ -260,7 +288,6 @@ I will review the various subgroup series, and &#x2014; if they've been
 already defined (implicitly or explicitly) &#x2014; their implementation.
 </p>
 </div>
-
 <div id="outline-container-h-4ecb1fc1-3d39-4555-8a61-3cf134915242" class="outline-3">
 <h3 id="h-4ecb1fc1-3d39-4555-8a61-3cf134915242"><span class="section-number-3">1.1.</span> Central Series</h3>
 <div class="outline-text-3" id="text-h-4ecb1fc1-3d39-4555-8a61-3cf134915242">
@@ -288,7 +315,6 @@ each \(Z_{k}\trianglelefteq G\) and the quotient satisfies
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-193c557d-a853-468a-a56f-ba3d2dfcf3ba" class="outline-3">
 <h3 id="h-193c557d-a853-468a-a56f-ba3d2dfcf3ba"><span class="section-number-3">1.2.</span> Subnormal Series</h3>
 <div class="outline-text-3" id="text-h-193c557d-a853-468a-a56f-ba3d2dfcf3ba">
@@ -316,7 +342,6 @@ whose factor groups \(N_{k}/N_{k+1}\) are Abelian.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-f057b7e7-9fa8-4236-9410-dfac6ff1e4df" class="outline-3">
 <h3 id="h-f057b7e7-9fa8-4236-9410-dfac6ff1e4df"><span class="section-number-3">1.3.</span> Composition Series</h3>
 <div class="outline-text-3" id="text-h-f057b7e7-9fa8-4236-9410-dfac6ff1e4df">
@@ -349,7 +374,6 @@ series (as a ``maximal'' subnormal series) requires the
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-7b9e0126-cb6c-4b44-8ae6-245ce59a4467" class="outline-3">
 <h3 id="h-7b9e0126-cb6c-4b44-8ae6-245ce59a4467"><span class="section-number-3">1.4.</span> Lower Central Series</h3>
 <div class="outline-text-3" id="text-h-7b9e0126-cb6c-4b44-8ae6-245ce59a4467">
@@ -374,7 +398,6 @@ Mizar implicitly defines this in <code>GRNILP1:Th27</code>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-a6f950fd-41bb-4c6c-9e3f-2c3828fdec89" class="outline-3">
 <h3 id="h-a6f950fd-41bb-4c6c-9e3f-2c3828fdec89"><span class="section-number-3">1.5.</span> Upper Central Series</h3>
 <div class="outline-text-3" id="text-h-a6f950fd-41bb-4c6c-9e3f-2c3828fdec89">
@@ -459,7 +482,7 @@ We would then have to prove
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-12 Tue 08:27.</p>
+<p class="postamble">Last Updated: Tue, 12 Apr 2022 09:03:14 -0700
 </div>
 </body>
 </html>

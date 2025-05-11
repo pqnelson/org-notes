@@ -6,7 +6,7 @@
 <title>Categorical Abstract Machine</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -246,7 +275,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-9e568af4-9c25-4aa8-b387-5219a6144983" class="outline-2">
 <h2 id="h-9e568af4-9c25-4aa8-b387-5219a6144983"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-9e568af4-9c25-4aa8-b387-5219a6144983">
@@ -265,7 +293,6 @@ The state of CAM may be described as a triple:
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-32d0602a-e85e-467c-b921-c32d7d0ff28f" class="outline-2">
 <h2 id="h-32d0602a-e85e-467c-b921-c32d7d0ff28f"><span class="section-number-2">2.</span> Correctness</h2>
 <div class="outline-text-2" id="text-h-32d0602a-e85e-467c-b921-c32d7d0ff28f">
@@ -293,7 +320,6 @@ in a sense which we define below.</li>
 </blockquote>
 </div>
 </div>
-
 <div id="outline-container-h-c6d87caf-43fd-4e9b-9778-032fc5b59a99" class="outline-2">
 <h2 id="h-c6d87caf-43fd-4e9b-9778-032fc5b59a99"><span class="section-number-2">3.</span> Compiling ML</h2>
 <div class="outline-text-2" id="text-h-c6d87caf-43fd-4e9b-9778-032fc5b59a99">
@@ -334,7 +360,6 @@ Hinze gives us:
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-06f7a39e-934a-4eb9-9406-571895a897e0" class="outline-2">
 <h2 id="h-06f7a39e-934a-4eb9-9406-571895a897e0"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-06f7a39e-934a-4eb9-9406-571895a897e0">
@@ -360,7 +385,7 @@ LNCS, 201, <cite class="book-title">Functional programming languages computer ar
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-12 Mon 20:17.</p>
+<p class="postamble">Last Updated: Mon, 12 Jul 2021 20:31:00 -0700
 </div>
 </body>
 </html>

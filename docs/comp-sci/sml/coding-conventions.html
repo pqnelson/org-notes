@@ -6,7 +6,7 @@
 <title>Coding Conventions - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -261,12 +290,10 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-fe015f46-6801-4e5e-a6aa-1f6aeb7dc65a" class="outline-2">
 <h2 id="h-fe015f46-6801-4e5e-a6aa-1f6aeb7dc65a"><span class="section-number-2">1.</span> Naming Conventions</h2>
 <div class="outline-text-2" id="text-h-fe015f46-6801-4e5e-a6aa-1f6aeb7dc65a">
 </div>
-
 <div id="outline-container-h-19504090-721d-4f6e-bf1a-cc4c1940a035" class="outline-3">
 <h3 id="h-19504090-721d-4f6e-bf1a-cc4c1940a035"><span class="section-number-3">1.1.</span> Prefixes</h3>
 <div class="outline-text-3" id="text-h-19504090-721d-4f6e-bf1a-cc4c1940a035">
@@ -275,7 +302,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-d8689044-b165-4069-8b53-7b5f2fddf21e" class="outline-3">
 <h3 id="h-d8689044-b165-4069-8b53-7b5f2fddf21e"><span class="section-number-3">1.2.</span> Cases (snake, upper, title, Pascal, etc.)</h3>
 <div class="outline-text-3" id="text-h-d8689044-b165-4069-8b53-7b5f2fddf21e">
@@ -290,7 +316,6 @@ Chris Okasaki uses the following conventions:
 <li>Variable names use <code>snake_case</code></li>
 </ul>
 </div>
-
 <div id="outline-container-h-d305e136-4b04-45ad-9fad-d82c22375688" class="outline-4">
 <h4 id="h-d305e136-4b04-45ad-9fad-d82c22375688"><span class="section-number-4">1.2.1.</span> Modules, Signatures, Functors</h4>
 <div class="outline-text-4" id="text-h-d305e136-4b04-45ad-9fad-d82c22375688">
@@ -301,7 +326,6 @@ Chris Okasaki uses the following conventions:
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-93ad4aa3-c86a-46c6-8df4-5944cfaa4273" class="outline-4">
 <h4 id="h-93ad4aa3-c86a-46c6-8df4-5944cfaa4273"><span class="section-number-4">1.2.2.</span> Filenames</h4>
 <div class="outline-text-4" id="text-h-93ad4aa3-c86a-46c6-8df4-5944cfaa4273">
@@ -319,7 +343,6 @@ Only MLton separates out functors into <code>functor-name.fun</code>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-89f8964b-2046-4ee5-a8b5-623ee1f3b9a9" class="outline-2">
 <h2 id="h-89f8964b-2046-4ee5-a8b5-623ee1f3b9a9"><span class="section-number-2">2.</span> Compiling</h2>
 <div class="outline-text-2" id="text-h-89f8964b-2046-4ee5-a8b5-623ee1f3b9a9">
@@ -345,7 +368,7 @@ If we want to support compiling with <i>both</i> Poly/ML <i>and</i> MLton, we ne
 to also have <code>main.sml</code> file which consists of a single line: 
 </p>
 
-<pre class="example" id="org181b39c">
+<pre class="example" id="orgf9bc8ae">
 (* main.sml *)
 
 val _ = main ();
@@ -356,7 +379,6 @@ MLton will compile everything, including <code>main.sml</code>, while Poly/ML wi
 just omit <code>main.sml</code> from compilation.
 </p>
 </div>
-
 <div id="outline-container-h-3dd47efe-fdf8-45df-b39e-b41eee18ea53" class="outline-3">
 <h3 id="h-3dd47efe-fdf8-45df-b39e-b41eee18ea53"><span class="section-number-3">2.1.</span> Build Scripts: Using the Standard Library</h3>
 <div class="outline-text-3" id="text-h-3dd47efe-fdf8-45df-b39e-b41eee18ea53">
@@ -391,7 +413,6 @@ I won't pretend to understand Moscow ML's build process.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-6c79786c-5df0-4aaf-b11c-07f184281145" class="outline-2">
 <h2 id="h-6c79786c-5df0-4aaf-b11c-07f184281145"><span class="section-number-2">3.</span> Typesetting in LaTeX</h2>
 <div class="outline-text-2" id="text-h-6c79786c-5df0-4aaf-b11c-07f184281145">
@@ -438,7 +459,7 @@ downside is that I need to <i>manually</i> add signature names to the
 <code>morekeywords={[2]...}</code> parameter):
 </p>
 
-<pre class="example" id="orgce61019">
+<pre class="example" id="orgc80561f">
 \documentclass{article}
 \usepackage{mfirstuc}
 \makeatletter
@@ -512,7 +533,7 @@ downside is that I need to <i>manually</i> add signature names to the
    morecomment=[n]{(*}{*)},%
    morestring=[d]",
    literate={JOB}{{\ttfamily\scshape Job}}3 {'a}{{$\alpha$}}1 {'b}{{$\beta$}}1
-               {\ o\ }{{$\circ$}}3 {+}{{$+$}}1 {/}{{$/$}}1 {*}{{$*$}}1 {=}{{$=$\ }}1
+               {\ o\ }{{\ $\circ$\ }}3 {+}{{$+$}}1 {/}{{$/$}}1 {*}{{$*$}}1 {=}{{$=$\ }}1
                {&gt;}{{$&gt;$}}1 {&lt;}{{$&lt;$}}1
                {\\\\}{{\char`\\\char`\\}}1
                {-&gt;}{{$\rightarrow$}}2 {&gt;=}{{$\geq$}}2 {&lt;-}{{$\leftarrow$}}2
@@ -532,9 +553,32 @@ fun giveRaise (SOME true) = true
 \end{lstlisting}
 \end{document}
 </pre>
-</div>
-</div>
 
+<p>
+Note that <code>lhs2tex</code> uses <code>\mid</code> for the separator in algebraic data
+types and <code>\mathbin{::}</code> for esti, <code>\mathbin{:}</code> for cons,
+etc. Remember:
+</p>
+
+<ul class="org-ul">
+<li>math operators are separated by a <code>\thinmuskip</code></li>
+<li>Binary operators are separated from ordinary atoms by a <code>\medmuskip</code></li>
+<li>Relations are separated from ordinary atoms by a <code>\thickmuskip</code>;
+however, two consecutive relation symbols are placed next to each
+other as if they were ordinary atoms (then treated together as a
+relation "molecule").</li>
+</ul>
+
+<p>
+See:
+</p>
+
+<ul class="org-ul">
+<li><a href="https://tex.stackexchange.com/q/38982">https://tex.stackexchange.com/q/38982</a></li>
+<li><a href="https://tex.stackexchange.com/q/55512">https://tex.stackexchange.com/q/55512</a></li>
+</ul>
+</div>
+</div>
 <div id="outline-container-h-25fbcb9f-dbf8-45c5-bbe6-f03945faf3f0" class="outline-2">
 <h2 id="h-25fbcb9f-dbf8-45c5-bbe6-f03945faf3f0"><span class="section-number-2">4.</span> Emacs</h2>
 <div class="outline-text-2" id="text-h-25fbcb9f-dbf8-45c5-bbe6-f03945faf3f0">
@@ -543,7 +587,7 @@ SML-mode provides all the functionality we need. Just add to the
 <code>init.el</code> file:
 </p>
 
-<pre class="example" id="org74f9e8a">
+<pre class="example" id="org6c2fcf3">
 (use-package sml-mode
   :ensure t
   :defer t)
@@ -551,7 +595,6 @@ SML-mode provides all the functionality we need. Just add to the
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-a062557d-975e-4cda-bb33-b20872ecc00c" class="outline-2">
 <h2 id="h-a062557d-975e-4cda-bb33-b20872ecc00c"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-a062557d-975e-4cda-bb33-b20872ecc00c">
@@ -565,7 +608,7 @@ SML-mode provides all the functionality we need. Just add to the
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-14 Fri 11:30.</p>
+<p class="postamble">Last Updated: Fri, 24 Mar 2023 09:30:20 -0700
 </div>
 </body>
 </html>

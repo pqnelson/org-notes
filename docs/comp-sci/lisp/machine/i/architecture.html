@@ -6,7 +6,7 @@
 <title>Architecture - I-Machine</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../../css/stylesheet.css" />
 </head>
@@ -420,7 +435,6 @@
 (These are annotations on the <a href="http://www.bitsavers.org/pdf/symbolics/I_Machine/I-Machine%20Architecture%20Specification.pdf">paper</a> (<a href="../../../../../ignore/I-Machine%20Architecture%20Specification.pdf">local</a>) describing the architecture of the
 Symbolics I-Machine.)
 </p>
-
 <div id="outline-container-h-d1c9627f-d099-41ec-a628-3dee020f305a" class="outline-2">
 <h2 id="h-d1c9627f-d099-41ec-a628-3dee020f305a"><span class="section-number-2">1.</span> Lisp-Machine Data Types</h2>
 <div class="outline-text-2" id="text-h-d1c9627f-d099-41ec-a628-3dee020f305a">
@@ -499,7 +513,6 @@ In C, this would be a packed struct:
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-ff4d7289-24ce-4f4d-8ac8-dcc1c94f2010" class="outline-5">
 <h5 id="h-ff4d7289-24ce-4f4d-8ac8-dcc1c94f2010"><span class="section-number-5">1.1.1.2.</span> Fields</h5>
 <div class="outline-text-5" id="text-h-ff4d7289-24ce-4f4d-8ac8-dcc1c94f2010">
@@ -520,7 +533,6 @@ The cdr code is used for various different purposes depending on the type.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-2c2520c4-8f48-4b5b-b183-0920c3407bb6" class="outline-4">
 <h4 id="h-2c2520c4-8f48-4b5b-b183-0920c3407bb6"><span class="section-number-4">1.1.2.</span> Classes of Stored Object Representations</h4>
 <div class="outline-text-4" id="text-h-2c2520c4-8f48-4b5b-b183-0920c3407bb6">
@@ -549,7 +561,6 @@ Each word within the structure object may contain:
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-f90be5cd-dec3-4052-af10-a489d3303016" class="outline-4">
 <h4 id="h-f90be5cd-dec3-4052-af10-a489d3303016"><span class="section-number-4">1.1.3.</span> Components of Stored Representations</h4>
 <div class="outline-text-4" id="text-h-f90be5cd-dec3-4052-af10-a489d3303016">
@@ -564,7 +575,6 @@ are:
 <li>special markers.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-79acf3fb-e088-4b62-a885-4c5d06d88593" class="outline-5">
 <h5 id="h-79acf3fb-e088-4b62-a885-4c5d06d88593"><span class="section-number-5">1.1.3.1.</span> Object References</h5>
 <div class="outline-text-5" id="text-h-79acf3fb-e088-4b62-a885-4c5d06d88593">
@@ -585,7 +595,6 @@ pointer to the value cell of a symbol).</li>
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-871c1aa4-a57d-423c-9fa3-ebbe4d762396" class="outline-5">
 <h5 id="h-871c1aa4-a57d-423c-9fa3-ebbe4d762396"><span class="section-number-5">1.1.3.2.</span> Headers</h5>
 <div class="outline-text-5" id="text-h-871c1aa4-a57d-423c-9fa3-ebbe4d762396">
@@ -723,7 +732,6 @@ contains the addresses of the new locations of the objects.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-5e4fcff6-de73-43af-bd04-5baff674425e" class="outline-5">
 <h5 id="h-5e4fcff6-de73-43af-bd04-5baff674425e"><span class="section-number-5">1.1.3.3.</span> Forwarding (Invisible) Pointers</h5>
 <div class="outline-text-5" id="text-h-5e4fcff6-de73-43af-bd04-5baff674425e">
@@ -761,7 +769,6 @@ a header-forward pointer containing the address of the new cons.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-fb0d4eba-6586-4bca-bf1d-3d607de6c99b" class="outline-5">
 <h5 id="h-fb0d4eba-6586-4bca-bf1d-3d607de6c99b"><span class="section-number-5">1.1.3.4.</span> Special Markers</h5>
 <div class="outline-text-5" id="text-h-fb0d4eba-6586-4bca-bf1d-3d607de6c99b">
@@ -798,8 +805,6 @@ oldspace.</li>
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-4f6d1bdd-db07-4bd3-bef4-fab56413353f" class="outline-4">
 <h4 id="h-4f6d1bdd-db07-4bd3-bef4-fab56413353f"><span class="section-number-4">1.1.4.</span> Operand-Reference Classification</h4>
 <div class="outline-text-4" id="text-h-4f6d1bdd-db07-4bd3-bef4-fab56413353f">
@@ -859,12 +864,10 @@ following 9 additional codes
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-796e935d-f343-479c-b767-ab07cc73ae43" class="outline-3">
 <h3 id="h-796e935d-f343-479c-b767-ab07cc73ae43"><span class="section-number-3">1.2.</span> Data-Type Descriptions</h3>
 <div class="outline-text-3" id="text-h-796e935d-f343-479c-b767-ab07cc73ae43">
 </div>
-
 <div id="outline-container-h-3ba54ac4-d2b2-4fb6-9d8e-a03e796d8e2c" class="outline-4">
 <h4 id="h-3ba54ac4-d2b2-4fb6-9d8e-a03e796d8e2c"><span class="section-number-4">1.2.1.</span> Representations of Symbols</h4>
 <div class="outline-text-4" id="text-h-3ba54ac4-d2b2-4fb6-9d8e-a03e796d8e2c">
@@ -955,7 +958,6 @@ section <a href="#h-7418b856-81cf-425a-a31b-0039b0136636">Wired Addresses</a>).
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-4d50d059-d7f7-42da-a2d5-0458a2ed06b4" class="outline-4">
 <h4 id="h-4d50d059-d7f7-42da-a2d5-0458a2ed06b4"><span class="section-number-4">1.2.2.</span> Representation of Instances and Related Data Types</h4>
 <div class="outline-text-4" id="text-h-4d50d059-d7f7-42da-a2d5-0458a2ed06b4">
@@ -963,7 +965,6 @@ section <a href="#h-7418b856-81cf-425a-a31b-0039b0136636">Wired Addresses</a>).
 Before we had CLOS, we had Flavors.
 </p>
 </div>
-
 <div id="outline-container-h-746e9565-76e7-4da4-bca4-d144bf9ba788" class="outline-5">
 <h5 id="h-746e9565-76e7-4da4-bca4-d144bf9ba788"><span class="section-number-5">1.2.2.1.</span> Flavor Instances</h5>
 <div class="outline-text-5" id="text-h-746e9565-76e7-4da4-bca4-d144bf9ba788">
@@ -1080,7 +1081,6 @@ or lexical closures (or dynamical closures?).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-716f1e1e-7caf-4f71-be1e-f3d99a25d93f" class="outline-5">
 <h5 id="h-716f1e1e-7caf-4f71-be1e-f3d99a25d93f"><span class="section-number-5">1.2.2.2.</span> List Instance</h5>
 <div class="outline-text-5" id="text-h-716f1e1e-7caf-4f71-be1e-f3d99a25d93f">
@@ -1090,7 +1090,6 @@ An object reference to a list instance is a word of data type
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-c41fde96-9806-49ae-abe7-988c3439b234" class="outline-5">
 <h5 id="h-c41fde96-9806-49ae-abe7-988c3439b234"><span class="section-number-5">1.2.2.3.</span> Array Instance</h5>
 <div class="outline-text-5" id="text-h-c41fde96-9806-49ae-abe7-988c3439b234">
@@ -1100,7 +1099,6 @@ An object reference to an array instance is a word of data type
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-0a77cef4-8498-45ba-9f68-68ad6ff28963" class="outline-5">
 <h5 id="h-0a77cef4-8498-45ba-9f68-68ad6ff28963"><span class="section-number-5">1.2.2.4.</span> String Instance</h5>
 <div class="outline-text-5" id="text-h-0a77cef4-8498-45ba-9f68-68ad6ff28963">
@@ -1111,7 +1109,6 @@ An object reference to a string instance is a word of data type
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-d82957f1-4199-43b0-b1a0-0484e84e0734" class="outline-4">
 <h4 id="h-d82957f1-4199-43b0-b1a0-0484e84e0734"><span class="section-number-4">1.2.3.</span> Representation of Characters</h4>
 <div class="outline-text-4" id="text-h-d82957f1-4199-43b0-b1a0-0484e84e0734">
@@ -1173,7 +1170,6 @@ control, meta, super, hyper bits should be added, as well, giving a
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-ef8bc228-4eda-4873-8853-30afaeda1d43" class="outline-4">
 <h4 id="h-ef8bc228-4eda-4873-8853-30afaeda1d43"><span class="section-number-4">1.2.4.</span> Representation of Numbers</h4>
 <div class="outline-text-4" id="text-h-ef8bc228-4eda-4873-8853-30afaeda1d43">
@@ -1186,7 +1182,6 @@ A 32-bit two's-complement integer. Its data type is <code>dtp-fixnum</code>.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-4fff7d2b-56b9-41e2-9de1-2da3a6695ffb" class="outline-5">
 <h5 id="h-4fff7d2b-56b9-41e2-9de1-2da3a6695ffb"><span class="section-number-5">1.2.4.2.</span> Bignum Representation</h5>
 <div class="outline-text-5" id="text-h-4fff7d2b-56b9-41e2-9de1-2da3a6695ffb">
@@ -1207,7 +1202,6 @@ is treated as an illegal value.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-666f093e-bcc3-41f0-a54e-d2243720dab0" class="outline-5">
 <h5 id="h-666f093e-bcc3-41f0-a54e-d2243720dab0"><span class="section-number-5">1.2.4.4.</span> Big-Ratio Representation</h5>
 <div class="outline-text-5" id="text-h-666f093e-bcc3-41f0-a54e-d2243720dab0">
@@ -1220,7 +1214,6 @@ or a negative number, is treated as an illegal value.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-4e80614e-1598-4bf9-96ea-7b53bd75b9e0" class="outline-5">
 <h5 id="h-4e80614e-1598-4bf9-96ea-7b53bd75b9e0"><span class="section-number-5">1.2.4.5.</span> Single-Precision Floating-Point Representation</h5>
 <div class="outline-text-5" id="text-h-4e80614e-1598-4bf9-96ea-7b53bd75b9e0">
@@ -1269,8 +1262,6 @@ floating-point number. The following fields are defined:
 </table>
 </div>
 </div>
-
-
 <div id="outline-container-h-de0a6904-527e-44cf-8cde-92a9febb8346" class="outline-5">
 <h5 id="h-de0a6904-527e-44cf-8cde-92a9febb8346"><span class="section-number-5">1.2.4.6.</span> Double-Precision Floating-Point Representation</h5>
 <div class="outline-text-5" id="text-h-de0a6904-527e-44cf-8cde-92a9febb8346">
@@ -1356,8 +1347,6 @@ double-precision numbers.
 </p>
 </div>
 </div>
-
-
 <div id="outline-container-h-5479c5a1-0e18-4835-8bd4-541ca733ad7d" class="outline-5">
 <h5 id="h-5479c5a1-0e18-4835-8bd4-541ca733ad7d"><span class="section-number-5">1.2.4.7.</span> Complex-Number Representation</h5>
 <div class="outline-text-5" id="text-h-5479c5a1-0e18-4835-8bd4-541ca733ad7d">
@@ -1493,7 +1482,6 @@ linked-list structure.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-f54aee0e-1d83-4009-8a9f-38fbd3581636" class="outline-4">
 <h4 id="h-f54aee0e-1d83-4009-8a9f-38fbd3581636"><span class="section-number-4">1.2.6.</span> Representations of Arrays and Strings</h4>
 <div class="outline-text-4" id="text-h-f54aee0e-1d83-4009-8a9f-38fbd3581636">
@@ -1864,13 +1852,11 @@ prefix_data.fields = {element_type        = ELEMENT_FIXNUM,
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-e3ecb8fe-0e4f-4f88-b583-0bc3d234b737" class="outline-4">
 <h4 id="h-e3ecb8fe-0e4f-4f88-b583-0bc3d234b737"><span class="section-number-4">1.2.7.</span> I-Machine Array Registers</h4>
 <div class="outline-text-4" id="text-h-e3ecb8fe-0e4f-4f88-b583-0bc3d234b737">
 </div>
 </div>
-
 <div id="outline-container-h-baca12c3-d791-4eba-9361-88b3d2519e88" class="outline-4">
 <h4 id="h-baca12c3-d791-4eba-9361-88b3d2519e88"><span class="section-number-4">1.2.8.</span> Representations of Functions and Closures</h4>
 <div class="outline-text-4" id="text-h-baca12c3-d791-4eba-9361-88b3d2519e88">
@@ -1900,7 +1886,7 @@ The memory layout for this looks roughly as follows:
 </p>
 
 
-<div id="orgc6c656a" class="figure">
+<div id="orgdc56bda" class="figure">
 <p><img src="../../../../img/lisp-machine-0.svg" alt="lisp-machine-0.svg" class="org-svg" id="fig:SED-HR4049">
 </p>
 <p><span class="figure-number">Figure 1: </span>The memory layout for a compiled function</p>
@@ -1928,7 +1914,6 @@ symbol.function = Word{type = DTP_ONE_Q_FORWARD,
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-9816af15-8215-425b-9d25-cd720604f957" class="outline-5">
 <h5 id="h-9816af15-8215-425b-9d25-cd720604f957"><span class="section-number-5">1.2.8.2.</span> Generic Functions</h5>
 <div class="outline-text-5" id="text-h-9816af15-8215-425b-9d25-cd720604f957">
@@ -1940,7 +1925,6 @@ internally by the flavor system. See the section <a href="#h-b2b6ffe8-4db0-414a-
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-2243c620-15b4-47ab-8ebb-61554949d930" class="outline-5">
 <h5 id="h-2243c620-15b4-47ab-8ebb-61554949d930"><span class="section-number-5">1.2.8.3.</span> Representation of Lexical Closures</h5>
 <div class="outline-text-5" id="text-h-2243c620-15b4-47ab-8ebb-61554949d930">
@@ -1965,7 +1949,6 @@ on function calling, specifically the section <a href="#h-9cdc18b9-c53a-4abf-89d
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-7f0dc201-bd95-4e7b-b217-a9f609484869" class="outline-5">
 <h5 id="h-7f0dc201-bd95-4e7b-b217-a9f609484869"><span class="section-number-5">1.2.8.4.</span> Representation of Dynamic Closures</h5>
 <div class="outline-text-5" id="text-h-7f0dc201-bd95-4e7b-b217-a9f609484869">
@@ -1993,7 +1976,6 @@ which that cell is to be linked.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-57eed90d-db43-4f20-b2f6-515640c41bf9" class="outline-4">
 <h4 id="h-57eed90d-db43-4f20-b2f6-515640c41bf9"><span class="section-number-4">1.2.9.</span> Instruction Representation</h4>
 <div class="outline-text-4" id="text-h-57eed90d-db43-4f20-b2f6-515640c41bf9">
@@ -2039,7 +2021,6 @@ chapter on the <a href="#h-55635f4d-2e65-438d-b09c-0bb6f176aba7">Macroinstructio
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-c3d57316-74a0-44fc-ab54-900c78ce8a56" class="outline-4">
 <h4 id="h-c3d57316-74a0-44fc-ab54-900c78ce8a56"><span class="section-number-4">1.2.10.</span> Program-Counter Representation</h4>
 <div class="outline-text-4" id="text-h-c3d57316-74a0-44fc-ab54-900c78ce8a56">
@@ -2060,7 +2041,6 @@ compiled functions for long branches. See
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-22855c89-f8a9-4a6b-99d8-5d1f767f4bfd" class="outline-4">
 <h4 id="h-22855c89-f8a9-4a6b-99d8-5d1f767f4bfd"><span class="section-number-4">1.2.11.</span> Representation of Locatives</h4>
 <div class="outline-text-4" id="text-h-22855c89-f8a9-4a6b-99d8-5d1f767f4bfd">
@@ -2081,7 +2061,6 @@ long format arrays and the base address of array registers.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-019fcb89-bc97-4812-a031-980b36462407" class="outline-4">
 <h4 id="h-019fcb89-bc97-4812-a031-980b36462407"><span class="section-number-4">1.2.12.</span> Representation of Physical Addresses</h4>
 <div class="outline-text-4" id="text-h-019fcb89-bc97-4812-a031-980b36462407">
@@ -2093,7 +2072,6 @@ type it has restricted usage.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-008d2ebc-901f-47ae-a01c-5a20a0b7b476" class="outline-3">
 <h3 id="h-008d2ebc-901f-47ae-a01c-5a20a0b7b476"><span class="section-number-3">1.3.</span> Data-Type Code Assignments</h3>
 <div class="outline-text-3" id="text-h-008d2ebc-901f-47ae-a01c-5a20a0b7b476">
@@ -2170,7 +2148,6 @@ type it has restricted usage.
 </table>
 </div>
 </div>
-
 <div id="outline-container-h-48760e0b-dbdf-40c3-8e0c-f2dcc6a3fd09" class="outline-4">
 <h4 id="h-48760e0b-dbdf-40c3-8e0c-f2dcc6a3fd09"><span class="section-number-4">1.3.2.</span> Number Data Types</h4>
 <div class="outline-text-4" id="text-h-48760e0b-dbdf-40c3-8e0c-f2dcc6a3fd09">
@@ -2243,7 +2220,6 @@ type it has restricted usage.
 </table>
 </div>
 </div>
-
 <div id="outline-container-h-a2bcff3e-b8af-4f87-8fe6-177d19691afe" class="outline-4">
 <h4 id="h-a2bcff3e-b8af-4f87-8fe6-177d19691afe"><span class="section-number-4">1.3.3.</span> Instance Data Types</h4>
 <div class="outline-text-4" id="text-h-a2bcff3e-b8af-4f87-8fe6-177d19691afe">
@@ -2292,7 +2268,6 @@ type it has restricted usage.
 </table>
 </div>
 </div>
-
 <div id="outline-container-h-e88bebf3-ceef-486c-9bb0-9b5e7824b4da" class="outline-4">
 <h4 id="h-e88bebf3-ceef-486c-9bb0-9b5e7824b4da"><span class="section-number-4">1.3.4.</span> Primitive Data Types</h4>
 <div class="outline-text-4" id="text-h-e88bebf3-ceef-486c-9bb0-9b5e7824b4da">
@@ -2428,7 +2403,6 @@ spare immediate data type.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-3ddf3fc4-6df8-4e4c-80dc-4d68588a7824" class="outline-4">
 <h4 id="h-3ddf3fc4-6df8-4e4c-80dc-4d68588a7824"><span class="section-number-4">1.3.5.</span> Special Marker for Garbage Collector</h4>
 <div class="outline-text-4" id="text-h-3ddf3fc4-6df8-4e4c-80dc-4d68588a7824">
@@ -2459,7 +2433,6 @@ spare immediate data type.
 </table>
 </div>
 </div>
-
 <div id="outline-container-h-af49a4a0-fac5-472f-821e-740a54659600" class="outline-4">
 <h4 id="h-af49a4a0-fac5-472f-821e-740a54659600"><span class="section-number-4">1.3.6.</span> Data Types for Program Counter Values</h4>
 <div class="outline-text-4" id="text-h-af49a4a0-fac5-472f-821e-740a54659600">
@@ -2496,7 +2469,6 @@ spare immediate data type.
 </table>
 </div>
 </div>
-
 <div id="outline-container-h-af00b7b6-db58-4fbf-8b4f-17dbd641cb03" class="outline-4">
 <h4 id="h-af00b7b6-db58-4fbf-8b4f-17dbd641cb03"><span class="section-number-4">1.3.7.</span> Full Word Instruction Data Types</h4>
 <div class="outline-text-4" id="text-h-af00b7b6-db58-4fbf-8b4f-17dbd641cb03">
@@ -2569,8 +2541,6 @@ spare immediate data type.
 </table>
 </div>
 </div>
-
-
 <div id="outline-container-h-e918dbab-b15f-42ed-a737-d70de08a1182" class="outline-4">
 <h4 id="h-e918dbab-b15f-42ed-a737-d70de08a1182"><span class="section-number-4">1.3.8.</span> Half-Word Instruction Data Types</h4>
 <div class="outline-text-4" id="text-h-e918dbab-b15f-42ed-a737-d70de08a1182">
@@ -2610,19 +2580,15 @@ described in the chapter on theinstruction set. The instruction in bits
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-8c46aa13-3df2-4dc1-87fd-d8f5db5c27a7" class="outline-3">
 <h3 id="h-8c46aa13-3df2-4dc1-87fd-d8f5db5c27a7"><span class="section-number-3">1.4.</span> Appendix: Comparison of 3600-Family and I-Machine Data Representations</h3>
 <div class="outline-text-3" id="text-h-8c46aa13-3df2-4dc1-87fd-d8f5db5c27a7">
 </div>
-
 <div id="outline-container-h-aa308c82-d539-47d6-bc21-c0c9205512dd" class="outline-4">
 <h4 id="h-aa308c82-d539-47d6-bc21-c0c9205512dd"><span class="section-number-4">1.4.1.</span> Array Differences</h4>
 <div class="outline-text-4" id="text-h-aa308c82-d539-47d6-bc21-c0c9205512dd">
 </div>
 </div>
-
 <div id="outline-container-h-cc5a8790-f854-422e-8a23-17cc9e03f89d" class="outline-4">
 <h4 id="h-cc5a8790-f854-422e-8a23-17cc9e03f89d"><span class="section-number-4">1.4.2.</span> Compiled Function Differences</h4>
 <div class="outline-text-4" id="text-h-cc5a8790-f854-422e-8a23-17cc9e03f89d">
@@ -2630,12 +2596,10 @@ described in the chapter on theinstruction set. The instruction in bits
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-23acae6c-cd54-4b24-8351-f711aa4a3287" class="outline-2">
 <h2 id="h-23acae6c-cd54-4b24-8351-f711aa4a3287"><span class="section-number-2">2.</span> Memory Layout and Addressing</h2>
 <div class="outline-text-2" id="text-h-23acae6c-cd54-4b24-8351-f711aa4a3287">
 </div>
-
 <div id="outline-container-h-12472c74-024b-4a6b-921f-b969c395bf27" class="outline-3">
 <h3 id="h-12472c74-024b-4a6b-921f-b969c395bf27"><span class="section-number-3">2.1.</span> Address Space</h3>
 <div class="outline-text-3" id="text-h-12472c74-024b-4a6b-921f-b969c395bf27">
@@ -2660,7 +2624,6 @@ low 3968 megawords)</li>
 Note that <code>0o37777777777</code> is 2<sup>32</sup>-1.
 </p>
 </div>
-
 <div id="outline-container-h-fc155048-a837-406e-a5be-c27b7254218a" class="outline-4">
 <h4 id="h-fc155048-a837-406e-a5be-c27b7254218a"><span class="section-number-4">2.1.1.</span> Virtual Addresses</h4>
 <div class="outline-text-4" id="text-h-fc155048-a837-406e-a5be-c27b7254218a">
@@ -2710,11 +2673,10 @@ allows each zone to be specified as either old or new space.
 The virtual address space is partitioned by software into regions,
 areas, and quanta. These have no direct hardware impact. Note, however,
 that the hardware hash function for the Page Hash Table is optimized for
-a quantum of size 65536 words (see <a href="#h-43245575-3159-48b1-9243-846f8cbe8f6a">Page Hash Table</a>).
+a quantum of size 65536 words (see <a href="#h-6a2f3028-4c4a-4b2d-a0dd-fff73fda46fe">Page Hash Table</a>).
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-ca28130b-5fa7-42e7-a9be-fa5e8371efa8" class="outline-4">
 <h4 id="h-ca28130b-5fa7-42e7-a9be-fa5e8371efa8"><span class="section-number-4">2.1.2.</span> Ephemeral Addresses</h4>
 <div class="outline-text-4" id="text-h-ca28130b-5fa7-42e7-a9be-fa5e8371efa8">
@@ -2783,8 +2745,6 @@ maintained in the PHT.
 </table>
 </div>
 </div>
-
-
 <div id="outline-container-h-53630603-244d-42c3-9770-42451306705c" class="outline-4">
 <h4 id="h-53630603-244d-42c3-9770-42451306705c"><span class="section-number-4">2.1.3.</span> Unmapped Addresses</h4>
 <div class="outline-text-4" id="text-h-53630603-244d-42c3-9770-42451306705c">
@@ -2795,12 +2755,10 @@ maintained in the PHT.
 <div class="outline-text-4" id="text-h-7418b856-81cf-425a-a31b-0039b0136636">
 </div>
 </div>
-
 <div id="outline-container-h-5740779d-eb55-4885-a813-0456ecc5033c" class="outline-4">
 <h4 id="h-5740779d-eb55-4885-a813-0456ecc5033c"><span class="section-number-4">2.1.5.</span> Pages</h4>
 <div class="outline-text-4" id="text-h-5740779d-eb55-4885-a813-0456ecc5033c">
 </div>
-
 <div id="outline-container-h-43245575-3159-48b1-9243-846f8cbe8f6a" class="outline-5">
 <h5 id="h-43245575-3159-48b1-9243-846f8cbe8f6a"><span class="section-number-5">2.1.5.1.</span> Page Hash Table</h5>
 <div class="outline-text-5" id="text-h-43245575-3159-48b1-9243-846f8cbe8f6a">
@@ -2818,45 +2776,37 @@ maintained in the PHT.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-7a857463-a2cb-467a-b14a-0252a2cef7ba" class="outline-3">
 <h3 id="h-7a857463-a2cb-467a-b14a-0252a2cef7ba"><span class="section-number-3">2.2.</span> GC Support</h3>
 <div class="outline-text-3" id="text-h-7a857463-a2cb-467a-b14a-0252a2cef7ba">
 </div>
 </div>
-
 <div id="outline-container-h-6a2dcdb8-a8d2-4606-85d9-5e4b0836fc1d" class="outline-3">
 <h3 id="h-6a2dcdb8-a8d2-4606-85d9-5e4b0836fc1d"><span class="section-number-3">2.3.</span> Address Translation</h3>
 <div class="outline-text-3" id="text-h-6a2dcdb8-a8d2-4606-85d9-5e4b0836fc1d">
 </div>
-
 <div id="outline-container-h-6a2f3028-4c4a-4b2d-a0dd-fff73fda46fe" class="outline-4">
 <h4 id="h-6a2f3028-4c4a-4b2d-a0dd-fff73fda46fe"><span class="section-number-4">2.3.1.</span> Page Hash Table</h4>
 <div class="outline-text-4" id="text-h-6a2f3028-4c4a-4b2d-a0dd-fff73fda46fe">
 </div>
 </div>
-
 <div id="outline-container-h-b086f93b-f387-497e-89c6-1ecaa7653aed" class="outline-4">
 <h4 id="h-b086f93b-f387-497e-89c6-1ecaa7653aed"><span class="section-number-4">2.3.2.</span> PHT Lookup Algorithm</h4>
 <div class="outline-text-4" id="text-h-b086f93b-f387-497e-89c6-1ecaa7653aed">
 </div>
 </div>
-
 <div id="outline-container-h-6c6431ab-6d0d-431c-ae99-d97f1c159070" class="outline-4">
 <h4 id="h-6c6431ab-6d0d-431c-ae99-d97f1c159070"><span class="section-number-4">2.3.3.</span> Translation Algorithm</h4>
 <div class="outline-text-4" id="text-h-6c6431ab-6d0d-431c-ae99-d97f1c159070">
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-761de232-072c-4117-8d01-c29be2fb7646" class="outline-3">
 <h3 id="h-761de232-072c-4117-8d01-c29be2fb7646"><span class="section-number-3">2.4.</span> Appendix: Comparison of 3600-Family and I-Machine Memory Layout and Addressing</h3>
 <div class="outline-text-3" id="text-h-761de232-072c-4117-8d01-c29be2fb7646">
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-55635f4d-2e65-438d-b09c-0bb6f176aba7" class="outline-2">
 <h2 id="h-55635f4d-2e65-438d-b09c-0bb6f176aba7"><span class="section-number-2">3.</span> Macroinstruction Set</h2>
 <div class="outline-text-2" id="text-h-55635f4d-2e65-438d-b09c-0bb6f176aba7">
@@ -2918,9 +2868,6 @@ for execution.
 </table>
 </div>
 </div>
-
-
-
 <div id="outline-container-h-3db86b85-a0bd-4bc4-81a4-473e1359fb4c" class="outline-4">
 <h4 id="h-3db86b85-a0bd-4bc4-81a4-473e1359fb4c"><span class="section-number-4">3.1.2.</span> Internal Registers</h4>
 <div class="outline-text-4" id="text-h-3db86b85-a0bd-4bc4-81a4-473e1359fb4c">
@@ -3425,8 +3372,6 @@ specific to Revision 0 of the Ivory chip.
 </table>
 </div>
 </div>
-
-
 <div id="outline-container-h-fdcf3483-dd68-4337-b04b-aa8674742a0f" class="outline-4">
 <h4 id="h-fdcf3483-dd68-4337-b04b-aa8674742a0f"><span class="section-number-4">3.1.3.</span> Memory Side Effects</h4>
 <div class="outline-text-4" id="text-h-fdcf3483-dd68-4337-b04b-aa8674742a0f">
@@ -3447,7 +3392,6 @@ effects; they are guaranteed to be performed exactly once.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-4d930461-09c1-4211-af67-2425603a4248" class="outline-4">
 <h4 id="h-4d930461-09c1-4211-af67-2425603a4248"><span class="section-number-4">3.1.4.</span> Explanation of Instruction Definitions</h4>
 <div class="outline-text-4" id="text-h-4d930461-09c1-4211-af67-2425603a4248">
@@ -3697,7 +3641,7 @@ effects; they are guaranteed to be performed exactly once.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 17:39:55 -0700
 </div>
 </body>
 </html>

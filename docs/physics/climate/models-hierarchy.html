@@ -6,7 +6,7 @@
 <title>Hierarchy of Climate Models</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -274,12 +289,10 @@ Murphy,<br>
 "Earth system curator: metadata infrastructure for climate modeling".<br>
 <i>Earth Science Informatics</i> <b>1</b> (2008) pp.131&#x2013;149 doi:<a href="https://doi.org/10.1007/s12145-008-0016-1">10.1007/s12145-008-0016-1</a></li>
 </ul>
-
 <div id="outline-container-h-78f8baee-6f4b-4f02-95f7-3ab2697eaffb" class="outline-2">
 <h2 id="h-78f8baee-6f4b-4f02-95f7-3ab2697eaffb"><span class="section-number-2">1.</span> Radiative Transfer Models</h2>
 <div class="outline-text-2" id="text-h-78f8baee-6f4b-4f02-95f7-3ab2697eaffb">
 </div>
-
 <div id="outline-container-h-b411b9fa-b776-4b87-a0f0-58a5ca2b2fb1" class="outline-3">
 <h3 id="h-b411b9fa-b776-4b87-a0f0-58a5ca2b2fb1"><span class="section-number-3">1.1.</span> Atmospheric &amp; Environmental Research (AER) Working Group</h3>
 <div class="outline-text-3" id="text-h-b411b9fa-b776-4b87-a0f0-58a5ca2b2fb1">
@@ -295,7 +308,6 @@ of radiative transfer.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-bf370b6d-78a9-4e61-a2f8-43149b238ea1" class="outline-2">
 <h2 id="h-bf370b6d-78a9-4e61-a2f8-43149b238ea1"><span class="section-number-2">2.</span> Atmospheric General Circulation Models</h2>
 <div class="outline-text-2" id="text-h-bf370b6d-78a9-4e61-a2f8-43149b238ea1">
@@ -329,7 +341,6 @@ Contains articles describing all aspects of general circulation modeling.</li>
 (<a href="https://authors.library.caltech.edu/5016/">preprint</a>)</li>
 </ul>
 </div>
-
 <div id="outline-container-h-b472bf21-5aa6-4620-86e6-e0f07ac8360e" class="outline-3">
 <h3 id="h-b472bf21-5aa6-4620-86e6-e0f07ac8360e"><span class="section-number-3">2.1.</span> Primordial Models</h3>
 <div class="outline-text-3" id="text-h-b472bf21-5aa6-4620-86e6-e0f07ac8360e">
@@ -354,7 +365,6 @@ code. Then followed a Cambrian explosion of innovation. Lather, rinse,
 repeat.
 </p>
 </div>
-
 <div id="outline-container-h-65de0020-de60-4547-8d19-4afd58ebfa11" class="outline-4">
 <h4 id="h-65de0020-de60-4547-8d19-4afd58ebfa11"><span class="section-number-4">2.1.1.</span> General Circulation Research Section [GCRS] (1956)</h4>
 <div class="outline-text-4" id="text-h-65de0020-de60-4547-8d19-4afd58ebfa11">
@@ -381,7 +391,6 @@ quasi-geostrophy, then removing them one by one.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-66c4aeb3-885f-4c50-b41c-29f704a12dbf" class="outline-4">
 <h4 id="h-66c4aeb3-885f-4c50-b41c-29f704a12dbf"><span class="section-number-4">2.1.2.</span> UCLA Models</h4>
 <div class="outline-text-4" id="text-h-66c4aeb3-885f-4c50-b41c-29f704a12dbf">
@@ -390,7 +399,7 @@ Yale Mintz recruited Akio Arakawa (of Tokyo University) to team up and
 make a model. Well, it was a happy family of models, more properly.
 </p>
 
-<div class="remark" id="org127c6a2">
+<div class="remark" id="orgca6f066">
 <p>
 The numbering scheme for the models seems inconsistent to me. In the
 book <cite class="book-title">A Vast Machine</cite>, Paul Edwards enumerates them from
@@ -400,7 +409,6 @@ I to IV. I'll follow his book's conventions.
 
 </div>
 </div>
-
 <div id="outline-container-h-3cba208b-e58a-4dc8-9443-834c78e2ef38" class="outline-5">
 <h5 id="h-3cba208b-e58a-4dc8-9443-834c78e2ef38"><span class="section-number-5">2.1.2.1.</span> Model I (1960?&#x2013;1965)</h5>
 <div class="outline-text-5" id="text-h-3cba208b-e58a-4dc8-9443-834c78e2ef38">
@@ -431,7 +439,6 @@ Centre for Medium-Range Weather Forecasts (ECMWF) model.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-02d3e4e2-f2b0-4c57-9a5d-156a4adc293f" class="outline-5">
 <h5 id="h-02d3e4e2-f2b0-4c57-9a5d-156a4adc293f"><span class="section-number-5">2.1.2.2.</span> Model II (1965&#x2013;1972??)</h5>
 <div class="outline-text-5" id="text-h-02d3e4e2-f2b0-4c57-9a5d-156a4adc293f">
@@ -479,7 +486,6 @@ Methods in Computational Physics: Advances in Research and Applications
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-51e23b0c-ac21-4ea2-966c-20e65107f585" class="outline-5">
 <h5 id="h-51e23b0c-ac21-4ea2-966c-20e65107f585"><span class="section-number-5">2.1.2.3.</span> Model III (1972??&#x2013;mid 1970s)</h5>
 <div class="outline-text-5" id="text-h-51e23b0c-ac21-4ea2-966c-20e65107f585">
@@ -496,7 +502,6 @@ It was a 12-level model. Two variants were built in the mid-1970s.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-2238ffc9-cdc5-49e2-9633-2a8ca2b2cd2a" class="outline-5">
 <h5 id="h-2238ffc9-cdc5-49e2-9633-2a8ca2b2cd2a"><span class="section-number-5">2.1.2.4.</span> Model IV (late 1970s)</h5>
 <div class="outline-text-5" id="text-h-2238ffc9-cdc5-49e2-9633-2a8ca2b2cd2a">
@@ -507,7 +512,6 @@ resolution to 15 layers.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-c9ea2a8e-de5c-46c9-bc11-af09d963719a" class="outline-5">
 <h5 id="h-c9ea2a8e-de5c-46c9-bc11-af09d963719a"><span class="section-number-5">2.1.2.5.</span> Model V (c.1990-????)</h5>
 <div class="outline-text-5" id="text-h-c9ea2a8e-de5c-46c9-bc11-af09d963719a">
@@ -517,7 +521,6 @@ A heavily modified version of UCLA III with up to 29 vertical levels.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-32736c4d-9f84-4ca5-9d8f-2a9738b2da11" class="outline-4">
 <h4 id="h-32736c4d-9f84-4ca5-9d8f-2a9738b2da11"><span class="section-number-4">2.1.3.</span> The Livermore Atmospheric Model "LAM" (1960&#x2013;1965)</h4>
 <div class="outline-text-4" id="text-h-32736c4d-9f84-4ca5-9d8f-2a9738b2da11">
@@ -567,8 +570,6 @@ eds. B. Alder, S. Fernbach, and M. Rotenberg
 </ul>
 </div>
 </div>
-
-
 <div id="outline-container-h-d66b6597-34d0-4658-9ca0-cc2ed6ae6d1b" class="outline-4">
 <h4 id="h-d66b6597-34d0-4658-9ca0-cc2ed6ae6d1b"><span class="section-number-4">2.1.4.</span> The National Center for Atmospheric Research (1964&#x2013;????)</h4>
 <div class="outline-text-4" id="text-h-d66b6597-34d0-4658-9ca0-cc2ed6ae6d1b">
@@ -578,7 +579,6 @@ difference schemes (generically referred to as NCAR family of models),
 the other used spectral schemes (the Community Climate Model Series, CCM).
 </p>
 </div>
-
 <div id="outline-container-h-9714e84d-954b-4f73-b6de-8d4b8768da73" class="outline-5">
 <h5 id="h-9714e84d-954b-4f73-b6de-8d4b8768da73"><span class="section-number-5">2.1.4.1.</span> NCAR 1 (1964&#x2013;1967?)</h5>
 <div class="outline-text-5" id="text-h-9714e84d-954b-4f73-b6de-8d4b8768da73">
@@ -595,7 +595,6 @@ publication on it appeared in 1967.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-34006cdd-68e4-4324-95b4-654a1162c2c6" class="outline-5">
 <h5 id="h-34006cdd-68e4-4324-95b4-654a1162c2c6"><span class="section-number-5">2.1.4.2.</span> NCAR 2 (1967?&#x2013;1970)</h5>
 <div class="outline-text-5" id="text-h-34006cdd-68e4-4324-95b4-654a1162c2c6">
@@ -618,7 +617,6 @@ National Center for Atmospheric Research, 1970</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-bbd4824e-994d-4e3d-b72d-55010bfd3908" class="outline-5">
 <h5 id="h-bbd4824e-994d-4e3d-b72d-55010bfd3908"><span class="section-number-5">2.1.4.3.</span> NCAR 3 (1970?&#x2013;1973)</h5>
 <div class="outline-text-5" id="text-h-bbd4824e-994d-4e3d-b72d-55010bfd3908">
@@ -636,8 +634,6 @@ In <i>Report of the JOC Conference on Climate Models: Performance, Intercomparis
 </ul>
 </div>
 </div>
-
-
 <div id="outline-container-h-a044a191-3e6e-4d38-9a0c-e64668da8917" class="outline-5">
 <h5 id="h-a044a191-3e6e-4d38-9a0c-e64668da8917"><span class="section-number-5">2.1.4.4.</span> CCM-0A (197?&#x2013;1977?)</h5>
 <div class="outline-text-5" id="text-h-a044a191-3e6e-4d38-9a0c-e64668da8917">
@@ -657,7 +653,6 @@ Methods in Computational Physics: Advances in Research and Applications
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-8d9835ea-f58f-4e38-a823-c726ee917d97" class="outline-5">
 <h5 id="h-8d9835ea-f58f-4e38-a823-c726ee917d97"><span class="section-number-5">2.1.4.5.</span> CCM-0B (1981&#x2013;198?)</h5>
 <div class="outline-text-5" id="text-h-8d9835ea-f58f-4e38-a823-c726ee917d97">
@@ -678,7 +673,6 @@ Australian spectral model that was the basis for CCM-0A.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-4fdb5799-e3c1-4555-892e-466aed11ef1d" class="outline-5">
 <h5 id="h-4fdb5799-e3c1-4555-892e-466aed11ef1d"><span class="section-number-5">2.1.4.6.</span> CCM-1 (1987?&#x2013;????)</h5>
 <div class="outline-text-5" id="text-h-4fdb5799-e3c1-4555-892e-466aed11ef1d">
@@ -698,8 +692,6 @@ schemes, and changes to moisture adjustment and condensation schemes.
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-1a943d30-650d-4ad9-819b-620b7af5f6ea" class="outline-3">
 <h3 id="h-1a943d30-650d-4ad9-819b-620b7af5f6ea"><span class="section-number-3">2.2.</span> Australian  Numerical  Meteorological  Research  Centre [ANMRC] (1977)</h3>
 <div class="outline-text-3" id="text-h-1a943d30-650d-4ad9-819b-620b7af5f6ea">
@@ -721,7 +713,7 @@ In <cite class="book-title">Methods in Computational Physics</cite>, 17, J. Chan
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-15 Thu 07:47.</p>
+<p class="postamble">Last Updated: Mon, 5 Jul 2021 22:51:38 -0700
 </div>
 </body>
 </html>

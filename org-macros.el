@@ -344,3 +344,16 @@ So a typical ID could look like \"Org-4nd91V40HI\"."
   async
   src=\"%PATH\">
 </script>"))
+
+;; When possible, use the git commit timestamp as the "Last Updated" date.
+;; Defaults to the current time.
+(require 'subr-x)
+
+(defun alex.org/html-postamble (plist)
+  (let ((result (string-trim (shell-command-to-string (concat "git log -1 --format=%cD " (buffer-file-name))))))
+    (concat "<p class=\"postamble\">Last Updated: "
+    (if (string-prefix-p "fatal:" result)
+        (format-time-string "%a, %d %b %Y %H:%M:%S %z")
+      result))))
+
+(setq org-html-postamble 'alex.org/html-postamble)

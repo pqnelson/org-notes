@@ -6,7 +6,7 @@
 <title>Meta-Physics</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -254,7 +283,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-13ff4071-eac4-4c43-9ac0-8b03303e6f7c" class="outline-2">
 <h2 id="h-13ff4071-eac4-4c43-9ac0-8b03303e6f7c"><span class="section-number-2">1.</span> Not What you think</h2>
 <div class="outline-text-2" id="text-h-13ff4071-eac4-4c43-9ac0-8b03303e6f7c">
@@ -273,7 +301,6 @@ size). When citing my <i>Zettelkasten</i> I summarize it as a particular
 subclass of propositions.
 </p>
 </div>
-
 <div id="outline-container-h-e3bde7ba-8b07-4d31-bb23-807910c1b080" class="outline-3">
 <h3 id="h-e3bde7ba-8b07-4d31-bb23-807910c1b080"><span class="section-number-3">1.1.</span> Constructive Results</h3>
 <div class="outline-text-3" id="text-h-e3bde7ba-8b07-4d31-bb23-807910c1b080">
@@ -285,7 +312,6 @@ what we have previously established works best.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-71531992-2a2e-4536-94bc-a9b8b8235ff6" class="outline-3">
 <h3 id="h-71531992-2a2e-4536-94bc-a9b8b8235ff6"><span class="section-number-3">1.2.</span> Experimental Facts</h3>
 <div class="outline-text-3" id="text-h-71531992-2a2e-4536-94bc-a9b8b8235ff6">
@@ -310,7 +336,6 @@ of examples.)
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-c4798587-9008-4c71-8147-718363036b61" class="outline-2">
 <h2 id="h-c4798587-9008-4c71-8147-718363036b61"><span class="section-number-2">2.</span> Examples in Physics</h2>
 <div class="outline-text-2" id="text-h-c4798587-9008-4c71-8147-718363036b61">
@@ -322,7 +347,6 @@ different physical situations, not different numeric values for the same
 situation.
 </p>
 </div>
-
 <div id="outline-container-h-0280afcd-d10f-4d6f-ba80-eadca1f5187c" class="outline-3">
 <h3 id="h-0280afcd-d10f-4d6f-ba80-eadca1f5187c"><span class="section-number-3">2.1.</span> Methods for Solving Physics</h3>
 <div class="outline-text-3" id="text-h-0280afcd-d10f-4d6f-ba80-eadca1f5187c">
@@ -359,7 +383,6 @@ becomes "automatic".
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-b10f11f4-db59-4585-abc4-1ea4a5feb224" class="outline-2">
 <h2 id="h-b10f11f4-db59-4585-abc4-1ea4a5feb224"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-b10f11f4-db59-4585-abc4-1ea4a5feb224">
@@ -372,7 +395,7 @@ Manuscript dated 1998, <a href="http://citeseerx.ist.psu.edu/viewdoc/download?do
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 12:12:32 -0700
 </div>
 </body>
 </html>

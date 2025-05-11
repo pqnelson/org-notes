@@ -6,7 +6,7 @@
 <title>Definitions in Lisp</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -235,7 +250,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-6763ca9e-d702-434d-b079-1fd86d324e3e" class="outline-2">
 <h2 id="h-6763ca9e-d702-434d-b079-1fd86d324e3e"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-6763ca9e-d702-434d-b079-1fd86d324e3e">
@@ -246,7 +260,6 @@ does, say, <code>defgeneric</code> and <code>defmethod</code> work?
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-21355c73-3eaa-4f77-8d2f-88e0904dc9db" class="outline-2">
 <h2 id="h-21355c73-3eaa-4f77-8d2f-88e0904dc9db"><span class="section-number-2">2.</span> Defun</h2>
 <div class="outline-text-2" id="text-h-21355c73-3eaa-4f77-8d2f-88e0904dc9db">
@@ -254,7 +267,6 @@ does, say, <code>defgeneric</code> and <code>defmethod</code> work?
 Usually <code>defun</code> is a macro.
 </p>
 </div>
-
 <div id="outline-container-h-627b296d-6abc-4fef-b925-82c03a785d50" class="outline-3">
 <h3 id="h-627b296d-6abc-4fef-b925-82c03a785d50"><span class="section-number-3">2.1.</span> SBCL</h3>
 <div class="outline-text-3" id="text-h-627b296d-6abc-4fef-b925-82c03a785d50">
@@ -264,7 +276,6 @@ It amounts to <code>(setf (fdefinition name) def)</code> as one might expect.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-69aa4f98-c4d1-435e-9cb3-f99e670f1931" class="outline-3">
 <h3 id="h-69aa4f98-c4d1-435e-9cb3-f99e670f1931"><span class="section-number-3">2.2.</span> ABCL</h3>
 <div class="outline-text-3" id="text-h-69aa4f98-c4d1-435e-9cb3-f99e670f1931">
@@ -274,12 +285,10 @@ Armed Bear CL has a primitive <a href="https://github.com/armedbear/abcl/blob/08
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-97c1b503-24df-468c-8280-647693666f69" class="outline-2">
 <h2 id="h-97c1b503-24df-468c-8280-647693666f69"><span class="section-number-2">3.</span> Defgeneric</h2>
 <div class="outline-text-2" id="text-h-97c1b503-24df-468c-8280-647693666f69">
 </div>
-
 <div id="outline-container-h-4a546921-bd95-4a94-be91-77ea2d63f793" class="outline-3">
 <h3 id="h-4a546921-bd95-4a94-be91-77ea2d63f793"><span class="section-number-3">3.1.</span> SBCL</h3>
 <div class="outline-text-3" id="text-h-4a546921-bd95-4a94-be91-77ea2d63f793">
@@ -294,7 +303,6 @@ calls <a href="https://github.com/sbcl/sbcl/blob/sbcl-2.0.11/src/pcl/boot.lisp#L
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-1f04467a-3d87-461a-a53f-44ddbe6d7c8a" class="outline-3">
 <h3 id="h-1f04467a-3d87-461a-a53f-44ddbe6d7c8a"><span class="section-number-3">3.2.</span> ABCL</h3>
 <div class="outline-text-3" id="text-h-1f04467a-3d87-461a-a53f-44ddbe6d7c8a">
@@ -304,7 +312,6 @@ which is a wrapper around <code>ensure-generic-function</code> (<a href="http://
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-5e1b7266-70af-4147-aea6-e7d0b8e654b4" class="outline-3">
 <h3 id="h-5e1b7266-70af-4147-aea6-e7d0b8e654b4"><span class="section-number-3">3.3.</span> CCL</h3>
 <div class="outline-text-3" id="text-h-5e1b7266-70af-4147-aea6-e7d0b8e654b4">
@@ -317,7 +324,7 @@ CCL has a <a href="https://github.com/Clozure/ccl/blob/v1.12/lib/macros.lisp#L21
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 12:12:32 -0700
 </div>
 </body>
 </html>

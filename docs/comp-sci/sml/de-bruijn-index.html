@@ -6,7 +6,7 @@
 <title>de Bruijn Indices - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -259,12 +288,12 @@
 <li><a href="#h-cae74e21-ef79-4f31-a5be-786564b0fe9b">8. References</a>
 <ul>
 <li><a href="#h-c4daab70-c334-4226-8c9b-671a6153f8c6">8.1. Explicit Substitutions</a></li>
+<li><a href="#h-6e9bda59-aadf-4749-930f-27290cec2d81">8.2. Dependent Types</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-a4e15c60-3817-479a-b174-e2165a8f8a78" class="outline-2">
 <h2 id="h-a4e15c60-3817-479a-b174-e2165a8f8a78"><span class="section-number-2">1.</span> Problem Statement</h2>
 <div class="outline-text-2" id="text-h-a4e15c60-3817-479a-b174-e2165a8f8a78">
@@ -291,7 +320,6 @@ How can we avoid the problem of accidental capture?
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-69f5b62a-bcd4-4de3-896c-0238934c797c" class="outline-2">
 <h2 id="h-69f5b62a-bcd4-4de3-896c-0238934c797c"><span class="section-number-2">2.</span> Solution</h2>
 <div class="outline-text-2" id="text-h-69f5b62a-bcd4-4de3-896c-0238934c797c">
@@ -340,7 +368,6 @@ The names of the bound variables do not matter:
 This is the basic idea of de Bruijn indices.
 </p>
 </div>
-
 <div id="outline-container-h-28efb67b-84c8-46d3-adde-08ba31d42dc5" class="outline-3">
 <h3 id="h-28efb67b-84c8-46d3-adde-08ba31d42dc5"><span class="section-number-3">2.1.</span> Translation Algorithm</h3>
 <div class="outline-text-3" id="text-h-28efb67b-84c8-46d3-adde-08ba31d42dc5">
@@ -411,7 +438,6 @@ the application \(\widetilde{e}_{1}~\widetilde{e}_{2}\).
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-534e5fe2-7cfc-4354-bda2-23bfc766fbf3" class="outline-3">
 <h3 id="h-534e5fe2-7cfc-4354-bda2-23bfc766fbf3"><span class="section-number-3">2.2.</span> Free Variables</h3>
 <div class="outline-text-3" id="text-h-534e5fe2-7cfc-4354-bda2-23bfc766fbf3">
@@ -424,7 +450,6 @@ purposes.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-1a0cf8ac-e24a-416e-905d-4549fd236a31" class="outline-3">
 <h3 id="h-1a0cf8ac-e24a-416e-905d-4549fd236a31"><span class="section-number-3">2.3.</span> Substitution</h3>
 <div class="outline-text-3" id="text-h-1a0cf8ac-e24a-416e-905d-4549fd236a31">
@@ -567,7 +592,6 @@ variable. Therefore, we are forced to admit the beta-reduction rule as proposed.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-16502c44-ef38-4b5c-8cc9-577a9621f5d2" class="outline-2">
 <h2 id="h-16502c44-ef38-4b5c-8cc9-577a9621f5d2"><span class="section-number-2">3.</span> Locally Nameless Variables</h2>
 <div class="outline-text-2" id="text-h-16502c44-ef38-4b5c-8cc9-577a9621f5d2">
@@ -594,14 +618,14 @@ We then substitute an expression for a name.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">subst</span> e' x@(Free n) = (<span class="org-keyword">fn</span> e@(Var (Free y)) =&gt; <span class="org-keyword">if</span> n = y <span class="org-keyword">then</span> e' <span class="org-keyword">else</span> e
+<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">subst</span> e' x@(Free n) = (<span class="org-keyword">fn</span> e@(Var (Free y)) =&gt; <span class="org-keyword">if</span> n = y the<span class="org-highlight-beyond-fill-column">n e' else e</span>
                         | e@(Var _) =&gt; e
                         | (Lam e) =&gt; Lam (subst e' x e)
-                        | (App (e1, e2)) =&gt; App (subst e' x e1, subst e' x e2))
-  | subst e' x@(Bound n) = (<span class="org-keyword">fn</span> e@(Var (Bound m)) =&gt; <span class="org-keyword">if</span> m = n <span class="org-keyword">then</span> e' <span class="org-keyword">else</span> e
+                        | (App (e1, e2)) =&gt; App (subst e' x e1<span class="org-highlight-beyond-fill-column">, subst e' x e2))</span>
+  | subst e' x@(Bound n) = (<span class="org-keyword">fn</span> e@(Var (Bound m)) =&gt; <span class="org-keyword">if</span> m = n t<span class="org-highlight-beyond-fill-column">hen e' else e</span>
                            | e@(Var _) =&gt; e
-                           | (Lam e) =&gt; Lam (subst e' (Bound (n+1)) e)
-                           | (App (e1, e2)) =&gt; App (subst e' x e1, subst e' x e2));
+                           | (Lam e) =&gt; Lam (subst e' (Bound (<span class="org-highlight-beyond-fill-column">n+1)) e)</span>
+                           | (App (e1, e2)) =&gt; App (subst e' x<span class="org-highlight-beyond-fill-column"> e1, subst e' x e2));</span>
 </pre>
 </div>
 
@@ -631,10 +655,10 @@ simplifies to:
   | beta e@(Lam _) = e
   | beta e@(App (e1, e2)) = <span class="org-keyword">case</span> e1 <span class="org-keyword">of</span>
                             | (Var _) =&gt; e
-                            | (Lam e') =&gt; subst e2 (Bound 0) e'
+                            | (Lam e') =&gt; subst e2 (Bound 0) e<span class="org-highlight-beyond-fill-column">'</span>
                             | (App (e11, e12)) =&gt;
                               <span class="org-keyword">let</span> <span class="org-keyword">val</span> <span class="org-variable-name">v1</span> = beta e1
-                              <span class="org-keyword">in</span> <span class="org-keyword">if</span> e1 = v1 <span class="org-keyword">then</span> e <span class="org-keyword">else</span> beta (App (v1, e2))
+                              <span class="org-keyword">in</span> <span class="org-keyword">if</span> e1 = v1 <span class="org-keyword">then</span> e <span class="org-keyword">else</span> beta (<span class="org-highlight-beyond-fill-column">App (v1, e2))</span>
                               <span class="org-keyword">end</span>;
 </pre>
 </div>
@@ -646,7 +670,6 @@ variables.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-0825b3d3-5d90-4f57-b3ff-bec320045ec1" class="outline-2">
 <h2 id="h-0825b3d3-5d90-4f57-b3ff-bec320045ec1"><span class="section-number-2">4.</span> HOAS, PHOAS, etc.</h2>
 <div class="outline-text-2" id="text-h-0825b3d3-5d90-4f57-b3ff-bec320045ec1">
@@ -668,7 +691,6 @@ For a SML library useful for a runtime HOAS/PHOAS encoding, see:
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-3761a02f-4b76-4769-a18f-defd3cc8d6be" class="outline-2">
 <h2 id="h-3761a02f-4b76-4769-a18f-defd3cc8d6be"><span class="section-number-2">5.</span> &#x2026;and <i>Typed</i> Lambda Calculus</h2>
 <div class="outline-text-2" id="text-h-3761a02f-4b76-4769-a18f-defd3cc8d6be">
@@ -688,7 +710,7 @@ We could equally do something like:
 </p>
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Name</span> = string;
-<span class="org-comment-delimiter">(* </span><span class="org-comment">datatype Var = ...</span><span class="org-comment-delimiter"> *)</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">The implementation is immaterial</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-comment-delimiter">(* </span><span class="org-comment">datatype Var = ...</span><span class="org-comment-delimiter"> *)</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">The implementation is immaterial</span><span class="org-comment-delimiter"> *</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column">)</span></span>
 
 <span class="org-keyword">datatype</span> <span class="org-type-def">Type</span> =
          | TArr <span class="org-keyword">of</span> Type * Type
@@ -710,7 +732,7 @@ calculus, we would have something like:
 
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Name</span> = string;
-<span class="org-keyword">datatype</span> <span class="org-type-def">Var</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">The implementation is immaterial</span><span class="org-comment-delimiter"> *)</span>
+<span class="org-keyword">datatype</span> <span class="org-type-def">Var</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">The implementation is immaterial</span><span class="org-comment-delimiter"> *</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column">)</span></span>
 
 <span class="org-keyword">datatype</span> <span class="org-type-def">Sort</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">complicated mess</span><span class="org-comment-delimiter"> *)</span>;
 
@@ -799,7 +821,6 @@ longer strongly normalizing, as first proved in:
 TLCA 1995, pp.328&#x2013;334; <a href="https://www.irif.fr/~mellies/papers/Mellies95tlca.ps">Eprint</a>.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-d945e1e1-35f5-4aea-81a3-50b54af769d9" class="outline-3">
 <h3 id="h-d945e1e1-35f5-4aea-81a3-50b54af769d9"><span class="section-number-3">6.1.</span> And Type Theory</h3>
 <div class="outline-text-3" id="text-h-d945e1e1-35f5-4aea-81a3-50b54af769d9">
@@ -816,7 +837,6 @@ Eprint <a href="https://ntrs.nasa.gov/api/citations/19990116988/downloads/199901
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-e4b20d7d-34ef-4039-9dfa-5175fefa7344" class="outline-2">
 <h2 id="h-e4b20d7d-34ef-4039-9dfa-5175fefa7344"><span class="section-number-2">7.</span> De Bruijn Levels</h2>
 <div class="outline-text-2" id="text-h-e4b20d7d-34ef-4039-9dfa-5175fefa7344">
@@ -836,7 +856,6 @@ doi:<a href="https://doi.org/10.7146/brics.v6i17.20074">10.7146/brics.v6i17.2007
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-cae74e21-ef79-4f31-a5be-786564b0fe9b" class="outline-2">
 <h2 id="h-cae74e21-ef79-4f31-a5be-786564b0fe9b"><span class="section-number-2">8.</span> References</h2>
 <div class="outline-text-2" id="text-h-cae74e21-ef79-4f31-a5be-786564b0fe9b">
@@ -848,9 +867,10 @@ Theorem".<br>
 <cite class="book-title">Indagationes Mathematicae (Proceedings)</cite> <b>75</b> 5 (1972) pp.381&#x2013;392 
 <a href="http://alexandria.tue.nl/repository/freearticles/597619.pdf">pdf</a>.</li>
 <li>TAPL</li>
+<li><a href="https://jesper.sikanda.be/posts/1001-syntax-representations.html">1001 Representations of Syntax with Binding</a> in Agda</li>
+<li><a href="https://github.com/AndrasKovacs/elaboration-zoo">Elaboration Zoo</a></li>
 </ul>
 </div>
-
 <div id="outline-container-h-c4daab70-c334-4226-8c9b-671a6153f8c6" class="outline-3">
 <h3 id="h-c4daab70-c334-4226-8c9b-671a6153f8c6"><span class="section-number-3">8.1.</span> Explicit Substitutions</h3>
 <div class="outline-text-3" id="text-h-c4daab70-c334-4226-8c9b-671a6153f8c6">
@@ -873,10 +893,18 @@ TLCA 1995, pp.328&#x2013;334; <a href="https://www.irif.fr/~mellies/papers/Melli
 </ul>
 </div>
 </div>
+<div id="outline-container-h-6e9bda59-aadf-4749-930f-27290cec2d81" class="outline-3">
+<h3 id="h-6e9bda59-aadf-4749-930f-27290cec2d81"><span class="section-number-3">8.2.</span> Dependent Types</h3>
+<div class="outline-text-3" id="text-h-6e9bda59-aadf-4749-930f-27290cec2d81">
+<ul class="org-ul">
+<li><a href="https://gist.github.com/Hirrolot/27e6b02a051df333811a23b97c375196">How to implement dependent types in 80 lines of code</a>, uses OCaml</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-22 Wed 09:18.</p>
+<p class="postamble">Last Updated: Sat, 4 Mar 2023 10:03:18 -0800
 </div>
 </body>
 </html>

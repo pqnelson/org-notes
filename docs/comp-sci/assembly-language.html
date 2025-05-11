@@ -6,7 +6,7 @@
 <title>Assembly Language</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,14 +205,31 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 <script>
   window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
     tex: {
       ams: {
         multlineWidth: '85%'
       },
+      inlineMath: {'[+]': [['$', '$']]},
       tags: 'ams',
       tagSide: 'right',
       tagIndent: '.8em'
@@ -233,7 +251,7 @@
   };
 </script>
 
-<script
+<script  type="text/javascript"
   id="MathJax-script"
   async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -264,7 +282,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-885c96f1-0b3b-420e-ad0d-82e51ac2b87b" class="outline-2">
 <h2 id="h-885c96f1-0b3b-420e-ad0d-82e51ac2b87b"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-885c96f1-0b3b-420e-ad0d-82e51ac2b87b">
@@ -284,7 +301,6 @@ available are: x86, x64, and ARM. <b>Be careful.</b>
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-18d9032e-b74d-4210-b8cd-2ee72674b81c" class="outline-2">
 <h2 id="h-18d9032e-b74d-4210-b8cd-2ee72674b81c"><span class="section-number-2">2.</span> x86 Architectures</h2>
 <div class="outline-text-2" id="text-h-18d9032e-b74d-4210-b8cd-2ee72674b81c">
@@ -331,7 +347,6 @@ Then there are about a million different instructions for the x86
 family.
 </p>
 </div>
-
 <div id="outline-container-h-c418607a-4f8f-4a1e-97b3-029f1133dfa4" class="outline-3">
 <h3 id="h-c418607a-4f8f-4a1e-97b3-029f1133dfa4"><span class="section-number-3">2.1.</span> Functions Using the C Calling Convention</h3>
 <div class="outline-text-3" id="text-h-c418607a-4f8f-4a1e-97b3-029f1133dfa4">
@@ -361,36 +376,36 @@ When we compile it using
 <div class="org-src-container">
 <pre class="src src-asm"><span class="org-function-name">exchange</span>:
 <span class="org-function-name">.LFB0</span>:
-        <span class="org-keyword">.cfi_startproc</span>
-        <span class="org-keyword">endbr64</span> 
-        <span class="org-keyword">pushq</span>   <span class="org-variable-name">%rbp</span>    #
-        <span class="org-keyword">.cfi_def_cfa_offset</span> 16
-        <span class="org-keyword">.cfi_offset</span> 6, -16
-        <span class="org-keyword">movq</span>    <span class="org-variable-name">%rsp</span>, <span class="org-variable-name">%rbp</span>      #,
-        <span class="org-keyword">.cfi_def_cfa_register</span> 6
-        <span class="org-keyword">movq</span>    <span class="org-variable-name">%rdi</span>, -24(<span class="org-variable-name">%rbp</span>) # xp, xp
-        <span class="org-keyword">movq</span>    <span class="org-variable-name">%rsi</span>, -32(<span class="org-variable-name">%rbp</span>) # yp, yp
+    <span class="org-keyword">.cfi_startproc</span>
+    <span class="org-keyword">endbr64</span> 
+    <span class="org-keyword">pushq</span>   <span class="org-variable-name">%rbp</span>    #
+    <span class="org-keyword">.cfi_def_cfa_offset</span> 16
+    <span class="org-keyword">.cfi_offset</span> 6, -16
+    <span class="org-keyword">movq</span>    <span class="org-variable-name">%rsp</span>, <span class="org-variable-name">%rbp</span>  #,
+    <span class="org-keyword">.cfi_def_cfa_register</span> 6
+    <span class="org-keyword">movq</span>    <span class="org-variable-name">%rdi</span>, -24(<span class="org-variable-name">%rbp</span>) # xp, xp
+    <span class="org-keyword">movq</span>    <span class="org-variable-name">%rsi</span>, -32(<span class="org-variable-name">%rbp</span>) # yp, yp
 # exchange.c:3:     int x = *xp<span class="org-comment-delimiter">;</span>
-        <span class="org-keyword">movq</span>    -24(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # xp, tmp85
-        <span class="org-keyword">movl</span>    (<span class="org-variable-name">%rax</span>), <span class="org-variable-name">%eax</span>    # *xp_3(D), tmp86
-        <span class="org-keyword">movl</span>    <span class="org-variable-name">%eax</span>, -4(<span class="org-variable-name">%rbp</span>)  # tmp86, x
+    <span class="org-keyword">movq</span>    -24(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # xp, tmp85
+    <span class="org-keyword">movl</span>    (<span class="org-variable-name">%rax</span>), <span class="org-variable-name">%eax</span>    # *xp_3(D), tmp86
+    <span class="org-keyword">movl</span>    <span class="org-variable-name">%eax</span>, -4(<span class="org-variable-name">%rbp</span>)  # tmp86, x
 # exchange.c:4:     *xp = *yp<span class="org-comment-delimiter">;</span>
-        <span class="org-keyword">movq</span>    -32(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # yp, tmp87
-        <span class="org-keyword">movl</span>    (<span class="org-variable-name">%rax</span>), <span class="org-variable-name">%edx</span>    # *yp_5(D), _1
+    <span class="org-keyword">movq</span>    -32(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # yp, tmp87
+    <span class="org-keyword">movl</span>    (<span class="org-variable-name">%rax</span>), <span class="org-variable-name">%edx</span>    # *yp_5(D), _1
 # exchange.c:4:     *xp = *yp<span class="org-comment-delimiter">;</span>
-        <span class="org-keyword">movq</span>    -24(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # xp, tmp88
-        <span class="org-keyword">movl</span>    <span class="org-variable-name">%edx</span>, (<span class="org-variable-name">%rax</span>)    # _1, *xp_3(D)
+    <span class="org-keyword">movq</span>    -24(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # xp, tmp88
+    <span class="org-keyword">movl</span>    <span class="org-variable-name">%edx</span>, (<span class="org-variable-name">%rax</span>)    # _1, *xp_3(D)
 # exchange.c:5:     *yp = x<span class="org-comment-delimiter">;</span>
-        <span class="org-keyword">movq</span>    -32(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # yp, tmp89
-        <span class="org-keyword">movl</span>    -4(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%edx</span>  # x, tmp90
-        <span class="org-keyword">movl</span>    <span class="org-variable-name">%edx</span>, (<span class="org-variable-name">%rax</span>)    # tmp90, *yp_5(D)
+    <span class="org-keyword">movq</span>    -32(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # yp, tmp89
+    <span class="org-keyword">movl</span>    -4(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%edx</span>  # x, tmp90
+    <span class="org-keyword">movl</span>    <span class="org-variable-name">%edx</span>, (<span class="org-variable-name">%rax</span>)    # tmp90, *yp_5(D)
 # exchange.c:6:     return x<span class="org-comment-delimiter">;</span>
-        <span class="org-keyword">movl</span>    -4(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%eax</span>  # x, _8
+    <span class="org-keyword">movl</span>    -4(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%eax</span>  # x, _8
 # exchange.c:7: }
-        <span class="org-keyword">popq</span>    <span class="org-variable-name">%rbp</span>    #
-        <span class="org-keyword">.cfi_def_cfa</span> 7, 8
-        <span class="org-keyword">ret</span>     
-        <span class="org-keyword">.cfi_endproc</span>
+    <span class="org-keyword">popq</span>    <span class="org-variable-name">%rbp</span>    #
+    <span class="org-keyword">.cfi_def_cfa</span> 7, 8
+    <span class="org-keyword">ret</span> 
+    <span class="org-keyword">.cfi_endproc</span>
 </pre>
 </div>
 
@@ -418,8 +433,6 @@ pointer and <code>ret</code> to end the function call.</li>
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-c646a439-0d6d-49bd-8598-9839024f00d8" class="outline-2">
 <h2 id="h-c646a439-0d6d-49bd-8598-9839024f00d8"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-c646a439-0d6d-49bd-8598-9839024f00d8">
@@ -432,7 +445,6 @@ Third edition, see especially section 3.7. (DO NOT GET the
 international paperback edition, it's riddled with errors.)</li>
 </ul>
 </div>
-
 <div id="outline-container-h-05df87a3-ed27-4236-85c3-1e1d020bdac9" class="outline-3">
 <h3 id="h-05df87a3-ed27-4236-85c3-1e1d020bdac9"><span class="section-number-3">3.1.</span> MMIX Assembly Language</h3>
 <div class="outline-text-3" id="text-h-05df87a3-ed27-4236-85c3-1e1d020bdac9">
@@ -447,7 +459,7 @@ Fascicles 1</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-08-30 Wed 09:14.</p>
+<p class="postamble">Last Updated: Sat, 26 Oct 2024 13:34:37 -0700
 </div>
 </body>
 </html>

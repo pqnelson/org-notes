@@ -6,7 +6,7 @@
 <title>On Theorem Provers</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 </head>
@@ -237,12 +252,12 @@
 </ul>
 </li>
 <li><a href="#h-f7b249a0-b1ec-4a8b-a5ca-303733594963">3.2. Mathematical Analysis in Theorem Provers</a></li>
+<li><a href="#orgbd6a4e5">3.3. Random odds and ends</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-6cd236b0-da47-4d1e-b956-7bac67f3d86f" class="outline-2">
 <h2 id="h-6cd236b0-da47-4d1e-b956-7bac67f3d86f"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-6cd236b0-da47-4d1e-b956-7bac67f3d86f">
@@ -254,8 +269,6 @@ mathematics, there is much use for theorem provers as a way to formalize
 mathematics.
 </p>
 </div>
-
-
 <div id="outline-container-h-043b1579-6f46-4130-a530-a3778c6037db" class="outline-3">
 <h3 id="h-043b1579-6f46-4130-a530-a3778c6037db"><span class="section-number-3">1.1.</span> Components of a Theorem Prover</h3>
 <div class="outline-text-3" id="text-h-043b1579-6f46-4130-a530-a3778c6037db">
@@ -278,7 +291,6 @@ implement the kernel and elaborator.</dd>
 </dl>
 </div>
 </div>
-
 <div id="outline-container-h-0d8b24ba-8575-45c7-bd31-3d003d8bc87e" class="outline-3">
 <h3 id="h-0d8b24ba-8575-45c7-bd31-3d003d8bc87e"><span class="section-number-3">1.2.</span> Vernacular</h3>
 <div class="outline-text-3" id="text-h-0d8b24ba-8575-45c7-bd31-3d003d8bc87e">
@@ -299,7 +311,6 @@ Mizar's <a href="http://www.mizar.org/language/mizar-grammar.xml">grammar</a> is
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-f631746a-da52-4b86-958f-8eb98d9593b4" class="outline-2">
 <h2 id="h-f631746a-da52-4b86-958f-8eb98d9593b4"><span class="section-number-2">2.</span> Rapid Prototyping</h2>
 <div class="outline-text-2" id="text-h-f631746a-da52-4b86-958f-8eb98d9593b4">
@@ -314,7 +325,6 @@ formulas and logical languages, etc.
 We can use Lisp (e.g., <a href="https://github.com/latte-central/LaTTe">LaTTe</a>).
 </p>
 </div>
-
 <div id="outline-container-h-f26ec2ee-cdcd-4606-a006-5030d73f83ac" class="outline-3">
 <h3 id="h-f26ec2ee-cdcd-4606-a006-5030d73f83ac"><span class="section-number-3">2.1.</span> Formalizing Mathematics</h3>
 <div class="outline-text-3" id="text-h-f26ec2ee-cdcd-4606-a006-5030d73f83ac">
@@ -373,7 +383,6 @@ community).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-936b2cbd-53e0-49b7-b496-052d2ba3b091" class="outline-2">
 <h2 id="h-936b2cbd-53e0-49b7-b496-052d2ba3b091"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-936b2cbd-53e0-49b7-b496-052d2ba3b091">
@@ -386,7 +395,6 @@ community).
 <a href="http://philsci-archive.pitt.edu/19508/1/language_archive.pdf">PDF</a>, dated 29 Aug 2021, 35 pages (paper corresponding to a <a href="https://www.andrew.cmu.edu/user/avigad/Talks/design.pdf">talk</a>)</li>
 </ul>
 </div>
-
 <div id="outline-container-h-31684bce-5827-4fe5-b9cd-00405898307d" class="outline-3">
 <h3 id="h-31684bce-5827-4fe5-b9cd-00405898307d"><span class="section-number-3">3.1.</span> Vernacular</h3>
 <div class="outline-text-3" id="text-h-31684bce-5827-4fe5-b9cd-00405898307d">
@@ -402,7 +410,6 @@ community).
 Eprint: <a href="https://arxiv.org/abs/1201.3601">arXiv:1201.3601</a>, 26 pages.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-7f07b242-0684-49af-9b3a-53d89ab36cbf" class="outline-4">
 <h4 id="h-7f07b242-0684-49af-9b3a-53d89ab36cbf"><span class="section-number-4">3.1.1.</span> Mizar</h4>
 <div class="outline-text-4" id="text-h-7f07b242-0684-49af-9b3a-53d89ab36cbf">
@@ -418,7 +425,6 @@ In <i>Mathematical Knowledge Management: Proceedings of the Second International
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-f7b249a0-b1ec-4a8b-a5ca-303733594963" class="outline-3">
 <h3 id="h-f7b249a0-b1ec-4a8b-a5ca-303733594963"><span class="section-number-3">3.2.</span> Mathematical Analysis in Theorem Provers</h3>
 <div class="outline-text-3" id="text-h-f7b249a0-b1ec-4a8b-a5ca-303733594963">
@@ -434,10 +440,20 @@ pp 246&#x2013;262.</li>
 </ul>
 </div>
 </div>
+<div id="outline-container-orgbd6a4e5" class="outline-3">
+<h3 id="orgbd6a4e5"><span class="section-number-3">3.3.</span> Random odds and ends</h3>
+<div class="outline-text-3" id="text-3-3">
+<ul class="org-ul">
+<li><a href="https://github.com/medovina/natty">natty</a> &#x2013; an experimental proof assistant in OCaml with natural
+language input
+<a href="https://aitp-conference.org/2024/slides/AD.pdf">slides</a></li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-11-22 Mon 15:33.</p>
+<p class="postamble">Last Updated: Sat, 9 Nov 2024 08:48:42 -0800
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>Set Theory</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -242,15 +271,15 @@
 <li><a href="#h-9c5c0d57-a7b0-497f-9b3a-e367ec7658a6">1. Overview</a></li>
 <li><a href="#h-a673cdab-3aa3-4979-85cf-03e70fe530a9">2. Classes</a></li>
 <li><a href="#h-cd10efca-0ee5-4666-b0de-f24ba41391ac">3. Tarski&#x2013;Grothendieck Set Theory</a></li>
-<li><a href="#h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd">4. References</a>
+<li><a href="#h-8ff0ad00-3c76-46eb-a08d-a259b858fedb">4. Consistency</a></li>
+<li><a href="#h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd">5. References</a>
 <ul>
-<li><a href="#h-912813df-2c88-4a03-aa81-3fa855993460">4.1. Many-Sorted Models of Sets and Classes</a></li>
+<li><a href="#h-912813df-2c88-4a03-aa81-3fa855993460">5.1. Many-Sorted Models of Sets and Classes</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-9c5c0d57-a7b0-497f-9b3a-e367ec7658a6" class="outline-2">
 <h2 id="h-9c5c0d57-a7b0-497f-9b3a-e367ec7658a6"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-9c5c0d57-a7b0-497f-9b3a-e367ec7658a6">
@@ -265,7 +294,6 @@ equipped with a soft type system, in "$(1+&epsilon;)$-order logic" for
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-a673cdab-3aa3-4979-85cf-03e70fe530a9" class="outline-2">
 <h2 id="h-a673cdab-3aa3-4979-85cf-03e70fe530a9"><span class="section-number-2">2.</span> Classes</h2>
 <div class="outline-text-2" id="text-h-a673cdab-3aa3-4979-85cf-03e70fe530a9">
@@ -277,7 +305,6 @@ to "two-sorted set theory", which would make more sense).
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-cd10efca-0ee5-4666-b0de-f24ba41391ac" class="outline-2">
 <h2 id="h-cd10efca-0ee5-4666-b0de-f24ba41391ac"><span class="section-number-2">3.</span> Tarski&#x2013;Grothendieck Set Theory</h2>
 <div class="outline-text-2" id="text-h-cd10efca-0ee5-4666-b0de-f24ba41391ac">
@@ -323,9 +350,23 @@ See:
 </ul>
 </div>
 </div>
+<div id="outline-container-h-8ff0ad00-3c76-46eb-a08d-a259b858fedb" class="outline-2">
+<h2 id="h-8ff0ad00-3c76-46eb-a08d-a259b858fedb"><span class="section-number-2">4.</span> Consistency</h2>
+<div class="outline-text-2" id="text-h-8ff0ad00-3c76-46eb-a08d-a259b858fedb">
+<p>
+There have been some explorations of the consistency of ZF using Turing
+machines and Godel encodings. (Adding the axiom of choice does not
+affect consistency, i.e., Con(ZF) iff Con(ZFC) is a tautology.)
+</p>
 
+<ul class="org-ul">
+<li><a href="https://turingmachinesimulator.com/shared/vgimygpuwi">https://turingmachinesimulator.com/shared/vgimygpuwi</a></li>
+<li><a href="https://github.com/sorear/metamath-turing-machines/blob/master/zf2.nql">https://github.com/sorear/metamath-turing-machines/blob/master/zf2.nql</a></li>
+</ul>
+</div>
+</div>
 <div id="outline-container-h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd" class="outline-2">
-<h2 id="h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd"><span class="section-number-2">4.</span> References</h2>
+<h2 id="h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-6dbb1f0d-dfc1-49a4-ae43-453ecf63a7bd">
 <ul class="org-ul">
 <li>Thomas Jech, <br>
@@ -339,9 +380,8 @@ Marcel Dekker, 3rd edition, 1999.</li>
 <a href="https://arxiv.org/abs/0810.1279">arXiv:0810.1279</a></li>
 </ul>
 </div>
-
 <div id="outline-container-h-912813df-2c88-4a03-aa81-3fa855993460" class="outline-3">
-<h3 id="h-912813df-2c88-4a03-aa81-3fa855993460"><span class="section-number-3">4.1.</span> Many-Sorted Models of Sets and Classes</h3>
+<h3 id="h-912813df-2c88-4a03-aa81-3fa855993460"><span class="section-number-3">5.1.</span> Many-Sorted Models of Sets and Classes</h3>
 <div class="outline-text-3" id="text-h-912813df-2c88-4a03-aa81-3fa855993460">
 <ul class="org-ul">
 <li>V. Gitman,<br>
@@ -355,7 +395,7 @@ Marcel Dekker, 3rd edition, 1999.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-03-09 Thu 08:15.</p>
+<p class="postamble">Last Updated: Thu, 18 May 2023 07:02:41 -0700
 </div>
 </body>
 </html>

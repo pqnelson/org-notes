@@ -6,7 +6,7 @@
 <title>Energy Balance Models</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -251,7 +280,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-118dd919-ab2b-4598-9ff6-485e77ebd55b" class="outline-2">
 <h2 id="h-118dd919-ab2b-4598-9ff6-485e77ebd55b"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-118dd919-ab2b-4598-9ff6-485e77ebd55b">
@@ -266,7 +294,6 @@ balanced depend on the latitude alone.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-2018e9b8-78c3-4a47-a4d1-d97ea0bef8a6" class="outline-2">
 <h2 id="h-2018e9b8-78c3-4a47-a4d1-d97ea0bef8a6"><span class="section-number-2">2.</span> Zero Dimensional Model</h2>
 <div class="outline-text-2" id="text-h-2018e9b8-78c3-4a47-a4d1-d97ea0bef8a6">
@@ -303,7 +330,6 @@ we're just trying to solve the equation:
 \frac{(1-\alpha)S}{4} = \varepsilon\sigma T_{s}^{4}.
 \end{equation}
 </div>
-
 <div id="outline-container-h-0ff1a82f-5332-41db-a7b8-c780ffecf336" class="outline-3">
 <h3 id="h-0ff1a82f-5332-41db-a7b8-c780ffecf336"><span class="section-number-3">2.1.</span> Emissivity vs Temperature</h3>
 <div class="outline-text-3" id="text-h-0ff1a82f-5332-41db-a7b8-c780ffecf336">
@@ -395,7 +421,6 @@ values of emissivity (a parameter between 0 and 1).
 </table>
 </div>
 </div>
-
 <div id="outline-container-h-5856efa8-6157-41f5-847c-2273a61fa3b2" class="outline-3">
 <h3 id="h-5856efa8-6157-41f5-847c-2273a61fa3b2"><span class="section-number-3">2.2.</span> Linearization</h3>
 <div class="outline-text-3" id="text-h-5856efa8-6157-41f5-847c-2273a61fa3b2">
@@ -468,7 +493,6 @@ temperature:
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-efb8e0c4-7665-4134-aa66-86474b03ba43" class="outline-3">
 <h3 id="h-efb8e0c4-7665-4134-aa66-86474b03ba43"><span class="section-number-3">2.3.</span> Evaluating Results</h3>
 <div class="outline-text-3" id="text-h-efb8e0c4-7665-4134-aa66-86474b03ba43">
@@ -484,7 +508,6 @@ of greenhouse gases.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-30c74fea-6e30-4747-a24b-070b622a27d9" class="outline-2">
 <h2 id="h-30c74fea-6e30-4747-a24b-070b622a27d9"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-30c74fea-6e30-4747-a24b-070b622a27d9">
@@ -498,7 +521,7 @@ of greenhouse gases.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sat, 24 Apr 2021 19:03:29 -0700
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>NaN Boxing</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,14 +205,31 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 <script>
   window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
     tex: {
       ams: {
         multlineWidth: '85%'
       },
+      inlineMath: {'[+]': [['$', '$']]},
       tags: 'ams',
       tagSide: 'right',
       tagIndent: '.8em'
@@ -233,7 +251,7 @@
   };
 </script>
 
-<script
+<script  type="text/javascript"
   id="MathJax-script"
   async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -275,7 +293,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-55385882-0ba1-4181-8cb2-ef3d7c2cfaec" class="outline-2">
 <h2 id="h-55385882-0ba1-4181-8cb2-ef3d7c2cfaec"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-55385882-0ba1-4181-8cb2-ef3d7c2cfaec">
@@ -299,7 +316,6 @@ and we get \(2^{9}=512\) possible constants).
 There is another alternative, to use tagged pointers.
 </p>
 </div>
-
 <div id="outline-container-h-8e806502-9bba-4a35-9640-b4a3406a1e41" class="outline-3">
 <h3 id="h-8e806502-9bba-4a35-9640-b4a3406a1e41"><span class="section-number-3">1.1.</span> Summary of NaN-Boxing</h3>
 <div class="outline-text-3" id="text-h-8e806502-9bba-4a35-9640-b4a3406a1e41">
@@ -321,12 +337,10 @@ There are 51 free bits in the quiet NaN, so we use it to store information.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-d3cd56d2-092d-40c5-b462-224f2f02143d" class="outline-2">
 <h2 id="h-d3cd56d2-092d-40c5-b462-224f2f02143d"><span class="section-number-2">2.</span> Problems with NaN-Boxing</h2>
 <div class="outline-text-2" id="text-h-d3cd56d2-092d-40c5-b462-224f2f02143d">
 </div>
-
 <div id="outline-container-h-316355cb-7ab7-436a-9c24-52e3e4877f58" class="outline-3">
 <h3 id="h-316355cb-7ab7-436a-9c24-52e3e4877f58"><span class="section-number-3">2.1.</span> Equality Fails</h3>
 <div class="outline-text-3" id="text-h-316355cb-7ab7-436a-9c24-52e3e4877f58">
@@ -342,12 +356,10 @@ expected. This is a problem in Java, for example.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-1d641dab-d665-441e-9aee-68d8e1fac6f9" class="outline-2">
 <h2 id="h-1d641dab-d665-441e-9aee-68d8e1fac6f9"><span class="section-number-2">3.</span> Alternatives</h2>
 <div class="outline-text-2" id="text-h-1d641dab-d665-441e-9aee-68d8e1fac6f9">
 </div>
-
 <div id="outline-container-h-6b6285ee-a96e-42e1-b1ec-dd1a95184df7" class="outline-3">
 <h3 id="h-6b6285ee-a96e-42e1-b1ec-dd1a95184df7"><span class="section-number-3">3.1.</span> Pointer Tagging</h3>
 <div class="outline-text-3" id="text-h-6b6285ee-a96e-42e1-b1ec-dd1a95184df7">
@@ -384,7 +396,6 @@ We may or may not even need 8 bits for metadata (heck, 3 bits may suffice).
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-eda564c0-559a-43dc-9a56-deacbe9a40b4" class="outline-3">
 <h3 id="h-eda564c0-559a-43dc-9a56-deacbe9a40b4"><span class="section-number-3">3.2.</span> Pointer Tagging + Memory Management</h3>
 <div class="outline-text-3" id="text-h-eda564c0-559a-43dc-9a56-deacbe9a40b4">
@@ -397,7 +408,6 @@ index to our array of contiguous bytes). This basically rolls our own
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-d246718d-172f-4309-b2a0-0474ac03ff74" class="outline-3">
 <h3 id="h-d246718d-172f-4309-b2a0-0474ac03ff74"><span class="section-number-3">3.3.</span> Pointer Alignment</h3>
 <div class="outline-text-3" id="text-h-d246718d-172f-4309-b2a0-0474ac03ff74">
@@ -423,7 +433,6 @@ If we stipulate pointers are always from a <code>malloc</code> (and we are using
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-7d6a332d-1eef-4a35-9ba1-28f0e9211547" class="outline-2">
 <h2 id="h-7d6a332d-1eef-4a35-9ba1-28f0e9211547"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-7d6a332d-1eef-4a35-9ba1-28f0e9211547">
@@ -447,7 +456,6 @@ Languages" October 1993 <a href="https://citeseerx.ist.psu.edu/viewdoc/download?
 <li><a href="https://v8.dev/blog/pointer-compression">https://v8.dev/blog/pointer-compression</a></li>
 </ul>
 </div>
-
 <div id="outline-container-h-7205480f-c3ae-40a8-b026-f60cbf467bc7" class="outline-3">
 <h3 id="h-7205480f-c3ae-40a8-b026-f60cbf467bc7"><span class="section-number-3">4.1.</span> Example Implementations</h3>
 <div class="outline-text-3" id="text-h-7205480f-c3ae-40a8-b026-f60cbf467bc7">
@@ -462,7 +470,7 @@ Languages" October 1993 <a href="https://citeseerx.ist.psu.edu/viewdoc/download?
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-08-25 Fri 08:55.</p>
+<p class="postamble">Last Updated: Sat, 26 Aug 2023 07:40:08 -0700
 </div>
 </body>
 </html>

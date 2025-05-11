@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Definitions in Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -189,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -250,7 +264,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-047a8ccd-0114-408c-8e78-12a96609bd82" class="outline-2">
 <h2 id="h-047a8ccd-0114-408c-8e78-12a96609bd82"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-047a8ccd-0114-408c-8e78-12a96609bd82">
@@ -271,12 +284,10 @@ seems.)
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-3a6c46b9-1ddf-4bf3-b3a6-61df8423f835" class="outline-2">
 <h2 id="h-3a6c46b9-1ddf-4bf3-b3a6-61df8423f835"><span class="section-number-2">2.</span> General Descriptions</h2>
 <div class="outline-text-2" id="text-h-3a6c46b9-1ddf-4bf3-b3a6-61df8423f835">
 </div>
-
 <div id="outline-container-h-e99e01cb-23ee-4780-8f44-1b0127f2c2b9" class="outline-3">
 <h3 id="h-e99e01cb-23ee-4780-8f44-1b0127f2c2b9"><span class="section-number-3">2.1.</span> Mizar Language</h3>
 <div class="outline-text-3" id="text-h-e99e01cb-23ee-4780-8f44-1b0127f2c2b9">
@@ -298,7 +309,6 @@ The main parts of a Mizar article are:
 <li><code>&lt;Schemes&gt;</code></li>
 </ol>
 </div>
-
 <div id="outline-container-h-b3211e1b-db9c-4f65-ac61-4f4635e09703" class="outline-4">
 <h4 id="h-b3211e1b-db9c-4f65-ac61-4f4635e09703"><span class="section-number-4">2.1.1.</span> Attributes</h4>
 <div class="outline-text-4" id="text-h-b3211e1b-db9c-4f65-ac61-4f4635e09703">
@@ -307,7 +317,6 @@ Attributes are predicates handled specially by the system, according to rules de
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-5ae672f3-988d-478a-bc55-949a091a0934" class="outline-4">
 <h4 id="h-5ae672f3-988d-478a-bc55-949a091a0934"><span class="section-number-4">2.1.2.</span> Terms</h4>
 <div class="outline-text-4" id="text-h-5ae672f3-988d-478a-bc55-949a091a0934">
@@ -343,7 +352,6 @@ Discusses how Mizar handles types atop set theory.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-99bf5b98-2250-49bd-9a0b-ef9a2c721af6" class="outline-4">
 <h4 id="h-99bf5b98-2250-49bd-9a0b-ef9a2c721af6"><span class="section-number-4">2.1.3.</span> Type Translation</h4>
 <div class="outline-text-4" id="text-h-99bf5b98-2250-49bd-9a0b-ef9a2c721af6">
@@ -360,7 +368,6 @@ is true iff <code>X</code> is an element of <code>Y</code>.</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-69eb70b7-71c4-499a-970f-1d0278a7ba97" class="outline-3">
 <h3 id="h-69eb70b7-71c4-499a-970f-1d0278a7ba97"><span class="section-number-3">2.2.</span> Syntactic Levels</h3>
 <div class="outline-text-3" id="text-h-69eb70b7-71c4-499a-970f-1d0278a7ba97">
@@ -386,7 +393,6 @@ usually quite nontrivial.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-afd51419-9f5f-4d56-8059-8c545235ca10" class="outline-3">
 <h3 id="h-afd51419-9f5f-4d56-8059-8c545235ca10"><span class="section-number-3">2.3.</span> First Order Formats, Outline of Translation</h3>
 <div class="outline-text-3" id="text-h-afd51419-9f5f-4d56-8059-8c545235ca10">
@@ -421,12 +427,10 @@ occurring in them; so <code>for x being Real holds x-x = 0</code> translates to
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-b82c3de9-2b8e-4674-a8bc-a5b895f75f68" class="outline-2">
 <h2 id="h-b82c3de9-2b8e-4674-a8bc-a5b895f75f68"><span class="section-number-2">3.</span> Translations of Mizar Definitions</h2>
 <div class="outline-text-2" id="text-h-b82c3de9-2b8e-4674-a8bc-a5b895f75f68">
 </div>
-
 <div id="outline-container-h-93786a76-990f-4302-b6b9-e0d8101b1665" class="outline-3">
 <h3 id="h-93786a76-990f-4302-b6b9-e0d8101b1665"><span class="section-number-3">3.1.</span> Mode Definitions</h3>
 <div class="outline-text-3" id="text-h-93786a76-990f-4302-b6b9-e0d8101b1665">
@@ -434,7 +438,7 @@ occurring in them; so <code>for x being Real holds x-x = 0</code> translates to
 The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Mode-Definition">syntactic structure</a> of <code>&lt;Mode-Definition&gt;</code> is:
 </p>
 
-<pre class="example" id="org3a38e2a">
+<pre class="example" id="orgb33a916">
 &lt;Mode-Definition&gt; =
 	"mode" &lt;Mode-Pattern&gt; ( [ &lt;Specification&gt; ] [ "means" &lt;Definiens&gt; ] ";"
 &lt;Correctness-Conditions&gt; | "is" &lt;Type-Expression&gt; ";" ) { &lt;Mode-Property&gt; } .
@@ -518,7 +522,7 @@ m1_subset_1(X,Y)))</code>
 Another couple examples, from <a href="http://www.mizar.org/version/current/mml/binop_1.miz"><code>binop_1.miz</code></a>:
 </p>
 
-<pre class="example" id="orgf374d29">
+<pre class="example" id="orgc553248">
 definition
   let A be set; :: loci-declaration
   :: defines a unary operation on A
@@ -529,7 +533,6 @@ end;
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-4a4a21b9-71fb-49ee-9a1f-6dded027c808" class="outline-3">
 <h3 id="h-4a4a21b9-71fb-49ee-9a1f-6dded027c808"><span class="section-number-3">3.2.</span> Predicate and Attribute Definitions</h3>
 <div class="outline-text-3" id="text-h-4a4a21b9-71fb-49ee-9a1f-6dded027c808">
@@ -543,7 +546,6 @@ The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predic
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-f048d47c-ccaf-4522-899a-8cd3bbec0cfc" class="outline-4">
 <h4 id="h-f048d47c-ccaf-4522-899a-8cd3bbec0cfc"><span class="section-number-4">3.2.1.</span> Example</h4>
 <div class="outline-text-4" id="text-h-f048d47c-ccaf-4522-899a-8cd3bbec0cfc">
@@ -551,7 +553,7 @@ The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predic
 An example given:
 </p>
 
-<pre class="example" id="org9c2412d">
+<pre class="example" id="org9698c8d">
 definition let X,Y:
   pred X c= Y means
 :: TARSKI:def 3
@@ -587,7 +589,6 @@ So this definition creates both a pattern and a constructor.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-0918eb83-8a7c-4b8d-a58f-4e9bd98527ff" class="outline-4">
 <h4 id="h-0918eb83-8a7c-4b8d-a58f-4e9bd98527ff"><span class="section-number-4">3.2.2.</span> Translation</h4>
 <div class="outline-text-4" id="text-h-0918eb83-8a7c-4b8d-a58f-4e9bd98527ff">
@@ -603,7 +604,6 @@ property, e.g., proving <code>r1_tarski(X,X)</code>.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-84b71f04-d53d-46ac-996d-ffac36c314e1" class="outline-4">
 <h4 id="h-84b71f04-d53d-46ac-996d-ffac36c314e1"><span class="section-number-4">3.2.3.</span> Attributes</h4>
 <div class="outline-text-4" id="text-h-84b71f04-d53d-46ac-996d-ffac36c314e1">
@@ -625,7 +625,7 @@ negation of <code>empty</code>). The <a href="http://wiki.mizar.org/twiki/pub/Mi
 Here's an example:
 </p>
 
-<pre class="example" id="orgb280b51">
+<pre class="example" id="orgedaa2e8">
 definition let i be number;
  attr i is even means
   ex j being Integer st i = 2*j;
@@ -649,7 +649,7 @@ associative] law of composition). Mizar refers to a <code>multMagma</code> as a
 magma with a single law of composition.
 </p>
 
-<pre class="example" id="org20d97a4">
+<pre class="example" id="org9ca664a">
 definition
   let IT be multMagma;
 
@@ -686,7 +686,6 @@ we have <code>(xy)z = x(yz)</code>.</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-6177f78e-3a2b-4783-88be-c6cdc907e665" class="outline-3">
 <h3 id="h-6177f78e-3a2b-4783-88be-c6cdc907e665"><span class="section-number-3">3.3.</span> Functor Definitions</h3>
 <div class="outline-text-3" id="text-h-6177f78e-3a2b-4783-88be-c6cdc907e665">
@@ -696,7 +695,7 @@ result. Several <code>&lt;Functor-Properties&gt;</code> (like <code>commutativit
 associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Functor-Definition">syntax</a> is:
 </p>
 
-<pre class="example" id="org790f518">
+<pre class="example" id="orge603b29">
 &lt;Functor-Definition&gt; =
  "func" &lt;Functor-Pattern&gt; [ &lt;Specification&gt; ] [ ( "means" | "equals" ) &lt;Definiens&gt; ] ";"
  &lt;Correctness-Conditions&gt; { &lt;Functor-Property&gt; } .
@@ -708,7 +707,7 @@ associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSy
 The example given:
 </p>
 
-<pre class="example" id="orgc6eff22">
+<pre class="example" id="orgcd1bf5d">
 definition let x be real number;
   func -x -&gt; real number means :Def1: x + it = 0;
   existence by AXIOMS:19;
@@ -745,7 +744,7 @@ theorem, <code>Th10</code>)</li>
 The definition creates one new pattern, and one new constructor. 
 </p>
 
-<div class="remark" id="org6c19036">
+<div class="remark" id="org56e9f7d">
 <p>
 Defining a "morphism" requires some involved work with cluster
 registrations, it's not as simple as defining a new function. See, e.g.,
@@ -756,7 +755,6 @@ how group morphisms are defined in
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-ffc5ae5c-4648-48b9-b614-c57b6ad51c58" class="outline-3">
 <h3 id="h-ffc5ae5c-4648-48b9-b614-c57b6ad51c58"><span class="section-number-3">3.4.</span> Structures</h3>
 <div class="outline-text-3" id="text-h-ffc5ae5c-4648-48b9-b614-c57b6ad51c58">
@@ -764,7 +762,7 @@ how group morphisms are defined in
 From <a href="http://www.mizar.org/version/current/mml/algstr_0.miz"><code>algstr_0.miz</code></a>, we have:
 </p>
 
-<pre class="example" id="orge686e92">
+<pre class="example" id="orgbb9cf41">
 :: Multiplicative structures
 definition
   struct (1-sorted) multMagma (# carrier -&gt; set, multF -&gt; BinOp of the carrier
@@ -786,7 +784,7 @@ end;
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-09 Wed 14:52.</p>
+<p class="postamble">Last Updated: Fri, 29 Apr 2022 09:50:03 -0700
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>Formal Definition of Standard ML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -255,7 +284,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-adc2558e-5e71-4a91-bc4a-0e0cc331f773" class="outline-2">
 <h2 id="h-adc2558e-5e71-4a91-bc4a-0e0cc331f773"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-adc2558e-5e71-4a91-bc4a-0e0cc331f773">
@@ -290,7 +318,6 @@ following bad situation] to occur."
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-91dedd8b-ba0d-4f1e-bab4-3de882481cdb" class="outline-2">
 <h2 id="h-91dedd8b-ba0d-4f1e-bab4-3de882481cdb"><span class="section-number-2">2.</span> Phases in Executing a Program</h2>
 <div class="outline-text-2" id="text-h-91dedd8b-ba0d-4f1e-bab4-3de882481cdb">
@@ -331,7 +358,6 @@ it is useful to perform the evaluation phase separately.
 </p>
 </blockquote>
 </div>
-
 <div id="outline-container-h-36c1be92-1df5-4547-9944-6479a83de834" class="outline-3">
 <h3 id="h-36c1be92-1df5-4547-9944-6479a83de834"><span class="section-number-3">2.1.</span> Basic Steps in Executing a Program</h3>
 <div class="outline-text-3" id="text-h-36c1be92-1df5-4547-9944-6479a83de834">
@@ -394,7 +420,6 @@ implementation-independent code.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-5f0eff98-c29e-4868-8bd1-f0211dddffa7" class="outline-2">
 <h2 id="h-5f0eff98-c29e-4868-8bd1-f0211dddffa7"><span class="section-number-2">3.</span> Summary of Semantics</h2>
 <div class="outline-text-2" id="text-h-5f0eff98-c29e-4868-8bd1-f0211dddffa7">
@@ -449,7 +474,6 @@ semantics" step.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-61fc37d6-61c8-4cff-8a8a-195042186c64" class="outline-2">
 <h2 id="h-61fc37d6-61c8-4cff-8a8a-195042186c64"><span class="section-number-2">4.</span> Reasoning with the Definition</h2>
 <div class="outline-text-2" id="text-h-61fc37d6-61c8-4cff-8a8a-195042186c64">
@@ -470,7 +494,6 @@ The challenge is to prove the rules supplied for equational reasoning
 may be derived from the formal definition.
 </p>
 </div>
-
 <div id="outline-container-h-519f2b39-6fd5-416b-a08c-5783827a4ced" class="outline-3">
 <h3 id="h-519f2b39-6fd5-416b-a08c-5783827a4ced"><span class="section-number-3">4.1.</span> Predefined Functions, Types, Signatures, and Structures</h3>
 <div class="outline-text-3" id="text-h-519f2b39-6fd5-416b-a08c-5783827a4ced">
@@ -507,7 +530,6 @@ somehow.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-fd9bdc7a-f83f-43d9-8e49-ff20e57f7c51" class="outline-2">
 <h2 id="h-fd9bdc7a-f83f-43d9-8e49-ff20e57f7c51"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-fd9bdc7a-f83f-43d9-8e49-ff20e57f7c51">
@@ -525,7 +547,7 @@ In <i>Sixth International Workshop on Higher Order Logic Theorem Proving and its
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-16 Thu 10:54.</p>
+<p class="postamble">Last Updated: Thu, 16 Feb 2023 12:07:08 -0800
 </div>
 </body>
 </html>

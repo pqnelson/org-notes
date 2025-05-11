@@ -6,7 +6,7 @@
 <title>Integrals</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -258,7 +287,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-01ccd6b3-7836-475f-975d-60efd14e4f98" class="outline-2">
 <h2 id="h-01ccd6b3-7836-475f-975d-60efd14e4f98"><span class="section-number-2">1.</span> Methods of Computation</h2>
 <div class="outline-text-2" id="text-h-01ccd6b3-7836-475f-975d-60efd14e4f98">
@@ -293,7 +321,6 @@ for any \(x\in[a,b]\), we have
 Now the two main methods of computing integrals may be deduced immediately.
 </p>
 </div>
-
 <div id="outline-container-h-628ead07-4911-4b0e-a5a5-0c3861211978" class="outline-3">
 <h3 id="h-628ead07-4911-4b0e-a5a5-0c3861211978"><span class="section-number-3">1.1.</span> Method of Substitution</h3>
 <div class="outline-text-3" id="text-h-628ead07-4911-4b0e-a5a5-0c3861211978">
@@ -318,7 +345,6 @@ integration is determined by \(\varphi([a,b])\).
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-5fde8826-ac10-4c10-b723-7b0ca78ebd7e" class="outline-3">
 <h3 id="h-5fde8826-ac10-4c10-b723-7b0ca78ebd7e"><span class="section-number-3">1.2.</span> Integration by Parts</h3>
 <div class="outline-text-3" id="text-h-5fde8826-ac10-4c10-b723-7b0ca78ebd7e">
@@ -375,7 +401,6 @@ for indefinite integrals, we have
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-f76fbe31-426f-4a0e-b0df-1ce5970e7f45" class="outline-2">
 <h2 id="h-f76fbe31-426f-4a0e-b0df-1ce5970e7f45"><span class="section-number-2">2.</span> Tricks</h2>
 <div class="outline-text-2" id="text-h-f76fbe31-426f-4a0e-b0df-1ce5970e7f45">
@@ -433,7 +458,6 @@ There was nothing special about using \((1 + \E^{x})\), we could use any
 
 </div>
 </div>
-
 <div id="outline-container-h-3ff44236-6302-4e93-ab80-e4d4a5b42fa1" class="outline-3">
 <h3 id="h-3ff44236-6302-4e93-ab80-e4d4a5b42fa1"><span class="section-number-3">2.1.</span> Weierstrass Substitution</h3>
 <div class="outline-text-3" id="text-h-3ff44236-6302-4e93-ab80-e4d4a5b42fa1">
@@ -455,7 +479,6 @@ and in particular
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-ee4b1d68-eddc-4480-97b0-cec462ccbcb0" class="outline-2">
 <h2 id="h-ee4b1d68-eddc-4480-97b0-cec462ccbcb0"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-ee4b1d68-eddc-4480-97b0-cec462ccbcb0">
@@ -467,7 +490,6 @@ and in particular
 <a href="https://web.archive.org/web/20140514090620/https://www.warwickmaths.org/files/gamma.pdf">The Gamma Function</a>.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-a510c87d-98a4-4465-838b-c83136b85402" class="outline-3">
 <h3 id="h-a510c87d-98a4-4465-838b-c83136b85402"><span class="section-number-3">3.1.</span> Treatises</h3>
 <div class="outline-text-3" id="text-h-a510c87d-98a4-4465-838b-c83136b85402">
@@ -481,7 +503,7 @@ and in particular
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 17:39:55 -0700
 </div>
 </body>
 </html>

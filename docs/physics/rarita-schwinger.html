@@ -6,7 +6,7 @@
 <title>Rarita-Schwinger Fields</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -245,7 +274,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-e522a8c7-ccdb-4ff3-8e3d-c9358edddefe" class="outline-2">
 <h2 id="h-e522a8c7-ccdb-4ff3-8e3d-c9358edddefe"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-e522a8c7-ccdb-4ff3-8e3d-c9358edddefe">
@@ -254,8 +282,6 @@ Rarita-Schwinger field describes a spin-\(3/2\) field.
 </p>
 </div>
 </div>
-
-
 <div id="outline-container-h-19de5aef-a3be-467d-93b1-6db947645960" class="outline-2">
 <h2 id="h-19de5aef-a3be-467d-93b1-6db947645960"><span class="section-number-2">2.</span> Velo-Zwanziger Problem</h2>
 <div class="outline-text-2" id="text-h-19de5aef-a3be-467d-93b1-6db947645960">
@@ -281,7 +307,6 @@ non-minimal coupling to electromagnetism.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-e8e76a2c-9e38-495c-8659-061b73acd1ba" class="outline-2">
 <h2 id="h-e8e76a2c-9e38-495c-8659-061b73acd1ba"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-e8e76a2c-9e38-495c-8659-061b73acd1ba">
@@ -300,7 +325,7 @@ to 8 pages).</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-03-15 Wed 09:34.</p>
+<p class="postamble">Last Updated: Fri, 24 Mar 2023 09:31:36 -0700
 </div>
 </body>
 </html>

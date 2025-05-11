@@ -6,7 +6,7 @@
 <title>Topology Rosetta Stone - Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,14 +205,31 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 <script>
   window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
     tex: {
       ams: {
         multlineWidth: '85%'
       },
+      inlineMath: {'[+]': [['$', '$']]},
       tags: 'ams',
       tagSide: 'right',
       tagIndent: '.8em'
@@ -233,7 +251,7 @@
   };
 </script>
 
-<script
+<script  type="text/javascript"
   id="MathJax-script"
   async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -246,7 +264,6 @@
  <a accesskey="H" href="../../../index.html"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">Topology Rosetta Stone - Mizar</h1>
-
 <div id="outline-container-h-d8724669-cfaa-429c-a9da-1280e6d5c947" class="outline-2">
 <h2 id="h-d8724669-cfaa-429c-a9da-1280e6d5c947">Overview</h2>
 <div class="outline-text-2" id="text-h-d8724669-cfaa-429c-a9da-1280e6d5c947">
@@ -267,7 +284,6 @@ metrization theorem.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-e232d892-af8c-443b-9158-d3aec8d695bd" class="outline-2">
 <h2 id="h-e232d892-af8c-443b-9158-d3aec8d695bd">Chapter 2 Topological Spaces and Continuous Functions</h2>
 <div class="outline-text-2" id="text-h-e232d892-af8c-443b-9158-d3aec8d695bd">
@@ -315,7 +331,6 @@ topologies on the same set \(X\). Then we say \(\mathcal{T}_{1}\) is
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-8cfbaa13-45c8-4c21-8abc-4617a54bbe0b" class="outline-3">
 <h3 id="h-8cfbaa13-45c8-4c21-8abc-4617a54bbe0b">&sect;13 Basis for Topologies</h3>
 <div class="outline-text-3" id="text-h-8cfbaa13-45c8-4c21-8abc-4617a54bbe0b">
@@ -396,7 +411,6 @@ elements. (<a href="http://mizar.uwb.edu.pl/version/current/html/cantor_1.html#T
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-60708636-c121-425e-8072-e0c766a712ab" class="outline-3">
 <h3 id="h-60708636-c121-425e-8072-e0c766a712ab">&sect;15 The Product Topology on \(X\times Y\)</h3>
 <div class="outline-text-3" id="text-h-60708636-c121-425e-8072-e0c766a712ab">
@@ -431,7 +445,6 @@ is a prebasis for the product topology on \(X\times Y\).
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-28b0b9c0-626b-4f31-b897-d5df48d63e0f" class="outline-3">
 <h3 id="h-28b0b9c0-626b-4f31-b897-d5df48d63e0f">&sect;16 The Subspace Topology</h3>
 <div class="outline-text-3" id="text-h-28b0b9c0-626b-4f31-b897-d5df48d63e0f">
@@ -457,7 +470,6 @@ topology \(A\times B\) inherits as a subspace of \(X\times Y\).
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-5b58c44d-594a-4956-9b0d-6cdc39eee2ad" class="outline-3">
 <h3 id="h-5b58c44d-594a-4956-9b0d-6cdc39eee2ad">&sect;17 Closed Sets and Limit Points</h3>
 <div class="outline-text-3" id="text-h-5b58c44d-594a-4956-9b0d-6cdc39eee2ad">
@@ -565,7 +577,7 @@ and \(A\subset X\) be a subset. We define the <dfn>Boundary</dfn> of \(A\)
 by the equation \(\partial A = \operatorname{Cl}(A)\cap\operatorname{Cl}(X\setminus A)\).
 <ul class="org-ul">
 <li>I think Bourbaki uses the symbol \(\operatorname{Fr}(A)\) instead of
-\(\partial A\), because the French word for "boundary" is <i>frontiÃ¨re</i>.</li>
+\(\partial A\), because the French word for "boundary" is <i>frontière</i>.</li>
 <li><a href="http://mizar.uwb.edu.pl/version/current/html/tops_1.html#K2"><code>TOPS_1:def 2</code></a> uses the complement \(A^{\complement} = X\setminus A\)
 in its definition, but is otherwise what we have written down.</li>
 <li>Many results concerning the boundary may be found in <code>TOPS_1</code></li>
@@ -573,7 +585,6 @@ in its definition, but is otherwise what we have written down.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-fa0dd80e-9205-49a1-9a43-d6508966bdd6" class="outline-3">
 <h3 id="h-fa0dd80e-9205-49a1-9a43-d6508966bdd6">&sect;18 Continuous Functions</h3>
 <div class="outline-text-3" id="text-h-fa0dd80e-9205-49a1-9a43-d6508966bdd6">
@@ -664,7 +675,6 @@ Then \(f\) is continuous iff the functions \(f_{1}\colon A\to X\) and
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-f335489c-496a-47a3-85cf-a7742879c4a1" class="outline-3">
 <h3 id="h-f335489c-496a-47a3-85cf-a7742879c4a1">&sect;19 The Product Topology</h3>
 <div class="outline-text-3" id="text-h-f335489c-496a-47a3-85cf-a7742879c4a1">
@@ -732,7 +742,6 @@ where \(X_{n}=\mathbb{R}\).</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-7da00635-e423-4498-8466-88581c97674e" class="outline-3">
 <h3 id="h-7da00635-e423-4498-8466-88581c97674e">&sect;20 The Metric Topology</h3>
 <div class="outline-text-3" id="text-h-7da00635-e423-4498-8466-88581c97674e">
@@ -863,7 +872,6 @@ topology as the product topology.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-8d911f16-fd7a-4676-987f-a02ef15357d6" class="outline-3">
 <h3 id="h-8d911f16-fd7a-4676-987f-a02ef15357d6">&sect;21 The Metric Topology (Continued)</h3>
 <div class="outline-text-3" id="text-h-8d911f16-fd7a-4676-987f-a02ef15357d6">
@@ -944,7 +952,6 @@ continuous. <span class="missing">Missing from Mizar</span></li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-1fe6af2b-bffd-4397-9ac1-611254545e30" class="outline-3">
 <h3 id="h-1fe6af2b-bffd-4397-9ac1-611254545e30">&sect;22 The Quotient Topology</h3>
 <div class="outline-text-3" id="text-h-1fe6af2b-bffd-4397-9ac1-611254545e30">
@@ -957,7 +964,6 @@ is in the article <a href="http://mizar.uwb.edu.pl/version/current/html/t_1topsp
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-7fa1aef4-a3d1-4d7d-950d-17b08326549f" class="outline-2">
 <h2 id="h-7fa1aef4-a3d1-4d7d-950d-17b08326549f">Chapter 3 Connectedness and Compactness</h2>
 <div class="outline-text-2" id="text-h-7fa1aef4-a3d1-4d7d-950d-17b08326549f">
@@ -994,7 +1000,6 @@ connected space. <span class="missing">Missing from Mizar</span></li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-f13f44c0-0c4a-4410-90a0-c5fd63fe9ea2" class="outline-3">
 <h3 id="h-f13f44c0-0c4a-4410-90a0-c5fd63fe9ea2">&sect;24 Connected Subspaces of the Real Line</h3>
 <div class="outline-text-3" id="text-h-f13f44c0-0c4a-4410-90a0-c5fd63fe9ea2">
@@ -1040,7 +1045,6 @@ connected by a path.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-769b045d-3e1b-4cfd-abe5-e2de62408b78" class="outline-3">
 <h3 id="h-769b045d-3e1b-4cfd-abe5-e2de62408b78">&sect;26 Compact Spaces</h3>
 <div class="outline-text-3" id="text-h-769b045d-3e1b-4cfd-abe5-e2de62408b78">
@@ -1109,7 +1113,6 @@ the intersection of elements of \(\mathcal{C}\) be nonempty
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-abe622fb-5fee-4a11-a40a-b288a9b80bfc" class="outline-3">
 <h3 id="h-abe622fb-5fee-4a11-a40a-b288a9b80bfc">&sect;27 Compact Subspaces of the Real Line</h3>
 <div class="outline-text-3" id="text-h-abe622fb-5fee-4a11-a40a-b288a9b80bfc">
@@ -1169,7 +1172,6 @@ uncountable. <span class="missing">Missing from Mizar</span></li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-38b94ed6-7ab0-4358-9278-e8c656ed14a0" class="outline-2">
 <h2 id="h-38b94ed6-7ab0-4358-9278-e8c656ed14a0">Chapter 4 Countability and Separation Axioms</h2>
 <div class="outline-text-2" id="text-h-38b94ed6-7ab0-4358-9278-e8c656ed14a0">
@@ -1210,7 +1212,6 @@ countably dense subset.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-366f6135-1506-465a-9982-298d487a758d" class="outline-3">
 <h3 id="h-366f6135-1506-465a-9982-298d487a758d">&sect;31 The Separation Axioms</h3>
 <div class="outline-text-3" id="text-h-366f6135-1506-465a-9982-298d487a758d">
@@ -1251,7 +1252,6 @@ and every \(U\subset X\) open, \(A\subset U\) implies there is an open
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-6bb0e4a9-2d54-478f-bb30-d98f4d4525a1" class="outline-3">
 <h3 id="h-6bb0e4a9-2d54-478f-bb30-d98f4d4525a1">&sect;32 Normal Spaces</h3>
 <div class="outline-text-3" id="text-h-6bb0e4a9-2d54-478f-bb30-d98f4d4525a1">
@@ -1270,7 +1270,6 @@ normal. <span class="missing">Missing from Mizar</span></li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-acab4555-c2b9-42c2-92f6-27b8489e9529" class="outline-3">
 <h3 id="h-acab4555-c2b9-42c2-92f6-27b8489e9529">&sect;33 Urysohn Lemma</h3>
 <div class="outline-text-3" id="text-h-acab4555-c2b9-42c2-92f6-27b8489e9529">
@@ -1303,7 +1302,6 @@ regular. Products of completely regular spaces are completely regular.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-fb013eb5-364a-4a9f-8cff-6228a9b3d538" class="outline-3">
 <h3 id="h-fb013eb5-364a-4a9f-8cff-6228a9b3d538">&sect;34 Urysohn Metrization Theorem</h3>
 <div class="outline-text-3" id="text-h-fb013eb5-364a-4a9f-8cff-6228a9b3d538">
@@ -1332,7 +1330,6 @@ only if it is homeomorphic to \([0,1]^{J}\) for some \(J\). <span class="missing
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-f0df8915-4570-4186-97ba-e8d90e30e2b1" class="outline-3">
 <h3 id="h-f0df8915-4570-4186-97ba-e8d90e30e2b1">&sect;35 The Tietze Extension Theorem</h3>
 <div class="outline-text-3" id="text-h-f0df8915-4570-4186-97ba-e8d90e30e2b1">
@@ -1350,12 +1347,10 @@ continuous map of all \(X\) into \(\mathbb{R}\). <span class="missing">Missing f
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-3e4a3608-622a-450f-9f1e-9703eb4a3c82" class="outline-2">
 <h2 id="h-3e4a3608-622a-450f-9f1e-9703eb4a3c82">Chapter 6 Metrization Theorems and Paracompactness</h2>
 <div class="outline-text-2" id="text-h-3e4a3608-622a-450f-9f1e-9703eb4a3c82">
 </div>
-
 <div id="outline-container-h-adb8bd20-7642-4eea-9fbe-d2450f447b90" class="outline-3">
 <h3 id="h-adb8bd20-7642-4eea-9fbe-d2450f447b90">&sect;39 Local Finiteness</h3>
 <div class="outline-text-3" id="text-h-adb8bd20-7642-4eea-9fbe-d2450f447b90">
@@ -1395,7 +1390,6 @@ then there is an open covering \(\mathcal{E}\) of \(X\) refining
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-7dd3c949-0d0c-40cc-8d53-f751982f7c4e" class="outline-3">
 <h3 id="h-7dd3c949-0d0c-40cc-8d53-f751982f7c4e">&sect;40 The Nagata-Smirnov Metrization Theorem</h3>
 <div class="outline-text-3" id="text-h-7dd3c949-0d0c-40cc-8d53-f751982f7c4e">
@@ -1428,7 +1422,6 @@ finite".</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-79591044-eb0c-4dce-9d8b-4d321f2aa137" class="outline-3">
 <h3 id="h-79591044-eb0c-4dce-9d8b-4d321f2aa137">&sect;41 Paracompactness</h3>
 <div class="outline-text-3" id="text-h-79591044-eb0c-4dce-9d8b-4d321f2aa137">
@@ -1457,7 +1450,7 @@ Every open covering of \(X\) has a refinement that is:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-11-28 Tue 08:30.</p>
+<p class="postamble">Last Updated: Mon, 12 Feb 2024 08:03:07 -0800
 </div>
 </body>
 </html>

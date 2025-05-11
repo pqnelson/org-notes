@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>StringStream - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -189,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -223,7 +237,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-e4bbaadc-b46b-4d44-b5bb-a2177a7a5318" class="outline-2">
 <h2 id="h-e4bbaadc-b46b-4d44-b5bb-a2177a7a5318"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-e4bbaadc-b46b-4d44-b5bb-a2177a7a5318">
@@ -255,12 +268,12 @@ really test this on other implementations&#x2026;
 
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-comment-delimiter">(*</span>
-<span class="org-comment">Creates a string writer, which writes to the supplied string buffer.</span>
+<span class="org-comment">Creates a string writer, which writes to the supplied string b</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">uffer.</span></span>
 
-<span class="org-comment">@param: buffer is the underlying string reference which accumulates</span>
+<span class="org-comment">@param: buffer is the underlying string reference which accumu</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">lates</span></span>
 <span class="org-comment">        everything the writer writes.</span>
 
-<span class="org-comment">@see: https://smlfamily.github.io/Basis/prim-io.html#SIG:PRIM_IO.writer:TY</span>
+<span class="org-comment">@see: https://smlfamily.github.io/Basis/prim-io.html#SIG:PRIM_</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">IO.writer:TY</span></span>
 <span class="org-comment">@see: https://smlfamily.github.io/Basis/mono-array-slice.html</span>
 <span class="org-comment">@see: https://smlfamily.github.io/Basis/mono-array.html</span>
 <span class="org-comment-delimiter">*)</span>
@@ -278,7 +291,7 @@ really test this on other implementations&#x2026;
         <span class="org-keyword">fun</span> <span class="org-function-name">writeArrNB'</span> (arr : TextPrimIO.array_slice)
             = (buffer:=(!buffer)^(CharArraySlice.vector arr);
                SOME (CharArraySlice.length arr))
-        <span class="org-keyword">fun</span> <span class="org-function-name">closing</span> () = print (<span class="org-string">"Trying to close string stream?!?!?\n\n"</span>)
+        <span class="org-keyword">fun</span> <span class="org-function-name">closing</span> () = print (<span class="org-string">"Trying to close string stream</span><span class="org-string"><span class="org-highlight-beyond-fill-column">?!?!?\n\n"</span></span><span class="org-highlight-beyond-fill-column">)</span>
     <span class="org-keyword">in</span>
         TextPrimIO.WR{
             name = <span class="org-string">"&lt;string&gt;"</span>,
@@ -317,7 +330,7 @@ writer":
 <div class="org-src-container">
 <pre class="src src-sml"><span class="org-keyword">fun</span> stringStream(buffer : string ref) =
     <span class="org-keyword">let</span>
-        <span class="org-keyword">val</span> <span class="org-variable-name">writer</span> : TextIO.StreamIO.writer = stringWriter(buffer)
+        <span class="org-keyword">val</span> <span class="org-variable-name">writer</span> : TextIO.StreamIO.writer = stringWriter(buf<span class="org-highlight-beyond-fill-column">fer)</span>
     <span class="org-keyword">in</span>
         TextIO.StreamIO.mkOutstream(writer, IO.NO_BUF)
     <span class="org-keyword">end</span>;
@@ -343,7 +356,7 @@ ss_print(<span class="org-string">"foobar"</span>);
 
 print(<span class="org-string">"\n\n!b1 = "</span>^(!b1)^<span class="org-string">"\n\n"</span>);
     
-<span class="org-comment-delimiter">(* </span><span class="org-comment">then `!b1` evaluates to "foobar" </span><span class="org-comment-delimiter">*)</span>
+<span class="org-comment-delimiter">(* </span><span class="org-comment">then `!b1` evaluates to "foobar"</span><span class="org-comment-delimiter"> *)</span>
 </pre>
 </div>
 
@@ -356,7 +369,7 @@ to make the order correct).</p>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-03 Thu 16:24.</p>
+<p class="postamble">Last Updated: Thu, 3 Feb 2022 16:24:45 -0800
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>Packages - Lisp</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -188,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -232,12 +247,10 @@
 When writing code, it's natural to organize them by modules or
 packages. Common Lisp has packages. Packages are namespaces for symbols.
 </p>
-
 <div id="outline-container-h-80a2a256-dc93-4a29-8ec7-b361f6443607" class="outline-2">
 <h2 id="h-80a2a256-dc93-4a29-8ec7-b361f6443607"><span class="section-number-2">1.</span> Conventions</h2>
 <div class="outline-text-2" id="text-h-80a2a256-dc93-4a29-8ec7-b361f6443607">
 </div>
-
 <div id="outline-container-h-e5e5b16c-8daa-4b51-a15d-19a2abb15ccb" class="outline-3">
 <h3 id="h-e5e5b16c-8daa-4b51-a15d-19a2abb15ccb"><span class="section-number-3">1.1.</span> Use Uninterned Symbols</h3>
 <div class="outline-text-3" id="text-h-e5e5b16c-8daa-4b51-a15d-19a2abb15ccb">
@@ -249,7 +262,7 @@ packages. Common Lisp has packages. Packages are namespaces for symbols.
 <b>Rationale:</b> We do this because, otherwise, we would have the following:
 </p>
 
-<pre class="example" id="org7734aac">
+<pre class="example" id="org522f8fe">
 [1]&gt; *package*
 #&lt;PACKAGE COMMON-LISP-USER&gt;
 [2]&gt; (defpackage bar)
@@ -263,7 +276,7 @@ BAR ;
 But using uninterned symbols:
 </p>
 
-<pre class="example" id="org11e22e0">
+<pre class="example" id="org5aabfd1">
 ;; Uninterned symbols don't cause symbol pollution:
 [4]&gt; (defpackage #:foo)
 #&lt;PACKAGE FOO&gt;
@@ -278,7 +291,6 @@ SCREAMING CASE.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-56dccc70-81c9-4b7b-a46d-3ad9acc3c420" class="outline-3">
 <h3 id="h-56dccc70-81c9-4b7b-a46d-3ad9acc3c420"><span class="section-number-3">1.2.</span> One Package May Have Many Files</h3>
 <div class="outline-text-3" id="text-h-56dccc70-81c9-4b7b-a46d-3ad9acc3c420">
@@ -316,8 +328,6 @@ Examples of this:
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-bda360a0-5aa1-4883-bbea-22a1800320cd" class="outline-2">
 <h2 id="h-bda360a0-5aa1-4883-bbea-22a1800320cd"><span class="section-number-2">2.</span> References</h2>
 <div class="outline-text-2" id="text-h-bda360a0-5aa1-4883-bbea-22a1800320cd">
@@ -330,7 +340,7 @@ Examples of this:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-28 Thu 09:09.</p>
+<p class="postamble">Last Updated: Fri, 29 Apr 2022 09:50:03 -0700
 </div>
 </body>
 </html>

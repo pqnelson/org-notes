@@ -6,7 +6,7 @@
 <title>Compiling HOL Light</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
 </head>
@@ -223,7 +238,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-c4e6f09e-d81f-4265-a808-d19c8167a1ea" class="outline-2">
 <h2 id="h-c4e6f09e-d81f-4265-a808-d19c8167a1ea"><span class="section-number-2">1.</span> OPAM</h2>
 <div class="outline-text-2" id="text-h-c4e6f09e-d81f-4265-a808-d19c8167a1ea">
@@ -241,7 +255,7 @@ On a Raspberry Pi, simply install OCaml using <code>sudo apt install ocaml</code
 Then clone and build OPAM:
 </p>
 
-<pre class="example" id="org930dc52">
+<pre class="example" id="org8325595">
 alex@rpi:~/$ cd src
 alex@rpi:~/src/$ git clone https://github.com/ocaml/opam
 ...
@@ -256,7 +270,7 @@ alex@rpi:~/src/OPAM/$ sudo make install
 Before we finish, we need to also install bubblewrap&#x2026;because&#x2026;reasons&#x2026;
 </p>
 
-<pre class="example" id="org909e569">
+<pre class="example" id="orga1f6120">
 alex@rpi:~/src/OPAM/$ sudo apt install bubblewrap
 alex@rpi:~/src/OPAM/$ cd ~
 alex@rpi:~/$ opam init
@@ -316,7 +330,7 @@ Now we build the infrastructure necessary to play with HOL Light (this
 will take about an hour in the following state):
 </p>
 
-<pre class="example" id="org65e6d12">
+<pre class="example" id="orge3238a3">
 alex@raspberrypi:~$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Installing new switch packages &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -338,7 +352,6 @@ Processing 13/18: [ocaml-base-compiler: make world]
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-6467e267-dbcd-494e-b403-9446923a786e" class="outline-2">
 <h2 id="h-6467e267-dbcd-494e-b403-9446923a786e"><span class="section-number-2">2.</span> HOL Light</h2>
 <div class="outline-text-2" id="text-h-6467e267-dbcd-494e-b403-9446923a786e">
@@ -346,7 +359,7 @@ Processing 13/18: [ocaml-base-compiler: make world]
 Clone HOL Light from github:
 </p>
 
-<pre class="example" id="orge686345">
+<pre class="example" id="orgde8330a">
 alex@box:~/src/$ git clone https://github.com/jrh13/hol-light
 Cloning into 'hol-light'...
 remote: Enumerating objects: 8310, done.
@@ -370,7 +383,7 @@ The trippy thing is we need to use OPAM to use the "correct" version of
 OCaml (c.f., <a href="https://github.com/jrh13/hol-light/issues/64#issuecomment-894131933">Github Issue</a>), the following bash commands should work:
 </p>
 
-<pre class="example" id="org5d62a6c">
+<pre class="example" id="orgd3cd1a4">
 opam switch create 4.05.0
 eval $(opam env)
 opam pin add camlp5 7.08
@@ -390,7 +403,7 @@ on <code>Processing 7/12: [ocaml-base-compiler ...]</code>, but that's because
 it's building the OCaml compiler from scratch; be patient!):
 </p>
 
-<pre class="example" id="org85a0f4b">
+<pre class="example" id="org27f7986">
 alex@box:~/src/hol-light/$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Gathering sources &gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -444,7 +457,7 @@ Now, the next step is to run <code>make</code>.
 <b>It is crucial to run <code>make</code> before loading hol into an OCaml repl.</b>
 </p>
 
-<pre class="example" id="org58230fd">
+<pre class="example" id="orgfb6fe05">
 alex@box:~/src/hol-light/$ make
 ...
 </pre>
@@ -455,7 +468,7 @@ include camlp5, and then tell it to <code>#use "hol.ml";;</code> (yes, both
 semicolons are necessary).
 </p>
 
-<pre class="example" id="org6e8562e">
+<pre class="example" id="org0b00b8a">
 alex@box:~/src/hol-light/$ ocaml -I `camlp5 -where` camlp5o.cma
 
         OCaml version 4.05.0
@@ -476,7 +489,7 @@ error, which is just confusing and cryptic.)
 Now we can simply <code>#use "hol.ml";;</code> to get:
 </p>
 
-<pre class="example" id="org8038609">
+<pre class="example" id="org783b5f8">
 # #use "hol.ml";;
 ...
 ...
@@ -505,7 +518,7 @@ used just by starting HOL Light in this manner.</p>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-01-20 Thu 12:01.</p>
+<p class="postamble">Last Updated: Thu, 20 Jan 2022 15:06:50 -0800
 </div>
 </body>
 </html>

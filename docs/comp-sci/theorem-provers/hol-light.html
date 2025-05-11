@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>HOL Light</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -189,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -239,7 +253,6 @@ for fun. HOL Light has an implementation in a <a href="https://github.com/jrh13/
 lines long (excluding 128 blank lines and 148 comment lines, as of git
 commit <code>970121c</code> on Sep 12, 2016).
 </p>
-
 <div id="outline-container-h-fc6974ee-5f2a-4ceb-8168-bf5d4586436c" class="outline-2">
 <h2 id="h-fc6974ee-5f2a-4ceb-8168-bf5d4586436c"><span class="section-number-2">1.</span> Get Started</h2>
 <div class="outline-text-2" id="text-h-fc6974ee-5f2a-4ceb-8168-bf5d4586436c">
@@ -249,7 +262,7 @@ successfully. Start up OCaml, then:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ocaml"># #use "hol.ml";;
+<pre class="src src-ocaml"># #use <span class="org-string">"hol.ml"</span><span class="org-tuareg-font-double-semicolon">;;</span>
 </pre>
 </div>
 
@@ -259,7 +272,7 @@ to use <code>miz3</code> mode, you can then run:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ocaml"># #use "miz3/miz3.ml";;
+<pre class="src src-ocaml"># #use <span class="org-string">"miz3/miz3.ml"</span><span class="org-tuareg-font-double-semicolon">;;</span>
 </pre>
 </div>
 
@@ -268,7 +281,6 @@ There are also some <a href="https://github.com/gilith/hol-light-emacs">emacs ma
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-b8966ca2-18ec-43d5-8343-19fe27ae5f15" class="outline-2">
 <h2 id="h-b8966ca2-18ec-43d5-8343-19fe27ae5f15"><span class="section-number-2">2.</span> Obtaining and Compiling</h2>
 <div class="outline-text-2" id="text-h-b8966ca2-18ec-43d5-8343-19fe27ae5f15">
@@ -277,7 +289,6 @@ There are also some <a href="https://github.com/gilith/hol-light-emacs">emacs ma
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-473abd86-2af4-4f98-86cc-f3c2a4815fdf" class="outline-2">
 <h2 id="h-473abd86-2af4-4f98-86cc-f3c2a4815fdf"><span class="section-number-2">3.</span> Some Examples</h2>
 <div class="outline-text-2" id="text-h-473abd86-2af4-4f98-86cc-f3c2a4815fdf">
@@ -286,7 +297,6 @@ There are also some <a href="https://github.com/gilith/hol-light-emacs">emacs ma
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-fccbb336-8af3-4f4a-8fcc-b08a2ac071ce" class="outline-2">
 <h2 id="h-fccbb336-8af3-4f4a-8fcc-b08a2ac071ce"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-fccbb336-8af3-4f4a-8fcc-b08a2ac071ce">
@@ -297,7 +307,6 @@ There are also some <a href="https://github.com/gilith/hol-light-emacs">emacs ma
 <a href="http://blog.felixbreuer.net/2012/06/11/hol.html">Formal proof - first steps with HOL Light</a>; blog post dated June 11, 2012.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-4253cf49-5f6a-42f8-83fb-fd8dfbc7c005" class="outline-3">
 <h3 id="h-4253cf49-5f6a-42f8-83fb-fd8dfbc7c005"><span class="section-number-3">4.1.</span> Neat Applications of HOL Light</h3>
 <div class="outline-text-3" id="text-h-4253cf49-5f6a-42f8-83fb-fd8dfbc7c005">
@@ -320,7 +329,6 @@ There are also some <a href="https://github.com/gilith/hol-light-emacs">emacs ma
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-5e7ea3c6-32ef-48d7-b64f-512e41f8b520" class="outline-3">
 <h3 id="h-5e7ea3c6-32ef-48d7-b64f-512e41f8b520"><span class="section-number-3">4.2.</span> Papers about implementation details</h3>
 <div class="outline-text-3" id="text-h-5e7ea3c6-32ef-48d7-b64f-512e41f8b520">
@@ -334,7 +342,6 @@ PhD Thesis, Cambridge 2017, <a href="http://www.sigplan.org/Awards/Dissertation/
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-2cfc3dcf-a386-420a-bcc5-c063e36fe47f" class="outline-3">
 <h3 id="h-2cfc3dcf-a386-420a-bcc5-c063e36fe47f"><span class="section-number-3">4.3.</span> Other related references</h3>
 <div class="outline-text-3" id="text-h-2cfc3dcf-a386-420a-bcc5-c063e36fe47f">
@@ -346,7 +353,6 @@ PhD Thesis, Cambridge 2017, <a href="http://www.sigplan.org/Awards/Dissertation/
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-915c5f4a-2917-4ce0-9be5-29b90b01affd" class="outline-3">
 <h3 id="h-915c5f4a-2917-4ce0-9be5-29b90b01affd"><span class="section-number-3">4.4.</span> HOL in general</h3>
 <div class="outline-text-3" id="text-h-915c5f4a-2917-4ce0-9be5-29b90b01affd">
@@ -361,7 +367,7 @@ doi:<a href="https://doi.org/10.1016/j.jal.2007.11.001">10.1016/j.jal.2007.11.00
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-23 Wed 13:07.</p>
+<p class="postamble">Last Updated: Thu, 24 Feb 2022 09:02:02 -0800
 </div>
 </body>
 </html>

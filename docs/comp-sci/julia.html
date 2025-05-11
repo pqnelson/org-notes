@@ -6,7 +6,7 @@
 <title>Julia</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 </head>
@@ -225,7 +240,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-acf36da9-8ddd-40ce-9c0b-61a5640e243a" class="outline-2">
 <h2 id="h-acf36da9-8ddd-40ce-9c0b-61a5640e243a"><span class="section-number-2">1.</span> Getting Started with Emacs</h2>
 <div class="outline-text-2" id="text-h-acf36da9-8ddd-40ce-9c0b-61a5640e243a">
@@ -234,7 +248,7 @@ Download Julia and put it somewhere. You don't install a compiler or
 interpreter the same way you do for, say, Python. It's executed locally.
 </p>
 
-<pre class="example" id="org71f1037">
+<pre class="example" id="orgb86a16b">
 ~$ mkdir -p src/julia/
 ~$ cd src/julia/
 ~/src/julia/$ wget https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.1-linux-x86_64.tar.gz
@@ -263,13 +277,13 @@ on the command line, then add to your init file:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span class="org-keyword">use-package</span> <span class="org-constant">vterm</span>
+<pre class="src src-elisp">(<span class="org-keyword">use-package</span> vterm
   <span class="org-builtin">:ensure</span> t)
 
-(<span class="org-keyword">use-package</span> <span class="org-constant">julia-mode</span>
+(<span class="org-keyword">use-package</span> julia-mode
   <span class="org-builtin">:ensure</span> t)
 
-(<span class="org-keyword">use-package</span> <span class="org-constant">julia-snail</span>
+(<span class="org-keyword">use-package</span> julia-snail
   <span class="org-builtin">:ensure</span> t
   <span class="org-builtin">:hook</span> (julia-mode . julia-snail-mode))
 
@@ -283,7 +297,6 @@ To run a REPL, you can just use <code>C-c C-z</code> in Emacs.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-1783780d-fd6d-4857-8d0e-2efd05c5f8f0" class="outline-2">
 <h2 id="h-1783780d-fd6d-4857-8d0e-2efd05c5f8f0"><span class="section-number-2">2.</span> Starting a project</h2>
 <div class="outline-text-2" id="text-h-1783780d-fd6d-4857-8d0e-2efd05c5f8f0">
@@ -302,7 +315,7 @@ pkg &gt; generate MyProject
 This will create the following files and subdirectories:
 </p>
 
-<pre class="example" id="org9c0ddfd">
+<pre class="example" id="orga04ce71">
 MyProject/
 ├── Project.toml
 └── src
@@ -340,7 +353,6 @@ Now we can start working on our project.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-b7360b0d-4c81-46e6-b0c8-f2bf72eba12a" class="outline-2">
 <h2 id="h-b7360b0d-4c81-46e6-b0c8-f2bf72eba12a"><span class="section-number-2">3.</span> Docstrings</h2>
 <div class="outline-text-2" id="text-h-b7360b0d-4c81-46e6-b0c8-f2bf72eba12a">
@@ -356,7 +368,6 @@ on various aspects of the thing being documented.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-d96858ea-30cd-4dad-888a-4863446ec7d6" class="outline-2">
 <h2 id="h-d96858ea-30cd-4dad-888a-4863446ec7d6"><span class="section-number-2">4.</span> Interesting Stuff</h2>
 <div class="outline-text-2" id="text-h-d96858ea-30cd-4dad-888a-4863446ec7d6">
@@ -384,7 +395,7 @@ two libraries worth examining further:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2024-03-21 Thu 10:37.</p>
+<p class="postamble">Last Updated: Thu, 21 Mar 2024 13:23:33 -0700
 </div>
 </body>
 </html>

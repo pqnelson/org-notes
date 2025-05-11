@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:49 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Isabelle</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -189,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -220,16 +234,17 @@
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#h-339b8860-4143-4c7a-b833-ceffc14b673a">1. Introduction</a></li>
-<li><a href="#h-b085c5b8-be9c-4578-b7b6-828c11924bf6">2. References</a>
+<li><a href="#h-5fd08e66-0648-4579-bdcd-5331dfabc3a8">2. Earley Parsing</a></li>
+<li><a href="#h-e4bc5319-45ec-473b-aa2c-c06ca79dcc7d">3. Symbols and Strings</a></li>
+<li><a href="#h-b085c5b8-be9c-4578-b7b6-828c11924bf6">4. References</a>
 <ul>
-<li><a href="#h-afac14c8-4dde-4cc2-b55f-a266832367a7">2.1. Early Papers</a></li>
-<li><a href="#h-a0bc1fc1-f37d-454e-a07c-f843bac1cabb">2.2. Set Theory in Isabelle</a></li>
+<li><a href="#h-afac14c8-4dde-4cc2-b55f-a266832367a7">4.1. Early Papers</a></li>
+<li><a href="#h-a0bc1fc1-f37d-454e-a07c-f843bac1cabb">4.2. Set Theory in Isabelle</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-339b8860-4143-4c7a-b833-ceffc14b673a" class="outline-2">
 <h2 id="h-339b8860-4143-4c7a-b833-ceffc14b673a"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-339b8860-4143-4c7a-b833-ceffc14b673a">
@@ -243,14 +258,75 @@ things like <code>Isabelle/X</code> for various choices of <code>X</code>.
 </p>
 </div>
 </div>
+<div id="outline-container-h-5fd08e66-0648-4579-bdcd-5331dfabc3a8" class="outline-2">
+<h2 id="h-5fd08e66-0648-4579-bdcd-5331dfabc3a8"><span class="section-number-2">2.</span> Earley Parsing</h2>
+<div class="outline-text-2" id="text-h-5fd08e66-0648-4579-bdcd-5331dfabc3a8">
+<p>
+The "object logic" is parsed using an Earley parser, as noted in the
+section "Parsing and unparsing" of <a href="https://www.cl.cam.ac.uk/research/hvg/Isabelle/dist/library/Doc/Implementation/Syntax.html">Documentation about Syntax</a>
+(Chapter 3 of the <a href="https://www.cl.cam.ac.uk/research/hvg/Isabelle/dist/library/Doc/Implementation/implementation.pdf">PDF</a> version of the documentation):
+</p>
 
+<blockquote>
+<p>
+Actual parsing is based on traditional lexical analysis and Earley parsing
+for arbitrary context-free grammars.
+</p>
+</blockquote>
+
+<p>
+I always wondered if the rumours were true about Isabelle using an
+Earley parser, now we know.
+</p>
+</div>
+</div>
+<div id="outline-container-h-e4bc5319-45ec-473b-aa2c-c06ca79dcc7d" class="outline-2">
+<h2 id="h-e4bc5319-45ec-473b-aa2c-c06ca79dcc7d"><span class="section-number-2">3.</span> Symbols and Strings</h2>
+<div class="outline-text-2" id="text-h-e4bc5319-45ec-473b-aa2c-c06ca79dcc7d">
+<p>
+The basic unit of text is a "symbol" (roughly analogous to a "character"
+in most other languages). A symbol is one of the following:
+</p>
+
+<ol class="org-ol">
+<li>An ASCII character</li>
+<li>A codepoint according to UTF-8</li>
+<li>A regular symbol <code>\&lt;ident&gt;</code> for things like Greek letters in a
+TeX-like format</li>
+<li>A control symbol <code>\&lt;^ident&gt;</code> for things like bold, emphasis, etc.</li>
+</ol>
+
+<p>
+This was introduced in Isabelle98 according to Wenzel's "Isabelle as
+Document-oriented Proof Assistant" (2011).
+</p>
+
+<p>
+The 1998 version can still be accessed on the
+<a href="https://isabelle.in.tum.de/download_past.html">Older Isabelle Releases</a> page.
+</p>
+
+<p>
+See also:
+</p>
+
+<ul class="org-ul">
+<li>Yves Bertot and Laurent Théry,<br>
+"A generic approach to building user interfaces for theorem provers."<br>
+<i>Journal of Symbolic Computation</i> <b>25</b>, no. 2 (1998) 161&#x2013;194.</li>
+</ul>
+
+<p>
+Asynchronous Proof Processing with Isabelle-Scala and Isabelle-jEdit.
+</p>
+</div>
+</div>
 <div id="outline-container-h-b085c5b8-be9c-4578-b7b6-828c11924bf6" class="outline-2">
-<h2 id="h-b085c5b8-be9c-4578-b7b6-828c11924bf6"><span class="section-number-2">2.</span> References</h2>
+<h2 id="h-b085c5b8-be9c-4578-b7b6-828c11924bf6"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-b085c5b8-be9c-4578-b7b6-828c11924bf6">
 </div>
-
 <div id="outline-container-h-afac14c8-4dde-4cc2-b55f-a266832367a7" class="outline-3">
-<h3 id="h-afac14c8-4dde-4cc2-b55f-a266832367a7"><span class="section-number-3">2.1.</span> Early Papers</h3>
+<h3 id="h-afac14c8-4dde-4cc2-b55f-a266832367a7"><span class="section-number-3">4.1.</span> Early Papers</h3>
 <div class="outline-text-3" id="text-h-afac14c8-4dde-4cc2-b55f-a266832367a7">
 <ul class="org-ul">
 <li>Lawrence Paulson,<br>
@@ -268,9 +344,8 @@ things like <code>Isabelle/X</code> for various choices of <code>X</code>.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-a0bc1fc1-f37d-454e-a07c-f843bac1cabb" class="outline-3">
-<h3 id="h-a0bc1fc1-f37d-454e-a07c-f843bac1cabb"><span class="section-number-3">2.2.</span> Set Theory in Isabelle</h3>
+<h3 id="h-a0bc1fc1-f37d-454e-a07c-f843bac1cabb"><span class="section-number-3">4.2.</span> Set Theory in Isabelle</h3>
 <div class="outline-text-3" id="text-h-a0bc1fc1-f37d-454e-a07c-f843bac1cabb">
 <ul class="org-ul">
 <li>Florian Rabe and Mihnea Iancu,<br>
@@ -288,7 +363,7 @@ things like <code>Isabelle/X</code> for various choices of <code>X</code>.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-22 Tue 08:31.</p>
+<p class="postamble">Last Updated: Sat, 26 Oct 2024 13:34:37 -0700
 </div>
 </body>
 </html>

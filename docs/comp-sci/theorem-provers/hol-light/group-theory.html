@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-11 Mon 08:48 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Group Theory - HOL Light</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -189,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -205,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -249,7 +277,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-4605aa94-8886-4ffc-80c0-209e4fa966f4" class="outline-2">
 <h2 id="h-4605aa94-8886-4ffc-80c0-209e4fa966f4"><span class="section-number-2">1.</span> Implementation</h2>
 <div class="outline-text-2" id="text-h-4605aa94-8886-4ffc-80c0-209e4fa966f4">
@@ -258,21 +285,21 @@ I'm just tracing out the implementation details. We find:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ocaml">let group_tybij =
-  let eth = prove
-   (`?s (z:A) n a.
-          z IN s /\
-          (!x. x IN s ==&gt; n x IN s) /\
-          (!x y. x IN s /\ y IN s ==&gt; a x y IN s) /\
-          (!x y z. x IN s /\ y IN s /\ z IN s
+<pre class="src src-ocaml"><span class="org-tuareg-font-lock-governing">let</span> <span class="org-variable-name">group_tybij</span> =
+  <span class="org-tuareg-font-lock-governing">let</span> <span class="org-variable-name">eth</span> = prove
+   (`?s (z:<span class="org-type">A</span>) n a.
+          z <span class="org-tuareg-font-lock-constructor">IN</span> s /\
+          (<span class="org-tuareg-font-lock-operator">!</span>x. x <span class="org-tuareg-font-lock-constructor">IN</span> s ==&gt; n x <span class="org-tuareg-font-lock-constructor">IN</span> s) /\
+          (<span class="org-tuareg-font-lock-operator">!</span>x y. x <span class="org-tuareg-font-lock-constructor">IN</span> s /\ y <span class="org-tuareg-font-lock-constructor">IN</span> s ==&gt; a x y <span class="org-tuareg-font-lock-constructor">IN</span> s) /\
+          (<span class="org-tuareg-font-lock-operator">!</span>x y z. x <span class="org-tuareg-font-lock-constructor">IN</span> s /\ y <span class="org-tuareg-font-lock-constructor">IN</span> s /\ z <span class="org-tuareg-font-lock-constructor">IN</span> s
                    ==&gt; a x (a y z) = a (a x y) z) /\
-          (!x. x IN s ==&gt; a z x = x /\ a x z = x) /\
-          (!x. x IN s ==&gt; a (n x) x = z /\ a x (n x) = z)`,
-    MAP_EVERY EXISTS_TAC
-     [`{ARB:A}`; `ARB:A`; `(\x. ARB):A-&gt;A`; `(\x y. ARB):A-&gt;A-&gt;A`] THEN
-    REWRITE_TAC[IN_SING] THEN MESON_TAC[]) in
-  new_type_definition "group" ("group","group_operations")
-   (GEN_REWRITE_RULE DEPTH_CONV [EXISTS_UNPAIR_THM] eth);;
+          (<span class="org-tuareg-font-lock-operator">!</span>x. x <span class="org-tuareg-font-lock-constructor">IN</span> s ==&gt; a z x = x /\ a x z = x) /\
+          (<span class="org-tuareg-font-lock-operator">!</span>x. x <span class="org-tuareg-font-lock-constructor">IN</span> s ==&gt; a (n x) x = z /\ a x (n x) = z)`,
+    <span class="org-tuareg-font-lock-constructor">MAP_EVERY</span> <span class="org-tuareg-font-lock-constructor">EXISTS_TAC</span>
+     [`{<span class="org-tuareg-font-lock-constructor">ARB</span>:<span class="org-tuareg-font-lock-constructor">A</span>}`; <span class="org-tuareg-font-lock-constructor">`ARB</span>:<span class="org-tuareg-font-lock-constructor">A</span>`; `(\x. <span class="org-tuareg-font-lock-constructor">ARB</span>):<span class="org-tuareg-font-lock-constructor">A</span>-&gt;<span class="org-tuareg-font-lock-constructor">A</span>`; `(\x y. <span class="org-tuareg-font-lock-constructor">ARB</span>):<span class="org-type">A-&gt;A-&gt;A`] THEN</span>
+<span class="org-type">    REWRITE_TAC[IN_SING] THEN MESON_TAC[]</span>) <span class="org-tuareg-font-lock-governing">in</span>
+  new_type_definition <span class="org-string">"group"</span> (<span class="org-string">"group"</span>,<span class="org-string">"group_operations"</span>)
+   (<span class="org-tuareg-font-lock-constructor">GEN_REWRITE_RULE</span> <span class="org-tuareg-font-lock-constructor">DEPTH_CONV</span> [<span class="org-tuareg-font-lock-constructor">EXISTS_UNPAIR_THM</span>] eth)<span class="org-tuareg-font-double-semicolon">;;</span>
 </pre>
 </div>
 
@@ -308,8 +335,8 @@ Also, the <a href="https://github.com/jrh13/hol-light/blob/18cef3b377c1f094fd33e
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ocaml">let IN = new_definition
-  `!P:A-&gt;bool. !x. x IN P &lt;=&gt; P x`;;
+<pre class="src src-ocaml"><span class="org-tuareg-font-lock-governing">let</span> <span class="org-tuareg-font-lock-constructor">IN</span> = new_definition
+  `<span class="org-tuareg-font-lock-operator">!</span><span class="org-tuareg-font-lock-constructor">P</span>:<span class="org-tuareg-font-lock-constructor">A</span>-&gt;bool. <span class="org-tuareg-font-lock-operator">!</span>x. x <span class="org-tuareg-font-lock-constructor">IN</span> <span class="org-tuareg-font-lock-constructor">P</span> &lt;=&gt; <span class="org-tuareg-font-lock-constructor">P</span> x`<span class="org-tuareg-font-double-semicolon">;;</span>
 </pre>
 </div>
 
@@ -318,7 +345,6 @@ That is to say, a set is just a predicate, so membership <code>IN</code> a set
 amounts to satisfying the underlying predicate.
 </p>
 </div>
-
 <div id="outline-container-h-42727c50-0e0b-4238-a6e2-6fc35013647a" class="outline-3">
 <h3 id="h-42727c50-0e0b-4238-a6e2-6fc35013647a"><span class="section-number-3">1.1.</span> Where is <code>new_type_definition</code> defined?</h3>
 <div class="outline-text-3" id="text-h-42727c50-0e0b-4238-a6e2-6fc35013647a">
@@ -327,21 +353,21 @@ In <a href="https://github.com/jrh13/hol-light/blob/d125b0ae73e546a63ed458a7891f
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ocaml">let the_type_definitions = ref ([]:((string*string*string)*(thm*thm))list);;
+<pre class="src src-ocaml"><span class="org-tuareg-font-lock-governing">let</span> <span class="org-variable-name">the_type_definitions</span> = <span class="org-builtin">ref</span> (<span class="org-tuareg-font-lock-constructor">[]</span>:<span class="org-type">((string*string*string)*(thm*thm))list</span>)<span class="org-tuareg-font-double-semicolon">;;</span>
 
-let new_type_definition tyname (absname,repname) th =
-  try let th',tth' = assoc (tyname,absname,repname) (!the_type_definitions) in
-      if concl th' &lt;&gt; concl th then failwith "" else
-      (warn true "Benign redefinition of type"; tth')
-  with Failure _ -&gt;
-    let th0 =
-     CONV_RULE (RATOR_CONV (REWR_CONV EXISTS_THM) THENC BETA_CONV) th in
-    let th1,th2 = new_basic_type_definition tyname (absname,repname) th0 in
-    let tth = CONJ (GEN_ALL th1)
-                   (GEN_ALL (CONV_RULE(LAND_CONV (TRY_CONV BETA_CONV)) th2)) in
+<span class="org-tuareg-font-lock-governing">let</span> <span class="org-function-name">new_type_definition</span> <span class="org-variable-name">tyname</span> (<span class="org-variable-name">absname</span>,<span class="org-variable-name">repname</span>) <span class="org-variable-name">th</span> =
+  <span class="org-keyword">try</span> <span class="org-tuareg-font-lock-governing">let</span> <span class="org-variable-name">th'</span>,<span class="org-variable-name">tth'</span> = assoc (tyname,absname,repname) (<span class="org-tuareg-font-lock-operator">!</span>the_type_definitions) <span class="org-tuareg-font-lock-governing">in</span>
+      <span class="org-keyword">if</span> concl th' &lt;&gt; concl th <span class="org-keyword">then</span> <span class="org-builtin">failwith</span> <span class="org-string">""</span> <span class="org-keyword">else</span>
+      (warn <span class="org-constant">true</span> <span class="org-string">"Benign redefinition of type"</span>; tth')
+  <span class="org-keyword">with</span> <span class="org-builtin">Failure</span> _ -&gt;
+    <span class="org-tuareg-font-lock-governing">let</span> <span class="org-variable-name">th0</span> =
+     <span class="org-tuareg-font-lock-constructor">CONV_RULE</span> (<span class="org-tuareg-font-lock-constructor">RATOR_CONV</span> (<span class="org-tuareg-font-lock-constructor">REWR_CONV</span> <span class="org-tuareg-font-lock-constructor">EXISTS_THM</span>) <span class="org-tuareg-font-lock-constructor">THENC</span> <span class="org-tuareg-font-lock-constructor">BETA_CONV</span>) th <span class="org-tuareg-font-lock-governing">in</span>
+    <span class="org-tuareg-font-lock-governing">let</span> <span class="org-variable-name">th1</span>,<span class="org-variable-name">th2</span> = new_basic_type_definition tyname (absname,repname) th0 <span class="org-tuareg-font-lock-governing">in</span>
+    <span class="org-tuareg-font-lock-governing">let</span> <span class="org-variable-name">tth</span> = <span class="org-tuareg-font-lock-constructor">CONJ</span> (<span class="org-tuareg-font-lock-constructor">GEN_ALL</span> th1)
+                   (<span class="org-tuareg-font-lock-constructor">GEN_ALL</span> (<span class="org-tuareg-font-lock-constructor">CONV_RULE</span>(<span class="org-tuareg-font-lock-constructor">LAND_CONV</span> (<span class="org-tuareg-font-lock-constructor">TRY_CONV</span> <span class="org-tuareg-font-lock-constructor">BETA_CONV</span>)) th2)) <span class="org-tuareg-font-lock-governing">in</span>
     the_type_definitions := ((tyname,absname,repname),(th,tth))::
-                            (!the_type_definitions);
-    tth;;
+                            (<span class="org-tuareg-font-lock-operator">!</span>the_type_definitions);
+    tth<span class="org-tuareg-font-double-semicolon">;;</span>
 </pre>
 </div>
 
@@ -351,7 +377,6 @@ See also: Rob Arthan's <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC610
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-473abd86-2af4-4f98-86cc-f3c2a4815fdf" class="outline-2">
 <h2 id="h-473abd86-2af4-4f98-86cc-f3c2a4815fdf"><span class="section-number-2">2.</span> References</h2>
 <div class="outline-text-2" id="text-h-473abd86-2af4-4f98-86cc-f3c2a4815fdf">
@@ -362,7 +387,7 @@ See also: Rob Arthan's <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC610
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-02-04 Fri 09:11.</p>
+<p class="postamble">Last Updated: Thu, 3 Feb 2022 18:34:56 -0800
 </div>
 </body>
 </html>

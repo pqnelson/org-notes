@@ -6,7 +6,7 @@
 <title>General Circulation Model</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -188,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -245,7 +274,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-6aece749-c320-4df5-aed5-1896af050400" class="outline-2">
 <h2 id="h-6aece749-c320-4df5-aed5-1896af050400"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-6aece749-c320-4df5-aed5-1896af050400">
@@ -265,7 +293,7 @@ Holton describes the negligibility of viscosity in his book
 defining quality of the atmosphere, anyways.
 </p>
 
-<div class="danger" id="org27da6f3">
+<div class="danger" id="org27db3ff">
 <p>
 Most general circulation models work in spherical coordinates, so extra
 care must be taken. For example, the vector Laplacian is defined by the
@@ -275,7 +303,7 @@ and not just the sum of squares of partial derivatives.
 
 </div>
 
-<div class="remark" id="org8244f0c">
+<div class="remark" id="orgd62f54d">
 <p>
 The notation for <a href="https://en.wikipedia.org/wiki/Spherical_coordinate_system">spherical coordinates</a> in Earth Sciences appears to be
 &#x2014; <b>when expressed in radians!</b> &#x2014;
@@ -288,7 +316,7 @@ fat" rather than a perfect sphere, but it's a good approximation.
 
 </div>
 
-<div class="proposition" id="orgf06e0ce">
+<div class="proposition" id="org959fc92">
 <p>
 We change coordinates to spherical coordinates, taking \(\lambda\) to
 describe the longitude (Eastwards angle), \(\phi\) the latitude (angular
@@ -306,7 +334,7 @@ material derivative be
 
 </div>
 
-<div class="theorem" id="org5d9ae11">
+<div class="theorem" id="orgd7fbfa2">
 <p>
 Mass conservation in spherical coordinates is
 </p>
@@ -326,7 +354,7 @@ outward \(w\).
 
 </div>
 
-<div class="theorem" id="org64a08ec">
+<div class="theorem" id="org125739f">
 <p>
 Momentum conservation in a rotating frame using spherical coordinates
 are (neglecting the viscosity term)
@@ -358,7 +386,7 @@ rotation is approximately
 
 </div>
 
-<div class="remark" id="org2461b7f">
+<div class="remark" id="orgf0f4893">
 <p>
 The "full blown" GCM equations are first-order quasilinear partial
 differential equations. They are under-determined, since we have now 4
@@ -369,7 +397,7 @@ have a unique solution.
 
 </div>
 
-<div class="puzzle" id="org7a84447">
+<div class="puzzle" id="org7d951f1">
 <p>
 (1) What extra equation can we add to this system?
 </p>
@@ -400,7 +428,6 @@ the Earth's radius and \(z_{\text{max}}\) is the maximum altitude (the
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-82a5d119-db84-4d64-8282-ff5c57d5e446" class="outline-2">
 <h2 id="h-82a5d119-db84-4d64-8282-ff5c57d5e446"><span class="section-number-2">2.</span> Primitive Equations</h2>
 <div class="outline-text-2" id="text-h-82a5d119-db84-4d64-8282-ff5c57d5e446">
@@ -422,7 +449,7 @@ horizontal equations of motion, as well as terms \(uw/r\) and \(vw/r\)
 since they are negligibly small.</li>
 </ol>
 
-<div class="theorem" id="org5bf1550">
+<div class="theorem" id="org714f506">
 <p>
 Taken altogether, the Navier-Stokes equations &#x2014; with \(u\) being the
 atmospheric fluid's velocity North-wards, \(v\) is the East-wards
@@ -454,7 +481,7 @@ In this approximation, the material derivative is
 
 </div>
 
-<div class="remark" id="orgf4b5f97">
+<div class="remark" id="org25294dd">
 <p>
 We have 3 first-order partial differential equations in 5 unknowns (the
 3 components of the atmospheric fluid velocity, the pressure, and the
@@ -474,7 +501,7 @@ unknown scalar function which we need to fix by means of another equation).
 
 </div>
 
-<div class="puzzle" id="org79f7b92">
+<div class="puzzle" id="orgd176bf0">
 <p>
 Is there an exact solution to the primitive equations? It seems like, if
 we work in the Lagrange description, there should be a unique solution
@@ -483,7 +510,7 @@ we could find fairly easily?
 
 </div>
 
-<div class="theorem" id="orgcb147fe">
+<div class="theorem" id="orgae7417d">
 <p>
 The mass conservation equation for a shallow atmosphere becomes
 </p>
@@ -511,7 +538,7 @@ or equivalently
 
 </div>
 
-<div class="puzzle" id="org06e7ad3">
+<div class="puzzle" id="org949b321">
 <p>
 What is the rigorous "limiting process" relating the solutions of the
 full GCM equations to the solutions to the primitive equations? I sense
@@ -522,7 +549,6 @@ there is some difficult discontinuity here, but it is not at all
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-3bd2952b-be5e-499e-abfe-d3a46a41e9b7" class="outline-2">
 <h2 id="h-3bd2952b-be5e-499e-abfe-d3a46a41e9b7"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-3bd2952b-be5e-499e-abfe-d3a46a41e9b7">
@@ -538,7 +564,7 @@ Cambridge University Press, 2 ed., 2017.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-12 Tue 07:36.</p>
+<p class="postamble">Last Updated: Tue, 12 Apr 2022 08:43:21 -0700
 </div>
 </body>
 </html>

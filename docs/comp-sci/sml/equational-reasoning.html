@@ -6,7 +6,7 @@
 <title>Equational Reasoning in Standard ML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -266,7 +295,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-b5b06cfd-93e5-4383-8b89-f4f872d9ee67" class="outline-2">
 <h2 id="h-b5b06cfd-93e5-4383-8b89-f4f872d9ee67"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-b5b06cfd-93e5-4383-8b89-f4f872d9ee67">
@@ -277,7 +305,7 @@ resembles Dijkstra's <a href="https://en.wikipedia.org/wiki/Structured_derivatio
 languages, we can use equational reasoning for the entire program.
 </p>
 
-<div class="remark" id="org9e36d6c">
+<div class="remark" id="org34deff4">
 <p>
 The critical property enabling us to reason about functional programs is
 <b>referential transparency.</b> The only two features of Standard ML which
@@ -298,7 +326,6 @@ proof.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-eb7b240e-e63c-4035-89a9-2c55052df004" class="outline-2">
 <h2 id="h-eb7b240e-e63c-4035-89a9-2c55052df004"><span class="section-number-2">2.</span> Definitions</h2>
 <div class="outline-text-2" id="text-h-eb7b240e-e63c-4035-89a9-2c55052df004">
@@ -383,7 +410,6 @@ i.e., \(e\) is valuable and \(e\Longrightarrow v\)</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-57e4c16f-fd17-4b6f-ab48-8527cf6a3ece" class="outline-2">
 <h2 id="h-57e4c16f-fd17-4b6f-ab48-8527cf6a3ece"><span class="section-number-2">3.</span> Provisional Definition of Extensional Equivalence</h2>
 <div class="outline-text-2" id="text-h-57e4c16f-fd17-4b6f-ab48-8527cf6a3ece">
@@ -393,7 +419,6 @@ equivalence. Really, there is an abstract definition, and these several
 cases are theorems&#x2026;but the abstract definition is too abstract.
 </p>
 </div>
-
 <div id="outline-container-h-b1cbf2e8-1917-4839-b783-103116c2fa2b" class="outline-3">
 <h3 id="h-b1cbf2e8-1917-4839-b783-103116c2fa2b"><span class="section-number-3">3.1.</span> For "base" types</h3>
 <div class="outline-text-3" id="text-h-b1cbf2e8-1917-4839-b783-103116c2fa2b">
@@ -411,7 +436,7 @@ following is true:
 <li>Both loop forever.</li>
 </ol>
 
-<div class="remark" id="orgf36ab10">
+<div class="remark" id="orgc31cd66">
 <p>
 We can see that two values of the same base type are extensionally
 equivalent iff they are identical (modulo silly encoding issues, like
@@ -427,7 +452,6 @@ equivalence carries over component-wise.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-501c753f-588d-4a7a-9436-33afc343fb04" class="outline-3">
 <h3 id="h-501c753f-588d-4a7a-9436-33afc343fb04"><span class="section-number-3">3.2.</span> For Function Values</h3>
 <div class="outline-text-3" id="text-h-501c753f-588d-4a7a-9436-33afc343fb04">
@@ -437,7 +461,7 @@ type are extensionally equivalent whenever <code>f(v) == g(w)</code> for all
 extensionally equivalent argument values <code>v : T</code> and <code>w : T</code>.
 </p>
 
-<div class="remark" id="orgc4b7265">
+<div class="remark" id="org307c822">
 <p>
 A "function value" is an anonymous lambda expression <code>fn x =&gt; e</code>
 together with a (possibly empty) environment of bindings for any
@@ -448,7 +472,6 @@ together with a (possibly empty) environment of bindings for any
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-53a1480a-6ff2-4505-a7f8-4c752986c693" class="outline-3">
 <h3 id="h-53a1480a-6ff2-4505-a7f8-4c752986c693"><span class="section-number-3">3.3.</span> For Functions</h3>
 <div class="outline-text-3" id="text-h-53a1480a-6ff2-4505-a7f8-4c752986c693">
@@ -464,7 +487,6 @@ equivalent if one of the following hold:
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-aab6de97-f44c-4910-ba94-b074fa9300ca" class="outline-3">
 <h3 id="h-aab6de97-f44c-4910-ba94-b074fa9300ca"><span class="section-number-3">3.4.</span> General Definition</h3>
 <div class="outline-text-3" id="text-h-aab6de97-f44c-4910-ba94-b074fa9300ca">
@@ -490,7 +512,6 @@ code and \(e\cong e'\) on paper.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-784e6087-72e0-42be-b709-ac98263747ab" class="outline-3">
 <h3 id="h-784e6087-72e0-42be-b709-ac98263747ab"><span class="section-number-3">3.5.</span> Using this Definition</h3>
 <div class="outline-text-3" id="text-h-784e6087-72e0-42be-b709-ac98263747ab">
@@ -512,7 +533,7 @@ is call-by-value, the only evaluation rules we really need are for the
 special functions like <code>andalso</code>, <code>orelse</code>, etc.
 </p>
 
-<div class="remark" id="org9896110">
+<div class="remark" id="org16352be">
 <p>
 What exactly <i>are</i> "values"? They correspond to non-expansive
 expressions as found in &sect;4.7 of <a href="https://smlfamily.github.io/sml97-defn.pdf">the 1997 Definition of Standard ML</a>.
@@ -525,7 +546,6 @@ expressions, etc.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-d74b14b3-96ba-441b-bfee-227798e0544a" class="outline-2">
 <h2 id="h-d74b14b3-96ba-441b-bfee-227798e0544a"><span class="section-number-2">4.</span> Initial Specification of a Few Types</h2>
 <div class="outline-text-2" id="text-h-d74b14b3-96ba-441b-bfee-227798e0544a">
@@ -542,7 +562,6 @@ The other interesting types are tuples, records, functions; we do not
 specify these, but they should be understood.
 </p>
 </div>
-
 <div id="outline-container-h-d3e60ff9-e8a7-4e93-b6dd-aa735f544af6" class="outline-3">
 <h3 id="h-d3e60ff9-e8a7-4e93-b6dd-aa735f544af6"><span class="section-number-3">4.1.</span> Integers</h3>
 <div class="outline-text-3" id="text-h-d3e60ff9-e8a7-4e93-b6dd-aa735f544af6">
@@ -590,7 +609,6 @@ The other evaluation rules are similarly defined.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-aa97e59e-f741-47fa-9977-dbcc09500b15" class="outline-3">
 <h3 id="h-aa97e59e-f741-47fa-9977-dbcc09500b15"><span class="section-number-3">4.2.</span> Booleans</h3>
 <div class="outline-text-3" id="text-h-aa97e59e-f741-47fa-9977-dbcc09500b15">
@@ -610,12 +628,10 @@ can replace <code>andalso</code>, <code>orelse</code> with these expressions.</d
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-1bb08f53-6114-4227-8897-b85963f0d0b8" class="outline-2">
 <h2 id="h-1bb08f53-6114-4227-8897-b85963f0d0b8"><span class="section-number-2">5.</span> Basic Properties</h2>
 <div class="outline-text-2" id="text-h-1bb08f53-6114-4227-8897-b85963f0d0b8">
-<div class="theorem" id="org8fbda2f">
+<div class="theorem" id="orgb544cae">
 <p>
 For every syntactically valid Standard ML expression <code>e</code> (i.e., <code>e</code> is
 well-typed and has type <code>T</code>) that we can
@@ -629,7 +645,7 @@ evaluate, exactly one of the following holds:
 
 </div>
 
-<div class="proof" id="org13786f0">
+<div class="proof" id="org437bd6b">
 <p>
 The dynamic semantics for expressions in Standard ML is given by rules
 (90) through (149) of the <a href="https://smlfamily.github.io/sml97-defn.pdf">1997 Definition</a>. By inspection, we see that
@@ -638,7 +654,7 @@ these are the only possibilities.
 
 </div>
 
-<div class="definition" id="orga331058">
+<div class="definition" id="orgbd4aa3f">
 <p>
 Two expressions <code>e</code> and <code>e'</code> are said to be <dfn>Extensionally Equivalent</dfn>
 (written \(e\cong e'\) or <code>e == e'</code>) if there is a type <code>T</code> such that <code>e : T</code>
@@ -653,21 +669,21 @@ and <code>v == v'</code>, or</li>
 
 </div>
 
-<div class="proposition" id="org0045ed1">
+<div class="proposition" id="org3fdd1d4">
 <p>
 If <code>e1 ==&gt; e2</code>, then <code>e1 == e2</code>.
 </p>
 
 </div>
 
-<div class="corollary" id="org391efa1">
+<div class="corollary" id="orge05c640">
 <p>
 If <code>e1 =​=​&gt; e</code> and <code>e2 =​​=​&gt; e</code>, then <code>e1 =​= e2</code>.
 </p>
 
 </div>
 
-<div class="theorem" id="org5eabfbd">
+<div class="theorem" id="org46daab1">
 <p>
 Equivalence is an equivalence relation:
 </p>
@@ -679,7 +695,7 @@ Equivalence is an equivalence relation:
 
 </div>
 
-<div class="proof" id="org517d836">
+<div class="proof" id="org28285fe">
 <p>
 Proof of reflexivity: by theorem 5, there are three possibilities when
 trying to evaluate <code>e</code>:
@@ -715,7 +731,7 @@ expression with an equivalent one "inside" any bigger expression. Let us
 formalize this notion using the idea of "referential transparency".
 </p>
 
-<div class="definition" id="org4020504">
+<div class="definition" id="org6fe57c8">
 <ol class="org-ol">
 <li>We call a context \(E[-]\) (i.e., an "expression with a hole")
 <dfn>Referentially Transparent</dfn> if for any \(e\hookrightarrow v\)
@@ -735,7 +751,7 @@ or build out of "pure functions". There are no side-effects when
 evaluating a referentially transparent expression.
 </p>
 
-<div class="theorem" id="orgd911981">
+<div class="theorem" id="org2bb6e28">
 <p>
 Let \(e\) be a referentially transparent expression.
 Let \(e_{1}\) be any subexpression of \(e\) and \(e = E[e_{1}]\).
@@ -744,7 +760,7 @@ Then for any well-typed expression \(e_{2}\cong e_{1}\) we have \(E[e_{1}]\cong 
 
 </div>
 
-<div class="math-example" id="org1217b23">
+<div class="math-example" id="org04e0a59">
 <p>
 For applications, we may generalize from the situation with a single argument:
 </p>
@@ -755,7 +771,7 @@ For applications, we may generalize from the situation with a single argument:
 
 </div>
 
-<div class="math-example" id="org540fbc3">
+<div class="math-example" id="org174840d">
 <p>
 On tuples, the general pattern may be gleaned from the ordered pair:
 </p>
@@ -766,7 +782,7 @@ On tuples, the general pattern may be gleaned from the ordered pair:
 
 </div>
 
-<div class="math-example" id="org72c78b9">
+<div class="math-example" id="org97c0400">
 <p>
 If <code>e1 == e1'</code>,
 then <code>(let val x = e1 in e2 end) == (let val x = e1' in e2 end)</code>.
@@ -774,12 +790,12 @@ then <code>(let val x = e1 in e2 end) == (let val x = e1' in e2 end)</code>.
 
 </div>
 
-<div class="math-example" id="org3a58c91">
+<div class="math-example" id="org0661467">
 <p>
 If <code>e1 == e1'</code>, then
 </p>
 
-<pre class="example" id="orga4bcde1">
+<pre class="example" id="orgc4d5424">
 case e of [] =&gt; e1 | x :: xs =&gt; e2
 
 ==
@@ -794,7 +810,7 @@ For subexpressions which "go under binders", we quantify over all values
 of the appropriate type. Consider the following examples:
 </p>
 
-<div class="math-example" id="org534d8c0">
+<div class="math-example" id="org3fd1d7f">
 <p>
 (Function bodies)
 If for all values <code>v : T</code>, <code>e[v/x] == e'[v/x]</code>, then
@@ -803,7 +819,7 @@ If for all values <code>v : T</code>, <code>e[v/x] == e'[v/x]</code>, then
 
 </div>
 
-<div class="math-example" id="org20d9d7c">
+<div class="math-example" id="org3e61eea">
 <p>
 (Let bodies)
 If for all values <code>v : T</code>, we have <code>e2[v/x] == e2'[v/x]</code>, then
@@ -812,14 +828,14 @@ If for all values <code>v : T</code>, we have <code>e2[v/x] == e2'[v/x]</code>, 
 
 </div>
 
-<div class="math-example" id="orgafcb9e9">
+<div class="math-example" id="org78b140a">
 <p>
 (Destructuring lists)
 If for all values <code>v</code> and <code>vs</code> we have <code>e2[v/x][vs/xs] == e2'[v/x][vs/xs]</code>,
 then
 </p>
 
-<pre class="example" id="org4d342b7">
+<pre class="example" id="org6c0982c">
 case e of [] =&gt; e1 | x::xs =&gt; e2
 
 ==
@@ -830,7 +846,6 @@ case e of [] =&gt; e1 | x::xs =&gt; e2'
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-bc08c8a9-465d-41cb-b9fc-0ad222f6410d" class="outline-2">
 <h2 id="h-bc08c8a9-465d-41cb-b9fc-0ad222f6410d"><span class="section-number-2">6.</span> Reductions</h2>
 <div class="outline-text-2" id="text-h-bc08c8a9-465d-41cb-b9fc-0ad222f6410d">
@@ -840,7 +855,7 @@ function <i>before</i> substituting into the body. We can express this by the
 following:
 </p>
 
-<div class="proposition" id="org03667e2">
+<div class="proposition" id="orgfb6c0f4">
 <p>
 If <code>e2 |-&gt; e2'</code>,
 then <code>(fn x =&gt; e) e2 |-&gt; (fn x =&gt; e) e2'</code>.
@@ -848,7 +863,7 @@ then <code>(fn x =&gt; e) e2 |-&gt; (fn x =&gt; e) e2'</code>.
 
 </div>
 
-<div class="remark" id="org1d6707a">
+<div class="remark" id="orgf1ca2a6">
 <p>
 We write <code>|-&gt;</code> for one step of calculation, and we write <code>==&gt;</code> to mean
 there have been an arbitrary number of steps.
@@ -856,7 +871,7 @@ there have been an arbitrary number of steps.
 
 </div>
 
-<div class="proposition" id="orgbfaed17">
+<div class="proposition" id="org7f2b948">
 <p>
 For short-circuiting boolean operators, <code>andalso</code> and <code>orelse</code>, we have
 different rules of evaluation:
@@ -872,7 +887,7 @@ different rules of evaluation:
 
 </div>
 
-<div class="proposition" id="org9d777dd">
+<div class="proposition" id="orgbb8f2df">
 <p>
 If <code>e' value</code>, then
 <code>(fn x =&gt; e) e' = e[e'/x]</code>.
@@ -885,7 +900,7 @@ The critical aspect of this second rule is the premise <code>e' value</code>. We
 have several other reduction rules, which "should be obvious".
 </p>
 
-<div class="math-example" id="orge173003">
+<div class="math-example" id="org047982c">
 <p>
 <code>(case [] of [] =&gt; e1 | x::xs =&gt; e2) == e1</code>
 </p>
@@ -901,7 +916,7 @@ If <code>v::vs value</code>, then
 
 </div>
 
-<div class="math-example" id="org4ce2c52">
+<div class="math-example" id="orgd0bec90">
 <p>
 If <code>(v1,v2) value</code>, then
 <code>(let val (x,y) = (v1,v2) in e end) == e[v1/x][v2/y]</code>.
@@ -909,7 +924,7 @@ If <code>(v1,v2) value</code>, then
 
 </div>
 
-<div class="theorem" id="org6972749">
+<div class="theorem" id="orgf910c7e">
 <p>
 If <code>e'</code> is valuable, then <code>((fn x =&gt; e) e') == (let x = e' in e end)</code>.
 </p>
@@ -917,11 +932,10 @@ If <code>e'</code> is valuable, then <code>((fn x =&gt; e) e') == (let x = e' in
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-1b53c25f-fb11-47bc-8174-d73aa0dfb041" class="outline-2">
 <h2 id="h-1b53c25f-fb11-47bc-8174-d73aa0dfb041"><span class="section-number-2">7.</span> Type-Directed Rules</h2>
 <div class="outline-text-2" id="text-h-1b53c25f-fb11-47bc-8174-d73aa0dfb041">
-<div class="proposition" id="orgc7388a4">
+<div class="proposition" id="org297bf27">
 <p>
 Two functions are equivalent if they agree on all arguments; i.e.,
 if for all values <code>v : T1</code> we have <code>f v == g v : T2</code>,
@@ -935,14 +949,14 @@ if <code>v == v' : T1</code>, then <code>f v == g v' : T2</code>
 
 </div>
 
-<div class="proposition" id="org335066f">
+<div class="proposition" id="org57a7153">
 <p>
 Constructors are injective and disjoint.
 </p>
 
 </div>
 
-<div class="math-example" id="orge9a708e">
+<div class="math-example" id="org465f5af">
 <p>
 Denote by <code>!=</code> the negation of our equivalence relation (so <code>a != b</code>
 means not <code>a==b</code>), then we have
@@ -955,17 +969,16 @@ means not <code>a==b</code>), then we have
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-517e93d9-e267-41b9-86d7-ec893dfe7f73" class="outline-2">
 <h2 id="h-517e93d9-e267-41b9-86d7-ec893dfe7f73"><span class="section-number-2">8.</span> Valuability</h2>
 <div class="outline-text-2" id="text-h-517e93d9-e267-41b9-86d7-ec893dfe7f73">
-<div class="lemma" id="org23bdf3f">
+<div class="lemma" id="org71f0a0b">
 <p>
 <code>[] valuable</code>
 </p>
 
 </div>
-<div class="lemma" id="org67b3e25">
+<div class="lemma" id="orgc7790ed">
 <p>
 If <code>x</code> and <code>xs</code> are valuable (with values <code>v</code> and <code>vs</code>, respectively),
 then <code>x::xs valuable</code>.
@@ -973,21 +986,21 @@ then <code>x::xs valuable</code>.
 
 </div>
 
-<div class="lemma" id="orge366dae">
+<div class="lemma" id="org5c82a5f">
 <p>
 If <code>x</code> and <code>y</code> are valuable, then <code>(x,y) valuable</code>.
 </p>
 
 </div>
 
-<div class="lemma" id="orgba06ae3">
+<div class="lemma" id="org86f0d02">
 <p>
 <code>(fn x =&gt; e) valuable</code>
 </p>
 
 </div>
 
-<div class="theorem" id="orga33922c">
+<div class="theorem" id="org6f31055">
 <p>
 If <code>f total</code> and <code>e valuable</code>,
 then <code>(f e) valuable</code>.
@@ -995,7 +1008,7 @@ then <code>(f e) valuable</code>.
 
 </div>
 
-<div class="remark" id="org497b9fd">
+<div class="remark" id="orgb739005">
 <p>
 To prove <code>f:T-&gt;T'</code> is total, we want to show <code>f v</code> is valuable for all
 values <code>v:T</code>.
@@ -1003,7 +1016,7 @@ values <code>v:T</code>.
 
 </div>
 
-<div class="theorem" id="org90400c4">
+<div class="theorem" id="org10e522b">
 <p>
 Let <code>e</code>, <code>e1</code>, <code>e2</code> be expressions.
 If:
@@ -1018,13 +1031,13 @@ If:
 <p>
 &#x2026;then we have
 </p>
-<pre class="example" id="org011118d">
+<pre class="example" id="org5c852ba">
 (case e of [] =&gt; e1 | x::xs =&gt; e2) valuable
 </pre>
 
 </div>
 
-<div class="theorem" id="orga82f2e5">
+<div class="theorem" id="org1b3aaa8">
 <p>
 In general, valuability is closed under equivalence:
 If <code>e==e'</code> and <code>e'</code> is valuable, then <code>e</code> is valuable.
@@ -1032,7 +1045,7 @@ If <code>e==e'</code> and <code>e'</code> is valuable, then <code>e</code> is va
 
 </div>
 
-<div class="theorem" id="org768ab23">
+<div class="theorem" id="org86f65cd">
 <p>
 (Valuable-Stepping Principle)
 </p>
@@ -1043,7 +1056,7 @@ If <code>e2</code> is a valuable expression, then
 </p>
 
 </div>
-<div class="remark" id="org74121f6">
+<div class="remark" id="org67bc391">
 <p>
 This can be made more complicated if <code>e1</code> or <code>e2</code> is impure.
 </p>
@@ -1051,7 +1064,6 @@ This can be made more complicated if <code>e1</code> or <code>e2</code> is impur
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-29c752da-965c-44b2-97fa-0375f6722045" class="outline-2">
 <h2 id="h-29c752da-965c-44b2-97fa-0375f6722045"><span class="section-number-2">9.</span> Inversions</h2>
 <div class="outline-text-2" id="text-h-29c752da-965c-44b2-97fa-0375f6722045">
@@ -1060,7 +1072,7 @@ For closed terms, <code>e == v</code> implies <code>e</code> evaluates to a valu
 justifies the following inversion(s):
 </p>
 
-<div class="theorem" id="org92758f7">
+<div class="theorem" id="org2af63bb">
 <p>
 If <code>e1 e2 == v</code>,
 then there exists an expression <code>e</code> and a value <code>v</code> such that
@@ -1074,7 +1086,7 @@ then there exists an expression <code>e</code> and a value <code>v</code> such t
 
 </div>
 
-<div class="theorem" id="orga75cfcb">
+<div class="theorem" id="org2e90150">
 <p>
 If <code>case e of [...]</code> is valuable,
 then <code>e</code> is valuable.
@@ -1083,7 +1095,6 @@ then <code>e</code> is valuable.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-1e7d947c-6fb0-456c-b6d0-110da995dcf1" class="outline-2">
 <h2 id="h-1e7d947c-6fb0-456c-b6d0-110da995dcf1"><span class="section-number-2">10.</span> Concluding Remarks</h2>
 <div class="outline-text-2" id="text-h-1e7d947c-6fb0-456c-b6d0-110da995dcf1">
@@ -1102,7 +1113,6 @@ be useful.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-63a006e4-bb72-451a-b884-463a6e9e9d42" class="outline-2">
 <h2 id="h-63a006e4-bb72-451a-b884-463a6e9e9d42"><span class="section-number-2">11.</span> References</h2>
 <div class="outline-text-2" id="text-h-63a006e4-bb72-451a-b884-463a6e9e9d42">
@@ -1121,7 +1131,7 @@ be useful.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-03-04 Sat 10:54.</p>
+<p class="postamble">Last Updated: Sat, 4 Mar 2023 11:36:08 -0800
 </div>
 </body>
 </html>

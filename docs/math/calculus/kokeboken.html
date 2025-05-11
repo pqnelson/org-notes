@@ -6,7 +6,7 @@
 <title>Kokeboken</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -252,12 +281,10 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-fba82fb2-78b0-4f5b-849f-8473b3dba0a2" class="outline-2">
 <h2 id="h-fba82fb2-78b0-4f5b-849f-8473b3dba0a2"><span class="section-number-2">1.</span> First Part</h2>
 <div class="outline-text-2" id="text-h-fba82fb2-78b0-4f5b-849f-8473b3dba0a2">
 </div>
-
 <div id="outline-container-h-62c07ef0-f04d-4138-823a-821857aefa9b" class="outline-3">
 <h3 id="h-62c07ef0-f04d-4138-823a-821857aefa9b"><span class="section-number-3">1.1.</span> Fractions</h3>
 <div class="outline-text-3" id="text-h-62c07ef0-f04d-4138-823a-821857aefa9b">
@@ -278,7 +305,6 @@ rational expression:
 \frac{2}{x^{2}-1} = \frac{1}{x-1} - \frac{1}{x + 1}
 \end{equation}
 </div>
-
 <div id="outline-container-h-cce02637-3dca-4dc0-90da-9f0ba765d5e2" class="outline-4">
 <h4 id="h-cce02637-3dca-4dc0-90da-9f0ba765d5e2"><span class="section-number-4">1.1.1.</span> Some Fun Integrals</h4>
 <div class="outline-text-4" id="text-h-cce02637-3dca-4dc0-90da-9f0ba765d5e2">
@@ -363,7 +389,6 @@ It's really useful for integrals with domain of integration from 1 to \(\infty\)
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-c5b09f4e-169a-4ab4-8437-8b673ffe8dd2" class="outline-3">
 <h3 id="h-c5b09f4e-169a-4ab4-8437-8b673ffe8dd2"><span class="section-number-3">1.2.</span> Trigonometric Functions</h3>
 <div class="outline-text-3" id="text-h-c5b09f4e-169a-4ab4-8437-8b673ffe8dd2">
@@ -446,7 +471,7 @@ Massaging the right-hand side produces the desired result.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 17:39:55 -0700
 </div>
 </body>
 </html>

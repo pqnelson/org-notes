@@ -6,7 +6,7 @@
 <title>Multiphysics</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -188,11 +188,12 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -252,7 +281,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-7f76b086-440b-4a4e-954c-f81b46cfafe7" class="outline-2">
 <h2 id="h-7f76b086-440b-4a4e-954c-f81b46cfafe7"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-7f76b086-440b-4a4e-954c-f81b46cfafe7">
@@ -269,7 +297,7 @@ article "Ten organising principles for coupling in multiphysics and
 multiscale models".
 </p>
 
-<div class="remark" id="org2bc1648">
+<div class="remark" id="org36ddef5">
 <p>
 COMSOL seems to be a proprietary company with some kind of software,
 claiming to be the "alpha and omega" on multiphysics. I never heard of
@@ -278,11 +306,10 @@ the term before stumbling across them by accident.
 
 </div>
 </div>
-
 <div id="outline-container-h-10e654a5-ef08-4497-a99e-ca9955be3aa9" class="outline-3">
 <h3 id="h-10e654a5-ef08-4497-a99e-ca9955be3aa9"><span class="section-number-3">1.1.</span> A Grocery List of Definitions</h3>
 <div class="outline-text-3" id="text-h-10e654a5-ef08-4497-a99e-ca9955be3aa9">
-<div class="definition" id="org35120bd">
+<div class="definition" id="orge070c42">
 <p>
 A <dfn>Constituent</dfn> \(\mathcal{C}\) is characterized by a "model"
 \(\mathcal{M}\) which solves its equations of motion on its domain
@@ -313,7 +340,7 @@ mesh for numerically computing finite differences is a
 numerical approximation to the Earth's atmosphere.
 </p>
 
-<div class="definition" id="org479d113">
+<div class="definition" id="org92dd14a">
 <p>
 Two constituents \(\mathcal{C}_{i}\) and \(\mathcal{C}_{j}\) are
 <dfn>Coupled</dfn> if
@@ -351,7 +378,6 @@ the next iterative state's values".
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-4c9a5e0f-1e17-415c-9c47-360b484928a5" class="outline-2">
 <h2 id="h-4c9a5e0f-1e17-415c-9c47-360b484928a5"><span class="section-number-2">2.</span> References</h2>
 <div class="outline-text-2" id="text-h-4c9a5e0f-1e17-415c-9c47-360b484928a5">
@@ -374,8 +400,6 @@ Cambridge University Press, 2011.</li>
 <i>Internat. J. of High Performance Comp. App.</i> <b>27</b>, no.1 (2013) pp.4-83, <a href="https://journals.sagepub.com/doi/pdf/10.1177/1094342012468181">PDF</a></li>
 </ul>
 </div>
-
-
 <div id="outline-container-h-6f08bf4a-8ba3-48ee-a293-63c9d13e0c58" class="outline-3">
 <h3 id="h-6f08bf4a-8ba3-48ee-a293-63c9d13e0c58"><span class="section-number-3">2.1.</span> In Climate Science</h3>
 <div class="outline-text-3" id="text-h-6f08bf4a-8ba3-48ee-a293-63c9d13e0c58">
@@ -396,7 +420,7 @@ doi:<a href="https://doi.org/10.1007/978-3-7091-0408-8_5">10.1007/978-3-7091-040
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-04-11 Mon 12:41.</p>
+<p class="postamble">Last Updated: Mon, 11 Apr 2022 12:46:48 -0700
 </div>
 </body>
 </html>

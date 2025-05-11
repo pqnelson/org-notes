@@ -6,7 +6,7 @@
 <title>SECD Machine</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -244,7 +259,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-6c546b2a-247f-48bb-a0b7-47c3e839e7c5" class="outline-2">
 <h2 id="h-6c546b2a-247f-48bb-a0b7-47c3e839e7c5"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-6c546b2a-247f-48bb-a0b7-47c3e839e7c5">
@@ -269,7 +283,6 @@ difficulties.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-5dba71ab-7d6a-4c90-a51d-eb85341a92d4" class="outline-2">
 <h2 id="h-5dba71ab-7d6a-4c90-a51d-eb85341a92d4"><span class="section-number-2">2.</span> Basic Data Structures</h2>
 <div class="outline-text-2" id="text-h-5dba71ab-7d6a-4c90-a51d-eb85341a92d4">
@@ -286,7 +299,6 @@ keep in memory:
 </ol>
 </div>
 </div>
-
 <div id="outline-container-h-0b1b3966-14ab-48b7-b37c-bd0b5a846104" class="outline-2">
 <h2 id="h-0b1b3966-14ab-48b7-b37c-bd0b5a846104"><span class="section-number-2">3.</span> Machine Description</h2>
 <div class="outline-text-2" id="text-h-0b1b3966-14ab-48b7-b37c-bd0b5a846104">
@@ -295,7 +307,6 @@ Like any abstract machine, we have some instruction set which
 manipulates stacks or registers.
 </p>
 </div>
-
 <div id="outline-container-h-9244ded3-4a09-499c-beb4-df1cf40e6567" class="outline-3">
 <h3 id="h-9244ded3-4a09-499c-beb4-df1cf40e6567"><span class="section-number-3">3.1.</span> The four "registers"</h3>
 <div class="outline-text-3" id="text-h-9244ded3-4a09-499c-beb4-df1cf40e6567">
@@ -318,7 +329,6 @@ on the stack, <code>y</code> is the position in that list.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-ccfb66ef-c283-4e8f-98b2-7007dccf3924" class="outline-3">
 <h3 id="h-ccfb66ef-c283-4e8f-98b2-7007dccf3924"><span class="section-number-3">3.2.</span> Operations</h3>
 <div class="outline-text-3" id="text-h-ccfb66ef-c283-4e8f-98b2-7007dccf3924">
@@ -351,7 +361,6 @@ And then about a half-dozen arithmetic operators (<code>ADD</code>, <code>SUB</c
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-259ea8d3-ec51-43a5-81fb-229589d18c2c" class="outline-3">
 <h3 id="h-259ea8d3-ec51-43a5-81fb-229589d18c2c"><span class="section-number-3">3.3.</span> Operation Transition Rules</h3>
 <div class="outline-text-3" id="text-h-259ea8d3-ec51-43a5-81fb-229589d18c2c">
@@ -360,7 +369,6 @@ The semantics for our SECD machine is described using a transition
 relation which maps <code>s e c d -&gt; s' e' c' d'</code>.
 </p>
 </div>
-
 <div id="outline-container-h-a76bd3bb-ff0f-41b2-802d-524239a8c621" class="outline-4">
 <h4 id="h-a76bd3bb-ff0f-41b2-802d-524239a8c621"><span class="section-number-4">3.3.1.</span> S-Expression related Rules</h4>
 <div class="outline-text-4" id="text-h-a76bd3bb-ff0f-41b2-802d-524239a8c621">
@@ -386,7 +394,6 @@ datum or not.
 </dl>
 </div>
 </div>
-
 <div id="outline-container-h-0704e465-c2db-4018-baea-5d59d35c4a48" class="outline-4">
 <h4 id="h-0704e465-c2db-4018-baea-5d59d35c4a48"><span class="section-number-4">3.3.2.</span> Arithmetic Rules</h4>
 <div class="outline-text-4" id="text-h-0704e465-c2db-4018-baea-5d59d35c4a48">
@@ -406,8 +413,6 @@ but do not modify the other registers:
 </ul>
 </div>
 </div>
-
-
 <div id="outline-container-h-a0bb400f-5054-4590-b399-040194213b8a" class="outline-4">
 <h4 id="h-a0bb400f-5054-4590-b399-040194213b8a"><span class="section-number-4">3.3.3.</span> Loading Rules</h4>
 <div class="outline-text-4" id="text-h-a0bb400f-5054-4590-b399-040194213b8a">
@@ -426,7 +431,7 @@ introducing a function which returns the <code>nth</code> member of a list
 (zero-indexed):
 </p>
 
-<pre class="example" id="secd-index">
+<pre id="secd-index" class="example">
 index :: Int -&gt; List -&gt; a
 index 0 s = car(s)
 index n s = if n &lt; 0 then error "Must have non-negative index number"
@@ -438,13 +443,12 @@ We use this to define a function which determines, for an index
 pair <code>i = (b . n)</code> the corresponding value in the environment:
 </p>
 
-<pre class="example" id="secd-locate">
+<pre id="secd-locate" class="example">
 locate :: (Int, Int) -&gt; Env -&gt; a
 locate (b, n) e = index n (index b e)
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-af2af415-3b1e-46c8-ab55-e5ae721b0c47" class="outline-4">
 <h4 id="h-af2af415-3b1e-46c8-ab55-e5ae721b0c47"><span class="section-number-4">3.3.4.</span> Conditional Form Rules</h4>
 <div class="outline-text-4" id="text-h-af2af415-3b1e-46c8-ab55-e5ae721b0c47">
@@ -476,7 +480,6 @@ caller.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-dfb2fed7-0e66-4ca7-9fdf-ff3f9f95b7ad" class="outline-4">
 <h4 id="h-dfb2fed7-0e66-4ca7-9fdf-ff3f9f95b7ad"><span class="section-number-4">3.3.5.</span> Function Application</h4>
 <div class="outline-text-4" id="text-h-dfb2fed7-0e66-4ca7-9fdf-ff3f9f95b7ad">
@@ -540,8 +543,6 @@ consider also reading John Ramsdell's "The Tail-Recursive SECD Machine"
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-d66dc70a-7b37-4bef-bd7e-6a89f4791e7b" class="outline-2">
 <h2 id="h-d66dc70a-7b37-4bef-bd7e-6a89f4791e7b"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-d66dc70a-7b37-4bef-bd7e-6a89f4791e7b">
@@ -557,7 +558,6 @@ Prentice-Hall International Series in Computer Science,
 <i>Theoretical Computer Science</i> <b>1</b> (1975) pp. 125-159.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-6f9e1dde-494d-4755-9f83-381a323a8d54" class="outline-3">
 <h3 id="h-6f9e1dde-494d-4755-9f83-381a323a8d54"><span class="section-number-3">4.1.</span> SECD Machine</h3>
 <div class="outline-text-3" id="text-h-6f9e1dde-494d-4755-9f83-381a323a8d54">
@@ -576,7 +576,6 @@ Addison-Wesley, 1975.</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-d00204c5-0ff0-4e26-9ba0-5881aeb4e634" class="outline-3">
 <h3 id="h-d00204c5-0ff0-4e26-9ba0-5881aeb4e634"><span class="section-number-3">4.2.</span> Lisp to SECD Compiler</h3>
 <div class="outline-text-3" id="text-h-d00204c5-0ff0-4e26-9ba0-5881aeb4e634">
@@ -594,7 +593,7 @@ Lispkit Lisp in Java". In <i>Proc. XV Conf. on Applied Math.</i>,
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-07-05 Mon 22:51.</p>
+<p class="postamble">Last Updated: Mon, 5 Jul 2021 22:51:38 -0700
 </div>
 </body>
 </html>

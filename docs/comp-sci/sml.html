@@ -6,7 +6,7 @@
 <title>Standard ML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,8 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -250,25 +300,26 @@
 </ul>
 </li>
 <li><a href="#h-cabfd644-fda3-4801-b97f-eb709f55f662">4. Value Restriction</a></li>
-<li><a href="#h-8bb21485-1413-4bef-9b13-d8255e14c965">5. References</a>
+<li><a href="#h-f08da84c-789c-457c-9af6-59cff48ee7c7">5. Lists: Map, Fold, Filter is all you need</a></li>
+<li><a href="#h-8bb21485-1413-4bef-9b13-d8255e14c965">6. References</a>
 <ul>
-<li><a href="#h-8f79e9f1-f460-40a5-8172-d70436622563">5.1. Standard Basis</a></li>
-<li><a href="#h-cf15cca4-a340-407e-9cbc-4a7eed153e63">5.2. Tutorials</a></li>
-<li><a href="#h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940">5.3. Definition of Standard ML</a></li>
-<li><a href="#h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc">5.4. Classic ML</a></li>
-<li><a href="#h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa">5.5. PCF</a>
+<li><a href="#h-8f79e9f1-f460-40a5-8172-d70436622563">6.1. Standard Basis</a></li>
+<li><a href="#h-cf15cca4-a340-407e-9cbc-4a7eed153e63">6.2. Tutorials</a></li>
+<li><a href="#h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940">6.3. Definition of Standard ML</a></li>
+<li><a href="#h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc">6.4. Classic ML</a></li>
+<li><a href="#h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa">6.5. PCF</a>
 <ul>
-<li><a href="#h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb">5.5.1. Full Abstraction of PCF</a></li>
+<li><a href="#h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb">6.5.1. Full Abstraction of PCF</a></li>
 </ul>
 </li>
-<li><a href="#h-412ef711-6f44-4b0b-bdea-31d24d849d87">5.6. Category Theory</a></li>
-<li><a href="#h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd">5.7. Pure Functional Programming</a></li>
+<li><a href="#h-412ef711-6f44-4b0b-bdea-31d24d849d87">6.6. Category Theory</a></li>
+<li><a href="#h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd">6.7. Pure Functional Programming</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="remark" id="orgf5fabf2">
+<div class="remark" id="orgb6c86d3">
 <p>
 This page has gotten a little unruly. I might refactor out the
 discussion of the Core and Module language into a separate tutorial
@@ -276,7 +327,6 @@ page. For <a href="sml/index.html">additional topics</a>, I have separated out o
 </p>
 
 </div>
-
 <div id="outline-container-h-507f2c0c-f5e9-4589-926e-9ef4b6b62622" class="outline-2">
 <h2 id="h-507f2c0c-f5e9-4589-926e-9ef4b6b62622"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-507f2c0c-f5e9-4589-926e-9ef4b6b62622">
@@ -306,7 +356,6 @@ an interesting little language.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-ecf81378-cc50-4217-94cb-971e4ec51413" class="outline-2">
 <h2 id="h-ecf81378-cc50-4217-94cb-971e4ec51413"><span class="section-number-2">2.</span> Core Language</h2>
 <div class="outline-text-2" id="text-h-ecf81378-cc50-4217-94cb-971e4ec51413">
@@ -315,7 +364,6 @@ The top-level amounts to declaration of values, functions, and type
 definitions. Let's examine these one-by-one.
 </p>
 </div>
-
 <div id="outline-container-h-1c6c13a5-097d-4bdc-a46b-340ad8527af4" class="outline-3">
 <h3 id="h-1c6c13a5-097d-4bdc-a46b-340ad8527af4"><span class="section-number-3">2.1.</span> Values</h3>
 <div class="outline-text-3" id="text-h-1c6c13a5-097d-4bdc-a46b-340ad8527af4">
@@ -325,13 +373,12 @@ constants.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 3.14159; <span class="org-comment-delimiter">(* </span><span class="org-comment">A declaration without a type annotation</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 3.14159; <span class="org-comment-delimiter">(* </span><span class="org-comment">A declaration without a type annotation</span><span class="org-comment-delimiter"> *</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column">)</span></span>
 <span class="org-keyword">val</span> <span class="org-variable-name">tau</span> : real = 6.28318; <span class="org-comment-delimiter">(* </span><span class="org-comment">An annotated declaration</span><span class="org-comment-delimiter"> *)</span>
 </pre>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-e732e4de-a608-4f24-8c76-cdaaf08da5f6" class="outline-3">
 <h3 id="h-e732e4de-a608-4f24-8c76-cdaaf08da5f6"><span class="section-number-3">2.2.</span> Functions</h3>
 <div class="outline-text-3" id="text-h-e732e4de-a608-4f24-8c76-cdaaf08da5f6">
@@ -390,7 +437,6 @@ signatures and modules. We stick the declaration in the signature and
 the definition in the module, but we'll tackle that later.
 </p>
 </div>
-
 <div id="outline-container-h-8abe6c8b-d365-461c-ab27-6a25e7f1e7e6" class="outline-4">
 <h4 id="h-8abe6c8b-d365-461c-ab27-6a25e7f1e7e6"><span class="section-number-4">2.2.1.</span> Semantics</h4>
 <div class="outline-text-4" id="text-h-8abe6c8b-d365-461c-ab27-6a25e7f1e7e6">
@@ -421,7 +467,6 @@ was bound to <code>3.14159</code>, so <code>area(1.0)</code> evaluates to <code>
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-4fa948ec-e9d3-4f8f-a823-694cf27673f4" class="outline-4">
 <h4 id="h-4fa948ec-e9d3-4f8f-a823-694cf27673f4"><span class="section-number-4">2.2.2.</span> Documentation</h4>
 <div class="outline-text-4" id="text-h-4fa948ec-e9d3-4f8f-a823-694cf27673f4">
@@ -467,7 +512,6 @@ intended.</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-5334a3b3-dce4-4839-8355-3f0e5787381b" class="outline-3">
 <h3 id="h-5334a3b3-dce4-4839-8355-3f0e5787381b"><span class="section-number-3">2.3.</span> Expressions</h3>
 <div class="outline-text-3" id="text-h-5334a3b3-dce4-4839-8355-3f0e5787381b">
@@ -482,7 +526,6 @@ mentioning:
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-6001f34b-fc1a-465b-aa48-423c135b9201" class="outline-3">
 <h3 id="h-6001f34b-fc1a-465b-aa48-423c135b9201"><span class="section-number-3">2.4.</span> Boolean Operators</h3>
 <div class="outline-text-3" id="text-h-6001f34b-fc1a-465b-aa48-423c135b9201">
@@ -506,7 +549,6 @@ works on "equality types" (unit, int, word, char, string, array, vector, ref).
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-d089eb20-5800-457a-ab86-4dca3ff3c60c" class="outline-3">
 <h3 id="h-d089eb20-5800-457a-ab86-4dca3ff3c60c"><span class="section-number-3">2.5.</span> Types</h3>
 <div class="outline-text-3" id="text-h-d089eb20-5800-457a-ab86-4dca3ff3c60c">
@@ -543,7 +585,7 @@ row by an "<code>of</code>" keyword.
 we have <code>int list</code>.
 </p>
 
-<div class="remark" id="orgd687cde">
+<div class="remark" id="org3149ce9">
 <p>
 Unlike Haskell, if we want to have a parametrized type, we need to
 include the apostrophe, e.g., <code>datatype 'a Foo = Bar of ('a * int)</code>.
@@ -551,7 +593,6 @@ include the apostrophe, e.g., <code>datatype 'a Foo = Bar of ('a * int)</code>.
 
 </div>
 </div>
-
 <div id="outline-container-h-43934354-d980-4def-9ab7-7e68d303df78" class="outline-4">
 <h4 id="h-43934354-d980-4def-9ab7-7e68d303df78"><span class="section-number-4">2.5.1.</span> Records</h4>
 <div class="outline-text-4" id="text-h-43934354-d980-4def-9ab7-7e68d303df78">
@@ -570,7 +611,7 @@ field by name rather than by its position.
                       born = 1956,
                       occupation = <span class="org-string">"Master of the Universe"</span>};
 
-print (#occupation harry); <span class="org-comment-delimiter">(* </span><span class="org-comment">prints "Master of the Universe" to screen</span><span class="org-comment-delimiter"> *)</span>
+print (#occupation harry); <span class="org-comment-delimiter">(* </span><span class="org-comment">prints "Master of the Universe" </span><span class="org-comment"><span class="org-highlight-beyond-fill-column">to screen</span></span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column"> *)</span></span>
 </pre>
 </div>
 
@@ -600,7 +641,6 @@ Without the dots in either destructuring instance produces errors
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-7504a762-210f-4259-9f3e-7f478ce9c328" class="outline-4">
 <h4 id="h-7504a762-210f-4259-9f3e-7f478ce9c328"><span class="section-number-4">2.5.2.</span> Pattern Matching in Functions</h4>
 <div class="outline-text-4" id="text-h-7504a762-210f-4259-9f3e-7f478ce9c328">
@@ -617,8 +657,8 @@ number of symbols involved "by cases":
               | App <span class="org-keyword">of</span> (Expr*Expr);
 
 <span class="org-keyword">fun</span> expr_length(Var id) = 1
-  | expr_length(Abs(e1, e2)) = expr_length e1 + expr_length e2 + 1
-  | expr_length(App(e1, e2)) = expr_length e1 + expr_length e2;
+  | expr_length(Abs(e1, e2)) = expr_length e1 + expr_length e2<span class="org-highlight-beyond-fill-column"> + 1</span>
+  | expr_length(App(e1, e2)) = expr_length e1 + expr_length e2<span class="org-highlight-beyond-fill-column">;</span>
 </pre>
 </div>
 
@@ -637,7 +677,6 @@ an expression, we could write:
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-4b7e79f2-48fb-4a60-96f1-e9fb645c82e1" class="outline-3">
 <h3 id="h-4b7e79f2-48fb-4a60-96f1-e9fb645c82e1"><span class="section-number-3">2.6.</span> References to Memory Locations</h3>
 <div class="outline-text-3" id="text-h-4b7e79f2-48fb-4a60-96f1-e9fb645c82e1">
@@ -664,7 +703,6 @@ We should think of <code>ref</code> as a parametrized type, <code>'a ref</code>.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-41afbff2-e546-4cda-a2a6-62612610b9ae" class="outline-3">
 <h3 id="h-41afbff2-e546-4cda-a2a6-62612610b9ae"><span class="section-number-3">2.7.</span> Primitive Functions and Types</h3>
 <div class="outline-text-3" id="text-h-41afbff2-e546-4cda-a2a6-62612610b9ae">
@@ -696,7 +734,7 @@ for a newline character, or <code>#"\uxxxx"</code> where <code>xxxx</code> are 4
 There are about a dozen primitive exceptions defined:
 </p>
 
-<pre class="example" id="orgadb72a2">
+<pre class="example" id="orgfa3242f">
 exception Bind
 exception Chr
 exception Div
@@ -847,7 +885,7 @@ for multiplication is higher than addition, and division is higher than
 addition.
 </p>
 
-<div class="remark" id="org58630cb">
+<div class="remark" id="org40dd0ee">
 <p>
 There's a lot more functionality provided by the Standard ML built-in
 library, but the rest seem to be contained in modules.
@@ -857,8 +895,6 @@ library, but the rest seem to be contained in modules.
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-8a5ab802-daf2-4883-b486-87759924c0b7" class="outline-2">
 <h2 id="h-8a5ab802-daf2-4883-b486-87759924c0b7"><span class="section-number-2">3.</span> Modules</h2>
 <div class="outline-text-2" id="text-h-8a5ab802-daf2-4883-b486-87759924c0b7">
@@ -884,7 +920,6 @@ Foo.span Foo.foo; <span class="org-comment-delimiter">(* </span><span class="org
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-41283ae2-b29d-4a49-8ce1-dfd108f47ce7" class="outline-3">
 <h3 id="h-41283ae2-b29d-4a49-8ce1-dfd108f47ce7"><span class="section-number-3">3.1.</span> Signatures</h3>
 <div class="outline-text-3" id="text-h-41283ae2-b29d-4a49-8ce1-dfd108f47ce7">
@@ -901,7 +936,7 @@ signature is interpreted as a specification.
     <span class="org-keyword">val</span> <span class="org-variable-name">enq</span> : 'a t * 'a -&gt; 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">add to end</span><span class="org-comment-delimiter"> *)</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">null</span> : 'a t -&gt; bool; <span class="org-comment-delimiter">(* </span><span class="org-comment">test for empty queue</span><span class="org-comment-delimiter"> *)</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">hd</span> : 'a t -&gt; 'a; <span class="org-comment-delimiter">(* </span><span class="org-comment">return the front of the queue</span><span class="org-comment-delimiter"> *)</span>
-    <span class="org-keyword">val</span> <span class="org-variable-name">deq</span> : 'a t -&gt; 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">remove the front of the queue</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-keyword">val</span> <span class="org-variable-name">deq</span> : 'a t -&gt; 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">remove the front of the queue</span><span class="org-comment-delimiter"> *</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column">)</span></span>
 <span class="org-keyword">end</span>;
 </pre>
 </div>
@@ -965,7 +1000,7 @@ List.null Q1.empty; <span class="org-comment-delimiter">(* </span><span class="o
 List.null Q2.empty; <span class="org-comment-delimiter">(* </span><span class="org-comment">ERROR!!!</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-comment-delimiter">(* </span><span class="org-comment">In SML/NJ we get:</span>
 
-<span class="org-comment">stdIn:7.1-7.19 Error: operator and operand do not agree [tycon mismatch]</span>
+<span class="org-comment">stdIn:7.1-7.19 Error: operator and operand do not agree [tycon</span><span class="org-comment"><span class="org-highlight-beyond-fill-column"> mismatch]</span></span>
 <span class="org-comment">  operator domain: 'Z list</span>
 <span class="org-comment">  operand:         'Y Q3.t</span>
 <span class="org-comment">  in expression:</span>
@@ -985,7 +1020,6 @@ constructors are hidden from the user, and distinct from existing
 constructors.
 </p>
 </div>
-
 <div id="outline-container-h-d3c46854-c3eb-4747-ae77-ed8bfbc9cc47" class="outline-4">
 <h4 id="h-d3c46854-c3eb-4747-ae77-ed8bfbc9cc47"><span class="section-number-4">3.1.1.</span> Usefulness of Opaque Ascription</h4>
 <div class="outline-text-4" id="text-h-d3c46854-c3eb-4747-ae77-ed8bfbc9cc47">
@@ -1032,7 +1066,6 @@ then they'll get an error.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-cabfd644-fda3-4801-b97f-eb709f55f662" class="outline-2">
 <h2 id="h-cabfd644-fda3-4801-b97f-eb709f55f662"><span class="section-number-2">4.</span> Value Restriction</h2>
 <div class="outline-text-2" id="text-h-cabfd644-fda3-4801-b97f-eb709f55f662">
@@ -1043,9 +1076,46 @@ definition calls "non-expansive expressions").
 </p>
 </div>
 </div>
+<div id="outline-container-h-f08da84c-789c-457c-9af6-59cff48ee7c7" class="outline-2">
+<h2 id="h-f08da84c-789c-457c-9af6-59cff48ee7c7"><span class="section-number-2">5.</span> Lists: Map, Fold, Filter is all you need</h2>
+<div class="outline-text-2" id="text-h-f08da84c-789c-457c-9af6-59cff48ee7c7">
+<p>
+The folklore result that you only really need <code>map</code>,
+<code>foldl</code>, and <code>filter</code> for a list may be found in:
+</p>
 
+<ul class="org-ul">
+<li>Erik Meijer, Maarten Fokkinga, and Ross Paterson,<br>
+"Functional Programming with Bananas, Lenses, Envelopes and Barbed Wire".<br>
+In <i>Conference on functional programming languages and computer architecture</i> (pp. 124&#x2013;144). Berlin, Heidelberg: Springer Berlin Heidelberg.
+<a href="https://maartenfokkinga.github.io/utwente/mmf91m.pdf">PDF</a>.</li>
+</ul>
+
+<p>
+Meijer and friends work in the category <b>CPO</b> which results in a lazy
+functional language. Here a type is an \(\omega\) CPO, and morphisms are
+continuous functions between them.
+</p>
+
+<p>
+Earlier work:
+</p>
+
+<ul class="org-ul">
+<li>Tatsuya Hagino,<br>
+"Codatatypes in ML."
+<i>Journal of symbolic computation</i> <b>8</b>, no. 6 (1989) 629&#x2013;650.</li>
+</ul>
+
+<p>
+(See also <a href="https://arxiv.org/abs/2010.05167">arXiv:2010.05167</a>for Hagino's PhD thesis, and his paper
+"A Typed Lambda Calculus with Categorical Type Constructors" <a href="https://www.lfcs.inf.ed.ac.uk/reports/88/ECS-LFCS-88-44/">eprint</a> for
+more details/fun.)
+</p>
+</div>
+</div>
 <div id="outline-container-h-8bb21485-1413-4bef-9b13-d8255e14c965" class="outline-2">
-<h2 id="h-8bb21485-1413-4bef-9b13-d8255e14c965"><span class="section-number-2">5.</span> References</h2>
+<h2 id="h-8bb21485-1413-4bef-9b13-d8255e14c965"><span class="section-number-2">6.</span> References</h2>
 <div class="outline-text-2" id="text-h-8bb21485-1413-4bef-9b13-d8255e14c965">
 <ul class="org-ul">
 <li>John Mitchell and Robert Harper,<br>
@@ -1053,11 +1123,12 @@ definition calls "non-expansive expressions").
 <li>Robert Harper and Christopher Stone,<br>
 "An Interpretation of Standard ML in Type Theory".<br>
 CMU-CS-97-147 Tech. Report, dated June 27, 1997, <a href="https://www.cs.cmu.edu/~rwh/papers/ismltt/ismltt.pdf">PDF</a>.</li>
+<li>Norman Ramsey's <a href="https://www.cs.tufts.edu/comp/105-2019s/readings/ml.html">Learning ML</a> is a good reading list, with good
+recommendations on what parts of books to read (and what to skip).</li>
 </ul>
 </div>
-
 <div id="outline-container-h-8f79e9f1-f460-40a5-8172-d70436622563" class="outline-3">
-<h3 id="h-8f79e9f1-f460-40a5-8172-d70436622563"><span class="section-number-3">5.1.</span> Standard Basis</h3>
+<h3 id="h-8f79e9f1-f460-40a5-8172-d70436622563"><span class="section-number-3">6.1.</span> Standard Basis</h3>
 <div class="outline-text-3" id="text-h-8f79e9f1-f460-40a5-8172-d70436622563">
 <ul class="org-ul">
 <li>Implementations
@@ -1069,9 +1140,8 @@ CMU-CS-97-147 Tech. Report, dated June 27, 1997, <a href="https://www.cs.cmu.edu
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-cf15cca4-a340-407e-9cbc-4a7eed153e63" class="outline-3">
-<h3 id="h-cf15cca4-a340-407e-9cbc-4a7eed153e63"><span class="section-number-3">5.2.</span> Tutorials</h3>
+<h3 id="h-cf15cca4-a340-407e-9cbc-4a7eed153e63"><span class="section-number-3">6.2.</span> Tutorials</h3>
 <div class="outline-text-3" id="text-h-cf15cca4-a340-407e-9cbc-4a7eed153e63">
 <ul class="org-ul">
 <li>Lawrence Paulson,<br>
@@ -1083,9 +1153,8 @@ CUP, second ed., 1996; <a href="https://www.cl.cam.ac.uk/~lp15/MLbook/pub-detail
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940" class="outline-3">
-<h3 id="h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940"><span class="section-number-3">5.3.</span> Definition of Standard ML</h3>
+<h3 id="h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940"><span class="section-number-3">6.3.</span> Definition of Standard ML</h3>
 <div class="outline-text-3" id="text-h-e9bc1bd4-2b3d-477e-ae7b-8c451a8d8940">
 <p>
 There is a precise definition of Standard ML (first <a href="https://smlfamily.github.io/sml90-defn.pdf">published</a> in 1990, later
@@ -1118,9 +1187,8 @@ definition of Standard ML (amazing!)</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc" class="outline-3">
-<h3 id="h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc"><span class="section-number-3">5.4.</span> Classic ML</h3>
+<h3 id="h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc"><span class="section-number-3">6.4.</span> Classic ML</h3>
 <div class="outline-text-3" id="text-h-74947a59-54a1-492a-a4b3-a1dc29ac9cbc">
 <p>
 A "dialect", I suppose we could call the "primordial Ur ML" (or
@@ -1134,9 +1202,8 @@ A "dialect", I suppose we could call the "primordial Ur ML" (or
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa" class="outline-3">
-<h3 id="h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa"><span class="section-number-3">5.5.</span> PCF</h3>
+<h3 id="h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa"><span class="section-number-3">6.5.</span> PCF</h3>
 <div class="outline-text-3" id="text-h-3ce99ec5-e0a2-4442-b2d8-a278203dafaa">
 <ul class="org-ul">
 <li>Martin Hotzel Escardo, <a href="https://www.cs.bham.ac.uk/~mhe/papers/RNC3.pdf">Introduction to Real PCF</a>.</li>
@@ -1155,9 +1222,8 @@ Springer, 2011; chapter 2 introduces PCF.</li>
 <a href="http://www.lix.polytechnique.fr/Labo/Catuscia.Palamidessi/teaching/cg520/98Fall/lecture_notes_98/L11.html">Lecture Notes</a>, 1998, CSE520</li>
 </ul>
 </div>
-
 <div id="outline-container-h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb" class="outline-4">
-<h4 id="h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb"><span class="section-number-4">5.5.1.</span> Full Abstraction of PCF</h4>
+<h4 id="h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb"><span class="section-number-4">6.5.1.</span> Full Abstraction of PCF</h4>
 <div class="outline-text-4" id="text-h-fd3a4867-2de6-4ddb-a91d-8b48e2077aeb">
 <p>
 There are concerns about whether the operational semantics of PCF
@@ -1223,9 +1289,8 @@ Eprint: <a href="https://ora.ox.ac.uk/objects/uuid:63c54392-39f3-46f1-8a68-e6ff0
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-412ef711-6f44-4b0b-bdea-31d24d849d87" class="outline-3">
-<h3 id="h-412ef711-6f44-4b0b-bdea-31d24d849d87"><span class="section-number-3">5.6.</span> Category Theory</h3>
+<h3 id="h-412ef711-6f44-4b0b-bdea-31d24d849d87"><span class="section-number-3">6.6.</span> Category Theory</h3>
 <div class="outline-text-3" id="text-h-412ef711-6f44-4b0b-bdea-31d24d849d87">
 <p>
 One major unresolved issue, for me, is whether we can articulate
@@ -1245,9 +1310,8 @@ pp 32-46
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd" class="outline-3">
-<h3 id="h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd"><span class="section-number-3">5.7.</span> Pure Functional Programming</h3>
+<h3 id="h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd"><span class="section-number-3">6.7.</span> Pure Functional Programming</h3>
 <div class="outline-text-3" id="text-h-90d0eff3-16ee-467c-ae47-fd9a29a6ddfd">
 <p>
 Usually people don't do pure functional programming in Standard ML (or
@@ -1282,7 +1346,7 @@ Milner's context lemmas</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2022-07-07 Thu 13:28.</p>
+<p class="postamble">Last Updated: Mon, 10 Jul 2023 08:33:34 -0700
 </div>
 </body>
 </html>

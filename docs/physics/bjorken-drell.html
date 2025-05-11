@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bjorken and Drell - Reading notes</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Bjorken and Drell - Reading notes</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-12715b37-7cbd-48b9-b370-2157e3f8da42">1. The Dirac Equation</a>
+<ul>
+<li><a href="#h-b1ab5d0b-757e-4820-ac19-8a64bb1c7024">1.1. Formulation of Relativistic Quantum Theory</a></li>
+<li><a href="#h-e9387302-f616-41ec-9bb6-1f402b758648">1.2. Early Attempts</a></li>
+<li><a href="#h-9c0bf147-d058-4998-bb58-bbfe083e4aac">1.3. The Dirac Equation</a></li>
+<li><a href="#h-d70ace27-4b3c-4710-bf69-f87d755a0d1b">1.4. Nonrelativistic Correspondence</a></li>
+</ul>
+</li>
+<li><a href="#h-43055381-a20c-4120-9f7b-82c26583e611">2. Lorentz Covariance of the Dirac Equation</a>
+<ul>
+<li><a href="#h-1c54f957-f7a0-4697-a67a-1acd5fa312b2">2.1. Covariant form of the Dirac Equation</a></li>
+<li><a href="#h-7713296f-781b-422b-90d0-bd0a6ddd2bbd">2.2. Proof of Covariance</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+These are my reading notes on Bjorken and Drell's
+<cite class="book-title">Relativistic Quantum Mechanics</cite> and
+<cite class="book-title">Relativistic Quantum Field Theory</cite>.
+The organization uses their chapter and section names.
+</p>
+
+<p>
+I will also use their equation numbering (which seems to be numbered
+within chapters).
+</p>
+
+<p>
+I am deliberating whether I should use their West-coast metric
+conventions, or use my preferred East-coast metric conventions.
+</p>
+<div id="outline-container-h-12715b37-7cbd-48b9-b370-2157e3f8da42" class="outline-2">
+<h2 id="h-12715b37-7cbd-48b9-b370-2157e3f8da42"><span class="section-number-2">1.</span> The Dirac Equation</h2>
+<div class="outline-text-2" id="text-h-12715b37-7cbd-48b9-b370-2157e3f8da42">
+</div>
+<div id="outline-container-h-b1ab5d0b-757e-4820-ac19-8a64bb1c7024" class="outline-3">
+<h3 id="h-b1ab5d0b-757e-4820-ac19-8a64bb1c7024"><span class="section-number-3">1.1.</span> Formulation of Relativistic Quantum Theory</h3>
+<div class="outline-text-3" id="text-h-b1ab5d0b-757e-4820-ac19-8a64bb1c7024">
+<ul class="org-ul">
+<li>Requirement of relativity: laws of motion valid in one inertial
+system must be true in all inertial systems.</li>
+<li>A "correct quantum theory" should satisfy this requirement of relativity.</li>
+<li>Mathematically: a relativistic quantum theory must be formulated in
+a Lorentz covariant form.</li>
+<li>Review of the principles of nonrelativistic quantum mechanics (they
+cite Pauli's "Handbuch der Physik"; Schiff's <cite class="book-title">Quantum Mechanics</cite>,
+second ed., McGraw-Hill, 1955; Dirac's <cite class="book-title">Principles of Quantum Mechanics</cite>,
+fourth ed., Oxford University Press, 1958):
+<ol class="org-ol">
+<li><p>
+A physical system is described by a state function \(\Phi\). This
+is usually written explicitly using coordinates \(\psi(q,s,t)\)
+which is a complex function of coordinates \(q=(q_{1},\dots,q_{m})\), time \(t\), and any
+additional degrees of freedom \(s\) (like spin).
+</p>
+
+<p>
+This has no direct physical interpretation. Instead,
+\(|\psi(q,s,t)|^{2}\geq0\) is interpreted as the probability of the
+system having values \((q,s)\) at time \(t\). This requires the sum
+of all \(|\psi(q,s,t)|^{2}\) to be finite.
+</p></li>
+<li>Every physical observable is represented by a linear Hermitian
+operator. In particular, the canonical momentum \(p_{i}\) the
+operator in coordinate-space is \(p_{i} \to -\I\hbar\partial/\partial q_{i}\).</li>
+<li><p>
+A physical system is in an eigenstate of the operator \(\Omega\) if
+</p>
+\begin{equation*}\tag{1.1}
+\Omega\Phi_{n}=\omega_{n}\Phi_{n}
+\end{equation*}
+<p>
+where \(\Phi_{n}\) is the n-th
+eigenstate corresponding to eigenvalue \(\omega_{n}\). For
+Hermitian operators, \(\omega_{n}\) is real.
+</p>
+
+<p>
+We can write this in local coordinates as
+\(\Omega(q,s,t)\psi_{n}(q,s,t)=\omega_{n}\psi_{n}(q,s,t)\).
+</p></li>
+<li>Expansion postulate: an arbitrary wave function for a physical
+system can be expanded in a complete orthognormal set of
+eigenfunctions \(\psi_{n}\) of a complete set of commuting
+operators \(\Omega_{n}\). We write this as
+\(\psi = \sum_{n}a_{n}\psi_{n}\)
+where the requirement of orthonormality is
+\[\sum_{s}\int\psi^{*}_{n}(q_{1},\dots,s,\dots,t)\psi_{m}(q_{1},\dots,s,\dots,t)\,\D q_{1}\dots=\delta_{m,n}\]
+(this is how they write it, it's a little ambiguous).
+The coefficients \(a_{n}\), we interpret \(|a_{n}|^{2}\) as the
+probability of finding the system in this eigenstate.</li>
+<li>The result of a measurement of a physical observable is any one
+of its eigenvalues.</li>
+<li><p>
+The development ofa physical system is expressed by the
+Schrodinger equation
+</p>
+\begin{equation*}\tag{1.2}
+\I\hbar\partial_{t}\psi = H\psi
+\end{equation*}
+<p>
+where \(\partial_{t} = \partial/\partial t\).
+</p>
+
+<p>
+A closed system has no explicit time dependence, so
+\(\partial_{t}\psi=0\) for closed systems.
+</p>
+
+<p>
+Corollary (superposition principle): linearity of \(H\) and
+conservation of probability from the Hermitian property of \(H\):
+</p>
+\begin{align*}\tag{1.3}
+&\frac{\D}{\D t}\sum_{s}\int\psi^{*}\psi(\D q_{1}\cdots)\\
+&=\frac{\I}{\hbar}\sum_{s}\int[(H\psi)^{\ast}\psi-\psi^{\ast}(H\psi)](\D q_{1}\cdots)\\
+&=0
+\end{align*}</li>
+</ol></li>
+<li>These six principles are taken to underpin quantum theory, the goal
+will be to maintain them.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-e9387302-f616-41ec-9bb6-1f402b758648" class="outline-3">
+<h3 id="h-e9387302-f616-41ec-9bb6-1f402b758648"><span class="section-number-3">1.2.</span> Early Attempts</h3>
+<div class="outline-text-3" id="text-h-e9387302-f616-41ec-9bb6-1f402b758648">
+<ul class="org-ul">
+<li><p>
+The free particle has its Hamiltonian be
+</p>
+\begin{equation*}\tag{1.4}
+H = \frac{p^{2}}{2m}.
+\end{equation*}</li>
+<li><p>
+The quantum counterpart takes
+</p>
+\begin{equation*}\tag{1.5}
+H\to\I\hbar\partial_{t},\quad\vec{p}\to-\I\hbar\vec{\nabla}
+\end{equation*}</li>
+<li><p>
+Thus we obtain the nonrelativistic Schrodinger equation
+</p>
+\begin{equation*}\tag{1.6}
+\I\hbar\partial_{t}\psi(q,t) = \frac{-\hbar^{2}}{2m}\nabla^{2}\psi(q,t).
+\end{equation*}</li>
+<li>Equations (1.4) and (1.6) are noncovariant and therefore
+unsatisfactory for relativistic quantum mechanics. I.e., the
+left-hand sides and right-hand sides transform differently under
+Lorentz transformations.</li>
+<li><p>
+The total energy \(E\) and the momenta \((p_{x},p_{y},p_{z})\) transform
+as components of a contravariant 4-vector
+</p>
+\begin{equation*}
+p^{\mu} = (p^{0},p^{1},p^{2},p^{3}) = \left(\frac{E}{c},p_{x},p_{y},p_{z}\right)
+\end{equation*}
+<p>
+of invariant length
+</p>
+\begin{equation*}\tag{1.7}
+\sum^{3}_{\mu=0}p^{\mu}p^{\mu} \equiv p_{\mu}p^{\mu} = \frac{\BDpos E^{2}}{c^{2}}\BDminus\vec{p}\cdot\vec{p}\equiv\BDpos m^{2}c^{2}
+\end{equation*}
+<p>
+where \(m\) is the rest mass of the particle, and \(c\) is the speed of
+light in a vacuum.
+</p></li>
+<li>The operator prescription is asserted to be Lorentz covariant, since
+\(p^{\mu}\to\I\hbar\partial/\partial x_{\mu}\).</li>
+<li><p>
+The relativistic Hamiltonian for a free particle is
+</p>
+\begin{equation*}\tag{1.8}
+H = \sqrt{\vec{p}\cdot\vec{p}c^{2} + m^{2}c^{4}}
+\end{equation*}
+<p>
+Therefore the relativistic counterpart to the Schrodinger equation
+would be
+</p>
+\begin{equation*}\tag{1.9}
+\I\hbar\partial_{t}\psi = \sqrt{-\hbar^{2}c^{2}\nabla^{2} + m^{2}c^{4}}\psi
+\end{equation*}
+<p>
+where \(\nabla^{2}\) is the Laplacian operator. The right-hand side of
+Equation (1.9) is non-local: if we take the series expansion of it,
+we have infinitely many derivatives (which results in non-local behaviour).
+</p></li>
+<li><p>
+The trick is to rewrite Equation (1.9) as
+</p>
+\begin{equation*}\tag{1.10}
+H^{2} = c^{2}\vec{p}\cdot\vec{p} + m^{2}c^{4}
+\end{equation*}
+<p>
+Equivalently, iterate Equation (1.9) using the fact if \([A,B]=0\)
+then \(A\psi=B\psi\) implies \(A^{2}\psi=B^{2}\psi\), which gives us
+</p>
+\begin{equation*}
+-\hbar^{2}\partial_{t}^{2}\psi = (-\hbar^{2}c^{2}\nabla^{2}+m^{2}c^{4})\psi.
+\end{equation*}
+<p>
+We can see this is the classical wave equation
+</p>
+\begin{equation*}\tag{1.11}
+[\Box + (mc/\hbar)^{2}]\psi = 0,\quad\mbox{where}\quad\Box=\partial_{\mu}\partial^{\mu}
+\end{equation*}
+<ul class="org-ul">
+<li>Note that this is the <dfn>Klein-Gordon Equation</dfn>.</li>
+</ul></li>
+<li>In squaring the energy relation, we have introduced extraneous
+negative-energy root \(H=-\sqrt{c^{2}\vec{p}\cdot\vec{p}+m^{2}c^{4}}\).
+So we no longer have positive-definite energy, and introduced the
+difficulty of extra negative-energy solutions. We'll address this in
+Chapter 5. (Spoiler: they're antiparticles.)</li>
+<li><p>
+Let us study Equations (1.10) and (1.11). Our first task: construct
+a conserved current. In analogy to the non-relativistic case,
+multiply \(\psi^{\ast}\) by (1.11), then subtracting \(\psi\) times the
+complex-conjugate equation, i.e.,
+</p>
+\begin{align*}
+\psi^{\ast}\left[\Box + (mc/\hbar)^{2}\right]\psi - \psi\left[\Box + (mc/\hbar)^{2}\right]\psi^{\ast} &= 0\\
+\nabla^{\mu}(\psi^{\ast}\nabla_{\mu}\psi - \psi\nabla_{\mu}\psi^{\ast}) &= 0
+\end{align*}
+<p>
+Or equivalently
+</p>
+\begin{equation*}\tag{1.12}
+\partial_{t}\left[\frac{\I\hbar}{2mc^{2}}\left(\psi^{\ast}\partial_{t}\psi-\psi\partial_{t}\psi^{\ast}\right)\right]+\frac{\hbar}{2\I m}\vec{\nabla}\cdot\left[\psi^{\ast}(\vec{\nabla}\psi)-\psi(\vec{\nabla}\psi^{\ast})\right]=0.
+\end{equation*}</li>
+<li><p>
+We would like to interpret
+</p>
+\begin{equation*}
+\frac{\I\hbar}{2mc^{2}}\left(\psi^{\ast}\partial_{t}\psi-\psi\partial_{t}\psi^{\ast}\right)=\rho
+\end{equation*}
+<p>
+as a probability density. But this is imposible: it is not a
+positive-definite expression.
+</p></li>
+<li>Therefore, following Dirac, we abandon Equation (1.11) in the hope
+of finding an equation which is first-order in the time derivative.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-9c0bf147-d058-4998-bb58-bbfe083e4aac" class="outline-3">
+<h3 id="h-9c0bf147-d058-4998-bb58-bbfe083e4aac"><span class="section-number-3">1.3.</span> The Dirac Equation</h3>
+<div class="outline-text-3" id="text-h-9c0bf147-d058-4998-bb58-bbfe083e4aac">
+<ul class="org-ul">
+<li>This section seems to have been imitated everywhere, introduce some
+matrix coefficients, which turn out to be the Gamma matrices.</li>
+<li><p>
+We have
+</p>
+\begin{equation*}\tag{1.13}
+\I\hbar\partial_{t}\psi = \frac{\hbar c}{\I}\left(\alpha_{1}\partial_{x^{1}}+\alpha_{2}\partial_{x^{2}}+\alpha\partial_{x^{3}}\right)\psi+\beta m c^{2}\psi\equiv H\psi
+\end{equation*}
+<p>
+where the \(\alpha_{i}\) and \(\beta\) are \(N\times N\) matrices.
+</p>
+<ul class="org-ul">
+<li>This equation is precisely the <dfn>Dirac Equation</dfn>.</li>
+</ul></li>
+<li>The requirements for this equation to make sense:
+<ol class="org-ol">
+<li>We should recover the energy-momentum relation \(E^{2}=p^{2}c^{2}+m^{2}c^{4}\)</li>
+<li>It must allow for a continuity equation and a probability
+interpretation for the wave function \(\psi\)</li>
+<li>It must be Lorentz covariant</li>
+</ol></li>
+<li>We will check the first two requirements.</li>
+<li><p>
+If we iterate Equation (1.13), we end up with
+</p>
+\begin{align*}
+-\hbar^{2}\partial_{t}^{2}\psi &= -\hbar^{2}c^{2}\sum^{3}_{i,j=1}\frac{\alpha_{i}\alpha_{j}+\alpha_{j}\alpha_{i}}{2}\partial_{i}\partial_{j}\psi\\
+&\qquad + \frac{\hbar m c^{3}}{\I}\sum^{3}_{i=1}(\alpha_{i}\beta+\beta\alpha_{i})\partial_{i}\psi\\
+&\qquad + \beta^{2}m^{2}c^{4}\psi.
+\end{align*}
+<p>
+This requires the four matrices \(\alpha_{i}\), \(\beta\) obey:
+</p>
+\begin{equation*} \tag{1.16}
+\left.\begin{array}{rcl}
+\alpha_{i}\alpha_{j}+\alpha_{j}\alpha_{i} &=& 2\delta_{i,j}\\
+\alpha_{i}\beta+\beta\alpha_{i} &=& 0\\
+\alpha_{i}^{2}=\beta^{2}&=&1
+\end{array}\right\}
+\end{equation*}</li>
+<li><b>Claim:</b> \(N=4\) is the smallest dimension for the matrices. 
+<ul class="org-ul">
+<li>From \(\alpha_{i}^{2}=\beta^{2}=1\) in Eq (1.16), the eigenvalues of
+\(\alpha_{i}\) and \(\beta\) must be \(\pm1\).</li>
+<li>From the anticommutation properties, it follows that the trace
+vanishes, i.e., \(\tr(\alpha_{i})=0\) and \(\tr(\beta)=0\).</li>
+<li>Taken together, this means the number of \(-1\) eigenvalues must be
+equal to the number of \(+1\) eigenvalues, which means we must have
+\(N\) be an even number.</li>
+<li>When \(N=2\), there are only three anticommuting matrices (the Pauli
+matrices). We need four anticommuting matrices. So this can't work.</li>
+<li><p>
+When \(N=4\), we have the possibility
+</p>
+\begin{equation*}\tag{1.17}
+\alpha_{i} = \begin{bmatrix} 0 & \sigma_{i}\\ \sigma_{i} & 0\end{bmatrix},\qquad\beta=\begin{bmatrix}1&0\\ 0&-1\end{bmatrix}
+\end{equation*}
+<p>
+where the \(\sigma_{i}\) are the familiar Pauli matrices, and
+\(\beta\) consists of \(2\times 2\) identity matrices (or its negation).
+</p></li>
+</ul></li>
+<li>Thus we recover the familiar energy-momentum relations, which
+finishes the first task we setup for ourselves.</li>
+<li><b>Goal 2:</b> now we want to consider the differential law of conservation.</li>
+<li><p>
+We introduce the Hermitian conjugate wave functions
+\(\psi^{\dagger}=(\psi^{\ast}_{1},\dots,\psi^{\ast}_{4})\) and
+left-multiply Equation (1.13) by \(\psi^{\dagger}\) to obtain
+</p>
+\begin{equation*}\tag{1.18}
+\I\hbar\psi^{\dagger}\partial_{t}\psi = -\I\hbar c\sum^{3}_{k=1}\psi^{\dagger}\alpha_{k}\partial_{k}\psi+mc^{2}\psi^{\dagger}\beta\psi.
+\end{equation*}</li>
+<li><p>
+Now form the Hermitian conjugate of Equation (1.13), then multiply
+on the right by \(\psi\):
+</p>
+\begin{equation*}\tag{1.19}
+-\I\hbar(\partial_{t}\psi^{\dagger})\psi = \I\hbar c\sum^{3}_{k=1}(\partial_{k}\psi^{\dagger})\alpha_{k}\psi+mc^{2}\psi^{\dagger}\beta\psi,
+\end{equation*}
+<p>
+where \(\alpha_{i}^{\dagger}=\alpha_{i}\) and \(\beta^{\dagger}=\beta\).
+</p></li>
+<li><p>
+Subtracting (1.19) from (1.18) gives us
+</p>
+\begin{equation*}
+\I\hbar\partial_{t}(\psi^{\dagger}\psi)=-\I\hbar c\sum^{3}_{k=1}\partial_{k}(\psi^{\dagger}\alpha_{k}\psi),
+\end{equation*}
+<p>
+or
+</p>
+\begin{equation*}\tag{1.20}
+\partial_{t}\rho + \vec{\nabla}\cdot\vec{j}=0.
+\end{equation*}
+<p>
+We identify the probability density
+</p>
+\begin{equation*}\tag{1.21}
+\rho = \psi^{\dagger}\psi= \sum^{4}_{\sigma=1}\psi^{\ast}_{\sigma}\psi_{\sigma}
+\end{equation*}
+<p>
+and the probability current with three components:
+</p>
+\begin{equation*}\tag{1.22}
+j^{k} = c\psi^{\ast}\alpha^{k}\psi.
+\end{equation*}</li>
+<li><p>
+Integrating Equation (1.20) over all space, and using Green's
+theorem, we find
+</p>
+\begin{equation*}\tag{1.23}
+\partial_{t}\int\psi^{\dagger}\psi\,\D^{3}x = 0,
+\end{equation*}
+<p>
+which encourages a tentative interpretation of \(\rho\) as a
+positive-definite probability density.
+</p></li>
+<li>We need to show that \(\vec{j}\) transforms as a 3-vector under
+spatial rotations. We must show that \((\rho,\vec{j})\) transforms as
+a 4-vector under Lorentz transformations. Also, we must show that
+the Dirac equation (1.13) is Lorentz covariant.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-d70ace27-4b3c-4710-bf69-f87d755a0d1b" class="outline-3">
+<h3 id="h-d70ace27-4b3c-4710-bf69-f87d755a0d1b"><span class="section-number-3">1.4.</span> Nonrelativistic Correspondence</h3>
+<div class="outline-text-3" id="text-h-d70ace27-4b3c-4710-bf69-f87d755a0d1b">
+<ul class="org-ul">
+<li>There are two problems facing us now:
+<ol class="org-ol">
+<li>Establish the Lorentz invariance of the Dirac equation, and</li>
+<li>Check that the equation makes physical sense.</li>
+</ol></li>
+<li>We will check the Dirac equation makes physical sense.</li>
+<li><p>
+When a free electron is at rest, Equation (1.13) reduces to
+</p>
+\begin{equation*}
+\I\hbar\partial_{t}\psi = \beta mc^{2}\psi,
+\end{equation*}
+<p>
+since the de Broglie wavelength is infinitely large and the wave
+function is uniform over all space.
+</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-h-43055381-a20c-4120-9f7b-82c26583e611" class="outline-2">
+<h2 id="h-43055381-a20c-4120-9f7b-82c26583e611"><span class="section-number-2">2.</span> Lorentz Covariance of the Dirac Equation</h2>
+<div class="outline-text-2" id="text-h-43055381-a20c-4120-9f7b-82c26583e611">
+</div>
+<div id="outline-container-h-1c54f957-f7a0-4697-a67a-1acd5fa312b2" class="outline-3">
+<h3 id="h-1c54f957-f7a0-4697-a67a-1acd5fa312b2"><span class="section-number-3">2.1.</span> Covariant form of the Dirac Equation</h3>
+<div class="outline-text-3" id="text-h-1c54f957-f7a0-4697-a67a-1acd5fa312b2">
+<ul class="org-ul">
+<li>Review of what is meant by a "Lorentz transformation"
+<ul class="org-ul">
+<li>Let \(O\) and \(O'\) be two observers in different inertial reference
+frames which describe the same physical event with different
+spacetime coordinates.</li>
+<li><p>
+The rule relating the coordinates \(x^{\mu}\) which observer \(O\)
+describes the event, to the coordinates \((x^{\mu})'\) which
+observer \(O'\) describes the same event, is given by the Lorentz
+transformation between the two sets of coordinates:
+</p>
+\begin{equation*}\tag{2.1}
+(x^{\nu})' = \sum^{3}_{\mu=0}{a^{\nu}}_{\mu}x^{\mu}\equiv {a^{\nu}}_{\mu}x^{\mu}
+\end{equation*}
+<p>
+This is a linear homogeneous transformation, and the coefficients
+\({a^{\nu}}_{\mu}\) depend only upon the relative velocities and
+spatial orientations of the reference frames of \(O\) and \(O'\).
+</p>
+<ul class="org-ul">
+<li>Note: Equation (2.1) describes familiar matrix multiplication
+taught in elementary linear algebra. Here \(x^{\mu}\) describes a
+column vector, and \({a^{\nu}}_{\mu}\) describes a matrix with
+\(\mu\) indexing rows, \(\nu\) indexing columns. Einstein summation
+convention here is just describing familiar matrix multiplication.</li>
+</ul></li>
+<li><p>
+The basic invariant of the Lorentz transformation is the proper
+time interval
+</p>
+\begin{equation*}\tag{2.2}
+\D s^{2}=g_{\mu\nu}\,\D x^{\mu}\D x^{\nu}
+\end{equation*}
+<p>
+(Note that \(\D s=c\,\D\tau\) gives us the "infinitesimal" proper
+time interval \(\D\tau\) explicitly.) This is derived from the
+physical observation that the velocity of light is constant in a vacuum.
+</p></li>
+<li><p>
+Now equations (2.1) and (2.2) taken together leads us to the
+condition on the coefficients that
+</p>
+\begin{equation*}\tag{2.3}
+{a_{\mu}}^{\nu}{a^{\mu}}_{\sigma}={\delta^{\nu}}_{\sigma}
+\end{equation*}
+<p>
+where \({\delta^{\nu}}_{\sigma}\) is the Kronecker delta (1 when
+\(\nu=\sigma\), and 0 otherwise).
+</p></li>
+<li>There are two classes of Lorentz transformations, since Equations
+(2.1) and (2.3) implies \(\det({a^{\mu}}_{\nu})=\pm1\). When the
+determinant is positive, we have <dfn>Proper Lorentz Transformations</dfn>;
+otherwise, the determinant is negative, and we call it an
+<dfn>Improper Lorentz Transformation</dfn>.</li>
+<li>Proper Lorentz transformations.
+<ul class="org-ul">
+<li>These form a subgroup: if \(A\) is a proper Lorentz
+transformation, then \(A^{-1}\) is a proper Lorentz
+transformation; further, if \(A\) and \(B\) are proper Lorentz
+transformations, then \(AB\) is another proper Lorentz
+transformation. The identity matrix is a proper Lorentz
+transformation describing the case when \(O=O'\).
+(We should check associativity, but we know
+matrix multiplication is associative.)</li>
+</ul></li>
+<li>Improper Lorentz transformations are the discrete transformations
+of space inversion and time inversion (possibly composed with
+proper Lorentz transformations).
+<ul class="org-ul">
+<li>Improper Lorentz transformations cannot be built out of
+infinitesimal Lorentz transformations.</li>
+</ul></li>
+</ul></li>
+<li>Now, we want to construct a correspondence relating a given set of
+observations of a Dirac particle made by observers \(O\) and \(O'\) in
+their respective reference frame.
+<ul class="org-ul">
+<li>We have wave functions \(\psi(x)\) used by observer \(O\), and \(\psi'(x')\) used by
+observer \(O'\).</li>
+<li>We seek a transformation law relating these two wave functions to
+each other. Specifically, for \(O'\) to compute \(\psi'(x')\) from \(\psi(x)\).</li>
+<li>Lorentz covariance requires this transformation yield wave
+functions which are solutions of Dirac equations of the same form
+in the primed as well as unprimed reference frame.</li>
+<li><p>
+This invariance expresses the Lorentz invariance of the underlying
+momentum shell
+</p>
+\begin{equation*}
+p^{\mu}p_{\mu}=m^{2}c^{2}.
+\end{equation*}</li>
+<li><p>
+<b>Gamma matrices.</b> Towards this end, we introduce the notation
+</p>
+\begin{equation*}
+\gamma^{0}=\beta,\quad\gamma^{i}=\beta\alpha_{i}.
+\end{equation*}
+<p>
+Then we have Dirac's equation be
+</p>
+\begin{equation*}\tag{2.4}
+\I\hbar\left(\gamma^{0}\partial_{0}+\gamma^{1}\partial_{1}+\dots+\gamma^{3}\partial_{3}\right)\psi-mc\psi=0.
+\end{equation*}</li>
+<li><p>
+We see the defining relations from Equation (1.16) is:
+</p>
+\begin{equation*}\tag{2.5}
+\gamma^{\mu}\gamma^{\nu}+\gamma^{\nu}\gamma^{\mu}=2g^{\mu\nu}\mathbf{1}
+\end{equation*}
+<p>
+where \(\mathbf{1}\) is the \(4\times 4\) identity matrix
+</p></li>
+<li>The \(\gamma^{i}\) are anti-Hermitian and \((\gamma^{i})^{2}=-\mathbf{1}\).</li>
+<li>The \(\gamma^{0}\) is Hermitian.</li>
+<li><p>
+The representation from Equation (1.17) gives us
+</p>
+\begin{equation*}\tag{2.6}
+\gamma^{i}=\begin{bmatrix}0 & \sigma^{i}\\-\sigma^{i}&0\end{bmatrix},\quad
+\gamma^{0}=\begin{bmatrix}1 & 0\\ 0 & -1\end{bmatrix}.
+\end{equation*}</li>
+<li><p>
+<b>Feynman slash notation.</b> We have
+</p>
+\begin{equation*}
+\cancel{A} = \gamma^{\mu}A_{\mu} = g_{\mu\nu}\gamma^{\mu}A^{\nu} = \gamma^{0}A^{0}-\vec{\gamma}\cdot\vec{A},
+\end{equation*}
+<p>
+so we have in particular
+</p>
+\begin{equation*}
+\cancel{\nabla} = \gamma^{\mu}\partial_{\mu} = \frac{\gamma^{0}}{c}\partial_{t}+\vec{\gamma}\cdot\vec{\nabla}.
+\end{equation*}</li>
+<li><p>
+We can then simplify the Dirac Equation (2.4) to:
+</p>
+\begin{equation*}\tag{2.7}
+(\I\hbar\cancel{\nabla} - mc)\psi = 0
+\end{equation*}
+<p>
+Or, using \(p^{\mu}=\I\hbar\partial_{\mu}\)
+</p>
+\begin{equation*}\tag{2.8}
+(\cancel{p} - mc)\psi = 0
+\end{equation*}</li>
+<li><p>
+We can add electromagnetic interaction according to the "minimal"
+substitution from Equation (1.25):
+</p>
+\begin{equation*}
+\left(\cancel{p} - \frac{e\cancel{A}}{c}  - mc\right)\psi = 0
+\end{equation*}
+<p>
+This does not affect concerns of covariance, since both \(p^{\mu}\)
+and \(A^{\mu}\) are 4-vectors.
+</p></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-7713296f-781b-422b-90d0-bd0a6ddd2bbd" class="outline-3">
+<h3 id="h-7713296f-781b-422b-90d0-bd0a6ddd2bbd"><span class="section-number-3">2.2.</span> Proof of Covariance</h3>
+<div class="outline-text-3" id="text-h-7713296f-781b-422b-90d0-bd0a6ddd2bbd">
+<ul class="org-ul">
+<li>To prove the Dirac equation is Lorentz covariant, we need to prove
+two things:
+<ol class="org-ol">
+<li>We need an explicit way to compute \(\psi'(x')\) for observer \(O'\)
+given \(\psi(x)\) from observer \(O\), which describes the same
+physical state.</li>
+<li><p>
+According to the principle of relativity, \(\psi'(x')\) will be a
+solution of an Equation which takes of the form of (2.7) in the
+primed system
+</p>
+\begin{equation*}
+\left(\I\hbar\widetilde{\gamma}^{\mu}\frac{\partial}{\partial x^{\mu\prime}} - mc\right)\psi'(x') = 0
+\end{equation*}
+<p>
+where \(\widetilde{\gamma}^{\mu}\) satisfy the same anticommutation
+relations of Equation (2.5), which means
+\(\widetilde{\gamma}^{0\dagger}=\widetilde{\gamma}^{0}\) and
+\(\widetilde{\gamma}^{i\dagger}=-\widetilde{\gamma}^{i}\). (This is
+required for the Hamiltonian operator to be Hermitian.)
+It turns out these are equivalent up to a unitary transformation
+\(U\),
+</p>
+\begin{equation*}
+\widetilde{\gamma}_{\mu}=U^{\dagger}\gamma_{\mu}U,\quad U^{\dagger}=U^{-1}
+\end{equation*}
+<p>
+(it's a straightforward but lengthy proof)
+</p>
+<ul class="org-ul">
+<li>These \(U\) matrices have constant components.</li>
+<li><p>
+We can therefore "pull out" the constant \(U\) matrices, and the
+Dirac equation in \(O'\) frame becomes
+</p>
+\begin{equation*}\tag{2.9}
+\left(\I\hbar\gamma^{\mu}\frac{\partial}{\partial x^{\mu\prime}} - mc\right)\psi'(x') = 0
+\end{equation*}
+<p>
+where Bjorken and Drell write the first term as \(\cancel{p}' = \I\hbar\gamma^{\mu}\partial'_{\mu}\)
+</p></li>
+</ul></li>
+</ol></li>
+<li>We'd like the transformation from \(\psi\) to \(\psi'\) be linear. What
+does this require?
+<ul class="org-ul">
+<li><p>
+To be explicit, we would like
+</p>
+\begin{equation*}\tag{2.10}
+\psi'(x')=\psi'(ax)=S(a)\psi(x)=S(a)\psi(a^{-1}x')
+\end{equation*}
+<p>
+where \(S(a)\) is a \(4\times 4\) matrix parametrized by \(a\), and
+\(S(a)\) operates on the four-component column vector \(\psi(x)\). The
+\(S(a)\) depends only on the relative velocities and spatial
+orientations of \(O\) and \(O'\).
+</p></li>
+<li><p>
+Further, \(S\) must have an inverse, so if \(O\) knows \(\psi'(x')\)
+which \(O'\) uses to describe the observations of a given state,
+observer \(O\) may construct their own wave function \(\psi(x)\) by
+</p>
+\begin{equation*}\tag{2.11}
+\psi(x) = S^{-1}(a)\psi'(x') = S^{-1}(a)\psi'(ax)
+\end{equation*}
+<p>
+Then using Equation (2.10), we can rewrite this as
+</p>
+\begin{equation*}
+\psi(x) = S(a^{-1})\psi'(ax).
+\end{equation*}
+<p>
+Therefore we obtain the identification
+</p>
+\begin{equation*}
+S(a^{-1}) = S^{-1}(a).
+\end{equation*}</li>
+<li>Now&#x2026;how to find \(S\)?</li>
+<li><p>
+Start with the Dirac equation for observer \(O\) (Eq (2.7)) and try
+to rewrite it in terms of \(\psi'(x')\) using Equation (2.11):
+</p>
+\begin{equation*}\tag{2.7'}
+\left(\I\hbar\gamma^{\mu}\frac{\partial}{\partial x^{\mu}}-mc\right)\psi(x)=0
+\end{equation*}
+<p>
+then using Equation (2.11)
+</p>
+\begin{equation*}
+\left(\I\hbar\gamma^{\mu}\frac{\partial}{\partial x^{\mu}}-mc\right)S^{-1}(a)\psi'(x')=0.
+\end{equation*}
+<p>
+Since \(S^{-1}(a)\) is constant with respect to \(x^{\mu}\), we can
+pull it inside the parentheses, and multiply on the left by \(S(a)\)
+to get:
+</p>
+\begin{equation*}
+\left(\I\hbar S(a)\gamma^{\mu}S^{-1}(a)\frac{\partial}{\partial x^{\mu}}-mc\right)\psi'(x')=0.
+\end{equation*}
+<ul class="org-ul">
+<li>Note that \(S(a)\) and \(S^{-1}(a)\) cannot be pulled past a \(\gamma\)
+matrix, since they act on gamma matrices.</li>
+</ul></li>
+<li><p>
+We then can use Equation (2.1) to rewrite the partial derivative
+operator as (using the chain rule)
+</p>
+\begin{equation*}
+\frac{\partial}{\partial x^{\mu}} = \frac{\partial x'^{\nu}}{\partial x^{\mu}}\frac{\partial}{\partial x'^{\nu}}={a^{\nu}}_{\mu}\frac{\partial}{\partial x'^{\nu}}.
+\end{equation*}</li>
+<li><p>
+We combine these previous two steps together to obtain the Dirac
+equation as:
+</p>
+\begin{equation*}
+\left(\I\hbar S(a)\gamma^{\mu}S^{-1}(a){a^{\nu}}_{\mu}\frac{\partial}{\partial x'^{\nu}}-mc\right)\psi'(x')=0.
+\end{equation*}
+<p>
+This is form-invariant (i.e., identical with Equation (2.9)),
+provided an \(S\) can be found such that
+</p>
+\begin{equation*}
+S(a)\gamma^{\mu}S^{-1}(a){a^{\nu}}_{\mu} = \gamma^{\nu},
+\end{equation*}
+<p>
+or equivalently,
+</p>
+\begin{equation*}\tag{2.12}
+S^{-1}(a)\gamma^{\nu}S(a) = {a^{\nu}}_{\mu}\gamma^{\mu}.
+\end{equation*}
+<ul class="org-ul">
+<li>Once we find a solution to Equation (2.12), we will have
+established the covariance of the Dirac equation.</li>
+<li><b>Terminology:</b> a wave function transforming according to
+Equations (2.10) and (2.12) are called a four-component Lorentz spinor.</li>
+</ul></li>
+</ul></li>
+<li>Goal: construct \(S\). The trick is to construct \(S\) for infinitesimal
+proper Lorentz transformations. (This is a common trick studying Lie
+groups from Lie algebras.)
+<ul class="org-ul">
+<li><p>
+We take
+</p>
+\begin{equation*}\tag{2.13a}
+{a^{\nu}}_{\mu} = {g^{\nu}}_{\mu} + \Delta{\omega^{\nu}}_{\mu}
+\end{equation*}
+<p>
+with
+</p>
+\begin{equation*}\tag{2.13b}
+\Delta\omega^{\nu\mu} = -\Delta\omega^{\mu\nu}
+\end{equation*}
+<p>
+infinitesimal (so quadratic and higher-order terms of
+\(\Delta\omega\) are dropped).
+</p></li>
+<li><b>Exercise:</b> prove if \(\mu\), \(\nu=1,\dots,N\) that \(\Delta\omega^{\mu\nu}\)
+has \(N(N-1)/2\) independent components. (Hint: look at the
+diagonal, then look at the off-diagonal.)</li>
+<li>Each of the six independent nonvanishing \(\Delta\omega^{\mu\nu}\)
+generates an infinitesimal Lorentz transformation.</li>
+<li>\(\Delta\omega^{01}=\Delta\beta\) describes a transformation for a
+coordinate system moving with velocity \(c\,\Delta\beta\) in the \(x\)
+direction.</li>
+<li>\(\Delta{\omega^{1}}_{2}=\Delta\varphi\) for a rotation through an
+angle \(\Delta\varphi\) about the $z$-axis, and so on.</li>
+<li><p>
+Expanding \(S\) in powers of \(\Delta\omega^{\nu\mu}\), and keeping
+only the linear terms in the infinitesimal generators, we have
+</p>
+\begin{equation*}\tag{2.14}
+S = \mathbf{1} - \frac{\I}{4}\sigma_{\mu\nu}\,\Delta\omega^{\mu\nu},\quad\mbox{and}\quad S^{-1} = \mathbf{1} + \frac{\I}{4}\sigma_{\mu\nu}\,\Delta\omega^{\mu\nu}
+\end{equation*}
+<p>
+with \(\sigma_{\mu\nu}=-\sigma_{\nu\mu}\) by (2.13b).
+</p></li>
+<li>Each of the six coefficients \(\sigma_{\mu\nu}\) is really a
+\(4\times 4\) matrix, as are the transformation \(S\) and the unit
+matrix \(\mathbf{1}\).</li>
+<li><p>
+Inserting Equations (2.13) and (2.14) into Equation (2.12) and
+keeping first-order terms in \(\Delta\omega^{\mu\nu}\), we find
+</p>
+\begin{equation*}
+\Delta{\omega^{\nu}}_{\mu}\,\gamma^{\mu} = \frac{-\I}{4}(\Delta\omega)^{\alpha\beta}(\gamma^{\nu}\sigma_{\alpha\beta}-\sigma_{\alpha\beta}\gamma^{\nu}).
+\end{equation*}
+<p>
+Careful: the right-hand side does not necessarily vanish,
+multiplication of matrices is not commutative.
+</p></li>
+<li><p>
+From the antisymmetry of the generators \(\Delta\omega^{\mu\nu}\) it
+follows that
+</p>
+\begin{equation*}\tag{2.15}
+2\I({g^{\nu}}_{\alpha}\gamma_{\beta}-{g^{\nu}}_{\beta}\gamma_{\alpha})=[\gamma^{\nu},\sigma_{\alpha\beta}]
+\end{equation*}
+<p>
+where the right-hand side is the commutator \([A,B]=AB-BA\).
+</p></li>
+<li>The problem of establishing proper Lorentz covariance of the Dirac
+equation is now reduced to finding six matrices
+\(\sigma_{\alpha\beta}\) satisfying Equation (2.15).</li>
+<li><p>
+Simplest guess:
+</p>
+\begin{equation*}\tag{2.16}
+\sigma_{\mu\nu}=\frac{\I}{2}[\gamma_{\mu},\gamma_{\nu}].
+\end{equation*}
+<ul class="org-ul">
+<li><p>
+Then using Equation (2.14), \(S\) for an infinitesimal
+transformation is given by
+</p>
+\begin{equation*}\tag{2.17}
+S = \mathbf{1} + \frac{1}{8}[\gamma_{\mu},\gamma_{\nu}]\,\Delta\omega^{\mu\nu} = \mathbf{1} - \frac{\I}{4}\sigma_{\mu\nu}\,\Delta\omega^{\mu\nu}
+\end{equation*}</li>
+<li>We can then build our way up to a finite Lorentz transformation
+by iterating a succession of infinitesimal Lorentz
+transformations (the trick transforming Lie algebras to Lie groups).</li>
+<li><p>
+I am going to skip the intermediate steps and jump to the
+conclusion. The trick is that we can rotate the Lorentz boost to
+be along the $x$-axis, taking
+</p>
+\begin{equation*}\tag{2.19}
+{I^{\nu}}_{\mu} = \begin{bmatrix} 0 & -1 & 0 & 0\\
+-1 & 0 & 0 & 0\\
+ 0 & 0 & 0 & 0\\
+ 0 & 0 & 0 & 0
+\end{bmatrix}
+\end{equation*}
+<p>
+There are 6 different possible \({I^{\nu}}_{\mu}\) matrices (3 for
+boosts along the \(x\), \(y\), \(z\) axes; and 3 for spatial rotations
+about each axis). This allows us to write
+</p>
+\begin{equation*}\tag{2.18}
+\Delta{\omega^{\nu}}_{\mu} = (\Delta\omega_{(n)}){(I_{(n)})^{\nu}}_{\mu}
+\end{equation*}
+<p>
+where \(\Delta\omega_{(n)}\) is the infinitesimal "angle of
+rotation" parameter, and \(n\) keeps track of which possible \(I\)
+matrix we're working with. We'll work through one possible case
+in some detail, the other cases are "obvious".
+</p></li>
+<li><p>
+Lorentz transformation for uniform relative $x$-axis motion
+(using Lie algebra to Lie group relations)
+</p>
+\begin{align*}
+x^{\nu'} &= {(\exp(\omega I))^{\nu}}_{\mu}x^{\mu}\\
+&= {(\cosh(\omega I) + \sinh(\omega I))^{\nu}}_{\mu}x^{\mu}\\
+&= {(\mathbf{1} - I^{2} + I^{2}\cosh(\omega) + I\sinh(\omega))^{\nu}}_{\mu}x^{\mu}
+\end{align*}</li>
+<li><p>
+The individual components for this:
+</p>
+\begin{equation*}\tag{2.20}
+\begin{bmatrix}x^{0\prime}\\x^{1\prime}\\x^{2\prime}\\x^{3\prime}\end{bmatrix}
+= \begin{bmatrix} \cosh(\omega) & -\sinh(\omega) & 0 & 0\\
+  -\sinh(\omega) & \cosh(\omega) & 0 & 0\\
+ 0 & 0 & 0 & 0\\
+ 0 & 0 & 0 & 0
+ \end{bmatrix}
+\begin{bmatrix}x^{0}\\x^{1}\\x^{2}\\x^{3}\end{bmatrix}
+\end{equation*}
+<p>
+Or if you prefer:
+</p>
+\begin{equation*}\tag{2.21}
+\left.\begin{array}{rcl}
+x^{0\prime} &=& (\cosh(\omega))(x^{0} - x^{1}\tanh(\omega))\\
+x^{1\prime} &=& (\cosh(\omega))(x^{1} - x^{0}\tanh(\omega))\\
+x^{2\prime} &=& x^{2}\\
+x^{3\prime} &=& x^{3}
+\end{array}\right\}
+\end{equation*}
+<p>
+where \(\tanh(\omega)=\beta\) and \(\cosh(\omega) = 1/\sqrt{1-\beta^{2}}\).
+</p></li>
+</ul></li>
+<li><p>
+Finite spinor transformation \(S\) may be determined using Equations
+(2.14) and (2.18) as
+</p>
+\begin{align*}
+\psi'(x') &= S\psi(x)\\
+          &= \exp\left(\frac{-\I}{4}\omega\sigma_{\mu\nu}I^{\mu\nu}_{(n)}\right)\psi(x)\tag{2.22}
+\end{align*}</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated: Sat, 14 Dec 2024 10:38:10 -0800
+</div>
+</body>
+</html>

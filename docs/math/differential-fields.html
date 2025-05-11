@@ -6,7 +6,7 @@
 <title>Differential Fields</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -266,7 +295,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-98e6773a-71b2-4c34-8d61-84f99cbdb3a5" class="outline-2">
 <h2 id="h-98e6773a-71b2-4c34-8d61-84f99cbdb3a5"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-98e6773a-71b2-4c34-8d61-84f99cbdb3a5">
@@ -299,7 +327,6 @@ into finding an element \(y\in\mathbb{k}\) such that
 \end{equation}
 </div>
 </div>
-
 <div id="outline-container-h-7c180687-c3b9-489c-b39a-68e04c6abc37" class="outline-2">
 <h2 id="h-7c180687-c3b9-489c-b39a-68e04c6abc37"><span class="section-number-2">2.</span> Polynomial Methods</h2>
 <div class="outline-text-2" id="text-h-7c180687-c3b9-489c-b39a-68e04c6abc37">
@@ -331,7 +358,6 @@ are \(q,r\in R\) such that \(a=bq+r\) and either \(r=0\) or \(\nu(r)\lt\nu(b)\).
 
 </div>
 </div>
-
 <div id="outline-container-h-751a7ac3-f79a-4642-b613-a920eeea32ca" class="outline-3">
 <h3 id="h-751a7ac3-f79a-4642-b613-a920eeea32ca"><span class="section-number-3">2.1.</span> Long Division</h3>
 <div class="outline-text-3" id="text-h-751a7ac3-f79a-4642-b613-a920eeea32ca">
@@ -379,7 +405,6 @@ this.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-8e98244d-56f8-4963-88c3-1f78471eb2ae" class="outline-3">
 <h3 id="h-8e98244d-56f8-4963-88c3-1f78471eb2ae"><span class="section-number-3">2.2.</span> Pseudo-Division</h3>
 <div class="outline-text-3" id="text-h-8e98244d-56f8-4963-88c3-1f78471eb2ae">
@@ -419,7 +444,6 @@ denoted \(\mathrm{prem}(A,B)\) by Bronstein.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-a3676324-9e86-4586-b707-27c267679ea9" class="outline-3">
 <h3 id="h-a3676324-9e86-4586-b707-27c267679ea9"><span class="section-number-3">2.3.</span> Euclidean Algorithm</h3>
 <div class="outline-text-3" id="text-h-a3676324-9e86-4586-b707-27c267679ea9">
@@ -442,7 +466,6 @@ There are several variations of Euclid's algorithm for GCD with polynomials.
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-f44a2567-777a-4120-ad6b-f041226af660" class="outline-4">
 <h4 id="h-f44a2567-777a-4120-ad6b-f041226af660"><span class="section-number-4">2.3.1.</span> Extended Euclidean Algorithm</h4>
 <div class="outline-text-4" id="text-h-f44a2567-777a-4120-ad6b-f041226af660">
@@ -478,7 +501,6 @@ algorithm could be implemented quite quickly.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-590cbbf3-ad55-4a26-9e49-d0c7f1ef9832" class="outline-4">
 <h4 id="h-590cbbf3-ad55-4a26-9e49-d0c7f1ef9832"><span class="section-number-4">2.3.2.</span> Half-Extended Euclidean</h4>
 <div class="outline-text-4" id="text-h-590cbbf3-ad55-4a26-9e49-d0c7f1ef9832">
@@ -508,7 +530,6 @@ variant of the Euclidean algorithm which Bronstein calls the
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-88893e7a-9439-47d6-9721-956d5796b621" class="outline-4">
 <h4 id="h-88893e7a-9439-47d6-9721-956d5796b621"><span class="section-number-4">2.3.3.</span> Euclidean Algorithm</h4>
 <div class="outline-text-4" id="text-h-88893e7a-9439-47d6-9721-956d5796b621">
@@ -527,7 +548,6 @@ implementation of Euclid's algorithm.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-09dee665-f595-430f-b349-0001d8e5da4d" class="outline-4">
 <h4 id="h-09dee665-f595-430f-b349-0001d8e5da4d"><span class="section-number-4">2.3.4.</span> Diophantine version of Extended Euclidean</h4>
 <div class="outline-text-4" id="text-h-09dee665-f595-430f-b349-0001d8e5da4d">
@@ -559,7 +579,6 @@ are the unknowns.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-9b99a81d-bf15-4199-b5d8-e7e6f334f34f" class="outline-4">
 <h4 id="h-9b99a81d-bf15-4199-b5d8-e7e6f334f34f"><span class="section-number-4">2.3.5.</span> Diophantine Half-Extended Euclidean</h4>
 <div class="outline-text-4" id="text-h-9b99a81d-bf15-4199-b5d8-e7e6f334f34f">
@@ -611,7 +630,6 @@ This gives us a more efficient diophantine extended Euclidean method
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-74646ae1-4018-4052-8462-5ce4142bac65" class="outline-4">
 <h4 id="h-74646ae1-4018-4052-8462-5ce4142bac65"><span class="section-number-4">2.3.6.</span> Partial Fraction Decomposition</h4>
 <div class="outline-text-4" id="text-h-74646ae1-4018-4052-8462-5ce4142bac65">
@@ -642,7 +660,6 @@ irreducible) factors \(\gcd(d_{i},d_{j})=1\) for \(i\neq j\).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-c5046482-1209-4124-9a15-b5975ba58338" class="outline-4">
 <h4 id="h-c5046482-1209-4124-9a15-b5975ba58338"><span class="section-number-4">2.3.7.</span> Partial Fraction Decomposition with Multiplicity</h4>
 <div class="outline-text-4" id="text-h-c5046482-1209-4124-9a15-b5975ba58338">
@@ -728,7 +745,6 @@ respect to the factorization \(d = \prod_{i} d_{i}^{e_{i}}\).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-08823f23-c088-4e0d-8ede-0cff084699f0" class="outline-2">
 <h2 id="h-08823f23-c088-4e0d-8ede-0cff084699f0"><span class="section-number-2">3.</span> Canonical Representation</h2>
 <div class="outline-text-2" id="text-h-08823f23-c088-4e0d-8ede-0cff084699f0">
@@ -759,7 +775,6 @@ Then we'll want to split a given polynomial
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-17b4392e-7077-4233-8f29-289bbb4574da" class="outline-2">
 <h2 id="h-17b4392e-7077-4233-8f29-289bbb4574da"><span class="section-number-2">4.</span> References</h2>
 <div class="outline-text-2" id="text-h-17b4392e-7077-4233-8f29-289bbb4574da">
@@ -768,7 +783,6 @@ Then we'll want to split a given polynomial
 Springer, second ed., 1996.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-6faf3e58-92a3-42a5-8528-3eef7ae5133b" class="outline-3">
 <h3 id="h-6faf3e58-92a3-42a5-8528-3eef7ae5133b"><span class="section-number-3">4.1.</span> Also See</h3>
 <div class="outline-text-3" id="text-h-6faf3e58-92a3-42a5-8528-3eef7ae5133b">
@@ -782,7 +796,7 @@ Springer, 2003.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 17:39:55 -0700
 </div>
 </body>
 </html>

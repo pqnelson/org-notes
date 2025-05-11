@@ -6,7 +6,7 @@
 <title>Metalogical Frameworks</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -267,7 +296,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-c20c0cca-8159-4f41-b3ae-be1561e5c6f7" class="outline-2">
 <h2 id="h-c20c0cca-8159-4f41-b3ae-be1561e5c6f7"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-c20c0cca-8159-4f41-b3ae-be1561e5c6f7">
@@ -283,7 +311,7 @@ logical framework such that it can prove metatheorems. For example,
 proving <a href="https://en.wikipedia.org/wiki/Cut-elimination_theorem">cut-elimination</a>.
 </p>
 
-<div class="remark" id="orga95bbfc">
+<div class="remark" id="orgec22f00">
 <p>
 I will often write "meta-logical framework" and "metalogical framework"
 interchangeably.
@@ -292,11 +320,10 @@ interchangeably.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-14d91154-6603-46f9-a532-90736863a01b" class="outline-2">
 <h2 id="h-14d91154-6603-46f9-a532-90736863a01b"><span class="section-number-2">2.</span> Examples of Meta-Logical</h2>
 <div class="outline-text-2" id="text-h-14d91154-6603-46f9-a532-90736863a01b">
-<div class="math-example" id="org7e84ecb">
+<div class="math-example" id="org8d4634f">
 <p>
 <a href="hol.html">HOL</a> is a meta-logical framework, since it can encode judgements using
 inductive types (thanks to the Tarski-Knaster theorem) and inference
@@ -307,14 +334,14 @@ meta-logical framework.
 
 </div>
 
-<div class="math-example" id="org73412c4">
+<div class="math-example" id="orgf8842cd">
 <p>
 A <b>NON-example</b> is <a href="automath.html">Automath</a>, which is too weak to prove metatheorems.
 </p>
 
 </div>
 
-<div class="math-example" id="org534ab00">
+<div class="math-example" id="org4e2be4f">
 <p>
 A mixed example would be <a href="isabelle.html">Isabelle</a> (which is a fragment of intuitionistic
 higher-order logic) alone is insufficient to be a meta-logical framework.
@@ -325,7 +352,6 @@ meta-logical framework.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-1819d180-7116-45f0-a85d-7df7ed5dbadd" class="outline-2">
 <h2 id="h-1819d180-7116-45f0-a85d-7df7ed5dbadd"><span class="section-number-2">3.</span> Defining Metalogical Frameworks</h2>
 <div class="outline-text-2" id="text-h-1819d180-7116-45f0-a85d-7df7ed5dbadd">
@@ -348,7 +374,6 @@ framework. (For more about reflection principles, see John Harrison's
 review, especially &sect;&sect;3 <i>et seq</i>.)
 </p>
 </div>
-
 <div id="outline-container-h-6892ab2e-77b7-454f-a41d-191def13f067" class="outline-3">
 <h3 id="h-6892ab2e-77b7-454f-a41d-191def13f067"><span class="section-number-3">3.1.</span> Observation: Weakly Constructive</h3>
 <div class="outline-text-3" id="text-h-6892ab2e-77b7-454f-a41d-191def13f067">
@@ -366,7 +391,6 @@ inessential. It is unclear to me at present.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-af1ef39b-c0e6-488a-9267-82b779dc2972" class="outline-3">
 <h3 id="h-af1ef39b-c0e6-488a-9267-82b779dc2972"><span class="section-number-3">3.2.</span> Observation: Initial Model</h3>
 <div class="outline-text-3" id="text-h-af1ef39b-c0e6-488a-9267-82b779dc2972">
@@ -431,7 +455,6 @@ programming languages, see his paper, "Relating Models of Polymorphism"
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-6ff11a58-ab6d-42c4-a72f-33a94d50834a" class="outline-2">
 <h2 id="h-6ff11a58-ab6d-42c4-a72f-33a94d50834a"><span class="section-number-2">4.</span> Logical Frameworks via Reflection Principles</h2>
 <div class="outline-text-2" id="text-h-6ff11a58-ab6d-42c4-a72f-33a94d50834a">
@@ -441,7 +464,6 @@ meta-logical framework obeys reflection principles or not. "Reflection"
 is a relatively "soft" concept (like predicativity).
 </p>
 </div>
-
 <div id="outline-container-h-efc8bdff-b813-455e-84b6-279f23e63f0d" class="outline-3">
 <h3 id="h-efc8bdff-b813-455e-84b6-279f23e63f0d"><span class="section-number-3">4.1.</span> Entailment System</h3>
 <div class="outline-text-3" id="text-h-efc8bdff-b813-455e-84b6-279f23e63f0d">
@@ -452,7 +474,7 @@ logic. The "space of first-order languages" is then generalized as an
 <i>entailment</i>, is defined as:
 </p>
 
-<div class="definition" id="org08edb07">
+<div class="definition" id="org161645e">
 <p>
 An <dfn>Entailment System</dfn> consists of
 </p>
@@ -489,7 +511,7 @@ where \(sen(H)(\Gamma)=\{sen(H)(\varphi)\mid\varphi\in\Gamma\}\).</li>
 
 </div>
 
-<div class="remark" id="orgd644097">
+<div class="remark" id="org9ba36f7">
 <p>
 We can meaningfully discuss a notion of <i>proof calculi</i> for entailment
 systems. See &sect;2.3 of "Axiomatizing Reflective Logics and Languages"
@@ -504,7 +526,7 @@ from including a signature \(\Sigma\) into a larger signature \(\Sigma'\),
 or from changing syntax, or something similar.
 </p>
 
-<div class="definition" id="orgb53e180">
+<div class="definition" id="org9125324">
 <p>
 Let \(\mathcal{E}\) be an entailment system. We define its category
 \(\mathbf{Th}\) of <dfn>Theories</dfn> to consist of
@@ -526,7 +548,7 @@ and the induced functor \(sen\colon\mathbf{Th}\to\mathbf{Set}\) given by
 
 </div>
 
-<div class="remark" id="org55a1bbf">
+<div class="remark" id="org7c54425">
 <p>
 I believe this means that \(\mathbf{Th}\) is fibred over \(\mathbf{Sign}\).
 </p>
@@ -534,7 +556,6 @@ I believe this means that \(\mathbf{Th}\) is fibred over \(\mathbf{Sign}\).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c" class="outline-3">
 <h3 id="h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c"><span class="section-number-3">4.2.</span> Using Institutions</h3>
 <div class="outline-text-3" id="text-h-64d0cbac-bb9e-49bd-b216-af2f770cdb8c">
@@ -545,7 +566,7 @@ formalize <b>model theory</b> beyond first-order logic, and has been used in
 the literature since their introduction in the '70s.
 </p>
 
-<div class="definition" id="org51a7ef1">
+<div class="definition" id="orga11b140">
 <p>
 An <dfn>Institution</dfn> consists of
 </p>
@@ -579,7 +600,7 @@ every \(\varphi\in sen(\Sigma)\), we have \(M'\vDash_{\Sigma'}sen(H)(\varphi)\if
 
 </div>
 
-<div class="remark" id="org0137939">
+<div class="remark" id="org9d4341b">
 <p>
 We can also note, if \(T=(\Sigma,\Gamma)\) is a theory, its model category
 \(\mathbf{Mod}(T)\) is the full subcategory of \(\mathbf{Mod}(\Sigma)\)
@@ -590,7 +611,7 @@ the sentences in \(\Gamma\) &#x2014; i.e., for each \(\varphi\in\Gamma\), we hav
 
 </div>
 
-<div class="theorem" id="org0ce890a">
+<div class="theorem" id="org5690ce4">
 <p>
 Given an institution \(I\), we may construct an entailment system \(I^{+}\)
 where we construct the relation: \(\Gamma\vdash_{\Sigma}\varphi\) if and
@@ -601,7 +622,6 @@ only if \(M\vDash_{\Sigma}\varphi\) for every \(M\in\mathbf{Mod}(T)\) for
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-661b870a-695f-4a1a-938a-c618e52e6780" class="outline-3">
 <h3 id="h-661b870a-695f-4a1a-938a-c618e52e6780"><span class="section-number-3">4.3.</span> Logic = Entailment System + Institution</h3>
 <div class="outline-text-3" id="text-h-661b870a-695f-4a1a-938a-c618e52e6780">
@@ -610,7 +630,7 @@ A logic can now be defined in glorious generality as a <i>sound</i>
 institutionalized entailment system.
 </p>
 
-<div class="definition" id="orgce7512c">
+<div class="definition" id="org85117ed">
 <p>
 A <dfn>Logic</dfn> consists of
 </p>
@@ -652,7 +672,7 @@ holds for any model \(M\) that satisfies all the sentences in \(\Gamma\).</li>
 
 </div>
 
-<div class="theorem" id="org0a8430b">
+<div class="theorem" id="orga055b9e">
 <p>
 Given an institution \(I\), we can construct an entailment system \(I^{+}\)
 and together these form a logic, which is denoted \(I^{\dagger}\) (or, by
@@ -663,7 +683,6 @@ Furthermore, this logic is complete.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-d0d88680-9d94-454a-bb95-bae2d9545de3" class="outline-3">
 <h3 id="h-d0d88680-9d94-454a-bb95-bae2d9545de3"><span class="section-number-3">4.4.</span> Relevant Reflection Principles</h3>
 <div class="outline-text-3" id="text-h-d0d88680-9d94-454a-bb95-bae2d9545de3">
@@ -671,7 +690,7 @@ Furthermore, this logic is complete.
 Then the particular notion of reflection can be described as:
 </p>
 
-<div class="definition" id="org6cf7d37">
+<div class="definition" id="org751d9c2">
 <p>
 Given an entailment system \(\mathcal{E}\) and a nonempty set of theories
 \(\mathcal{C}\) in it, a theory \(U\) is <dfn>\(\mathcal{C}\) Universal</dfn>
@@ -700,9 +719,6 @@ classof all finitely presentable theories in the logic.
 </div>
 </div>
 </div>
-
-
-
 <div id="outline-container-h-38b74b13-abc7-4bae-a2d0-272ae22effe7" class="outline-3">
 <h3 id="h-38b74b13-abc7-4bae-a2d0-272ae22effe7"><span class="section-number-3">4.5.</span> Logical Framework</h3>
 <div class="outline-text-3" id="text-h-38b74b13-abc7-4bae-a2d0-272ae22effe7">
@@ -710,7 +726,7 @@ classof all finitely presentable theories in the logic.
 From this perspective, we may thus define a <a href="logical-framework.html">logical framework</a> as:
 </p>
 
-<div class="definition" id="org3bddb93">
+<div class="definition" id="org5072126">
 <p>
 A <dfn>Logical Framework</dfn> consists of
 </p>
@@ -726,7 +742,7 @@ such that \(U\) is $\mathcal{C}$-universal.
 
 </div>
 
-<div class="remark" id="org9f34ef7">
+<div class="remark" id="org281a910">
 <p>
 This observation seems to have also been made in &sect;3 of
 "Axiomatizing Reflective Logics and Languages"
@@ -739,7 +755,6 @@ universal theory \(U\).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-94b822dd-afb8-4a4d-aac5-d6ea941f7e4e" class="outline-2">
 <h2 id="h-94b822dd-afb8-4a4d-aac5-d6ea941f7e4e"><span class="section-number-2">5.</span> Definition of Meta-logical Framework</h2>
 <div class="outline-text-2" id="text-h-94b822dd-afb8-4a4d-aac5-d6ea941f7e4e">
@@ -747,7 +762,7 @@ universal theory \(U\).
 Let me give a "morally right" definition, which fails to be rigorous:
 </p>
 
-<div class="definition" id="orgd33a64f">
+<div class="definition" id="orgda7688e">
 <p>
 A <dfn>Meta-logical framework</dfn> consists of a logical framework
 \((\mathcal{L}, \mathcal{C}, U)\) equipped with
@@ -776,7 +791,7 @@ the metatheory of any \(T\).</li>
 
 </div>
 
-<div class="remark" id="org64fbb29">
+<div class="remark" id="org772cca7">
 <p>
 It's not clear exactly <i>how</i> super-nice the superlogic has to be; is
 there something <i>weaker</i> than having Tarskian semantics?
@@ -784,7 +799,7 @@ there something <i>weaker</i> than having Tarskian semantics?
 
 </div>
 
-<div class="remark" id="org444fdd4">
+<div class="remark" id="orge398851">
 <p>
 Also, it's unclear <i>when</i> will a logic \(\mathcal{L}\) have a superlogic
 \(\mathcal{S}\) which has Tarskian semantics and admits quantifiers.
@@ -792,7 +807,7 @@ Also, it's unclear <i>when</i> will a logic \(\mathcal{L}\) have a superlogic
 
 </div>
 
-<div class="puzzle" id="org7844bb0">
+<div class="puzzle" id="org498971b">
 <p>
 Can we reformulate this notion of a metalogical framework within the more
 familiar judgements and inference rules setting?
@@ -801,7 +816,6 @@ familiar judgements and inference rules setting?
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-ef7b6773-9653-4d89-903b-1e95119c96b9" class="outline-2">
 <h2 id="h-ef7b6773-9653-4d89-903b-1e95119c96b9"><span class="section-number-2">6.</span> References</h2>
 <div class="outline-text-2" id="text-h-ef7b6773-9653-4d89-903b-1e95119c96b9">
@@ -824,7 +838,6 @@ In <i>International Conference on Foundations of Software Technology and Theoret
 pp. 55-80. Springer, Berlin, Heidelberg, 2000.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-61521a7b-80df-40a1-b414-ec4de8bcd51b" class="outline-3">
 <h3 id="h-61521a7b-80df-40a1-b414-ec4de8bcd51b"><span class="section-number-3">6.1.</span> Logic, Entailment Systems, etc.</h3>
 <div class="outline-text-3" id="text-h-61521a7b-80df-40a1-b414-ec4de8bcd51b">
@@ -837,7 +850,6 @@ North-Holland, Amsterdam, The Netherlands, 275&#x2013;329.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b" class="outline-3">
 <h3 id="h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b"><span class="section-number-3">6.2.</span> Principle of Reflection</h3>
 <div class="outline-text-3" id="text-h-ca35be4c-ac5b-460d-af8c-aa5ab7ba591b">
@@ -854,7 +866,6 @@ Research Centre, 1995.
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15" class="outline-3">
 <h3 id="h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15"><span class="section-number-3">6.3.</span> Using HOL</h3>
 <div class="outline-text-3" id="text-h-3f3a1a2f-88c2-42cc-b54d-6da68f818a15">
@@ -868,7 +879,7 @@ Research Centre, 1995.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-03-09 Thu 09:16.</p>
+<p class="postamble">Last Updated: Sat, 11 Mar 2023 09:06:36 -0800
 </div>
 </body>
 </html>

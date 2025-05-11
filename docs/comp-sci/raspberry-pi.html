@@ -6,7 +6,7 @@
 <title>Raspberry Pi</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 </head>
@@ -284,7 +299,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-2139284d-7b5c-46c8-abce-c3ede3b2b67f" class="outline-2">
 <h2 id="h-2139284d-7b5c-46c8-abce-c3ede3b2b67f"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-2139284d-7b5c-46c8-abce-c3ede3b2b67f">
@@ -302,7 +316,6 @@ Lisp tools on it.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-bd448f65-3561-4ce8-90da-580ef958cee7" class="outline-2">
 <h2 id="h-bd448f65-3561-4ce8-90da-580ef958cee7"><span class="section-number-2">2.</span> Ssh into the Pi</h2>
 <div class="outline-text-2" id="text-h-bd448f65-3561-4ce8-90da-580ef958cee7">
@@ -313,7 +326,6 @@ to be installed but not yet enabled), then we can simply do
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-b0d187d2-f502-4a62-9dd4-a6fd994a903a" class="outline-2">
 <h2 id="h-b0d187d2-f502-4a62-9dd4-a6fd994a903a"><span class="section-number-2">3.</span> Debian Infrastructure</h2>
 <div class="outline-text-2" id="text-h-b0d187d2-f502-4a62-9dd4-a6fd994a903a">
@@ -331,7 +343,6 @@ This took a few hours.
 Then I ran <code>sudo rpi-update</code> to update the firmware.
 </p>
 </div>
-
 <div id="outline-container-h-75c9966a-5592-4ae4-a025-80e0e6c34f6a" class="outline-3">
 <h3 id="h-75c9966a-5592-4ae4-a025-80e0e6c34f6a"><span class="section-number-3">3.1.</span> Optimizing for my local computer</h3>
 <div class="outline-text-3" id="text-h-75c9966a-5592-4ae4-a025-80e0e6c34f6a">
@@ -343,7 +354,6 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-4cb12e4d-ab7f-466c-b7b5-d69daec934b8" class="outline-3">
 <h3 id="h-4cb12e4d-ab7f-466c-b7b5-d69daec934b8"><span class="section-number-3">3.2.</span> Upgrading to Bullseye</h3>
 <div class="outline-text-3" id="text-h-4cb12e4d-ab7f-466c-b7b5-d69daec934b8">
@@ -351,7 +361,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="org6108e7e">
+<pre class="example" id="org080102e">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -362,7 +372,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="org6da8de6">
+<pre class="example" id="orgb2382be">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -371,7 +381,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="org3972a6d">
+<pre class="example" id="org65499bc">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -385,7 +395,6 @@ I saved it, closed nano, then ran the commands:
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f" class="outline-2">
 <h2 id="h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f"><span class="section-number-2">4.</span> Installing Emacs</h2>
 <div class="outline-text-2" id="text-h-c5576d86-7d9e-46e1-b3eb-d81187d6e67f">
@@ -393,7 +402,7 @@ I saved it, closed nano, then ran the commands:
 I pulled down Emacs from the git repository:
 </p>
 
-<pre class="example" id="ex-build-emacs">
+<pre id="ex-build-emacs" class="example">
 ~/$ cd src
 ~/src/$ # for just one version without updating to another, run:
 ~/src/$ # git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git
@@ -408,7 +417,7 @@ I pulled down Emacs from the git repository:
 We need to install the GNU-Autotools:
 </p>
 
-<pre class="example" id="ex-gnu-autotools">
+<pre id="ex-gnu-autotools" class="example">
 ~/src/emacs/$ sudo apt-get install autoconf automake
 </pre>
 
@@ -417,7 +426,7 @@ We can try installing the dependencies, but will also have to install
 the <code>dev</code> version of the libraries:
 </p>
 
-<pre class="example" id="ex-build-dep-emacs">
+<pre id="ex-build-dep-emacs" class="example">
 ~/src/emacs/$ sudo apt-get build-dep emacs
 ...
 ~/src/emacs/$ sudo apt-get install libm17n-dev libgif-dev libxpm-dev libtiff5-dev
@@ -432,7 +441,7 @@ the <code>dev</code> version of the libraries:
 Now for the configuration
 </p>
 
-<pre class="example" id="emacs-autogen">
+<pre id="emacs-autogen" class="example">
 ~/src/emacs/$ ./autogen.sh
 ~/src/emacs/$ ./configure --with-x-toolkit=no --with-m17n-flt --with-modules CFLAGS="-mtune=native -mcpu=native -Os -marm"
 </pre>
@@ -443,11 +452,10 @@ If you configure with <code>-Ofast</code> you need to also include
 error saying Emacs won't compile with <code>-ffinite-math-only</code>).
 </p>
 </div>
-
 <div id="outline-container-h-505fbdb9-12a4-46d8-9daf-46229887468f" class="outline-3">
 <h3 id="h-505fbdb9-12a4-46d8-9daf-46229887468f"><span class="section-number-3">4.1.</span> Attempting Configuration</h3>
 <div class="outline-text-3" id="text-h-505fbdb9-12a4-46d8-9daf-46229887468f">
-<pre class="example" id="emacs-attempt-config">
+<pre id="emacs-attempt-config" class="example">
 ~/src/emacs/$ git clean -dxf
 ~/src/emacs/$ ./autogen.sh
 ~/src/emacs/$ ./configure --with-m17n-flt --with-modules --with-json --with-threads --with-included-regex --with-compress-install CFLAGS="-Ofast -mtune=native -mcpu=native -marm"
@@ -464,11 +472,10 @@ depending on the configuration choices:
 <li><code>--with-xft</code> requires installing <code>libxft-dev</code></li>
 </ul>
 </div>
-
 <div id="outline-container-h-e2365690-7ab7-4a52-859f-efbd835309c8" class="outline-4">
 <h4 id="h-e2365690-7ab7-4a52-859f-efbd835309c8"><span class="section-number-4">4.1.1.</span> Installation</h4>
 <div class="outline-text-4" id="text-h-e2365690-7ab7-4a52-859f-efbd835309c8">
-<pre class="example" id="emacs-install">
+<pre id="emacs-install" class="example">
 ~/src/emacs/$ make
 ...
 ~/src/emacs/$ sudo make install
@@ -477,7 +484,6 @@ depending on the configuration choices:
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-a901d579-d540-41fe-a551-380de73e0cfd" class="outline-4">
 <h4 id="h-a901d579-d540-41fe-a551-380de73e0cfd"><span class="section-number-4">4.1.2.</span> For Emacs 28</h4>
 <div class="outline-text-4" id="text-h-a901d579-d540-41fe-a551-380de73e0cfd">
@@ -487,7 +493,7 @@ commands clone exactly the <code>emacs-27</code> branch, and makes it impossible
 change to the <code>emacs-28</code> branch.
 </p>
 
-<pre class="example" id="emacs-28-config">
+<pre id="emacs-28-config" class="example">
 ~/src/ $ git clone https://git.savannah.gnu.org/git/emacs.git
 ~/src/ $ cd emacs
 ~/src/emacs/ $ git checkout emacs-28
@@ -519,7 +525,6 @@ dynamic modules something something), but it's highly recommended</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c" class="outline-3">
 <h3 id="h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c"><span class="section-number-3">4.2.</span> Improving Startup Time</h3>
 <div class="outline-text-3" id="text-h-f94a466e-fdf6-40ed-a476-0f3572fc9b7c">
@@ -550,7 +555,6 @@ seconds. If I further compiled with <code>-Ofast</code>, I get startup time in
 3.713 seconds.
 </p>
 </div>
-
 <div id="outline-container-h-8a85bb78-4f0c-4595-86f8-a7f8c304f80b" class="outline-4">
 <h4 id="h-8a85bb78-4f0c-4595-86f8-a7f8c304f80b"><span class="section-number-4">4.2.1.</span> Emacs 28</h4>
 <div class="outline-text-4" id="text-h-8a85bb78-4f0c-4595-86f8-a7f8c304f80b">
@@ -572,7 +576,6 @@ When I byte-compile my <code>init.el</code> and my <code>./.emacs</code> file ju
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-62fa7326-e681-447e-8ca0-0ff03c33e19a" class="outline-3">
 <h3 id="h-62fa7326-e681-447e-8ca0-0ff03c33e19a"><span class="section-number-3">4.3.</span> Emacs 29</h3>
 <div class="outline-text-3" id="text-h-62fa7326-e681-447e-8ca0-0ff03c33e19a">
@@ -580,12 +583,11 @@ When I byte-compile my <code>init.el</code> and my <code>./.emacs</code> file ju
 For my Desktop, I tried:
 </p>
 
-<pre class="example" id="org5d630bc">
+<pre class="example" id="org3499d5a">
 $ ./configure --with-wide-int --with-x-toolkit=lucid --with-gnutls=ifavailable --with-m17n-flt --with-modules --with-json --with-threads --with-compress-install "CFLAGS=-O3 -pipe -mtune=native -march=native -fno-finite-math-only"
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-4dec9f01-2e78-470a-b632-a4a88732e175" class="outline-3">
 <h3 id="h-4dec9f01-2e78-470a-b632-a4a88732e175"><span class="section-number-3">4.4.</span> Checking Build Flags</h3>
 <div class="outline-text-3" id="text-h-4dec9f01-2e78-470a-b632-a4a88732e175">
@@ -596,7 +598,6 @@ last ran <code>./configure</code> by examining the variable <code>system-configu
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9" class="outline-2">
 <h2 id="h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9"><span class="section-number-2">5.</span> Installing Common Lisp</h2>
 <div class="outline-text-2" id="text-h-b5a0f4e9-867a-4cc6-bfce-50c097dc09b9">
@@ -605,7 +606,6 @@ I'm not sure what happened, but somehow I had SBCL 1.4 installed on my
 Raspberry Pi already. I was suspicious of this, and remain so to date.
 </p>
 </div>
-
 <div id="outline-container-h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88" class="outline-3">
 <h3 id="h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88"><span class="section-number-3">5.1.</span> Clozure Common Lisp</h3>
 <div class="outline-text-3" id="text-h-de3ba0b9-0cd1-407f-bc3b-2d4aa9c2ba88">
@@ -620,7 +620,7 @@ constraints for the Raspberry Pi today (at least, I do).
 I followed Rainer's <a href="https://web.archive.org/web/20121010001720/http://lispm.dyndns.org/ccl">instructions</a> .
 </p>
 
-<pre class="example" id="building-clozure">
+<pre id="building-clozure" class="example">
 ~/src/$ git clone https://github.com/Clozure/ccl/
 ...
 ~/src/$ cd ccl/
@@ -652,7 +652,6 @@ same size, but the <code>armcl.image</code> is 17100816 bytes (and in <code>v1.1
 17158160 bytes).
 </p>
 </div>
-
 <div id="outline-container-h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e" class="outline-4">
 <h4 id="h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e"><span class="section-number-4">5.1.1.</span> Making <code>armcl</code> global</h4>
 <div class="outline-text-4" id="text-h-96d3a59c-e1bb-4e11-8c10-7ccd6d9b7f5e">
@@ -660,7 +659,7 @@ same size, but the <code>armcl.image</code> is 17100816 bytes (and in <code>v1.1
 I also ran
 </p>
 
-<pre class="example" id="armcl">
+<pre id="armcl" class="example">
 ~/src/$ sudo ln -s /home/alex/src/ccl/armcl /usr/local/bin/armcl
 </pre>
 
@@ -670,7 +669,6 @@ This let me run armcl for any user.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-35bc094e-a63f-4ba0-9b30-6d6582bf9869" class="outline-3">
 <h3 id="h-35bc094e-a63f-4ba0-9b30-6d6582bf9869"><span class="section-number-3">5.2.</span> SBCL</h3>
 <div class="outline-text-3" id="text-h-35bc094e-a63f-4ba0-9b30-6d6582bf9869">
@@ -679,7 +677,6 @@ Now, Raspberry Pi offers SBCL 2.1.9, which installs without problem.
 Wonderful! I don't need to stress over compiling CCL properly.
 </p>
 </div>
-
 <div id="outline-container-h-f0715bd5-5e1a-436a-b786-850061f4a5fd" class="outline-4">
 <h4 id="h-f0715bd5-5e1a-436a-b786-850061f4a5fd"><span class="section-number-4">5.2.1.</span> Compiling SBCL Problems</h4>
 <div class="outline-text-4" id="text-h-f0715bd5-5e1a-436a-b786-850061f4a5fd">
@@ -688,7 +685,7 @@ I run into a problem compiling SBCL from the RPi package, experiencing
 an error (as of git commit <code>b430f314c</code>, date Wed Apr 20 03:46:44 2022 +0300):
 </p>
 
-<pre class="example" id="org3c334a2">
+<pre class="example" id="org746f7ab">
 ~/src/sbcl $ sh make.sh
 ...
 cc -g -Wall -Wundef -Wsign-compare -Wpointer-arith -O3 -std=gnu99 -fno-pie -I.  -c -o os-common.o os-common.c
@@ -761,7 +758,6 @@ CPU architecture properly).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-caf05a1b-6f16-4430-a62b-200f4c5bd753" class="outline-3">
 <h3 id="h-caf05a1b-6f16-4430-a62b-200f4c5bd753"><span class="section-number-3">5.3.</span> Adding Quicklisp</h3>
 <div class="outline-text-3" id="text-h-caf05a1b-6f16-4430-a62b-200f4c5bd753">
@@ -769,7 +765,7 @@ CPU architecture properly).
 We get quicklisp:
 </p>
 
-<pre class="example" id="quicklisp">
+<pre id="quicklisp" class="example">
 ~/$ wget http://beta.quicklisp.org/quicklisp.lisp
 ...
 ~/$ armcl
@@ -800,7 +796,6 @@ default, you could just add a <code>(load-quicklisp)</code> line to the
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-69ecc133-c067-40e8-a9ba-bc0589a99914" class="outline-2">
 <h2 id="h-69ecc133-c067-40e8-a9ba-bc0589a99914"><span class="section-number-2">6.</span> LaTeX</h2>
 <div class="outline-text-2" id="text-h-69ecc133-c067-40e8-a9ba-bc0589a99914">
@@ -811,8 +806,6 @@ a few other basic TeX packages.</li>
 </ul>
 </div>
 </div>
-
-
 <div id="outline-container-h-3b62ead8-4526-46b2-a922-92053432e1c3" class="outline-2">
 <h2 id="h-3b62ead8-4526-46b2-a922-92053432e1c3"><span class="section-number-2">7.</span> Stumpwm</h2>
 <div class="outline-text-2" id="text-h-3b62ead8-4526-46b2-a922-92053432e1c3">
@@ -827,7 +820,6 @@ common lisp dependencies, which quicklisp would automatically handle.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-a66006a4-533e-4994-be5f-307174039327" class="outline-2">
 <h2 id="h-a66006a4-533e-4994-be5f-307174039327"><span class="section-number-2">8.</span> Window Managers</h2>
 <div class="outline-text-2" id="text-h-a66006a4-533e-4994-be5f-307174039327">
@@ -842,7 +834,6 @@ I may want to consider looking at other window managers (ahem, <i>window</i> sho
 <li><a href="https://www.reddit.com/r/unixporn/comments/4tfdzu/ram_usage_of_small_window_managers_a_comparison/">RAM Usage of small window managers - a comparison</a></li>
 </ul>
 </div>
-
 <div id="outline-container-h-0aed8294-f790-4e82-bf2c-5707990dd55f" class="outline-3">
 <h3 id="h-0aed8294-f790-4e82-bf2c-5707990dd55f"><span class="section-number-3">8.1.</span> TWM</h3>
 <div class="outline-text-3" id="text-h-0aed8294-f790-4e82-bf2c-5707990dd55f">
@@ -852,7 +843,6 @@ I may want to consider looking at other window managers (ahem, <i>window</i> sho
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-fa7f411e-d0be-4c94-8277-87cabddb3838" class="outline-3">
 <h3 id="h-fa7f411e-d0be-4c94-8277-87cabddb3838"><span class="section-number-3">8.2.</span> FVWM</h3>
 <div class="outline-text-3" id="text-h-fa7f411e-d0be-4c94-8277-87cabddb3838">
@@ -909,7 +899,6 @@ AddToFunc RestartFunction
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-42f8cb5f-78d3-4c5b-9aed-9471a4249dfa" class="outline-3">
 <h3 id="h-42f8cb5f-78d3-4c5b-9aed-9471a4249dfa"><span class="section-number-3">8.4.</span> URXVT Terminal</h3>
 <div class="outline-text-3" id="text-h-42f8cb5f-78d3-4c5b-9aed-9471a4249dfa">
@@ -924,7 +913,6 @@ very nift.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-70ef8113-f25f-4e98-96eb-f65586aa779a" class="outline-2">
 <h2 id="h-70ef8113-f25f-4e98-96eb-f65586aa779a"><span class="section-number-2">9.</span> Temperature Checking</h2>
 <div class="outline-text-2" id="text-h-70ef8113-f25f-4e98-96eb-f65586aa779a">
@@ -934,7 +922,7 @@ command <code>/opt/vc/bin/vcgencmd measure_temp</code>. I've stuck this into a
 script:
 </p>
 
-<pre class="example" id="org7ef4748">
+<pre class="example" id="orge813f4b">
 #!/bin/bash
 
 # ~/temperature.sh
@@ -943,12 +931,10 @@ script:
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-547100f8-09b9-4160-ae84-9e2fea00aba5" class="outline-2">
 <h2 id="h-547100f8-09b9-4160-ae84-9e2fea00aba5"><span class="section-number-2">10.</span> Mizar</h2>
 <div class="outline-text-2" id="text-h-547100f8-09b9-4160-ae84-9e2fea00aba5">
 </div>
-
 <div id="outline-container-h-a505070b-b824-4c80-95ff-b1e591ab49f9" class="outline-3">
 <h3 id="h-a505070b-b824-4c80-95ff-b1e591ab49f9"><span class="section-number-3">10.1.</span> Pre-built Binaries Appear Broken</h3>
 <div class="outline-text-3" id="text-h-a505070b-b824-4c80-95ff-b1e591ab49f9">
@@ -957,7 +943,7 @@ I couldn't get Mizar working on my Raspberry Pi 2, and it does not work on
 Raspberry Pi 4B either. Get the latest version <a href="http://mizar.uwb.edu.pl/system/index.html#download">here</a> for Linux (ARM).
 </p>
 
-<pre class="example" id="org1d4552a">
+<pre class="example" id="org71636d0">
 ~/src/$ mkdir mizar
 ~/src/$ cd mizar
 ~/src/mizar/$ wget mizar-&lt;version&gt;-arm-linux.tar
@@ -972,7 +958,7 @@ Raspberry Pi 4B either. Get the latest version <a href="http://mizar.uwb.edu.pl/
 When I try running, say, <code>mizf</code> on 32-bit mode, I get errors:
 </p>
 
-<pre class="example" id="org40a3678">
+<pre class="example" id="org5f7482b">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char.miz
 Illegal instruction
 Illegal instruction
@@ -983,7 +969,7 @@ alex@raspberrypi:~/src/mizar-playground $
 <p>
 In 64-bit mode, I get errors:
 </p>
-<pre class="example" id="org20a75d7">
+<pre class="example" id="orgb43e961">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char
 /usr/local/bin/mizf: 8: makeenv: Exec format error
 /usr/local/bin/mizf: 13: errflag: Exec format error
@@ -991,7 +977,6 @@ alex@raspberrypi:~/src/mizar-playground $ mizf text/char
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-82019e0e-1f56-4a09-bc95-295d204794be" class="outline-3">
 <h3 id="h-82019e0e-1f56-4a09-bc95-295d204794be"><span class="section-number-3">10.2.</span> Building it from Scratch</h3>
 <div class="outline-text-3" id="text-h-82019e0e-1f56-4a09-bc95-295d204794be">
@@ -1004,7 +989,7 @@ Raspberry Pi. The basic instructions:
 <b>Step 1: install Free Pascal.</b>
 </p>
 
-<pre class="example" id="org0b0447e">
+<pre class="example" id="org4133bfa">
 alex@raspberrypi:~$ sudo apt-get update
 alex@raspberrypi:~$ sudo apt-get upgrade
 alex@raspberrypi:~$ sudo apt-get install fpc
@@ -1021,7 +1006,7 @@ binaries, but it installs the MML and documentation locally.
 If you tried using the pre-built binaries, then you can skip this step.
 </p>
 
-<pre class="example" id="orgc04f514">
+<pre class="example" id="orgd4cd3ed">
 alex@raspberrypi:~ $ cd src
 alex@raspberrypi:~/src $ mkdir mizar
 alex@raspberrypi:~/src $ cd mizar
@@ -1066,7 +1051,7 @@ changes are adding install instructions, the compile script, and
 adjusting two parameters in the code) and run the following commands:
 </p>
 
-<pre class="example" id="orgca2cf91">
+<pre class="example" id="org0cc634b">
 alex@raspberrypi:~/src $ git clone https://github.com/CoghettoR/MizarSystem/
 alex@raspberrypi:~/src $ cd MizarSystem
 alex@raspberrypi:~/src/MizarSystem $ time sh compile_rpi.sh
@@ -1081,7 +1066,6 @@ alex@raspberrypi:~/src/MizarSystem $
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-cd1194c0-4b09-4fd9-810c-044b646f78f9" class="outline-2">
 <h2 id="h-cd1194c0-4b09-4fd9-810c-044b646f78f9"><span class="section-number-2">11.</span> Run 64-bit mode</h2>
 <div class="outline-text-2" id="text-h-cd1194c0-4b09-4fd9-810c-044b646f78f9">
@@ -1090,7 +1074,7 @@ To make Raspberry Pi 4 run in 64-bit mode, add the following line to the
 bottom of your <code>/boot/config.txt</code>:
 </p>
 
-<pre class="example" id="org9883b34">
+<pre class="example" id="org3250e2e">
 arm_64bit=1
 </pre>
 
@@ -1099,7 +1083,6 @@ arm_64bit=1
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-88c07655-f971-4a20-b7f9-3f75d70adacd" class="outline-2">
 <h2 id="h-88c07655-f971-4a20-b7f9-3f75d70adacd"><span class="section-number-2">12.</span> Other Links</h2>
 <div class="outline-text-2" id="text-h-88c07655-f971-4a20-b7f9-3f75d70adacd">
@@ -1114,7 +1097,7 @@ arm_64bit=1
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-09-01 Fri 06:28.</p>
+<p class="postamble">Last Updated: Tue, 5 Sep 2023 08:30:01 -0700
 </div>
 </body>
 </html>

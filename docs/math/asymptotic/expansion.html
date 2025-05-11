@@ -6,7 +6,7 @@
 <title>Asymptotic Expansions</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -251,7 +280,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-217d9061-6164-475a-8958-eaa84e4f32e2" class="outline-2">
 <h2 id="h-217d9061-6164-475a-8958-eaa84e4f32e2"><span class="section-number-2">1.</span> Asymptotic Sequences and Expansions</h2>
 <div class="outline-text-2" id="text-h-217d9061-6164-475a-8958-eaa84e4f32e2">
@@ -323,7 +351,6 @@ S_{n}(x) = \sum^{n}_{j=1}a_{j}\phi_{j}(x)
 </dl>
 </div>
 </div>
-
 <div id="outline-container-h-eff77443-ee66-49a9-9073-ff2c41e68d81" class="outline-2">
 <h2 id="h-eff77443-ee66-49a9-9073-ff2c41e68d81"><span class="section-number-2">2.</span> Uniqueness of Asymptotic Expansions</h2>
 <div class="outline-text-2" id="text-h-eff77443-ee66-49a9-9073-ff2c41e68d81">
@@ -402,7 +429,6 @@ limits
 a_{n+1} = \lim_{x\to x_{0}}\frac{f(x) - S_{n}(x)}{\phi_{n+1}(x)}.
 \end{equation}
 </div>
-
 <div id="outline-container-h-1d1b4c8b-58b3-40fb-a689-8018a9a9363d" class="outline-3">
 <h3 id="h-1d1b4c8b-58b3-40fb-a689-8018a9a9363d"><span class="section-number-3">2.1.</span> Non-Uniqueness</h3>
 <div class="outline-text-3" id="text-h-1d1b4c8b-58b3-40fb-a689-8018a9a9363d">
@@ -431,7 +457,6 @@ expansions as \(x\to\infty\).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-a3ce3903-3101-42f5-ba18-02dec031507a" class="outline-2">
 <h2 id="h-a3ce3903-3101-42f5-ba18-02dec031507a"><span class="section-number-2">3.</span> Transcendentally Small Terms</h2>
 <div class="outline-text-2" id="text-h-a3ce3903-3101-42f5-ba18-02dec031507a">
@@ -495,7 +520,6 @@ essential singularity at \(\infty\).</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-40e4ba4c-630d-4a08-88f1-e6d3433b7ce3" class="outline-2">
 <h2 id="h-40e4ba4c-630d-4a08-88f1-e6d3433b7ce3"><span class="section-number-2">4.</span> Arithmetic of Asymptotic Series</h2>
 <div class="outline-text-2" id="text-h-40e4ba4c-630d-4a08-88f1-e6d3433b7ce3">
@@ -628,7 +652,6 @@ differentiate term-by-term the asymptotic expansion.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-2d66a4c4-9000-44b4-9770-3d39443d5ef4" class="outline-2">
 <h2 id="h-2d66a4c4-9000-44b4-9770-3d39443d5ef4"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-2d66a4c4-9000-44b4-9770-3d39443d5ef4">
@@ -643,7 +666,7 @@ Hyperasymptotic Series". <br>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 19:09:01 -0700
 </div>
 </body>
 </html>

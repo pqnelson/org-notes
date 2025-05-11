@@ -6,7 +6,7 @@
 <title>Lie Theory in Mizar</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -255,7 +284,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e" class="outline-2">
 <h2 id="h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-h-0ff3dfee-375a-43d1-b8e5-fe1160a3383e">
@@ -266,12 +294,10 @@ Bourbaki's books may be the best outline/strategy.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-42b94e81-8319-49c1-ab2d-d8852a381f56" class="outline-2">
 <h2 id="h-42b94e81-8319-49c1-ab2d-d8852a381f56"><span class="section-number-2">2.</span> Relevant Definitions</h2>
 <div class="outline-text-2" id="text-h-42b94e81-8319-49c1-ab2d-d8852a381f56">
 </div>
-
 <div id="outline-container-h-8e62fe3a-da15-47d4-93a1-9f70d1331b65" class="outline-3">
 <h3 id="h-8e62fe3a-da15-47d4-93a1-9f70d1331b65"><span class="section-number-3">2.1.</span> Existing in Mizar</h3>
 <div class="outline-text-3" id="text-h-8e62fe3a-da15-47d4-93a1-9f70d1331b65">
@@ -331,12 +357,10 @@ orthogonal vector space</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-7abad33c-acb5-49ce-8243-945872dce09c" class="outline-3">
 <h3 id="h-7abad33c-acb5-49ce-8243-945872dce09c"><span class="section-number-3">2.2.</span> Not in Mizar</h3>
 <div class="outline-text-3" id="text-h-7abad33c-acb5-49ce-8243-945872dce09c">
 </div>
-
 <div id="outline-container-h-301cfce8-d249-4697-ab45-f1ba73dd82d9" class="outline-4">
 <h4 id="h-301cfce8-d249-4697-ab45-f1ba73dd82d9"><span class="section-number-4">2.2.1.</span> Differentiable Manifolds</h4>
 <div class="outline-text-4" id="text-h-301cfce8-d249-4697-ab45-f1ba73dd82d9">
@@ -353,11 +377,10 @@ manifold).
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-9cb82a62-a811-4a83-ada1-ab7fc5aaf75b" class="outline-4">
 <h4 id="h-9cb82a62-a811-4a83-ada1-ab7fc5aaf75b"><span class="section-number-4">2.2.2.</span> Lie Algebras</h4>
 <div class="outline-text-4" id="text-h-9cb82a62-a811-4a83-ada1-ab7fc5aaf75b">
-<div class="definition" id="org00c1fd1">
+<div class="definition" id="org5ee0178">
 <p>
 A vector space \(L\) over a field \(F\) with an operation \(L\times L\to L\),
 denoted \((x,y)\to[x, y]\) called the bracket (or commutator) of \(x\) and \(y\),
@@ -378,7 +401,7 @@ This is the definition given by Humphreys' <i>Introduction to Lie Algebras and R
 <i>Lie Groups and Lie Algebras</i> I.1&sect;2 Definition 1:
 </p>
 
-<div class="definition" id="orgff0fa8a">
+<div class="definition" id="orgbe38a58">
 <p>
 An algebra \(\mathfrak{g}\) over a commutative unital [associative] ring
 \(K\) is called a <dfn>Lie Algebra</dfn> over \(K\) if its multiplication
@@ -402,7 +425,7 @@ it is not adequately justified. "Bilinear" yes, but "alternating"? No,
 not in general: only if the characteristic of \(K\) is not 2.
 </p>
 
-<div class="remark" id="orgd6ca7cc">
+<div class="remark" id="org64a75e9">
 <p>
 Mizar's notion of an algebra is <b>almost</b> good: they demand an algebra be
 unital, but this is not true in general for Lie algebras. Further, since
@@ -414,7 +437,7 @@ which extends <code>ModuleStr</code>.
 
 </div>
 
-<div class="remark" id="org7663fb3">
+<div class="remark" id="orgeb6fc09">
 <p>
 Unfortunately, <a href="http://mizar.uwb.edu.pl/version/current/html/lopban_8.html#V1"><code>Bilinear</code></a> <i>is</i> defined as an attribute, but only for
 operators over real vector spaces. (See also <a href="http://mizar.uwb.edu.pl/version/current/html/lopban_8.html#V2"><code>Bilinear</code></a> and <a href="http://mizar.uwb.edu.pl/version/current/html/lopban_8.html#NM1"><code>BilinearOperator</code></a>.)
@@ -509,7 +532,6 @@ empty multMagma (instead of just being 1-sorted).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-d95aeb61-2705-477a-bff1-5af409e21561" class="outline-2">
 <h2 id="h-d95aeb61-2705-477a-bff1-5af409e21561"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-d95aeb61-2705-477a-bff1-5af409e21561">
@@ -534,7 +556,7 @@ Thread on Math.Overflow</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-01-20 Fri 15:57.</p>
+<p class="postamble">Last Updated: Thu, 19 Jan 2023 12:59:12 -0800
 </div>
 </body>
 </html>

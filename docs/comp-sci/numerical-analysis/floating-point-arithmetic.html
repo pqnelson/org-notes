@@ -6,7 +6,7 @@
 <title>Floating Point Arithmetic</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -255,7 +284,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-573e907e-2568-4ff7-8ebd-7e324680f885" class="outline-2">
 <h2 id="h-573e907e-2568-4ff7-8ebd-7e324680f885"><span class="section-number-2">1.</span> Idealized Floating Point</h2>
 <div class="outline-text-2" id="text-h-573e907e-2568-4ff7-8ebd-7e324680f885">
@@ -321,7 +349,6 @@ but the spacing between floating point numbers grows as the exponent
 grows.
 </p>
 </div>
-
 <div id="outline-container-h-b32b117e-4922-4a2c-ac51-40b1660255be" class="outline-3">
 <h3 id="h-b32b117e-4922-4a2c-ac51-40b1660255be"><span class="section-number-3">1.1.</span> Encoding Real Numbers as Idealized Floating Point</h3>
 <div class="outline-text-3" id="text-h-b32b117e-4922-4a2c-ac51-40b1660255be">
@@ -433,12 +460,10 @@ translating back to the floating point encoding.</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-94342c9b-ca5b-4af6-a37a-241d5b8db062" class="outline-2">
 <h2 id="h-94342c9b-ca5b-4af6-a37a-241d5b8db062"><span class="section-number-2">2.</span> Representing numbers</h2>
 <div class="outline-text-2" id="text-h-94342c9b-ca5b-4af6-a37a-241d5b8db062">
 </div>
-
 <div id="outline-container-h-03c844d3-a202-4c93-b502-6a3be680ddfa" class="outline-3">
 <h3 id="h-03c844d3-a202-4c93-b502-6a3be680ddfa"><span class="section-number-3">2.1.</span> Motivational example</h3>
 <div class="outline-text-3" id="text-h-03c844d3-a202-4c93-b502-6a3be680ddfa">
@@ -479,7 +504,6 @@ leading 1 (i.e., we can pretend the <code>c</code> tuple describes the bits
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-b8c81701-1a7b-454e-aa72-272e12e84564" class="outline-3">
 <h3 id="h-b8c81701-1a7b-454e-aa72-272e12e84564"><span class="section-number-3">2.2.</span> Rounding, Truncating</h3>
 <div class="outline-text-3" id="text-h-b8c81701-1a7b-454e-aa72-272e12e84564">
@@ -527,7 +551,6 @@ computation), so we use it to clarify certain concepts.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-bb989840-6eab-4a44-89e2-4888f5adb8b3" class="outline-3">
 <h3 id="h-bb989840-6eab-4a44-89e2-4888f5adb8b3"><span class="section-number-3">2.3.</span> Relative, Absolute Error</h3>
 <div class="outline-text-3" id="text-h-bb989840-6eab-4a44-89e2-4888f5adb8b3">
@@ -565,8 +588,6 @@ is small, though the relative error is large.
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-e3540d7a-abe2-4b21-ba19-78638f885839" class="outline-2">
 <h2 id="h-e3540d7a-abe2-4b21-ba19-78638f885839"><span class="section-number-2">3.</span> References</h2>
 <div class="outline-text-2" id="text-h-e3540d7a-abe2-4b21-ba19-78638f885839">
@@ -586,7 +607,7 @@ floating point", their lecture 13.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-05-30 Sun 10:19.</p>
+<p class="postamble">Last Updated: Mon, 31 May 2021 11:46:00 -0700
 </div>
 </body>
 </html>

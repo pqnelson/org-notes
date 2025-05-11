@@ -6,7 +6,7 @@
 <title>Apologia</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 </head>
@@ -248,7 +263,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-a82e2b95-2055-45f6-9f75-91596f250b51" class="outline-2">
 <h2 id="h-a82e2b95-2055-45f6-9f75-91596f250b51"><span class="section-number-2">1.</span> Programming Language</h2>
 <div class="outline-text-2" id="text-h-a82e2b95-2055-45f6-9f75-91596f250b51">
@@ -301,7 +315,6 @@ Scheme interpreter/VM in the C code. I like this approach better.
 were generic functions in Guile.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-79a28f2f-2488-40b0-ae54-8073b2aa6f05" class="outline-3">
 <h3 id="h-79a28f2f-2488-40b0-ae54-8073b2aa6f05"><span class="section-number-3">1.1.</span> Dialects</h3>
 <div class="outline-text-3" id="text-h-79a28f2f-2488-40b0-ae54-8073b2aa6f05">
@@ -348,12 +361,10 @@ The biggest flaws that come to mind are figuring out which dialect to
 use. Each of them have their quirks and shortcomings.
 </p>
 </div>
-
 <div id="outline-container-h-10500493-3ac4-48c9-951e-74a7b0e52494" class="outline-4">
 <h4 id="h-10500493-3ac4-48c9-951e-74a7b0e52494"><span class="section-number-4">1.2.1.</span> Scheme</h4>
 <div class="outline-text-4" id="text-h-10500493-3ac4-48c9-951e-74a7b0e52494">
 </div>
-
 <div id="outline-container-h-31198688-8e76-470a-8196-2954e63db051" class="outline-5">
 <h5 id="h-31198688-8e76-470a-8196-2954e63db051"><span class="section-number-5">1.2.1.1.</span> No Canonical Implementation</h5>
 <div class="outline-text-5" id="text-h-31198688-8e76-470a-8196-2954e63db051">
@@ -386,7 +397,6 @@ functionality I'd use.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-00b3a4bb-8be3-4ea1-b3f8-cfa573ba9579" class="outline-4">
 <h4 id="h-00b3a4bb-8be3-4ea1-b3f8-cfa573ba9579"><span class="section-number-4">1.2.2.</span> Common Lisp</h4>
 <div class="outline-text-4" id="text-h-00b3a4bb-8be3-4ea1-b3f8-cfa573ba9579">
@@ -399,7 +409,6 @@ numbers, <code>eq</code> for pointers, <code>eql</code> for pointers or numbers,
 instances [objects]).
 </p>
 </div>
-
 <div id="outline-container-h-873760ae-9db9-424e-bda5-39a4746dee67" class="outline-5">
 <h5 id="h-873760ae-9db9-424e-bda5-39a4746dee67"><span class="section-number-5">1.2.2.1.</span> Floating Point Arithmetic isn't part of the Standard</h5>
 <div class="outline-text-5" id="text-h-873760ae-9db9-424e-bda5-39a4746dee67">
@@ -418,7 +427,6 @@ it's just compiler dependent.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-929f80eb-b3c3-4c47-b41f-9abd0bc46b36" class="outline-4">
 <h4 id="h-929f80eb-b3c3-4c47-b41f-9abd0bc46b36"><span class="section-number-4">1.2.3.</span> Clojure</h4>
 <div class="outline-text-4" id="text-h-929f80eb-b3c3-4c47-b41f-9abd0bc46b36">
@@ -427,7 +435,6 @@ Slow startup with repls and bloated software are two of the biggest
 issues facing Clojure.
 </p>
 </div>
-
 <div id="outline-container-h-412e8188-b046-4b4b-9aaa-41d8764c3ef4" class="outline-5">
 <h5 id="h-412e8188-b046-4b4b-9aaa-41d8764c3ef4"><span class="section-number-5">1.2.3.1.</span> Memory Usage</h5>
 <div class="outline-text-5" id="text-h-412e8188-b046-4b4b-9aaa-41d8764c3ef4">
@@ -445,7 +452,6 @@ This frequently leads to rewriting the code in Java.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-49ce9144-6029-451d-95bd-fb3ef3864168" class="outline-5">
 <h5 id="h-49ce9144-6029-451d-95bd-fb3ef3864168"><span class="section-number-5">1.2.3.2.</span> There is no standard</h5>
 <div class="outline-text-5" id="text-h-49ce9144-6029-451d-95bd-fb3ef3864168">
@@ -455,7 +461,6 @@ doing what I expect? Erm&#x2026;maybe?
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-86c65538-7974-4832-958a-f809c15c3417" class="outline-5">
 <h5 id="h-86c65538-7974-4832-958a-f809c15c3417"><span class="section-number-5">1.2.3.3.</span> JVM Historically didn't have IEEE 754 floating point</h5>
 <div class="outline-text-5" id="text-h-86c65538-7974-4832-958a-f809c15c3417">
@@ -468,7 +473,6 @@ problematic.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-b5520db7-1764-4f43-87d0-7f901bfe2709" class="outline-3">
 <h3 id="h-b5520db7-1764-4f43-87d0-7f901bfe2709"><span class="section-number-3">1.3.</span> Further Reading</h3>
 <div class="outline-text-3" id="text-h-b5520db7-1764-4f43-87d0-7f901bfe2709">
@@ -485,7 +489,7 @@ Common Lisp for performance and clarity</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-04-11 Sun 17:48.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 17:39:55 -0700
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>Partial Differential Equations</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,29 +205,57 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -272,7 +301,6 @@
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-cbf8ddb3-c14c-49f5-9bad-216aaa0b8639" class="outline-2">
 <h2 id="h-cbf8ddb3-c14c-49f5-9bad-216aaa0b8639"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-h-cbf8ddb3-c14c-49f5-9bad-216aaa0b8639">
@@ -380,7 +408,6 @@ infinitely many solutions as a linear combination of these two
 
 </div>
 </div>
-
 <div id="outline-container-h-b03419e9-4de1-473c-917a-bdeeb70d5adb" class="outline-3">
 <h3 id="h-b03419e9-4de1-473c-917a-bdeeb70d5adb"><span class="section-number-3">1.1.</span> Grocery List of Examples</h3>
 <div class="outline-text-3" id="text-h-b03419e9-4de1-473c-917a-bdeeb70d5adb">
@@ -545,13 +572,10 @@ But that \(\vartheta\) makes it a <i>nonlinear</i> PDE.
 </div>
 </div>
 </div>
-
-
 <div id="outline-container-h-641fd899-e72f-444a-89d8-261dabdec2ae" class="outline-2">
 <h2 id="h-641fd899-e72f-444a-89d8-261dabdec2ae"><span class="section-number-2">2.</span> ODEs and PDEs revisited</h2>
 <div class="outline-text-2" id="text-h-641fd899-e72f-444a-89d8-261dabdec2ae">
 </div>
-
 <div id="outline-container-h-2f1ccab1-d4c1-4f64-ae3a-7279224cc5ca" class="outline-3">
 <h3 id="h-2f1ccab1-d4c1-4f64-ae3a-7279224cc5ca"><span class="section-number-3">2.1.</span> Solving an ODE</h3>
 <div class="outline-text-3" id="text-h-2f1ccab1-d4c1-4f64-ae3a-7279224cc5ca">
@@ -615,7 +639,6 @@ and
 \end{equation}
 </div>
 </div>
-
 <div id="outline-container-h-38b79876-cca2-4836-b386-4b8b3ae06ec0" class="outline-3">
 <h3 id="h-38b79876-cca2-4836-b386-4b8b3ae06ec0"><span class="section-number-3">2.2.</span> For PDEs</h3>
 <div class="outline-text-3" id="text-h-38b79876-cca2-4836-b386-4b8b3ae06ec0">
@@ -667,7 +690,6 @@ Compare this to the general solution to the second-order ODE.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-6165a0a0-310a-4144-979d-3ac71a8a2c0d" class="outline-3">
 <h3 id="h-6165a0a0-310a-4144-979d-3ac71a8a2c0d"><span class="section-number-3">2.3.</span> Example with mixed derivatives</h3>
 <div class="outline-text-3" id="text-h-6165a0a0-310a-4144-979d-3ac71a8a2c0d">
@@ -714,7 +736,6 @@ Here \(g(x)\) is the "integration constant" with respect to \(y\).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-fd1b7d8a-b2d7-48d6-a09e-f7ff6620ab8a" class="outline-2">
 <h2 id="h-fd1b7d8a-b2d7-48d6-a09e-f7ff6620ab8a"><span class="section-number-2">3.</span> Geometric and Coordinate Perspectives</h2>
 <div class="outline-text-2" id="text-h-fd1b7d8a-b2d7-48d6-a09e-f7ff6620ab8a">
@@ -906,7 +927,6 @@ precisely as desired.
 
 </div>
 </div>
-
 <div id="outline-container-h-22d49717-b4bc-4981-8de9-0789d0b6f600" class="outline-3">
 <h3 id="h-22d49717-b4bc-4981-8de9-0789d0b6f600"><span class="section-number-3">3.1.</span> Example: First-Order PDE with Constant Coefficients</h3>
 <div class="outline-text-3" id="text-h-22d49717-b4bc-4981-8de9-0789d0b6f600">
@@ -999,7 +1019,6 @@ describes a surface. This is where geometry comes up.
 </p>
 </div>
 </div>
-
 <div id="outline-container-h-79c80b03-d2d2-4895-b54c-d74dfb60a685" class="outline-3">
 <h3 id="h-79c80b03-d2d2-4895-b54c-d74dfb60a685"><span class="section-number-3">3.2.</span> Coordinate Perspective</h3>
 <div class="outline-text-3" id="text-h-79c80b03-d2d2-4895-b54c-d74dfb60a685">
@@ -1068,12 +1087,10 @@ This coincides completely with the geometric approach.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-e3e6c4cb-06e1-4ee1-a53c-8d0759967052" class="outline-2">
 <h2 id="h-e3e6c4cb-06e1-4ee1-a53c-8d0759967052"><span class="section-number-2">4.</span> Variable Coefficient First-Order PDEs</h2>
 <div class="outline-text-2" id="text-h-e3e6c4cb-06e1-4ee1-a53c-8d0759967052">
 </div>
-
 <div id="outline-container-h-80d5359a-40e2-453c-b8a1-e5f7f3e673cd" class="outline-3">
 <h3 id="h-80d5359a-40e2-453c-b8a1-e5f7f3e673cd"><span class="section-number-3">4.1.</span> Motivating Example</h3>
 <div class="outline-text-3" id="text-h-80d5359a-40e2-453c-b8a1-e5f7f3e673cd">
@@ -1123,7 +1140,6 @@ is constant with respect to \(x\). Hence
 and we just insist \(\mu(x,y) = f(y_{0}) = f(ye^{-x})\).
 </p>
 </div>
-
 <div id="outline-container-h-a2a59290-f2b1-41ba-bc8f-72a1feeeba78" class="outline-4">
 <h4 id="h-a2a59290-f2b1-41ba-bc8f-72a1feeeba78"><span class="section-number-4">4.1.1.</span> More generally</h4>
 <div class="outline-text-4" id="text-h-a2a59290-f2b1-41ba-bc8f-72a1feeeba78">
@@ -1193,7 +1209,6 @@ called <dfn>Characteristic Curves</dfn>.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-51cba849-fba8-458f-9e28-ac516aec3e67" class="outline-3">
 <h3 id="h-51cba849-fba8-458f-9e28-ac516aec3e67"><span class="section-number-3">4.2.</span> Steps involved in solving Homogeneous PDEs</h3>
 <div class="outline-text-3" id="text-h-51cba849-fba8-458f-9e28-ac516aec3e67">
@@ -1329,7 +1344,6 @@ denominator vanishes \(1 + tf' = 0\).
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-8b648e77-9e8b-4fe5-a4ca-96f145812801" class="outline-3">
 <h3 id="h-8b648e77-9e8b-4fe5-a4ca-96f145812801"><span class="section-number-3">4.3.</span> Steps involved in solving Inhomogeneous PDES</h3>
 <div class="outline-text-3" id="text-h-8b648e77-9e8b-4fe5-a4ca-96f145812801">
@@ -1410,7 +1424,6 @@ either \(\log(x)\) or \(\exp(x)\). But I could be wrong.
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-43de617f-65f8-4f9d-b91d-6418e0ce8180" class="outline-2">
 <h2 id="h-43de617f-65f8-4f9d-b91d-6418e0ce8180"><span class="section-number-2">5.</span> References</h2>
 <div class="outline-text-2" id="text-h-43de617f-65f8-4f9d-b91d-6418e0ce8180">
@@ -1423,7 +1436,7 @@ John Wiley and Sons, first ed., 1992.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2021-06-01 Tue 10:00.</p>
+<p class="postamble">Last Updated: Sun, 11 Apr 2021 17:39:55 -0700
 </div>
 </body>
 </html>

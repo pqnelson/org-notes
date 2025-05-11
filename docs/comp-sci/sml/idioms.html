@@ -6,7 +6,7 @@
 <title>Idioms - SML</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
-<style>
+<style type="text/css">
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -193,6 +193,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
 <div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
 \newcommand\D{\mathrm{d}}
 \newcommand\E{\mathrm{e}}
 \newcommand\I{\mathrm{i}}
@@ -204,6 +205,20 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
 \)</div>
 <link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
 </head>
@@ -237,7 +252,6 @@
 <p>
 These are idioms gleaned from reading some random Standard ML programs.
 </p>
-
 <div id="outline-container-h-151fd75d-61bd-4eb2-b962-3724940c7e31" class="outline-2">
 <h2 id="h-151fd75d-61bd-4eb2-b962-3724940c7e31"><span class="section-number-2">1.</span> Using <code>type t</code> in Signatures</h2>
 <div class="outline-text-2" id="text-h-151fd75d-61bd-4eb2-b962-3724940c7e31">
@@ -286,7 +300,6 @@ mySet = TreeSet.empty;
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-b1168d9b-0e58-41f4-9bcc-53e5d2775d08" class="outline-2">
 <h2 id="h-b1168d9b-0e58-41f4-9bcc-53e5d2775d08"><span class="section-number-2">2.</span> Datatypes in Signatures</h2>
 <div class="outline-text-2" id="text-h-b1168d9b-0e58-41f4-9bcc-53e5d2775d08">
@@ -401,7 +414,6 @@ See:
 </ul>
 </div>
 </div>
-
 <div id="outline-container-h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d" class="outline-2">
 <h2 id="h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d"><span class="section-number-2">3.</span> Stringify Types</h2>
 <div class="outline-text-2" id="text-h-5e1f48c1-d6ff-4e40-bcc4-08564a1aa48d">
@@ -420,7 +432,6 @@ we end up encoding them as signatures. Strictly speaking, we would have
 </pre>
 </div>
 </div>
-
 <div id="outline-container-h-889254de-0316-4e44-9331-d92d371b8419" class="outline-3">
 <h3 id="h-889254de-0316-4e44-9331-d92d371b8419"><span class="section-number-3">3.1.</span> Type Conversions</h3>
 <div class="outline-text-3" id="text-h-889254de-0316-4e44-9331-d92d371b8419">
@@ -435,7 +446,7 @@ then we define a function of the form:
 <span class="org-keyword">struct</span>
     <span class="org-keyword">type</span> <span class="org-type-def">t</span>;
     <span class="org-keyword">val</span> <span class="org-variable-name">toB</span> : t -&gt; B;
-    <span class="org-comment-delimiter">(* </span><span class="org-comment">val fromB : B -&gt; t; if we can convert the other way around</span><span class="org-comment-delimiter"> *)</span>
+    <span class="org-comment-delimiter">(* </span><span class="org-comment">val fromB : B -&gt; t; if we can convert the other way aro</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">und</span></span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column"> *)</span></span>
     <span class="org-comment-delimiter">(* </span><span class="org-comment">etc.</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
 </pre>
@@ -452,7 +463,6 @@ encourages this sort of naming convention for conversion functions.</li>
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-770611ec-d37f-42e9-9e97-802a79d389be" class="outline-2">
 <h2 id="h-770611ec-d37f-42e9-9e97-802a79d389be"><span class="section-number-2">4.</span> Comparable Types</h2>
 <div class="outline-text-2" id="text-h-770611ec-d37f-42e9-9e97-802a79d389be">
@@ -500,7 +510,6 @@ References:
 encourages this sort of practice with linear orders.</li>
 </ul>
 </div>
-
 <div id="outline-container-h-bb3e2d02-6651-49d4-82bb-11083bfa0fb5" class="outline-3">
 <h3 id="h-bb3e2d02-6651-49d4-82bb-11083bfa0fb5"><span class="section-number-3">4.1.</span> Caveat: Equality Testing</h3>
 <div class="outline-text-3" id="text-h-bb3e2d02-6651-49d4-82bb-11083bfa0fb5">
@@ -518,7 +527,6 @@ implement your own <code>eq</code> function than to use <code>compare (x,y) = EQ
 </div>
 </div>
 </div>
-
 <div id="outline-container-h-20417263-b75c-464c-b4ef-e48078110bd6" class="outline-2">
 <h2 id="h-20417263-b75c-464c-b4ef-e48078110bd6"><span class="section-number-2">5.</span> Principle: Similar Functions should have Similar Names</h2>
 <div class="outline-text-2" id="text-h-20417263-b75c-464c-b4ef-e48078110bd6">
@@ -555,7 +563,7 @@ encourages this sort of practice.</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2023-02-21 Tue 08:25.</p>
+<p class="postamble">Last Updated: Tue, 21 Feb 2023 09:26:05 -0800
 </div>
 </body>
 </html>

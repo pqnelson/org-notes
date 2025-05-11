@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bob Meyer's "Whither Literate Programming"</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../css/stylesheet.css" />
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Bob Meyer's "Whither Literate Programming"</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-cbea2488-7f3a-4fa7-8dc5-ec37553f6a87">1. Whither Literate Programming (1)</a>
+<ul>
+<li><a href="#h-c1eb4c1f-b1b9-4836-adce-948b43c8cacc">1.1. What is literate programming?</a></li>
+<li><a href="#h-999d5b14-5507-48f7-917a-2ce253121413">1.2. Recent LP works</a></li>
+<li><a href="#h-b631271d-8883-4687-bc23-74835864db12">1.3. What is NOT literate programming?</a>
+<ul>
+<li><a href="#h-9c07e10d-f7b5-4373-bfd3-75086c32c23d">1.3.1. Docco</a></li>
+<li><a href="#h-903c6781-ed3f-4b77-80b5-2fabf264eb23">1.3.2. Jupyter</a></li>
+<li><a href="#h-c90aa9b5-87a0-4457-b3f9-01cb4c6cd7b7">1.3.3. JSDoc</a></li>
+<li><a href="#h-5206c1ad-a465-4477-ae97-6ff2d4b90220">1.3.4. Literate CoffeeScript and Literate Haskell</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-f3297cfd-2970-4f6d-8400-71c8f6e79063">2. Whither Literate Programming (2) — What went wrong?</a>
+<ul>
+<li><a href="#h-0b6713f2-af64-4189-8507-5b5de0c041d6">2.1. It solves problems that don’t need to be solved anymore</a></li>
+<li><a href="#h-cf3c2b25-b181-4205-ba41-742b5db5b197">2.2. Literate programming is too much work and/or not necessary</a></li>
+<li><a href="#h-adf8b1ca-44e4-4935-9be8-6d7dd267a16c">2.3. I don’t need no stinking comments</a></li>
+<li><a href="#h-9a403545-32fc-45c1-b99e-18532c065ae0">2.4. IDEs</a></li>
+<li><a href="#h-433ccf98-b471-4cfd-91ec-258b3a419a1c">2.5. Tooling</a></li>
+<li><a href="#h-e0f4e384-0e7f-4f70-b3b1-0e63adae87c3">2.6. Literate revision management</a></li>
+<li><a href="#h-575501da-22db-4b61-a10b-ebda3548b6ae">2.7. Modern features in programming languages</a></li>
+<li><a href="#h-d4f8f65a-725b-4f5e-918e-fbfb13bc1651">2.8. Test-Driven Development</a></li>
+<li><a href="#h-0258b0c0-1c9c-4f19-88ad-39437fea1529">2.9. Speed of change</a></li>
+<li><a href="#h-5cd1ac68-a2fa-403a-8f59-efd853925918">2.10. Agility</a></li>
+<li><a href="#h-c3b4a393-edb6-4e63-a8f5-64c5212ea32c">2.11. The demise of program design</a></li>
+<li><a href="#h-073a1c5c-1f50-49fb-a39e-c4b2b458585a">2.12. A modular world</a></li>
+<li><a href="#h-fa9d0067-ebe4-42d0-a69f-c36761a2dace">2.13. Moving ahead</a></li>
+</ul>
+</li>
+<li><a href="#h-c7f91692-80ff-4392-9c2a-3c8f5d48c1fd">3. Whither Literate Programming (3) — Desiderata for a New Era</a>
+<ul>
+<li><a href="#h-ad821979-f375-42ab-bb8a-f760bd1113e7">3.1. What is literate programming?</a></li>
+<li><a href="#h-6f2438f9-d72d-42da-bf96-eb8c5d53b6ea">3.2. How must literate programming be reinvented?</a></li>
+<li><a href="#h-0b6833fe-bc8d-49bf-bacb-c7735e20386f">3.3. A medium for literate programming for the 2020s</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+This is just my copy of Bob Myers's series of posts "Whither Literate
+Programming"
+(<a href="https://torazaburo.medium.com/whither-literate-programming-2-what-went-wrong-e4a3d89af644">Part 2</a>, <a href="https://torazaburo.medium.com/whither-literate-programming-3-desiderata-for-a-new-era-b3cc8e19d441">Part 3</a>),
+since Medium has decided to obfuscate and hide it. Since it seems to be
+paywalled, I'm just noting it for myself.
+</p>
+<div id="outline-container-h-cbea2488-7f3a-4fa7-8dc5-ec37553f6a87" class="outline-2">
+<h2 id="h-cbea2488-7f3a-4fa7-8dc5-ec37553f6a87"><span class="section-number-2">1.</span> Whither Literate Programming (1)</h2>
+<div class="outline-text-2" id="text-h-cbea2488-7f3a-4fa7-8dc5-ec37553f6a87">
+<p>
+It’s been more than three decades since literate programming was
+invented by the legendary Donald Knuth. Its promise was immense —
+creating software which was more reliable, more understandable, more
+maintainable, and with hugely more teaching value — software which
+targeted <i>both</i> humans <i>and</i> computers.
+</p>
+
+<p>
+What is literate programming? How has literate programming evolved? Why
+hasn’t literate programming taken off? Where is it headed?
+</p>
+
+<p>
+In this three-part series, we’ll take a detailed look at these
+questions. This first part is an introduction to what is literate
+programming. (The second part, an overview of the challenges with
+literate programming, is here.)
+</p>
+</div>
+<div id="outline-container-h-c1eb4c1f-b1b9-4836-adce-948b43c8cacc" class="outline-3">
+<h3 id="h-c1eb4c1f-b1b9-4836-adce-948b43c8cacc"><span class="section-number-3">1.1.</span> What is literate programming?</h3>
+<div class="outline-text-3" id="text-h-c1eb4c1f-b1b9-4836-adce-948b43c8cacc">
+<p>
+Let’s define literate programming.
+</p>
+
+<blockquote>
+<p>
+Literate programming refers to melding a descriptive narrative and
+computer code into a single document, from which both human-friendly
+documentation and computer-readable files can be created.
+</p>
+</blockquote>
+
+<p>
+Let us quote from Knuth’s <a href="http://www.literateprogramming.com/knuthweb.pdf">paper on literate programming</a>:
+</p>
+
+<blockquote>
+<p>
+The practitioner of literate programming can be regarded as an essayist,
+whose main concern is with exposition and excellence of style. Such an
+author, with thesaurus in hand, chooses the names of variables carefully
+and explains what each variable means. He or she strives for a program
+that is comprehensible because its concepts have been introduced in an
+order that is best for human understanding, using a mixture of formal
+and informal methods that reınforce each other.
+</p>
+</blockquote>
+
+<p>
+As Knuth says, the document does not have to, and in fact probably
+should not, follow the lexical order of the source code, whatever that
+is; instead, the whole idea is that its order should be most meaningful
+to human readers (he calls this the “stream of consciousness”
+order). The process of creating the document is called <b>weaving</b>; the
+process of creating the compilable files is called <b>tangling</b>.
+</p>
+
+
+<p>
+In a 2008 interview, Knuth also claims increased productivity as well as
+more happiness:
+</p>
+
+<blockquote>
+<p>
+Not only has it enabled me to write and maintain programs <b>faster</b> and
+more reliably than ever before, and been one of my greatest sources of
+<b>joy</b> since the 1980s — it has actually been indispensable at times.
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-h-999d5b14-5507-48f7-917a-2ce253121413" class="outline-3">
+<h3 id="h-999d5b14-5507-48f7-917a-2ce253121413"><span class="section-number-3">1.2.</span> Recent LP works</h3>
+<div class="outline-text-3" id="text-h-999d5b14-5507-48f7-917a-2ce253121413">
+<p>
+In addition to various works published by Knuth in what he called WEB,
+his initial implementation of literate programming, there are several
+outstanding examples of literate programming. Perhaps the most ambitious
+is the CGI book called <a href="https://www.amazon.com/Physically-Based-Rendering-Theory-Implementation/dp/0128006455">“Physically Based Rendering”</a> by Pharr and
+Humphreys, which is famous for being the only book ever to have won an
+Academy Award (Knuth said it should have also won a Pulitzer):
+</p>
+
+<p>
+Other books cited as great examples of literate programming style
+include <a href="https://www.amazon.com/Interfaces-Implementations-Techniques-Creating-Reusable/dp/0201498413/ref=sr_1_1?ie=UTF8&amp;qid=1535698536">“C Interfaces and Implementations”</a> by David R. Hanson:
+</p>
+
+<p>
+The book <a href="https://www.amazon.com/Lisp-Small-Pieces-Christian-Queinnec/dp/0521545668">“Lisp in Small Pieces”</a> is sometimes cited as an example of
+literate programming, but it seems to really be narrative interspersed
+with code fragments for didactic purposes.
+</p>
+
+<p>
+One <a href="https://news.ycombinator.com/item?id=10070549">post in a Hacker News thread</a> from three years ago described the
+thorough-going use of literate programming at a major defense
+contractor, with excellent results. He notes:
+</p>
+
+<blockquote>
+<p>
+It forced us to keep things clean, modular and simple. It meant doing
+everything took longer the first time, but at the point of actually
+writing the code, the coder had a really good picture of exactly what it
+had to do and exactly where it fitted in to the grander scheme. There
+was little revisiting or rewriting, and usually the first version
+written was the last version written. It also made debugging a lot
+easier.
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-h-b631271d-8883-4687-bc23-74835864db12" class="outline-3">
+<h3 id="h-b631271d-8883-4687-bc23-74835864db12"><span class="section-number-3">1.3.</span> What is NOT literate programming?</h3>
+<div class="outline-text-3" id="text-h-b631271d-8883-4687-bc23-74835864db12">
+<p>
+In this section, we review various alternatives and point out why they
+are <i>not</i> literate programming in the strict sense of the word.
+</p>
+</div>
+<div id="outline-container-h-9c07e10d-f7b5-4373-bfd3-75086c32c23d" class="outline-4">
+<h4 id="h-9c07e10d-f7b5-4373-bfd3-75086c32c23d"><span class="section-number-4">1.3.1.</span> Docco</h4>
+<div class="outline-text-4" id="text-h-9c07e10d-f7b5-4373-bfd3-75086c32c23d">
+<p>
+Systems such as <a href="http://ashkenas.com/docco/">docco</a> already do something superficially similar to
+literate programming. docco is a way to present nicely formatted output
+of comments, alongside or interspersed with source code. It not only
+treats the comments as Markdown, meaning you can apply styles, but also
+applies automatic syntax highlighting to your code. Underscore’s
+<a href="https://underscorejs.org/docs/underscore.html">annotated source code</a> is a classic, well-executed example of using
+docco, which supports virtually any language. There are dozens of
+variations of this product. It’s a great piece of work, but it’s not
+literate programming, most basically because it’s missing the key
+feature of re-ordering and transclusion.
+</p>
+</div>
+</div>
+<div id="outline-container-h-903c6781-ed3f-4b77-80b5-2fabf264eb23" class="outline-4">
+<h4 id="h-903c6781-ed3f-4b77-80b5-2fabf264eb23"><span class="section-number-4">1.3.2.</span> Jupyter</h4>
+<div class="outline-text-4" id="text-h-903c6781-ed3f-4b77-80b5-2fabf264eb23">
+<p>
+What about systems like Jupyter, which provides a great notebook format
+mixing narrative and code, with the added bonus that code can be
+executed right in the “notebook”, with the output, including
+visualizations, visible in real time? Although its roots are in the
+Python world, Jupyter now supports other data-focused languages such as
+R and Julia. But as wonderfully useful as Jupyter and similar systems,
+such as <a href="http://beta.observablehq.com/">ObservableHQ</a> (coming from the d3 world) are, and they are
+becoming wildly popular as a way for data scientists to do and present
+their work, we should distinguish them from literate programming. They
+may contain little programs, but they are not intended to be a
+programming system. The Wolfram Language (the language of Mathematica)
+also appears to fall into this “live notebook” category.
+</p>
+</div>
+</div>
+<div id="outline-container-h-c90aa9b5-87a0-4457-b3f9-01cb4c6cd7b7" class="outline-4">
+<h4 id="h-c90aa9b5-87a0-4457-b3f9-01cb4c6cd7b7"><span class="section-number-4">1.3.3.</span> JSDoc</h4>
+<div class="outline-text-4" id="text-h-c90aa9b5-87a0-4457-b3f9-01cb4c6cd7b7">
+<p>
+<a href="http://usejsdoc.org/">JSDoc</a> is a documentation generation system designed to produce
+self-standing documentations of interfaces and APIs. Virtually all other
+languages have similar systems, including of course its ancestor
+<a href="http://en.wikipedia.org/wiki/Javadoc">Javadoc</a>, JSDoc is great. There are other similar systems to do things
+like auto-generating REST API documentation. But we can’t call these
+literate programming. They are automated documentation generate tools.
+</p>
+</div>
+</div>
+<div id="outline-container-h-5206c1ad-a465-4477-ae97-6ff2d4b90220" class="outline-4">
+<h4 id="h-5206c1ad-a465-4477-ae97-6ff2d4b90220"><span class="section-number-4">1.3.4.</span> Literate CoffeeScript and Literate Haskell</h4>
+<div class="outline-text-4" id="text-h-5206c1ad-a465-4477-ae97-6ff2d4b90220">
+<p>
+CoffeeScript offers a <a href="http://coffeescript.org/#literate">literate programming mode</a>, in which narrative
+material is mixed with code (identified by being indented) in files with
+the <code>.literatecoffee</code> extension. However, purists would say this is
+nothing more than a syntactic alternative for comments, and that it
+fails to meet the basic literate programming criteria of allowing the
+author to re-order the program to present it in more human-friendly
+fashion.
+</p>
+
+<p>
+Haskell offers a well-regarded <a href="https://wiki.haskell.org/Literate_programming">literate programming mode</a>. A tool called
+<a href="https://wiki.haskell.org/Haddock">Haddock</a> generates documentation from annotated source code. It offers
+two solutions to the classic problem of how to distinguish narrative
+from code when doing literate programming: “Bird notation”, where each
+line of code is prefixed with a “&gt;”, and LaTeX notation, where code is
+surrounded by <code>`</code> , <code>\begin{code}</code> and <code>\end{code}</code> pairs (latex style); other
+formatting unfortunately requires knowledge of LaTeX as well.
+</p>
+
+<p>
+However, purists would again object to calling this feature, as useful
+as it is, “literate programming”. They would point to the lack of any
+ability to include fragments of code in other fragments, or the
+full-fledged ability to present the code in a different order than it is
+to be presented to the compiler.
+</p>
+
+<p>
+For R aficionados, there is the <code>sweave</code> package — also LaTeX dependent —
+and its successors, including <a href="https://github.com/yihui/knitr">knitr</a>. And there are many others.
+</p>
+
+<p>
+Currently, the only current tools that really qualify as literate
+program in the strict Knuthian sense of the word are all quite long in
+the tooth — for instance, <a href="https://en.wikipedia.org/wiki/Noweb">noweb</a>, a simplified 1990s port of <a href="https://en.wikipedia.org/wiki/CWEB">CWEB</a> (a C
+language version of Knuth’s original WEB system).
+</p>
+
+<p>
+In the second part of this series, we will take up the question of why
+literate programming has gotten so little traction over the decades. In
+the third part we will move on to discussing future directions for
+literate programming.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-h-f3297cfd-2970-4f6d-8400-71c8f6e79063" class="outline-2">
+<h2 id="h-f3297cfd-2970-4f6d-8400-71c8f6e79063"><span class="section-number-2">2.</span> Whither Literate Programming (2) — What went wrong?</h2>
+<div class="outline-text-2" id="text-h-f3297cfd-2970-4f6d-8400-71c8f6e79063">
+<p>
+What is literate programming? How has literate programming evolved? Why
+hasn’t literate programming taken off? Where is it headed?
+</p>
+
+<p>
+In the first article in this three part series, we addressed the first
+of these questions, learning about what literate programming is,
+something of its history, and the great promise it holds. Let us recall
+the definition of literate programming:
+</p>
+
+<blockquote>
+<p>
+Literate programming harmonizes the human and machine aspects of
+programming into an integral whole which best expresses and communicates
+a software solution.
+</p>
+</blockquote>
+
+<p>
+But something went horribly wrong. The Google Trends chart below shows
+starkly the inexorable decline in interest in literate programming.
+</p>
+
+<p>
+[graph omitted]
+</p>
+
+<p>
+From a high point in 2004 — and remember that at this point a lot of the
+air had already gone out of the literate programming balloon — interest
+has declined to almost zero, relatively speaking.
+</p>
+
+<p>
+What went wrong? That is the topic of this second article in our series
+of literate programming.Let’s try to identify some of the causes of the
+virtual complete lack of momentum in recent years. Some of these reasons
+may be intrinsic to the activity of programming and programming behavior
+in any era; others may have appeared, or been aggravated, by recent
+changes in the environment.
+</p>
+
+<p>
+Once we understand better what happened with literate programming, and
+the factors affecting its adoption (or lack thereof), we will be ready
+to propose a new generation of literate programming concepts and tools —
+and a new series of use cases — which will finally allow us to realize
+the potential of Knuth’s conceptual breakthrough. That will be the topic
+of the third and final article in this series.
+</p>
+
+<p>
+Now, with no further ado, let us proceed to examine the factors that
+have slowed, and could continue to slow, the spread of literate
+programming.
+</p>
+</div>
+<div id="outline-container-h-0b6713f2-af64-4189-8507-5b5de0c041d6" class="outline-3">
+<h3 id="h-0b6713f2-af64-4189-8507-5b5de0c041d6"><span class="section-number-3">2.1.</span> It solves problems that don’t need to be solved anymore</h3>
+<div class="outline-text-3" id="text-h-0b6713f2-af64-4189-8507-5b5de0c041d6">
+<p>
+To understand the genesis of literate programming, and the reasons it
+failed to catch on, let’s briefly review some historical background.
+</p>
+
+<p>
+First, in 1984 there was no world-wide web or even really PCs for that
+matter; “documentation” was printed on paper. Knuth, of course, was a
+pioneer in computer-based typesetting with his TeX system, and so it is
+not surprising that his initial implementation of literate programming
+was designed to produce TeX documents. That meant, unfortunately, that
+users had to know TeX to some extent, and that the source documents were
+littered with incomprehensible TeX commands, so people had to write
+things like this:
+</p>
+
+<p>
+[picture omitted, presumably some straightforward TeX markup.]
+</p>
+
+<p>
+Ouch.
+</p>
+
+<p>
+Second, it turns out that at the time Knuth was programming in Pascal,
+an early modern language that could be said to be based on ALGOL (the
+progenitor of high-level structured programming languages), and was
+later made famous by the ubiquitous Turbo Pascal. However, Pascal
+imposed a number of limitations. For instance, it had no preprocessor or
+<code>#define</code> like capability such as found in C; and it had restrictions on
+things like the order of declarations. Knuth’s literate programming
+initiative, which he called <code>WEB</code>, can be viewed in part as being a kind
+of Pascal preprocessor to make up for these limitations.
+</p>
+
+<p>
+Some critics of literate program say that modern programming
+environments no longer have these kinds of issues, which has made
+something like Knuth’s <code>WEB</code> less necessary. That’s just one of the many
+criticisms of literate programming, which we go over in a following
+section.
+</p>
+</div>
+</div>
+<div id="outline-container-h-cf3c2b25-b181-4205-ba41-742b5db5b197" class="outline-3">
+<h3 id="h-cf3c2b25-b181-4205-ba41-742b5db5b197"><span class="section-number-3">2.2.</span> Literate programming is too much work and/or not necessary</h3>
+<div class="outline-text-3" id="text-h-cf3c2b25-b181-4205-ba41-742b5db5b197">
+<p>
+Contrary to Knuth’s assertion in the quote given in the first article in
+this series that literate programming lets him program faster, it’s a
+fair assessment that adopting a literate programming approach might
+actually require more time — in the worst case, perhaps as much as
+double. Of course, the notion is that this extra investment of time will
+repay itself many times over the coming years, by saving on maintenance
+costs, or serving as great teaching material for new folks, but
+unfortunately not only developers, but managers and business people as
+well, tend to be more interested in how fast they can get something
+working and shipped.
+</p>
+</div>
+</div>
+<div id="outline-container-h-adf8b1ca-44e4-4935-9be8-6d7dd267a16c" class="outline-3">
+<h3 id="h-adf8b1ca-44e4-4935-9be8-6d7dd267a16c"><span class="section-number-3">2.3.</span> I don’t need no stinking comments</h3>
+<div class="outline-text-3" id="text-h-adf8b1ca-44e4-4935-9be8-6d7dd267a16c">
+<p>
+This problem is aggravated by a particular mentality found in some
+quarters of our industry that no kind of documentation, or comments, is
+really necessary in the first place, because after, real developers
+write “self-documenting code”, or in a variation of this line of
+thought, real developers can figure out any code; some people say that
+if you need to understand what code does you can just ask the person who
+wrote it (if they’re still with the company, of course).
+</p>
+
+<p>
+In its extreme incarnation, this mentality actually claims that comments
+are evil and should be abolished. After all, why should I adorn a line
+saying <code>initialize();</code> with a comment saying <code>// Initialize variables</code>?
+These “antidocs” people variously claim that comments, in addition to
+being superfluous, are subject to code rot — which of course they are,
+unless someone keeps them up to date; that “wrong documentation is worse
+than no documentation”; or that comments are actually a way of covering
+up for poor coding practices, and in that sense may even indirectly
+promote such poor coding practices, and on and on.
+</p>
+
+<p>
+People who don’t believe in commenting their code are obviously not
+going to be the least bit interested in literate programming, which can
+be viewed as commenting on steroids. The prevalence of this attitude is
+definitely a factor working against restoring any level of interest in
+literate programming.
+</p>
+</div>
+</div>
+<div id="outline-container-h-9a403545-32fc-45c1-b99e-18532c065ae0" class="outline-3">
+<h3 id="h-9a403545-32fc-45c1-b99e-18532c065ae0"><span class="section-number-3">2.4.</span> IDEs</h3>
+<div class="outline-text-3" id="text-h-9a403545-32fc-45c1-b99e-18532c065ae0">
+<p>
+I personally believe that a lot of the blame for the demise of literate
+programming can be laid at the feet of the folks making IDEs. As
+programmers, we spend most of our time these days living inside
+IDEs. We’ve gotten spoiled by their auto-complete features, in-line
+error indications, and integrated build/run/debug features. We use them
+for everything from downloading libraries to sending commands to our
+phones to collaborative editing. Few if any programmers are going to
+leave the warm embrace of their IDE and fire up a text editor to enter
+cryptic commands in some literate programming language.
+</p>
+
+<p>
+Yes, the IDEs do offer plug-ins. But in most cases, the plug-in
+architecture does not expose the kind of functionality one would need to
+implement literate programming in the IDE. If the IDE talks to some kind
+of language service in the background, which reports syntax errors,
+plugins may not be able to easily get their hands on that information in
+order to display error annotations in the literate programming version
+of the file.
+</p>
+
+<p>
+Let’s be clear: there is no specific reason why IDEs could not offer
+literate programming features. They simply don’t feel it’s a
+priority. As a result, an entire generation of engineers has learned to
+program in an environment where they couldn’t use literate programming
+even if they wanted to. To be fair to the people making IDEs, there is a
+chicken-and-egg problem here; they don’t want to provide a feature no
+one is asking for, yet it is the very presence of the feature which
+could help restore the popularity of literate programming popular.
+</p>
+
+<p>
+Perhaps one problem is that the people building IDEs are confused about
+what flavor of literate programming to implement. No one wants to go
+back to Knuth’s arcane original notation, which lives on in
+noweb. Certainly no one other than hold-outs in academia want to go
+anywhere near literate programming that involves LaTeX. But the IDE
+folks are smart and can figure this out. Markdown, or some variant
+thereof, is a perfectly serviceable, widely-used format for textual
+narrative, and in fact is already used in several of the few isolated
+experiments on literate programming being done by zealots to this day;
+for output, HTML is probably enough, but it’s not hard to also support
+other formats such as <code>.doc</code>, <code>.pdf</code>, or even <code>.epub</code>, in case someone wants
+to curl up in bed with your program.
+</p>
+
+<p>
+VSCode, wherefore art thou?
+</p>
+</div>
+</div>
+<div id="outline-container-h-433ccf98-b471-4cfd-91ec-258b3a419a1c" class="outline-3">
+<h3 id="h-433ccf98-b471-4cfd-91ec-258b3a419a1c"><span class="section-number-3">2.5.</span> Tooling</h3>
+<div class="outline-text-3" id="text-h-433ccf98-b471-4cfd-91ec-258b3a419a1c">
+<p>
+By definition, literate programming requires an extra build step — the so-called “tangle” step of extracting and re-arranging the program code in the literate programming source into compilable or executable form. Although tangling usually involves nothing more than a quick command invocation, it is nevertheless yet another step to worry about and potentially go wrong — who wants today’s deployment to fail because of a lint error from some literate programming Markdown syntax?
+</p>
+
+<p>
+In an era of source maps which allows us to map back compiled and transpiled code to the original source, or transformed CSS back to its pre-processor origins, there is a risk that we will be unable to map the code being executed back to the literate program we wrote — current approaches, such as they are, don’t address this issue at all.
+</p>
+
+<p>
+Finally, it may be an issue that the tangling step also takes time; it should be quick, but every second counts.
+</p>
+
+<p>
+Recent attempts to provide literate programming tools around the web
+stack don’t really address these tooling issues in a convincing way.
+</p>
+</div>
+</div>
+<div id="outline-container-h-e0f4e384-0e7f-4f70-b3b1-0e63adae87c3" class="outline-3">
+<h3 id="h-e0f4e384-0e7f-4f70-b3b1-0e63adae87c3"><span class="section-number-3">2.6.</span> Literate revision management</h3>
+<div class="outline-text-3" id="text-h-e0f4e384-0e7f-4f70-b3b1-0e63adae87c3">
+<p>
+Knuth invented literate programming in the previous century. Although literate programming has many advantages that have withstood the test of time, there have also been massive changes in the computing world, some of which might make literate programming less pertinent. One of those is the advent of version control.
+</p>
+
+<p>
+Knuth did not have any version control at all that we know of, much less “commit messages” or “pull requests”. Commit messages — if written carefully — can provide a useful kind of documentation for a system, with the added advantage that they are ordered chronologically, so the most recent ones come up first, with the older ones aging away gracefully. git and other version control systems can search commit messages, and we can find all the files involved in a particular commit whose message we have found.
+</p>
+
+<p>
+This approach to consciously using commit messages for documentation has
+been called “literate version control”. In addition to commit messages,
+modern development methodologies, repository management systems, and
+issue and bug tracking systems will capture code review comments and bug
+discussions, all of which represent a kind of documentation, which has
+the advantage almost by definition of being mostly about the things we
+really care about. On the other hand, programmers who are not inclined
+to comment their code, much less program in literal programming style,
+are likely to also be the ones who write useless commit messages like
+“Fixed bug”.
+</p>
+</div>
+</div>
+<div id="outline-container-h-575501da-22db-4b61-a10b-ebda3548b6ae" class="outline-3">
+<h3 id="h-575501da-22db-4b61-a10b-ebda3548b6ae"><span class="section-number-3">2.7.</span> Modern features in programming languages</h3>
+<div class="outline-text-3" id="text-h-575501da-22db-4b61-a10b-ebda3548b6ae">
+<p>
+As alluded to above, one of Knuth’s motivations in developing <code>WEB</code> was
+the lack of macros in Pascal, and other language restrictions. Today’s
+languages generally do provide macro or meta-programming
+facilities. Chunks of code can be factored out into separate functions
+within the parent function (in many languages, at least — actually this
+was true for Pascal as well), and given meaningful names, with very low
+run-time overhead — some engines may even inline them for you, and some
+IDEs provide this kind of “refactoring” feature, so in this view there
+is no need to rely on literate programming to manage our “chunks” for
+us.
+</p>
+</div>
+</div>
+<div id="outline-container-h-d4f8f65a-725b-4f5e-918e-fbfb13bc1651" class="outline-3">
+<h3 id="h-d4f8f65a-725b-4f5e-918e-fbfb13bc1651"><span class="section-number-3">2.8.</span> Test-Driven Development</h3>
+<div class="outline-text-3" id="text-h-d4f8f65a-725b-4f5e-918e-fbfb13bc1651">
+<p>
+It’s safe to say that one key development in software over the last
+decades has been a huge focus on testing, testing frameworks, testing
+methodologies, and testing tools. We use the term “test-driven
+development” here in its broadest sense — development which takes tests
+seriously and devotes a meaningful amount of its time to developing and
+maintaining tests. Literate programming has never provided a convincing
+story about how it would co-exist with today’s test-centric priorities.
+</p>
+</div>
+</div>
+<div id="outline-container-h-0258b0c0-1c9c-4f19-88ad-39437fea1529" class="outline-3">
+<h3 id="h-0258b0c0-1c9c-4f19-88ad-39437fea1529"><span class="section-number-3">2.9.</span> Speed of change</h3>
+<div class="outline-text-3" id="text-h-0258b0c0-1c9c-4f19-88ad-39437fea1529">
+<p>
+As software developers, the world around us is changing much more
+rapidly than ever before. Software can now be modified and deployed in
+hours, rather than months or years. Our modern culture and business
+environment has grown more dynamic, demanding that software change
+faster to keep up. We no longer have the luxury of sitting in our
+armchairs tweaking pixels and internal program structure. For literate
+programming, the question is whether things are now moving too fast to
+accommodate literate programming — or is literate programming actually a
+savvy way to deal with the increased rate of change?
+</p>
+</div>
+</div>
+<div id="outline-container-h-5cd1ac68-a2fa-403a-8f59-efd853925918" class="outline-3">
+<h3 id="h-5cd1ac68-a2fa-403a-8f59-efd853925918"><span class="section-number-3">2.10.</span> Agility</h3>
+<div class="outline-text-3" id="text-h-5cd1ac68-a2fa-403a-8f59-efd853925918">
+<p>
+It’s now 2018, nearly two decades after the <a href="http://agilemanifesto.org/">Agile Manifesto</a>. On the one
+hand, that manifesto says
+</p>
+
+<blockquote>
+<p>
+We are uncovering better ways of developing software by doing it and <b>helping others do it.</b>
+</p>
+</blockquote>
+
+<p>
+“Helping others do it” sure sounds like something that literate
+programming could help with. And the twelve principles include:
+</p>
+
+<blockquote>
+<p>
+Continuous attention to technical excellence and good design enhances agility.
+</p>
+</blockquote>
+
+<p>
+which definitely sounds like something that literate programming could
+contribute to, since literate programming could certainly be considered
+one aspect of “technical excellence”, and makes design explicit,
+communicates it clearly, and facilitates peer review. On the other hand,
+the manifesto goes on to say:
+</p>
+
+<blockquote>
+<p>
+We have to come to value working software over <b>comprehensive documentation.</b>
+</p>
+</blockquote>
+
+<p>
+Depending on how you look at it, that could be taken as a criticism of
+literate programming, to the extent you view it as “comprehensive
+documention” which slows down getting to “working software”.
+</p>
+
+<p>
+So which is it? Is agile supportive, not supportive, or indifferent to
+literate programming? One insightful contributor to a <a href="https://news.ycombinator.com/item?id=10069748">Hacker News thread</a>
+from 2015 put it well:
+</p>
+
+<blockquote>
+<p>
+I don’t think literate programming is incompatible with the original
+agile manifesto, but I think it wouldn’t survive in what that seems to
+have turned into.
+</p>
+</blockquote>
+
+<p>
+This article is not about justifying, or criticizing, or commenting on
+the evolution of agile or scrum. Suffice it to say that moving toward
+literate programming is almost certainly going to require a change in
+mindset for the manager used to locking down features which are going to
+get shipped next Tuesday or else, or getting evaluated on whether or not
+they are shipped.
+</p>
+</div>
+</div>
+<div id="outline-container-h-c3b4a393-edb6-4e63-a8f5-64c5212ea32c" class="outline-3">
+<h3 id="h-c3b4a393-edb6-4e63-a8f5-64c5212ea32c"><span class="section-number-3">2.11.</span> The demise of program design</h3>
+<div class="outline-text-3" id="text-h-c3b4a393-edb6-4e63-a8f5-64c5212ea32c">
+<p>
+Literate programming is about expressing, and communicating program
+design, in addition to individual pieces of code. (As such, it is also a
+great way to share, review, and collaborate on designs.) By “program
+design”, we refer to internal design — the structure of the modules and
+components that make up the piece of solution, and their interfaces with
+each other and the outside world.
+</p>
+
+<p>
+Unfortunately, the past decades have seen an inexorable decline in the
+practice of internal design. Far too many programmers these days believe
+that the first step in software is to sit down right away in front of
+the computer and start typing code, instead of first <i>thinking</i>, which is
+what program design is about. It’s also hard to do too much thinking or
+internal design when your manager is breathing down your neck about the
+release next Tuesday. It’s hard to get into an internal design mentality
+when none of your co-workers, or engineering managers who should know
+better, care about it or even know how to do it. A generation of
+programmers who have learned to program by copying and pasting fragments
+of jQuery is not suddenly going to adopt an internal design mentality.
+</p>
+
+<p>
+Literate programming has the potential to stand in an interesting
+feedback loop with a revival in internal design. It can both benefit
+from a greater focus on internal design; and by its very nature, can
+contribute to that focus.
+</p>
+</div>
+</div>
+<div id="outline-container-h-073a1c5c-1f50-49fb-a39e-c4b2b458585a" class="outline-3">
+<h3 id="h-073a1c5c-1f50-49fb-a39e-c4b2b458585a"><span class="section-number-3">2.12.</span> A modular world</h3>
+<div class="outline-text-3" id="text-h-073a1c5c-1f50-49fb-a39e-c4b2b458585a">
+<p>
+In days of yore, monolithic programs were the rule, going all the way
+back to the 1000-card deck of punched cards that made up your FORTRAN
+program. Programming languages and development environments did not
+support breaking systems down into modules, or communiation among
+modules, at least not to the extend we know today. Literate programming
+as we know it has never really addressed the modularization of the
+world. How did individual literate programs relate to each other, or
+refer to each other? Literate programs like TeX appear to have been
+basically been one monstrous file, perhaps with simple inclusion
+mechanisms, which when “woven” turned into the TeX book.
+</p>
+
+<p>
+A successful, modern incarnation of literate programming is going to
+have to fully support our current module-based world.
+</p>
+</div>
+</div>
+<div id="outline-container-h-fa9d0067-ebe4-42d0-a69f-c36761a2dace" class="outline-3">
+<h3 id="h-fa9d0067-ebe4-42d0-a69f-c36761a2dace"><span class="section-number-3">2.13.</span> Moving ahead</h3>
+<div class="outline-text-3" id="text-h-fa9d0067-ebe4-42d0-a69f-c36761a2dace">
+<p>
+This article has been about the reasons for literate programming not
+taking off — some old reasons and some new reasons. However, I believe
+that none of these barriers are impossible to overcome, and in fact that
+we need literate programming today more than we ever had. In the next
+installment in this series, I will present my scenarios for the future
+of literate programming.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-h-c7f91692-80ff-4392-9c2a-3c8f5d48c1fd" class="outline-2">
+<h2 id="h-c7f91692-80ff-4392-9c2a-3c8f5d48c1fd"><span class="section-number-2">3.</span> Whither Literate Programming (3) — Desiderata for a New Era</h2>
+<div class="outline-text-2" id="text-h-c7f91692-80ff-4392-9c2a-3c8f5d48c1fd">
+<p>
+In the first article of this series, we reviewed the history of literate
+programming. In the second article, we mused about how and why literate
+programming never realized its immense promise. In that article, I
+boldly promised a third article in the series which would 
+</p>
+
+<blockquote>
+<p>
+…propose a new generation of literate programming concepts and tools —
+and a new series of use cases — which will finally allow us to realize
+the potential of Knuth’s conceptual breakthrough.
+</p>
+</blockquote>
+
+<p>
+However, I now see clearly that this ambitious enterprise cannot
+possibly be realized in one additional article. A full rethinking of
+literate programming might take a year, or a decade. It will require an
+immense amount of conceptualization, invention, experimentation, and
+development. So in this, the third article in the series, I will limit
+myself to framing the problem, presenting the desiderata — the
+requirements — for a new model and a new era of literate programming,
+and provide the briefest of sketches of how we could move toward
+satisfying them, in the form of a new medium I call a “litbook”, a
+vastly enhanced type of ebook which is real-time, instrumented,
+hyperconnected, and learning-equipped.
+</p>
+</div>
+<div id="outline-container-h-ad821979-f375-42ab-bb8a-f760bd1113e7" class="outline-3">
+<h3 id="h-ad821979-f375-42ab-bb8a-f760bd1113e7"><span class="section-number-3">3.1.</span> What is literate programming?</h3>
+<div class="outline-text-3" id="text-h-ad821979-f375-42ab-bb8a-f760bd1113e7">
+<p>
+Let us start by reminding ourselves of Knuth’s incisive definition of
+literate programming:
+</p>
+
+<blockquote>
+<p>
+Literate programming harmonizes the human and machine aspects of
+programming into an integral whole which best expresses and communicates
+a software solution.
+</p>
+</blockquote>
+
+<p>
+This definition is notable for Knuth’s characteristically careful choice
+of words, as well as the way in which it painstakingly abstracts away
+any aspects of literate programming which were dependent on the
+technologies or media of the time. It’s worth going over each word used
+in this definition, with help from the dictionary:
+</p>
+
+<p>
+<b>Harmonize.</b> “Combine in a pleasing fashion”; “coordinate”; “bring into alignment”; “blend”.
+</p>
+
+<p>
+<b>Integral whole.</b> “A unit formed from the interrelated composition of all essential parts.”
+</p>
+
+<p>
+<b>Express.</b> “Represent, such in words”; “give or convey”; “depict”.
+</p>
+
+<p>
+<b>Communicate.</b> “Convey knowledge of or information about”.
+</p>
+</div>
+</div>
+<div id="outline-container-h-6f2438f9-d72d-42da-bf96-eb8c5d53b6ea" class="outline-3">
+<h3 id="h-6f2438f9-d72d-42da-bf96-eb8c5d53b6ea"><span class="section-number-3">3.2.</span> How must literate programming be reinvented?</h3>
+<div class="outline-text-3" id="text-h-6f2438f9-d72d-42da-bf96-eb8c5d53b6ea">
+<p>
+Knuth’s characterization of literate programming is so robust that in
+and of itself it needs hardly any adjustment to our current reality
+thirty-five years later. Twenty years into this bright new millennium,
+we still — perhaps more than ever — want to express and communicate the
+“human and machine aspects of our software solutions” as a harmonized,
+integrated whole. The only differences worthy of note today are that
+today our software solutions are more complex, and often composed from
+sub-solutions, including third-party products. Contrast this with
+something like TeX , for example, which was an almost entirely
+stand-alone software system; this raises the question of what level of
+granularity we should choose when creating works of literate
+programming. We will revisit this topic later in the article.
+</p>
+
+<p>
+If I were to quibble about Knuth’s formulation, it would be to wonder
+why he stopped short of mentioning the <i>purpose</i> of expressing and
+communicating. I would be very surprised were it not the case that for
+Knuth a major goal was simply to present a software solution in a way
+enabling it to be appreciated for its intrinsic beauty, whether of
+design or implementation; and, by extension, to pass on, directly or
+indirectly, principles and techniques that could be used by
+practitioners in the future. These remain admirable objectives for
+literate programming to this day, at least within the academic, research
+and education domains.
+</p>
+
+<p>
+TeX, however, has essentially remain unchanged since v3 came out in
+1989, when the character representation went to eight bits. (TeX has not
+changed at all since v3.14159265, according to Knuth’s quirky
+digits-of-pi-based versioning system, which came out in 2014; the next
+revision, which will add another digit (3), is planned for 2020). Thus,
+“TeX: The Program”, the literate programming version of TeX published in
+1984, was only to a negligible extent about capturing information
+required by maintainers. Today, in contrast, our systems tend to have
+longer maintenance lifetimes, and thus the relative importance of
+literate programming-like documents for purposes of teaching maintainers
+the code has grown. Since there are presumably fewer people maintaining
+a piece of software than wanting to understand its aesthetics, this also
+implies that works of literate programming in our day are likely to have
+smaller audiences.
+</p>
+
+<p>
+In other words: in the 2020s, literate programming must re-orient itself
+from being about museum catalogs describing beautiful, finished,
+self-contained software objects, to be read in leisurely fashion,
+towards being about guides to messy, tangled systems which are
+undergoing ongoing development, targeting an audience with a decidedly
+shorter attention span.
+</p>
+</div>
+</div>
+<div id="outline-container-h-0b6833fe-bc8d-49bf-bacb-c7735e20386f" class="outline-3">
+<h3 id="h-0b6833fe-bc8d-49bf-bacb-c7735e20386f"><span class="section-number-3">3.3.</span> A medium for literate programming for the 2020s</h3>
+<div class="outline-text-3" id="text-h-0b6833fe-bc8d-49bf-bacb-c7735e20386f">
+<p>
+It’s unlikely that Knuth considered any medium for his works of literate
+programming other than the printed page, as he used for “TeX: The
+Program” and “Metafont: The Program”. At the time, there would have been
+few if any alternatives. And the physical book has massive advantages as
+a medium for “expressing and communicating” information, which account
+for its extraordinary durability as an artifact of our civilization,
+dating back more than four thousand years. Those advantages include:
+</p>
+
+<ol class="org-ol">
+<li>Books are discrete objects, which can be stored, carried around, given away, and their identity remembered.</li>
+<li>Books typically cover a topic or tell a story in its entirety, in some depth.</li>
+<li>Books provide a default path through the information, and it is very common to be useful to read a book from beginning to end.</li>
+<li>Books can have indexes to quickly identify references to a particular topic.</li>
+<li>Locations in books can be bookmarked.</li>
+<li>Books often supply notes and/or bibliographies.</li>
+</ol>
+
+<p>
+Most of these things would be highly useful, if not indispensable, in
+any vehicle via which literate programming were to be delivered. After
+all, if we consider that our objective is to “tell a story” about a
+piece of software, what better medium than the classic storybook?
+</p>
+
+<p>
+Aside from the heft of the printed volume and the distinctive smell of
+the paper, we can now replicate most of the characteristics of books in
+ebooks. Ebooks also offer the programmability necessary for things like
+animations (although very few do). However, for reasons that may never
+be fully elucidated, ebooks have failed to fully realize their potential
+as the ubiquitous, self-contained, portable, digital containers of
+information that many once hoped they would become. Most people today
+probably think an ebook is the bastardized format you read on a Kindle,
+and would not even know how to consume an EPUB if one fell into their
+hands.
+</p>
+
+<p>
+Notwithstanding the diminishing popularity of the ebook format, we think
+it remains an excellent candidate for the vehicle via which to deliver
+literate programming content, with certain key enhancements and
+extensions. While preserving the strengths of the ebook format as we
+know it, together with features already found in many ebooks such as
+full-text search, hyperlinking of course, smart (e.g. animated) content,
+and multiple navigational paths, we need to add the capability for
+auto-updating, self-learning, instrumentation, and
+personalization. Until someone comes up with a better name, let us call
+this flavor of ebook a literate programming book, or litbook.
+</p>
+
+<p>
+Litbooks must be tightly coupled to the repository and source code
+control systems which are ubiquitous today. We also think it’s important
+that they have advanced query mechanisms, and be intelligent in the
+sense that they know, or can learn, what portions of the content are
+most useful and what might be missing.
+</p>
+
+<p>
+Critically, they must also be easily updatable in a semi-automated
+fashion. Software solutions today not only have longer maintenance and
+upgrade lifetimes, but are maintained and upgraded on a faster cadence —
+much faster in many cases. And as we all know, the only thing worse than
+no documentation is out-of-date documentation. Any model for literate
+programming in the 2020’s must accommodate such rapid release
+cycles. Just as we continuously integrate, and continuously deploy, we
+must start to continuously document. In other words, in addition to CI
+and CD we must have CL, meaning “continuous litbooking”. No feature or
+subsystem should be considered complete until it is reflected in updated
+works of a literate programming nature, any more than in today’s world a
+feature or subsystem would be considered complete without accompanying
+unit tests and/or integration tests.
+</p>
+
+<p>
+Finally, it is imperative that our litbook approach avoid the “initial
+cliff” — the inability to generate any useful literate programming
+materials until program writers have made a specific investment of time
+in preparing or writing litbook-specific content. We need to be able to
+create litbooks from plain old software systems, using various
+heuristics. This could be called “monotonic documentation” — meaning
+that each incremental investment in litbooking provides in incrementally
+more useful litbooks.
+</p>
+
+<p>
+What approach would Knuth choose if he were to reinvent literate
+programming today? How we would like to hear his input. Would it be
+anything like the litbooks we have imagined here?
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated: Mon, 27 May 2024 18:15:01 -0700
+</div>
+</body>
+</html>
