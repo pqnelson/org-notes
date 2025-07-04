@@ -16,6 +16,130 @@
 :CUSTOM_ID: h-e4bbaadc-b46b-4d44-b5bb-a2177a7a5318
 :END:
 
+For debugging purposes, it's useful to have a way to use a string as
+an input stream instead of a file.
+
+It's also useful to have a "string writer" (analogous to Java's
+~StringStream~) for building up a string.
+
+** String reader
+:PROPERTIES:
+:CUSTOM_ID: h-3708155b-2b2f-4cc5-886c-28940959cbae
+:END:
+
+We would create a ~TextPrimIO.reader~ object, something like:
+
+#+begin_src sml
+fun mk_string_reader (source : string) : TextPrimIO.reader =
+  let
+    val pos = ref 0;
+    fun read n =
+      let
+        val p = !pos;
+        val m = min(n, size source - p);
+      in
+        pos := p + m;
+        substring(source, p, m)
+      end;
+    val name = "<string \"" ^
+               (if size source <= 8
+                then source
+                else (substring(source, 0, 8) ^"...")) ^
+               "\">";
+  in
+    TextPrimIO.RD{name = name,
+                  chunkSize = size source,
+                  readVec = SOME(read),
+                  readArr = NONE,
+                  readVecNB = SOME(fn n => SOME(read n)),
+                  readArrNB = NONE,
+                  block = SOME(fn () => ()),
+                  canInput = SOME(fn () => true),
+                  avail = SOME(fn () => size source - !pos),
+                  getPos = SOME(fn () => !pos),
+                  setPos = SOME(fn k =>
+                               if 0 <= k andalso k <= size source
+                               then pos := k
+                               else raise Fail "position out of bounds"),
+                  verifyPos = NONE,
+                  close = (fn () => ()),
+                  ioDesc = NONE}
+  end;
+#+end_src
+
+This can be found in, e.g., section 8.3 of Andrew W Appel's
+[[https://smlfamily.github.io/history/io.95-02-06.pdf][Proposed interface for Standard ML Stream I/O]] (dated February 6, 1995).
+
+If we wish to adhere to the [[https://smlfamily.github.io/Basis/prim-io.html#SIG:PRIM_IO.reader:TY][Standard Basis documentation]] more
+faithfully, we should have a way to check if the stream was
+closed. Something like:
+
+#+begin_src sml
+fun mk_string_reader (source : string) : TextPrimIO.reader =
+  let
+    val pos = ref 0;
+    val is_closed = ref false;
+    fun read n =
+      if !is_closed then raise IO.ClosedStream
+      else
+        let
+          val p = !pos;
+          val m = min(n, size source - p);
+        in
+          pos := p + m;
+          substring(source, p, m)
+        end;
+    val name = "<string \"" ^
+               (if size source <= 8
+                then source
+                else (substring(source, 0, 8) ^"...")) ^
+               "\">";
+  in
+    TextPrimIO.RD{name = name,
+                  chunkSize = size source,
+                  readVec = SOME(read),
+                  readArr = NONE,
+                  readVecNB = SOME(fn n => SOME(read n)),
+                  readArrNB = NONE,
+                  block = SOME(fn () => ()),
+                  canInput = SOME(fn () => !is_closed),
+                  avail = SOME(fn () =>
+                                  if !is_closed
+                                  then raise IO.ClosedStream
+                                  else size source - !pos),
+                  getPos = SOME(fn () => !pos),
+                  setPos = SOME(fn k =>
+                               if !is_closed
+                               then raise IO.ClosedStream
+                               else if 0 <= k andalso k <= size source
+                               then pos := k
+                               else raise Fail "position out of bounds"),
+                  verifyPos = NONE,
+                  close = (fn () => is_closed := true),
+                  ioDesc = NONE}
+  end;
+#+end_src
+
+We then have a "smart constructor" to make this an appropriate input
+stream type:
+
+#+begin_src sml
+fun stringReader(source : string) =
+  let
+    val reader : TextIO.StreamIO.reader = mk_string_reader source;
+  in
+    TextIO.StreamIO.mkInstream(reader, "")
+  end;
+#+end_src
+
+Ostensibly, we can use the result when trying to invoke
+~TextIO.StramIO.input1~. 
+
+** String writer
+:PROPERTIES:
+:CUSTOM_ID: h-ef6933da-a434-40e2-b67e-f08e2c1337dd
+:END:
+
 I found myself looking for something analogous to Java's ~StringStream~,
 when writing things out.
 
@@ -46,37 +170,37 @@ Creates a string writer, which writes to the supplied string buffer.
 @see: https://smlfamily.github.io/Basis/mono-array.html
 *)
 fun stringWriter(buffer : string ref) : TextPrimIO.writer =
-    let
-        fun writeVec' (v : TextPrimIO.vector_slice)
-            = (buffer := (!buffer)^(CharVectorSlice.vector v);
-              (CharVectorSlice.length v))
-        fun writeArr' (arr : TextPrimIO.array_slice)
-            = (buffer:=(!buffer)^(CharArraySlice.vector arr);
-               (CharArraySlice.length arr))
-        fun writeVecNB' (v : TextPrimIO.vector_slice)
-            = (buffer := (!buffer)^(CharVectorSlice.vector v);
-               SOME (CharVectorSlice.length v))
-        fun writeArrNB' (arr : TextPrimIO.array_slice)
-            = (buffer:=(!buffer)^(CharArraySlice.vector arr);
-               SOME (CharArraySlice.length arr))
-        fun closing () = print ("Trying to close string stream?!?!?\n\n")
-    in
-        TextPrimIO.WR{
-            name = "<string>",
-            chunkSize = 1,
-            writeVec = SOME writeVec',
-            writeArr = SOME writeArr',
-            writeVecNB = SOME writeVecNB',
-            writeArrNB = SOME writeArrNB',
-            block = NONE,
-            canOutput = NONE,
-            getPos = NONE,
-            setPos = NONE,
-            endPos = NONE,
-            verifyPos = NONE,
-            close = closing,
-            ioDesc = NONE}
-      end;
+  let
+    fun writeVec' (v : TextPrimIO.vector_slice)
+      = (buffer := (!buffer)^(CharVectorSlice.vector v);
+         (CharVectorSlice.length v))
+    fun writeArr' (arr : TextPrimIO.array_slice)
+      = (buffer:=(!buffer)^(CharArraySlice.vector arr);
+         (CharArraySlice.length arr))
+    fun writeVecNB' (v : TextPrimIO.vector_slice)
+      = (buffer := (!buffer)^(CharVectorSlice.vector v);
+         SOME (CharVectorSlice.length v))
+    fun writeArrNB' (arr : TextPrimIO.array_slice)
+      = (buffer:=(!buffer)^(CharArraySlice.vector arr);
+         SOME (CharArraySlice.length arr))
+    fun closing () = print ("Trying to close string stream?!?!?\n\n")
+  in
+    TextPrimIO.WR{
+      name = "<string>",
+      chunkSize = 1,
+      writeVec = SOME writeVec',
+      writeArr = SOME writeArr',
+      writeVecNB = SOME writeVecNB',
+      writeArrNB = SOME writeArrNB',
+      block = NONE,
+      canOutput = NONE,
+      getPos = NONE,
+      setPos = NONE,
+      endPos = NONE,
+      verifyPos = NONE,
+      close = closing,
+      ioDesc = NONE}
+  end;
 #+end_src
 
 Now, the Standard ML I/O model has a stream [[https://en.wikipedia.org/wiki/Facade_pattern]["facade"]] (if I may
@@ -92,11 +216,11 @@ writer":
 
 #+begin_src sml
 fun stringStream(buffer : string ref) =
-    let
-        val writer : TextIO.StreamIO.writer = stringWriter(buffer)
-    in
-        TextIO.StreamIO.mkOutstream(writer, IO.NO_BUF)
-    end;
+  let
+    val writer : TextIO.StreamIO.writer = stringWriter(buffer)
+  in
+    TextIO.StreamIO.mkOutstream(writer, IO.NO_BUF)
+  end;
 #+end_src
 
 Now we can show an example usage:
@@ -106,11 +230,11 @@ val b1 : string ref = ref "";
 val ss1 = stringStream(b1);
 
 fun ss_print (s : string) =
-    let
-        val cv : CharVector.vector = s
-    in
-        TextIO.StreamIO.output(ss1, cv)
-    end;
+  let
+    val cv : CharVector.vector = s
+  in
+    TextIO.StreamIO.output(ss1, cv)
+  end;
 
 ss_print("foobar");
 
