@@ -1,0 +1,517 @@
+#+TITLE: Ring Theory - A Rosetta Stone
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2025-12-28T13:22:34-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:nil toc:nil num:nil
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../../../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../../../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+# Created Sunday December 28, 2025 at  1:22PM
+
+* Ch. 7 Introduction to Rings
+:PROPERTIES:
+:CUSTOM_ID: h-8f9a8455-0e59-42cc-b7dd-aee5d81f3542
+:END:
+
+Following the enumeration of results found in Dummit and Foote's
+/Abstract Algebra/, chapters 7 through 9, we relate the results of
+ring theory in Mizar.
+
+** \sect7.1 Basic Definitions and Examples
+:PROPERTIES:
+:CUSTOM_ID: h-78a9fb8d-458e-4180-974f-4c0119f156dc
+:END:
+
+- *Definition.* A {{{dfn(Ring)}}} $R$ is a non-empty set with two binary $+$ and
+  $\times$ (called addition and multiplication) such that ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM3][~vectsp_1~]])
+  - addition is commutative: for all $x,y\in R$, we have $x+y=y+x$ ([[https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V2][~Abelian~]])
+  - associativity of addition $(x+y)+z=x+(y+z)$ for all $x,y,z\in R$
+    ([[https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V3][~add-associative~]])
+  - additive inverse: for each $x\in R$, there exists a $y\in R$ such
+    that $x+y=0$ (i.e., every element is [[https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#V10][~right_complementable~]])
+  - additive identity $x+0=x$ ([[https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V4][~right_zeroed~]]) and by commutativity $0+x=x$ for all $x\in R$
+  - multiplication is [[https://mizar.uwb.edu.pl/version/current/html/group_1.html#V3][associative]]: for all $x,y,z\in R$ we have $(xy)z=x(yz)$
+  - it is [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V4][well-unital]]: for all $x\in R$, we have $x\cdot 1=x$ and
+    $1\cdot x=x$
+  - multiplication is [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V5][distributive]] over addition: for all $x,y,z\in R$
+    we have $x(y+z)=xy+xz$ and $(x+y)z=xz+yz$
+- *Remark.* This is technically a little "overfitted": Mathematicians
+  can work with nonassociative rings, and do so all the time.
+- *Definition.* A ring $R$ is {{{dfn(Commutative)}}} if multiplication
+  is [[https://mizar.uwb.edu.pl/version/current/html/group_1.html#V5][commutative]].
+- *Definition.* A ring $R$ is said to have an {{{dfn(Identity)}}}
+  (i.e., is {{{dfn(Unital)}}}) if there is an element $1\in R$ such
+  that for all $a\in R$ we have $1\times a=a\times 1=a$.
+  - *Remark.* Sadly, Mizar's ring is defined to /always/ be
+    unital. Therefore we will tend to drop the "unital" prefix.
+- *Implicit Definition.* A ring $R$ is called {{{dfn(Degenerate)}}} if
+  $1=0$. Otherwise, $R$ is said to be {{{dfn(Non-degenerate)}}}.
+- *Definition.* A nondegenerate ring $R$ is called a {{{dfn(Division Ring)}}}
+  (or a {{{dfn(Skew-Field)}}}) if every nonzero $a\in R$ has a
+  multiplicative inverse ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM4][~vectsp_1~]]).
+- *Definition.* A {{{dfn(Field)}}} is a commutative Skew-Field ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM5][~vectsp_1~]]).
+- *Examples.*
+  1. The integers form a ring, which Mizar calls [[https://mizar.uwb.edu.pl/version/current/html/int_3.html#K1][~INT.Ring~]]
+  2. The real numbers form a field which Mizar calls [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#K2][~F_Real~]]
+  3. The rational numbers form a field which Mizar calls [[https://mizar.uwb.edu.pl/version/current/html/gaussint.html#K11][~F_Rat~]]
+  4. The complex numbers form a field which Mizar calls [[https://mizar.uwb.edu.pl/version/current/html/complfld.html#K1][~F_Complex~]]
+  5. The integers modulo $n$ forms a commutative ring which Mizar
+     calls [[https://mizar.uwb.edu.pl/version/current/html/int_3.html#K9][~INT.Ring n~]]
+  6. The quaternions form a ring $\mathbb{H}$ which Mizar calls [[https://mizar.uwb.edu.pl/version/current/html/quatern2.html#K15][~R_Quaternion~]]
+  7. If $A$ is a ring and $X$ is a nonempty set, then the set $R$ of
+     all functions $X\to A$ forms a ring {{{missing()}}}
+- *Proposition 1.* Let $R$ be a ring. Then
+  1. For all $a\in R$ we have $0a=a0=0$ ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T7][~vectsp_1:7~]] and [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T14][~vectsp_1:14~]])
+  2. For all $a,b\in R$ we have
+     - ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T8][~vectsp_1:8~]]) $a(-b)=-(ab)$
+     - ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T9][~vectsp_1:9~]]) $(-a)b=-(ab)$
+  3. For all $a,b\in R$ we have $(-a)(-b)=ab$ ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T10][~vectsp_1:10~]])
+  4. For all $a\in R$ we have $-a=(-1)a$ ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T14][~vectsp_1:14~]])
+- *Definition.* Let $R$ be a ring.
+  1. We say $x\in R$ is a {{{dfn(Zero Divisor)}}} if there is a $y\in R$
+     such that $y\neq0$ and $xy=0$. Mizar requires $R$ to be
+     commutative. ([[https://mizar.uwb.edu.pl/version/current/html/ringfrac.html#NM1][~ringfrac~]])
+  2. If $R$ is nondegenerate (i.e., $1\neq0$), we say $x\in R$ is
+     {{{dfn(Unital)}}} if there exists some $y\in R$ such that $xy=1$
+     and $yx=1$ ([[https://mizar.uwb.edu.pl/version/current/html/gcd_1.html#V1][~gcd_1:def 2~]])
+- *Examples.*
+  - The example $\mathbb{Q}(\sqrt{D})$ where $D^{2}\notin\mathbb{Q}$
+    is a specialized example of adjoining the squareroot of a
+    nonsquare element of a field. In Mizar, this is done by
+    ~FieldAdjunction(F,{sqrt a})~ (see, e.g., Lemma [[https://mizar.uwb.edu.pl/version/current/html/field_9.html#E84][~dega~]] in
+    ~field_9~)
+- *Definition.* A commutative nondegenerate ring is called an
+  {{{dfn(Integral Domain)}}} ([[https://mizar.uwb.edu.pl/version/current/html/vectsp_2.html#NM2][~vectsp_2~]]) if it has no zero divisors,
+  i.e.,
+  - [[https://mizar.uwb.edu.pl/version/current/html/vectsp_2.html#V1][~domRing-like~]]: for any $x,y\in R$, if $xy=0$ then $x=0$ or $y=0$
+- *Proposition 2.* Let $R$ be a ring, let $a,b,c\in R$. If $a$ is not
+  a zero-divisor and $ab=ac$, then $b=c$. {{{missing()}}}
+- *Corollary 3.* Any finite integral domain is a field. {{{missing()}}}
+- *Definition.* Let $R$ be a ring. A {{{dfn(Subring)}}} of $R$ is a
+  subgroup of $R$ that is closed under multiplication. ([[https://mizar.uwb.edu.pl/version/current/html/c0sp1.html#M1][~c0sp1:def 3~]])
+- *Examples.*
+  - $\mathbb{Z}$ is a subring of $\mathbb{Q}$ ([[https://mizar.uwb.edu.pl/version/current/html/ring_3.html#T47][~ring_3:47~]])
+  - $\mathbb{Q}$ is a subring of $\mathbb{R}$ ([[https://mizar.uwb.edu.pl/version/current/html/liouvil2.html#T4][~liouvil2:4~]])
+  - $\mathbb{R}$ is a subring of $\mathbb{C}$ ([[https://mizar.uwb.edu.pl/version/current/html/liouvil2.html#T3][~liouvil2:3~]])
+  - The integral quaternions $S=\mathbb{Z}+i\mathbb{Z}+j\mathbb{Z}+k\mathbb{Z}$
+    is a subring of the quaternions {{{missing()}}}
+  - If $R$ is a subring of a field $F$ that contains the identity,
+    then $R$ is an integral domain {{{missing()}}}
+
+** \sect7.2 Examples: Polynomial rings, Matrix rings, and group rings
+:PROPERTIES:
+:CUSTOM_ID: h-009eb3ec-5c49-481e-af57-53c7e0397747
+:END:
+
+*** Polynomial rings
+:PROPERTIES:
+:CUSTOM_ID: h-a25efa10-1acd-4d99-bc1b-a73f0963dc61
+:END:
+
+Polynomial rings are...well...tricky. After all, it's given an entire
+chapter in Dummit and Foote, but it could easily be given its own book.
+
+- *Proposition 4.* Let $R$ be an integral domain, let $p(x)$ and
+  $q(x)$ be nonzero elements of $R[x]$. Then
+  1. $\deg(p(x)q(x))=\deg(p(x))+\deg(q(x))$
+  2. the units of $R[x]$ are just the units of $R$
+  3. $R[x]$ is an integral domain
+
+*** Matrix Rings
+:PROPERTIES:
+:CUSTOM_ID: h-c12a21b9-07aa-438d-8fd2-586a022ddbe5
+:END:
+
+This has been formalized in the submitted-but-not-yet-accepted
+~matgrp_0~ article.
+
+*** Group Rings
+:PROPERTIES:
+:CUSTOM_ID: h-06fda95c-cb28-41e3-9f3b-5a8f476a5a15
+:END:
+
+{{{missing()}}}
+
+** \sect7.3 Ring Homomorphisms and Quotient Rings
+:PROPERTIES:
+:CUSTOM_ID: h-34348abf-a5d4-4900-8268-4f0d9e57a1d4
+:END:
+
+- *Definition.* ([[https://mizar.uwb.edu.pl/version/current/html/quofield.html#NV1][~quofield~]]) Let $R$ and $S$ be rings. A {{{dfn(Ring Homomorphism)}}}
+  is a map $\varphi\colon R\to S$ such that
+  1. [[https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V13][additive]]: $\varphi(a+b)=\varphi(a)+\varphi(b)$ for all $a,b\in R$
+  2. [[https://mizar.uwb.edu.pl/version/current/html/group_6.html#V1][multiplicative]]: $\varphi(ab)=\varphi(a)\varphi(b)$ for all $a,b\in R$
+  3. [[https://mizar.uwb.edu.pl/version/current/html/group_1.html#V6][unity-preserving]]: $\varphi(1)=1$
+- *Implicit Definition.* Let $R$ and $S$ be rings. We say $S$ is
+  {{{dfn($R$-homomorphic)}}} if there exists a ring homomorphism
+  $\varphi\colon R\to S$. ([[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#V3][~ring_2:def 4~]])
+  This is needed because types in Mizar can't be empty, and we want to
+  define ~Homomorphism of R,S~ [[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#NM2][~ring_2~]].
+- *Definition.* Let $R$ and $S$ be rings. The {{{dfn(Kernel)}}} of a
+  ring homomorphism $\varphi$, denoted $\ker(\varphi)$, is the set of
+  elements of $R$ that map to $0$ in $S$. ([[https://mizar.uwb.edu.pl/version/current/html/vectsp10.html#K8][~vectsp10:def 9~]])
+- *Definition.* Let $R$ and $S$ be rings. We say a ring homomorphism
+  $\varphi\colon R\to S$ is a {{{dfn(Isomorphism)}}} if it is
+  bijective (~RingIsomorphism~ is a synonym for ~isomorphism~ defined
+  in [[https://mizar.uwb.edu.pl/version/current/html/mod_4.html#V7][~mod_4:def 12~]])
+- *Implicit Definition.* Let $R$ and $S$ be rings. We say $R$ is
+  {{{dfn(Isomorphic)}}} to $S$ if there exists an isomorphism $R\to S$
+  ([[https://mizar.uwb.edu.pl/version/current/html/quofield.html#R2][~quofield:def 23~]]). This is usually denoted $R\cong S$.
+- *Example.* Let $R$ be a ring, let $c_{1},\dots,c_{n}\in R$ be elements of $R$. The
+  function $e_{c_{1},\dots,c_{n}}\colon R[x_{1},\dots,x_{n}]\to R$,
+  defined by sending $x_{i}\mapsto c_{i}$ then evaluating the
+  polynomial, is a ring homomorphism. ([[https://mizar.uwb.edu.pl/version/current/html/polynom2.html#K3][~polynom2:def 5~]])
+- *Proposition 5.* Let $R$ and $S$ be rings, let $\varphi\colon R\to S$   
+  be a ring morphism. Then
+  1. The image of $\varphi$ is a subring of $S$ ([[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#K4][~ring_2:def 6~]])
+  2. The kernel of $\varphi$ is a subring of $R$.
+- *Definition.* Let $R$ be a ring. Let $I\subset R$ be a subset of
+  $R$, and let $r\in R$ be an element of $R$.
+  1. 
+     - ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#K10][~ideal_1:def 18~]]) $rI = \{ra\mid a\in I\}$ and
+     - {{{missing()}}} $Ir = \{ar\mid a\in I\}$
+  2. A subset $I$ of $R$ is a {{{dfn(Left Ideal)}}} of $R$ ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#NM3][~ideal_1~]]) if
+     1. +$I$ is a subring of $R$ and+
+        $I$ is [[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V1][~add-closed~]]: for any $x,y\in I$, $x+y\in I$
+     2. [[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V2][~left-ideal~]]: $I$ is closed under left multiplication by elements from $R$,
+        i.e., $rI\subset I$ for all $r\in R$
+  3. A subset $I$ of $R$ is a {{{dfn(Right Ideal)}}} of $R$ ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#NM2][~ideal_1~]]) if
+     1. $I$ is [[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V1][~add-closed~]]: for any $x,y\in I$, $x+y\in I$
+     2. [[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V3][~right-ideal~]]: $Ir\subset I$ for all $r\in R$
+  4. A subset $I$ of $R$ is a {{{dfn(Two-Sided Ideal)}}} ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#NM1][~ideal_1~]]) if it is both
+     a left and right ideal of $R$
+- *Notation:* We write $I\trianglelefteq R$ is $I$ is a two-sided
+  ideal of $R$, and $I\triangleleft R$ if $I\neq R$ is a *proper*
+  two-sided ideal.
+- *Proposition 6.* Let $R$ be a (possibly nonassociative) ring, let
+  $I$ be an ideal of $R$. Then $R/I$ is a ring consisting of $a+I$ for
+  $a\in R$, addition is defined using $(a+I)+(b+I)=(a+b)+I$,
+  multiplication is defined by $(a+I)(b+I)=ab+I$. ([[https://mizar.uwb.edu.pl/version/current/html/ring_1.html#K2][~ring_1:def 6~]])
+- *Theorem 7.*
+  1. First isomorphism theorem ([[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#T15][~ring_2:15~]]): If $\varphi\colon R\to S$
+     is a ring morphism, then $R/\ker(\varphi)\cong\varphi(R)$
+  2. If $I$ is any ideal of $R$, then the map $R\to R/I$ defined by
+     $r\mapsto r+I$ is a surjective ring morphism with kernel $I$
+     which Mizar calls the {{{dfn(Canonical Morphism of $I$)}}}
+     ([[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#K3][~ring_2:def 5~]]). Thus every ideal is the kernel of a morphism,
+     and vice-versa.
+- *Examples.* Let $R$ be a ring.
+  1. The subrings $R$ and $\{0\}$ are ideals ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#T10][~ideal_1:10~]]). 
+
+     An ideal $I$ is {{{dfn(proper)}}} if $I\neq R$.
+
+     The ideal $\{0\}$ is called the
+     {{{dfn(Trivial Ideal)}}} and denoted by $0$ ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V4][~ideal_1:def 4~]]).
+  2. The sets $n\mathbb{Z}$ are ideals of $\mathbb{Z}$ for any
+     $n\in\mathbb{Z}$ (although this is {{{missing()}}}, its
+     significance for Dummit and Foote is only to construct
+     $\mathbb{Z}/n\mathbb{Z}$ which is done explicitly in Mizar)
+  3. Let $R=\mathbb{Z}[x]$ be the ring of polynomials in $x$ with
+     integer coefficients. Let $I$ be the set of polynomials whose
+     terms are of degree at least 2 (i.e., they all look like
+     $a_{n}x^{n}+\dots+a_{2}x^{2}$). Then $I$ is an ideal of $R$. {{{missing()}}}
+- *Theorem 8.* Let $R$ be a ring.
+  1. Second isomorphism theorem for rings: Let $A$ be a subring of
+     $R$, let $I$ be an ideal of $R$. Then $A+I$ is a subring of $R$,
+     $A\cap I$ is an ideal of $A$, and $(A+I)/I\cong A/(A\cap I)$
+  2. Third isomorphism theorem for rings: Let $I$ and $J$ be ideals of
+     $R$ with $I\subset J$. Then $J/I$ is an ideal of $R/I$ and
+     $(R/I)/(J/I)\cong R/J$.
+  3. Fourth isomorphism theorem for rings: Let $I$ be an ideal of
+     $R$. The correspondence $A\leftrightarrow A/I$ is an
+     inclusion-preserving bijection between the set of subrings $A$ of
+     $R$ which contain $I$ and the set of subrings of
+     $R/I$. Furthermore, $A$ (a subring containing $I$) is an ideal of
+     $R$ if and only if $A/I$ is an ideal of $R/I$.
+- *Definition.* Let $I$ and $J$ be ideals of $R$.
+  1. The {{{dfn(Sum)}}} of $I$ and $J$ is $I+J=\{a+b\mid a\in I,b\in J\}$
+     ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#K11][~ideal_1:def 19~]])
+  2. The {{{dfn(Product)}}} of $I$ and $J$ is the set $IJ$ of all finite
+     sums of terms of the form $ab$ with $a\in I$ and $b\in J$
+     ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#K14][~ideal_1:def 21~]])
+  3. For any $n\geq1$, define the {{{dfn(n-th power)}}} of $I$,
+     denoted by $I^{n}$, to be the set consisting of all finite sums
+     of elements of the form $a_{1}a_{2}(\dots)a_{n}$ for $a_{i}\in I$
+     for all $i$. That is to say $I^{1}=I$ and $I^{n+1}=II^{n}$
+     ([[https://mizar.uwb.edu.pl/version/current/html/ideal_2.html#K3][~ideal_2:def 2~]])
+
+** \sect7.4 Properties of Ideals
+:PROPERTIES:
+:CUSTOM_ID: h-b13d8f59-7a70-4b7e-8dad-354a4e5c7b97
+:END:
+
+- *Definition.* Let $A$ be any subset of the ring $R$.
+  1. The {{{dfn(Ideal Generated by $A$)}}} is the smallest ideal $(A)$
+     of $R$ containing $A$ ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#K7][~ideal_1:def 14~]]); this also generalizes
+     to "left ideals generated by $A$" and "right ideals generated by $A$"
+  2. Let $AR=\{\sum^{n}_{i=1}a_{i}r_{i}\mid n\in\mathbb{N},a_{i}\in A,r_{i}\in R\}$
+     and $RA=\{\sum^{n}_{i=1}r_{i}a_{i}\mid n\in\mathbb{N},a_{i}\in A,r_{i}\in R\}$
+  3. A {{{dfn(Principal Ideal)}}} is the ideal generated by a single
+     element
+     ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V7][~ideal_1:def 27~]])
+  4. An ideal generated by a finite set is called a
+     {{{dfn(Finitely-Generated Ideal)}}}
+     ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V5][~ideal_1:def 25~]])
+- *Proposition 9.* Let $I$ be an ideal of $R$.
+  1. $I=R$ if and only if $I$ contains a unit ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#T20][~ideal_1:20~]])
+  2. Assume $R$ is commutative. Then $R$ is a field if and only if its
+     only ideals are $0$ and $R$. ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#T22][~ideal_1:22~]])
+- *Corollary 10.* If $R$ is a field, then any nonzero ring
+  homomorphism from $R$ into another ring is an injection. {{{missing()}}}
+- *Definition.* An ideal $M$ in an arbitrary ring $S$ is called a
+  {{{dfn(Maximal Ideal)}}} if $M\neq S$ and the only ideals containing
+  $M$ are $M$ and $S$. ([[https://mizar.uwb.edu.pl/version/current/html/ring_1.html#V4][~ring_1:def 4~]])
+- *Proposition 11.* In a unital ring, every proper ideal is contained
+  in a maximal ideal. ([[https://mizar.uwb.edu.pl/version/current/html/field_11.html#M1][~field_11:def 8~]])
+- *Proposition 12.* Let $R$ be a commutative ring. The ideal $M$ is a
+  maximal ideal if and only if the quotient ring $R/M$ is a field.
+  ([[https://mizar.uwb.edu.pl/version/current/html/ring_1.html#T21][~ring_1:21~]])
+- *Definition.* Let $R$ be a commutative ring. An ideal $P$ of $R$ is
+  called a {{{dfn(Prime Ideal)}}} if $P\neq R$ and whenever $ab\in P$
+  then either $a\in P$ or $b\in P$
+  ([[https://mizar.uwb.edu.pl/version/current/html/ring_1.html#V2][~ring_1:def 2~]])
+- *Proposition 13.* Let $R$ be a commutative ring. Then $P$ is a prime
+  ideal in $R$ if and only if the quotient ring $R/P$ is an integral domain
+  ([[https://mizar.uwb.edu.pl/version/current/html/ring_1.html#T18][~ring_1:18~]])
+- *Corollary 14.* Let $R$ be a commutative ring. Then every maximal
+  ideal of $R$ is a prime ideal. This is a [[https://mizar.uwb.edu.pl/version/current/html/ring_1.html#CC5][registered fact]] in ~ring_1~.
+
+** \sect7.5 Rings of Fractions
+:PROPERTIES:
+:CUSTOM_ID: h-96e6d9da-c968-4275-8de7-dd325aa10412
+:END:
+
+- *Theorem 15.* Let $R$ be a commutative ring, let $D$ be any nonempty
+  subset of $R$ which does not contain $0\notin D$, and $D$ does not
+  contain any zero-divisors, and $D$ is closed under
+  multiplication. Then there exists a commutative unital ring $Q$ such
+  that $Q$ contains $R$ as a subring and every element of $D$ is a
+  unit in $Q$. The ring $Q$ also has the following properties:
+  1. Every element of $Q$ is of the form $rd^{-1}$ for some $r\in R$
+     and $d\in D$.
+  2. (Uniqueness of $Q$) The ring $Q$ is the "smallest" ring
+     containing $R$ in which all elements of $D$ are units, in the
+     sense that for any commutative unital ring $S$ and for any
+     injective ring morphism $\varphi\colon R\to S$ such that
+     $\varphi(d)$ is a unit for all $d\in D$, then there exists an
+     injective ring morphism $\Phi\colon Q\to S$ such that $\Phi|_{R}=\varphi$
+- *Definition.* Let $R$, $D$, $Q$ be as in Theorem 15.
+  1. The ring $Q$ is called the {{{dfn(Ring of Fractions)}}} of $D$
+     with respect to $R$ and is denoted $Q^{-1}R$
+     ([[https://mizar.uwb.edu.pl/version/current/html/ringfrac.html#K15][~ringfrac:def 18~]]). Mizar uses the notation =Q ~ R= instead of $Q^{-1}R$.
+  2. If $R$ is an integral domain and $D=R\setminus\{0\}$, then $Q$ is
+     called the {{{dfn(Field of Fractions)}}} or {{{dfn(Quotient Field)}}}
+     of $R$; this is defined for any nondegenerate unital commutative
+     ring, where it's called the {{{dfn(Total Quotient Ring)}}}
+     ([[https://mizar.uwb.edu.pl/version/current/html/ringfrac.html#K21][~ringfrac:def 24~]]).
+- *Corollary 16.* Let $R$ be an integral domain, let $Q$ be the field
+  of fractions of $R$. If a field $F$ contains a subring $R'$
+  isomorphic to $R$, then the subfield of $F$ generated by $R'$ is
+  isomorphic to $Q$. (This is the universal property of the ring of
+  fractions, and is formalized in [[https://mizar.uwb.edu.pl/version/current/html/ringfrac.html#K20][~ringfrac:def 23~]])
+
+* Ch. 8 Euclidean Domains, Principal Ideal Domains, Unique Factorization Domains
+:PROPERTIES:
+:CUSTOM_ID: h-08861cef-f5d4-4a68-8228-33091768796a
+:END:
+
+** \sect8.1 Euclidean Domains
+:PROPERTIES:
+:CUSTOM_ID: h-181e0416-2977-4b12-b516-690e0b3b8e01
+:END:
+
+- *Definition.* The integral domain $R$ is said to be a
+  {{{dfn(Euclidean Domain)}}} if there exists a function $N\colon R\to\mathbb{N}_{0}$
+  with $N(0)=0$ and for any $a,b\in R$ with $b\neq0$ there exists
+  elements $q,r\in R$ such that $a=qb+r$ and $r=0$ or $N(r)\lt N(b)$
+  ([[https://mizar.uwb.edu.pl/version/current/html/int_3.html#V1][~int_3:def 8~]])
+
+  The function $N$ is called the {{{dfn(Degree Function)}}} in Mizar
+  ([[https://mizar.uwb.edu.pl/version/current/html/int_3.html#M1][~int_3:def 9~]]).
+- *Proposition 1.* Every ideal in a Euclidean domain is principal;
+  i.e., if $I$ is any nonzero ideal in the Euclidean domain $R$, then
+  there exists a $d\in R$ such that $I=(d)$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#T94][~ideal_1:94~]])
+- *Definition.* Let $R$ be a commutative ring, let $a,b\in R$ with $b\neq0$.
+  1. We say $a$ is a {{{dfn(multiple)}}} of $b$ if there exists an
+     element $x\in R$ with $a=bx$. In this case, we also say $b$
+     {{{dfn(Divides)}}} $a$
+     ([[https://mizar.uwb.edu.pl/version/current/html/gcd_1.html#R1][~gcd_1:def 1~]])
+  2. A {{{dfn(Greatest Common Divisor)}}} of $a$ and $b$ is a nonzero
+     element $d$ such that $d$ divides $a$, and $d$ divides $b$, and
+     for any other $d'\in R$ if $d'$ divides both $a$ and $b$ then
+     $d'$ divides $d$.
+     (This is generalized in [[https://mizar.uwb.edu.pl/version/current/html/gcd_1.html#K5][~gcd_1:def 12~]] and especially [[https://mizar.uwb.edu.pl/version/current/html/ring_4.html#V4][~ring_4:def 10~]])
+- *Proposition 2.* If $a$ and $b$ are elements of a commutative ring
+  $R$ such that the ideal generated by $a$ and $b$ is a principal
+  ideal $(d)$, then $d$ is a greatest common divisor of $a$ and $b$
+  {{{missing()}}}
+- *Proposition 3.* Let $R$ be an integral domain. If two elements $d$
+  and $d'$ of $R$ generate the same principal ideal $(d)=(d')$, then
+  $d'=ud$ for some unit $u\in R$.
+  ([[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#T21][~ring_2:21~]])
+- *Theorem 4.* Let $R$ be a Euclidian domain, let $a$ and $b$ be
+  nonzero elements of $R$. Let $d=r_{n}$ be the last nonzero remainder
+  in the Euclidian algorithm. Then
+  1. $d$ is a greatest common divisor of $a$ and $b$ ({{{missing()}}}), and
+  2. The principal ideal $(d)$ is the ideal generated by $a$ and $b$
+     ({{{missing()}}} but seems to follow from [[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#T18][~ring_2:18~]])
+- *Proposition 5.* Let $R$ be an integral domain that is not a
+  field. If $R$ is a Euclidian domain, then there are universal side
+  divisors in $R$.
+
+** \sect8.2 Principal Ideal Domains
+:PROPERTIES:
+:CUSTOM_ID: h-f4dae11f-3f15-486f-bcd3-d5bd8c5bc045
+:END:
+
+- *Definition.* A {{{dfn(Principal Ideal Domain)}}} (PID) is an
+  integral domain in which every ideal is principal ([[https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V8][~ideal_1:def 28~]]
+  and [[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#NM5][~ring_2~]]).
+- *Proposition 6.* Let $R$ be a principal ideal domain, let $a$ and
+  $b$ be nonzero elements of $R$. Let $d$ be a generator for the ideal
+  generated by $a$ and $b$. Then
+  1. $d$ is a greatest common divisor of $a$ and $b$ {{{missing()}}}
+  2. $d$ can be written as an $R$-linear combination of $a$ and $b$,
+     i.e., there exists $x$ and $y$ in $R$ with $d=ax+by$ {{{missing()}}}
+  3. $d$ is unique up to multiplication by a unit of $R$ {{{missing()}}}
+- *Proposition 7.* Every nonzero prime ideal in a principal ideal
+  domain is a maximal ideal.
+  ([[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#T26][~ring_2:26~]])
+- *Corollary 8.* If $R$ is any commutative ring such that the
+  polynomial ring $R[x]$ is a principal ideal domain (or a Euclidian
+  domain), then $R$ is necessarily a field. {{{missing()}}}
+- *Definition.* Define $N$ to be a {{{dfn(Dedekind-Hasse norm)}}} if
+  $N$ is a positive norm and for every nonzero $a,b\in R$ either $a$
+  is an element of the ideal $(b)$ or there is a nonzero element in
+  the ideal $(a,b)$ of norm strictly less than the norm of $(b)$
+  (i.e., either $b$ divides $a$ in $R$, or there exists $s,t\in R$
+  with $0\lt N(sa-tb)\lt N(b)$) {{{missing()}}}
+- *Proposition 9.* The integral domain $R$ is a PID if and only if $R$
+  has a Dedekind-Hasse norm. {{{missing()}}}
+
+** \sect8.3 Unique Factorization Domains
+:PROPERTIES:
+:CUSTOM_ID: h-2158426a-1061-4e09-be8d-2ae8fe5a9c85
+:END:
+
+- *Definition.* Let $R$ be an integral domain
+  - Suppose $r\in R$ is nonzero and is not a unit. Then $r$ is called
+    {{{dfn(Irreducible)}}} if whenever $r=ab$ with $a,b\in R$, then 
+    either $a$ is a unit in $R$ or $b$ is a unit in $R$ or both;
+    otherwise $r$ is called {{{dfn(Reducible)}}}
+    ([[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#V5][~ring_2:def 9~]])
+  - The nonzero element $p\in R$ is called {{{dfn(Prime)}}} in $R$ if
+    the ideal $(p)$ generated by $p$ is a prime ideal. In other words,
+    a nonzero element $p$ is prime if it is not a unit and whenever
+    $p\mid ab$ either $p\mid a$ or $p\mid b$
+    ([[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#V4][~ring_2:def 8~]])
+  - Two elements $a,b\in R$ differing by a unit are said to be
+    {{{dfn(Associated)}}} if $a=ub$ for some unit $u\in R$
+    ([[https://mizar.uwb.edu.pl/version/current/html/gcd_1.html#R3][~gcd_1:def 3~]])
+- *Proposition 10.* In an integral domain a prime element is always
+  irreducible. (Registered in [[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#CC7][~ring_2~]])
+- *Proposition 11.* In a PID, a nonzero element is prime iff it is
+  irreducible ([[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#T26][~ring_2:26~]])
+- *Definition.* A {{{dfn(Unique Factorization Domain)}}} (UFD, [[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#V8][~ring_2:def 15~]]) is an
+  integral domain $R$ in which every nonzero element $r\in R$ which is
+  not a unit has the following two properties
+  1. $r$ can be written as a finite product of irreducibles $p_{i}$ of
+     $R$, i.e., $r=p_{1}p_{2}\dots p_{n}$; and
+  2. the decomposition in (1) is unique up to associates
+- *Proposition 12.* In a UFD, a nonzero element is prime iff it is
+  irreducible. 
+- *Theorem 14.* Every principal ideal domain is a unique factorization
+  domain. (This is a registered fact in [[https://mizar.uwb.edu.pl/version/current/html/ring_2.html#CC18][~ring_2~]])
+
+* Ch. 9 Polynomial Rings
+:PROPERTIES:
+:CUSTOM_ID: h-a1d9ea93-b470-4d40-b8f8-f1b6a318547b
+:END:
+
+** \sect9.1 Definitions and Basic Properties
+:PROPERTIES:
+:CUSTOM_ID: h-1aad5b7b-2c3b-4d78-92f1-5ceea8559a31
+:END:
+
+- *Implicit definition.* The {{{dfn(Degree)}}} of a polynomial
+  $p(x)=a_{n}x^{n}+\dots+a_{1}x+a_{0}$ where $a_{n}\neq0$ is
+  $\deg(p)=n$
+  ([[https://mizar.uwb.edu.pl/version/current/html/hurwitz.html#K2][~hurwitz:def 2~]])
+- *Proposition 1.* Let $R$ be an integral domain
+  1. $\deg(p(x)q(x))=\deg(p(x))+\deg(q(x))$
+     ([[https://mizar.uwb.edu.pl/version/current/html/hurwitz.html#T23][~hurwitz:23~]])
+  2. the units of $R[x]$ is just the units of $R$ {{{missing()}}}
+  3. $R[x]$ is an integral domain {{{missing()}}}
+- *Proposition 2.* Let $I$ be an ideal of the ring $R$, let $(I)=I[x]$
+  denote the ideal of $R[x]$ generated by $I$ (the set of polynomials
+  with coefficients in $I$). Then $R[x]/(I)\cong(R/I)[x]$. In
+  particular, if $I$ is a prime ideal of $R$ then $(I)$ is a prime
+  ideal of $R[x]$. {{{missing()}}}
+- *Definition.* The {{{dfn(Polynomial Ring in the variables $x_{1}$,
+  ..., $x_{n}$ with coefficients in $R$)}}} denoted $R[x_{1},\dots,x_{n}]$ 
+  is defined inductively by $R[x_{1},\dots,x_{n-1},x_{n}]=R[x_{1},\dots,x_{n-1}][x_{n}]$
+  - Although this is easier for informal mathematics, Mizar formalizes
+    a notion of "bags" to describe monomials as a function from the
+    set of unknowns to the exponent for each unknown. A polynomial is
+    then a formal $R$-linear combination of bags.
+
+** \sect9.2 Polynomial Rings over Fields (Part 1)
+:PROPERTIES:
+:CUSTOM_ID: h-5f3eb5d1-c6e9-47a0-afaa-3d09dab813ae
+:END:
+
+- *Theorem 3.* Let $F$ be a field. The polynmial ring $F[x]$ is a
+  Euclidian domain. Specifically, if $a(x)$ and $b(x)$ are two
+  polynomials in $F[x]$ with $b(x)$ nonzero, then there are /unique/
+  $q(x)$ and $r(x)$ in $F[x]$ such that $a(x)=q(x)b(x)+r(x)$ with
+  $r(x)=0$ or $\deg(r(x))\lt\deg(b(x))$. {{{missing()}}}
+- *Corollary 4.* If $F$ is a field, then $F[x]$ is a PID and a UFD.
+  {{{missing()}}}
+
+** \sect9.3 Polynomial Rings that are Unique Factorization Domains
+:PROPERTIES:
+:CUSTOM_ID: h-73e98f0b-deec-4f26-8ae6-9386f58f9f2b
+:END:
+
+- *Proposition 5* (Gauss's Lemma). Let $R$ be a UFD with field of
+  fractions $F$ and let $p(x)\in R[x]$. If $p(x)$ is reducible in
+  $F[x]$ then $p(x)$ is reducible in $R[x]$. More precisely, if
+  $p(x)=A(x)B(x)$ for some nonconstant polynomials $A(x),B(x)\in F[x]$,
+  then there are nonzero elements $r,s\in F$ such that $rA(x)=a(x)$
+  and $sB(x)=b(x)$ both lie in $R[x]$ and $p(x)=a(x)b(x)$ is a
+  factorization in $R[x]$. {{{missing()}}}
+- *Corollary 6.* Let $R$ be a UFD, let $F$ be its field of fractions,
+  and let $p(x)\in R[x]$. Suppose the greatest common divisor of the
+  coefficients of $p(x)$ is 1. Then $p(x)$ is irreducible in $R[x]$ if
+  and only if it is irreducible in $F[x]$. In particular, if $p(x)$ is
+  a monic polynomial that is irreducible in $R[x]$, then $p(x)$ is
+  irreducible in $F[x]$. {{{missing()}}}
+- *Theorem 7.* $R$ is a UFD if and only if $R[x]$ is a UFD {{{missing()}}}
+- *Corollary 8.* If $R$ is a UFD, then a polynomial ring in an
+  arbitrary number of variables with coefficients in $R$ is also a UFD. {{{missing()}}}
+
+** \sect9.4 Irreducibility Criteria
+:PROPERTIES:
+:CUSTOM_ID: h-fca83440-61f5-4a5d-936b-4d2e21b3d42d
+:END:
+
+- *Proposition 9.* Let $F$ be a field, let $p(x)\in F[x]$. Then $p(x)$
+  has a factor of degree one if and only if $p(x)$ has a root in $F$,
+  i.e., there is an $\alpha\in F$ with $p(\alpha)=0$ {{{missing()}}}
+- *Proposition 10.* A polynomial of degree 2 or 3 over a field $F$ is
+  reducible if and only if it has a root in $F$
+  ([[https://mizar.uwb.edu.pl/version/current/html/field_10.html#T5][~field_10:5~]] and [[https://mizar.uwb.edu.pl/version/current/html/field_10.html#T6][~field_10:6~]])
+- *Proposition 12.* Let $I$ be a proper ideal in the integral domain
+  $R$ and let $p(x)$ be a nonconstant monic polynomial in $R[x]$. If
+  the image of $p(x)$ in $(R/I)[x]$ cannot be factored in $(R/I)[x]$
+  into two polynomials of smaller degree, then $p(x)$ is irreducible
+  in $R[x]$. {{{missing()}}}
+- *Proposition 13* (Eisenstein's criterion). Let $P$ be a prime ideal
+  of the integral domain $R$ and let $f(x)=x^{n}+a_{n-1}x^{n-1}+\dots+a_{1}x+a_{0}$
+  be a polynomial in $R[x]$ (where $n\geq1$). Suppose $a_{n-1}$, ...,
+  $a_{1}$, $a_{0}$ are elements of $P$ and suppose $a_{0}\notin
+  P^{2}$. Then $f(x)$ is irreducible in $R[x]$. {{{missing()}}}

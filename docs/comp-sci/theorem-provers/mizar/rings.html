@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ring Theory - A Rosetta Stone</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Ring Theory - A Rosetta Stone</h1>
+<div id="outline-container-h-8f9a8455-0e59-42cc-b7dd-aee5d81f3542" class="outline-2">
+<h2 id="h-8f9a8455-0e59-42cc-b7dd-aee5d81f3542">Ch. 7 Introduction to Rings</h2>
+<div class="outline-text-2" id="text-h-8f9a8455-0e59-42cc-b7dd-aee5d81f3542">
+<p>
+Following the enumeration of results found in Dummit and Foote's
+<i>Abstract Algebra</i>, chapters 7 through 9, we relate the results of
+ring theory in Mizar.
+</p>
+</div>
+<div id="outline-container-h-78a9fb8d-458e-4180-974f-4c0119f156dc" class="outline-3">
+<h3 id="h-78a9fb8d-458e-4180-974f-4c0119f156dc">&sect;7.1 Basic Definitions and Examples</h3>
+<div class="outline-text-3" id="text-h-78a9fb8d-458e-4180-974f-4c0119f156dc">
+<ul class="org-ul">
+<li><b>Definition.</b> A <dfn>Ring</dfn> \(R\) is a non-empty set with two binary \(+\) and
+\(\times\) (called addition and multiplication) such that (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM3"><code>vectsp_1</code></a>)
+<ul class="org-ul">
+<li>addition is commutative: for all \(x,y\in R\), we have \(x+y=y+x\) (<a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V2"><code>Abelian</code></a>)</li>
+<li>associativity of addition \((x+y)+z=x+(y+z)\) for all \(x,y,z\in R\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V3"><code>add-associative</code></a>)</li>
+<li>additive inverse: for each \(x\in R\), there exists a \(y\in R\) such
+that \(x+y=0\) (i.e., every element is <a href="https://mizar.uwb.edu.pl/version/current/html/algstr_0.html#V10"><code>right_complementable</code></a>)</li>
+<li>additive identity \(x+0=x\) (<a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1.html#V4"><code>right_zeroed</code></a>) and by commutativity \(0+x=x\) for all \(x\in R\)</li>
+<li>multiplication is <a href="https://mizar.uwb.edu.pl/version/current/html/group_1.html#V3">associative</a>: for all \(x,y,z\in R\) we have \((xy)z=x(yz)\)</li>
+<li>it is <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V4">well-unital</a>: for all \(x\in R\), we have \(x\cdot 1=x\) and
+\(1\cdot x=x\)</li>
+<li>multiplication is <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V5">distributive</a> over addition: for all \(x,y,z\in R\)
+we have \(x(y+z)=xy+xz\) and \((x+y)z=xz+yz\)</li>
+</ul></li>
+<li><b>Remark.</b> This is technically a little "overfitted": Mathematicians
+can work with nonassociative rings, and do so all the time.</li>
+<li><b>Definition.</b> A ring \(R\) is <dfn>Commutative</dfn> if multiplication
+is <a href="https://mizar.uwb.edu.pl/version/current/html/group_1.html#V5">commutative</a>.</li>
+<li><b>Definition.</b> A ring \(R\) is said to have an <dfn>Identity</dfn>
+(i.e., is <dfn>Unital</dfn>) if there is an element \(1\in R\) such
+that for all \(a\in R\) we have \(1\times a=a\times 1=a\).
+<ul class="org-ul">
+<li><b>Remark.</b> Sadly, Mizar's ring is defined to <i>always</i> be
+unital. Therefore we will tend to drop the "unital" prefix.</li>
+</ul></li>
+<li><b>Implicit Definition.</b> A ring \(R\) is called <dfn>Degenerate</dfn> if
+\(1=0\). Otherwise, \(R\) is said to be <dfn>Non-degenerate</dfn>.</li>
+<li><b>Definition.</b> A nondegenerate ring \(R\) is called a <dfn>Division Ring</dfn>
+(or a <dfn>Skew-Field</dfn>) if every nonzero \(a\in R\) has a
+multiplicative inverse (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM4"><code>vectsp_1</code></a>).</li>
+<li><b>Definition.</b> A <dfn>Field</dfn> is a commutative Skew-Field (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#NM5"><code>vectsp_1</code></a>).</li>
+<li><b>Examples.</b>
+<ol class="org-ol">
+<li>The integers form a ring, which Mizar calls <a href="https://mizar.uwb.edu.pl/version/current/html/int_3.html#K1"><code>INT.Ring</code></a></li>
+<li>The real numbers form a field which Mizar calls <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#K2"><code>F_Real</code></a></li>
+<li>The rational numbers form a field which Mizar calls <a href="https://mizar.uwb.edu.pl/version/current/html/gaussint.html#K11"><code>F_Rat</code></a></li>
+<li>The complex numbers form a field which Mizar calls <a href="https://mizar.uwb.edu.pl/version/current/html/complfld.html#K1"><code>F_Complex</code></a></li>
+<li>The integers modulo \(n\) forms a commutative ring which Mizar
+calls <a href="https://mizar.uwb.edu.pl/version/current/html/int_3.html#K9"><code>INT.Ring n</code></a></li>
+<li>The quaternions form a ring \(\mathbb{H}\) which Mizar calls <a href="https://mizar.uwb.edu.pl/version/current/html/quatern2.html#K15"><code>R_Quaternion</code></a></li>
+<li>If \(A\) is a ring and \(X\) is a nonempty set, then the set \(R\) of
+all functions \(X\to A\) forms a ring <span class="missing">Missing from Mizar</span></li>
+</ol></li>
+<li><b>Proposition 1.</b> Let \(R\) be a ring. Then
+<ol class="org-ol">
+<li>For all \(a\in R\) we have \(0a=a0=0\) (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T7"><code>vectsp_1:7</code></a> and <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T14"><code>vectsp_1:14</code></a>)</li>
+<li>For all \(a,b\in R\) we have
+<ul class="org-ul">
+<li>(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T8"><code>vectsp_1:8</code></a>) \(a(-b)=-(ab)\)</li>
+<li>(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T9"><code>vectsp_1:9</code></a>) \((-a)b=-(ab)\)</li>
+</ul></li>
+<li>For all \(a,b\in R\) we have \((-a)(-b)=ab\) (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T10"><code>vectsp_1:10</code></a>)</li>
+<li>For all \(a\in R\) we have \(-a=(-1)a\) (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T14"><code>vectsp_1:14</code></a>)</li>
+</ol></li>
+<li><b>Definition.</b> Let \(R\) be a ring.
+<ol class="org-ol">
+<li>We say \(x\in R\) is a <dfn>Zero Divisor</dfn> if there is a \(y\in R\)
+such that \(y\neq0\) and \(xy=0\). Mizar requires \(R\) to be
+commutative. (<a href="https://mizar.uwb.edu.pl/version/current/html/ringfrac.html#NM1"><code>ringfrac</code></a>)</li>
+<li>If \(R\) is nondegenerate (i.e., \(1\neq0\)), we say \(x\in R\) is
+<dfn>Unital</dfn> if there exists some \(y\in R\) such that \(xy=1\)
+and \(yx=1\) (<a href="https://mizar.uwb.edu.pl/version/current/html/gcd_1.html#V1"><code>gcd_1:def 2</code></a>)</li>
+</ol></li>
+<li><b>Examples.</b>
+<ul class="org-ul">
+<li>The example \(\mathbb{Q}(\sqrt{D})\) where \(D^{2}\notin\mathbb{Q}\)
+is a specialized example of adjoining the squareroot of a
+nonsquare element of a field. In Mizar, this is done by
+<code>FieldAdjunction(F,{sqrt a})</code> (see, e.g., Lemma <a href="https://mizar.uwb.edu.pl/version/current/html/field_9.html#E84"><code>dega</code></a> in
+<code>field_9</code>)</li>
+</ul></li>
+<li><b>Definition.</b> A commutative nondegenerate ring is called an
+<dfn>Integral Domain</dfn> (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_2.html#NM2"><code>vectsp_2</code></a>) if it has no zero divisors,
+i.e.,
+<ul class="org-ul">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_2.html#V1"><code>domRing-like</code></a>: for any \(x,y\in R\), if \(xy=0\) then \(x=0\) or \(y=0\)</li>
+</ul></li>
+<li><b>Proposition 2.</b> Let \(R\) be a ring, let \(a,b,c\in R\). If \(a\) is not
+a zero-divisor and \(ab=ac\), then \(b=c\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Corollary 3.</b> Any finite integral domain is a field. <span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> Let \(R\) be a ring. A <dfn>Subring</dfn> of \(R\) is a
+subgroup of \(R\) that is closed under multiplication. (<a href="https://mizar.uwb.edu.pl/version/current/html/c0sp1.html#M1"><code>c0sp1:def 3</code></a>)</li>
+<li><b>Examples.</b>
+<ul class="org-ul">
+<li>\(\mathbb{Z}\) is a subring of \(\mathbb{Q}\) (<a href="https://mizar.uwb.edu.pl/version/current/html/ring_3.html#T47"><code>ring_3:47</code></a>)</li>
+<li>\(\mathbb{Q}\) is a subring of \(\mathbb{R}\) (<a href="https://mizar.uwb.edu.pl/version/current/html/liouvil2.html#T4"><code>liouvil2:4</code></a>)</li>
+<li>\(\mathbb{R}\) is a subring of \(\mathbb{C}\) (<a href="https://mizar.uwb.edu.pl/version/current/html/liouvil2.html#T3"><code>liouvil2:3</code></a>)</li>
+<li>The integral quaternions \(S=\mathbb{Z}+i\mathbb{Z}+j\mathbb{Z}+k\mathbb{Z}\)
+is a subring of the quaternions <span class="missing">Missing from Mizar</span></li>
+<li>If \(R\) is a subring of a field \(F\) that contains the identity,
+then \(R\) is an integral domain <span class="missing">Missing from Mizar</span></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-009eb3ec-5c49-481e-af57-53c7e0397747" class="outline-3">
+<h3 id="h-009eb3ec-5c49-481e-af57-53c7e0397747">&sect;7.2 Examples: Polynomial rings, Matrix rings, and group rings</h3>
+<div class="outline-text-3" id="text-h-009eb3ec-5c49-481e-af57-53c7e0397747">
+</div>
+<div id="outline-container-h-a25efa10-1acd-4d99-bc1b-a73f0963dc61" class="outline-4">
+<h4 id="h-a25efa10-1acd-4d99-bc1b-a73f0963dc61">Polynomial rings</h4>
+<div class="outline-text-4" id="text-h-a25efa10-1acd-4d99-bc1b-a73f0963dc61">
+<p>
+Polynomial rings are&#x2026;well&#x2026;tricky. After all, it's given an entire
+chapter in Dummit and Foote, but it could easily be given its own book.
+</p>
+
+<ul class="org-ul">
+<li><b>Proposition 4.</b> Let \(R\) be an integral domain, let \(p(x)\) and
+\(q(x)\) be nonzero elements of \(R[x]\). Then
+<ol class="org-ol">
+<li>\(\deg(p(x)q(x))=\deg(p(x))+\deg(q(x))\)</li>
+<li>the units of \(R[x]\) are just the units of \(R\)</li>
+<li>\(R[x]\) is an integral domain</li>
+</ol></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-c12a21b9-07aa-438d-8fd2-586a022ddbe5" class="outline-4">
+<h4 id="h-c12a21b9-07aa-438d-8fd2-586a022ddbe5">Matrix Rings</h4>
+<div class="outline-text-4" id="text-h-c12a21b9-07aa-438d-8fd2-586a022ddbe5">
+<p>
+This has been formalized in the submitted-but-not-yet-accepted
+<code>matgrp_0</code> article.
+</p>
+</div>
+</div>
+<div id="outline-container-h-06fda95c-cb28-41e3-9f3b-5a8f476a5a15" class="outline-4">
+<h4 id="h-06fda95c-cb28-41e3-9f3b-5a8f476a5a15">Group Rings</h4>
+<div class="outline-text-4" id="text-h-06fda95c-cb28-41e3-9f3b-5a8f476a5a15">
+<p>
+<span class="missing">Missing from Mizar</span>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-h-34348abf-a5d4-4900-8268-4f0d9e57a1d4" class="outline-3">
+<h3 id="h-34348abf-a5d4-4900-8268-4f0d9e57a1d4">&sect;7.3 Ring Homomorphisms and Quotient Rings</h3>
+<div class="outline-text-3" id="text-h-34348abf-a5d4-4900-8268-4f0d9e57a1d4">
+<ul class="org-ul">
+<li><b>Definition.</b> (<a href="https://mizar.uwb.edu.pl/version/current/html/quofield.html#NV1"><code>quofield</code></a>) Let \(R\) and \(S\) be rings. A <dfn>Ring Homomorphism</dfn>
+is a map \(\varphi\colon R\to S\) such that
+<ol class="org-ol">
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#V13">additive</a>: \(\varphi(a+b)=\varphi(a)+\varphi(b)\) for all \(a,b\in R\)</li>
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/group_6.html#V1">multiplicative</a>: \(\varphi(ab)=\varphi(a)\varphi(b)\) for all \(a,b\in R\)</li>
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/group_1.html#V6">unity-preserving</a>: \(\varphi(1)=1\)</li>
+</ol></li>
+<li><b>Implicit Definition.</b> Let \(R\) and \(S\) be rings. We say \(S\) is
+<dfn>$R$-homomorphic</dfn> if there exists a ring homomorphism
+\(\varphi\colon R\to S\). (<a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#V3"><code>ring_2:def 4</code></a>)
+This is needed because types in Mizar can't be empty, and we want to
+define <code>Homomorphism of R,S</code> <a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#NM2"><code>ring_2</code></a>.</li>
+<li><b>Definition.</b> Let \(R\) and \(S\) be rings. The <dfn>Kernel</dfn> of a
+ring homomorphism \(\varphi\), denoted \(\ker(\varphi)\), is the set of
+elements of \(R\) that map to \(0\) in \(S\). (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp10.html#K8"><code>vectsp10:def 9</code></a>)</li>
+<li><b>Definition.</b> Let \(R\) and \(S\) be rings. We say a ring homomorphism
+\(\varphi\colon R\to S\) is a <dfn>Isomorphism</dfn> if it is
+bijective (<code>RingIsomorphism</code> is a synonym for <code>isomorphism</code> defined
+in <a href="https://mizar.uwb.edu.pl/version/current/html/mod_4.html#V7"><code>mod_4:def 12</code></a>)</li>
+<li><b>Implicit Definition.</b> Let \(R\) and \(S\) be rings. We say \(R\) is
+<dfn>Isomorphic</dfn> to \(S\) if there exists an isomorphism \(R\to S\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/quofield.html#R2"><code>quofield:def 23</code></a>). This is usually denoted \(R\cong S\).</li>
+<li><b>Example.</b> Let \(R\) be a ring, let \(c_{1},\dots,c_{n}\in R\) be elements of \(R\). The
+function \(e_{c_{1},\dots,c_{n}}\colon R[x_{1},\dots,x_{n}]\to R\),
+defined by sending \(x_{i}\mapsto c_{i}\) then evaluating the
+polynomial, is a ring homomorphism. (<a href="https://mizar.uwb.edu.pl/version/current/html/polynom2.html#K3"><code>polynom2:def 5</code></a>)</li>
+<li><b>Proposition 5.</b> Let \(R\) and \(S\) be rings, let \(\varphi\colon R\to S\)   
+be a ring morphism. Then
+<ol class="org-ol">
+<li>The image of \(\varphi\) is a subring of \(S\) (<a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#K4"><code>ring_2:def 6</code></a>)</li>
+<li>The kernel of \(\varphi\) is a subring of \(R\).</li>
+</ol></li>
+<li><b>Definition.</b> Let \(R\) be a ring. Let \(I\subset R\) be a subset of
+\(R\), and let \(r\in R\) be an element of \(R\).
+<ol class="org-ol">
+<li><ul class="org-ul">
+<li>(<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#K10"><code>ideal_1:def 18</code></a>) \(rI = \{ra\mid a\in I\}\) and</li>
+<li><span class="missing">Missing from Mizar</span> \(Ir = \{ar\mid a\in I\}\)</li>
+</ul></li>
+<li>A subset \(I\) of \(R\) is a <dfn>Left Ideal</dfn> of \(R\) (<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#NM3"><code>ideal_1</code></a>) if
+<ol class="org-ol">
+<li><del>\(I\) is a subring of \(R\) and</del>
+\(I\) is <a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V1"><code>add-closed</code></a>: for any \(x,y\in I\), \(x+y\in I\)</li>
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V2"><code>left-ideal</code></a>: \(I\) is closed under left multiplication by elements from \(R\),
+i.e., \(rI\subset I\) for all \(r\in R\)</li>
+</ol></li>
+<li>A subset \(I\) of \(R\) is a <dfn>Right Ideal</dfn> of \(R\) (<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#NM2"><code>ideal_1</code></a>) if
+<ol class="org-ol">
+<li>\(I\) is <a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V1"><code>add-closed</code></a>: for any \(x,y\in I\), \(x+y\in I\)</li>
+<li><a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V3"><code>right-ideal</code></a>: \(Ir\subset I\) for all \(r\in R\)</li>
+</ol></li>
+<li>A subset \(I\) of \(R\) is a <dfn>Two-Sided Ideal</dfn> (<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#NM1"><code>ideal_1</code></a>) if it is both
+a left and right ideal of \(R\)</li>
+</ol></li>
+<li><b>Notation:</b> We write \(I\trianglelefteq R\) is \(I\) is a two-sided
+ideal of \(R\), and \(I\triangleleft R\) if \(I\neq R\) is a <b>proper</b>
+two-sided ideal.</li>
+<li><b>Proposition 6.</b> Let \(R\) be a (possibly nonassociative) ring, let
+\(I\) be an ideal of \(R\). Then \(R/I\) is a ring consisting of \(a+I\) for
+\(a\in R\), addition is defined using \((a+I)+(b+I)=(a+b)+I\),
+multiplication is defined by \((a+I)(b+I)=ab+I\). (<a href="https://mizar.uwb.edu.pl/version/current/html/ring_1.html#K2"><code>ring_1:def 6</code></a>)</li>
+<li><b>Theorem 7.</b>
+<ol class="org-ol">
+<li>First isomorphism theorem (<a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#T15"><code>ring_2:15</code></a>): If \(\varphi\colon R\to S\)
+is a ring morphism, then \(R/\ker(\varphi)\cong\varphi(R)\)</li>
+<li>If \(I\) is any ideal of \(R\), then the map \(R\to R/I\) defined by
+\(r\mapsto r+I\) is a surjective ring morphism with kernel \(I\)
+which Mizar calls the <dfn>Canonical Morphism of \(I\)</dfn>
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#K3"><code>ring_2:def 5</code></a>). Thus every ideal is the kernel of a morphism,
+and vice-versa.</li>
+</ol></li>
+<li><b>Examples.</b> Let \(R\) be a ring.
+<ol class="org-ol">
+<li><p>
+The subrings \(R\) and \(\{0\}\) are ideals (<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#T10"><code>ideal_1:10</code></a>). 
+</p>
+
+<p>
+An ideal \(I\) is <dfn>proper</dfn> if \(I\neq R\).
+</p>
+
+<p>
+The ideal \(\{0\}\) is called the
+<dfn>Trivial Ideal</dfn> and denoted by \(0\) (<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V4"><code>ideal_1:def 4</code></a>).
+</p></li>
+<li>The sets \(n\mathbb{Z}\) are ideals of \(\mathbb{Z}\) for any
+\(n\in\mathbb{Z}\) (although this is <span class="missing">Missing from Mizar</span>, its
+significance for Dummit and Foote is only to construct
+\(\mathbb{Z}/n\mathbb{Z}\) which is done explicitly in Mizar)</li>
+<li>Let \(R=\mathbb{Z}[x]\) be the ring of polynomials in \(x\) with
+integer coefficients. Let \(I\) be the set of polynomials whose
+terms are of degree at least 2 (i.e., they all look like
+\(a_{n}x^{n}+\dots+a_{2}x^{2}\)). Then \(I\) is an ideal of \(R\). <span class="missing">Missing from Mizar</span></li>
+</ol></li>
+<li><b>Theorem 8.</b> Let \(R\) be a ring.
+<ol class="org-ol">
+<li>Second isomorphism theorem for rings: Let \(A\) be a subring of
+\(R\), let \(I\) be an ideal of \(R\). Then \(A+I\) is a subring of \(R\),
+\(A\cap I\) is an ideal of \(A\), and \((A+I)/I\cong A/(A\cap I)\)</li>
+<li>Third isomorphism theorem for rings: Let \(I\) and \(J\) be ideals of
+\(R\) with \(I\subset J\). Then \(J/I\) is an ideal of \(R/I\) and
+\((R/I)/(J/I)\cong R/J\).</li>
+<li>Fourth isomorphism theorem for rings: Let \(I\) be an ideal of
+\(R\). The correspondence \(A\leftrightarrow A/I\) is an
+inclusion-preserving bijection between the set of subrings \(A\) of
+\(R\) which contain \(I\) and the set of subrings of
+\(R/I\). Furthermore, \(A\) (a subring containing \(I\)) is an ideal of
+\(R\) if and only if \(A/I\) is an ideal of \(R/I\).</li>
+</ol></li>
+<li><b>Definition.</b> Let \(I\) and \(J\) be ideals of \(R\).
+<ol class="org-ol">
+<li>The <dfn>Sum</dfn> of \(I\) and \(J\) is \(I+J=\{a+b\mid a\in I,b\in J\}\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#K11"><code>ideal_1:def 19</code></a>)</li>
+<li>The <dfn>Product</dfn> of \(I\) and \(J\) is the set \(IJ\) of all finite
+sums of terms of the form \(ab\) with \(a\in I\) and \(b\in J\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#K14"><code>ideal_1:def 21</code></a>)</li>
+<li>For any \(n\geq1\), define the <dfn>n-th power</dfn> of \(I\),
+denoted by \(I^{n}\), to be the set consisting of all finite sums
+of elements of the form \(a_{1}a_{2}(\dots)a_{n}\) for \(a_{i}\in I\)
+for all \(i\). That is to say \(I^{1}=I\) and \(I^{n+1}=II^{n}\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_2.html#K3"><code>ideal_2:def 2</code></a>)</li>
+</ol></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-b13d8f59-7a70-4b7e-8dad-354a4e5c7b97" class="outline-3">
+<h3 id="h-b13d8f59-7a70-4b7e-8dad-354a4e5c7b97">&sect;7.4 Properties of Ideals</h3>
+<div class="outline-text-3" id="text-h-b13d8f59-7a70-4b7e-8dad-354a4e5c7b97">
+<ul class="org-ul">
+<li><b>Definition.</b> Let \(A\) be any subset of the ring \(R\).
+<ol class="org-ol">
+<li>The <dfn>Ideal Generated by \(A\)</dfn> is the smallest ideal \((A)\)
+of \(R\) containing \(A\) (<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#K7"><code>ideal_1:def 14</code></a>); this also generalizes
+to "left ideals generated by \(A\)" and "right ideals generated by \(A\)"</li>
+<li>Let \(AR=\{\sum^{n}_{i=1}a_{i}r_{i}\mid n\in\mathbb{N},a_{i}\in A,r_{i}\in R\}\)
+and \(RA=\{\sum^{n}_{i=1}r_{i}a_{i}\mid n\in\mathbb{N},a_{i}\in A,r_{i}\in R\}\)</li>
+<li>A <dfn>Principal Ideal</dfn> is the ideal generated by a single
+element
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V7"><code>ideal_1:def 27</code></a>)</li>
+<li>An ideal generated by a finite set is called a
+<dfn>Finitely-Generated Ideal</dfn>
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V5"><code>ideal_1:def 25</code></a>)</li>
+</ol></li>
+<li><b>Proposition 9.</b> Let \(I\) be an ideal of \(R\).
+<ol class="org-ol">
+<li>\(I=R\) if and only if \(I\) contains a unit (<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#T20"><code>ideal_1:20</code></a>)</li>
+<li>Assume \(R\) is commutative. Then \(R\) is a field if and only if its
+only ideals are \(0\) and \(R\). (<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#T22"><code>ideal_1:22</code></a>)</li>
+</ol></li>
+<li><b>Corollary 10.</b> If \(R\) is a field, then any nonzero ring
+homomorphism from \(R\) into another ring is an injection. <span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> An ideal \(M\) in an arbitrary ring \(S\) is called a
+<dfn>Maximal Ideal</dfn> if \(M\neq S\) and the only ideals containing
+\(M\) are \(M\) and \(S\). (<a href="https://mizar.uwb.edu.pl/version/current/html/ring_1.html#V4"><code>ring_1:def 4</code></a>)</li>
+<li><b>Proposition 11.</b> In a unital ring, every proper ideal is contained
+in a maximal ideal. (<a href="https://mizar.uwb.edu.pl/version/current/html/field_11.html#M1"><code>field_11:def 8</code></a>)</li>
+<li><b>Proposition 12.</b> Let \(R\) be a commutative ring. The ideal \(M\) is a
+maximal ideal if and only if the quotient ring \(R/M\) is a field.
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ring_1.html#T21"><code>ring_1:21</code></a>)</li>
+<li><b>Definition.</b> Let \(R\) be a commutative ring. An ideal \(P\) of \(R\) is
+called a <dfn>Prime Ideal</dfn> if \(P\neq R\) and whenever \(ab\in P\)
+then either \(a\in P\) or \(b\in P\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ring_1.html#V2"><code>ring_1:def 2</code></a>)</li>
+<li><b>Proposition 13.</b> Let \(R\) be a commutative ring. Then \(P\) is a prime
+ideal in \(R\) if and only if the quotient ring \(R/P\) is an integral domain
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ring_1.html#T18"><code>ring_1:18</code></a>)</li>
+<li><b>Corollary 14.</b> Let \(R\) be a commutative ring. Then every maximal
+ideal of \(R\) is a prime ideal. This is a <a href="https://mizar.uwb.edu.pl/version/current/html/ring_1.html#CC5">registered fact</a> in <code>ring_1</code>.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-96e6d9da-c968-4275-8de7-dd325aa10412" class="outline-3">
+<h3 id="h-96e6d9da-c968-4275-8de7-dd325aa10412">&sect;7.5 Rings of Fractions</h3>
+<div class="outline-text-3" id="text-h-96e6d9da-c968-4275-8de7-dd325aa10412">
+<ul class="org-ul">
+<li><b>Theorem 15.</b> Let \(R\) be a commutative ring, let \(D\) be any nonempty
+subset of \(R\) which does not contain \(0\notin D\), and \(D\) does not
+contain any zero-divisors, and \(D\) is closed under
+multiplication. Then there exists a commutative unital ring \(Q\) such
+that \(Q\) contains \(R\) as a subring and every element of \(D\) is a
+unit in \(Q\). The ring \(Q\) also has the following properties:
+<ol class="org-ol">
+<li>Every element of \(Q\) is of the form \(rd^{-1}\) for some \(r\in R\)
+and \(d\in D\).</li>
+<li>(Uniqueness of \(Q\)) The ring \(Q\) is the "smallest" ring
+containing \(R\) in which all elements of \(D\) are units, in the
+sense that for any commutative unital ring \(S\) and for any
+injective ring morphism \(\varphi\colon R\to S\) such that
+\(\varphi(d)\) is a unit for all \(d\in D\), then there exists an
+injective ring morphism \(\Phi\colon Q\to S\) such that \(\Phi|_{R}=\varphi\)</li>
+</ol></li>
+<li><b>Definition.</b> Let \(R\), \(D\), \(Q\) be as in Theorem 15.
+<ol class="org-ol">
+<li>The ring \(Q\) is called the <dfn>Ring of Fractions</dfn> of \(D\)
+with respect to \(R\) and is denoted \(Q^{-1}R\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ringfrac.html#K15"><code>ringfrac:def 18</code></a>). Mizar uses the notation <code>Q ~ R</code> instead of \(Q^{-1}R\).</li>
+<li>If \(R\) is an integral domain and \(D=R\setminus\{0\}\), then \(Q\) is
+called the <dfn>Field of Fractions</dfn> or <dfn>Quotient Field</dfn>
+of \(R\); this is defined for any nondegenerate unital commutative
+ring, where it's called the <dfn>Total Quotient Ring</dfn>
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ringfrac.html#K21"><code>ringfrac:def 24</code></a>).</li>
+</ol></li>
+<li><b>Corollary 16.</b> Let \(R\) be an integral domain, let \(Q\) be the field
+of fractions of \(R\). If a field \(F\) contains a subring \(R'\)
+isomorphic to \(R\), then the subfield of \(F\) generated by \(R'\) is
+isomorphic to \(Q\). (This is the universal property of the ring of
+fractions, and is formalized in <a href="https://mizar.uwb.edu.pl/version/current/html/ringfrac.html#K20"><code>ringfrac:def 23</code></a>)</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-h-08861cef-f5d4-4a68-8228-33091768796a" class="outline-2">
+<h2 id="h-08861cef-f5d4-4a68-8228-33091768796a">Ch. 8 Euclidean Domains, Principal Ideal Domains, Unique Factorization Domains</h2>
+<div class="outline-text-2" id="text-h-08861cef-f5d4-4a68-8228-33091768796a">
+</div>
+<div id="outline-container-h-181e0416-2977-4b12-b516-690e0b3b8e01" class="outline-3">
+<h3 id="h-181e0416-2977-4b12-b516-690e0b3b8e01">&sect;8.1 Euclidean Domains</h3>
+<div class="outline-text-3" id="text-h-181e0416-2977-4b12-b516-690e0b3b8e01">
+<ul class="org-ul">
+<li><p>
+<b>Definition.</b> The integral domain \(R\) is said to be a
+<dfn>Euclidean Domain</dfn> if there exists a function \(N\colon R\to\mathbb{N}_{0}\)
+with \(N(0)=0\) and for any \(a,b\in R\) with \(b\neq0\) there exists
+elements \(q,r\in R\) such that \(a=qb+r\) and \(r=0\) or \(N(r)\lt N(b)\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/int_3.html#V1"><code>int_3:def 8</code></a>)
+</p>
+
+<p>
+The function \(N\) is called the <dfn>Degree Function</dfn> in Mizar
+(<a href="https://mizar.uwb.edu.pl/version/current/html/int_3.html#M1"><code>int_3:def 9</code></a>).
+</p></li>
+<li><b>Proposition 1.</b> Every ideal in a Euclidean domain is principal;
+i.e., if \(I\) is any nonzero ideal in the Euclidean domain \(R\), then
+there exists a \(d\in R\) such that \(I=(d)\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#T94"><code>ideal_1:94</code></a>)</li>
+<li><b>Definition.</b> Let \(R\) be a commutative ring, let \(a,b\in R\) with \(b\neq0\).
+<ol class="org-ol">
+<li>We say \(a\) is a <dfn>multiple</dfn> of \(b\) if there exists an
+element \(x\in R\) with \(a=bx\). In this case, we also say \(b\)
+<dfn>Divides</dfn> \(a\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/gcd_1.html#R1"><code>gcd_1:def 1</code></a>)</li>
+<li>A <dfn>Greatest Common Divisor</dfn> of \(a\) and \(b\) is a nonzero
+element \(d\) such that \(d\) divides \(a\), and \(d\) divides \(b\), and
+for any other \(d'\in R\) if \(d'\) divides both \(a\) and \(b\) then
+\(d'\) divides \(d\).
+(This is generalized in <a href="https://mizar.uwb.edu.pl/version/current/html/gcd_1.html#K5"><code>gcd_1:def 12</code></a> and especially <a href="https://mizar.uwb.edu.pl/version/current/html/ring_4.html#V4"><code>ring_4:def 10</code></a>)</li>
+</ol></li>
+<li><b>Proposition 2.</b> If \(a\) and \(b\) are elements of a commutative ring
+\(R\) such that the ideal generated by \(a\) and \(b\) is a principal
+ideal \((d)\), then \(d\) is a greatest common divisor of \(a\) and \(b\)
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Proposition 3.</b> Let \(R\) be an integral domain. If two elements \(d\)
+and \(d'\) of \(R\) generate the same principal ideal \((d)=(d')\), then
+\(d'=ud\) for some unit \(u\in R\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#T21"><code>ring_2:21</code></a>)</li>
+<li><b>Theorem 4.</b> Let \(R\) be a Euclidian domain, let \(a\) and \(b\) be
+nonzero elements of \(R\). Let \(d=r_{n}\) be the last nonzero remainder
+in the Euclidian algorithm. Then
+<ol class="org-ol">
+<li>\(d\) is a greatest common divisor of \(a\) and \(b\) (<span class="missing">Missing from Mizar</span>), and</li>
+<li>The principal ideal \((d)\) is the ideal generated by \(a\) and \(b\)
+(<span class="missing">Missing from Mizar</span> but seems to follow from <a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#T18"><code>ring_2:18</code></a>)</li>
+</ol></li>
+<li><b>Proposition 5.</b> Let \(R\) be an integral domain that is not a
+field. If \(R\) is a Euclidian domain, then there are universal side
+divisors in \(R\).</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-f4dae11f-3f15-486f-bcd3-d5bd8c5bc045" class="outline-3">
+<h3 id="h-f4dae11f-3f15-486f-bcd3-d5bd8c5bc045">&sect;8.2 Principal Ideal Domains</h3>
+<div class="outline-text-3" id="text-h-f4dae11f-3f15-486f-bcd3-d5bd8c5bc045">
+<ul class="org-ul">
+<li><b>Definition.</b> A <dfn>Principal Ideal Domain</dfn> (PID) is an
+integral domain in which every ideal is principal (<a href="https://mizar.uwb.edu.pl/version/current/html/ideal_1.html#V8"><code>ideal_1:def 28</code></a>
+and <a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#NM5"><code>ring_2</code></a>).</li>
+<li><b>Proposition 6.</b> Let \(R\) be a principal ideal domain, let \(a\) and
+\(b\) be nonzero elements of \(R\). Let \(d\) be a generator for the ideal
+generated by \(a\) and \(b\). Then
+<ol class="org-ol">
+<li>\(d\) is a greatest common divisor of \(a\) and \(b\) <span class="missing">Missing from Mizar</span></li>
+<li>\(d\) can be written as an $R$-linear combination of \(a\) and \(b\),
+i.e., there exists \(x\) and \(y\) in \(R\) with \(d=ax+by\) <span class="missing">Missing from Mizar</span></li>
+<li>\(d\) is unique up to multiplication by a unit of \(R\) <span class="missing">Missing from Mizar</span></li>
+</ol></li>
+<li><b>Proposition 7.</b> Every nonzero prime ideal in a principal ideal
+domain is a maximal ideal.
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#T26"><code>ring_2:26</code></a>)</li>
+<li><b>Corollary 8.</b> If \(R\) is any commutative ring such that the
+polynomial ring \(R[x]\) is a principal ideal domain (or a Euclidian
+domain), then \(R\) is necessarily a field. <span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> Define \(N\) to be a <dfn>Dedekind-Hasse norm</dfn> if
+\(N\) is a positive norm and for every nonzero \(a,b\in R\) either \(a\)
+is an element of the ideal \((b)\) or there is a nonzero element in
+the ideal \((a,b)\) of norm strictly less than the norm of \((b)\)
+(i.e., either \(b\) divides \(a\) in \(R\), or there exists \(s,t\in R\)
+with \(0\lt N(sa-tb)\lt N(b)\)) <span class="missing">Missing from Mizar</span></li>
+<li><b>Proposition 9.</b> The integral domain \(R\) is a PID if and only if \(R\)
+has a Dedekind-Hasse norm. <span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-2158426a-1061-4e09-be8d-2ae8fe5a9c85" class="outline-3">
+<h3 id="h-2158426a-1061-4e09-be8d-2ae8fe5a9c85">&sect;8.3 Unique Factorization Domains</h3>
+<div class="outline-text-3" id="text-h-2158426a-1061-4e09-be8d-2ae8fe5a9c85">
+<ul class="org-ul">
+<li><b>Definition.</b> Let \(R\) be an integral domain
+<ul class="org-ul">
+<li>Suppose \(r\in R\) is nonzero and is not a unit. Then \(r\) is called
+<dfn>Irreducible</dfn> if whenever \(r=ab\) with \(a,b\in R\), then 
+either \(a\) is a unit in \(R\) or \(b\) is a unit in \(R\) or both;
+otherwise \(r\) is called <dfn>Reducible</dfn>
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#V5"><code>ring_2:def 9</code></a>)</li>
+<li>The nonzero element \(p\in R\) is called <dfn>Prime</dfn> in \(R\) if
+the ideal \((p)\) generated by \(p\) is a prime ideal. In other words,
+a nonzero element \(p\) is prime if it is not a unit and whenever
+\(p\mid ab\) either \(p\mid a\) or \(p\mid b\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#V4"><code>ring_2:def 8</code></a>)</li>
+<li>Two elements \(a,b\in R\) differing by a unit are said to be
+<dfn>Associated</dfn> if \(a=ub\) for some unit \(u\in R\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/gcd_1.html#R3"><code>gcd_1:def 3</code></a>)</li>
+</ul></li>
+<li><b>Proposition 10.</b> In an integral domain a prime element is always
+irreducible. (Registered in <a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#CC7"><code>ring_2</code></a>)</li>
+<li><b>Proposition 11.</b> In a PID, a nonzero element is prime iff it is
+irreducible (<a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#T26"><code>ring_2:26</code></a>)</li>
+<li><b>Definition.</b> A <dfn>Unique Factorization Domain</dfn> (UFD, <a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#V8"><code>ring_2:def 15</code></a>) is an
+integral domain \(R\) in which every nonzero element \(r\in R\) which is
+not a unit has the following two properties
+<ol class="org-ol">
+<li>\(r\) can be written as a finite product of irreducibles \(p_{i}\) of
+\(R\), i.e., \(r=p_{1}p_{2}\dots p_{n}\); and</li>
+<li>the decomposition in (1) is unique up to associates</li>
+</ol></li>
+<li><b>Proposition 12.</b> In a UFD, a nonzero element is prime iff it is
+irreducible.</li>
+<li><b>Theorem 14.</b> Every principal ideal domain is a unique factorization
+domain. (This is a registered fact in <a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#CC18"><code>ring_2</code></a>)</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-h-a1d9ea93-b470-4d40-b8f8-f1b6a318547b" class="outline-2">
+<h2 id="h-a1d9ea93-b470-4d40-b8f8-f1b6a318547b">Ch. 9 Polynomial Rings</h2>
+<div class="outline-text-2" id="text-h-a1d9ea93-b470-4d40-b8f8-f1b6a318547b">
+</div>
+<div id="outline-container-h-1aad5b7b-2c3b-4d78-92f1-5ceea8559a31" class="outline-3">
+<h3 id="h-1aad5b7b-2c3b-4d78-92f1-5ceea8559a31">&sect;9.1 Definitions and Basic Properties</h3>
+<div class="outline-text-3" id="text-h-1aad5b7b-2c3b-4d78-92f1-5ceea8559a31">
+<ul class="org-ul">
+<li><b>Implicit definition.</b> The <dfn>Degree</dfn> of a polynomial
+\(p(x)=a_{n}x^{n}+\dots+a_{1}x+a_{0}\) where \(a_{n}\neq0\) is
+\(\deg(p)=n\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/hurwitz.html#K2"><code>hurwitz:def 2</code></a>)</li>
+<li><b>Proposition 1.</b> Let \(R\) be an integral domain
+<ol class="org-ol">
+<li>\(\deg(p(x)q(x))=\deg(p(x))+\deg(q(x))\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/hurwitz.html#T23"><code>hurwitz:23</code></a>)</li>
+<li>the units of \(R[x]\) is just the units of \(R\) <span class="missing">Missing from Mizar</span></li>
+<li>\(R[x]\) is an integral domain <span class="missing">Missing from Mizar</span></li>
+</ol></li>
+<li><b>Proposition 2.</b> Let \(I\) be an ideal of the ring \(R\), let \((I)=I[x]\)
+denote the ideal of \(R[x]\) generated by \(I\) (the set of polynomials
+with coefficients in \(I\)). Then \(R[x]/(I)\cong(R/I)[x]\). In
+particular, if \(I\) is a prime ideal of \(R\) then \((I)\) is a prime
+ideal of \(R[x]\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> The <dfn>Polynomial Ring in the variables \(x_{1}\)</dfn> denoted \(R[x_{1},\dots,x_{n}]\) 
+is defined inductively by \(R[x_{1},\dots,x_{n-1},x_{n}]=R[x_{1},\dots,x_{n-1}][x_{n}]\)
+<ul class="org-ul">
+<li>Although this is easier for informal mathematics, Mizar formalizes
+a notion of "bags" to describe monomials as a function from the
+set of unknowns to the exponent for each unknown. A polynomial is
+then a formal $R$-linear combination of bags.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-5f3eb5d1-c6e9-47a0-afaa-3d09dab813ae" class="outline-3">
+<h3 id="h-5f3eb5d1-c6e9-47a0-afaa-3d09dab813ae">&sect;9.2 Polynomial Rings over Fields (Part 1)</h3>
+<div class="outline-text-3" id="text-h-5f3eb5d1-c6e9-47a0-afaa-3d09dab813ae">
+<ul class="org-ul">
+<li><b>Theorem 3.</b> Let \(F\) be a field. The polynmial ring \(F[x]\) is a
+Euclidian domain. Specifically, if \(a(x)\) and \(b(x)\) are two
+polynomials in \(F[x]\) with \(b(x)\) nonzero, then there are <i>unique</i>
+\(q(x)\) and \(r(x)\) in \(F[x]\) such that \(a(x)=q(x)b(x)+r(x)\) with
+\(r(x)=0\) or \(\deg(r(x))\lt\deg(b(x))\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Corollary 4.</b> If \(F\) is a field, then \(F[x]\) is a PID and a UFD.
+<span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-73e98f0b-deec-4f26-8ae6-9386f58f9f2b" class="outline-3">
+<h3 id="h-73e98f0b-deec-4f26-8ae6-9386f58f9f2b">&sect;9.3 Polynomial Rings that are Unique Factorization Domains</h3>
+<div class="outline-text-3" id="text-h-73e98f0b-deec-4f26-8ae6-9386f58f9f2b">
+<ul class="org-ul">
+<li><b>Proposition 5</b> (Gauss's Lemma). Let \(R\) be a UFD with field of
+fractions \(F\) and let \(p(x)\in R[x]\). If \(p(x)\) is reducible in
+\(F[x]\) then \(p(x)\) is reducible in \(R[x]\). More precisely, if
+\(p(x)=A(x)B(x)\) for some nonconstant polynomials \(A(x),B(x)\in F[x]\),
+then there are nonzero elements \(r,s\in F\) such that \(rA(x)=a(x)\)
+and \(sB(x)=b(x)\) both lie in \(R[x]\) and \(p(x)=a(x)b(x)\) is a
+factorization in \(R[x]\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Corollary 6.</b> Let \(R\) be a UFD, let \(F\) be its field of fractions,
+and let \(p(x)\in R[x]\). Suppose the greatest common divisor of the
+coefficients of \(p(x)\) is 1. Then \(p(x)\) is irreducible in \(R[x]\) if
+and only if it is irreducible in \(F[x]\). In particular, if \(p(x)\) is
+a monic polynomial that is irreducible in \(R[x]\), then \(p(x)\) is
+irreducible in \(F[x]\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 7.</b> \(R\) is a UFD if and only if \(R[x]\) is a UFD <span class="missing">Missing from Mizar</span></li>
+<li><b>Corollary 8.</b> If \(R\) is a UFD, then a polynomial ring in an
+arbitrary number of variables with coefficients in \(R\) is also a UFD. <span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-fca83440-61f5-4a5d-936b-4d2e21b3d42d" class="outline-3">
+<h3 id="h-fca83440-61f5-4a5d-936b-4d2e21b3d42d">&sect;9.4 Irreducibility Criteria</h3>
+<div class="outline-text-3" id="text-h-fca83440-61f5-4a5d-936b-4d2e21b3d42d">
+<ul class="org-ul">
+<li><b>Proposition 9.</b> Let \(F\) be a field, let \(p(x)\in F[x]\). Then \(p(x)\)
+has a factor of degree one if and only if \(p(x)\) has a root in \(F\),
+i.e., there is an \(\alpha\in F\) with \(p(\alpha)=0\) <span class="missing">Missing from Mizar</span></li>
+<li><b>Proposition 10.</b> A polynomial of degree 2 or 3 over a field \(F\) is
+reducible if and only if it has a root in \(F\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_10.html#T5"><code>field_10:5</code></a> and <a href="https://mizar.uwb.edu.pl/version/current/html/field_10.html#T6"><code>field_10:6</code></a>)</li>
+<li><b>Proposition 12.</b> Let \(I\) be a proper ideal in the integral domain
+\(R\) and let \(p(x)\) be a nonconstant monic polynomial in \(R[x]\). If
+the image of \(p(x)\) in \((R/I)[x]\) cannot be factored in \((R/I)[x]\)
+into two polynomials of smaller degree, then \(p(x)\) is irreducible
+in \(R[x]\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Proposition 13</b> (Eisenstein's criterion). Let \(P\) be a prime ideal
+of the integral domain \(R\) and let \(f(x)=x^{n}+a_{n-1}x^{n-1}+\dots+a_{1}x+a_{0}\)
+be a polynomial in \(R[x]\) (where \(n\geq1\)). Suppose \(a_{n-1}\), &#x2026;,
+\(a_{1}\), \(a_{0}\) are elements of \(P\) and suppose \(a_{0}\notin
+  P^{2}\). Then \(f(x)\) is irreducible in \(R[x]\). <span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated: 
+</div>
+</body>
+</html>
