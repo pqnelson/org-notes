@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Field Theory - Rosetta Stone</title>
+<meta name="author" content="Alex Nelson" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather" rel="stylesheet">
+<div style="display: none"> \(
+\DeclareMathOperator{\tr}{tr}
+\newcommand\D{\mathrm{d}}
+\newcommand\E{\mathrm{e}}
+\newcommand\I{\mathrm{i}}
+\newcommand\bigOh{\mathcal{O}}
+\newcommand{\cat}[1]{\mathbf{#1}}
+\newcommand\curl{\vec{\nabla}\times}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+% For +---- metric
+\newcommand{\BDpos}{}
+\newcommand{\BDneg}{-}
+\newcommand{\BDposs}{\phantom{-}}
+\newcommand{\BDnegg}{-}
+\newcommand{\BDplus}{+}
+\newcommand{\BDminus}{-}
+% For -+++ metric
+\newcommand{\BDpos}{-}
+\newcommand{\BDposs}{-}
+\newcommand{\BDneg}{}
+\newcommand{\BDnegg}{\phantom{-}}
+\newcommand{\BDplus}{-}
+\newcommand{\BDminus}{+}
+\)</div>
+<link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+<script>
+  window.MathJax = {
+    loader: {source: { '[tex]/amsCd': '[tex]/amscd',
+                       '[tex]/AMScd': '[tex]/amscd'}},
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      inlineMath: {'[+]': [['$', '$']]},
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="./index.html"> UP </a>
+ |
+ <a accesskey="H" href="../../../index.html"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">Field Theory - Rosetta Stone</h1>
+<p>
+Again, following Dummit and Foote's <i>Abstract Algebra</i>, chapters 13
+and 14 (since that's the first half of Caltech's Math 5C course).
+</p>
+<div id="outline-container-h-8376fbfe-9da7-4597-8d1a-0db5f790df10" class="outline-2">
+<h2 id="h-8376fbfe-9da7-4597-8d1a-0db5f790df10">Ch. 13 Field Theory</h2>
+<div class="outline-text-2" id="text-h-8376fbfe-9da7-4597-8d1a-0db5f790df10">
+</div>
+<div id="outline-container-h-c96e6267-4b90-4bd5-b21b-85bcddc00971" class="outline-3">
+<h3 id="h-c96e6267-4b90-4bd5-b21b-85bcddc00971">&sect;13.1 Basic Theory of Field Extensions</h3>
+<div class="outline-text-3" id="text-h-c96e6267-4b90-4bd5-b21b-85bcddc00971">
+<ul class="org-ul">
+<li><b>Definition.</b> The <dfn>Characteristic</dfn> of a field \(F\), denoted
+\(\operatorname{ch}(F)\), is defined to be the smallest positive
+integer \(p\) such that \(p\cdot1_{F}=0\) if such a \(p\) exists and is
+defined to be 0 otherwise. (<a href="https://mizar.uwb.edu.pl/version/current/html/ring_3.html#K3"><code>ring_3:def 5</code></a>)</li>
+<li><b>Proposition 1.</b> The characteristic of a field is either 0 or a
+prime \(p\). If \(\operatorname{ch}(F)=p\) then for any \(\alpha\in F\) we
+have \(p\cdot\alpha=0\).</li>
+<li><b>Examples.</b>
+<ol class="org-ol">
+<li>The fields \(\mathbb{Q}\) and \(\mathbb{R}\) both have characteristic 0.</li>
+<li>The finite field \(\mathbb{F}_{p}\) has characteristic \(p\)</li>
+</ol></li>
+<li><b>Implicit Definition.</b> Let \(F\) be a field. A <dfn>Subfield</dfn> of
+\(F\) is a subring which is a field.
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ec_pf_1.html#M1"><code>ec_pf_1:def 1</code></a>)</li>
+<li><b>Definition.</b> The <dfn>Prime Subfield</dfn> of a field \(F\) (<a href="https://mizar.uwb.edu.pl/version/current/html/ring_3.html#K7"><code>ring_3:def 10</code></a>) is the
+subfield of \(F\) generated by the multiplicative identity \(1_{F}\) of
+\(F\). It is isomorphic to either \(\mathbb{Q}\) (if
+\(\operatorname{ch}(F)=0\) &#x2014; <a href="https://mizar.uwb.edu.pl/version/current/html/ring_3.html#T103"><code>ring_3:103</code></a>)
+or \(\mathbb{F}_{p}\) (if \(\operatorname{ch}(F)=p\) &#x2014; <a href="https://mizar.uwb.edu.pl/version/current/html/ring_3.html#T111"><code>ring_3:111</code></a>).</li>
+<li><b>Definition.</b> If \(K\) Is a field containing the subfield \(F\), then
+\(K\) is said to be an <dfn>extension field</dfn> of \(F\), denoted
+\(K/F\).
+<ul class="org-ul">
+<li>This is defined as a type in <a href="https://mizar.uwb.edu.pl/version/current/html/field_4.html#NM4"><code>field_4</code></a></li>
+<li>The "meat" of the definition is an attribute (<a href="https://mizar.uwb.edu.pl/version/current/html/field_4.html#V1"><code>field_4:def 1</code></a>)</li>
+<li><b>Note:</b> We can really speak of ring extensions analogously, and
+this is formalized in <code>field_4</code> a bit</li>
+</ul></li>
+<li><b>Implicit definition.</b> If \(K/F\) is a field extension, then \(K\) is a
+vector space over \(F\). (<a href="https://mizar.uwb.edu.pl/version/current/html/field_4.html#K2"><code>field_4:def 6</code></a>)</li>
+<li><b>Definition.</b> The <dfn>Degree</dfn> of a field extension \(K/F\),
+denoted \([K:F]\), is the dimension of \(K\) as a vector space over \(F\)
+&#x2014; so \([K:F]:=\dim_{F}K\). (<a href="https://mizar.uwb.edu.pl/version/current/html/field_4.html#K3"><code>field_4:def 7</code></a>)
+<ul class="org-ul">
+<li><b>Note:</b> Mizar's convention is to treat \([K:F]=-1\) when \(\dim_{F}K\)
+is not finite. This is idiomatic in Mizar handling of <a href="https://mizar.uwb.edu.pl/version/current/html/int_1.html#V2"><code>dim-like</code></a> things.</li>
+</ul></li>
+<li><b>Proposition 2.</b> Let \(\varphi\colon F\to F'\) be a morphism of
+fields. Then \(\varphi\) is either identically 0 or injective, so that
+the image of \(\varphi\) is either 0 or isomorphic to \(F\).
+(This is a registration in <a href="https://mizar.uwb.edu.pl/version/current/html/ring_2.html#CC2"><code>ring_2</code></a>)</li>
+<li><b>Implicit Definition.</b> Let \(F\) be a field, let \(p(x)\in F[x]\),
+let \(K/F\) be a field extension, let \(c\in K\). Then we can treat
+\(p\in K[x]\) and evaluate \(p(c)\) &#x2014; this is <code>Ext_eval(p,c)</code>
+(<a href="https://mizar.uwb.edu.pl/version/current/html/algnum_1.html#K1"><code>algnum_1:def 1</code></a>)</li>
+<li><b>Implicit Definition.</b> Let \(F\) be a field and \(p(x)\in F[x]\), let
+\(K/F\) be a field extension of \(F\). We say \(p\) <dfn>has roots in</dfn>
+(or "has roots in") \(K\) if there exists an \(\alpha\in K\) such
+that \(p(\alpha)=0\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_4.html#R2"><code>field_4:def 3</code></a>)</li>
+<li><p>
+<b>Theorem 3.</b> Let \(F\) be a field, let \(p(x)\in F[x]\) be an irreducible
+polynomial. Then there exists a field \(K\) containing a subfield
+isomorphic to \(F\) in which \(p(x)\) has a root.
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_4.html#T31"><code>field_4:31</code></a>)
+</p>
+
+<p>
+Identifying \(F\) with
+this isomorphic copy shows there exists an extension of \(F\) in which
+\(p(x)\) has a root.
+</p></li>
+<li><b>Theorem 4.</b> Let \(p(x)\in F[x]\) be an irreducible polynomial of
+degree \(n\) over the field \(F\). Let \(K\) be the field \(F[x]/(p(x))\).
+Let \(\theta=x\pmod{p(x)}\in K\). Then the elements 1, \(\theta\),
+&hellip;, \(\theta^{n-1}\) are a basis for \(K\) as a vector space over
+\(F\), so the degree of the extension is \(n\) &#x2014; that is, \([K:F]=n\).
+<ul class="org-ul">
+<li>This set \(\{1,\theta,\dots,\theta^{n-1}\}\) is defined in Mizar as
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_6.html#K7"><code>field_6:def 8</code></a>)</li>
+
+<li>That this is a basis of the vector space is proved in
+<a href="https://mizar.uwb.edu.pl/version/current/html/field_6.html#T65"><code>field_6:65</code></a></li>
+</ul></li>
+<li><p>
+<b>Definition.</b> Let \(K\) be an extension of the field \(F\). Let
+\(\alpha,\beta,\dots\in K\) be a collection of elements of \(K\). The
+smallest subfield of \(K\) containing both \(F\) and the elements
+\(\alpha,\beta,\dots\) &#x2014; denoted as \(F(\alpha,\beta,\dots)\) &#x2014; is
+called the field <dfn>generated by</dfn> \(\alpha,\beta,\dots\) over \(F\).
+</p>
+
+<p>
+This is usually called the field <dfn>adjoined with</dfn> \(\alpha,\beta,\dots\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_6.html#K5"><code>field_6:def 6</code></a>)
+</p></li>
+<li><b>Definition.</b> If the field \(K\) is generated by a single element
+\(\alpha\) over \(F\) &#x2014; that is, \(K = F(\alpha)\) &#x2014; then we say \(K\)
+is a <dfn>Simple</dfn> extension of \(F\) (<a href="https://mizar.uwb.edu.pl/version/current/html/field_14.html#V2"><code>field_14:def 7</code></a>)
+and the element \(\alpha\) is
+said to be a <dfn>Primitive Element</dfn> of the extension (<a href="https://mizar.uwb.edu.pl/version/current/html/field_14.html#V3"><code>field_14:def 8</code></a>).</li>
+<li><b>Theorem 6.</b> Let \(F\) be a field and let \(p(x)\in F[x]\) be an
+irreducible polynomial. Suppose \(K\) is an extension field of \(F\)
+containing a root \(\alpha\) of \(p(x)\) &#x2014; so \(p(\alpha)=0\). Let
+\(F(\alpha)\) denote the subfield of \(K\) generated by \(F\) over
+\(\alpha\). Then \(F(\alpha)\cong F[x]/(p(x))\).
+<ul class="org-ul">
+<li>This particular theorem seems to be missing in Mizar, but follows
+from <a href="https://mizar.uwb.edu.pl/version/current/html/field_6.html#T59"><code>field_6:59</code></a></li>
+</ul></li>
+<li><b>Corollary 7.</b> Suppose in Theorem 6 that \(p(x)\) is of degree
+\(n\). Then
+\(F(\alpha)=\{a_{0}+a_{1}\alpha+\dots+a_{n-1}\alpha^{n-1}\mid a_{i}\in F\}\subset K\).
+<span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 8.</b> Let \(\varphi\colon F\to F'\) be an isomorphism of
+fields. Let \(p(x)\in F[x]\) be an irreducible polynomial, let
+\(p'(x)\in F'[x]\) be the irreducible polynomial obtained by applying
+the map \(\varphi\) to the coefficients of \(p(x)\). Let \(\alpha\) be a
+root of \(p(x)\) in some field extension of \(F\), let \(\beta\) be a root
+of \(p'(x)\) in some extension of \(F'\). Then there is an isomorphism
+\(\sigma\colon F(\alpha)\to F'(\beta)\) sending \(\alpha\) to \(\beta\)
+and extending \(\varphi\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_8.html#T55"><code>field_8:55</code></a>, and \(\sigma\) in Mizar is <code>Phi</code>)</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-5464593f-4596-4f0b-9533-5f9f09105f91" class="outline-3">
+<h3 id="h-5464593f-4596-4f0b-9533-5f9f09105f91">&sect;13.2 Algebraic Extensions</h3>
+<div class="outline-text-3" id="text-h-5464593f-4596-4f0b-9533-5f9f09105f91">
+<ul class="org-ul">
+<li><p>
+<b>Definition.</b> Let \(F\) be a field, let \(K\) be an extension field of
+\(F\). The element \(\alpha\in K\) is said to be <dfn>Algebraic</dfn>
+over \(F\) if \(\alpha\) is the root of some nonzero polynomial \(f(x)\in
+  F[x]\). (<a href="https://mizar.uwb.edu.pl/version/current/html/field_6.html#V2"><code>field_6:def 7</code></a>)
+</p>
+
+<p>
+If \(\alpha\) is not algebraic over \(F\), then \(\alpha\) is said to be
+<dfn>Transcendental</dfn> over \(F\). (Synonym in <a href="https://mizar.uwb.edu.pl/version/current/html/field_6.html#NV3"><code>field_6</code></a>)
+</p>
+
+<p>
+The extension \(K/F\) is said to be <dfn>Algebraic</dfn> if every
+element of \(K\) is algebraic over \(F\) (<a href="https://mizar.uwb.edu.pl/version/current/html/field_7.html#V2"><code>field_7:def 11</code></a>).
+</p></li>
+<li><p>
+<b>Proposition 9.</b> Let \(\alpha\) be algebraic over \(F\). Then there is a
+unique monic irreducible polynomial \(m_{\alpha,F}(x)\in F[x]\) which
+has \(\alpha\) as a root. (Proved in the definition of the minimal polynomial.)
+</p>
+
+<p>
+A polynomial \(f(x)\in F[x]\) has \(\alpha\) as
+a root if and only if \(m_{\alpha,F}(x)\) divides \(f(x)\) in \(F[x]\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_6.html#T53"><code>field_6:53</code></a>)
+</p></li>
+<li><b>Corollary 10.</b> If \(L/F\) is a field extension and \(\alpha\) is
+algebraic over \(F\) and \(L\), then \(m_{\alpha,L}(x)\) divides
+\(m_{\alpha,F}(x)\) in \(L[x]\). <span class="missing">Missing from Mizar</span></li>
+<li><p>
+<b>Definition.</b> The polynomial \(m_{\alpha,F}(x)\) &#x2014; or just
+\(m_{\alpha}(x)\) &#x2014; in Proposition 9 is called the <dfn>Minimal Polynomial</dfn>
+for \(\alpha\) over \(F\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/algnum_1.html#K4"><code>algnum_1:def 9</code></a> and in <code>field_6</code> abbreviated to <a href="https://mizar.uwb.edu.pl/version/current/html/field_6.html#NK9"><code>MinPoly</code></a>)
+</p>
+
+<p>
+The <dfn>degree</dfn> of \(\alpha\) is equal to the degree of the
+minimal polynomial \(m_{\alpha}(x)\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/algnum_1.html#K5"><code>algnum_1:def 10</code></a>)
+</p></li>
+<li><b>Proposition 11.</b> Let \(\alpha\) be algebraic over the field \(F\) and
+let \(F(\alpha)\) be the field generated by \(\alpha\) over \(F\). Then
+\(F(\alpha)\cong F[x]/(m_{\alpha}(x))\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_6.html#T59"><code>field_6:59</code></a>)
+so that \([F(\alpha):F]=\deg(m_{\alpha}(x))\).</li>
+<li><p>
+<b>Proposition 12.</b> The element \(\alpha\) is algebraic over \(F\) if and
+only if the simple extension \(F(\alpha)/F\) is finite (<a href="https://mizar.uwb.edu.pl/version/current/html/field_6.html#T68"><code>field_6:68</code></a>).
+</p>
+
+<p>
+More precisely,
+</p>
+<ol class="org-ol">
+<li>if \(\alpha\) is an element of an extension of degree
+\(n\) over \(F\), then \(\alpha\) satisfies a polynomial of degree at most
+\(n\) over \(F\); and</li>
+<li>if \(\alpha\) satisfies a polynomial of degree \(n\) over \(F\), then
+the degree of \(F(\alpha)\) over \(F\) is at most \(n\).</li>
+</ol></li>
+<li><b>Corollary 13.</b> If the extension \(K/F\) is finite, then it is
+algebraic. (<a href="https://mizar.uwb.edu.pl/version/current/html/field_7.html#T37"><code>field_7:37</code></a> and also this is registered in <a href="https://mizar.uwb.edu.pl/version/current/html/field_7.html#CC5"><code>field_7</code></a>)</li>
+<li><b>Theorem 14.</b> Let \(F\subset K\subset L\) be fields. Then
+\([L:F]=[L:K][K:F]\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_7.html#T30"><code>field_7:30</code></a>)</li>
+<li><b>Corollary 15.</b> Suppose \(L/F\) is a finite extension, let \(K\) be any
+subfield of \(L\) containing \(F\) (so \(F\subset K\subset L\)). Then
+\([K:F]\) divides \([L:F]\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> An extension \(K/F\) is <dfn>Finitely Generated</dfn> if
+there are elements \(\alpha_{1}\), &hellip;, \(\alpha_{n}\) in \(K\) such
+that \(K=F(\alpha_{1},\dots,\alpha_{n})\).</li>
+<li><b>Lemma 16.</b> \(F(\alpha,\beta)=(F(\alpha))(\beta)\) &#x2014; that is to say,
+the field generated over \(F\) by \(\alpha\) and \(\beta\) is the field
+generated by \(\beta\) over \(F(\alpha)\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 17.</b> The extension \(K/F\) is finite if and only if \(K\) is
+generated by a finite number of algebraic elements over \(F\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Corollary 18.</b> Suppose \(\alpha\) and \(\beta\) are algebraic over
+\(F\). Then \(\alpha\pm\beta\), \(\alpha\beta\), \(\alpha/\beta\) (for
+\(\beta\neq0\)) are all algebraic. <span class="missing">Missing from Mizar</span></li>
+<li><b>Corollary 19.</b> Let \(L/F\) be an arbitrary field extension. Then the
+collection of elements of \(L\) that are algebraic over \(F\) form a
+subfield \(K\) of \(L\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Theorem 20.</b> If \(K\) is algebraic over \(F\), and if \(L\) is algebraic
+over \(K\), then \(L\) is algebraic over \(F\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_7.html#T39"><code>field_7:39</code></a>)</li>
+<li><b>Definition.</b> Let \(K_{1}\) and \(K_{2}\) be two subfields of \(K\). Then
+the <dfn>Composite Field</dfn> of \(K_{1}\) and \(K_{2}\), denoted
+\(K_{1}K_{2}\), is the smallest subfield of \(K\) containing both
+\(K_{1}\) and \(K_{2}\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Implicit proposition.</b> The composite \(K_{1}K_{2}\) is the
+intersection of all subfields of \(K\) containing both \(K_{1}\) and \(K_{2}\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Proposition 21.</b> Let \(K_{1}\) and \(K_{2}\) be two finite extensions
+of a field \(F\) contained in \(K\). Then
+\([K_{1}K_{2}:F]\leq[K_{1}:F][K_{2}:F]\) <span class="missing">Missing from Mizar</span></li>
+<li><b>Corollary 22.</b> Suppose \([K_{1}:F]=n\) and \([K_{2}:F]=m\) in
+Proposition 21 where \(m\) and \(n\) are coprime \(\gcd(m,n)=1\). Then
+\([K_{1}K_{2}:F]=[K_{1}:F][K_{2}:F]=mn\). <span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-f5b73a1c-09b4-4cce-80b7-f164bd8bcc52" class="outline-3">
+<h3 id="h-f5b73a1c-09b4-4cce-80b7-f164bd8bcc52">&sect;13.3 Classical Straightedge and Compass Constructions</h3>
+<div class="outline-text-3" id="text-h-f5b73a1c-09b4-4cce-80b7-f164bd8bcc52">
+<p>
+I'm skipping this section. If you're interested, I can revisit this.
+</p>
+</div>
+</div>
+<div id="outline-container-h-e88f42c9-c1cb-466a-a816-d5dc11549b38" class="outline-3">
+<h3 id="h-e88f42c9-c1cb-466a-a816-d5dc11549b38">&sect;13.4 Splitting Fields and Algebraic Closures</h3>
+<div class="outline-text-3" id="text-h-e88f42c9-c1cb-466a-a816-d5dc11549b38">
+<ul class="org-ul">
+<li><b>Definition.</b> The extension \(K\) of \(F\) is called a <dfn>Splitting Field</dfn> (<a href="https://mizar.uwb.edu.pl/version/current/html/field_8.html#M1"><code>field_8:def 1</code></a>)
+for the polynomial \(f(x)\in F[x]\) if \(f(x)\) factors completely into
+linear factors (or <dfn>Splits Completely</dfn> <a href="https://mizar.uwb.edu.pl/version/current/html/field_4.html#R3"><code>field_4: def 5</code></a>) in \(K[x]\) and
+\(f(x)\) does not factor completely into linear factors over any
+proper subfield of \(K\) containing \(F\).</li>
+<li><b>Theorem 25.</b> For any field \(F\), if \(f(x)\in F[x]\) then there exists
+an extension \(K\) of \(F\) which is a splitting field for \(f(x)\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_8.html#T31"><code>field_8:31</code></a>)
+<ul class="org-ul">
+<li>NOTE: Dummit and Foote errs here! We need \(f(x)\) to be a
+nonconstant polynomial.</li>
+</ul></li>
+<li><b>Definition.</b> If \(K\) is an algebraic extension of \(F\) which is the
+splitting field over \(F\) for a collection of polynomials \(f(x)\in F[x]\)
+then \(K\) is called a <dfn>Normal</dfn> extension of \(F\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_13.html#V2"><code>field_13:def 5</code></a>)</li>
+<li><b>Proposition 26.</b> A splitting field of a polynomial of degree \(n\)
+over \(F\) is of degree at most \(n!\) over \(F\). <span class="missing">Missing from Mizar</span></li>
+<li><b>Definition.</b> A generator of the  cyclic group of all n-th roots of
+unity is called a <dfn>Primitive</dfn> n-th root of unity. These are
+typically denoted \(\zeta_{n}\).
+<ul class="org-ul">
+<li>Roots of unity are defined in <a href="https://mizar.uwb.edu.pl/version/current/html/uniroots.html#K2"><code>uniroots:def 2</code></a></li>
+</ul></li>
+<li><b>Definition.</b> The field \(\mathbb{Q}(\zeta_{n})\) is called the
+<dfn>Cyclotomic Field of n-th roots of unity</dfn>.
+(<a href="https://mizar.uwb.edu.pl/version/current/html/uniroots.html#K5"><code>uniroots:def 5</code></a>)</li>
+<li><b>Theorem 27.</b> Let \(\varphi\colon F\to F'\) be an isomorphism of
+fields. Let \(f(x)\in F[x]\) be a polynomial, let \(f'(x)\in F'[x]\) be
+a polynomial obtained by applying \(\varphi\) to the coefficients of
+\(f(x)\). Let \(E\) be a splitting field for \(f(x)\) over \(F\), let \(E'\)
+be a splitting field for \(f'(x)\) over \(F'\). Then the isomorphism
+\(\varphi\) extends to an isomorphism \(\sigma\colon E\to E'\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_8.html#T57"><code>field_8:57</code></a>)</li>
+<li><b>Corollary 28</b> (Uniqueness of splitting fields). Any two splitting
+fields for a polynomial \(f(x)\in F[x]\) over a field \(F\) are
+isomorphic.
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_8.html#T58"><code>field_8:58</code></a>)</li>
+<li><b>Definition.</b> The field \(\overline{F}\) is called an <dfn>Algebraic Closure</dfn>
+of \(F\) if \(\overline{F}\) is algebraic over \(F\) and if every
+polynomial \(f(x)\in F[x]\) splits completely over \(\overline{F}\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_12.html#M3"><code>field_12:def 11</code></a>)</li>
+<li><b>Definition.</b> A field \(K\) is said to be <dfn>Algebraically Closed</dfn>
+if every polynomial with coefficients in \(K\) has a root over \(K\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/polynom5.html#V2"><code>polynom5:def 9</code></a>)</li>
+<li><b>Proposition 29.</b> Let \(\overline{F}\) be the algebraic closure of
+\(F\). Then \(\overline{F}\) is algebraically closed. (This is part of
+the definition of algebraic closure in Mizar.)</li>
+<li><b>Proposition 30.</b> For any field \(F\) there exists an algebraically
+closed field \(K\) containing \(F\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_12.html#T29"><code>field_12:29</code></a>)</li>
+<li><p>
+<b>Proposition 31.</b> Let \(K\) be an algebraically closed field, let \(F\)
+be a subfield of \(K\). Then the collection of elements \(\overline{F}\)
+of \(K\) which are algebraic over \(F\) is an algebraic closure of \(F\).
+</p>
+
+<p>
+An algebraic closure of \(F\) is unique up to isomorphism.
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_12.html#T63"><code>field_12:63</code></a>)
+</p></li>
+<li><b>Theorem.</b> The field \(\mathbb{C}\) is algebraically closed.
+(This is <a href="https://mizar.uwb.edu.pl/version/current/html/polynom5.html#FC6">registered in <code>polynom5</code></a> and is <a href="https://mizar.uwb.edu.pl/version/current/html/polynom5.html#T74"><code>polynom5:74</code></a>)</li>
+<li><b>Corollary 32.</b> The field \(\mathbb{C}\) contains an algebraic closure
+for any of its subfields. In particular, \(\overline{\mathbb{Q}}\)
+(the algebraic closure of \(\mathbb{Q}\) in \(\mathbb{C}\)) is an
+algebraic closure of \(\mathbb{Q}\).
+<span class="missing">Missing from Mizar</span></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-f6703d97-5312-485e-ba61-5304eba506db" class="outline-3">
+<h3 id="h-f6703d97-5312-485e-ba61-5304eba506db">&sect;13.5 Separable and Inseparable Extensions</h3>
+<div class="outline-text-3" id="text-h-f6703d97-5312-485e-ba61-5304eba506db">
+<ul class="org-ul">
+<li><b>Definition.</b> A polynomial over \(F\) is called <dfn>Separable</dfn>
+if it has no multiple roots (i.e., all its roots are distinct).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_15.html#V1"><code>field_15:def 3</code></a>)
+Otherwise, it is called <dfn>Inseparable</dfn>
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_15.html#NV2"><code>field_15</code></a>)</li>
+<li><b>Definition.</b> The <dfn>Derivative</dfn> of the polynomial
+\(f(x)=a_{n}x^{n}+a_{n-1}x^{n-1}+\dots+a_{1}x+a_{0}\) is the
+polynomial
+\(D_{x}f(x)=na_{n}x^{n-1}+(n-1)a_{n-1}x^{n-2}+\dots+2a_{2}x+a_{1}\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/ringder1.html#K9"><code>ringder1:def 8</code></a> and also aliased in <a href="https://mizar.uwb.edu.pl/version/current/html/field_14.html#NK6"><code>field_14</code></a>)</li>
+<li><b>Proposition 33.</b> A polynomial \(f(x)\) has a multiple root \(\alpha\)
+if and only if \(\alpha\) is also a root of \(D_{x}f(x)\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_15.html#T70"><code>field_15:70</code></a>)</li>
+<li><p>
+<b>Corollary 34.</b> Every irreducible polynomial over a field of
+characteristic 0 is separable. (Registered fact in <a href="https://mizar.uwb.edu.pl/version/current/html/field_15.html#CC3"><code>field_15</code></a>)
+</p>
+
+<p>
+A polynomial over such a field is separable if and only if it is the
+product of distinct irreducible polynomials. <span class="missing">Missing from Mizar</span>
+</p></li>
+<li><b>Proposition 35.</b> Let \(F\) be a field of characteristic \(p\). Then for
+any \(a,b\in F\) we have \((a+b)^{p}=a^{p}+b^{p}\) and \((ab)^{p}=a^{p}b^{p}\)</li>
+<li><b>Definition.</b> The map in Proposition 35 is called the
+<dfn>Frobenius Endomorphism</dfn> of \(F\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_16.html#K5"><code>field_16:def 6</code></a>)</li>
+<li><b>Corollary 36.</b> Suppose \(F\) isa finite field of characteristic
+\(p\). Then every element of \(F\) is a \(p^{th}\) power in \(F\)
+(notationally: \(F=F^{p}\))
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_15.html#T93"><code>field_15:93</code></a> and <a href="https://mizar.uwb.edu.pl/version/current/html/field_16.html#T25"><code>field_16:25</code></a>)</li>
+<li><p>
+<b>Proposition 37.</b> Every irreducible polynomial over a finite field
+is separable. <span class="missing">Missing from Mizar</span>
+</p>
+
+<p>
+A polynomial in \(F[x]\) is separable if and only if it is the product
+of distinct irreducible polynomials in \(F[x]\).
+</p></li>
+<li><b>Definition.</b> A field \(K\) of characteristic \(p\) is called
+<dfn>Perfect</dfn> if every element of \(K\) is a p-th power in \(K\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_15.html#V2"><code>field_15:def 4</code></a>)</li>
+<li><b>Proposition 38.</b> Let \(p(x)\) be an irreducible polynomial over a
+field \(F\) of characteristic \(p\). Then there exists a unique integer
+\(k\geq0\) and a unique irreducible separable polynomial
+\(p_{sep}(x)\in F[x]\) such that \(p(x)=p_{sep}(x^{p^{k}})\). <span class="missing">Missing from Mizar</span></li>
+<li><p>
+<b>Definition.</b> Let \(p(x)\) be an irreducible polynomial over a field
+of characteristic \(p\). The degree of \(p_{sep}(x)\) in the previous
+proposition is called the <dfn>Separable Degree</dfn> of \(p(x)\),
+denoted \(\deg_{s}p(x)\). <span class="missing">Missing from Mizar</span>
+</p>
+
+<p>
+The integer \(p^{k}\) in the last proposition is called the
+<dfn>Inseparable Degree</dfn> of \(p(x)\), denoted \(\deg_{i}p\). <span class="missing">Missing from Mizar</span>
+</p></li>
+<li><b>Definition.</b> The field \(K\) is said to be <dfn>Separable</dfn> over
+\(F\) if every element of \(K\) is the root of a separable polynomial
+over \(F\).
+(<a href="https://mizar.uwb.edu.pl/version/current/html/field_15.html#T93"><code>field_15:def 5</code></a>)</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-eafd3cf5-1227-448a-83cb-6083ec8711a5" class="outline-3">
+<h3 id="h-eafd3cf5-1227-448a-83cb-6083ec8711a5">&sect;13.6 Cyclotomic Polynomials and Extensions</h3>
+<div class="outline-text-3" id="text-h-eafd3cf5-1227-448a-83cb-6083ec8711a5">
+<ul class="org-ul">
+<li><b>Definition.</b> Let \(\mu_{n}\) denote the <dfn>Group of n-th Roots of Unity</dfn>
+over \(\mathbb{Q}\)
+(<a href="https://mizar.uwb.edu.pl/version/current/html/uniroots.html#K3"><code>uniroots:def 3</code></a>)</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-h-dd46e7b1-85b0-4dd2-89b0-175263e60ad3" class="outline-2">
+<h2 id="h-dd46e7b1-85b0-4dd2-89b0-175263e60ad3">Ch. 14 Galois Theory</h2>
+<div class="outline-text-2" id="text-h-dd46e7b1-85b0-4dd2-89b0-175263e60ad3">
+<p>
+This is actively being formalized by Christoph Schwarzweller and
+friends. So I am deferring transcribing anything until their work is
+done. </p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="postamble">Last Updated 2025-12-29 Mon 12:07</p>
+</div>
+</body>
+</html>
