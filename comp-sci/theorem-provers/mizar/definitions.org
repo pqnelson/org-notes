@@ -173,7 +173,7 @@ definition let X;
   mode Element of X means
   :Def2: it in X if X is non empty
     otherwise it is empty;
-  existency by BOOLE:def 1;
+  existence by BOOLE:def 1;
   consistency;
 end;
 #+end_src
@@ -217,7 +217,7 @@ m1_subset_1(X,Y)))~
 
 Another couple examples, from [[http://www.mizar.org/version/current/mml/binop_1.miz][~binop_1.miz~]]:
 
-#+begin_example
+#+begin_example mizar
 definition
   let A be set; :: loci-declaration
   :: defines a unary operation on A
@@ -246,7 +246,7 @@ The [[http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predicate-Def
 
 An example given:
 
-#+begin_example
+#+begin_example mizar
 definition let X,Y:
   pred X c= Y means
 :: TARSKI:def 3
@@ -299,7 +299,7 @@ negation of ~empty~). The [[http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/sy
 
 Here's an example:
 
-#+begin_example
+#+begin_example mizar
 definition let i be number;
  attr i is even means
   ex j being Integer st i = 2*j;
@@ -319,7 +319,7 @@ formalization of groups in Mizar. The definition of a group appears in
 associative] law of composition). Mizar refers to a ~multMagma~ as a
 magma with a single law of composition.
 
-#+begin_example
+#+begin_example mizar
 definition
   let IT be multMagma;
 
@@ -364,7 +364,7 @@ Functions must define the types of their arguments and the type of their
 result. Several ~<Functor-Properties>~ (like ~commutativity~) can be
 associated with them. The [[http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Functor-Definition][syntax]] is:
 
-#+begin_example
+#+begin_example ebnf
 <Functor-Definition> =
  "func" <Functor-Pattern> [ <Specification> ] [ ( "means" | "equals" ) <Definiens> ] ";"
  <Correctness-Conditions> { <Functor-Property> } .
@@ -377,7 +377,7 @@ and uniqueness.
 
 The example given:
 
-#+begin_example
+#+begin_example mizar
 definition let x be real number;
   func -x -> real number means :Def1: x + it = 0;
   existence by AXIOMS:19;
@@ -420,7 +420,7 @@ Intuitively, a structure is a tuple with named components.
 
 From [[http://www.mizar.org/version/current/mml/algstr_0.miz][~algstr_0.miz~]], we have:
 
-#+begin_example
+#+begin_example mizar
 :: Multiplicative structures
 definition
   struct (1-sorted) multMagma (# carrier -> set,
@@ -457,7 +457,7 @@ attribute for a ~GadgetStr~ structure, then we will find a
 
 Another example of a structure (from [[http://mizar.org/version/current/html/vectsp_1.html#L1][~VECTSP_1~]]), this time using ~over~:
 
-#+begin_example
+#+begin_example mizar
 :: VECTSP_1
 definition
   let F be 1-sorted;
