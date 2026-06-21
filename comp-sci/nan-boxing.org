@@ -79,10 +79,30 @@ to 64 Pebibytes (72.057 Petabytes) of memory.
 For reference:
 - in May 2017, HP announced it built a computer with 160 Terabytes of RAM ([[https://www.bbc.com/news/technology-39936975][BBC]]).
 - The architectural specifications for Intel64 and AMD64 specify 52-bit
-  pointer size for virtual memory addresses.
+  pointer size for virtual memory addresses. At the risk of link-rot,
+  let me link the relevant documents and quote the passages (if possible):
+  - AMD64 architectural specification (well, the [[https://docs.amd.com/v/u/en-US/24593_3.44_APM_Vol2]["programmer's guide"]]
+    version 24593—Rev. 3.44—release date 2026-03-06) states "The AMD64 architecture enhances this support to allow
+    translation of 64-bit virtual addresses into 52-bit physical
+    addresses, although processor implementations can support smaller
+    virtual-address and physical-address spaces." (Section 5.1 physical
+    page 128, pdf page 189)
+  - Intel's specification allows for up to 52-bit physical addresses
+    (see [[https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html][Intel® 64 and IA-32 Architectures Software Developer’s Manual Volume 3A]],
+    table 5-1 on page 5-2). I last checked the volume version number 325462-091US
+    dated March 2026
 - ARMv8.2 has a larger VA space of up to 52-bits, before this ARM had
   48-bit virtual address size. (The bits 63:48 are set to 0 for
   user-space, and 1 for kernel space.)
+  (See [[https://developer.arm.com/documentation/ddi0487/mb/-Part-D-The-AArch64-System-Level-Architecture/-Chapter-D8-The-AArch64-Virtual-Memory-System-Architecture/-D8-1-Address-translation/-D8-1-6-Implemented-physical-address-size?lang=en#mdsec_implemented_physical_address_size][Table D8-5]] of "Arm Architecture Reference Manual for A-profile
+  architecture" Version M.b; I last checked this 21 June 2026)
+- As of today (Sunday 21 June 2026), [[https://www.crucial.com/catalog/memory/ddr4][Crucial]] sells 32 GB DDR4 RAM sticks
+  which can fit in one slot, and high end desktops have 8 slots for RAM,
+  which means that desktops right now can support 256 GB RAM (or $2^{8}$ GB).
+  But the next generation DDR5 RAM octuples the density, meaning we
+  could expect 2 TB of RAM in 8 slots in the next few years. (DDR6 is
+  expected to be released around 2028.) *tl;dr* 2 TB of RAM is the
+  cutting edge for desktops over the next couple years.
 
 I have the feeling we may end up staggering into a false sense of
 security, unwittingly imitating Bill Gates's 1985 remark to InfoWorld,
