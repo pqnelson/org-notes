@@ -1,0 +1,97 @@
+#+TITLE: Parsing Algorithms
+#+AUTHOR: Alex Nelson
+#+EMAIL: pqnelson@gmail.com
+#+DATE: <2024-12-25T07:52:40-08:00>
+#+LANGUAGE: en
+#+OPTIONS: H:5
+#+HTML_DOCTYPE: html5
+#+INCLUDE: ../org-macros.org
+#+HTML_LINK_UP: ./index.html
+#+HTML_LINK_HOME: ../index.html
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+# Created Wednesday December 25, 2024 at  7:52AM
+
+There are many different parsing algorithms, so I am just listing the
+resources I found useful for the ones I was randomly researching.
+
+* Pratt Parsing
+:PROPERTIES:
+:CUSTOM_ID: h-d84a9f67-f883-4e8c-b780-c305cd50d1a6
+:END:
+
+Pratt parsing shines when you need to parse expressions, and they can
+have operators with wildly different precedence inserted at any time.
+
+- Andy Chu, [[https://www.oilshell.org/blog/2016/11/01.html][Pratt Parsing and Precedence Climbing Are the Same Algorithm]]
+  - See also Chu's [[https://www.oilshell.org/blog/2017/03/31.html][Index on Pratt Parsing]]
+- Andy Chu, [[https://www.oilshell.org/blog/2016/11/05.html][Pratt Parsers Can Be Statically Typed]]
+- Theodore Norvell, [[https://www.engr.mun.ca/%7Etheo/Misc/exp_parsing.htm][Parsing Expressions by Recursive Descent]]. Blog post 1999
+- Theodore Norvell, [[https://www.engr.mun.ca/%7Etheo/Misc/pratt_parsing.htm][From Precedence Climbing to Pratt Parsing]]. Blog post 2016
+- Eli Bendersky, [[https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing][Top-Down operator precedence (Pratt) parsing]]
+- Douglas Crockford, [[https://crockford.com/javascript/tdop/tdop.html][Top Down Operator Precedence]]. Blog post dated Feb 21, 2007
+
+* Earley Parser
+:PROPERTIES:
+:CUSTOM_ID: h-6aa4cedf-1c13-4197-b15a-949e48c207d9
+:END:
+
+When you need to parse "some" context-free grammar, but don't have any
+details beyond "it's context-free".
+
+You can also look at LR parsing as an Earley parser restricted to an LR
+grammar: any $LR(k)$ grammar can be parsed in $\mathcal{O}(n)$ time
+(where $n$ is the length of the input string).
+
+The basic idea is to take your input string and work one token (terminal
+symbol) at a time. At position $j$ we build up a set of items $I_{j}$
+representing the state of production used in a possible derivation.
+
+An Earley item looks like $(A\to\beta\bullet\gamma,k)$ which consists of
+1. the production rule $A\to\beta\gamma$ with a dot located on the right-hand
+   side to show how much has been used thus far; and
+2. the position $k$ in the input where the parsing of the nonterminal
+   $A$ started (in terms of the number of tokens read up to that point).
+
+That's then used to build up all possible derivations. It starts by
+initializing the set $I_{0}$ to the rule $(S'\to\bullet S,0)$ where $S$
+is the start symbol for the grammar and $S'$ is a new artificial symbol
+introduced to simpify the algorithm. If the algorithm successfully
+parses the input $a_{0}a_{1}\cdots a_{n-1}$, then the item $(S'\to S\bullet,0)$
+appears in the set $I_{n}$.
+
+There are three possible rules guiding the algorithm:
+
+- *Scan:* if the set $I_{j}$ contains $(A\to\beta\bullet c\delta,k)$
+  where $c=a_{j}$, then the item $(A\to\beta c\bullet\delta,k)$ is added
+  to $I_{j+1}$. These can be done as the final actions at a given input
+  position since they do not affect $I_{j}$
+- *Predict:* if $I_{j}$ contains an item $(A\to\beta\bullet C\delta,k)$,
+  then for each production rule $C\to\gamma$ in the grammar, an item
+  $(C\to\bullet\gamma,j)$ is added to $I_{j}$; this can propagate to
+  require more predict steps, when $\gamma$ starts with a nonterminal.
+- *Complete:* If the set $I_{j}$ contains a completed item $(C\to\gamma\bullet,k)$,
+  then for each item of the form $(A\to\beta\bullet C\delta,\ell)$ in $I_{k}$,
+  we add an item $(A\to\beta C\bullet\delta,\ell)$ to $I_{j}$.
+
+The only problem is that, for ambiguous grammars, this gives us a
+*recognizer* (i.e., a function which returns =true= if the string
+belongs to the language and =false= otherwise), not a *parser* (i.e., a
+function which constructs some kind of syntax tree).
+
+We could choose to work with "whatever parses first", but there are
+other hacks to make it into a parser.
+
+Now some references:
+
+- Loup Vaillant's [[https://loup-vaillant.fr/tutorials/earley-parsing/][Earley parsing explained]] blog post series
+- Rahul Gopinath's [[https://rahul.gopinath.org/post/2021/02/06/earley-parsing/][Earley Parser]] in python
+- Haskell has an [[https://github.com/ollef/Earley][Earley]] library
+- Elizabeth Scott,\\
+  "SPPF-Style Parsing From Earley Recognisers".\\
+  {{{doi(10.1016/j.entcs.2008.03.044)}}}, 2008, 15 pages
+- [[https://www.cs.cornell.edu/courses/cs4120/2021sp/notes.html?id=bottomup][Bottom-Up parsing]], Cornell University CS 4120 Spring 2021
+  Introduction to Compilers
+- Isabelle's [[https://github.com/isabelle-prover/mirror-isabelle/blob/14161c6b87e111da50c0e667ecb63bfdfb7e1292/src/Pure/Syntax/parser.ML][implementation]] of an Earley parser
+- Philippe McLean & R. Nigel Horspool,\\
+  "A Faster Earley Parser".\\
+  [[https://webhome.cs.uvic.ca/~nigelh/Publications/fastEarley.pdf][PDF]]
