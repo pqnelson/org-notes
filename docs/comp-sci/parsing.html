@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Function - Mizar</title>
+<title>Parsing Algorithms</title>
 <meta name="author" content="Alex Nelson" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
@@ -220,7 +220,7 @@
 \newcommand{\BDplus}{-}
 \newcommand{\BDminus}{+}
 \)</div>
-<link rel="stylesheet" type="text/css" href="../../../css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 <script>
   window.MathJax = {
     loader: {source: { '[tex]/amsCd': '[tex]/amscd',
@@ -261,103 +261,135 @@
 <div id="org-div-home-and-up">
  <a accesskey="h" href="./index.html"> UP </a>
  |
- <a accesskey="H" href="../../../index.html"> HOME </a>
+ <a accesskey="H" href="../index.html"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">Function - Mizar</h1>
+<h1 class="title">Parsing Algorithms</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#h-c888a6ba-af90-4e56-b83f-f67a07d89ca9">1. Introduction</a></li>
-<li><a href="#h-26a2d1bb-1db8-46bd-b0db-e0174ba3969e">2. Mizar Implementation</a></li>
-<li><a href="#h-e5773fc3-f7fb-4860-a14b-605092eb89d9">3. Functions to Empty Sets</a></li>
+<li><a href="#h-d84a9f67-f883-4e8c-b780-c305cd50d1a6">1. Pratt Parsing</a></li>
+<li><a href="#h-6aa4cedf-1c13-4197-b15a-949e48c207d9">2. Earley Parser</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-h-c888a6ba-af90-4e56-b83f-f67a07d89ca9" class="outline-2">
-<h2 id="h-c888a6ba-af90-4e56-b83f-f67a07d89ca9"><span class="section-number-2">1.</span> Introduction</h2>
-<div class="outline-text-2" id="text-h-c888a6ba-af90-4e56-b83f-f67a07d89ca9">
 <p>
-In Mizar, if <code>A</code> and <code>B</code> are sets, we can form the type <code>Function of A,B</code>
-which describes something like \(f\colon A\to B\).
+There are many different parsing algorithms, so I am just listing the
+resources I found useful for the ones I was randomly researching.
+</p>
+<div id="outline-container-h-d84a9f67-f883-4e8c-b780-c305cd50d1a6" class="outline-2">
+<h2 id="h-d84a9f67-f883-4e8c-b780-c305cd50d1a6"><span class="section-number-2">1.</span> Pratt Parsing</h2>
+<div class="outline-text-2" id="text-h-d84a9f67-f883-4e8c-b780-c305cd50d1a6">
+<p>
+Pratt parsing shines when you need to parse expressions, and they can
+have operators with wildly different precedence inserted at any time.
+</p>
+
+<ul class="org-ul">
+<li>Andy Chu, <a href="https://www.oilshell.org/blog/2016/11/01.html">Pratt Parsing and Precedence Climbing Are the Same Algorithm</a>
+<ul class="org-ul">
+<li>See also Chu's <a href="https://www.oilshell.org/blog/2017/03/31.html">Index on Pratt Parsing</a></li>
+</ul></li>
+<li>Andy Chu, <a href="https://www.oilshell.org/blog/2016/11/05.html">Pratt Parsers Can Be Statically Typed</a></li>
+<li>Theodore Norvell, <a href="https://www.engr.mun.ca/%7Etheo/Misc/exp_parsing.htm">Parsing Expressions by Recursive Descent</a>. Blog post 1999</li>
+<li>Theodore Norvell, <a href="https://www.engr.mun.ca/%7Etheo/Misc/pratt_parsing.htm">From Precedence Climbing to Pratt Parsing</a>. Blog post 2016</li>
+<li>Eli Bendersky, <a href="https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing">Top-Down operator precedence (Pratt) parsing</a></li>
+<li>Douglas Crockford, <a href="https://crockford.com/javascript/tdop/tdop.html">Top Down Operator Precedence</a>. Blog post dated Feb 21, 2007</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-h-6aa4cedf-1c13-4197-b15a-949e48c207d9" class="outline-2">
+<h2 id="h-6aa4cedf-1c13-4197-b15a-949e48c207d9"><span class="section-number-2">2.</span> Earley Parser</h2>
+<div class="outline-text-2" id="text-h-6aa4cedf-1c13-4197-b15a-949e48c207d9">
+<p>
+When you need to parse "some" context-free grammar, but don't have any
+details beyond "it's context-free".
 </p>
 
 <p>
-There is some subtlety here, because modern mathematics describes a
-function \(f\colon A\to B\) as a subset \(f\subseteq A\times B\) such that:
+You can also look at LR parsing as an Earley parser restricted to an LR
+grammar: any \(LR(k)\) grammar can be parsed in \(\mathcal{O}(n)\) time
+(where \(n\) is the length of the input string).
 </p>
 
+<p>
+The basic idea is to take your input string and work one token (terminal
+symbol) at a time. At position \(j\) we build up a set of items \(I_{j}\)
+representing the state of production used in a possible derivation.
+</p>
+
+<p>
+An Earley item looks like \((A\to\beta\bullet\gamma,k)\) which consists of
+</p>
 <ol class="org-ol">
-<li>for each \(a\in A\), there exists a \(b\in B\) such that \((a,b)\in f\); and</li>
-<li>for each \(a\in A\) and \(b_{1},b_{2}\in B\), if \((a,b_{1})\in f\) and
-\((a,b_{2})\in f\), then we have \(b_{1} = b_{2}\)</li>
+<li>the production rule \(A\to\beta\gamma\) with a dot located on the right-hand
+side to show how much has been used thus far; and</li>
+<li>the position \(k\) in the input where the parsing of the nonterminal
+\(A\) started (in terms of the number of tokens read up to that point).</li>
 </ol>
-</div>
-</div>
-<div id="outline-container-h-26a2d1bb-1db8-46bd-b0db-e0174ba3969e" class="outline-2">
-<h2 id="h-26a2d1bb-1db8-46bd-b0db-e0174ba3969e"><span class="section-number-2">2.</span> Mizar Implementation</h2>
-<div class="outline-text-2" id="text-h-26a2d1bb-1db8-46bd-b0db-e0174ba3969e">
-<p>
-Mizar defines <code>Function of X,Y</code> as a <a href="http://mizar.uwb.edu.pl/version/current/html/funct_2.html#NM1"><code>quasi_total PartFunc of X,Y</code></a>.
-A <a href="http://mizar.uwb.edu.pl/version/current/html/partfun1.html#NM1"><code>PartFunc of X,Y</code></a> is defined as a <code>Function-like Relation of X,Y</code>,
-where <code>Function-like</code> literally encodes that second condition
-(uniqueness of image):
-</p>
-
-<div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
-  <span class="org-mizar-skeleton">let</span> X <span class="org-mizar-normal">be</span> set;
-  <span class="org-mizar-normal">attr</span> X <span class="org-mizar-normal">is</span> Function-like <span class="org-mizar-normal">means</span> :Def1: <span class="org-comment-delimiter">:: </span><span class="org-comment">FUNCT_1:def 1</span>
-  <span class="org-mizar-formula">for</span> x, y1, y2 <span class="org-mizar-formula">being</span> object
-  <span class="org-mizar-formula">st</span> [x,y1] in X <span class="org-mizar-formula">&amp;</span> [x,y2] in X
-  <span class="org-mizar-formula">holds</span> y1 = y2;
-<span class="org-mizar-block">end</span>;
-</pre>
-</div>
 
 <p>
-The <a href="http://mizar.uwb.edu.pl/version/current/html/relset_1.html#NM1"><code>Relation of X,Y</code></a> is just a <code>Subset of [:X,Y:]</code>
-(a subset of \(X\times Y\)).
+That's then used to build up all possible derivations. It starts by
+initializing the set \(I_{0}\) to the rule \((S'\to\bullet S,0)\) where \(S\)
+is the start symbol for the grammar and \(S'\) is a new artificial symbol
+introduced to simpify the algorithm. If the algorithm successfully
+parses the input \(a_{0}a_{1}\cdots a_{n-1}\), then the item \((S'\to S\bullet,0)\)
+appears in the set \(I_{n}\).
 </p>
 
 <p>
-And <code>quasi_total</code> is defined as:
+There are three possible rules guiding the algorithm:
 </p>
 
-<div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
-  <span class="org-mizar-skeleton">let</span> X, Y <span class="org-mizar-normal">be</span> set;
-  <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-normal">be</span> Relation <span class="org-mizar-normal">of</span> X,Y;
-  <span class="org-mizar-normal">attr</span> R <span class="org-mizar-normal">is</span> quasi_total <span class="org-mizar-normal">means</span> :Def1: <span class="org-comment-delimiter">:: </span><span class="org-comment">FUNCT_2:def 1</span>
-  X = dom R <span class="org-mizar-normal">if</span> Y &lt;&gt; {}
-  <span class="org-mizar-normal">otherwise</span> R = {};
-  <span class="org-mizar-normal">consistency</span>;
-<span class="org-mizar-block">end</span>; 
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-h-e5773fc3-f7fb-4860-a14b-605092eb89d9" class="outline-2">
-<h2 id="h-e5773fc3-f7fb-4860-a14b-605092eb89d9"><span class="section-number-2">3.</span> Functions to Empty Sets</h2>
-<div class="outline-text-2" id="text-h-e5773fc3-f7fb-4860-a14b-605092eb89d9">
+<ul class="org-ul">
+<li><b>Scan:</b> if the set \(I_{j}\) contains \((A\to\beta\bullet c\delta,k)\)
+where \(c=a_{j}\), then the item \((A\to\beta c\bullet\delta,k)\) is added
+to \(I_{j+1}\). These can be done as the final actions at a given input
+position since they do not affect \(I_{j}\)</li>
+<li><b>Predict:</b> if \(I_{j}\) contains an item \((A\to\beta\bullet C\delta,k)\),
+then for each production rule \(C\to\gamma\) in the grammar, an item
+\((C\to\bullet\gamma,j)\) is added to \(I_{j}\); this can propagate to
+require more predict steps, when \(\gamma\) starts with a nonterminal.</li>
+<li><b>Complete:</b> If the set \(I_{j}\) contains a completed item \((C\to\gamma\bullet,k)\),
+then for each item of the form \((A\to\beta\bullet C\delta,\ell)\) in \(I_{k}\),
+we add an item \((A\to\beta C\bullet\delta,\ell)\) to \(I_{j}\).</li>
+</ul>
+
 <p>
-This means that \(f\colon X\to\emptyset\) is implicitly empty, and
-therefore equal to \(\operatorname{id}_{\emptyset}\). Mizar proves this in
-Theorem <a href="http://mizar.uwb.edu.pl/version/current/html/funct_2.html#T130"><code>FUNCT_2:130</code></a> (proving \(f\colon A\to\emptyset\implies f=\emptyset\)) and 
-Theorem <a href="http://mizar.uwb.edu.pl/version/current/html/relat_1.html#T55"><code>RELAT_1:55</code></a> (proving
-\(\operatorname{id}_{\emptyset}=\emptyset\)).
+The only problem is that, for ambiguous grammars, this gives us a
+<b>recognizer</b> (i.e., a function which returns <code>true</code> if the string
+belongs to the language and <code>false</code> otherwise), not a <b>parser</b> (i.e., a
+function which constructs some kind of syntax tree).
 </p>
 
 <p>
-Sadly, a consequence of this choice, is that we often will need to
-include premises like "For any \(f\colon X\to Y\) such that
-(\(Y=\emptyset\implies X=\emptyset\)) we have \(P[f]\)".
+We could choose to work with "whatever parses first", but there are
+other hacks to make it into a parser.
 </p>
+
+<p>
+Now some references:
+</p>
+
+<ul class="org-ul">
+<li>Loup Vaillant's <a href="https://loup-vaillant.fr/tutorials/earley-parsing/">Earley parsing explained</a> blog post series</li>
+<li>Rahul Gopinath's <a href="https://rahul.gopinath.org/post/2021/02/06/earley-parsing/">Earley Parser</a> in python</li>
+<li>Haskell has an <a href="https://github.com/ollef/Earley">Earley</a> library</li>
+<li>Elizabeth Scott,<br>
+"SPPF-Style Parsing From Earley Recognisers".<br>
+doi:<a href="https://doi.org/10.1016/j.entcs.2008.03.044">10.1016/j.entcs.2008.03.044</a>, 2008, 15 pages</li>
+<li><a href="https://www.cs.cornell.edu/courses/cs4120/2021sp/notes.html?id=bottomup">Bottom-Up parsing</a>, Cornell University CS 4120 Spring 2021
+Introduction to Compilers</li>
+<li>Isabelle's <a href="https://github.com/isabelle-prover/mirror-isabelle/blob/14161c6b87e111da50c0e667ecb63bfdfb7e1292/src/Pure/Syntax/parser.ML">implementation</a> of an Earley parser</li>
+<li>Philippe McLean &amp; R. Nigel Horspool,<br>
+"A Faster Earley Parser".<br>
+<a href="https://webhome.cs.uvic.ca/~nigelh/Publications/fastEarley.pdf">PDF</a></li>
+</ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated: Thu, 18 Jun 2026 07:19:50 -0700
+<p class="postamble">Last Updated: Sun, 21 Jun 2026 07:22:25 -0700
 </div>
 </body>
 </html>
