@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -288,14 +289,14 @@ structure (if at all):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">MONOID</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">MONOID</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>;
   <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t;
   <span class="org-keyword">val</span> <span class="org-variable-name">append</span> : 'a t -&gt; 'a t -&gt; 'a t;
   <span class="org-keyword">val</span> <span class="org-variable-name">concat</span> : 'a t list -&gt; 'a t;
   <span class="org-comment-delimiter">(* </span><span class="org-comment">fun concat xs = List.foldr append empty xs</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -309,10 +310,10 @@ The laws it needs to satisfy:
 </ul>
 
 <p>
-&#x2026;and that's it.
+&hellip;and that's it.
 </p>
 
-<div class="danger" id="org718e560">
+<div class="danger" id="org6c6a78d">
 <p>
 Care must be taken with the signature, since Haskell is more flexible
 in its ability to allow quantifiers. If we want to be faithful to
@@ -350,7 +351,7 @@ the monoid signature.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">List</span> = <span class="org-keyword">struct</span>
+<pre class="src src-sml"><code><span class="org-keyword">structure</span> <span class="org-module-def">List</span> = <span class="org-keyword">struct</span>
   <span class="org-keyword">open</span> List;
   <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span> = 'a list;
   <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> = nil;
@@ -363,7 +364,7 @@ the monoid signature.
   <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t = <span class="org-string">""</span>;
   <span class="org-keyword">fun</span> <span class="org-function-name">append</span> (xs : 'a t) (ys : 'a t) : 'a t = xs ^ ys;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>

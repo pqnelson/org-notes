@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -319,7 +320,7 @@
 </ul>
 </div>
 </div>
-<div class="remark" id="orgb6c86d3">
+<div class="remark" id="org60b197a">
 <p>
 This page has gotten a little unruly. I might refactor out the
 discussion of the Core and Module language into a separate tutorial
@@ -373,9 +374,9 @@ constants.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 3.14159; <span class="org-comment-delimiter">(* </span><span class="org-comment">A declaration without a type annotation</span><span class="org-comment-delimiter"> *</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column">)</span></span>
+<pre class="src src-sml"><code><span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 3.14159; <span class="org-comment-delimiter">(* </span><span class="org-comment">A declaration without a type annotation</span><span class="org-comment-delimiter"> *</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column">)</span></span>
 <span class="org-keyword">val</span> <span class="org-variable-name">tau</span> : real = 6.28318; <span class="org-comment-delimiter">(* </span><span class="org-comment">An annotated declaration</span><span class="org-comment-delimiter"> *)</span>
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -389,8 +390,8 @@ take a tuple and produce a value.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> cylinder_volume(r,h) = pi*r*r*h;
-</pre>
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> cylinder_volume(r,h) = pi*r*r*h;
+</code></pre>
 </div>
 
 <p>
@@ -398,8 +399,8 @@ We can optionally annotate each parameter with its type:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> cyl_vol2(r : real, h : real) = pi*r*r*h;
-</pre>
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> cyl_vol2(r : real, h : real) = pi*r*r*h;
+</code></pre>
 </div>
 
 <p>
@@ -407,8 +408,8 @@ We can optionally annotate the result
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> cyl_vol3(r,h) : real = pi*r*r*h;
-</pre>
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> cyl_vol3(r,h) : real = pi*r*r*h;
+</code></pre>
 </div>
 
 <p>
@@ -416,8 +417,8 @@ We can use curried versions:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">cyl_vol4</span> r h = pi*r*r*h;
-</pre>
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">cyl_vol4</span> r h = pi*r*r*h;
+</code></pre>
 </div>
 
 <p>
@@ -426,8 +427,8 @@ parenthetize each argument to declare its type:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">cyl_vol5</span> (r : real) (h : real) = pi*r*r*h;
-</pre>
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">cyl_vol5</span> (r : real) (h : real) = pi*r*r*h;
+</code></pre>
 </div>
 
 <p>
@@ -451,14 +452,14 @@ available at the time. For example:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 3.14159;
+<pre class="src src-sml"><code><span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 3.14159;
 
 <span class="org-keyword">fun</span> area(r) = pi*r*r;
 
 <span class="org-keyword">val</span> <span class="org-variable-name">pi</span> = 1.0; <span class="org-comment-delimiter">(* </span><span class="org-comment">redefinitions are allowed</span><span class="org-comment-delimiter"> *)</span>
 
 area(1.0);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -495,19 +496,19 @@ intended.</li>
 </ol>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">select : int -&gt; int</span>
-<span class="org-comment">   REQUIRES: true</span>
-<span class="org-comment">   ENSURES: select(x) returns</span>
-<span class="org-comment">                      0 if x = 1,</span>
-<span class="org-comment">                      x if x &lt; 1,</span>
-<span class="org-comment">                      and x*x if x &gt; 1.</span>
-<span class="org-comment-delimiter">*)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">select : int -&gt; int
+   REQUIRES: true
+   ENSURES: select(x) returns
+                      0 if x = 1,
+                      x if x &lt; 1,
+                      and x*x if x &gt; 1.</span><span class="org-comment-delimiter">
+*)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">select</span> (x:int):int =
     (<span class="org-keyword">case</span> (square x, x &gt; 0) <span class="org-keyword">of</span>
          (1, true) =&gt; 0
        | (_, false) =&gt; x
        | (sqr, _) =&gt; sqr)
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -566,12 +567,12 @@ existing type, the other is to construct an algebraic data type.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Identifier</span> = string;
+<pre class="src src-sml"><code><span class="org-keyword">type</span> <span class="org-type-def">Identifier</span> = string;
 
 <span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> = Var <span class="org-keyword">of</span> Identifier
               | Abs <span class="org-keyword">of</span> (Expr*Expr)
               | App <span class="org-keyword">of</span> (Expr*Expr);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -585,7 +586,7 @@ row by an "<code>of</code>" keyword.
 we have <code>int list</code>.
 </p>
 
-<div class="remark" id="org3149ce9">
+<div class="remark" id="orgc5d66f5">
 <p>
 Unlike Haskell, if we want to have a parametrized type, we need to
 include the apostrophe, e.g., <code>datatype 'a Foo = Bar of ('a * int)</code>.
@@ -602,7 +603,7 @@ field by name rather than by its position.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">person</span> : {name:string,
+<pre class="src src-sml"><code><span class="org-keyword">type</span> <span class="org-type-def">person</span> : {name:string,
                age:int,
                born:int,
                occupation:string};
@@ -612,7 +613,7 @@ field by name rather than by its position.
                       occupation = <span class="org-string">"Master of the Universe"</span>};
 
 print (#occupation harry); <span class="org-comment-delimiter">(* </span><span class="org-comment">prints "Master of the Universe" </span><span class="org-comment"><span class="org-highlight-beyond-fill-column">to screen</span></span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column"> *)</span></span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -622,7 +623,7 @@ error alerting us about an unresolved flexible record type.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-rml">fun is_nice ({occupation,...} : person) =
+<pre class="src src-rml"><code>fun is_nice ({occupation,...} : person) =
     occupation="Barista" orelse occupation="Cook";
 
 (* alternatively *)
@@ -632,7 +633,7 @@ let
 in
     occupation="Barista" orelse occupation="Cook"
 end;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -650,7 +651,7 @@ number of symbols involved "by cases":
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Identifier</span> = string;
+<pre class="src src-sml"><code><span class="org-keyword">type</span> <span class="org-type-def">Identifier</span> = string;
 
 <span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> = Var <span class="org-keyword">of</span> Identifier
               | Abs <span class="org-keyword">of</span> (Expr*Expr)
@@ -659,7 +660,7 @@ number of symbols involved "by cases":
 <span class="org-keyword">fun</span> expr_length(Var id) = 1
   | expr_length(Abs(e1, e2)) = expr_length e1 + expr_length e2<span class="org-highlight-beyond-fill-column"> + 1</span>
   | expr_length(App(e1, e2)) = expr_length e1 + expr_length e2<span class="org-highlight-beyond-fill-column">;</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -669,10 +670,10 @@ an expression, we could write:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> abs_count(Abs(e1, e2)) = 1 + abs_count e1 + abs_count e2
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> abs_count(Abs(e1, e2)) = 1 + abs_count e1 + abs_count e2
   | abs_count(App(e1, e2)) = abs_count e1 + abs_count e2
   | _ = 0;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -688,14 +689,14 @@ example:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">iref</span> : int ref;
+<pre class="src src-sml"><code><span class="org-keyword">val</span> <span class="org-variable-name">iref</span> : int ref;
 
 iref := 3; <span class="org-comment-delimiter">(* </span><span class="org-comment">initialize the ref</span><span class="org-comment-delimiter"> *)</span>
 
 iref := !iref - 1; <span class="org-comment-delimiter">(* </span><span class="org-comment">update the ref</span><span class="org-comment-delimiter"> *)</span>
 
 <span class="org-keyword">val</span> <span class="org-variable-name">foo</span> : int = (!iref)*7; <span class="org-comment-delimiter">(* </span><span class="org-comment">use the ref</span><span class="org-comment-delimiter"> *)</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -734,7 +735,7 @@ for a newline character, or <code>#"\uxxxx"</code> where <code>xxxx</code> are 4
 There are about a dozen primitive exceptions defined:
 </p>
 
-<pre class="example" id="orgfa3242f">
+<pre class="example" id="org02663fb">
 exception Bind
 exception Chr
 exception Div
@@ -885,7 +886,7 @@ for multiplication is higher than addition, and division is higher than
 addition.
 </p>
 
-<div class="remark" id="org40dd0ee">
+<div class="remark" id="orgffb542e">
 <p>
 There's a lot more functionality provided by the Standard ML built-in
 library, but the rest seem to be contained in modules.
@@ -910,14 +911,14 @@ minimum. For example,
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">Foo</span> = <span class="org-keyword">struct</span>
+<pre class="src src-sml"><code><span class="org-keyword">structure</span> <span class="org-module-def">Foo</span> = <span class="org-keyword">struct</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">foo</span> = [];
     <span class="org-keyword">fun</span> <span class="org-function-name">spam</span> q::qs = 1 + spam qs
       | spam    [] = 0;
 <span class="org-keyword">end</span>;
 
 Foo.span Foo.foo; <span class="org-comment-delimiter">(* </span><span class="org-comment">=&gt; 0</span><span class="org-comment-delimiter"> *)</span>
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-41283ae2-b29d-4a49-8ce1-dfd108f47ce7" class="outline-3">
@@ -929,7 +930,7 @@ signature is interpreted as a specification.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">QUEUE</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">QUEUE</span> = <span class="org-keyword">sig</span>
     <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span>; <span class="org-comment-delimiter">(* </span><span class="org-comment">type of queues</span><span class="org-comment-delimiter"> *)</span>
     <span class="org-keyword">exception</span> E; <span class="org-comment-delimiter">(* </span><span class="org-comment">for errors</span><span class="org-comment-delimiter"> *)</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">empty</span> : 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">the empty queue</span><span class="org-comment-delimiter"> *)</span>
@@ -938,7 +939,7 @@ signature is interpreted as a specification.
     <span class="org-keyword">val</span> <span class="org-variable-name">hd</span> : 'a t -&gt; 'a; <span class="org-comment-delimiter">(* </span><span class="org-comment">return the front of the queue</span><span class="org-comment-delimiter"> *)</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">deq</span> : 'a t -&gt; 'a t; <span class="org-comment-delimiter">(* </span><span class="org-comment">remove the front of the queue</span><span class="org-comment-delimiter"> *</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column">)</span></span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -959,7 +960,7 @@ We can "implement" a queue by making the types declared in the signature
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">Q1</span> : QUEUE = <span class="org-keyword">struct</span>
+<pre class="src src-sml"><code><span class="org-keyword">structure</span> <span class="org-module-def">Q1</span> : QUEUE = <span class="org-keyword">struct</span>
     <span class="org-keyword">type</span> 'a <span class="org-type-def">t</span> = 'a list;
     <span class="org-keyword">exception</span> E;
 
@@ -998,19 +999,19 @@ We can "implement" a queue by making the types declared in the signature
 List.null Q1.empty; <span class="org-comment-delimiter">(* </span><span class="org-comment">evaluates to "true"</span><span class="org-comment-delimiter"> *)</span>
 
 List.null Q2.empty; <span class="org-comment-delimiter">(* </span><span class="org-comment">ERROR!!!</span><span class="org-comment-delimiter"> *)</span>
-<span class="org-comment-delimiter">(* </span><span class="org-comment">In SML/NJ we get:</span>
+<span class="org-comment-delimiter">(* </span><span class="org-comment">In SML/NJ we get:
 
-<span class="org-comment">stdIn:7.1-7.19 Error: operator and operand do not agree [tycon</span><span class="org-comment"><span class="org-highlight-beyond-fill-column"> mismatch]</span></span>
-<span class="org-comment">  operator domain: 'Z list</span>
-<span class="org-comment">  operand:         'Y Q3.t</span>
-<span class="org-comment">  in expression:</span>
-<span class="org-comment">    List.null Q3.empty</span>
+stdIn:7.1-7.19 Error: operator and operand do not agree [tycon</span><span class="org-comment"><span class="org-highlight-beyond-fill-column"> mismatch]</span></span><span class="org-comment">
+  operator domain: 'Z list
+  operand:         'Y Q3.t
+  in expression:
+    List.null Q3.empty
 
-<span class="org-comment">In HaMLet:</span>
+In HaMLet:
 
-<span class="org-comment">(input 2):1.0-1.18: type mismatch on application</span>
-<span class="org-comment-delimiter">*)</span>
-</pre>
+(input 2):1.0-1.18: type mismatch on application</span><span class="org-comment-delimiter">
+*)</span>
+</code></pre>
 </div>
 
 <p>
@@ -1041,7 +1042,7 @@ With opaque signature ascription! We have
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">KERNEL</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">KERNEL</span> = <span class="org-keyword">sig</span>
     <span class="org-keyword">type</span> <span class="org-type-def">thm</span>;
     <span class="org-keyword">type</span> <span class="org-type-def">context</span>;
 
@@ -1055,7 +1056,7 @@ With opaque signature ascription! We have
 
     <span class="org-comment-delimiter">(* </span><span class="org-comment">inference rules omitted</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -1087,7 +1088,7 @@ The folklore result that you only really need <code>map</code>,
 <ul class="org-ul">
 <li>Erik Meijer, Maarten Fokkinga, and Ross Paterson,<br>
 "Functional Programming with Bananas, Lenses, Envelopes and Barbed Wire".<br>
-In <i>Conference on functional programming languages and computer architecture</i> (pp. 124&#x2013;144). Berlin, Heidelberg: Springer Berlin Heidelberg.
+In <i>Conference on functional programming languages and computer architecture</i> (pp. 124&ndash;144). Berlin, Heidelberg: Springer Berlin Heidelberg.
 <a href="https://maartenfokkinga.github.io/utwente/mmf91m.pdf">PDF</a>.</li>
 </ul>
 
@@ -1104,7 +1105,7 @@ Earlier work:
 <ul class="org-ul">
 <li>Tatsuya Hagino,<br>
 "Codatatypes in ML."
-<i>Journal of symbolic computation</i> <b>8</b>, no. 6 (1989) 629&#x2013;650.</li>
+<i>Journal of symbolic computation</i> <b>8</b>, no. 6 (1989) 629&ndash;650.</li>
 </ul>
 
 <p>
@@ -1251,20 +1252,20 @@ follows.
 </p>
 
 <p>
-&#x2026;
+&hellip;
 </p>
 
 <ul class="org-ul">
 <li><b>61.</b> Plotkin,  G. D. (1977),<br>
 "LCF as  a programming language",<br>
-<i>Theoret.Comput.Sci.</i> <b>5</b>,  223&#x2013;255.</li>
+<i>Theoret.Comput.Sci.</i> <b>5</b>,  223&ndash;255.</li>
 <li><b>65.</b> Sazonov, V. Yu. (1975),<br>
 "Sequentiality and parallely computable functionals",<br>
 in ``Proc.Symp.Lambda Calculus and Computer Science Theory,''
 Lecture Notes in Computer Science, Vol.37, Springer-Verlag,  Berlin/New York.</li>
 <li><b>67.</b> Sazonov, V. Yu. (1976),<br>
 "Expressibility of functions in Scott's LCF language",<br>
-Algebra i Logika <b>15</b>, 308&#x2013;330.</li>
+Algebra i Logika <b>15</b>, 308&ndash;330.</li>
 </ul>
 </blockquote>
 
@@ -1334,7 +1335,7 @@ be lazy, not eager.</li>
 </ul></li>
 <li>Robin Milner,<br>
 "Fully abstract models of typed lambda-calculi".
-<i>Theoretical Computer Science</i> <b>4</b>, no.1 (1977) 1&#x2013;22,
+<i>Theoretical Computer Science</i> <b>4</b>, no.1 (1977) 1&ndash;22,
 <a href="https://www.research.ed.ac.uk/en/publications/fully-abstract-models-of-typed-%CE%BB-calculi">Eprint</a>
 <ul class="org-ul">
 <li>Arguably, any purely functional programming language should satisfy

@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -288,7 +289,7 @@
 </li>
 <li><a href="#h-f5b3ca7f-2d1e-42ad-a914-d73877c1f0a6">4. Equation Indent</a></li>
 <li><a href="#h-cdd388f8-d89c-4cd0-a3d3-0c91c59cc4cc">5. AMSPPT</a></li>
-<li><a href="#org6f401f1">6. References and Links</a></li>
+<li><a href="#orgabbfbd4">6. References and Links</a></li>
 </ul>
 </div>
 </div>
@@ -342,17 +343,17 @@ one needs to redefine <code>\bye</code> to be something like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-tex"><span class="org-keyword">\def</span>\<span class="org-function-name">makeatletter</span>{<span class="org-keyword">\catcode</span>`<span class="org-keyword">\@</span>11<span class="org-keyword">\relax</span>}
+<pre class="src src-tex"><code><span class="org-keyword">\def</span>\<span class="org-function-name">makeatletter</span>{<span class="org-keyword">\catcode</span>`<span class="org-keyword">\@</span>11<span class="org-keyword">\relax</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">makeatother</span>{<span class="org-keyword">\catcode</span>`<span class="org-keyword">\@</span>12<span class="org-keyword">\relax</span>}
 <span class="org-keyword">\makeatletter</span>
 <span class="org-keyword">\let\@@end\end</span>
 <span class="org-keyword">\outer\def\bye</span>{<span class="org-keyword">\par\vfill\supereject\@@end</span>}
 
-<span class="org-comment-delimiter">% </span><span class="org-comment">define environment syntax</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">begin</span>#1{<span class="org-keyword">\begingroup\csname</span>#1<span class="org-keyword">\endcsname</span>}
+<span class="org-comment-delimiter">% </span><span class="org-comment">define environment syntax
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">begin</span>#1{<span class="org-keyword">\begingroup\csname</span>#1<span class="org-keyword">\endcsname</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">end</span>#1{<span class="org-keyword">\csname</span> end#1<span class="org-keyword">\endcsname\endgroup</span>}
 <span class="org-keyword">\makeatother</span>
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-d37b46ee-efb8-4b81-8c1c-0afc91010dbb" class="outline-4">
@@ -363,48 +364,48 @@ In <code>latex.ltx</code> around lines 4400, we find
 </p>
 
 <div class="org-src-container">
-<pre class="src src-tex"><span class="org-keyword">\DeclareRobustCommand\begin</span>[1]{<span class="org-comment">%</span>
-<span class="org-function-name">  \@ifundefined{#1}</span><span class="org-comment">%</span>
-<span class="org-function-name">    {\def\reserved@a{\@latex@error{Environment #1 undefined}\@eha}</span>}<span class="org-comment">%</span>
-    {<span class="org-keyword">\def\reserved@a</span>{<span class="org-keyword">\def\@currenvir</span>{#1}<span class="org-comment">%</span>
-     <span class="org-keyword">\edef\@currenvline</span>{<span class="org-keyword">\on@line</span>}<span class="org-comment">%</span>
-     <span class="org-keyword">\csname</span> #1<span class="org-keyword">\endcsname</span>}}<span class="org-comment">%</span>
-  <span class="org-keyword">\@ignorefalse</span>
+<pre class="src src-tex"><code><span class="org-keyword">\DeclareRobustCommand\begin</span>[1]{<span class="org-comment">%
+</span><span class="org-function-name">  \@ifundefined{#1}</span><span class="org-comment">%
+</span><span class="org-function-name">    {\def\reserved@a{\@latex@error{Environment #1 undefined}\@eha}</span>}<span class="org-comment">%
+</span>    {<span class="org-keyword">\def\reserved@a</span>{<span class="org-keyword">\def\@currenvir</span>{#1}<span class="org-comment">%
+</span>     <span class="org-keyword">\edef\@currenvline</span>{<span class="org-keyword">\on@line</span>}<span class="org-comment">%
+</span>     <span class="org-keyword">\csname</span> #1<span class="org-keyword">\endcsname</span>}}<span class="org-comment">%
+</span>  <span class="org-keyword">\@ignorefalse</span>
   <span class="org-keyword">\begingroup\@endpefalse\reserved@a</span>}
 <span class="org-keyword">\edef\end</span>
-  {<span class="org-keyword">\unexpanded</span>{<span class="org-comment">%</span>
-     <span class="org-keyword">\romannumeral</span>
+  {<span class="org-keyword">\unexpanded</span>{<span class="org-comment">%
+</span>     <span class="org-keyword">\romannumeral</span>
        <span class="org-keyword">\ifx\protect\@typeset@protect</span>
-       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1</span>
-         <span class="org-keyword">\expandafter</span>        <span class="org-comment">%2</span>
-       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1</span>
-           <span class="org-keyword">\expandafter</span>         <span class="org-comment">%3 expands the \csname inside \end&lt;space&gt;</span>
-       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1</span>
-         <span class="org-keyword">\expandafter</span>        <span class="org-comment">%2  expands \end&lt;space&gt;</span>
-       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1     expands the \else</span>
-           <span class="org-keyword">\z@</span>
+       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1
+</span>         <span class="org-keyword">\expandafter</span>        <span class="org-comment">%2
+</span>       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1
+</span>           <span class="org-keyword">\expandafter</span>         <span class="org-comment">%3 expands the \csname inside \end&lt;space&gt;
+</span>       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1
+</span>         <span class="org-keyword">\expandafter</span>        <span class="org-comment">%2  expands \end&lt;space&gt;
+</span>       <span class="org-keyword">\expandafter</span>       <span class="org-comment">%1     expands the \else
+</span>           <span class="org-keyword">\z@</span>
        <span class="org-keyword">\else</span>
          <span class="org-keyword">\expandafter\z@\expandafter\protect</span>
        <span class="org-keyword">\fi</span>
-   }<span class="org-comment">%</span>
-   <span class="org-keyword">\expandafter\noexpand\csname</span> end <span class="org-keyword">\endcsname</span>
+   }<span class="org-comment">%
+</span>   <span class="org-keyword">\expandafter\noexpand\csname</span> end <span class="org-keyword">\endcsname</span>
   }
-<span class="org-keyword">\@namedef</span>{end }#1{<span class="org-comment">%</span>
-  <span class="org-keyword">\csname</span> end#1<span class="org-keyword">\endcsname\@checkend</span>{#1}<span class="org-comment">%</span>
-  <span class="org-keyword">\expandafter\endgroup\if@endpe\@doendpe\fi</span>
+<span class="org-keyword">\@namedef</span>{end }#1{<span class="org-comment">%
+</span>  <span class="org-keyword">\csname</span> end#1<span class="org-keyword">\endcsname\@checkend</span>{#1}<span class="org-comment">%
+</span>  <span class="org-keyword">\expandafter\endgroup\if@endpe\@doendpe\fi</span>
   <span class="org-keyword">\if@ignore\@ignorefalse\ignorespaces\fi</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">@checkend</span>#1{<span class="org-keyword">\def\reserved@a</span>{#1}<span class="org-keyword">\ifx</span>
       <span class="org-keyword">\reserved@a\@currenvir</span> <span class="org-keyword">\else\@badend</span>{#1}<span class="org-keyword">\fi</span>}
 <span class="org-keyword">\let\@currenvline\@empty</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">...</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">4907:</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">@doendpe</span>{<span class="org-keyword">\@endpetrue</span>
+<span class="org-comment-delimiter">% </span><span class="org-comment">...
+</span><span class="org-comment-delimiter">% </span><span class="org-comment">4907:
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">@doendpe</span>{<span class="org-keyword">\@endpetrue</span>
      <span class="org-keyword">\def</span>\<span class="org-function-name">par</span>{<span class="org-keyword">\@restorepar</span>
               <span class="org-keyword">\clubpenalty\@clubpenalty</span>
               <span class="org-keyword">\everypar</span>{}<span class="org-keyword">\par\@endpefalse</span>}<span class="org-keyword">\everypar</span>
-               {{<span class="org-keyword">\setbox\z@\lastbox</span>}<span class="org-comment">%</span>
-                <span class="org-keyword">\everypar</span>{}<span class="org-keyword">\@endpefalse</span>}}
-</pre>
+               {{<span class="org-keyword">\setbox\z@\lastbox</span>}<span class="org-comment">%
+</span>                <span class="org-keyword">\everypar</span>{}<span class="org-keyword">\@endpefalse</span>}}
+</code></pre>
 </div>
 </div>
 </div>
@@ -417,23 +418,23 @@ The implementation is fairly straightforward.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-tex"><span class="org-comment-delimiter">%% </span><span class="org-comment">LaTeX's implementation:</span>
-<span class="org-comment-delimiter">%%</span>
-<span class="org-comment-delimiter">%% </span><span class="org-comment">\def\stepcounter#1{%</span>
-<span class="org-comment-delimiter">%%   </span><span class="org-comment">\addtocounter{#1}\@ne</span>
-<span class="org-comment-delimiter">%%   </span><span class="org-comment">\begingroup</span>
-<span class="org-comment-delimiter">%%     </span><span class="org-comment">\let\@elt\@stpelt</span>
-<span class="org-comment-delimiter">%%     </span><span class="org-comment">\csname cl@#1\endcsname</span>
-<span class="org-comment-delimiter">%%   </span><span class="org-comment">\endgroup}</span>
-<span class="org-comment-delimiter">%% </span><span class="org-comment">\def\@definecounter#1{\expandafter\newcount\csname c@#1\endcsname</span>
-<span class="org-comment-delimiter">%%      </span><span class="org-comment">\setcounter{#1}\z@</span>
-<span class="org-comment-delimiter">%%      </span><span class="org-comment">\global\expandafter\let\csname cl@#1\endcsname\@empty</span>
-<span class="org-comment-delimiter">%%      </span><span class="org-comment">\@addtoreset{#1}{@ckpt}%</span>
-<span class="org-comment-delimiter">%%      </span><span class="org-comment">\global\expandafter\let\csname p@#1\endcsname\@empty</span>
-<span class="org-comment-delimiter">%%      </span><span class="org-comment">\expandafter</span>
-<span class="org-comment-delimiter">%%      </span><span class="org-comment">\gdef\csname the#1\expandafter\endcsname\expandafter</span>
-<span class="org-comment-delimiter">%%           </span><span class="org-comment">{\expandafter\@arabic\csname c@#1\endcsname}}</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">stepcounter</span>#1{
+<pre class="src src-tex"><code><span class="org-comment-delimiter">%% </span><span class="org-comment">LaTeX's implementation:
+</span><span class="org-comment-delimiter">%%</span><span class="org-comment">
+</span><span class="org-comment-delimiter">%% </span><span class="org-comment">\def\stepcounter#1{%
+</span><span class="org-comment-delimiter">%%   </span><span class="org-comment">\addtocounter{#1}\@ne
+</span><span class="org-comment-delimiter">%%   </span><span class="org-comment">\begingroup
+</span><span class="org-comment-delimiter">%%     </span><span class="org-comment">\let\@elt\@stpelt
+</span><span class="org-comment-delimiter">%%     </span><span class="org-comment">\csname cl@#1\endcsname
+</span><span class="org-comment-delimiter">%%   </span><span class="org-comment">\endgroup}
+</span><span class="org-comment-delimiter">%% </span><span class="org-comment">\def\@definecounter#1{\expandafter\newcount\csname c@#1\endcsname
+</span><span class="org-comment-delimiter">%%      </span><span class="org-comment">\setcounter{#1}\z@
+</span><span class="org-comment-delimiter">%%      </span><span class="org-comment">\global\expandafter\let\csname cl@#1\endcsname\@empty
+</span><span class="org-comment-delimiter">%%      </span><span class="org-comment">\@addtoreset{#1}{@ckpt}%
+</span><span class="org-comment-delimiter">%%      </span><span class="org-comment">\global\expandafter\let\csname p@#1\endcsname\@empty
+</span><span class="org-comment-delimiter">%%      </span><span class="org-comment">\expandafter
+</span><span class="org-comment-delimiter">%%      </span><span class="org-comment">\gdef\csname the#1\expandafter\endcsname\expandafter
+</span><span class="org-comment-delimiter">%%           </span><span class="org-comment">{\expandafter\@arabic\csname c@#1\endcsname}}
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">stepcounter</span>#1{
     <span class="org-keyword">\expandafter\global\expandafter\advance\csname</span> c@#1<span class="org-keyword">\endcsname</span> by1
 }
 <span class="org-keyword">\def</span>\<span class="org-function-name">setcounter</span>#1#2{
@@ -451,7 +452,7 @@ The implementation is fairly straightforward.
 <span class="org-keyword">\def</span>\<span class="org-function-name">equation</span>{$$<span class="org-keyword">\refstepcounter</span>{equation}}
 <span class="org-keyword">\def</span>\<span class="org-function-name">endequation</span>{<span class="org-keyword">\eqno</span> <span class="org-keyword">\hbox</span>{<span class="org-keyword">\@eqnnum</span>}$$<span class="org-keyword">\@ignoretrue</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">@eqnnum</span>{{<span class="org-keyword">\normalfont</span> <span class="org-keyword">\normalcolor</span> (<span class="org-keyword">\theequation</span>)}}
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -479,7 +480,7 @@ fits my needs perfectly.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-tex"><span class="org-keyword">\newcount\zzdepth</span>
+<pre class="src src-tex"><code><span class="org-keyword">\newcount\zzdepth</span>
 <span class="org-keyword">\newcount\zza</span>
 <span class="org-keyword">\edef\zzbase</span>{<span class="org-keyword">\the\allocationnumber</span>}
 <span class="org-keyword">\zzdepth\allocationnumber</span>
@@ -487,13 +488,13 @@ fits my needs perfectly.
 <span class="org-keyword">\newcount\zzc</span>
 <span class="org-keyword">\newcount\zzd</span>
 
-<span class="org-keyword">\def</span>\<span class="org-function-name">thezz</span>{{<span class="org-comment">%</span>
-<span class="org-keyword">\ifnum\zzdepth</span>&gt;<span class="org-keyword">\zzbase\relax</span>
-<span class="org-keyword">\advance\zzdepth</span>-1 <span class="org-comment">%</span>
-<span class="org-keyword">\expandafter\thezz</span>
+<span class="org-keyword">\def</span>\<span class="org-function-name">thezz</span>{{<span class="org-comment">%
+</span><span class="org-keyword">\ifnum\zzdepth</span>&gt;<span class="org-keyword">\zzbase\relax</span>
+<span class="org-keyword">\advance\zzdepth</span>-1 <span class="org-comment">%
+</span><span class="org-keyword">\expandafter\thezz</span>
 <span class="org-keyword">\fi</span>
-}<span class="org-keyword">\the\count\zzdepth</span>.<span class="org-comment">%</span>
-}
+}<span class="org-keyword">\the\count\zzdepth</span>.<span class="org-comment">%
+</span>}
 
 <span class="org-keyword">\everypar</span>{{<span class="org-keyword">\bf</span><span class="org-bold"><span class="org-keyword">\thezz</span></span>} }
 
@@ -502,8 +503,8 @@ fits my needs perfectly.
 <span class="org-keyword">\def</span>\<span class="org-function-name">on</span>{<span class="org-keyword">\advance\count\zzdepth</span> 1<span class="org-keyword">\relax</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">eatstar</span>*{}
 <span class="org-keyword">\def</span>\<span class="org-function-name">down</span>{<span class="org-keyword">\futurelet\tmp\xxdown</span>}
-<span class="org-keyword">\def</span>\<span class="org-function-name">xxdown</span>{<span class="org-comment">%</span>
-<span class="org-keyword">\ifx*\tmp</span>
+<span class="org-keyword">\def</span>\<span class="org-function-name">xxdown</span>{<span class="org-comment">%
+</span><span class="org-keyword">\ifx*\tmp</span>
 <span class="org-keyword">\advance\zzdepth</span> 1 <span class="org-keyword">\count\zzdepth</span> 0<span class="org-keyword">\relax</span>
 <span class="org-keyword">\expandafter\eatstar</span>
 <span class="org-keyword">\else</span>
@@ -534,7 +535,7 @@ This is 2.2.1
 This is 3
 
 <span class="org-keyword">\bye</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -543,7 +544,7 @@ own personal purposes:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-tex"><span class="org-keyword">\newcount\zzdepth</span>
+<pre class="src src-tex"><code><span class="org-keyword">\newcount\zzdepth</span>
 <span class="org-keyword">\newcount\zza</span>
 <span class="org-keyword">\edef\zzbase</span>{<span class="org-keyword">\the\allocationnumber</span>}
 <span class="org-keyword">\zzdepth\allocationnumber</span>
@@ -551,13 +552,13 @@ own personal purposes:
 <span class="org-keyword">\newcount\zzc</span>
 <span class="org-keyword">\newcount\zzd</span>
 
-<span class="org-keyword">\def</span>\<span class="org-function-name">thezz</span>{{<span class="org-comment">%</span>
-<span class="org-keyword">\ifnum\zzdepth</span>&gt;<span class="org-keyword">\zzbase\relax</span>
-<span class="org-keyword">\advance\zzdepth</span>-1 <span class="org-comment">%</span>
-<span class="org-keyword">\expandafter\thezz</span>
+<span class="org-keyword">\def</span>\<span class="org-function-name">thezz</span>{{<span class="org-comment">%
+</span><span class="org-keyword">\ifnum\zzdepth</span>&gt;<span class="org-keyword">\zzbase\relax</span>
+<span class="org-keyword">\advance\zzdepth</span>-1 <span class="org-comment">%
+</span><span class="org-keyword">\expandafter\thezz</span>
 <span class="org-keyword">\fi</span>
-}<span class="org-keyword">\the\count\zzdepth</span>.<span class="org-comment">%</span>
-}
+}<span class="org-keyword">\the\count\zzdepth</span>.<span class="org-comment">%
+</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">theM</span>{{<span class="org-keyword">\bf</span><span class="org-bold"><span class="org-keyword">\thezz</span></span>}<span class="org-keyword">\quad\ignorespaces</span>}
 
 <span class="org-keyword">\def</span>\<span class="org-function-name">None</span>#1{<span class="org-keyword">\advance\count\zzdepth</span> 1<span class="org-keyword">\relax\theM</span>{<span class="org-keyword">\bf</span><span class="org-bold">#1.</span>}<span class="org-keyword">\quad\ignorespaces</span>}
@@ -617,7 +618,7 @@ This is 3
 Spam and eggs test!
 
 <span class="org-keyword">\bye</span>
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -641,7 +642,7 @@ for either situation.
 </p>
 
 
-<div id="org5e7dd82" class="figure">
+<div id="org685fac6" class="figure">
 <p><img src="../img/typing-relation-article-cls.png" alt="typing-relation-article-cls.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>Different variants in the typesetting of the typing relation.</p>
@@ -691,8 +692,8 @@ documents, and 2.5em for single column documents.
 </ul>
 </div>
 </div>
-<div id="outline-container-org6f401f1" class="outline-2">
-<h2 id="org6f401f1"><span class="section-number-2">6.</span> References and Links</h2>
+<div id="outline-container-orgabbfbd4" class="outline-2">
+<h2 id="orgabbfbd4"><span class="section-number-2">6.</span> References and Links</h2>
 <div class="outline-text-2" id="text-6">
 <ul class="org-ul">
 <li><a href="https://pretextbook.org/documentation.html">PreTeXt</a> is a library(?) for authors who want to write a LaTeX

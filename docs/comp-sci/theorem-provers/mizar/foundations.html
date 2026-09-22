@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -313,7 +314,7 @@ for \(x\) being object holds<br>
 for \(x, y, z\) being object st \(P_{1}[x,y]\) &amp; \(P_{1}[x,z]\) holds \(y = z\)</dd>
 </dl>
 
-<div class="remark" id="orga46988b">
+<div class="remark" id="org3650304">
 <p>
 The axiom of regularity may look a little strange, but remember: if we
 have \(\forall X((\exists x, P[x,X])\implies Q[X])\), then this is
@@ -322,7 +323,7 @@ logically equivalent to \(\forall X\forall x(P[x,X]\implies Q[X])\).
 
 </div>
 
-<div class="remark" id="orgc5afaac">
+<div class="remark" id="orgea12117">
 <p>
 The axiom schema of specification can be <a href="https://en.wikipedia.org/wiki/Axiom_schema_of_specification#Relation_to_the_axiom_schema_of_replacement">derived</a> from the schema of
 replacement. 
@@ -330,10 +331,10 @@ replacement.
 
 </div>
 
-<div class="remark" id="org4f41f85">
+<div class="remark" id="org244c6f2">
 <p>
 Mizar just <i>defines</i> the unordered pair \(\{X,Y\}\) for any \(X\), \(Y\) in
-<a href="http://mizar.org/version/current/html/tarski.html#K2"><code>TARSKI:def 2</code></a>&#x2026;but uses the axiom of pairing to justify its existence.
+<a href="http://mizar.org/version/current/html/tarski.html#K2"><code>TARSKI:def 2</code></a>&hellip;but uses the axiom of pairing to justify its existence.
 </p>
 
 </div>
@@ -368,7 +369,7 @@ which depends on the axiom of the universe.
 
 <p>
 There is also the well-ordering theorem (which Wikipedia includes in the
-ZF axioms, but I do not believe it's actually needed &#x2014; it should be
+ZF axioms, but I do not believe it's actually needed &mdash; it should be
 included for ZFC, though). Mizar proves this in
 <a href="http://mizar.org/version/current/html/wellord2.html#T17"><code>WELLORD2:Th17</code></a>.
 </p>
@@ -391,7 +392,7 @@ Mathematics</i>:
 <ul class="org-ul">
 <li>Andrzej Trybulec,<br>
 "Tarski Grothendieck Set Theory".<br>
-<i>Formalized Mathematics</i> <b>1</b>, no.1 (1990) 9&#x2013;11, <a href="http://mizar.org/fm/1990-1/pdf1-1/tarski.pdf">PDF</a>.</li>
+<i>Formalized Mathematics</i> <b>1</b>, no.1 (1990) 9&ndash;11, <a href="http://mizar.org/fm/1990-1/pdf1-1/tarski.pdf">PDF</a>.</li>
 </ul>
 </div>
 </div>
@@ -404,13 +405,13 @@ We have a <i>predicate</i> for \(\subseteq\) encoded in Mizar
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> X, Y <span class="org-mizar-normal">be</span> set;
-  <span class="org-mizar-normal">pred</span> X c= Y <span class="org-mizar-normal">means</span> <span class="org-comment-delimiter">:: </span><span class="org-comment">TARSKI:def 3</span>
-  <span class="org-mizar-formula">for</span> x <span class="org-mizar-formula">being</span> object <span class="org-mizar-formula">st</span> x in X <span class="org-mizar-formula">holds</span> x in Y;
+  <span class="org-mizar-normal">pred</span> X c= Y <span class="org-mizar-normal">means</span> <span class="org-comment-delimiter">:: </span><span class="org-comment">TARSKI:def 3
+</span>  <span class="org-mizar-formula">for</span> x <span class="org-mizar-formula">being</span> object <span class="org-mizar-formula">st</span> x in X <span class="org-mizar-formula">holds</span> x in Y;
   <span class="org-mizar-normal">reflexivity</span>;
 <span class="org-mizar-block">end</span>; 
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -418,11 +419,11 @@ The <i>type</i> for a Subset of \(X\) is defined in <a href="http://mizar.org/ve
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> X <span class="org-mizar-normal">be</span> set;
   <span class="org-mizar-normal">mode</span> Subset <span class="org-mizar-normal">of</span> X <span class="org-mizar-normal">is</span> Element <span class="org-mizar-normal">of</span> bool X;
 <span class="org-mizar-block">end</span>; 
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -431,14 +432,14 @@ as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> X <span class="org-mizar-normal">be</span> set ;
-  <span class="org-mizar-normal">func</span> bool X -&gt; set <span class="org-mizar-normal">means</span> :Def1: <span class="org-comment-delimiter">:: </span><span class="org-comment">ZFMISC_1:def 1</span>
-  <span class="org-mizar-formula">for</span> Z <span class="org-mizar-formula">being</span> set <span class="org-mizar-formula">holds</span>
+  <span class="org-mizar-normal">func</span> bool X -&gt; set <span class="org-mizar-normal">means</span> :Def1: <span class="org-comment-delimiter">:: </span><span class="org-comment">ZFMISC_1:def 1
+</span>  <span class="org-mizar-formula">for</span> Z <span class="org-mizar-formula">being</span> set <span class="org-mizar-formula">holds</span>
   (Z in <span class="org-mizar-normal">it</span> <span class="org-mizar-formula">iff</span> Z c= X);
-  <span class="org-comment-delimiter">:: </span><span class="org-comment">correctness conditions omitted</span>
-<span class="org-mizar-block">end</span>;
-</pre>
+  <span class="org-comment-delimiter">:: </span><span class="org-comment">correctness conditions omitted
+</span><span class="org-mizar-block">end</span>;
+</code></pre>
 </div>
 
 <p>

@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -283,16 +284,16 @@ dimensions (height of 9.25 inches, width of 6.375 inches).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-tex"><span class="org-comment-delimiter">% </span><span class="org-comment">taocpmac.tex original</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">Page layout</span>
-<span class="org-keyword">\newdimen\pagewidth</span> <span class="org-keyword">\newdimen\pageheight</span> <span class="org-keyword">\newdimen\ruleht</span>
+<pre class="src src-tex"><code><span class="org-comment-delimiter">% </span><span class="org-comment">taocpmac.tex original
+</span><span class="org-comment-delimiter">% </span><span class="org-comment">Page layout
+</span><span class="org-keyword">\newdimen\pagewidth</span> <span class="org-keyword">\newdimen\pageheight</span> <span class="org-keyword">\newdimen\ruleht</span>
 <span class="org-keyword">\hsize</span>=29pc  <span class="org-keyword">\vsize</span>=45pc  <span class="org-keyword">\maxdepth</span>=2.2pt  <span class="org-keyword">\parindent</span>=19pt
 <span class="org-keyword">\pagewidth</span>=<span class="org-keyword">\hsize</span> <span class="org-keyword">\pageheight</span>=<span class="org-keyword">\vsize</span> <span class="org-keyword">\ruleht</span>=.5pt
 <span class="org-keyword">\abovedisplayskip</span>=6pt plus 3pt minus 1pt
 <span class="org-keyword">\belowdisplayskip</span>=6pt plus 3pt minus 1pt
 <span class="org-keyword">\abovedisplayshortskip</span>=0pt plus 3pt
 <span class="org-keyword">\belowdisplayshortskip</span>=4pt plus 3pt
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -300,11 +301,11 @@ The easiest way to reproduce this, I think, is something like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-latex"><span class="org-keyword">\usepackage</span>[pagewidth=6.375in,
+<pre class="src src-latex"><code><span class="org-keyword">\usepackage</span>[pagewidth=6.375in,
   pageheight=9.25in,
   textwidth=29pc,
   textheight=45pc]{<span class="org-builtin">geometry</span>}
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -316,16 +317,16 @@ The tex macros for this is reproduced below:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-tex"><span class="org-comment-delimiter">% </span><span class="org-comment">taocpmac.tex original</span>
-
+<pre class="src src-tex"><code><span class="org-comment-delimiter">% </span><span class="org-comment">taocpmac.tex original
+</span>
 <span class="org-keyword">\newif\iftitle</span> <span class="org-keyword">\newif\ifdrop</span> <span class="org-keyword">\newif\ifrunon</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">titlepage</span>{<span class="org-keyword">\global\titletrue\global\droptrue</span>} <span class="org-comment">% for pages without headlines</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">lhead</span>{} <span class="org-comment">% running headline on lefthand pages (usually chapter name)</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">rhead</span>{} <span class="org-comment">% running headline on righthand pages (usually section name)</span>
-
+<span class="org-keyword">\def</span>\<span class="org-function-name">titlepage</span>{<span class="org-keyword">\global\titletrue\global\droptrue</span>} <span class="org-comment">% for pages without headlines
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">lhead</span>{} <span class="org-comment">% running headline on lefthand pages (usually chapter name)
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">rhead</span>{} <span class="org-comment">% running headline on righthand pages (usually section name)
+</span>
   
-<span class="org-comment-delimiter">% </span><span class="org-comment">line 388 et seq.</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">beginchapter</span>#1: #2.
+<span class="org-comment-delimiter">% </span><span class="org-comment">line 388 et seq.
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">beginchapter</span>#1: #2.
   {<span class="org-keyword">\vfill\eject</span>
     <span class="org-keyword">\titlepage</span>
     <span class="org-keyword">\leftline</span>{<span class="org-keyword">\twelvess</span> <span class="org-keyword">\spaceskip</span>=10pt <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\kern</span>1pt}#1}
@@ -344,8 +345,8 @@ The tex macros for this is reproduced below:
   {<span class="org-keyword">\mark</span>{<span class="org-keyword">\currentsection</span> <span class="org-keyword">\noexpand\else</span> #1}
     <span class="org-keyword">\ifrunon</span> <span class="org-keyword">\runonfalse\vskip</span> 1 cm plus 1 pc minus 5 pt
     <span class="org-keyword">\else</span> <span class="org-keyword">\vfill\eject</span>
-      {<span class="org-keyword">\output</span>{<span class="org-keyword">\setbox</span>0=<span class="org-keyword">\box</span>255}<span class="org-keyword">\null\vfill\eject</span>} <span class="org-comment">% set \topmark for sure</span>
-    <span class="org-keyword">\fi</span>
+      {<span class="org-keyword">\output</span>{<span class="org-keyword">\setbox</span>0=<span class="org-keyword">\box</span>255}<span class="org-keyword">\null\vfill\eject</span>} <span class="org-comment">% set \topmark for sure
+</span>    <span class="org-keyword">\fi</span>
     <span class="org-keyword">\tenpoint</span>
     <span class="org-keyword">\leftline</span>{<span class="org-keyword">\tenssbx\starred</span>#1. <span class="org-keyword">\uppercase</span>{#2}}
     <span class="org-keyword">\def</span>\<span class="org-function-name">starred</span>{}
@@ -374,8 +375,8 @@ The tex macros for this is reproduced below:
     {<span class="org-keyword">\ninepoint\xdef\rhead</span>{<span class="org-keyword">\uppercase</span>{#2}}}
     <span class="org-keyword">\nobreak\smallskip\noindent</span>}
 
-<span class="org-keyword">\def</span>\<span class="org-function-name">beginsubsubsection</span> #1. #2.    <span class="org-comment">% set page headers: 3.2.1.3</span>
-  {<span class="org-keyword">\mark</span>{<span class="org-keyword">\currentsection</span> <span class="org-keyword">\noexpand\else</span> #1}
+<span class="org-keyword">\def</span>\<span class="org-function-name">beginsubsubsection</span> #1. #2.    <span class="org-comment">% set page headers: 3.2.1.3
+</span>  {<span class="org-keyword">\mark</span>{<span class="org-keyword">\currentsection</span> <span class="org-keyword">\noexpand\else</span> #1}
     <span class="org-keyword">\tenpoint</span>
     <span class="org-keyword">\bigbreak</span>
     <span class="org-keyword">\null</span>
@@ -385,13 +386,13 @@ The tex macros for this is reproduced below:
     <span class="org-keyword">\nobreak\vskip</span>-<span class="org-keyword">\baselineskip</span>
     <span class="org-keyword">\noindent</span>{<span class="org-keyword">\bf</span><span class="org-bold"><span class="org-keyword">\starred</span></span><span class="org-bold">#1.</span><span class="org-bold"><span class="org-keyword">\enspace</span></span><span class="org-bold"> #2.</span><span class="org-bold"><span class="org-keyword">\xskip</span></span>}<span class="org-keyword">\def\starred</span>{}<span class="org-keyword">\ignorespaces</span>}
 
-<span class="org-keyword">\def</span>\<span class="org-function-name">beginsubsubsectionprime</span> #1.  <span class="org-comment">% don't set page headers: 3.3.1B</span>
-  {<span class="org-keyword">\medbreak</span>
+<span class="org-keyword">\def</span>\<span class="org-function-name">beginsubsubsectionprime</span> #1.  <span class="org-comment">% don't set page headers: 3.3.1B
+</span>  {<span class="org-keyword">\medbreak</span>
     <span class="org-keyword">\null</span>
     <span class="org-keyword">\tenpoint</span>
     <span class="org-keyword">\nobreak\vskip</span>-<span class="org-keyword">\baselineskip</span>
     <span class="org-keyword">\noindent</span>{<span class="org-keyword">\bf</span><span class="org-bold"><span class="org-keyword">\starred</span></span><span class="org-bold">#1.</span><span class="org-bold"><span class="org-keyword">\xskip</span></span>}<span class="org-keyword">\def\starred</span>{}<span class="org-keyword">\ignorespaces</span>}
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -405,7 +406,7 @@ separates the body text from the chapter section title.
 <p>
 Almost every section in <i>The Art of Computer Programming</i> starts at the
 top of a page. I don't know if this is by accident or by design, but
-since it's <b>every</b> section&#x2026;that's too much to be a coincidence. (The
+since it's <b>every</b> section&hellip;that's too much to be a coincidence. (The
 only exception I found was section 6.1, but I may be mistaken!)
 Section formatting:
 </p>
@@ -452,49 +453,49 @@ subsections, and subsubsections to resemble their counterparts in
 </p>
 
 <div class="org-src-container">
-<pre class="src src-latex"><span class="org-keyword">\usepackage</span>{<span class="org-builtin">titlesec</span>}
+<pre class="src src-latex"><code><span class="org-keyword">\usepackage</span>{<span class="org-builtin">titlesec</span>}
 <span class="org-keyword">\font\titlefont</span>=cmssbx10 scaled<span class="org-keyword">\magstep</span>2
 <span class="org-keyword">\def</span>\<span class="org-function-name">starred</span>{}
 <span class="org-keyword">\def</span>\<span class="org-function-name">starit</span>{<span class="org-keyword">\def\starred</span>{<span class="org-keyword">\llap</span>{*}}}
 <span class="org-keyword">\usepackage</span>{<span class="org-builtin">titlesec</span>}
-<span class="org-comment-delimiter">% </span><span class="org-comment">"\large" is 12-point when the main font is 10-point</span>
-<span class="org-keyword">\titleformat</span>{<span class="org-keyword">\chapter</span>}[display]
-            {<span class="org-keyword">\titlefont</span>} <span class="org-comment">% format</span>
-            {<span class="org-keyword">\large\sffamily\spaceskip</span>=10pt<span class="org-keyword">\MakeUppercase</span>{<span class="org-keyword">\chaptertitlename</span>} <span class="org-keyword">\thechapter</span>} <span class="org-comment">% label</span>
-            {4pc} <span class="org-comment">% sep </span>
-            {<span class="org-keyword">\filleft\MakeUppercase</span>} <span class="org-comment">% before</span>
-<span class="org-keyword">\titleformat</span>{name=<span class="org-keyword">\chapter</span>,numberless}[display]
-            {<span class="org-keyword">\titlefont</span>} <span class="org-comment">% format</span>
-            {} <span class="org-comment">% label</span>
-            {4pc} <span class="org-comment">% sep</span>
-            {<span class="org-keyword">\filleft</span>} <span class="org-comment">% before</span>
-
-<span class="org-comment-delimiter">% </span><span class="org-comment">Use the fact that a normal space is computed using font dimensions</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">see: https://tex.stackexchange.com/a/229642/14751</span>
-<span class="org-keyword">\titleformat</span>{<span class="org-keyword">\section</span>}<span class="org-comment">%[block]</span>
-            {<span class="org-keyword">\bfseries</span><span class="org-bold"><span class="org-keyword">\sffamily</span></span>} <span class="org-comment">% format</span>
-            {<span class="org-keyword">\starred\thesection</span>.<span class="org-keyword">\def\starred</span>{}} <span class="org-comment">% label</span>
-            {2<span class="org-keyword">\fontdimen</span>2<span class="org-keyword">\font</span> plus<span class="org-keyword">\fontdimen</span>3<span class="org-keyword">\font</span> minus<span class="org-keyword">\fontdimen</span>4<span class="org-keyword">\font</span>} <span class="org-comment">% sep</span>
-            {<span class="org-keyword">\MakeUppercase</span>} <span class="org-comment">% before</span>
-
-<span class="org-keyword">\titleformat</span>{<span class="org-keyword">\subsection</span>}<span class="org-comment">%[block]</span>
-            {<span class="org-keyword">\bfseries</span><span class="org-bold"><span class="org-keyword">\sffamily</span></span>} <span class="org-comment">% format</span>
-            {<span class="org-keyword">\starred\thesubsection</span>.<span class="org-keyword">\def\starred</span>{}} <span class="org-comment">% label</span>
-            {2<span class="org-keyword">\fontdimen</span>2<span class="org-keyword">\font</span> plus<span class="org-keyword">\fontdimen</span>3<span class="org-keyword">\font</span> minus<span class="org-keyword">\fontdimen</span>4<span class="org-keyword">\font</span>} <span class="org-comment">% sep</span>
-            {} <span class="org-comment">% before</span>
-
-<span class="org-comment-delimiter">% </span><span class="org-comment">Runin subsubsections, with a period added (if missing)</span>
-<span class="org-keyword">\makeatletter</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">@addpunct</span>#1{<span class="org-comment">%</span>
-  <span class="org-keyword">\relax\ifhmode</span>
+<span class="org-comment-delimiter">% </span><span class="org-comment">"\large" is 12-point when the main font is 10-point
+</span><span class="org-keyword">\titleformat</span>{<span class="org-keyword">\chapter</span>}[display]
+            {<span class="org-keyword">\titlefont</span>} <span class="org-comment">% format
+</span>            {<span class="org-keyword">\large\sffamily\spaceskip</span>=10pt<span class="org-keyword">\MakeUppercase</span>{<span class="org-keyword">\chaptertitlename</span>} <span class="org-keyword">\thechapter</span>} <span class="org-comment">% label
+</span>            {4pc} <span class="org-comment">% sep 
+</span>            {<span class="org-keyword">\filleft\MakeUppercase</span>} <span class="org-comment">% before
+</span><span class="org-keyword">\titleformat</span>{name=<span class="org-keyword">\chapter</span>,numberless}[display]
+            {<span class="org-keyword">\titlefont</span>} <span class="org-comment">% format
+</span>            {} <span class="org-comment">% label
+</span>            {4pc} <span class="org-comment">% sep
+</span>            {<span class="org-keyword">\filleft</span>} <span class="org-comment">% before
+</span>
+<span class="org-comment-delimiter">% </span><span class="org-comment">Use the fact that a normal space is computed using font dimensions
+</span><span class="org-comment-delimiter">% </span><span class="org-comment">see: https://tex.stackexchange.com/a/229642/14751
+</span><span class="org-keyword">\titleformat</span>{<span class="org-keyword">\section</span>}<span class="org-comment">%[block]
+</span>            {<span class="org-keyword">\bfseries</span><span class="org-bold"><span class="org-keyword">\sffamily</span></span>} <span class="org-comment">% format
+</span>            {<span class="org-keyword">\starred\thesection</span>.<span class="org-keyword">\def\starred</span>{}} <span class="org-comment">% label
+</span>            {2<span class="org-keyword">\fontdimen</span>2<span class="org-keyword">\font</span> plus<span class="org-keyword">\fontdimen</span>3<span class="org-keyword">\font</span> minus<span class="org-keyword">\fontdimen</span>4<span class="org-keyword">\font</span>} <span class="org-comment">% sep
+</span>            {<span class="org-keyword">\MakeUppercase</span>} <span class="org-comment">% before
+</span>
+<span class="org-keyword">\titleformat</span>{<span class="org-keyword">\subsection</span>}<span class="org-comment">%[block]
+</span>            {<span class="org-keyword">\bfseries</span><span class="org-bold"><span class="org-keyword">\sffamily</span></span>} <span class="org-comment">% format
+</span>            {<span class="org-keyword">\starred\thesubsection</span>.<span class="org-keyword">\def\starred</span>{}} <span class="org-comment">% label
+</span>            {2<span class="org-keyword">\fontdimen</span>2<span class="org-keyword">\font</span> plus<span class="org-keyword">\fontdimen</span>3<span class="org-keyword">\font</span> minus<span class="org-keyword">\fontdimen</span>4<span class="org-keyword">\font</span>} <span class="org-comment">% sep
+</span>            {} <span class="org-comment">% before
+</span>
+<span class="org-comment-delimiter">% </span><span class="org-comment">Runin subsubsections, with a period added (if missing)
+</span><span class="org-keyword">\makeatletter</span>
+<span class="org-keyword">\def</span>\<span class="org-function-name">@addpunct</span>#1{<span class="org-comment">%
+</span>  <span class="org-keyword">\relax\ifhmode</span>
     <span class="org-keyword">\ifnum\spacefactor</span>&gt;<span class="org-keyword">\@m</span> <span class="org-keyword">\else</span>#1<span class="org-keyword">\fi</span>
   <span class="org-keyword">\fi</span>}
 <span class="org-keyword">\titleformat</span>{<span class="org-keyword">\subsubsection</span>}[runin]
-            {<span class="org-keyword">\normalfont\bfseries</span>} <span class="org-comment">% format</span>
-            {<span class="org-keyword">\starred\thesubsubsection</span>.<span class="org-keyword">\def\starred</span>{}} <span class="org-comment">% label</span>
-            {0.5em} <span class="org-comment">% sep = \enspace</span>
-            {} <span class="org-comment">% before</span>
-            [<span class="org-keyword">\@addpunct</span>{.}]
+            {<span class="org-keyword">\normalfont\bfseries</span>} <span class="org-comment">% format
+</span>            {<span class="org-keyword">\starred\thesubsubsection</span>.<span class="org-keyword">\def\starred</span>{}} <span class="org-comment">% label
+</span>            {0.5em} <span class="org-comment">% sep = \enspace
+</span>            {} <span class="org-comment">% before
+</span>            [<span class="org-keyword">\@addpunct</span>{.}]
 <span class="org-keyword">\makeatother</span>
 <span class="org-keyword">\newskip\xskipamount</span>
 <span class="org-keyword">\xskipamount</span>=7pt plus 3pt minus 4pt
@@ -503,7 +504,7 @@ subsections, and subsubsections to resemble their counterparts in
 <span class="org-keyword">\titlespacing*</span>{<span class="org-keyword">\subsection</span>}{0pt}{<span class="org-keyword">\bigskipamount</span>}{<span class="org-keyword">\smallskipamount</span>}
 <span class="org-keyword">\titlespacing*</span>{<span class="org-keyword">\subsubsection</span>}{0pt}{<span class="org-keyword">\bigskipamount</span>}{<span class="org-keyword">\xskipamount\ignorespaces</span>}
 <span class="org-keyword">\setcounter</span>{<span class="org-variable-name">secnumdepth</span>}{3}
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -513,32 +514,32 @@ subsections, and subsubsections to resemble their counterparts in
 <div class="outline-text-2" id="text-h-9e2d1b7e-68d0-4dc3-a7e2-38a9adee2270">
 <p>
 Knuth uses <code>\slug</code> as his <code>\qedsymbol</code>, so if you want to use some other
-symbol&#x2026;you'll have to update these macros accordingly.
+symbol&hellip;you'll have to update these macros accordingly.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-latex"><span class="org-comment-delimiter">% </span><span class="org-comment">latex macros</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">These macros are borrowed from TAOCPMAC.tex</span>
-<span class="org-keyword">\newcommand</span>{<span class="org-function-name">\slug</span>}{<span class="org-keyword">\hbox</span>{<span class="org-keyword">\kern</span>1.5pt<span class="org-keyword">\vrule</span> width2.5pt height6pt depth1.5pt<span class="org-keyword">\kern</span>1.5pt}}
+<pre class="src src-latex"><code><span class="org-comment-delimiter">% </span><span class="org-comment">latex macros
+</span><span class="org-comment-delimiter">% </span><span class="org-comment">These macros are borrowed from TAOCPMAC.tex
+</span><span class="org-keyword">\newcommand</span>{<span class="org-function-name">\slug</span>}{<span class="org-keyword">\hbox</span>{<span class="org-keyword">\kern</span>1.5pt<span class="org-keyword">\vrule</span> width2.5pt height6pt depth1.5pt<span class="org-keyword">\kern</span>1.5pt}}
 <span class="org-keyword">\def</span>\<span class="org-function-name">xskip</span>{<span class="org-keyword">\hskip</span> 7pt plus 3pt minus 4pt}
 <span class="org-keyword">\newdimen\algindent</span>
-<span class="org-keyword">\newif\ifitempar</span> <span class="org-keyword">\itempartrue</span> <span class="org-comment">% normally true unless briefly set false</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">algindentset</span>#1{<span class="org-keyword">\setbox</span>0<span class="org-keyword">\hbox</span>{{<span class="org-keyword">\bf</span><span class="org-bold"> #1.</span><span class="org-bold"><span class="org-keyword">\kern</span></span><span class="org-bold">.25em</span>}}<span class="org-keyword">\algindent</span>=<span class="org-keyword">\wd</span>0<span class="org-keyword">\relax</span>}
-<span class="org-keyword">\def</span>\<span class="org-function-name">algbegin</span> #1 #2{<span class="org-keyword">\algindentset</span>{#21}<span class="org-keyword">\alg</span> #1 #2} <span class="org-comment">% when steps all have 1 digit</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">aalgbegin</span> #1 #2{<span class="org-keyword">\algindentset</span>{#211}<span class="org-keyword">\alg</span> #1 #2} <span class="org-comment">% when 10 or more steps</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">alg</span>#1(#2). {<span class="org-keyword">\medbreak</span> <span class="org-comment">% Usage: \algbegin Algorithm A (algname). This...</span>
-  <span class="org-keyword">\noindent</span>{<span class="org-keyword">\bf</span><span class="org-bold">#1</span>}({<span class="org-keyword">\it</span><span class="org-italic">#2</span><span class="org-italic"><span class="org-keyword">\/</span></span>}).<span class="org-keyword">\xskip\ignorespaces</span>}
+<span class="org-keyword">\newif\ifitempar</span> <span class="org-keyword">\itempartrue</span> <span class="org-comment">% normally true unless briefly set false
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">algindentset</span>#1{<span class="org-keyword">\setbox</span>0<span class="org-keyword">\hbox</span>{{<span class="org-keyword">\bf</span><span class="org-bold"> #1.</span><span class="org-bold"><span class="org-keyword">\kern</span></span><span class="org-bold">.25em</span>}}<span class="org-keyword">\algindent</span>=<span class="org-keyword">\wd</span>0<span class="org-keyword">\relax</span>}
+<span class="org-keyword">\def</span>\<span class="org-function-name">algbegin</span> #1 #2{<span class="org-keyword">\algindentset</span>{#21}<span class="org-keyword">\alg</span> #1 #2} <span class="org-comment">% when steps all have 1 digit
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">aalgbegin</span> #1 #2{<span class="org-keyword">\algindentset</span>{#211}<span class="org-keyword">\alg</span> #1 #2} <span class="org-comment">% when 10 or more steps
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">alg</span>#1(#2). {<span class="org-keyword">\medbreak</span> <span class="org-comment">% Usage: \algbegin Algorithm A (algname). This...
+</span>  <span class="org-keyword">\noindent</span>{<span class="org-keyword">\bf</span><span class="org-bold">#1</span>}({<span class="org-keyword">\it</span><span class="org-italic">#2</span><span class="org-italic"><span class="org-keyword">\/</span></span>}).<span class="org-keyword">\xskip\ignorespaces</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">algstep</span>#1.{<span class="org-keyword">\ifitempar\smallskip\noindent\else\itempartrue</span>
   <span class="org-keyword">\hskip</span>-<span class="org-keyword">\parindent\fi</span>
-  <span class="org-keyword">\hbox</span> to<span class="org-keyword">\algindent</span>{<span class="org-keyword">\bf</span><span class="org-bold"><span class="org-keyword">\hfil</span></span><span class="org-bold"> #1.</span><span class="org-bold"><span class="org-keyword">\kern</span></span><span class="org-bold">.25em</span>}<span class="org-comment">%</span>
-  <span class="org-keyword">\hangindent</span>=<span class="org-keyword">\algindent\hangafter</span>=1<span class="org-keyword">\ignorespaces</span>}
-<span class="org-comment-delimiter">% </span><span class="org-comment">end of borrowed macros</span>
-
-<span class="org-comment-delimiter">% </span><span class="org-comment">For Example, with less than 10 steps:</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">\algbegin X (Multiplication). blah blah blah blah...</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">\algstep X1. [{\it Do stuff\/}] blah blah blah</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">\algstep X2. Terminate the algorithm.\quad\slug</span>
-</pre>
+  <span class="org-keyword">\hbox</span> to<span class="org-keyword">\algindent</span>{<span class="org-keyword">\bf</span><span class="org-bold"><span class="org-keyword">\hfil</span></span><span class="org-bold"> #1.</span><span class="org-bold"><span class="org-keyword">\kern</span></span><span class="org-bold">.25em</span>}<span class="org-comment">%
+</span>  <span class="org-keyword">\hangindent</span>=<span class="org-keyword">\algindent\hangafter</span>=1<span class="org-keyword">\ignorespaces</span>}
+<span class="org-comment-delimiter">% </span><span class="org-comment">end of borrowed macros
+</span>
+<span class="org-comment-delimiter">% </span><span class="org-comment">For Example, with less than 10 steps:
+</span><span class="org-comment-delimiter">% </span><span class="org-comment">\algbegin X (Multiplication). blah blah blah blah...
+</span><span class="org-comment-delimiter">% </span><span class="org-comment">\algstep X1. [{\it Do stuff\/}] blah blah blah
+</span><span class="org-comment-delimiter">% </span><span class="org-comment">\algstep X2. Terminate the algorithm.\quad\slug</span>
+</code></pre>
 </div>
 
 <p>
@@ -554,7 +555,7 @@ found in it.
 <div class="outline-text-2" id="text-h-507a9a50-3ecd-4d11-aa07-9ab084779d0e">
 <p>
 The assembly code printed in the book is formatted using the <code>\mixtwo</code>,
-<code>\mixthree</code>, <code>\mixfour</code>, &#x2026;, <code>\mixsix</code> macros. These are plain TeX
+<code>\mixthree</code>, <code>\mixfour</code>, &hellip;, <code>\mixsix</code> macros. These are plain TeX
 tables, so the columns are separated by <code>&amp;</code> and the end of line needs a
 <code>\cr</code> macro.
 </p>
@@ -580,38 +581,38 @@ associated algorithm; Knuth breaks the underlining when there is a
 <li><code>\mc</code> is for medium caps (as opposed to <code>\sc</code>), and I honestly don't
 know why <code>\mc</code> is used for these logos instead of <code>\sc</code> or anything
 else (but after working with Times New Roman font for a while, <code>\mc</code>
-formatting of FORTRAN looks much nicer than <code>\textsc{Fortran}</code>&#x2026;);</li>
+formatting of FORTRAN looks much nicer than <code>\textsc{Fortran}</code>&hellip;);</li>
 <li>I have had great difficulty getting these macros to work nicely with
 page breaks in LaTeX, but perhaps I'm just an idiot</li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-tex"><span class="org-comment-delimiter">% </span><span class="org-comment">taocpmac.tex lines 876 et seq.</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">CEE</span>/{{<span class="org-keyword">\mc</span> C<span class="org-keyword">\spacefactor</span>1000}}<span class="org-comment">% the C programming language</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">FORTRAN</span>/{{<span class="org-keyword">\mc</span> FORTRAN<span class="org-keyword">\spacefactor</span>1000}}<span class="org-comment">% ditto for the older guy</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">ALGOL</span>/{{<span class="org-keyword">\mc</span> ALGOL<span class="org-keyword">\spacefactor</span>1000}}
+<pre class="src src-tex"><code><span class="org-comment-delimiter">% </span><span class="org-comment">taocpmac.tex lines 876 et seq.
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">CEE</span>/{{<span class="org-keyword">\mc</span> C<span class="org-keyword">\spacefactor</span>1000}}<span class="org-comment">% the C programming language
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">FORTRAN</span>/{{<span class="org-keyword">\mc</span> FORTRAN<span class="org-keyword">\spacefactor</span>1000}}<span class="org-comment">% ditto for the older guy
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">ALGOL</span>/{{<span class="org-keyword">\mc</span> ALGOL<span class="org-keyword">\spacefactor</span>1000}}
 <span class="org-keyword">\def</span>\<span class="org-function-name">COBOL</span>/{{<span class="org-keyword">\mc</span> COBOL<span class="org-keyword">\spacefactor</span>1000}}
 <span class="org-keyword">\def</span>\<span class="org-function-name">MIX</span>{{<span class="org-keyword">\tt</span> MIX<span class="org-keyword">\spacefactor</span>1000}}
 <span class="org-keyword">\def</span>\<span class="org-function-name">MMIX</span>{{<span class="org-keyword">\tt</span> MMIX<span class="org-keyword">\spacefactor</span>1000}}
-<span class="org-keyword">\def</span>\<span class="org-function-name">mm</span>{<span class="org-keyword">\kern</span>-.2em<span class="org-keyword">\'</span>{}<span class="org-keyword">\kern</span>-.1em} <span class="org-comment">% modifies a section number, for MMIX changes</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">rA</span>{<span class="org-keyword">\hbox</span>{<span class="org-keyword">\rm</span> rA}}
+<span class="org-keyword">\def</span>\<span class="org-function-name">mm</span>{<span class="org-keyword">\kern</span>-.2em<span class="org-keyword">\'</span>{}<span class="org-keyword">\kern</span>-.1em} <span class="org-comment">% modifies a section number, for MMIX changes
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">rA</span>{<span class="org-keyword">\hbox</span>{<span class="org-keyword">\rm</span> rA}}
 <span class="org-keyword">\def</span>\<span class="org-function-name">rX</span>{<span class="org-keyword">\hbox</span>{<span class="org-keyword">\rm</span> rX}}
 <span class="org-keyword">\def</span>\<span class="org-function-name">rAX</span>{<span class="org-keyword">\hbox</span>{<span class="org-keyword">\rm</span> rAX}}
 <span class="org-keyword">\def</span>\<span class="org-function-name">rI</span>{<span class="org-keyword">\hbox</span>{<span class="org-keyword">\rm</span> rI}}
 <span class="org-keyword">\def</span>\<span class="org-function-name">rJ</span>{<span class="org-keyword">\hbox</span>{<span class="org-keyword">\rm</span> rJ}}
 
-<span class="org-comment-delimiter">% </span><span class="org-comment">to typeset assembly code, use:</span>
-<span class="org-comment-delimiter">%  </span><span class="org-comment">\mixtwo   for opcode and address</span>
-<span class="org-comment-delimiter">%  </span><span class="org-comment">\mixthree for location, opcode, and address</span>
-<span class="org-comment-delimiter">%  </span><span class="org-comment">\mixfour  for line number, location, opcode, and address</span>
-<span class="org-comment-delimiter">%  </span><span class="org-comment">\mixfive  for line number, location, opcode, address, count</span>
-<span class="org-comment-delimiter">%  </span><span class="org-comment">\mixsix  for line number, location, opcode, address, count, squeezed tight</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">(all variations allow optional comments at end of the line)</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">put \\ after \cr to indicate a logical page break</span>
-<span class="org-comment-delimiter">% </span><span class="org-comment">and end the whole thing with \endmix</span>
-
-<span class="org-comment-delimiter">% </span><span class="org-comment">Say \let\ninepoint=\flexninepoint to allow slight baselineskip variations</span>
-
+<span class="org-comment-delimiter">% </span><span class="org-comment">to typeset assembly code, use:
+</span><span class="org-comment-delimiter">%  </span><span class="org-comment">\mixtwo   for opcode and address
+</span><span class="org-comment-delimiter">%  </span><span class="org-comment">\mixthree for location, opcode, and address
+</span><span class="org-comment-delimiter">%  </span><span class="org-comment">\mixfour  for line number, location, opcode, and address
+</span><span class="org-comment-delimiter">%  </span><span class="org-comment">\mixfive  for line number, location, opcode, address, count
+</span><span class="org-comment-delimiter">%  </span><span class="org-comment">\mixsix  for line number, location, opcode, address, count, squeezed tight
+</span><span class="org-comment-delimiter">% </span><span class="org-comment">(all variations allow optional comments at end of the line)
+</span><span class="org-comment-delimiter">% </span><span class="org-comment">put \\ after \cr to indicate a logical page break
+</span><span class="org-comment-delimiter">% </span><span class="org-comment">and end the whole thing with \endmix
+</span>
+<span class="org-comment-delimiter">% </span><span class="org-comment">Say \let\ninepoint=\flexninepoint to allow slight baselineskip variations
+</span>
 <span class="org-keyword">\def</span>\<span class="org-function-name">sdol</span>{<span class="org-keyword">\global\catcode</span>`<span class="org-keyword">\$</span>=12 <span class="org-keyword">\global\catcode</span>`<span class="org-keyword">\#</span>=12}
 <span class="org-keyword">\def</span>\<span class="org-function-name">ndol</span>{<span class="org-keyword">\global\catcode</span>`<span class="org-keyword">\$</span>=3  <span class="org-keyword">\global\catcode</span>`<span class="org-keyword">\#</span>=6}
 <span class="org-keyword">\def</span>\<span class="org-function-name">specialunder</span>{<span class="org-keyword">\ifmmode\def\next</span>{_}<span class="org-keyword">\else\chardef\next</span>=`<span class="org-keyword">\_\fi\next</span>}
@@ -620,79 +621,79 @@ page breaks in LaTeX, but perhaps I'm just an idiot</li>
 <span class="org-keyword">\def</span>\<span class="org-function-name">mixtwo</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt</span> <span class="org-keyword">\ninepoint</span>
   <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\noalign</span>{<span class="org-keyword">\penalty</span>-200}}
   <span class="org-keyword">\halign\bgroup</span>
-          <span class="org-keyword">\ttt\hbox</span> to 2.5em{##<span class="org-keyword">\hfil</span>}&amp; <span class="org-comment">% op</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad</span>&amp;            <span class="org-comment">% address</span>
-          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">mmixtwo</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span> <span class="org-keyword">\underspecial</span>
+          <span class="org-keyword">\ttt\hbox</span> to 2.5em{##<span class="org-keyword">\hfil</span>}&amp; <span class="org-comment">% op
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad</span>&amp;            <span class="org-comment">% address
+</span>          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">mmixtwo</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span> <span class="org-keyword">\underspecial</span>
   <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\noalign</span>{<span class="org-keyword">\penalty</span>-200}}
   <span class="org-keyword">\halign\bgroup</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad\sdol</span>&amp;       <span class="org-comment">% op</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad\ndol</span>&amp;       <span class="org-comment">% expr</span>
-          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">mixthree</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span>
+          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad\sdol</span>&amp;       <span class="org-comment">% op
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad\ndol</span>&amp;       <span class="org-comment">% expr
+</span>          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">mixthree</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span>
   <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\noalign</span>{<span class="org-keyword">\penalty</span>-200}}
   <span class="org-keyword">\halign\bgroup</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% loc</span>
-          <span class="org-keyword">\ttt\hbox</span> to 2.5em{##<span class="org-keyword">\hfil</span>}&amp; <span class="org-comment">% op</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad</span>&amp;            <span class="org-comment">% address</span>
-          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">mmixthree</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span>
+          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% loc
+</span>          <span class="org-keyword">\ttt\hbox</span> to 2.5em{##<span class="org-keyword">\hfil</span>}&amp; <span class="org-comment">% op
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad</span>&amp;            <span class="org-comment">% address
+</span>          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">mmixthree</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span>
   <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\noalign</span>{<span class="org-keyword">\penalty</span>-200}}
   <span class="org-keyword">\halign\bgroup</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% label</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil</span>\ <span class="org-keyword">\sdol</span>&amp;          <span class="org-comment">% op</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad\ndol</span>&amp;       <span class="org-comment">% expr</span>
-          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">mixfour</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span>
+          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% label
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil</span>\ <span class="org-keyword">\sdol</span>&amp;          <span class="org-comment">% op
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad\ndol</span>&amp;       <span class="org-comment">% expr
+</span>          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">mixfour</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span>
   <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\noalign</span>{<span class="org-keyword">\penalty</span>-200}}
   <span class="org-keyword">\halign\bgroup</span>
-          <span class="org-keyword">\hfil\it</span><span class="org-italic">##</span><span class="org-italic"><span class="org-keyword">\quad</span></span>&amp;             <span class="org-comment">% line</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% loc</span>
-          <span class="org-keyword">\ttt\hbox</span> to 2.5em{##<span class="org-keyword">\hfil</span>}&amp; <span class="org-comment">% op</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad</span>&amp;            <span class="org-comment">% address</span>
-          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">mmixfour</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span> <span class="org-keyword">\underspecial</span>
+          <span class="org-keyword">\hfil\it</span><span class="org-italic">##</span><span class="org-italic"><span class="org-keyword">\quad</span></span>&amp;             <span class="org-comment">% line
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% loc
+</span>          <span class="org-keyword">\ttt\hbox</span> to 2.5em{##<span class="org-keyword">\hfil</span>}&amp; <span class="org-comment">% op
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad</span>&amp;            <span class="org-comment">% address
+</span>          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">mmixfour</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span> <span class="org-keyword">\underspecial</span>
   <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\noalign</span>{<span class="org-keyword">\penalty</span>-200}}
   <span class="org-keyword">\halign\bgroup</span>
-          <span class="org-keyword">\hfil\it</span><span class="org-italic">##</span><span class="org-italic"><span class="org-keyword">\quad\sdol</span></span>&amp;        <span class="org-comment">% line</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% label</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\enspace</span>&amp;         <span class="org-comment">% op</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad\ndol</span>&amp;       <span class="org-comment">% expr</span>
-          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">mixfive</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span>
+          <span class="org-keyword">\hfil\it</span><span class="org-italic">##</span><span class="org-italic"><span class="org-keyword">\quad\sdol</span></span>&amp;        <span class="org-comment">% line
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% label
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\enspace</span>&amp;         <span class="org-comment">% op
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad\ndol</span>&amp;       <span class="org-comment">% expr
+</span>          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">mixfive</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span>
   <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\noalign</span>{<span class="org-keyword">\penalty</span>-200}}
   <span class="org-keyword">\halign\bgroup</span>
-          <span class="org-keyword">\hfil\it</span><span class="org-italic">##</span><span class="org-italic"><span class="org-keyword">\quad</span></span>&amp;             <span class="org-comment">% line</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% loc</span>
-          <span class="org-keyword">\ttt\hbox</span> to 2.5em{##<span class="org-keyword">\hfil</span>}&amp; <span class="org-comment">% op</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad</span>&amp;            <span class="org-comment">% address</span>
-          <span class="org-keyword">\hfil</span><span class="org-tex-math">$ ##$</span><span class="org-keyword">\hfil\quad</span>&amp;        <span class="org-comment">% frequency count</span>
-          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">mmixfive</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span> <span class="org-keyword">\underspecial</span>
+          <span class="org-keyword">\hfil\it</span><span class="org-italic">##</span><span class="org-italic"><span class="org-keyword">\quad</span></span>&amp;             <span class="org-comment">% line
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% loc
+</span>          <span class="org-keyword">\ttt\hbox</span> to 2.5em{##<span class="org-keyword">\hfil</span>}&amp; <span class="org-comment">% op
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad</span>&amp;            <span class="org-comment">% address
+</span>          <span class="org-keyword">\hfil</span><span class="org-tex-math">$ ##$</span><span class="org-keyword">\hfil\quad</span>&amp;        <span class="org-comment">% frequency count
+</span>          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">mmixfive</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span> <span class="org-keyword">\underspecial</span>
   <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\noalign</span>{<span class="org-keyword">\penalty</span>-200}}
   <span class="org-keyword">\halign\bgroup</span>
-          <span class="org-keyword">\hfil\it</span><span class="org-italic">##</span><span class="org-italic"><span class="org-keyword">\quad\sdol</span></span>&amp;        <span class="org-comment">% line</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% label</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\enspace</span>&amp;         <span class="org-comment">% op</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad\ndol</span>&amp;       <span class="org-comment">% expr</span>
-          <span class="org-keyword">\hfil</span><span class="org-tex-math">$ ##$</span><span class="org-keyword">\hfil\quad</span>&amp;        <span class="org-comment">% frequency count</span>
-          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment</span>
-<span class="org-keyword">\newdimen\mixsqueeze</span> <span class="org-comment">% set this before each use of \mixsix</span>
-<span class="org-keyword">\def</span>\<span class="org-function-name">mixsix</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span> <span class="org-comment">%last field is flush right</span>
-  <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\noalign</span>{<span class="org-keyword">\penalty</span>-200}}
+          <span class="org-keyword">\hfil\it</span><span class="org-italic">##</span><span class="org-italic"><span class="org-keyword">\quad\sdol</span></span>&amp;        <span class="org-comment">% line
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% label
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\enspace</span>&amp;         <span class="org-comment">% op
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad\ndol</span>&amp;       <span class="org-comment">% expr
+</span>          <span class="org-keyword">\hfil</span><span class="org-tex-math">$ ##$</span><span class="org-keyword">\hfil\quad</span>&amp;        <span class="org-comment">% frequency count
+</span>          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hfil\cr</span>}               <span class="org-comment">% comment
+</span><span class="org-keyword">\newdimen\mixsqueeze</span> <span class="org-comment">% set this before each use of \mixsix
+</span><span class="org-keyword">\def</span>\<span class="org-function-name">mixsix</span>{<span class="org-keyword">\begingroup\let\ttt</span>=<span class="org-keyword">\tt\ninepoint</span> <span class="org-comment">%last field is flush right
+</span>  <span class="org-keyword">\def</span><span class="org-warning">\\</span>{<span class="org-keyword">\noalign</span>{<span class="org-keyword">\penalty</span>-200}}
   <span class="org-keyword">\halign</span> to <span class="org-keyword">\hsize\bgroup</span>
-          <span class="org-keyword">\hfil\it</span><span class="org-italic">##</span><span class="org-italic"><span class="org-keyword">\quad</span></span>&amp;             <span class="org-comment">% line</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% loc</span>
-          <span class="org-keyword">\ttt\hbox</span> to 2.5em{##<span class="org-keyword">\hfil</span>}&amp; <span class="org-comment">% op</span>
-          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad</span>&amp;            <span class="org-comment">% address</span>
-          <span class="org-keyword">\hskip</span>-<span class="org-keyword">\mixsqueeze</span>
-          <span class="org-keyword">\hfil</span><span class="org-tex-math">$ ##$</span><span class="org-keyword">\hfil\quad</span>&amp;        <span class="org-comment">% frequency count</span>
-          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hidewidth\tabskip</span> 0pt plus 1fil&amp; <span class="org-comment">% comment</span>
-          <span class="org-keyword">\medmuskip</span> 1mu <span class="org-keyword">\relax</span> <span class="org-keyword">\thickmuskip</span> 3mu <span class="org-keyword">\relax</span>
+          <span class="org-keyword">\hfil\it</span><span class="org-italic">##</span><span class="org-italic"><span class="org-keyword">\quad</span></span>&amp;             <span class="org-comment">% line
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\enspace\hfil</span>&amp;         <span class="org-comment">% loc
+</span>          <span class="org-keyword">\ttt\hbox</span> to 2.5em{##<span class="org-keyword">\hfil</span>}&amp; <span class="org-comment">% op
+</span>          <span class="org-keyword">\ttt</span>##<span class="org-keyword">\hfil\quad</span>&amp;            <span class="org-comment">% address
+</span>          <span class="org-keyword">\hskip</span>-<span class="org-keyword">\mixsqueeze</span>
+          <span class="org-keyword">\hfil</span><span class="org-tex-math">$ ##$</span><span class="org-keyword">\hfil\quad</span>&amp;        <span class="org-comment">% frequency count
+</span>          <span class="org-keyword">\rm</span>##<span class="org-keyword">\hidewidth\tabskip</span> 0pt plus 1fil&amp; <span class="org-comment">% comment
+</span>          <span class="org-keyword">\medmuskip</span> 1mu <span class="org-keyword">\relax</span> <span class="org-keyword">\thickmuskip</span> 3mu <span class="org-keyword">\relax</span>
           <span class="org-keyword">\hfil</span>##<span class="org-keyword">\tabskip</span>0pt<span class="org-keyword">\cr</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">endmix</span>{<span class="org-keyword">\egroup\endgroup</span>}
 <span class="org-keyword">\def</span>\<span class="org-function-name">endmmix</span>{<span class="org-keyword">\egroup\endgroup</span>}
-</pre>
+</code></pre>
 </div>
 </div>
 </div>

@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -337,7 +338,7 @@ Thus the upper-bound on a program to be a candidate for being "bug free"
 is approximately 441 lines of code.
 </p>
 
-<div class="remark" id="org0b66db8">
+<div class="remark" id="org46da45f">
 <p>
 If we then use this estimate for the number of lines \(n\leq 50k^{2}\)
 for a <i>Binomial</i> distributed random variable (<b>NOT</b> a <i>negative</i>
@@ -347,7 +348,7 @@ bug within 3 sigmas of 0 bugs is greater than 50%.
 
 </div>
 
-<div class="remark" id="org05fd617">
+<div class="remark" id="org223f814">
 <p>
 Just a quick consistency check, we can use the <a href="https://en.wikipedia.org/wiki/Binomial_distribution#Poisson_approximation">Poisson approximation</a> to
 a Binomial distribution to find a heuristic upper bound on the number of
@@ -366,7 +367,7 @@ of lines of code \(N\) such that the probability of finding no more than
 The R code which let me solve this by brute force:
 </p>
 
-<pre class="example" id="org5bb9036">
+<pre class="example" id="orgf03ffc1">
 p_bug &lt;- 0.02
 q_bug &lt;- 1 - p_bug
 
@@ -393,7 +394,7 @@ greatest value of <code>n</code> such that <code>guess(n) &gt;= 0.5</code>.
 If we wanted to be more certain, we could modify the code:
 </p>
 
-<pre class="example" id="orgc5d449e">
+<pre class="example" id="org0d10b22">
 guess &lt;- function(n, k=3) { pbinom(round(k*sd_bug*sqrt(n)), n, p_bug)}
 
 expected_bugs &lt;- function(n) { p_bug*n }
@@ -448,7 +449,7 @@ The concern for small trusted kernel is generically referred to as the
 <ul class="org-ul">
 <li>Henk Barendregt,<br>
 "The impact of the lambda calculus in logic and computer science".<br>
-<i>Bulletin of Symbolic Logic</i> <b>3</b>, no. 2 (1997) pp.181&#x2013;215.</li>
+<i>Bulletin of Symbolic Logic</i> <b>3</b>, no. 2 (1997) pp.181&ndash;215.</li>
 </ul>
 
 <p>

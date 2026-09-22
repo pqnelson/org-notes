@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -315,7 +316,7 @@ structure.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">int</span> <span class="org-function-name">position</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">x</span>, <span class="org-type">List</span> *<span class="org-variable-name">a</span>) {
+<pre class="src src-c"><code><span class="org-type">int</span> <span class="org-function-name">position</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">x</span>, <span class="org-type">List</span> *<span class="org-variable-name">a</span>) {
     <span class="org-keyword">if</span> (eq(x, car(a))) {
         <span class="org-keyword">return</span> 0;
     } <span class="org-keyword">else</span> {
@@ -331,7 +332,7 @@ structure.
         <span class="org-keyword">return</span> member(x, cdr(l));
     }
 }
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -340,7 +341,7 @@ return the pair <code>(p . q)</code> encoding its position.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">List</span>* <span class="org-function-name">location</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">x</span>, <span class="org-type">List</span> *<span class="org-variable-name">namelist</span>) {
+<pre class="src src-c"><code><span class="org-type">List</span>* <span class="org-function-name">location</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">x</span>, <span class="org-type">List</span> *<span class="org-variable-name">namelist</span>) {
     <span class="org-keyword">if</span> (member(x, car(namelist))) {
         <span class="org-keyword">return</span> new_list(0, position(x, car(namelist)));
     } <span class="org-keyword">else</span> {
@@ -349,7 +350,7 @@ return the pair <code>(p . q)</code> encoding its position.
         <span class="org-keyword">return</span> z;
     }
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -361,10 +362,10 @@ To compile an S-Expression to SECD code, we have:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">SecdBytecode</span>* <span class="org-function-name">compile</span>(<span class="org-type">SExp</span> *<span class="org-variable-name">expr</span>) {
+<pre class="src src-c"><code><span class="org-type">SecdBytecode</span>* <span class="org-function-name">compile</span>(<span class="org-type">SExp</span> *<span class="org-variable-name">expr</span>) {
     <span class="org-keyword">return</span> comp(e, NIL, cons(SECD_APPLY, cons(SECD_STOP, NIL)));
 }
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -373,7 +374,7 @@ bytecode <code>c</code>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">List</span>* <span class="org-function-name">comp</span>(<span class="org-type">SExp</span> *<span class="org-variable-name">e</span>, <span class="org-type">SExp</span> *<span class="org-variable-name">n</span>, <span class="org-type">SExp</span> *<span class="org-variable-name">c</span>) {
+<pre class="src src-c"><code><span class="org-type">List</span>* <span class="org-function-name">comp</span>(<span class="org-type">SExp</span> *<span class="org-variable-name">e</span>, <span class="org-type">SExp</span> *<span class="org-variable-name">n</span>, <span class="org-type">SExp</span> *<span class="org-variable-name">c</span>) {
     <span class="org-keyword">if</span> (is_atom(e)) {
         <span class="org-keyword">return</span> cons(SECD_LD, cons(location(e, n), c));
     } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_quote(car(e))) {
@@ -408,16 +409,16 @@ bytecode <code>c</code>
         <span class="org-type">SExp</span> *<span class="org-variable-name">body</span> = comp(caddr(e), cons(cadr(e), n), cons(SECD_RTN, NIL));
         <span class="org-keyword">return</span> cons(SECD_LDF, cons(body, c));
     } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_let(car(e))) {
-        <span class="org-comment-delimiter">// </span><span class="org-comment">supposed to be: bindings = cddr(e);</span>
-        <span class="org-comment-delimiter">// </span><span class="org-comment">SExp *namelist = cons(vars(cadr(e)), n);</span>
-        <span class="org-comment-delimiter">// </span><span class="org-comment">SExp *ags = exprs(cadr(e));</span>
-        <span class="org-comment-delimiter">// </span><span class="org-comment">SExp *body = compile_list(cddr(e), namelist, cons(SECD_RTN, NIL));</span>
-        <span class="org-keyword">return</span> compile_let(e, n, c);
+        <span class="org-comment-delimiter">// </span><span class="org-comment">supposed to be: bindings = cddr(e);
+</span>        <span class="org-comment-delimiter">// </span><span class="org-comment">SExp *namelist = cons(vars(cadr(e)), n);
+</span>        <span class="org-comment-delimiter">// </span><span class="org-comment">SExp *ags = exprs(cadr(e));
+</span>        <span class="org-comment-delimiter">// </span><span class="org-comment">SExp *body = compile_list(cddr(e), namelist, cons(SECD_RTN, NIL));
+</span>        <span class="org-keyword">return</span> compile_let(e, n, c);
     } <span class="org-keyword">else</span> <span class="org-keyword">if</span> (is_letrec(car(e))) {
         <span class="org-keyword">return</span> compile_letrec(e, n, c);
     }
 }
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-9a92a2ad-41fc-452d-a0d5-dae117769683" class="outline-4">
@@ -433,7 +434,7 @@ We have the ancillary functions when compiling <code>(let ...)</code>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">SExp</span>* <span class="org-function-name">vars</span>(<span class="org-type">SExp</span> *<span class="org-variable-name">d</span>) {
+<pre class="src src-c"><code><span class="org-type">SExp</span>* <span class="org-function-name">vars</span>(<span class="org-type">SExp</span> *<span class="org-variable-name">d</span>) {
     <span class="org-keyword">if</span> (eq(d, NIL)) {
         <span class="org-keyword">return</span> NIL;
     } <span class="org-keyword">else</span> {
@@ -448,7 +449,7 @@ We have the ancillary functions when compiling <code>(let ...)</code>.
         <span class="org-keyword">return</span> cons(cdar(d), exprs(cdr(d)));
     }
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>

@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -361,7 +362,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="org080102e">
+<pre class="example" id="orgf059b5d">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -372,7 +373,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="orgb2382be">
+<pre class="example" id="org34a3fa7">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -381,7 +382,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="org65499bc">
+<pre class="example" id="org3542655">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -583,7 +584,7 @@ When I byte-compile my <code>init.el</code> and my <code>./.emacs</code> file ju
 For my Desktop, I tried:
 </p>
 
-<pre class="example" id="org3499d5a">
+<pre class="example" id="orgbdfcce2">
 $ ./configure --with-wide-int --with-x-toolkit=lucid --with-gnutls=ifavailable --with-m17n-flt --with-modules --with-json --with-threads --with-compress-install "CFLAGS=-O3 -pipe -mtune=native -march=native -fno-finite-math-only"
 </pre>
 </div>
@@ -640,7 +641,7 @@ I followed Rainer's <a href="https://web.archive.org/web/20121010001720/http://l
 <p>
 There is a bug with <code>optimizers.lisp</code> which hangs on master branch.
 It should take less than a minute to finish <code>optimizers.lisp</code>, so if
-it's taking longer&#x2026;it's probably a bug. (I have found the
+it's taking longer&hellip;it's probably a bug. (I have found the
 <code>v1.12-dev.1</code>, <code>v1.12-dev.2</code>, <code>v1.12-dev.3</code>, <code>v1.12-dev.4</code> tags are
 capable of rebuilding as expected.)
 </p>
@@ -685,7 +686,7 @@ I run into a problem compiling SBCL from the RPi package, experiencing
 an error (as of git commit <code>b430f314c</code>, date Wed Apr 20 03:46:44 2022 +0300):
 </p>
 
-<pre class="example" id="org746f7ab">
+<pre class="example" id="orgb33eaec">
 ~/src/sbcl $ sh make.sh
 ...
 cc -g -Wall -Wundef -Wsign-compare -Wpointer-arith -O3 -std=gnu99 -fno-pie -I.  -c -o os-common.o os-common.c
@@ -779,12 +780,12 @@ following content:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">load-quicklisp</span> ()
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">load-quicklisp</span> ()
   (<span class="org-keyword">let</span> ((quicklisp-init (merge-pathnames <span class="org-string">"quicklisp/setup.lisp"</span>
                                          (user-homedir-pathname))))
     (<span class="org-keyword">when</span> (probe-file quicklisp-init)
       (load quicklisp-init))))
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -872,14 +873,14 @@ department yet.
 I am using a script
 </p>
 <div class="org-src-container">
-<pre class="src src-bash"><span class="org-comment-delimiter">#</span><span class="org-comment">!/usr/local/bin/</span><span class="org-keyword">bash</span>
-
+<pre class="src src-bash"><code><span class="org-comment-delimiter">#</span><span class="org-comment">!/usr/local/bin/</span><span class="org-keyword">bash</span><span class="org-comment">
+</span>
 sleep 10
 
 <span class="org-keyword">while</span> true; <span class="org-keyword">do</span>
 feh --no-fehbg -F -r --bg-max -z /home/alex/Pictures/Wallpaper &amp;&amp; sleep 5 || <span class="org-keyword">exit</span>
 <span class="org-keyword">done</span>
-</pre>
+</code></pre>
 </div>
 
 
@@ -922,7 +923,7 @@ command <code>/opt/vc/bin/vcgencmd measure_temp</code>. I've stuck this into a
 script:
 </p>
 
-<pre class="example" id="orge813f4b">
+<pre class="example" id="orga3a8338">
 #!/bin/bash
 
 # ~/temperature.sh
@@ -943,7 +944,7 @@ I couldn't get Mizar working on my Raspberry Pi 2, and it does not work on
 Raspberry Pi 4B either. Get the latest version <a href="http://mizar.uwb.edu.pl/system/index.html#download">here</a> for Linux (ARM).
 </p>
 
-<pre class="example" id="org71636d0">
+<pre class="example" id="orga35f627">
 ~/src/$ mkdir mizar
 ~/src/$ cd mizar
 ~/src/mizar/$ wget mizar-&lt;version&gt;-arm-linux.tar
@@ -958,7 +959,7 @@ Raspberry Pi 4B either. Get the latest version <a href="http://mizar.uwb.edu.pl/
 When I try running, say, <code>mizf</code> on 32-bit mode, I get errors:
 </p>
 
-<pre class="example" id="org5f7482b">
+<pre class="example" id="org5e50bad">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char.miz
 Illegal instruction
 Illegal instruction
@@ -969,7 +970,7 @@ alex@raspberrypi:~/src/mizar-playground $
 <p>
 In 64-bit mode, I get errors:
 </p>
-<pre class="example" id="orgb43e961">
+<pre class="example" id="orgce511b4">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char
 /usr/local/bin/mizf: 8: makeenv: Exec format error
 /usr/local/bin/mizf: 13: errflag: Exec format error
@@ -989,7 +990,7 @@ Raspberry Pi. The basic instructions:
 <b>Step 1: install Free Pascal.</b>
 </p>
 
-<pre class="example" id="org4133bfa">
+<pre class="example" id="orgadaff62">
 alex@raspberrypi:~$ sudo apt-get update
 alex@raspberrypi:~$ sudo apt-get upgrade
 alex@raspberrypi:~$ sudo apt-get install fpc
@@ -1006,7 +1007,7 @@ binaries, but it installs the MML and documentation locally.
 If you tried using the pre-built binaries, then you can skip this step.
 </p>
 
-<pre class="example" id="orgd4cd3ed">
+<pre class="example" id="orge08dd12">
 alex@raspberrypi:~ $ cd src
 alex@raspberrypi:~/src $ mkdir mizar
 alex@raspberrypi:~/src $ cd mizar
@@ -1051,7 +1052,7 @@ changes are adding install instructions, the compile script, and
 adjusting two parameters in the code) and run the following commands:
 </p>
 
-<pre class="example" id="org0cc634b">
+<pre class="example" id="org11abffe">
 alex@raspberrypi:~/src $ git clone https://github.com/CoghettoR/MizarSystem/
 alex@raspberrypi:~/src $ cd MizarSystem
 alex@raspberrypi:~/src/MizarSystem $ time sh compile_rpi.sh
@@ -1074,7 +1075,7 @@ To make Raspberry Pi 4 run in 64-bit mode, add the following line to the
 bottom of your <code>/boot/config.txt</code>:
 </p>
 
-<pre class="example" id="org3250e2e">
+<pre class="example" id="org3a17d2f">
 arm_64bit=1
 </pre>
 

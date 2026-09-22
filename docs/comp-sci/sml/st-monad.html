@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -254,9 +255,9 @@ The definition of the <code>ST</code> monad is <a href="https://hackage.haskell.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-haskell-keyword">newtype</span> <span class="org-haskell-type">ST</span> s a <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">ST</span> (<span class="org-haskell-constructor">STRep</span> s a)
+<pre class="src src-haskell"><code><span class="org-haskell-keyword">newtype</span> <span class="org-haskell-type">ST</span> s a <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">ST</span> (<span class="org-haskell-constructor">STRep</span> s a)
 <span class="org-haskell-keyword">type</span> <span class="org-haskell-type">STRep</span> s a <span class="org-haskell-operator">=</span> <span class="org-haskell-type">State#</span> s <span class="org-haskell-operator">-&gt;</span> (<span class="org-haskell-operator">#</span> <span class="org-haskell-type">State#</span> s, a <span class="org-haskell-operator">#</span>)
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -279,7 +280,7 @@ Apparently this <code>ST</code> monad can be traced back to the paper:
 <ul class="org-ul">
 <li>John Launchbury and Simon Peyton Jones,<br>
 "Lazy Functional State Threads".<br>
-<i>CM SIGPLAN Notices</i> <b>29</b>, no.6 (1994) 24&#x2013;35.
+<i>CM SIGPLAN Notices</i> <b>29</b>, no.6 (1994) 24&ndash;35.
 PLDI '94, <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/1994/06/lazy-functional-state-threads.pdf">Eprint</a>.</li>
 </ul>
 
@@ -300,11 +301,11 @@ in our <a href="io-monad.html">IO monad</a> implementation we have:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">abstype</span> 'a <span class="org-type-def">Job</span> = JOB <span class="org-keyword">of</span> unit -&gt; 'a
+<pre class="src src-sml"><code><span class="org-keyword">abstype</span> 'a <span class="org-type-def">Job</span> = JOB <span class="org-keyword">of</span> unit -&gt; 'a
 <span class="org-keyword">with</span>
     <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -313,11 +314,11 @@ We take advantage of the fact that <code>'a</code> is isomorphic to <code>unit *
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">abstype</span> ('s, 'a) <span class="org-type-def">ST</span> = ST <span class="org-keyword">of</span> ('s -&gt; 's * 'a)
+<pre class="src src-sml"><code><span class="org-keyword">abstype</span> ('s, 'a) <span class="org-type-def">ST</span> = ST <span class="org-keyword">of</span> ('s -&gt; 's * 'a)
 <span class="org-keyword">with</span>
     <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -334,8 +335,8 @@ From a <a href="https://stackoverflow.com/a/26435065/1296973">Stackoverflow answ
 
 <blockquote>
 <p>
-After some headbanging, I think this <i>is</i> possible &#x2014; or at least close
-enough to it to work &#x2014; although it isn't very pretty to look at. (I may
+After some headbanging, I think this <i>is</i> possible &mdash; or at least close
+enough to it to work &mdash; although it isn't very pretty to look at. (I may
 be on completely the wrong track here, someone knowledgeable please
 comment.)
 </p>
@@ -347,7 +348,7 @@ to create abstract phantom types that cannot be referred to outside a
 given lexical block:
 </p>
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> ('s, 'a) <span class="org-type-def">Res</span> = ResC <span class="org-keyword">of</span> 's
+<pre class="src src-sml"><code><span class="org-keyword">datatype</span> ('s, 'a) <span class="org-type-def">Res</span> = ResC <span class="org-keyword">of</span> 's
 
 <span class="org-keyword">signature</span> <span class="org-interface-def">BLOCK</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> <span class="org-type-def">t</span>
@@ -375,7 +376,7 @@ given lexical block:
 <span class="org-keyword">end</span>)
 
 ;print (Int.toString(T.run()))
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -394,7 +395,7 @@ with the phantom type:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">RMONAD</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">RMONAD</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> ('s, 'a, 'r) <span class="org-type-def">m</span>
   <span class="org-keyword">val</span> <span class="org-variable-name">ret</span>: ('s * 'r) -&gt; 'a -&gt; ('s, 'a, 'r) m
   <span class="org-keyword">val</span> <span class="org-variable-name">bnd</span>: ('s, 'a, 'r) m * ('a * 'r -&gt; ('s, 'b, 'r) m) -&gt; ('s<span class="org-highlight-beyond-fill-column">, 'b, 'r) m</span>
@@ -448,7 +449,7 @@ with the phantom type:
 <span class="org-keyword">end</span>)
 
 ;T.run()
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -469,7 +470,7 @@ unable to access it in any way.
 Invoking <code>T.run</code> twice will re-use the same "key" type, meaning this isn't
 equivalent to a nested <code>forall</code>, but that shouldn't make a difference if
 there's no way to share <code>r</code> between two separate invocations; which there
-isn't &#x2014; if it can't be returned, can't be assigned outside, and any
+isn't &mdash; if it can't be returned, can't be assigned outside, and any
 closures can't run the code that works on it. At least, I think so.
 </p>
 </blockquote>
@@ -481,11 +482,11 @@ closures can't run the code that works on it. At least, I think so.
 <ul class="org-ul">
 <li>John Launchbury and Simon Peyton Jones,<br>
 "Lazy Functional State Threads".<br>
-<i>CM SIGPLAN Notices</i> <b>29</b>, no.6 (1994) 24&#x2013;35.
+<i>CM SIGPLAN Notices</i> <b>29</b>, no.6 (1994) 24&ndash;35.
 PLDI '94, <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/1994/06/lazy-functional-state-threads.pdf">Eprint</a>.</li>
 <li>John Launchbury, Simon Peyton Jones,<br>
 "State in Haskell".<br>
-<i>Lisp and Symbolic Computation</i> (1995) pp. 293&#x2013;342.
+<i>Lisp and Symbolic Computation</i> (1995) pp. 293&ndash;342.
 <a href="https://www.microsoft.com/en-us/research/publication/state-in-haskell/">Eprint</a>.</li>
 <li>Stephanie Weirich,<br>
 <a href="https://www.seas.upenn.edu/~cis552/17fa/lectures/stub/STMonad.html">The ST and IO Monads</a>.<br>
@@ -494,7 +495,7 @@ CIS552 lecture, UPenn, 2017 Fall Quarter.</li>
 "Purity of an ST monad: full abstraction by semantically typed
 back-translation".<br>
 <i>Proceedings of ACM on Programming Languages</i>
-<b>6</b> no.1 (2022) 1&#x2013;27
+<b>6</b> no.1 (2022) 1&ndash;27
 doi:<a href="https://doi.org/10.1145/3527326">10.1145/3527326</a></li>
 </ul>
 </div>

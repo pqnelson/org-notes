@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -357,7 +358,7 @@ function name, or mangle it in some consistent manner. For example,
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">exchange.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">exchange.c</span><span class="org-comment-delimiter"> */</span>
 <span class="org-type">int</span> <span class="org-function-name">exchange</span>(<span class="org-type">int</span> *<span class="org-variable-name">xp</span>, <span class="org-type">int</span> *<span class="org-variable-name">yp</span>)
 {
     <span class="org-type">int</span> <span class="org-variable-name">x</span> = *xp;
@@ -365,7 +366,7 @@ function name, or mangle it in some consistent manner. For example,
     *yp = x;
     <span class="org-keyword">return</span> x;
 }
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -374,7 +375,7 @@ When we compile it using
 </p>
 
 <div class="org-src-container">
-<pre class="src src-asm"><span class="org-function-name">exchange</span>:
+<pre class="src src-asm"><code><span class="org-function-name">exchange</span>:
 <span class="org-function-name">.LFB0</span>:
     <span class="org-keyword">.cfi_startproc</span>
     <span class="org-keyword">endbr64</span> 
@@ -385,28 +386,28 @@ When we compile it using
     <span class="org-keyword">.cfi_def_cfa_register</span> 6
     <span class="org-keyword">movq</span>    <span class="org-variable-name">%rdi</span>, -24(<span class="org-variable-name">%rbp</span>) # xp, xp
     <span class="org-keyword">movq</span>    <span class="org-variable-name">%rsi</span>, -32(<span class="org-variable-name">%rbp</span>) # yp, yp
-# exchange.c:3:     int x = *xp<span class="org-comment-delimiter">;</span>
-    <span class="org-keyword">movq</span>    -24(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # xp, tmp85
+# exchange.c:3:     int x = *xp<span class="org-comment-delimiter">;</span><span class="org-comment">
+</span>    <span class="org-keyword">movq</span>    -24(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # xp, tmp85
     <span class="org-keyword">movl</span>    (<span class="org-variable-name">%rax</span>), <span class="org-variable-name">%eax</span>    # *xp_3(D), tmp86
     <span class="org-keyword">movl</span>    <span class="org-variable-name">%eax</span>, -4(<span class="org-variable-name">%rbp</span>)  # tmp86, x
-# exchange.c:4:     *xp = *yp<span class="org-comment-delimiter">;</span>
-    <span class="org-keyword">movq</span>    -32(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # yp, tmp87
+# exchange.c:4:     *xp = *yp<span class="org-comment-delimiter">;</span><span class="org-comment">
+</span>    <span class="org-keyword">movq</span>    -32(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # yp, tmp87
     <span class="org-keyword">movl</span>    (<span class="org-variable-name">%rax</span>), <span class="org-variable-name">%edx</span>    # *yp_5(D), _1
-# exchange.c:4:     *xp = *yp<span class="org-comment-delimiter">;</span>
-    <span class="org-keyword">movq</span>    -24(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # xp, tmp88
+# exchange.c:4:     *xp = *yp<span class="org-comment-delimiter">;</span><span class="org-comment">
+</span>    <span class="org-keyword">movq</span>    -24(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # xp, tmp88
     <span class="org-keyword">movl</span>    <span class="org-variable-name">%edx</span>, (<span class="org-variable-name">%rax</span>)    # _1, *xp_3(D)
-# exchange.c:5:     *yp = x<span class="org-comment-delimiter">;</span>
-    <span class="org-keyword">movq</span>    -32(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # yp, tmp89
+# exchange.c:5:     *yp = x<span class="org-comment-delimiter">;</span><span class="org-comment">
+</span>    <span class="org-keyword">movq</span>    -32(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%rax</span> # yp, tmp89
     <span class="org-keyword">movl</span>    -4(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%edx</span>  # x, tmp90
     <span class="org-keyword">movl</span>    <span class="org-variable-name">%edx</span>, (<span class="org-variable-name">%rax</span>)    # tmp90, *yp_5(D)
-# exchange.c:6:     return x<span class="org-comment-delimiter">;</span>
-    <span class="org-keyword">movl</span>    -4(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%eax</span>  # x, _8
+# exchange.c:6:     return x<span class="org-comment-delimiter">;</span><span class="org-comment">
+</span>    <span class="org-keyword">movl</span>    -4(<span class="org-variable-name">%rbp</span>), <span class="org-variable-name">%eax</span>  # x, _8
 # exchange.c:7: }
     <span class="org-keyword">popq</span>    <span class="org-variable-name">%rbp</span>    #
     <span class="org-keyword">.cfi_def_cfa</span> 7, 8
     <span class="org-keyword">ret</span> 
     <span class="org-keyword">.cfi_endproc</span>
-</pre>
+</code></pre>
 </div>
 
 <p>

@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -272,13 +273,13 @@ Here's an example of a class, namely <code>Shape</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-f90"><span class="org-keyword">type</span> <span class="org-function-name">Shape</span>
+<pre class="src src-f90"><code><span class="org-keyword">type</span> <span class="org-function-name">Shape</span>
    <span class="org-type">integer</span> ::<span class="org-variable-name"> color</span>
    <span class="org-type">logical</span> ::<span class="org-variable-name"> filled</span>
    <span class="org-type">integer</span> ::<span class="org-variable-name"> x</span>
    <span class="org-type">integer</span> ::<span class="org-variable-name"> y</span>
 <span class="org-keyword">end type</span> <span class="org-function-name">Shape</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -288,13 +289,13 @@ private, we could do the following:
 
 
 <div class="org-src-container">
-<pre class="src src-f90"><span class="org-keyword">type</span> <span class="org-function-name">Shape</span>
+<pre class="src src-f90"><code><span class="org-keyword">type</span> <span class="org-function-name">Shape</span>
    <span class="org-type">integer</span>, <span class="org-keyword">private</span> ::<span class="org-variable-name"> color</span>
    <span class="org-type">logical</span>, <span class="org-keyword">protected</span> ::<span class="org-variable-name"> filled</span>
    <span class="org-type">integer</span> ::<span class="org-variable-name"> x</span>
    <span class="org-type">integer</span> ::<span class="org-variable-name"> y</span>
 <span class="org-keyword">end type</span> <span class="org-function-name">Shape</span>
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -321,7 +322,7 @@ will change my mind soon enough)</li>
 There are a few default constructors provided:
 </p>
 
-<pre class="example" id="orgbc0e2b3">
+<pre class="example" id="org8618ed7">
 Shape(0, .false., 3, 7) ! Initialize with positional arguments
 Shape(x = 5, color = 33, y = 1, filled = .false.) ! keyword arguments
 </pre>
@@ -335,14 +336,14 @@ using Fortran's interfaces.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-f90"><span class="org-keyword">pure</span> <span class="org-type">type(Shape) </span><span class="org-keyword">function</span> <span class="org-function-name">new_shape</span><span class="org-default">(x, y, color) result(res)</span>
+<pre class="src src-f90"><code><span class="org-keyword">pure</span> <span class="org-type">type(Shape) </span><span class="org-keyword">function</span> <span class="org-function-name">new_shape</span><span class="org-default">(x, y, color) result(res)</span>
   <span class="org-type">integer</span>, <span class="org-keyword">intent</span>(in) ::<span class="org-variable-name"> x, y, color</span>
   res%color = color
   res%filled = <span class="org-keyword">.true.</span>
   res%x = x
   res%y = y
 <span class="org-keyword">end function</span> <span class="org-function-name">new_shape</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -352,10 +353,10 @@ constructor to <code>new_shape(x, y, color)</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-f90"><span class="org-keyword">interface</span> <span class="org-function-name">Shape</span>
+<pre class="src src-f90"><code><span class="org-keyword">interface</span> <span class="org-function-name">Shape</span>
    <span class="org-keyword">module procedure</span> :: <span class="org-function-name">new_shape</span>
 <span class="org-keyword">end interface</span> <span class="org-function-name">Shape</span>
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -369,7 +370,7 @@ we're passing <code>self</code> along as a parameter:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-f90"><span class="org-keyword">module</span> <span class="org-function-name">Shape_class</span>
+<pre class="src src-f90"><code><span class="org-keyword">module</span> <span class="org-function-name">Shape_class</span>
   <span class="org-keyword">implicit</span> <span class="org-type">none</span>
   <span class="org-keyword">type</span> <span class="org-function-name">Shape</span>
      <span class="org-type">integer</span> ::<span class="org-variable-name"> color</span>
@@ -387,7 +388,7 @@ we're passing <code>self</code> along as a parameter:
   <span class="org-keyword">end function</span> <span class="org-function-name">area</span>
 
 <span class="org-keyword">end module</span> <span class="org-function-name">Shape_class</span>
-</pre>
+</code></pre>
 </div>
 
 <p>

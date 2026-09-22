@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -285,7 +286,7 @@ printing a string to the terminal, reading text from the keyboard, and
 nothing else).
 </p>
 
-<div class="remark" id="org9aa9d08">
+<div class="remark" id="org2990545">
 <p>
 In an eager language, the IO monad is a <i>weak</i> monad. This is proven
 in chapter 8 of Andrew Gordon's PhD dissertation. Think about the
@@ -295,13 +296,13 @@ problem. Eager languages cannot.
 </p>
 
 <p>
-However, <a href="https://okmij.org/ftp/Haskell/index.html#lazyIO-not-True">lazy IO breaks equational reasoning</a>&#x2026;which is pretty much
+However, <a href="https://okmij.org/ftp/Haskell/index.html#lazyIO-not-True">lazy IO breaks equational reasoning</a>&hellip;which is pretty much
 why we would want monadic IO (for the equational reasoning!).
 </p>
 
 </div>
 
-<div class="puzzle" id="org02ca0ca">
+<div class="puzzle" id="orgf6bba3d">
 <p>
 The IO monad makes sense for a single-core processor, but how would we
 extend this to work with multiple threads executed in parallel?
@@ -314,7 +315,7 @@ Our implementation will also be incomplete compared to what, say,
 Haskell offers. There are avenues for further investigation.
 </p>
 
-<div class="puzzle" id="orged5dc5a">
+<div class="puzzle" id="org4240ef1">
 <p>
 Would it be possible to extend the IO monad implemented in Standard ML
 to include IORef operations? If so, could we do it without relying on
@@ -333,7 +334,7 @@ Andrew Gordon's PhD thesis. There the construction uses an abstract type:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">infix</span> 1 &gt;&gt; &gt;&gt;=
+<pre class="src src-sml"><code><span class="org-keyword">infix</span> 1 &gt;&gt; &gt;&gt;=
 <span class="org-keyword">abstype</span> 'a <span class="org-type-def">Job</span> = JOB <span class="org-keyword">of</span> unit -&gt; 'a
 <span class="org-keyword">with</span>
     <span class="org-comment-delimiter">(* </span><span class="org-comment">exec : 'a Job -&gt; 'a</span><span class="org-comment-delimiter"> *)</span>
@@ -365,7 +366,7 @@ Andrew Gordon's PhD thesis. There the construction uses an abstract type:
     putStr <span class="org-string">"Second name: "</span> &gt;&gt; getLine &gt;&gt;= (<span class="org-keyword">fn</span> second =&gt;
     putStr (<span class="org-string">"Hello "</span>^first^<span class="org-string">" "</span>^second^<span class="org-string">"\n"</span>)));
 <span class="org-comment-delimiter">(* </span><span class="org-comment">exec main;</span><span class="org-comment-delimiter"> *)</span>
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -378,12 +379,12 @@ a Monad would be:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">MONAD</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">MONAD</span> = <span class="org-keyword">sig</span>
     <span class="org-keyword">type</span> 'a <span class="org-type-def">m</span>;
     <span class="org-keyword">val</span> <span class="org-variable-name">return</span> : 'a -&gt; 'a m;
     <span class="org-keyword">val</span> <span class="org-variable-name">bind</span> : 'a m -&gt; ('a -&gt; 'b m) -&gt; 'b m;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -391,14 +392,14 @@ The IO Monad requires a few more public-facing methods.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">IO_MONAD</span> =
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">IO_MONAD</span> =
 <span class="org-keyword">sig</span>
     <span class="org-keyword">include</span> MONAD;
     <span class="org-keyword">val</span> <span class="org-variable-name">exec</span> : 'a m -&gt; 'a;
     <span class="org-keyword">val</span> <span class="org-variable-name">getStr</span> : int -&gt; TextIO.vector m;
     <span class="org-keyword">val</span> <span class="org-variable-name">putStr</span> : string -&gt; unit m;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -422,12 +423,12 @@ But there is also a way to implement an IO monad using
 does in Haskell.
 </p>
 
-<div class="puzzle" id="org806f54f">
+<div class="puzzle" id="orgebe7dd3">
 <p>
 We have so far not discussed blocking IO too much, but that's because
 blocking IO comes about from threads and multiple
 processes. Essentially <i>something else</i> is reading or writing to a
-file (or stream or socket or&#x2026;) and we have to wait until the
+file (or stream or socket or&hellip;) and we have to wait until the
 resource is free. When will it become important to model this in an IO
 monad?
 </p>
@@ -455,7 +456,7 @@ in <i>Engineering theories of software construction</i>, IOS Press, 2001;
 semantics for the IO part and some denotational semantics for a lazy
 lambda calculus.</li>
 </ul></li>
-<li><a href="https://hackage.haskell.org/package/pure-io-0.2.1/docs/PureIO.html">PureIO</a> &#x2014; a pedagogical IO monad implemented in Haskell</li>
+<li><a href="https://hackage.haskell.org/package/pure-io-0.2.1/docs/PureIO.html">PureIO</a> &mdash; a pedagogical IO monad implemented in Haskell</li>
 <li><a href="https://github.com/noughtmare/free-io/blob/main/src/System/IO/Free.hs">free-io/Free.hs</a> implementation using Free monads</li>
 </ul>
 </div>

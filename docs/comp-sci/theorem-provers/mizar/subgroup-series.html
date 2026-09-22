@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -284,8 +285,8 @@
 <h2 id="h-e5583d34-8606-4622-bc9a-3b915cb5eb4a"><span class="section-number-2">1.</span> Subgroup Series</h2>
 <div class="outline-text-2" id="text-h-e5583d34-8606-4622-bc9a-3b915cb5eb4a">
 <p>
-I will review the various subgroup series, and &#x2014; if they've been
-already defined (implicitly or explicitly) &#x2014; their implementation.
+I will review the various subgroup series, and &mdash; if they've been
+already defined (implicitly or explicitly) &mdash; their implementation.
 </p>
 </div>
 <div id="outline-container-h-4ecb1fc1-3d39-4555-8a61-3cf134915242" class="outline-3">
@@ -299,10 +300,10 @@ each \(Z_{k}\trianglelefteq G\) and the quotient satisfies
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Group;
-  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> nilpotent <span class="org-mizar-normal">means</span> :Def2: <span class="org-comment-delimiter">:: </span><span class="org-comment">GRNILP_1:def 2</span>
-  <span class="org-mizar-formula">ex</span> F <span class="org-mizar-formula">being</span> FinSequence <span class="org-mizar-normal">of</span> the_normal_subgroups_of IT <span class="org-mizar-formula">st</span>
+  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> nilpotent <span class="org-mizar-normal">means</span> :Def2: <span class="org-comment-delimiter">:: </span><span class="org-comment">GRNILP_1:def 2
+</span>  <span class="org-mizar-formula">ex</span> F <span class="org-mizar-formula">being</span> FinSequence <span class="org-mizar-normal">of</span> the_normal_subgroups_of IT <span class="org-mizar-formula">st</span>
   (len F &gt; 0 <span class="org-mizar-formula">&amp;</span> F.1 = (Omega).IT <span class="org-mizar-formula">&amp;</span> F.(len F) = (1).IT <span class="org-mizar-formula">&amp;</span>
    (<span class="org-mizar-formula">for</span> i <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> NAT <span class="org-mizar-formula">st</span> i in dom F <span class="org-mizar-formula">&amp;</span> i+1 in dom F
     <span class="org-mizar-formula">for</span> G1, G2 <span class="org-mizar-formula">being</span> strict normal Subgroup <span class="org-mizar-normal">of</span> IT
@@ -311,7 +312,7 @@ each \(Z_{k}\trianglelefteq G\) and the quotient satisfies
            G1./.((G1,G2)`*`) <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span>
              center (IT./.G2))));
 <span class="org-mizar-block">end</span>; 
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -321,15 +322,15 @@ each \(Z_{k}\trianglelefteq G\) and the quotient satisfies
 <p>
 A solvable group is defined by having a subnormal series
 \(G=N_{1}\trianglerighteq N_{2}\trianglerighteq\dots\trianglerighteq N_{n}=\mathbf{1}\)
-&#x2014; that is, \(N_{j+1}\trianglelefteq N_{j}\) for \(j=0,\dots,n-1\) &#x2014;
+&mdash; that is, \(N_{j+1}\trianglelefteq N_{j}\) for \(j=0,\dots,n-1\) &mdash;
 whose factor groups \(N_{k}/N_{k+1}\) are Abelian.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Group;
-  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> solvable <span class="org-mizar-normal">means</span> :Def1: <span class="org-comment-delimiter">:: </span><span class="org-comment">GRSOLV_1:def 1</span>
-  <span class="org-mizar-formula">ex</span> F <span class="org-mizar-formula">being</span> FinSequence <span class="org-mizar-normal">of</span> Subgroups IT <span class="org-mizar-formula">st</span>
+  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> solvable <span class="org-mizar-normal">means</span> :Def1: <span class="org-comment-delimiter">:: </span><span class="org-comment">GRSOLV_1:def 1
+</span>  <span class="org-mizar-formula">ex</span> F <span class="org-mizar-formula">being</span> FinSequence <span class="org-mizar-normal">of</span> Subgroups IT <span class="org-mizar-formula">st</span>
   (len F &gt; 0 <span class="org-mizar-formula">&amp;</span> F.1 = (Omega).IT <span class="org-mizar-formula">&amp;</span> F.(len F) = (1).IT <span class="org-mizar-formula">&amp;</span>
    (<span class="org-mizar-formula">for</span> i <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> NAT <span class="org-mizar-formula">st</span> i in dom F <span class="org-mizar-formula">&amp;</span> i+1 in dom F
     <span class="org-mizar-formula">for</span> G1, G2 <span class="org-mizar-formula">being</span> strict Subgroup <span class="org-mizar-normal">of</span> IT
@@ -338,7 +339,7 @@ whose factor groups \(N_{k}/N_{k+1}\) are Abelian.
            (<span class="org-mizar-formula">for</span> N <span class="org-mizar-formula">being</span> normal Subgroup <span class="org-mizar-normal">of</span> G1 <span class="org-mizar-formula">st</span> N = G2
             <span class="org-mizar-formula">holds</span> G1 ./. N <span class="org-mizar-normal">is</span> commutative))));
 <span class="org-mizar-block">end</span>; 
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -357,20 +358,20 @@ series (as a ``maximal'' subnormal series) requires the
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-comment-delimiter">:: </span><span class="org-comment">ALG I.4.7 Definition 9</span>
-<span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-comment-delimiter">:: </span><span class="org-comment">ALG I.4.7 Definition 9
+</span><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> O <span class="org-mizar-normal">be</span> set;
   <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> GroupWithOperators <span class="org-mizar-normal">of</span> O;
   <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> FinSequence <span class="org-mizar-normal">of</span> the_stable_subgroups_of G;
   <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> composition_series <span class="org-mizar-normal">means</span>
-  <span class="org-comment-delimiter">:: </span><span class="org-comment">GROUP_9:def 28</span>
-  IT.1=(Omega).G <span class="org-mizar-formula">&amp;</span> IT.(len IT)= (1).G <span class="org-mizar-formula">&amp;</span>
+  <span class="org-comment-delimiter">:: </span><span class="org-comment">GROUP_9:def 28
+</span>  IT.1=(Omega).G <span class="org-mizar-formula">&amp;</span> IT.(len IT)= (1).G <span class="org-mizar-formula">&amp;</span>
   <span class="org-mizar-formula">for</span> i <span class="org-mizar-formula">being</span> Nat <span class="org-mizar-formula">st</span> i in dom IT <span class="org-mizar-formula">&amp;</span> i+1 in dom IT
   <span class="org-mizar-formula">for</span> H1,H2 <span class="org-mizar-formula">being</span> StableSubgroup <span class="org-mizar-normal">of</span> G
   <span class="org-mizar-formula">st</span> H1=IT.i <span class="org-mizar-formula">&amp;</span> H2=IT.(i+1)
   <span class="org-mizar-formula">holds</span> H2 <span class="org-mizar-normal">is</span> normal StableSubgroup <span class="org-mizar-normal">of</span> H1;
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -385,8 +386,8 @@ Mizar implicitly defines this in <code>GRNILP1:Th27</code>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">theorem</span> <span class="org-comment-delimiter">:: </span><span class="org-comment">GRNILP_1:27</span>
-  <span class="org-mizar-formula">for</span> G <span class="org-mizar-formula">being</span> Group
+<pre class="src src-mizar"><code><span class="org-mizar-main">theorem</span> <span class="org-comment-delimiter">:: </span><span class="org-comment">GRNILP_1:27
+</span>  <span class="org-mizar-formula">for</span> G <span class="org-mizar-formula">being</span> Group
   <span class="org-mizar-formula">st</span> <span class="org-mizar-formula">ex</span> F <span class="org-mizar-formula">being</span> FinSequence <span class="org-mizar-normal">of</span> the_normal_subgroups_of G
      <span class="org-mizar-formula">st</span> len F &gt; 0 <span class="org-mizar-formula">&amp;</span> F.1 = (Omega).G <span class="org-mizar-formula">&amp;</span> F.(len F) = (1).G <span class="org-mizar-formula">&amp;</span>
      <span class="org-mizar-formula">for</span> i <span class="org-mizar-formula">st</span> i in dom F <span class="org-mizar-formula">&amp;</span> i+1 in dom F
@@ -394,7 +395,7 @@ Mizar implicitly defines this in <code>GRNILP1:Th27</code>
      <span class="org-mizar-formula">holds</span> [.G1, (Omega).G.] = F.(i+1)
   <span class="org-mizar-formula">holds</span> G <span class="org-mizar-normal">is</span> nilpotent
 <span class="org-mizar-block">proof</span> <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -426,7 +427,7 @@ We could thus propose the definition (based on modifying the definition
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> Group;
   <span class="org-mizar-normal">func</span> UpperCentralSeries G -&gt; sequence <span class="org-mizar-normal">of</span> the_normal_subgroups_of G <span class="org-mizar-normal">means</span>
   :Def:
@@ -460,7 +461,7 @@ We could thus propose the definition (based on modifying the definition
     <span class="org-mizar-skeleton">hence</span> <span class="org-mizar-normal">thesis</span>;
   <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -468,14 +469,14 @@ We would then have to prove
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">theorem</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">theorem</span>
   <span class="org-mizar-formula">for</span> G <span class="org-mizar-normal">be</span> Group
   <span class="org-mizar-formula">for</span> n <span class="org-mizar-normal">be</span> Nat
   <span class="org-mizar-formula">holds</span> the carrier <span class="org-mizar-normal">of</span> (UpperCentralSeries G).(n+1) =
         {g <span class="org-mizar-normal">where</span> g <span class="org-mizar-normal">is</span> Element <span class="org-mizar-normal">of</span> G :
          <span class="org-mizar-formula">for</span> y <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> G
          <span class="org-mizar-formula">holds</span> [.g,y.] in (UpperCentralSeries G).n};
-</pre>
+</code></pre>
 </div>
 </div>
 </div>

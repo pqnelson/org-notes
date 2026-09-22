@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -270,11 +271,11 @@ a user-given message for details.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">exception</span> AssertionFailure <span class="org-keyword">of</span> string;
+<pre class="src src-sml"><code><span class="org-keyword">exception</span> AssertionFailure <span class="org-keyword">of</span> string;
 
 <span class="org-keyword">fun</span> <span class="org-function-name">assert</span> (msg : string) (is_success : bool) : unit =
     <span class="org-keyword">if</span> is_success <span class="org-keyword">then</span> () <span class="org-keyword">else</span> <span class="org-keyword">raise</span> AssertionFailure msg;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -289,9 +290,9 @@ encoded as a string).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Test</span> = TestCase <span class="org-keyword">of</span> string*(unit -&gt; unit)
+<pre class="src src-sml"><code><span class="org-keyword">datatype</span> <span class="org-type-def">Test</span> = TestCase <span class="org-keyword">of</span> string*(unit -&gt; unit)
               | TestSuite <span class="org-keyword">of</span> string*(Test list);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -312,7 +313,7 @@ tests.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">run</span> (TestCase (name, assertion))
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">run</span> (TestCase (name, assertion))
     = (assertion()
        <span class="org-keyword">handle</span> AssertionFailure msg =&gt; print (concat [<span class="org-string">"Test "</span>,
                                                      name,
@@ -323,7 +324,7 @@ tests.
                                   <span class="org-string">": "</span>,
                                   exnMessage e]))
   | run (TestSuite (name, tests)) = app run tests;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -333,12 +334,12 @@ test cases (and test suites) a little easier.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">test</span> (name:string) (assertion:unit -&gt; unit) : Test =
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">test</span> (name:string) (assertion:unit -&gt; unit) : Test =
     TestCase (name, assertion);
 
 <span class="org-keyword">fun</span> <span class="org-function-name">suite</span> (name:string) (tests : Test list) : Test=
     TestSuite (name, tests);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -346,12 +347,12 @@ Now we could run this on some example tests:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">ex_tests</span> = suite <span class="org-string">"Arithmetic Tests"</span>
+<pre class="src src-sml"><code><span class="org-keyword">val</span> <span class="org-variable-name">ex_tests</span> = suite <span class="org-string">"Arithmetic Tests"</span>
                      [test <span class="org-string">"Arithmetic test 1"</span> (<span class="org-keyword">fn</span> () =&gt; asser<span class="org-highlight-beyond-fill-column">t </span><span class="org-string"><span class="org-highlight-beyond-fill-column">"1+1=2"</span></span><span class="org-highlight-beyond-fill-column"> (1+1=2)),</span>
                       test <span class="org-string">"Arithmetic test 2"</span> (<span class="org-keyword">fn</span> () =&gt; asser<span class="org-highlight-beyond-fill-column">t </span><span class="org-string"><span class="org-highlight-beyond-fill-column">"1+1=3"</span></span><span class="org-highlight-beyond-fill-column"> (1+1=3))];</span>
 
 run ex_tests;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -379,14 +380,14 @@ track of possibly nested test suites).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">Extend the framework to handle printing test outcomes.</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">Extend the framework to handle printing test outcomes.</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">datatype</span> <span class="org-type-def">TestOutcome</span> = TestSuccess
                      | TestFail <span class="org-keyword">of</span> string
                      | TestException <span class="org-keyword">of</span> exn;
 
 <span class="org-keyword">datatype</span> <span class="org-type-def">TestResult</span> = ResultCase <span class="org-keyword">of</span> string*Time.time*TestOutco<span class="org-highlight-beyond-fill-column">me</span>
                     | ResultSuite <span class="org-keyword">of</span> string*Time.time*(TestRes<span class="org-highlight-beyond-fill-column">ult list);</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -394,7 +395,7 @@ We can now modify our <code>run</code> function to produce a <code>TestResult</c
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">run_test</span> (test : Test) : TestResult =
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">run_test</span> (test : Test) : TestResult =
 <span class="org-keyword">let</span>
   <span class="org-keyword">val</span> <span class="org-variable-name">start</span> = Time.now()
 <span class="org-keyword">in</span>
@@ -416,7 +417,7 @@ We can now modify our <code>run</code> function to produce a <code>TestResult</c
           ResultSuite (suite_name, dt, results)
       <span class="org-keyword">end</span>)
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -435,9 +436,9 @@ microseconds instead.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">`Time.fmt n interval` will produce a string representation </span><span class="org-comment"><span class="org-highlight-beyond-fill-column">of the</span></span>
-<span class="org-comment">number of seconds in the interval, to `n` digits after the dec</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">imal</span></span>
-<span class="org-comment">point.</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">`Time.fmt n interval` will produce a string representation </span><span class="org-comment"><span class="org-highlight-beyond-fill-column">of the</span></span><span class="org-comment">
+number of seconds in the interval, to `n` digits after the dec</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">imal</span></span><span class="org-comment">
+point.</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">intervalToString</span> (dt : Time.time) : string =
     Time.fmt 3 dt;
     <span class="org-comment-delimiter">(* </span><span class="org-comment">(LargeInt.toString (Time.toMicroseconds dt))^"ms";</span><span class="org-comment-delimiter"> *)</span>
@@ -468,14 +469,14 @@ microseconds instead.
   | report_results (ResultSuite (name,dt,outcomes)) =
     (print (concat [<span class="org-string">"Suite "</span>, name, <span class="org-string">" ("</span>, intervalToString dt,<span class="org-highlight-beyond-fill-column"> </span><span class="org-string"><span class="org-highlight-beyond-fill-column">")\n"</span></span><span class="org-highlight-beyond-fill-column">]);</span>
      app report_results outcomes);
-</pre>
+</code></pre>
 </div>
 
 <p>
 Now we could run this on the example tests by doing something like:
 </p>
 
-<pre class="example" id="orga6a74e0">
+<pre class="example" id="org2047bb2">
 val ex_results = run_test ex_tests;
 
 report_results ex_results;
@@ -505,10 +506,10 @@ record type to track the number of successes, failures, and errors.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">ResultSummary</span> = {success : int, fail : int, errors : int}<span class="org-highlight-beyond-fill-column">;</span>
+<pre class="src src-sml"><code><span class="org-keyword">type</span> <span class="org-type-def">ResultSummary</span> = {success : int, fail : int, errors : int}<span class="org-highlight-beyond-fill-column">;</span>
 
 <span class="org-keyword">val</span> <span class="org-variable-name">no_results</span> = {success=0, fail=0, errors=0};
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -519,13 +520,13 @@ will be used to fold them all together.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">merge_summaries</span> (({success=s1, fail=f1, errors=e1},
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">merge_summaries</span> (({success=s1, fail=f1, errors=e1},
                      {success=s2, fail=f2, errors=e2}) : Resul<span class="org-highlight-beyond-fill-column">tSummary*ResultSummary)</span>
     : ResultSummary
     = {success = s1+s2,
        fail = f1 + f2,
        errors = e1 + e2};
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -534,7 +535,7 @@ summing over the summaries of its constituents.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">summarize : TestRest -&gt; ResultSummary</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">summarize : TestRest -&gt; ResultSummary</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">summarize</span> (ResultCase (_, _, outcome)) =
     (<span class="org-keyword">case</span> outcome <span class="org-keyword">of</span>
          TestSuccess =&gt; {success=1, fail=0, errors=0}
@@ -542,14 +543,14 @@ summing over the summaries of its constituents.
        | (TestException _) =&gt; {success=0, fail=0, errors=1})
   | summarize (ResultSuite (_, _, outcomes)) =
     foldl merge_summaries no_results (map summarize outcomes);
-</pre>
+</code></pre>
 </div>
 
 <p>
 Now we could check the summary of our toy test suite:
 </p>
 
-<pre class="example" id="orgf00acb8">
+<pre class="example" id="orge4b4a18">
 summarize ex_results;
 
 (* SML/NJ produces:
@@ -569,7 +570,7 @@ test suite be contained in its own file. So I would love to write
 something like:
 </p>
 
-<pre class="example" id="orgfc3211a">
+<pre class="example" id="org0a31a00">
 suite "FooBarTests";
 
 test "BaazTest1" fn () =&gt; (* ... *);
@@ -586,9 +587,9 @@ specifically uses <code>ref</code> instances.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">current_suite</span> : (string*(Test list)) ref = ref (<span class="org-string">""</span>, []);
+<pre class="src src-sml"><code><span class="org-keyword">val</span> <span class="org-variable-name">current_suite</span> : (string*(Test list)) ref = ref (<span class="org-string">""</span>, []);
 <span class="org-keyword">val</span> <span class="org-variable-name">all_suites</span> : (Test list) ref = ref [];
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -607,14 +608,14 @@ suite to the running list of all suites in a helper function:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">append_suite</span> (name : string) =
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">append_suite</span> (name : string) =
     <span class="org-keyword">let</span>
         <span class="org-keyword">val</span> (name, tests) = !current_suite
     <span class="org-keyword">in</span>
         all_suites := (TestSuite (name, tests)) :: (!all_suite<span class="org-highlight-beyond-fill-column">s);</span>
         current_suite := (name, [])
     <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -622,9 +623,9 @@ Now, we have our redefinition for <code>suite</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">suite</span> (name : string) =
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">suite</span> (name : string) =
     append_suite(name);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -633,13 +634,13 @@ list of tests.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">test</span> (name : string) (assertion : unit -&gt; unit) : unit =
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">test</span> (name : string) (assertion : unit -&gt; unit) : unit =
     <span class="org-keyword">let</span>
         <span class="org-keyword">val</span> (suite_name, tests) = !current_suite
     <span class="org-keyword">in</span>
         current_suite := (suite_name, (TestCase (name, asserti<span class="org-highlight-beyond-fill-column">on))::tests)</span>
     <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -662,11 +663,11 @@ file.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">REPORTER</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">REPORTER</span> = <span class="org-keyword">sig</span>
     <span class="org-keyword">type</span> <span class="org-type-def">t</span>; <span class="org-comment-delimiter">(* </span><span class="org-comment">type of the artifact produced</span><span class="org-comment-delimiter"> *)</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">report</span> : TestResult -&gt; t;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -681,7 +682,7 @@ The output for a test suite which has no errors or failures would
 consist of two lines:
 </p>
 
-<pre class="example" id="org67bb85e">
+<pre class="example" id="orga774f76">
 Running &lt;file path&gt;
 Tests run: &lt;number&gt;, Failures: &lt;number&gt;, Errors: &lt;number&gt;, Skipped: &lt;number&gt;, Time elapsed: &lt;interval s - in &lt;file path&gt;
 </pre>
@@ -693,7 +694,7 @@ package this together in <code>JUnitTt</code>, a structure writing to the termin
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">count_tests_run</span> ({success=s1, fail=f1, errors=e1} : Result<span class="org-highlight-beyond-fill-column">Summary)</span>
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">count_tests_run</span> ({success=s1, fail=f1, errors=e1} : Result<span class="org-highlight-beyond-fill-column">Summary)</span>
     = s1 + f1 + e1;
 
 <span class="org-keyword">structure</span> <span class="org-module-def">JUnitTt</span> : REPORTER = <span class="org-keyword">struct</span>
@@ -722,7 +723,7 @@ package this together in <code>JUnitTt</code>, a structure writing to the termin
                         <span class="org-string">"\n"</span>]))
     <span class="org-keyword">end</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -730,7 +731,7 @@ Now we can run this on our example test results, which will produce
 something like the following:
 </p>
 
-<pre class="example" id="org738673a">
+<pre class="example" id="orgbaa6f99">
 - JUnitTt.report ex_results;
 Running Arithmetic Tests
 Arithmetic test 2 FAIL: 1+1=3
@@ -754,7 +755,7 @@ in writing some SML code.
 Schematically, the XML output from JUnit looks like:
 </p>
 
-<pre class="example" id="orgb58d5a1">
+<pre class="example" id="org62cc451">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!-- a description of the JUnit XML format and how Jenkins parses it. See also junit.xsd --&gt;
 
@@ -847,7 +848,7 @@ Schematically, the XML output from JUnit looks like:
 Ideally, my project should look like:
 </p>
 
-<pre class="example" id="org9d059ff">
+<pre class="example" id="orgb79fd8a">
 ├── src
 │   ├── main.sml
 │   └── foo.sml

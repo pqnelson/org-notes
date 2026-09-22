@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -309,7 +310,7 @@ write some notes about them. We should recall, in general, a binary tree
 is inductively defined as
 </p>
 
-<div class="definition" id="orgb069ec6">
+<div class="definition" id="org7429d79">
 <p>
 A <dfn>Binary Tree</dfn> is either
 </p>
@@ -329,12 +330,12 @@ as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Metadata</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">whatever you want, we omit it</span><span class="org-comment-delimiter"> *)</span>;
+<pre class="src src-sml"><code><span class="org-keyword">type</span> <span class="org-type-def">Metadata</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">whatever you want, we omit it</span><span class="org-comment-delimiter"> *)</span>;
 
 <span class="org-keyword">datatype</span> 'a <span class="org-type-def">BinaryTree</span>
   = EmptyTree
   | Branch <span class="org-keyword">of</span> 'a * ('a BinaryTree) * ('a BinaryTree) *  Metada<span class="org-highlight-beyond-fill-column">ta;</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -354,10 +355,10 @@ count the nodes in a tree thusly:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">node_count</span> EmptyTree = 0
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">node_count</span> EmptyTree = 0
   | node_count (Branch (_, left, right, _))
     = 1 + node_count left + node_count right;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -376,7 +377,7 @@ size to be "neither branch should be horribly bigger than the other" and
 still have logarithmic runtime for the tree operations.
 </p>
 
-<div class="definition" id="org31c5c65">
+<div class="definition" id="org2613d36">
 <p>
 Let \(\Delta\in\mathbb{R}\) be a positive real constant (called the <dfn>Weight Ratio</dfn>)
 greater than 1.
@@ -413,10 +414,10 @@ algebraic data type, something like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">Wishful thinking:</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">Wishful thinking:</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">datatype</span> 'a <span class="org-type-def">WBTree</span> = Empty
                    | Branch <span class="org-keyword">of</span> int * 'a * ('a WBTree) * ('a WB<span class="org-highlight-beyond-fill-column">Tree);</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -468,7 +469,7 @@ The bare minimum we need is just a <code>compare</code> function for a type:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig</span><span class="org-comment-delimiter"> *)</span>
 
 <span class="org-comment-delimiter">(* </span><span class="org-comment">minimal signature which is fleshed out in a functor</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">signature</span> <span class="org-interface-def">COMPARABLE</span> =
@@ -476,7 +477,7 @@ The bare minimum we need is just a <code>compare</code> function for a type:
     <span class="org-keyword">type</span> <span class="org-type-def">t</span>;
     <span class="org-keyword">val</span> <span class="org-variable-name">compare</span> : t * t -&gt; order;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -486,7 +487,7 @@ imaginable, as well as a way to determine which value is <code>max</code> and <c
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig</span><span class="org-comment-delimiter"> *)</span>
 
 <span class="org-keyword">signature</span> <span class="org-interface-def">COMPARABLE</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
 
@@ -502,7 +503,7 @@ imaginable, as well as a way to determine which value is <code>max</code> and <c
     <span class="org-keyword">val</span> <span class="org-variable-name">max</span> : t * t -&gt; t;
     <span class="org-keyword">val</span> <span class="org-variable-name">min</span> : t * t -&gt; t;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -511,7 +512,7 @@ module implementing <code>COMPARABLE</code> functions:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig</span><span class="org-comment-delimiter"> *)</span>
 
 <span class="org-keyword">signature</span> <span class="org-interface-def">COMPARABLE</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>;
 
@@ -529,7 +530,7 @@ module implementing <code>COMPARABLE</code> functions:
     <span class="org-keyword">fun</span> <span class="org-function-name">max</span> (x,y) = <span class="org-keyword">if</span> lt(x,y) <span class="org-keyword">then</span> y <span class="org-keyword">else</span> x;
     <span class="org-keyword">fun</span> <span class="org-function-name">min</span> (x,y) = <span class="org-keyword">if</span> lt(x,y) <span class="org-keyword">then</span> x <span class="org-keyword">else</span> y;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -544,11 +545,11 @@ by specifying it is a structure whose signature is <code>ORD</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
+<pre class="src src-sml"><code><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
   <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -561,7 +562,7 @@ the world to only be vaguely aware <code>WBTree.t</code> even exists.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
+<pre class="src src-sml"><code><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-comment-delimiter">(* </span><span class="org-comment">Declaration for the type of a weight-balanced tree.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E
@@ -569,7 +570,7 @@ the world to only be vaguely aware <code>WBTree.t</code> even exists.
 
    <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -582,7 +583,7 @@ avoid making anything outside the functor realize the smart constructor
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
+<pre class="src src-sml"><code><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-comment-delimiter">(* </span><span class="org-comment">Declaration for the type of a weight-balanced tree.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E
@@ -593,7 +594,7 @@ avoid making anything outside the functor realize the smart constructor
 
    <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -602,7 +603,7 @@ tree, giving us our initial functor:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E
@@ -618,7 +619,7 @@ tree, giving us our initial functor:
    <span class="org-keyword">fun</span> <span class="org-function-name">bin</span> x l r = T (1 + size l + size r, x, l, r);
    <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-7b18d91a-27f0-471c-b2a9-13bfb00f23f7" class="outline-4">
@@ -644,7 +645,7 @@ present), or does nothing (if absent).</li>
 
 <p>
 There are some "nice to have" functions, which "working programmers"
-will want&#x2026;but we may or may not need <i>all</i> of them:
+will want&hellip;but we may or may not need <i>all</i> of them:
 </p>
 
 <ul class="org-ul">
@@ -652,7 +653,7 @@ will want&#x2026;but we may or may not need <i>all</i> of them:
 <ul class="org-ul">
 <li><code>union : t -&gt; t -&gt; t</code> which will add elements from the second tree
 (the "right" tree) to the first "left" tree if the element is absent
-from the first tree &#x2014; so if the comparison of node values is not
+from the first tree &mdash; so if the comparison of node values is not
 injective (intuitively: two distinct values are "equivalent" and
 treated as <code>EQUAL</code>), then the existing value is kept.</li>
 <li><code>difference : t -&gt; t -&gt; t</code> which will remove elements from the first
@@ -718,7 +719,7 @@ when \(|R|=0\) or \(|L|=0\), when we should allow the other subtree to be
 either empty or a singleton. Formally:
 </p>
 
-<div class="definition" id="org6a3a725">
+<div class="definition" id="org8611514">
 <p>
 Let <code>Delta</code> be a positive number.
 We say a weight-balanced tree \((n, x, L, R)\) is <dfn>Strictly Balanced</dfn> if:
@@ -762,7 +763,7 @@ When <code>Delta</code> is 3 and <code>size(L)</code> = 5, then a <i>strictly ba
 allows <code>15 &gt; size(R) &gt;= 2</code> for the sizes for the right subtree.
 </p>
 
-<div class="remark" id="org296cc88">
+<div class="remark" id="org3895ad0">
 <p>
 There is some slight variation in the definition of a WBT being
 balanced. For example, Hirai and Yamamoto define it as
@@ -778,7 +779,7 @@ we would allow <code>Delta*size(L) + (Delta - 1) &gt;= size(R) &gt;= ceiling(siz
 We will conceptually think of subtree \(T_{1}\) as
 <dfn>Balanced With Respect to</dfn> subtree \(T_{2}\)
 if \(\Delta\cdot(|T_{2}|+1)\geq|T_{1}|+1\). This is implemented as
-<code>isBalanced T2 T1</code> &#x2014; the intuition is the curried form
+<code>isBalanced T2 T1</code> &mdash; the intuition is the curried form
 <code>isBalanced T2</code> is a predicate testing if its argument (the expected \(T_{1}\)) is
 balanced with respect to \(T_{2}\).
 </p>
@@ -792,7 +793,7 @@ We could implement this predicate in Standard ML as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int * Node.t * t * t;
@@ -814,7 +815,7 @@ We could implement this predicate in Standard ML as:
                                    balanced l <span class="org-keyword">andalso</span> balanced<span class="org-highlight-beyond-fill-column"> r;</span>
    <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -835,14 +836,14 @@ with the implementation:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">first attempt</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">first attempt</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
   | insert x (t <span class="org-keyword">as</span> T (sz, v, l, r)) =
     <span class="org-keyword">case</span> compare(x,v) <span class="org-keyword">of</span>
        LESS =&gt; T (sz + 1, v, insert x l, r)
      | EQUAL =&gt; t
      | GREATER T(sz + 1, v, l, insert x r);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -854,7 +855,7 @@ less than the root of the subtree. But what happens with
 </p>
 
 
-<div id="org27b2254" class="figure">
+<div id="orgf118dd1" class="figure">
 <p><img src="../../img/tree-2.png" alt="tree-2.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>Naive insertion of <code>[1,2,3,4,5]</code> into an empty tree.</p>
@@ -886,7 +887,7 @@ To see this, observe the following two trees:
 </p>
 
 
-<div id="orgb48c5da" class="figure">
+<div id="org8c69b94" class="figure">
 <p><img src="../../img/tree-5.png" alt="tree-5.png">
 </p>
 <p><span class="figure-number">Figure 2: </span>Two possible weight-balanced trees with \(x < a < y < b < z\).</p>
@@ -907,14 +908,14 @@ We can remedy this by <i>balancing</i> the tree after inserting a new node:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">insert : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">insert : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">insert</span> x E = singleton x
   | insert x (tree <span class="org-keyword">as</span> T (sz, v, l, r)) =
     <span class="org-keyword">case</span> compare(x,v) <span class="org-keyword">of</span>
        LESS =&gt; balanceL v (insert x l) r
      | EQUAL =&gt; tree
      | GREATER =&gt; balanceR v l  (insert x r);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -946,7 +947,7 @@ Tree rotation can graphically visualized as:
 </p>
 
 
-<div id="orgc2f7419" class="figure">
+<div id="org07aa429" class="figure">
 <p><img src="../../img/tree-1.png" alt="tree-1.png">
 </p>
 <p><span class="figure-number">Figure 3: </span>Single left and single right rotations of tree with \(x < a < y < b < z\).</p>
@@ -962,7 +963,7 @@ tells us the left subtree is "too big".
 <p>
 There is an edge-case worth discussing: what if we start with a tree
 like in the left-hand side of figure 3, where the left subtree is too
-heavy, so we rotate&#x2026;but then after rotation, the right subtree is too
+heavy, so we rotate&hellip;but then after rotation, the right subtree is too
 heavy? We would be shifting the \(y\) subtree back and forth in an
 infinite loop. Could this happen?
 </p>
@@ -1034,7 +1035,7 @@ A <dfn>double left rotation</dfn> moves a
 </p>
 
 
-<div id="org4aebdf6" class="figure">
+<div id="orgea2af17" class="figure">
 <p><img src="../../img/tree-3.png" alt="tree-3.png">
 </p>
 <p><span class="figure-number">Figure 4: </span>Double left rotation of tree with \(x < a < y_{0} < b < y_{1} < c < z\).</p>
@@ -1045,7 +1046,7 @@ This is done first by performing a "local right" rotation:
 </p>
 
 
-<div id="org1d70192" class="figure">
+<div id="orgf1cc574" class="figure">
 <p><img src="../../img/tree-4.png" alt="tree-4.png">
 </p>
 <p><span class="figure-number">Figure 5: </span>"Local right" rotation of tree with \(x < a < y_{0} < b < y_{1} < c < z\).</p>
@@ -1066,7 +1067,7 @@ The implementation of this, albeit unoptimized:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">balanceR : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">balanceR : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">balanceR</span> x l r = <span class="org-keyword">if</span> isBalanced l r
                      <span class="org-keyword">then</span> bin x l r
                      <span class="org-keyword">else</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">when size r &gt; delta*(size l)</span><span class="org-comment-delimiter"> *)</span> r<span class="org-highlight-beyond-fill-column">otateL x l r;</span>
@@ -1075,7 +1076,7 @@ The implementation of this, albeit unoptimized:
 <span class="org-keyword">fun</span> <span class="org-function-name">balanceL</span> x l r = <span class="org-keyword">if</span> isBalanced r l
                      <span class="org-keyword">then</span> bin x l r
                      <span class="org-keyword">else</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">when size l &gt; delta*(size r)</span><span class="org-comment-delimiter"> *)</span> r<span class="org-highlight-beyond-fill-column">otateR x l r;</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -1084,7 +1085,7 @@ have <i>double</i> rotations.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">rotateL : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">rotateL : Node.t -&gt; t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">rotateL</span> x l (r <span class="org-keyword">as</span> (T (_, _, rl, rr))) =
     <span class="org-keyword">if</span> isSingle rl rr <span class="org-keyword">then</span> singleL x l r
     <span class="org-keyword">else</span> doubleL x l r
@@ -1098,7 +1099,7 @@ have <i>double</i> rotations.
   | doubleL _ _ _ = <span class="org-keyword">raise</span> <span class="org-string">"doubleL"</span>;
 
 <span class="org-comment-delimiter">(* </span><span class="org-comment">...and analogous functions for right rotations</span><span class="org-comment-delimiter"> *)</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -1110,9 +1111,9 @@ double rotations. For us, we name <code>alpha</code> something more relevant,
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">isSingle : t -&gt; t -&gt; bool</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">isSingle : t -&gt; t -&gt; bool</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">isSingle</span> l r = (size l + 1) &lt; ratio*(size r + 1);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -1122,7 +1123,7 @@ We combine these functions together, and our functor so far becomes:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">wbtree.fun</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int * Node.t * t * t;
@@ -1191,10 +1192,10 @@ We combine these functions together, and our functor so far becomes:
          | GREATER =&gt; balanceR v l  (insert x r));
    <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
-<div class="exercise" id="org93ef768">
+<div class="exercise" id="org8c9f18c">
 <p>
 Assume <code>l</code> and <code>r</code> are balanced trees, and <code>x</code> is a value such that it
 lies between the subtrees.
@@ -1207,7 +1208,7 @@ lies between the subtrees.
 
 </div>
 
-<div class="exercise" id="org738f95b">
+<div class="exercise" id="org18328cf">
 <p>
 Assume <code>l</code> and <code>r</code> are balanced trees and <code>x</code> is a value that lies
 between the two trees. What is the worst-case, best-case, and average runtime complexities of <code>balanceL x l r</code>?
@@ -1216,7 +1217,7 @@ Is the runtime complexities for <code>balanceR x l r</code> the same?
 
 </div>
 
-<div class="exercise" id="org2609286">
+<div class="exercise" id="org58cbf3b">
 <p>
 Optimize our code. We proved it works (well, in an exercise), so prove
 your optimizations "work" as well!
@@ -1237,7 +1238,7 @@ For other ideas, see Milan Straka's "The performance of the Haskell
 
 </div>
 
-<div class="exercise" id="org0a48956">
+<div class="exercise" id="orgdf3a453">
 <p>
 Prove or find a counter-example: <code>insert</code> is not commutative, in the
 sense that for any tree <code>t</code> and any values <code>x</code> and <code>y</code>, we do not have
@@ -1283,7 +1284,7 @@ We can easily code this up as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
+<pre class="src src-sml"><code><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
 
@@ -1296,10 +1297,10 @@ We can easily code this up as:
 
    <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
-<div class="exercise" id="orga1869b2">
+<div class="exercise" id="org7b39c31">
 <p>
 Write a function to query for the subtree consisting of elements:
 </p>
@@ -1326,14 +1327,14 @@ well, we'll just brush that problem into another function which will
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">delete : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">delete : Node.t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">delete</span> _ E = E
   | delete x (tree <span class="org-keyword">as</span> T (_, y, l, r)) =
     (<span class="org-keyword">case</span> compare (x,y) <span class="org-keyword">of</span>
          LESS =&gt; balanceR y (delete x l) r
        | EQUAL =&gt; glue l r
        | GREATER =&gt; balanceL y l (delete x r));
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -1359,7 +1360,7 @@ and rebalance everything by invoking <code>balanceL m l r'</code> to produce a b
 </ol>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">glue : t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">glue : t -&gt; t -&gt; t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">glue</span> E r = r
   | glue l E = l
   | glue (l <span class="org-keyword">as</span> T(sl, xl, ll, lr)) (r <span class="org-keyword">as</span> T(sr, xr, rl, rr))
@@ -1369,12 +1370,12 @@ and rebalance everything by invoking <code>balanceL m l r'</code> to produce a b
       <span class="org-keyword">else</span> (<span class="org-keyword">let</span> <span class="org-keyword">val</span> (m, r') = minViewSure xr rl rr
             <span class="org-keyword">in</span> balanceL m l r'
             <span class="org-keyword">end</span>);
-</pre>
+</code></pre>
 </div>
 
 <p>
 We can get the maximum element of a tree, plus a version of the tree
-with that element <i>removed</i>. How? Simply plumb the right subtree &#x2014;
+with that element <i>removed</i>. How? Simply plumb the right subtree &mdash;
 recursively examine the right subtree until it is finally empty, then
 the node must contain the maximum value. Since we assume the tree is
 balanced, we know that every value in the left subtree will be less than
@@ -1387,7 +1388,7 @@ and the maximum value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">maxViewSure : Node.t -&gt; t -&gt; t -&gt; Node.t * t</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">maxViewSure : Node.t -&gt; t -&gt; t -&gt; Node.t * t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">maxViewSure</span> x l E = (x, l)
   | maxViewSure x l (T (_, xr, lr, rr)) =
     (<span class="org-keyword">case</span> maxViewSure xr lr rr <span class="org-keyword">of</span>
@@ -1396,7 +1397,7 @@ and the maximum value:
 <span class="org-comment-delimiter">(* </span><span class="org-comment">maxView : t -&gt; (Node.t * t) option</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">maxView</span> E = NONE
   | maxView (T (_, x, l, r)) = SOME (maxViewSure x l r);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -1410,7 +1411,7 @@ rebalance the remaining trees:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">minViewSure : Node.t -&gt; t -&gt; t -&gt; Node.t * t</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">minViewSure : Node.t -&gt; t -&gt; t -&gt; Node.t * t</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">minViewSure</span> x E r = (x, r)
   | minViewSure x (T (_, xl, ll, lr)) r =
     (<span class="org-keyword">case</span> minViewSure xl ll lr <span class="org-keyword">of</span>
@@ -1419,7 +1420,7 @@ rebalance the remaining trees:
 <span class="org-comment-delimiter">(* </span><span class="org-comment">minView : t -&gt; (Node.t * t) option</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">minView</span> E = NONE
   | minView (T (_, x, l, r)) = SOME (minViewSure x l r);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -1427,7 +1428,7 @@ Great, now we have the ability to insert and delete elements from our
 weight-balanced tree.
 </p>
 
-<div class="exercise" id="orgde8208e">
+<div class="exercise" id="org21225b5">
 <p>
 Prove, if <code>tree</code> is a <i>balanced</i> weight-balanced tree containing the value <code>x</code>,
 then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
@@ -1435,7 +1436,7 @@ then <code>delete x tree</code> produces a <i>balanced</i> weight-balanced tree.
 
 </div>
 
-<div class="exercise" id="orgff2d2cf">
+<div class="exercise" id="orgafe25df">
 <p>
 Change our code for the case when <code>x</code> is not contained in <code>tree</code>, then
 we have <code>delete x tree</code> return the <code>tree</code> unmodified.
@@ -1456,12 +1457,12 @@ In summary, the code related to the <code>delete</code> function is collected th
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
+<pre class="src src-sml"><code><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-comment-delimiter">(** </span><span class="org-comment">Helper functions for delete</span><span class="org-comment-delimiter"> **)</span>
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">Retrieve the maximal key for the set, and the set stripp</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">ed</span></span>
-<span class="org-comment">      of that element.</span><span class="org-comment-delimiter"> *)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">Retrieve the maximal key for the set, and the set stripp</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">ed</span></span><span class="org-comment">
+      of that element.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">maxViewSure</span> x l E = (x, l)
      | maxViewSure x l (T (_, xr, lr, rr)) =
        (<span class="org-keyword">case</span> maxViewSure xr lr rr <span class="org-keyword">of</span>
@@ -1475,14 +1476,14 @@ In summary, the code related to the <code>delete</code> function is collected th
        (<span class="org-keyword">case</span> minViewSure xl ll lr <span class="org-keyword">of</span>
             (m, l') =&gt; (m, balanceR x l' r));
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">Retrieves the minimal key of the set, and the set is str</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">ipped of that</span></span>
-<span class="org-comment">      element, or `NONE` if passed an empty list.</span><span class="org-comment-delimiter"> *)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">Retrieves the minimal key of the set, and the set is str</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">ipped of that</span></span><span class="org-comment">
+      element, or `NONE` if passed an empty list.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">minView</span> E = NONE
      | minView (T (_, x, l, r)) = SOME (minViewSure x l r);
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">Glue two trees together.</span>
-<span class="org-comment">      Assume that `l` and `r` are already balanced with respec</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">t to each</span></span>
-<span class="org-comment">      other.</span><span class="org-comment-delimiter"> *)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">Glue two trees together.
+      Assume that `l` and `r` are already balanced with respec</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">t to each</span></span><span class="org-comment">
+      other.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">glue</span> E r = r
      | glue l E = l
      | glue (l <span class="org-keyword">as</span> T(sl, xl, ll, lr)) (r <span class="org-keyword">as</span> T(sr, xr, rl, rr))
@@ -1503,7 +1504,7 @@ In summary, the code related to the <code>delete</code> function is collected th
 
    <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1515,7 +1516,7 @@ In summary, the code related to the <code>delete</code> function is collected th
 <h3 id="h-e0dc94f8-0daf-49c4-bfb2-3512397bc428"><span class="section-number-3">5.1.</span> ord.sig</h3>
 <div class="outline-text-3" id="text-h-e0dc94f8-0daf-49c4-bfb2-3512397bc428">
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">ord.sig</span><span class="org-comment-delimiter"> *)</span>
 
 <span class="org-comment-delimiter">(* </span><span class="org-comment">minimal signature which is fleshed out in a functor</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">signature</span> <span class="org-interface-def">COMPARABLE</span> =
@@ -1549,7 +1550,7 @@ In summary, the code related to the <code>delete</code> function is collected th
     <span class="org-keyword">fun</span> <span class="org-function-name">max</span> (x,y) = <span class="org-keyword">if</span> lt(x,y) <span class="org-keyword">then</span> y <span class="org-keyword">else</span> x;
     <span class="org-keyword">fun</span> <span class="org-function-name">min</span> (x,y) = <span class="org-keyword">if</span> lt(x,y) <span class="org-keyword">then</span> x <span class="org-keyword">else</span> y;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1557,7 +1558,7 @@ In summary, the code related to the <code>delete</code> function is collected th
 <h3 id="h-980e6087-e4d2-4c29-9773-077c9df86f09"><span class="section-number-3">5.2.</span> wbtree.fun</h3>
 <div class="outline-text-3" id="text-h-980e6087-e4d2-4c29-9773-077c9df86f09">
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
+<pre class="src src-sml"><code><span class="org-keyword">functor</span> <span class="org-module-def">WBTree</span>(Node : ORD) =
 <span class="org-keyword">struct</span>
    <span class="org-keyword">datatype</span> <span class="org-type-def">t</span> = E | T <span class="org-keyword">of</span> int * Node.t * t * t;
 
@@ -1633,8 +1634,8 @@ In summary, the code related to the <code>delete</code> function is collected th
          | GREATER =&gt; balanceR v l  (insert x r));
 
    <span class="org-comment-delimiter">(** </span><span class="org-comment">Helper functions for delete</span><span class="org-comment-delimiter"> **)</span>
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">Retrieve the maximal key for the set, and the set stripp</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">ed</span></span>
-<span class="org-comment">      of that element.</span><span class="org-comment-delimiter"> *)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">Retrieve the maximal key for the set, and the set stripp</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">ed</span></span><span class="org-comment">
+      of that element.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">maxViewSure</span> x l E = (x, l)
      | maxViewSure x l (T (_, xr, lr, rr)) =
        (<span class="org-keyword">case</span> maxViewSure xr lr rr <span class="org-keyword">of</span>
@@ -1648,14 +1649,14 @@ In summary, the code related to the <code>delete</code> function is collected th
        (<span class="org-keyword">case</span> minViewSure xl ll lr <span class="org-keyword">of</span>
             (m, l') =&gt; (m, balanceR x l' r));
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">Retrieves the minimal key of the set, and the set is str</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">ipped of that</span></span>
-<span class="org-comment">      element, or `NONE` if passed an empty list.</span><span class="org-comment-delimiter"> *)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">Retrieves the minimal key of the set, and the set is str</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">ipped of that</span></span><span class="org-comment">
+      element, or `NONE` if passed an empty list.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">minView</span> E = NONE
      | minView (T (_, x, l, r)) = SOME (minViewSure x l r);
 
-   <span class="org-comment-delimiter">(* </span><span class="org-comment">Glue two trees together.</span>
-<span class="org-comment">      Assume that `l` and `r` are already balanced with respec</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">t to each</span></span>
-<span class="org-comment">      other.</span><span class="org-comment-delimiter"> *)</span>
+   <span class="org-comment-delimiter">(* </span><span class="org-comment">Glue two trees together.
+      Assume that `l` and `r` are already balanced with respec</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">t to each</span></span><span class="org-comment">
+      other.</span><span class="org-comment-delimiter"> *)</span>
    <span class="org-keyword">fun</span> <span class="org-function-name">glue</span> E r = r
      | glue l E = l
      | glue (l <span class="org-keyword">as</span> T(sl, xl, ll, lr)) (r <span class="org-keyword">as</span> T(sr, xr, rl, rr))
@@ -1676,7 +1677,7 @@ In summary, the code related to the <code>delete</code> function is collected th
 
    <span class="org-comment-delimiter">(* </span><span class="org-comment">more to come</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1688,18 +1689,18 @@ In summary, the code related to the <code>delete</code> function is collected th
 <li>Jürg Nievergelt and Edward M. Reingold,<br>
 "Binary search trees of bounded balance".<br>
 <i>STOC '72: Proceedings of the fourth annual ACM symposium on Theory of computing</i>,
-May 1972, Pages 137&#x2013;142
+May 1972, Pages 137&ndash;142
 <a href="https://doi.org/10.1145/800152.804906">https://doi.org/10.1145/800152.804906</a>
 <ul class="org-ul">
 <li>Cited/blamed as the origin/inspiration for weighted-balanced trees</li>
 </ul></li>
 <li>Stephen Adams,<br>
-"Functional Pearls: Efficient sets &#x2014; a balancing act".<br>
-In <i>J. of Func. Progr.</i> <b>3</b> no.4 (1993) pp.553&#x2013;561,
+"Functional Pearls: Efficient sets &mdash; a balancing act".<br>
+In <i>J. of Func. Progr.</i> <b>3</b> no.4 (1993) pp.553&ndash;561,
 <a href="https://www.cambridge.org/core/journals/journal-of-functional-programming/article/functional-pearls-efficient-setsa-balancing-act/0CAA1C189B4F7C15CE9B8C02D0D4B54E">Eprint</a></li>
 <li>Yoichi Hirai and Kazuhiko Yamamoto,<br>
 "Balancing weight-balanced trees".<br>
-<i>Journal of Functional Programming</i> <b>21</b> no.3 (2011) 287&#x2013;307.
+<i>Journal of Functional Programming</i> <b>21</b> no.3 (2011) 287&ndash;307.
 <a href="https://yoichihirai.com/bst.pdf">PDF</a>
 <ul class="org-ul">
 <li><b>CAUTION:</b> the <code>balanceL</code> and <code>balanceR</code> functions described by

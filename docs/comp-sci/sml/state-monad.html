@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -275,10 +276,10 @@ We can view this as a generalization of the <a href="io-monad.html">IO Monad</a>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-haskell-keyword">type</span> <span class="org-haskell-type">RealWorld</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-operator">...</span>
+<pre class="src src-haskell"><code><span class="org-haskell-keyword">type</span> <span class="org-haskell-type">RealWorld</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-operator">...</span>
 
 <span class="org-haskell-keyword">type</span> <span class="org-haskell-type">IO</span> a <span class="org-haskell-operator">=</span> <span class="org-haskell-type">State</span> <span class="org-haskell-type">RealWorld</span> a
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -290,8 +291,8 @@ We basically have a state be described along the lines of:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> ('s,'a) <span class="org-type-def">State</span> = State <span class="org-keyword">of</span> ('s -&gt; 'a*'s);
-</pre>
+<pre class="src src-sml"><code><span class="org-keyword">datatype</span> ('s,'a) <span class="org-type-def">State</span> = State <span class="org-keyword">of</span> ('s -&gt; 'a*'s);
+</code></pre>
 </div>
 
 <p>
@@ -304,8 +305,8 @@ user to do pattern matching. We could ostensibly just do:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">type</span> ('s, 'a) <span class="org-type-def">State</span> = 's -&gt; 'a * 's;
-</pre>
+<pre class="src src-sml"><code><span class="org-keyword">type</span> ('s, 'a) <span class="org-type-def">State</span> = 's -&gt; 'a * 's;
+</code></pre>
 </div>
 
 <p>
@@ -318,7 +319,7 @@ What we do is:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">abstype</span> ('s, 'a) <span class="org-type-def">State</span> = State <span class="org-keyword">of</span> ('s -&gt; 'a * 's)
+<pre class="src src-sml"><code><span class="org-keyword">abstype</span> ('s, 'a) <span class="org-type-def">State</span> = State <span class="org-keyword">of</span> ('s -&gt; 'a * 's)
 <span class="org-keyword">where</span>
   <span class="org-keyword">fun</span> <span class="org-function-name">state</span> (f : 's -&gt; 'a * 's) = State f;
   <span class="org-keyword">fun</span> <span class="org-function-name">runState</span> t st = <span class="org-comment-delimiter">(* </span><span class="org-comment">magic...</span><span class="org-comment-delimiter"> *)</span>;
@@ -330,7 +331,7 @@ What we do is:
                              <span class="org-keyword">in</span> runState (k x) st'
                              <span class="org-keyword">end</span>);
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -357,12 +358,12 @@ The bind function composes state-transition functions:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">f : top-of-stack -&gt; State</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">f : top-of-stack -&gt; State</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">bind</span> (State st) f = State (<span class="org-keyword">fn</span> s =&gt; <span class="org-keyword">let</span> <span class="org-keyword">val</span> (x, s') = st s
                                            <span class="org-keyword">val</span> (State st') = f<span class="org-highlight-beyond-fill-column"> x</span>
                                        <span class="org-keyword">in</span> st' s'
                                        <span class="org-keyword">end</span>);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -371,7 +372,7 @@ implemented using monadic constructor:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> ('a * 's) State = State <span class="org-keyword">of</span> ('s -&gt; 'a * 's);
+<pre class="src src-sml"><code><span class="org-keyword">datatype</span> ('a * 's) State = State <span class="org-keyword">of</span> ('s -&gt; 'a * 's);
 
 <span class="org-comment-delimiter">(* </span><span class="org-comment">push : int -&gt; State (int list) int</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">fun</span> <span class="org-function-name">push</span> n = State (<span class="org-keyword">fn</span> s =&gt; (n, n::s));
@@ -381,7 +382,7 @@ implemented using monadic constructor:
 
 <span class="org-comment-delimiter">(* </span><span class="org-comment">top : State (int list) int</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">val</span> <span class="org-variable-name">top</span> = State (<span class="org-keyword">fn</span> (x::xs) =&gt; (x, x::xs));
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -418,9 +419,9 @@ understanding of a Monad transformer is (according to <a href="https://hackage.h
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-haskell-keyword">class</span> (<span class="org-haskell-keyword">forall</span> m<span class="org-haskell-operator">.</span> <span class="org-haskell-type">Monad</span> m <span class="org-haskell-operator">=&gt;</span> <span class="org-haskell-type">Monad</span> (t m)) <span class="org-haskell-operator">=&gt;</span> <span class="org-haskell-type">MonadTrans</span> t <span class="org-haskell-keyword">where</span>
+<pre class="src src-haskell"><code><span class="org-haskell-keyword">class</span> (<span class="org-haskell-keyword">forall</span> m<span class="org-haskell-operator">.</span> <span class="org-haskell-type">Monad</span> m <span class="org-haskell-operator">=&gt;</span> <span class="org-haskell-type">Monad</span> (t m)) <span class="org-haskell-operator">=&gt;</span> <span class="org-haskell-type">MonadTrans</span> t <span class="org-haskell-keyword">where</span>
     lift <span class="org-haskell-operator">::</span> (<span class="org-haskell-type">Monad</span> m) <span class="org-haskell-operator">=&gt;</span> m a <span class="org-haskell-operator">-&gt;</span> t m a
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -437,8 +438,8 @@ What we should do is define a monad transformer as a functor.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">functor</span>
-</pre>
+<pre class="src src-sml"><code><span class="org-keyword">functor</span>
+</code></pre>
 </div>
 </div>
 </div>
@@ -447,12 +448,12 @@ What we should do is define a monad transformer as a functor.
 <h2 id="h-1ceb984d-54d3-4718-8883-56e5cf4ef952"><span class="section-number-2">4.</span> OCaml Implementation</h2>
 <div class="outline-text-2" id="text-h-1ceb984d-54d3-4718-8883-56e5cf4ef952">
 <p>
-Cambridge L28 taught in 2014&#x2013;2015 has, in its
+Cambridge L28 taught in 2014&ndash;2015 has, in its
 <a href="https://www.cl.cam.ac.uk/teaching/1415/L28/monads.pdf">lecture notes</a>, an implementation in OCaml which is very straightforward:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ocaml"><span class="org-tuareg-font-lock-governing">module type</span> <span class="org-tuareg-font-lock-module">MONAD</span> =
+<pre class="src src-ocaml"><code><span class="org-tuareg-font-lock-governing">module type</span> <span class="org-tuareg-font-lock-module">MONAD</span> =
 <span class="org-tuareg-font-lock-governing">sig</span>
   <span class="org-tuareg-font-lock-governing">type</span> <span class="org-type">'a t</span>
   <span class="org-tuareg-font-lock-governing">val</span> <span class="org-function-name">return</span> : 'a -&gt; 'a t
@@ -467,7 +468,7 @@ Cambridge L28 taught in 2014&#x2013;2015 has, in its
   <span class="org-tuareg-font-lock-governing">val</span> <span class="org-function-name">put</span> : state -&gt; unit t
   <span class="org-tuareg-font-lock-governing">val</span> <span class="org-function-name">runState</span> : 'a t -&gt; <span class="org-tuareg-font-lock-label">init</span>:state -&gt; state * 'a
 <span class="org-tuareg-font-lock-governing">end</span>
-</pre>
+</code></pre>
 </div>
 </div>
 </div>

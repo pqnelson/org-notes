@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -376,27 +377,27 @@ Haskell does with its intermediate Core language:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Expr</span>
+<pre class="src src-haskell"><code><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Expr</span>
   <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Var</span>
   <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Lit</span> <span class="org-haskell-constructor">Literal</span>
   <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">App</span> <span class="org-haskell-constructor">Expr</span> <span class="org-haskell-constructor">Expr</span>
-  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Lam</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Expr</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Both term and type lambda</span>
-  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Let</span> <span class="org-haskell-constructor">Bind</span> <span class="org-haskell-constructor">Expr</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Lam</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Expr</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Both term and type lambda
+</span>  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Let</span> <span class="org-haskell-constructor">Bind</span> <span class="org-haskell-constructor">Expr</span>
   <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Case</span> <span class="org-haskell-constructor">Expr</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Type</span> [(<span class="org-haskell-constructor">AltCon</span>, [<span class="org-haskell-constructor">Var</span>], <span class="org-haskell-constructor">Expr</span>)]
-  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Type</span> <span class="org-haskell-constructor">Type</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Used for type application</span>
-
-<span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Var</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">Id</span> <span class="org-haskell-constructor">Name</span> <span class="org-haskell-constructor">Type</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Term variable</span>
-  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">TyVar</span> <span class="org-haskell-constructor">Name</span> <span class="org-haskell-constructor">Kind</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Type/kind variable</span>
-
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">Type</span> <span class="org-haskell-constructor">Type</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Used for type application
+</span>
+<span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Var</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">Id</span> <span class="org-haskell-constructor">Name</span> <span class="org-haskell-constructor">Type</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Term variable
+</span>  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">TyVar</span> <span class="org-haskell-constructor">Name</span> <span class="org-haskell-constructor">Kind</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Type/kind variable
+</span>
 <span class="org-haskell-keyword">type</span> <span class="org-haskell-type">Kind</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-type">Type</span>
 
 <span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Type</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">TyVarTy</span> <span class="org-haskell-constructor">Var</span>
   <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">LitTy</span> <span class="org-haskell-constructor">TyLit</span>
   <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">AppTy</span> <span class="org-haskell-constructor">Type</span> <span class="org-haskell-constructor">Type</span>
   <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">TyConApp</span> <span class="org-haskell-constructor">TyCon</span> [<span class="org-haskell-constructor">Type</span>]
-  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">FunTy</span> <span class="org-haskell-constructor">Type</span> <span class="org-haskell-constructor">Type</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Not really necy</span>
-  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">ForAllTy</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Type</span>
-</pre>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">FunTy</span> <span class="org-haskell-constructor">Type</span> <span class="org-haskell-constructor">Type</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Not really necy
+</span>  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">ForAllTy</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Type</span>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-d55708ac-878a-42f2-b451-31ec087fed7e" class="outline-3">
@@ -409,14 +410,14 @@ rank-1 polymorphism, where the &forall; and big &Lambda; binders appear in
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">MonoType</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">TyVarTy</span> <span class="org-haskell-constructor">Var</span>
+<pre class="src src-haskell"><code><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">MonoType</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">TyVarTy</span> <span class="org-haskell-constructor">Var</span>
   <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">LitTy</span> <span class="org-haskell-constructor">TyLit</span>
   <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">AppTy</span> <span class="org-haskell-constructor">MonoType</span> <span class="org-haskell-constructor">MonoType</span>
   <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">TyConApp</span> <span class="org-haskell-constructor">TyCon</span> [<span class="org-haskell-constructor">MonoType</span>]
-  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">FunTy</span> <span class="org-haskell-constructor">MonoType</span> <span class="org-haskell-constructor">MonoType</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Not really necy</span>
-<span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Type</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">TSType</span> <span class="org-haskell-constructor">MonoType</span>
+  <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">FunTy</span> <span class="org-haskell-constructor">MonoType</span> <span class="org-haskell-constructor">MonoType</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">Not really necy
+</span><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Type</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">TSType</span> <span class="org-haskell-constructor">MonoType</span>
   <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">ForAllTy</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">TypeScheme</span>
-</pre>
+</code></pre>
 </div>
 
 <p>

@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -290,7 +291,7 @@ hard part of the formalizations is the proof of existence and uniqueness
 These definitions are taken from <a href="https://arxiv.org/abs/1906.07216">arXiv:1906.07216</a>.
 </p>
 
-<div class="definition" id="orgbe19d7e">
+<div class="definition" id="orgc2b8824">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group whose order is
 divisible by \(p\). A <dfn>$p$-local subgroup</dfn> is one that looks like
@@ -305,7 +306,7 @@ for subgroups.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> p <span class="org-mizar-normal">be</span> prime Nat;
   <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> finite Group <span class="org-mizar-normal">such</span> <span class="org-mizar-normal">that</span> p divides card G;
   <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Subgroup <span class="org-mizar-normal">of</span> G;
@@ -314,7 +315,7 @@ for subgroups.
   <span class="org-mizar-formula">ex</span> P <span class="org-mizar-formula">being</span> non trivial p-group Subgroup <span class="org-mizar-normal">of</span> G
   <span class="org-mizar-formula">st</span> the multMagma <span class="org-mizar-normal">of</span> IT = Normalizer P;
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -324,7 +325,7 @@ normalizer of a subgroup is defined to be a strict subgroup.) For this
 reason, we needed to check <code>the multMagma of IT = Normalizer P</code>.
 </p>
 
-<div class="definition" id="orgf3d659e">
+<div class="definition" id="org05e9fec">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group, \(L\leq G\) be a subgroup.
 We say \(K\) <dfn>has Characteristic \(p\)</dfn> if
@@ -338,7 +339,7 @@ This introduces a new predicate, <code>has_characteristic p</code> for a subgrou
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> p <span class="org-mizar-normal">be</span> prime Nat;
   <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> Group;
   <span class="org-mizar-skeleton">let</span> L <span class="org-mizar-normal">be</span> Subgroup <span class="org-mizar-normal">of</span> G;
@@ -346,10 +347,10 @@ This introduces a new predicate, <code>has_characteristic p</code> for a subgrou
   :Def:
   Centralizer (p-core L) <span class="org-mizar-normal">is</span> Subgroup <span class="org-mizar-normal">of</span> (p-core L);
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 
-<div class="definition" id="orga96e633">
+<div class="definition" id="orgb40e868">
 <p>
 Let \(p\) be a prime number, \(G\) be a finite group.
 We say \(G\) <dfn>has local Characteristic \(p\)</dfn> if
@@ -364,14 +365,14 @@ Characteristic.)
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> p <span class="org-mizar-normal">be</span> prime Nat;
   <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> finite Group;
   <span class="org-mizar-normal">pred</span> G has_local_characteristic p <span class="org-mizar-normal">means</span>
   :Def:
   <span class="org-mizar-formula">for</span> L <span class="org-mizar-formula">being</span> Subgroup <span class="org-mizar-normal">of</span> G <span class="org-mizar-formula">st</span> L <span class="org-mizar-normal">is</span> p-local <span class="org-mizar-formula">holds</span> L has_characteristic p;
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>

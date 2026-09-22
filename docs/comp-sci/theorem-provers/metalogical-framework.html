@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -311,7 +312,7 @@ logical framework such that it can prove metatheorems. For example,
 proving <a href="https://en.wikipedia.org/wiki/Cut-elimination_theorem">cut-elimination</a>.
 </p>
 
-<div class="remark" id="orgec22f00">
+<div class="remark" id="orgd7c1b20">
 <p>
 I will often write "meta-logical framework" and "metalogical framework"
 interchangeably.
@@ -323,7 +324,7 @@ interchangeably.
 <div id="outline-container-h-14d91154-6603-46f9-a532-90736863a01b" class="outline-2">
 <h2 id="h-14d91154-6603-46f9-a532-90736863a01b"><span class="section-number-2">2.</span> Examples of Meta-Logical</h2>
 <div class="outline-text-2" id="text-h-14d91154-6603-46f9-a532-90736863a01b">
-<div class="math-example" id="org8d4634f">
+<div class="math-example" id="org440c20e">
 <p>
 <a href="hol.html">HOL</a> is a meta-logical framework, since it can encode judgements using
 inductive types (thanks to the Tarski-Knaster theorem) and inference
@@ -334,14 +335,14 @@ meta-logical framework.
 
 </div>
 
-<div class="math-example" id="orgf8842cd">
+<div class="math-example" id="org4e7fd54">
 <p>
 A <b>NON-example</b> is <a href="automath.html">Automath</a>, which is too weak to prove metatheorems.
 </p>
 
 </div>
 
-<div class="math-example" id="org4e2be4f">
+<div class="math-example" id="orgcdf7731">
 <p>
 A mixed example would be <a href="isabelle.html">Isabelle</a> (which is a fragment of intuitionistic
 higher-order logic) alone is insufficient to be a meta-logical framework.
@@ -403,7 +404,7 @@ Frameworks":
 <p>
 A logic's syntax and proofs are inductively built from syntax and proof
 constructors. A logical framework and a metalogical framework can share
-these as a common basis. However, [&#x2026;], for a metalogical framework the
+these as a common basis. However, [&hellip;], for a metalogical framework the
 representation must additionally preserve the inductive nature of the
 syntax and proof constructors. Model-theoretically, this means that a
 formalization in the metalogic should have an <i>initial model</i>, which
@@ -412,7 +413,7 @@ corresponds to the syntax and proofs of the formalized object logic.
 </blockquote>
 
 <p>
-This is admittedly persuasive&#x2026;at least, I cannot imagine reasoning
+This is admittedly persuasive&hellip;at least, I cannot imagine reasoning
 about a logic without an inductive representation of its syntax and
 semantics, which would be equivalent to this "initial model"
 condition. Thus it seems unavoidable that the "initial model" condition
@@ -450,7 +451,7 @@ that's why encoding an "object logic" as an initial syntactic model is
 important, that's why we care about "deep embeddings". José Meseguer
 really pioneered pointing this out in the domain of semantics for
 programming languages, see his paper, "Relating Models of Polymorphism"
-(<i>POPL</i> 1989, pp.228&#x2013;241) for references.
+(<i>POPL</i> 1989, pp.228&ndash;241) for references.
 </p>
 </div>
 </div>
@@ -474,7 +475,7 @@ logic. The "space of first-order languages" is then generalized as an
 <i>entailment</i>, is defined as:
 </p>
 
-<div class="definition" id="org161645e">
+<div class="definition" id="org0f8f7ed">
 <p>
 An <dfn>Entailment System</dfn> consists of
 </p>
@@ -511,7 +512,7 @@ where \(sen(H)(\Gamma)=\{sen(H)(\varphi)\mid\varphi\in\Gamma\}\).</li>
 
 </div>
 
-<div class="remark" id="org9ba36f7">
+<div class="remark" id="org1d47da2">
 <p>
 We can meaningfully discuss a notion of <i>proof calculi</i> for entailment
 systems. See &sect;2.3 of "Axiomatizing Reflective Logics and Languages"
@@ -526,7 +527,7 @@ from including a signature \(\Sigma\) into a larger signature \(\Sigma'\),
 or from changing syntax, or something similar.
 </p>
 
-<div class="definition" id="org9125324">
+<div class="definition" id="org3253756">
 <p>
 Let \(\mathcal{E}\) be an entailment system. We define its category
 \(\mathbf{Th}\) of <dfn>Theories</dfn> to consist of
@@ -548,7 +549,7 @@ and the induced functor \(sen\colon\mathbf{Th}\to\mathbf{Set}\) given by
 
 </div>
 
-<div class="remark" id="org7c54425">
+<div class="remark" id="orgc0013d4">
 <p>
 I believe this means that \(\mathbf{Th}\) is fibred over \(\mathbf{Sign}\).
 </p>
@@ -566,7 +567,7 @@ formalize <b>model theory</b> beyond first-order logic, and has been used in
 the literature since their introduction in the '70s.
 </p>
 
-<div class="definition" id="orga11b140">
+<div class="definition" id="org43fcf23">
 <p>
 An <dfn>Institution</dfn> consists of
 </p>
@@ -600,18 +601,18 @@ every \(\varphi\in sen(\Sigma)\), we have \(M'\vDash_{\Sigma'}sen(H)(\varphi)\if
 
 </div>
 
-<div class="remark" id="org9d4341b">
+<div class="remark" id="org0981107">
 <p>
 We can also note, if \(T=(\Sigma,\Gamma)\) is a theory, its model category
 \(\mathbf{Mod}(T)\) is the full subcategory of \(\mathbf{Mod}(\Sigma)\)
 determined by the models \(M\in\mathbf{Mod}(\Sigma)\) which satisfy all
-the sentences in \(\Gamma\) &#x2014; i.e., for each \(\varphi\in\Gamma\), we have
+the sentences in \(\Gamma\) &mdash; i.e., for each \(\varphi\in\Gamma\), we have
 \(M\vDash_{\Sigma}\varphi\).
 </p>
 
 </div>
 
-<div class="theorem" id="org5690ce4">
+<div class="theorem" id="orgf853800">
 <p>
 Given an institution \(I\), we may construct an entailment system \(I^{+}\)
 where we construct the relation: \(\Gamma\vdash_{\Sigma}\varphi\) if and
@@ -630,7 +631,7 @@ A logic can now be defined in glorious generality as a <i>sound</i>
 institutionalized entailment system.
 </p>
 
-<div class="definition" id="org85117ed">
+<div class="definition" id="org3019222">
 <p>
 A <dfn>Logic</dfn> consists of
 </p>
@@ -672,11 +673,11 @@ holds for any model \(M\) that satisfies all the sentences in \(\Gamma\).</li>
 
 </div>
 
-<div class="theorem" id="orga055b9e">
+<div class="theorem" id="org846ebd1">
 <p>
 Given an institution \(I\), we can construct an entailment system \(I^{+}\)
 and together these form a logic, which is denoted \(I^{\dagger}\) (or, by
-an abuse of notation, use a superscript "plus"&#x2026;which is more common).
+an abuse of notation, use a superscript "plus"&hellip;which is more common).
 Furthermore, this logic is complete.
 </p>
 
@@ -690,7 +691,7 @@ Furthermore, this logic is complete.
 Then the particular notion of reflection can be described as:
 </p>
 
-<div class="definition" id="org751d9c2">
+<div class="definition" id="org3806ba8">
 <p>
 Given an entailment system \(\mathcal{E}\) and a nonempty set of theories
 \(\mathcal{C}\) in it, a theory \(U\) is <dfn>\(\mathcal{C}\) Universal</dfn>
@@ -726,7 +727,7 @@ classof all finitely presentable theories in the logic.
 From this perspective, we may thus define a <a href="logical-framework.html">logical framework</a> as:
 </p>
 
-<div class="definition" id="org5072126">
+<div class="definition" id="org4e05918">
 <p>
 A <dfn>Logical Framework</dfn> consists of
 </p>
@@ -742,7 +743,7 @@ such that \(U\) is $\mathcal{C}$-universal.
 
 </div>
 
-<div class="remark" id="org281a910">
+<div class="remark" id="org2263f8d">
 <p>
 This observation seems to have also been made in &sect;3 of
 "Axiomatizing Reflective Logics and Languages"
@@ -762,7 +763,7 @@ universal theory \(U\).
 Let me give a "morally right" definition, which fails to be rigorous:
 </p>
 
-<div class="definition" id="orgda7688e">
+<div class="definition" id="org7274b8d">
 <p>
 A <dfn>Meta-logical framework</dfn> consists of a logical framework
 \((\mathcal{L}, \mathcal{C}, U)\) equipped with
@@ -791,7 +792,7 @@ the metatheory of any \(T\).</li>
 
 </div>
 
-<div class="remark" id="org772cca7">
+<div class="remark" id="orgef2fbb9">
 <p>
 It's not clear exactly <i>how</i> super-nice the superlogic has to be; is
 there something <i>weaker</i> than having Tarskian semantics?
@@ -799,7 +800,7 @@ there something <i>weaker</i> than having Tarskian semantics?
 
 </div>
 
-<div class="remark" id="orge398851">
+<div class="remark" id="org7ae0d31">
 <p>
 Also, it's unclear <i>when</i> will a logic \(\mathcal{L}\) have a superlogic
 \(\mathcal{S}\) which has Tarskian semantics and admits quantifiers.
@@ -807,7 +808,7 @@ Also, it's unclear <i>when</i> will a logic \(\mathcal{L}\) have a superlogic
 
 </div>
 
-<div class="puzzle" id="org498971b">
+<div class="puzzle" id="org15f593e">
 <p>
 Can we reformulate this notion of a metalogical framework within the more
 familiar judgements and inference rules setting?
@@ -822,7 +823,7 @@ familiar judgements and inference rules setting?
 <ul class="org-ul">
 <li>David A. Basin and Robert L. Constable,<br>
 "Metalogical frameworks".<br>
-<i>Logical Environments</i> (1993) pp.1&#x2013;29.
+<i>Logical Environments</i> (1993) pp.1&ndash;29.
 <a href="https://ecommons.cornell.edu/handle/1813/7075">Eprint</a>
 <ul class="org-ul">
 <li>This seems to be the first paper which invented the term
@@ -830,7 +831,7 @@ familiar judgements and inference rules setting?
 </ul></li>
 <li>D. Basin, and M. Clavel, and J. Meseguer,<br>
 "Reflective metalogical frameworks".<br>
-<i>ACM Transactions on Computational Logic</i> <b>5</b>, no.3 (2004) pp.528&#x2013;576.
+<i>ACM Transactions on Computational Logic</i> <b>5</b>, no.3 (2004) pp.528&ndash;576.
 <a href="https://people.inf.ethz.ch/basin/pubs/rmf.pdf">Eprint</a></li>
 <li>David Basin and Manuel Clavel and José Meseguer,<br>
 "Rewriting logic as a metalogical framework".<br>
@@ -845,7 +846,7 @@ pp. 55-80. Springer, Berlin, Heidelberg, 2000.</li>
 <li>J Meseguer,<br>
 "General logics".<br>
 In <i>Logic Colloquium'87</i> (H.-D. Ebbinghaus et al., Eds.)
-North-Holland, Amsterdam, The Netherlands, 275&#x2013;329.
+North-Holland, Amsterdam, The Netherlands, 275&ndash;329.
 <a href="https://apps.dtic.mil/sti/pdfs/ADA219469.pdf">Eprint</a></li>
 </ul>
 </div>

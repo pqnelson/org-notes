@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -255,7 +256,7 @@ On a Raspberry Pi, simply install OCaml using <code>sudo apt install ocaml</code
 Then clone and build OPAM:
 </p>
 
-<pre class="example" id="org8325595">
+<pre class="example" id="orgce0f6d0">
 alex@rpi:~/$ cd src
 alex@rpi:~/src/$ git clone https://github.com/ocaml/opam
 ...
@@ -267,10 +268,10 @@ alex@rpi:~/src/OPAM/$ sudo make install
 </pre>
 
 <p>
-Before we finish, we need to also install bubblewrap&#x2026;because&#x2026;reasons&#x2026;
+Before we finish, we need to also install bubblewrap&hellip;because&hellip;reasons&hellip;
 </p>
 
-<pre class="example" id="orga1f6120">
+<pre class="example" id="orgece12d2">
 alex@rpi:~/src/OPAM/$ sudo apt install bubblewrap
 alex@rpi:~/src/OPAM/$ cd ~
 alex@rpi:~/$ opam init
@@ -330,7 +331,7 @@ Now we build the infrastructure necessary to play with HOL Light (this
 will take about an hour in the following state):
 </p>
 
-<pre class="example" id="orge3238a3">
+<pre class="example" id="org106b38a">
 alex@raspberrypi:~$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Installing new switch packages &lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -359,7 +360,7 @@ Processing 13/18: [ocaml-base-compiler: make world]
 Clone HOL Light from github:
 </p>
 
-<pre class="example" id="orgde8330a">
+<pre class="example" id="org807e8e1">
 alex@box:~/src/$ git clone https://github.com/jrh13/hol-light
 Cloning into 'hol-light'...
 remote: Enumerating objects: 8310, done.
@@ -383,7 +384,7 @@ The trippy thing is we need to use OPAM to use the "correct" version of
 OCaml (c.f., <a href="https://github.com/jrh13/hol-light/issues/64#issuecomment-894131933">Github Issue</a>), the following bash commands should work:
 </p>
 
-<pre class="example" id="orgd3cd1a4">
+<pre class="example" id="org494f04e">
 opam switch create 4.05.0
 eval $(opam env)
 opam pin add camlp5 7.08
@@ -392,7 +393,7 @@ opam install num camlp5
 
 <p>
 <b>Remark:</b> It seems that the latest version of OCaml to work with Camlp5
-7.08 is 4.08.0 &#x2014; or so OPAM tells me. I couldn't get HOL Light to
+7.08 is 4.08.0 &mdash; or so OPAM tells me. I couldn't get HOL Light to
 compile with OCaml 4.08.0 <i>and</i> Camlp5 7.08, your mileage may vary.
 (End of Remark)
 </p>
@@ -403,7 +404,7 @@ on <code>Processing 7/12: [ocaml-base-compiler ...]</code>, but that's because
 it's building the OCaml compiler from scratch; be patient!):
 </p>
 
-<pre class="example" id="org27f7986">
+<pre class="example" id="orgf1369ac">
 alex@box:~/src/hol-light/$ opam switch create 4.05.0
 
 &lt;&gt;&lt;&gt; Gathering sources &gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;
@@ -457,7 +458,7 @@ Now, the next step is to run <code>make</code>.
 <b>It is crucial to run <code>make</code> before loading hol into an OCaml repl.</b>
 </p>
 
-<pre class="example" id="orgfb6fe05">
+<pre class="example" id="org8470bbc">
 alex@box:~/src/hol-light/$ make
 ...
 </pre>
@@ -468,7 +469,7 @@ include camlp5, and then tell it to <code>#use "hol.ml";;</code> (yes, both
 semicolons are necessary).
 </p>
 
-<pre class="example" id="org0b00b8a">
+<pre class="example" id="orgff1f05a">
 alex@box:~/src/hol-light/$ ocaml -I `camlp5 -where` camlp5o.cma
 
         OCaml version 4.05.0
@@ -489,7 +490,7 @@ error, which is just confusing and cryptic.)
 Now we can simply <code>#use "hol.ml";;</code> to get:
 </p>
 
-<pre class="example" id="org783b5f8">
+<pre class="example" id="orgc21f9d2">
 # #use "hol.ml";;
 ...
 ...

@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -308,11 +309,11 @@ products, and function types. We encode these using an algebraic data type:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(* </span><span class="org-comment">Syntactic types</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(* </span><span class="org-comment">Syntactic types</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">datatype</span> <span class="org-type-def">Type</span> = Basic <span class="org-keyword">of</span> string
               | Fun <span class="org-keyword">of</span> Type * Type
               | Pair <span class="org-keyword">of</span> Type * Type;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -322,16 +323,16 @@ evaluation. We have the syntactic terms:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Term</span> = var <span class="org-keyword">of</span> string
+<pre class="src src-sml"><code><span class="org-keyword">datatype</span> <span class="org-type-def">Term</span> = var <span class="org-keyword">of</span> string
               | lam <span class="org-keyword">of</span> string * Term <span class="org-comment-delimiter">(* </span><span class="org-comment">lam (var_name, body)</span><span class="org-comment-delimiter"> *</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column">)</span></span>
               | app <span class="org-keyword">of</span> Term * Term
               | pair <span class="org-keyword">of</span> Term * Term
               | fst <span class="org-keyword">of</span> Term
               | snd <span class="org-keyword">of</span> Term;
-</pre>
+</code></pre>
 </div>
 
-<div class="remark" id="orgb13c657">
+<div class="remark" id="org2f302a7">
 <p>
 It may prove useful to use <a href="de-bruijn-index.html">de Bruijn indices</a> or locally nameless
 variables, when encoding syntactic terms. I'm not sure whether I'll do
@@ -346,10 +347,10 @@ as elements of the metalanguage. We have
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Sem</span> = LAM <span class="org-keyword">of</span> (Sem -&gt; Sem)
+<pre class="src src-sml"><code><span class="org-keyword">datatype</span> <span class="org-type-def">Sem</span> = LAM <span class="org-keyword">of</span> (Sem -&gt; Sem)
              | PAIR <span class="org-keyword">of</span> Sem * Sem
              | SYN <span class="org-keyword">of</span> Term;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -406,7 +407,7 @@ inductively by:
       T \text{ where } \|t\|_\Gamma = \mathbf{PAIR}\ (S, T)
 \end{align}
 
-<div class="remark" id="orga07e8a2">
+<div class="remark" id="orgd73e62e">
 <p>
 In the literature, usually the meaning is denoted using Oxford brackets \([\![t]\!]\)
 instead of the norm \(\|t\|\).

@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -582,8 +583,8 @@ is false.
 <div class="outline-text-3" id="text-h-188d1518-b176-49ce-9c6b-67539e920b74">
 <p>
 Tests if top two elements of the stack are equals as numeric
-quantities. Note that <code>(equal-number 0 0.0)</code> &#x2014; which is also written 
-as <code>(= 0 0.0)</code> &#x2014; is true, in contrast to ~(eql 0 0.0) which is false.
+quantities. Note that <code>(equal-number 0 0.0)</code> &mdash; which is also written 
+as <code>(= 0 0.0)</code> &mdash; is true, in contrast to ~(eql 0 0.0) which is false.
 </p>
 
 <p>
@@ -888,14 +889,14 @@ the result of the first form):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">cons</span> (car cdr)
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">cons</span> (car cdr)
   (%set-cdr-code-normal car)
   (%set-cdr-code-nil cdr)
   (%make-pointer dtp-list
                  (<span class="org-keyword">prog1</span> (%allocate-list-block default-cons-area 2)
                         (%block-1-write car)
                         (%block-1-write cdr))))
-</pre>
+</code></pre>
 </div>
 
 <p>

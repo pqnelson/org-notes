@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -350,7 +351,7 @@ This is also extended to, for a group \(G\), subsets \(A\subset G\)
 we'd have <code>A"</code> be the collection of <code>g"</code> for <code>g in A</code>, i.e.,
 \(A^{-1}=\{g^{-1}|g\in A\}\); see line 57 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>
 </p>
-<pre class="example" id="orga12f4bd">
+<pre class="example" id="org541d699">
 let G be Group;
 let A be Subset of G;
 func A " -&gt; Subset of G equals :: GROUP_2:def 1
@@ -364,7 +365,7 @@ underlying set of \(G\) equal to the set underlying \(H\)</li>
 The trivial subgroup of \(G\) is denoted <code>(1).G</code>, defined on line 1258
 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a> as
 </p>
-<pre class="example" id="orgdfe0e11">
+<pre class="example" id="orga7cbc98">
   func (1).G -&gt; strict Subgroup of G means
   :Def7:
   the carrier of it = {1_G};
@@ -381,7 +382,7 @@ of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.mi
 </blockquote></li>
 <li>"strict" for subgroup is on line 1011 of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>; it's a
 registration of a cluster. I believe it refers to being a "just"
-subgroup &#x2014; your intuition should be "a set [not a topological
+subgroup &mdash; your intuition should be "a set [not a topological
 space, not a manifold, not an algebraic variety, not any other
 gadget] equipped with a group structure <b>and nothing else</b>".</li>
 <li><code>(Omega).G</code> (line of <a href="http://mizar.org/version/current/html/group_2.html"><code>group_2.miz</code></a>) seems to be the other trivial subgroup of \(G\), i.e., \(G\) itself
@@ -408,7 +409,7 @@ in <a href="http://mizar.org/version/current/html/group_4.html#K8"><code>group_4
 subgroups is defined in <a href="http://mizar.org/version/current/html/latsubgr.html#K2"><code>latsubgr.miz</code></a></li>
 </ul></li>
 <li>Conjugation of \(a\) by \(b\) (both elements of \(G\)) is denoted
-<code>a |^ b</code>, defined on lines 299&#x2013;300 of <a href="http://mizar.org/version/current/html/group_3.html"><code>group_3.miz</code></a>
+<code>a |^ b</code>, defined on lines 299&ndash;300 of <a href="http://mizar.org/version/current/html/group_3.html"><code>group_3.miz</code></a>
 <ul class="org-ul">
 <li>This is extended to subsets \(A\) and \(B\) of \(G\), <code>A |^ B</code> is the
 collection of conjugating elements of \(A\) by elements of \(B\)
@@ -444,7 +445,7 @@ usually write as \(\langle A\rangle\)</li>
 <li><p>
 Frattini subgroup is tricky. Relevant code starts around 1371 of  <a href="http://mizar.org/version/current/html/group_4.html"><code>group_4.miz</code></a>
 </p>
-<pre class="example" id="orge706b4c">
+<pre class="example" id="org68d7a52">
 ::$N Frattini subgroup
   func Phi(G) -&gt; strict Subgroup of G means
   :Def7:
@@ -499,14 +500,14 @@ Be careful! There is some confusing double-negation in the
 definition of <code>simple</code>, but it is logically equivalent to
 </p>
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> IT <span class="org-mizar-normal">be</span> Group;
-  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> simple <span class="org-mizar-normal">means</span> <span class="org-comment-delimiter">:: </span><span class="org-comment">GROUP_9:def 12</span>
-  (<span class="org-mizar-formula">not</span> IT <span class="org-mizar-normal">is</span> trivial <span class="org-mizar-formula">&amp;</span>
+  <span class="org-mizar-normal">attr</span> IT <span class="org-mizar-normal">is</span> simple <span class="org-mizar-normal">means</span> <span class="org-comment-delimiter">:: </span><span class="org-comment">GROUP_9:def 12
+</span>  (<span class="org-mizar-formula">not</span> IT <span class="org-mizar-normal">is</span> trivial <span class="org-mizar-formula">&amp;</span>
   (<span class="org-mizar-formula">for</span> H <span class="org-mizar-formula">being</span> strict normal Subgroup <span class="org-mizar-normal">of</span> IT
    <span class="org-mizar-formula">holds</span> (H = (Omega).IT <span class="org-mizar-formula">or</span> H = (1).IT)));
 <span class="org-mizar-block">end</span>; 
-</pre>
+</code></pre>
 </div></li>
 </ul></li>
 <li>The chunk of text dealing with composition series begins on line 6701
@@ -575,9 +576,9 @@ function with <code>dom g = I</code>).</li>
 <li>The permutation group is defined in <a href="http://mizar.uwb.edu.pl/version/current/html/matrix_1.html#K10"><code>MATRIX_1</code></a> as <code>Group_of_Perm n</code>
 <ul class="org-ul">
 <li>The attribute <a href="http://mizar.uwb.edu.pl/version/current/html/matrix_1.html#V6"><code>even</code></a> is defined there</li>
-<li>This is the Symmetric group on \(n\) symbols &#x2014; i.e., \(S_{n}\) = <code>Group_of_Perm n</code></li>
+<li>This is the Symmetric group on \(n\) symbols &mdash; i.e., \(S_{n}\) = <code>Group_of_Perm n</code></li>
 <li>The symmetric group on an arbitrary set \(X\) is defined in <code>CAYLEY</code> as
-<a href="http://mizar.uwb.edu.pl/version/current/html/cayley.html#K2"><code>SymGroup X</code></a> &#x2014; i.e., \(\mathrm{Sym}(X)\) = <code>SymGroup X</code></li>
+<a href="http://mizar.uwb.edu.pl/version/current/html/cayley.html#K2"><code>SymGroup X</code></a> &mdash; i.e., \(\mathrm{Sym}(X)\) = <code>SymGroup X</code></li>
 <li>If you want to prove properties about permutation groups, you should
 work with <code>Group_of_Perm n</code>.</li>
 </ul></li>
@@ -592,7 +593,7 @@ work with <code>Group_of_Perm n</code>.</li>
 <div class="outline-text-3" id="text-h-e33b09d4-26e4-44e8-b68b-31bf539a87b4">
 <p>
 It seems that the notion of a group action and group representation
-are&#x2026;well, kind of muddled in Mizar.
+are&hellip;well, kind of muddled in Mizar.
 </p>
 
 <ul class="org-ul">

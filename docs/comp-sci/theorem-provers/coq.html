@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -295,7 +296,7 @@ propositions.
 Generic definitions look like:
 </p>
 
-<pre class="example" id="org669ce02">
+<pre class="example" id="orgb4f8f1b">
 Definition my_new_term : Type :=
   (* body *).
 </pre>
@@ -309,7 +310,7 @@ We can ask Coq to evaluate a term by writing <code>Compute &lt;term&gt;.</code>
 There are also theorems.
 </p>
 
-<pre class="example" id="orgb9b10e4">
+<pre class="example" id="orgdeda31e">
 Theorem ex_arith_thm : forall (n : nat), n + 0 = n.
 Proof.
   (* ... *)
@@ -365,15 +366,15 @@ standing in for a variable, we can explicitly tell Coq to do this by
 </ul></li>
 <li><code>f_equal</code>: Given a goal of the form <code>f a1 ... an = g b1 ... bn</code>,
 the tactic <code>f_equal</code> will produce subgoals of the form <code>f = g</code>,
-<code>a1 = b1</code>, &#x2026;, <code>an = bn</code>.
+<code>a1 = b1</code>, &hellip;, <code>an = bn</code>.
 <ul class="org-ul">
 <li><code>f_equiv</code> does likewise, but when an equivalence relation <code>R</code>
 relates the two terms</li>
 </ul></li>
-<li><code>injection</code> &#x2014; if we have an equality of constructors
+<li><code>injection</code> &mdash; if we have an equality of constructors
 <code>Constructor t_1 ... t_n = Constructor u_1 ... u_n</code>, we can use the
 fact that type constructors are injective to transform our goal into
-\(n\) equalities <code>t_1 = u_1</code>, &#x2026;, <code>t_n = u_n</code></li>
+\(n\) equalities <code>t_1 = u_1</code>, &hellip;, <code>t_n = u_n</code></li>
 <li><code>discriminate</code> uses the fact that constructors are disjoint, so we can
 never have a situation where <code>H : Con1 ... = Con2 ...</code>. We use this fact
 on a hypothesis as <code>discriminate H</code>.</li>
@@ -385,7 +386,7 @@ on a hypothesis as <code>discriminate H</code>.</li>
 quantified when doing an induction proof; forgetting to do so will
 produce an impossible situation. See <a href="https://www.seas.upenn.edu/~cis500/current/sf/lf-current/Tactics.html#lab150">Foundations</a> on this.</li>
 </ul></li>
-<li><code>inversion</code> &#x2014; when proving an inductive <code>Prop</code>, we may want to
+<li><code>inversion</code> &mdash; when proving an inductive <code>Prop</code>, we may want to
 analyze ("destructure") the evidence of the inductive hypothesis;
 inversion let's us do this. Hence <code>inversion</code> requires a label,
 referring to a proposition to invert.</li>

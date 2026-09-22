@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -240,8 +241,8 @@
 </li>
 <li><a href="#h-7d217b7b-003a-43fa-a2fd-514ee28fcfcd">2. History of Lisp Machines</a>
 <ul>
-<li><a href="#h-a5537df0-6a80-4d60-bff4-47a43d84c009">2.1. Origins (1973&#x2013;1979)</a></li>
-<li><a href="#h-2bf56502-28a3-4081-88b1-6a2b67910703">2.2. Commercialization (1980&#x2013;????)</a></li>
+<li><a href="#h-a5537df0-6a80-4d60-bff4-47a43d84c009">2.1. Origins (1973&ndash;1979)</a></li>
+<li><a href="#h-2bf56502-28a3-4081-88b1-6a2b67910703">2.2. Commercialization (1980&ndash;????)</a></li>
 </ul>
 </li>
 <li><a href="#h-7619fcfa-cefa-480d-820e-50b65e710c55">3. Architecture</a>
@@ -267,7 +268,7 @@ The LISP machine now permits LISP programmers to abandon bra and fig-leaf.
 </p>
 
 <p>
-&#x2013; Alan Perlis, Epigrams in Programming, ACM SIGPLAN Sept. 1982
+&ndash; Alan Perlis, Epigrams in Programming, ACM SIGPLAN Sept. 1982
 </p>
 </blockquote>
 <div id="outline-container-h-e0067fee-1487-4f43-99bc-2af55f5f3c57" class="outline-2">
@@ -302,7 +303,7 @@ what features are necessary?
 <div class="outline-text-2" id="text-h-7d217b7b-003a-43fa-a2fd-514ee28fcfcd">
 </div>
 <div id="outline-container-h-a5537df0-6a80-4d60-bff4-47a43d84c009" class="outline-3">
-<h3 id="h-a5537df0-6a80-4d60-bff4-47a43d84c009"><span class="section-number-3">2.1.</span> Origins (1973&#x2013;1979)</h3>
+<h3 id="h-a5537df0-6a80-4d60-bff4-47a43d84c009"><span class="section-number-3">2.1.</span> Origins (1973&ndash;1979)</h3>
 <div class="outline-text-3" id="text-h-a5537df0-6a80-4d60-bff4-47a43d84c009">
 <p>
 Started at MIT's AI lab around 1973. Originally motivated by the
@@ -317,8 +318,8 @@ hope was to manufacture Lisp-oriented hardware like how
 The first Lisp Machine was called the "Cons Machine", or informally
 referred to as the "Knight machine" (named after Tom Knight who designed
 it), and its prototype first appeared in 1975 (pg 27 of AI Memo 444).
-It appears to be a <a href="https://en.wikipedia.org/wiki/Microcode">microcoded</a> CPU &#x2014; i.e., a "vanilla CPU" with
-microcode specifically for Lisp &#x2014; according to MIT AI Memo 444.
+It appears to be a <a href="https://en.wikipedia.org/wiki/Microcode">microcoded</a> CPU &mdash; i.e., a "vanilla CPU" with
+microcode specifically for Lisp &mdash; according to MIT AI Memo 444.
 Knight's "CONS" (Working paper 80) explicitly suggests an amalgam of:
 </p>
 
@@ -360,10 +361,10 @@ Daniel Weinreb,
 </div>
 </div>
 <div id="outline-container-h-2bf56502-28a3-4081-88b1-6a2b67910703" class="outline-3">
-<h3 id="h-2bf56502-28a3-4081-88b1-6a2b67910703"><span class="section-number-3">2.2.</span> Commercialization (1980&#x2013;????)</h3>
+<h3 id="h-2bf56502-28a3-4081-88b1-6a2b67910703"><span class="section-number-3">2.2.</span> Commercialization (1980&ndash;????)</h3>
 <div class="outline-text-3" id="text-h-2bf56502-28a3-4081-88b1-6a2b67910703">
 <p>
-Greenblatt founded Lisp Machines, Inc., some time in 1979 &#x2014; according
+Greenblatt founded Lisp Machines, Inc., some time in 1979 &mdash; according
 to Levy's <i>Hackers: Heroes of the Computer Revolution</i>.
 </p>
 
@@ -468,19 +469,19 @@ For the Ivory microprocessor
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">example-count</span> (predicate list)
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">example-count</span> (predicate list)
   (<span class="org-keyword">let</span> ((count 0))
     (<span class="org-keyword">dolist</span> (i list count)
       (<span class="org-keyword">when</span> (funcall predicate i)
         (incf count)))))
-</pre>
+</code></pre>
 </div>
 
 <p>
 Would disassemble as (<a href="https://www.reddit.com/r/lisp/comments/2ws8o7/if_i_wanted_to_build_a_lisp_machine/cotpbiw/?utm_source=share&amp;utm_medium=web3x&amp;utm_name=web3xcss&amp;utm_term=1&amp;utm_content=share_button">reddit</a>):
 </p>
 
-<pre class="example" id="org873def4">
+<pre class="example" id="org292cf2d">
 Command: (disassemble (compile #'example-count))
 
   0  ENTRY: 2 REQUIRED, 0 OPTIONAL      ;Creating PREDICATE and LIST
@@ -506,20 +507,20 @@ In the <a href="http://www.bitsavers.org/pdf/symbolics/software/genera_8/Symboli
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">foo</span> (array-1 array-2 n-elements)
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">foo</span> (array-1 array-2 n-elements)
   (<span class="org-keyword">let</span> ((a array-1)
         (b array-2))
     (<span class="org-keyword">declare</span> (sys:array-register a b))
     (<span class="org-keyword">dotimes</span> (i n-elements)
       (setf (aref b i) (aref a i)))))
-</pre>
+</code></pre>
 </div>
 
 <p>
 Disassembles as:
 </p>
 
-<pre class="example" id="org900ebef">
+<pre class="example" id="org0d67d18">
 (disassemble 'foo)
 
 0 ENTRY: 3 REQUIRED, 0 OPTIONAL
@@ -548,16 +549,16 @@ Another example from the manual, if we inline <code>square</code> in the followi
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">square-sum</span> (a b)(square (+ a b)))
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">square-sum</span> (a b)(square (+ a b)))
 (<span class="org-keyword">defun</span> <span class="org-function-name">square</span> (x) (* x x))
-</pre>
+</code></pre>
 </div>
 
 <p>
 Then <code>square-sum</code> disassembles like:
 </p>
 
-<pre class="example" id="org08fa589">
+<pre class="example" id="org3cb3da6">
 0 ENTRY: 2 REQUIRED, 0 OPTIONAL
 1 PUSH-LOCAL FP|0               ;A
 2 BUILTIN +-INTERNAL STACK FP|1 ;B creating X(FP|2)
@@ -572,17 +573,17 @@ For the MIT Cadr machine (<a href="https://www.takeoka.org/~take/ailabo/cadr/kni
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">fact</span> (x)
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">fact</span> (x)
   (<span class="org-keyword">cond</span> ((zerop x) 1)
         (t (* x (fact (1- x))))))
-</pre>
+</code></pre>
 </div>
 
 <p>
 This compiles and disassembles to:
 </p>
 
-<pre class="example" id="org0e55263">
+<pre class="example" id="org19efe02">
 (disassemble #'fact)
 
 22 NOVE D-PDL ARG|0 ;X
@@ -667,7 +668,7 @@ Retrocomputing Stackexchange thread</li>
 <li><a href="https://youtu.be/e39LnDVBl4c">I-Machine Lecture at MIT, Efland &amp; BEE 1987-09-29</a>, Youtube</li>
 <li>P.M. Kogge,
 <cite class="book-title">The Architecture of Symbolic Computers</cite>.
-McGraw&#x2013;Hill, 1991, ch. 10, sections 5 <i>et seq.</i></li>
+McGraw&ndash;Hill, 1991, ch. 10, sections 5 <i>et seq.</i></li>
 <li><a href="https://web.archive.org/web/20100302033837/http://blogs.azulsystems.com/cliff/2008/11/a-brief-conversation-with-david-moon.html">A Brief Conversation with David Moon</a>, where David Moon and Cliff Click
 and Daniel Weinreb reminisce about Lisp Machines.</li>
 </ul>

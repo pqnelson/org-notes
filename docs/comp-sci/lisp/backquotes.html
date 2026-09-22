@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -296,10 +297,10 @@ to produce an object to be inserted at that point. For example,
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">let</span> ((b 3))
+<pre class="src src-lisp"><code>(<span class="org-keyword">let</span> ((b 3))
   `(a b ,b ,(+ b 1) b))
 <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; (a b 3 4 b)</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -309,10 +310,10 @@ at-sign is evaluated to produce a list of objects; this list is then
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">let</span> ((x '(a b c)))
+<pre class="src src-lisp"><code>(<span class="org-keyword">let</span> ((x '(a b c)))
      `(x ,x      ,@x   foo ,(cadr x) bar ,(cdr x) baz ,@(cdr x)))
 <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; (x (a b c) a b c foo b         bar (b c)    baz b c)</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -320,12 +321,12 @@ This is especially useful for macros. For example, from my <a href="https://gith
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defmacro</span> <span class="org-function-name">defthm</span> (name params <span class="org-type">&amp;body</span> formula-body)
+<pre class="src src-lisp"><code>(<span class="org-keyword">defmacro</span> <span class="org-function-name">defthm</span> (name params <span class="org-type">&amp;body</span> formula-body)
   `(<span class="org-keyword">progn</span>
      (<span class="org-keyword">defun</span> ,(intern (string name) 'cl-aim.fol.thm) ,params
        ,@formula-body)
      (export ',(intern (string name) 'cl-aim.fol.thm) 'cl-aim.fol.thm)))
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -343,7 +344,7 @@ rules governing backquotes:
 </p>
 
 <ul class="org-ul">
-<li><code>`basic</code> is the same as <code>'basic</code> &#x2014; i.e., <code>(quote basic)</code> &#x2014; for any
+<li><code>`basic</code> is the same as <code>'basic</code> &mdash; i.e., <code>(quote basic)</code> &mdash; for any
 form <code>basic</code> which is not a list or general vector</li>
 <li><code>`,form</code> is the same as <code>form</code> for any <code>form</code> provided the
 representation of <code>form</code> does not begin with either <code>@</code> or <code>.</code></li>
@@ -404,10 +405,10 @@ Example of what a double backquote looks like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">let</span> ((b <span class="org-builtin">:foobar</span>))
+<pre class="src src-lisp"><code>(<span class="org-keyword">let</span> ((b <span class="org-builtin">:foobar</span>))
  ``(,A ,,B ,,17))
 <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,:FOOBAR ,17)</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -415,10 +416,10 @@ We use double commas to produce an "expanded comma" expression. That is,
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">let</span> ((b 'spam))
+<pre class="src src-lisp"><code>(<span class="org-keyword">let</span> ((b 'spam))
  ``(,A ,,B ,,17))
 <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,SPAM ,17)</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -436,14 +437,14 @@ result, we would do something like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">let</span> ((b 'spam))
+<pre class="src src-lisp"><code>(<span class="org-keyword">let</span> ((b 'spam))
  ``(,A ,',B ,,17))
 <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,'SPAM ,17)</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
-This then evaluates the quote in the result &#x2014; that is, when we <i>use</i>
+This then evaluates the quote in the result &mdash; that is, when we <i>use</i>
 this backquoted expression, the second term <code>,'SPAM</code> evaluates to <code>SPAM</code>
 as a symbol.
 </p>
@@ -453,26 +454,26 @@ as a symbol.
 <h3 id="h-79514d56-ea6d-4263-a2d1-626cafe84e6e"><span class="section-number-3">3.2.</span> Nested Splicing</h3>
 <div class="outline-text-3" id="text-h-79514d56-ea6d-4263-a2d1-626cafe84e6e">
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">let</span> ((b '(spam und eggs)))
+<pre class="src src-lisp"><code>(<span class="org-keyword">let</span> ((b '(spam und eggs)))
  ``(,A ,@,B ,,17))
-<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,@(SPAM UND EGGS) ,17)</span>
-
+<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,@(SPAM UND EGGS) ,17)
+</span>
 (<span class="org-keyword">let</span> ((b '(spam und eggs)))
  ``(,A ,,@B ,,17))
-<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,SPAM ,UND ,EGGS ,17)</span>
-
+<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,SPAM ,UND ,EGGS ,17)
+</span>
 (<span class="org-keyword">let</span> ((b '(spam und eggs)))
  ``(,A ,,B ,,17))
-<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,(SPAM UND EGGS) ,17)</span>
-
+<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,(SPAM UND EGGS) ,17)
+</span>
 (<span class="org-keyword">let</span> ((b '(spam und eggs)))
  ``(,A ,',B ,,17))
-<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,'(SPAM UND EGGS) ,17)</span>
-
+<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,'(SPAM UND EGGS) ,17)
+</span>
 (<span class="org-keyword">let</span> ((b '(spam und eggs)))
  ``(,A ,@',B ,,17))
 <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; `(,A ,@'(SPAM UND EGGS) ,17)</span>
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -485,19 +486,19 @@ In SBCL 2.2.4.46-d4779571f, we see in the REPL:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">SBCL</span>
-(caadr (<span class="org-keyword">let</span> ((b '(spam und eggs))) ``(,A ,@',B ,,17)))
-<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; ,A</span>
-
+<pre class="src src-lisp"><code><span class="org-comment-delimiter">;; </span><span class="org-comment">SBCL
+</span>(caadr (<span class="org-keyword">let</span> ((b '(spam und eggs))) ``(,A ,@',B ,,17)))
+<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; ,A
+</span>
 (type-of (caadr (<span class="org-keyword">let</span> ((b '(spam und eggs))) ``(,A ,@',B ,,17))))
-<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; SB-IMPL::COMMA</span>
-
+<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; SB-IMPL::COMMA
+</span>
 (cadadr (<span class="org-keyword">let</span> ((b '(spam und eggs))) ``(,A ,@',B ,,17)))
-<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; ,@'(SPAM UND EGGS)</span>
-
+<span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; ,@'(SPAM UND EGGS)
+</span>
 (type-of (cadadr (<span class="org-keyword">let</span> ((b '(spam und eggs))) ``(,A ,@',B ,,17))))
 <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; SB-IMPL::COMMA</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -507,12 +508,12 @@ comma expressions. For example, in SBCL, we could obtain all the
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">SBCL</span>
-(remove-if-not #'sb-int::comma-p
+<pre class="src src-lisp"><code><span class="org-comment-delimiter">;; </span><span class="org-comment">SBCL
+</span>(remove-if-not #'sb-int::comma-p
  (alexandria:flatten
    (<span class="org-keyword">let</span> ((b '(spam und eggs))) ``(,A ,@',B ,,17))))
 <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; (,A ,@'(SPAM UND EGGS) ,17)</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -521,11 +522,11 @@ what we'd naively expect:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">CCL repl</span>
-(<span class="org-keyword">let</span> ((b '(spam und eggs)))
+<pre class="src src-lisp"><code><span class="org-comment-delimiter">;; </span><span class="org-comment">CCL repl
+</span>(<span class="org-keyword">let</span> ((b '(spam und eggs)))
   ``(,A ,@',B ,,17))
 <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; (LIST* A (APPEND '(SPAM UND EGGS) (LIST 17)))</span>
-</pre>
+</code></pre>
 </div>
 </div>
 </div>

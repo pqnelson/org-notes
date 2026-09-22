@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -278,7 +279,7 @@
 </li>
 <li><a href="#h-16502c44-ef38-4b5c-8cc9-577a9621f5d2">3. Locally Nameless Variables</a></li>
 <li><a href="#h-0825b3d3-5d90-4f57-b3ff-bec320045ec1">4. HOAS, PHOAS, etc.</a></li>
-<li><a href="#h-3761a02f-4b76-4769-a18f-defd3cc8d6be">5. &#x2026;and <i>Typed</i> Lambda Calculus</a></li>
+<li><a href="#h-3761a02f-4b76-4769-a18f-defd3cc8d6be">5. &hellip;and <i>Typed</i> Lambda Calculus</a></li>
 <li><a href="#h-507248f5-0954-4c7e-9393-c8fb75833372">6. Explicit Substitutions</a>
 <ul>
 <li><a href="#h-d945e1e1-35f5-4aea-81a3-50b54af769d9">6.1. And Type Theory</a></li>
@@ -325,7 +326,7 @@ How can we avoid the problem of accidental capture?
 <div class="outline-text-2" id="text-h-69f5b62a-bcd4-4de3-896c-0238934c797c">
 <p>
 The approach De Bruijn took was to use numbers for bound
-variables. (What do we do with free variables? Well&#x2026;let's see how we
+variables. (What do we do with free variables? Well&hellip;let's see how we
 translate bound variables into numbers first.)
 </p>
 
@@ -413,7 +414,7 @@ then we move on to step 6. Otherwise we move to step 7.
 
 <p>
 <b>Step 6.</b> Given a lambda abstraction for our expression \(e = \lambda x.e'\),
-we translate \(x\) to a de Bruijn index and update our context &#x2014; exactly
+we translate \(x\) to a de Bruijn index and update our context &mdash; exactly
 as we have done in step 3. Using this new context \(\Gamma_{\text{new}}\),
 we translate the body of the abstraction \(e'\) using this new context;
 i.e., we set \(e\gets e'\) and \(\Gamma\gets\Gamma_{\text{new}}\), then
@@ -460,7 +461,7 @@ indices?
 
 <p>
 We see that \((\lambda x.\lambda y.x)e\to\lambda y.e\); with de Bruijn
-indices, we would have \((\lambda\lambda.1)\widetilde{e}\) translated&#x2026;how?
+indices, we would have \((\lambda\lambda.1)\widetilde{e}\) translated&hellip;how?
 Well, we begin by realizing \(x\) has been replaced initially by 0, so we
 would write:
 \[ (\lambda\lambda.1)\widetilde{e}\to (\lambda.1)[0 := \widetilde{e}]\]
@@ -553,7 +554,7 @@ Thus we find:
 </p>
 
 <p>
-This works as we expected! &#x2026;for one simple example. If we had a
+This works as we expected! &hellip;for one simple example. If we had a
 different context, where \(x\) were translated to \(n\), then we would have instead:
 </p>
 
@@ -562,7 +563,7 @@ different context, where \(x\) were translated to \(n\), then we would have inst
 </p>
 
 <p>
-&#x2026;which is right. We would therefore need to shift down
+&hellip;which is right. We would therefore need to shift down
 by 1. That is to say, we would need beta reduction to be defined as:
 </p>
 
@@ -597,20 +598,20 @@ variable. Therefore, we are forced to admit the beta-reduction rule as proposed.
 <div class="outline-text-2" id="text-h-16502c44-ef38-4b5c-8cc9-577a9621f5d2">
 <p>
 This is a big old mess, all caused by free variables. What if we
-just&#x2026;leave free variables alone? Treat them as strings? Then we won't
+just&hellip;leave free variables alone? Treat them as strings? Then we won't
 have to worry about shifting and unshifting in beta
-reduction. But we have two notions of variables &#x2014; free variables and
+reduction. But we have two notions of variables &mdash; free variables and
 bound ones.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Name</span> = Bound <span class="org-keyword">of</span> int
+<pre class="src src-sml"><code><span class="org-keyword">datatype</span> <span class="org-type-def">Name</span> = Bound <span class="org-keyword">of</span> int
        | Free <span class="org-keyword">of</span> string;
 
 <span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> = Var <span class="org-keyword">of</span> Name
        | Lam <span class="org-keyword">of</span> Expr
        | App <span class="org-keyword">of</span> Expr * Expr;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -618,7 +619,7 @@ We then substitute an expression for a name.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">subst</span> e' x@(Free n) = (<span class="org-keyword">fn</span> e@(Var (Free y)) =&gt; <span class="org-keyword">if</span> n = y the<span class="org-highlight-beyond-fill-column">n e' else e</span>
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">subst</span> e' x@(Free n) = (<span class="org-keyword">fn</span> e@(Var (Free y)) =&gt; <span class="org-keyword">if</span> n = y the<span class="org-highlight-beyond-fill-column">n e' else e</span>
                         | e@(Var _) =&gt; e
                         | (Lam e) =&gt; Lam (subst e' x e)
                         | (App (e1, e2)) =&gt; App (subst e' x e1<span class="org-highlight-beyond-fill-column">, subst e' x e2))</span>
@@ -626,7 +627,7 @@ We then substitute an expression for a name.
                            | e@(Var _) =&gt; e
                            | (Lam e) =&gt; Lam (subst e' (Bound (<span class="org-highlight-beyond-fill-column">n+1)) e)</span>
                            | (App (e1, e2)) =&gt; App (subst e' x<span class="org-highlight-beyond-fill-column"> e1, subst e' x e2));</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -635,14 +636,14 @@ simplify this code quite a bit:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">shift</span> (Bound n) = Bound (n + 1)
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">shift</span> (Bound n) = Bound (n + 1)
   | shift e = e;
 
 <span class="org-keyword">fun</span> <span class="org-function-name">subst</span> (e' : Expr) (x : Name) =
     (<span class="org-keyword">fn</span> e@(Var y) =&gt; <span class="org-keyword">if</span> x = y <span class="org-keyword">then</span> e' <span class="org-keyword">else</span> e
     | (Lam e) =&gt; Lam (subst e' (shift x) e)
     | (App (e1, e2)) =&gt; App (subst e' x e1, subst e' x e2));
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -651,7 +652,7 @@ simplifies to:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">beta</span> e@(Var _) = e
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">beta</span> e@(Var _) = e
   | beta e@(Lam _) = e
   | beta e@(App (e1, e2)) = <span class="org-keyword">case</span> e1 <span class="org-keyword">of</span>
                             | (Var _) =&gt; e
@@ -660,7 +661,7 @@ simplifies to:
                               <span class="org-keyword">let</span> <span class="org-keyword">val</span> <span class="org-variable-name">v1</span> = beta e1
                               <span class="org-keyword">in</span> <span class="org-keyword">if</span> e1 = v1 <span class="org-keyword">then</span> e <span class="org-keyword">else</span> beta (<span class="org-highlight-beyond-fill-column">App (v1, e2))</span>
                               <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -692,7 +693,7 @@ For a SML library useful for a runtime HOAS/PHOAS encoding, see:
 </div>
 </div>
 <div id="outline-container-h-3761a02f-4b76-4769-a18f-defd3cc8d6be" class="outline-2">
-<h2 id="h-3761a02f-4b76-4769-a18f-defd3cc8d6be"><span class="section-number-2">5.</span> &#x2026;and <i>Typed</i> Lambda Calculus</h2>
+<h2 id="h-3761a02f-4b76-4769-a18f-defd3cc8d6be"><span class="section-number-2">5.</span> &hellip;and <i>Typed</i> Lambda Calculus</h2>
 <div class="outline-text-2" id="text-h-3761a02f-4b76-4769-a18f-defd3cc8d6be">
 <p>
 Thus far, we have worked with locally nameless variables for untyped
@@ -709,7 +710,7 @@ typecheck expressions to make sure evaluation makes sense ("works").
 We could equally do something like:
 </p>
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Name</span> = string;
+<pre class="src src-sml"><code><span class="org-keyword">type</span> <span class="org-type-def">Name</span> = string;
 <span class="org-comment-delimiter">(* </span><span class="org-comment">datatype Var = ...</span><span class="org-comment-delimiter"> *)</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">The implementation is immaterial</span><span class="org-comment-delimiter"> *</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column">)</span></span>
 
 <span class="org-keyword">datatype</span> <span class="org-type-def">Type</span> =
@@ -722,7 +723,7 @@ We could equally do something like:
        | Var <span class="org-keyword">of</span> Name
        | Abs <span class="org-keyword">of</span> Type * Term
        | App <span class="org-keyword">of</span> Term * Term;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -731,7 +732,7 @@ calculus, we would have something like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">type</span> <span class="org-type-def">Name</span> = string;
+<pre class="src src-sml"><code><span class="org-keyword">type</span> <span class="org-type-def">Name</span> = string;
 <span class="org-keyword">datatype</span> <span class="org-type-def">Var</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">...</span><span class="org-comment-delimiter"> *)</span> <span class="org-comment-delimiter">(* </span><span class="org-comment">The implementation is immaterial</span><span class="org-comment-delimiter"> *</span><span class="org-comment-delimiter"><span class="org-highlight-beyond-fill-column">)</span></span>
 
 <span class="org-keyword">datatype</span> <span class="org-type-def">Sort</span> = <span class="org-comment-delimiter">(* </span><span class="org-comment">complicated mess</span><span class="org-comment-delimiter"> *)</span>;
@@ -746,7 +747,7 @@ calculus, we would have something like:
          | BVar int
          | Abs Type * Term
          | App Term * Term;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -768,7 +769,7 @@ by Axiomatizing the Typing Relation"), we would need something like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> =
+<pre class="src src-sml"><code><span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> =
          | EType
          | EVar <span class="org-keyword">of</span> Var
          | ELam <span class="org-keyword">of</span> Expr * Expr
@@ -776,7 +777,7 @@ by Axiomatizing the Typing Relation"), we would need something like:
      <span class="org-keyword">and</span> Type =
          | TKind
          | TLam <span class="org-keyword">of</span> Expr * Type;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -784,13 +785,13 @@ Or perhaps more succinctly using one datatype for pseudo-expressions:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> =
+<pre class="src src-sml"><code><span class="org-keyword">datatype</span> <span class="org-type-def">Expr</span> =
          | Type
          | Kind
          | Var <span class="org-keyword">of</span> Var
          | Lam <span class="org-keyword">of</span> Expr * Expr
          | App <span class="org-keyword">of</span> Expr * Expr;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -818,7 +819,7 @@ longer strongly normalizing, as first proved in:
 <ul class="org-ul">
 <li>P-A. Melliès,<br>
 "Typed lambda-calculi with explicit substitutions may not terminate".<br>
-TLCA 1995, pp.328&#x2013;334; <a href="https://www.irif.fr/~mellies/papers/Mellies95tlca.ps">Eprint</a>.</li>
+TLCA 1995, pp.328&ndash;334; <a href="https://www.irif.fr/~mellies/papers/Mellies95tlca.ps">Eprint</a>.</li>
 </ul>
 </div>
 <div id="outline-container-h-d945e1e1-35f5-4aea-81a3-50b54af769d9" class="outline-3">
@@ -864,7 +865,7 @@ doi:<a href="https://doi.org/10.7146/brics.v6i17.20074">10.7146/brics.v6i17.2007
 "Lambda Calculus Notation with Nameless Dummies, a Tool for Automatic
 Formula Manipulation, with Application to the Church-Rosser
 Theorem".<br>
-<cite class="book-title">Indagationes Mathematicae (Proceedings)</cite> <b>75</b> 5 (1972) pp.381&#x2013;392 
+<cite class="book-title">Indagationes Mathematicae (Proceedings)</cite> <b>75</b> 5 (1972) pp.381&ndash;392 
 <a href="http://alexandria.tue.nl/repository/freearticles/597619.pdf">pdf</a>.</li>
 <li>TAPL</li>
 <li><a href="https://jesper.sikanda.be/posts/1001-syntax-representations.html">1001 Representations of Syntax with Binding</a> in Agda</li>
@@ -877,7 +878,7 @@ Theorem".<br>
 <ul class="org-ul">
 <li>Martin Abadi, Lucas Cardelli, Pierre-Louis Curien, and Jean-Jacques Lévy,<br>
 "Explicit substitutions".<br>
-<i>Journal of Functional Programming</i> <b>1</b> no.4 (1991) pp.375&#x2013;416
+<i>Journal of Functional Programming</i> <b>1</b> no.4 (1991) pp.375&ndash;416
 <ul class="org-ul">
 <li>This is the first paper which introduces explicit substitutions as a concept.</li>
 <li><a href="http://pauillac.inria.fr/~levy/pubs/90popljfp.pdf">Expanded Eprint</a></li>
@@ -889,7 +890,7 @@ Programming languages conference</li>
 Eprint <a href="https://ntrs.nasa.gov/citations/20010000323">NASA/CR-2000-210621</a>, 32 pages.</li>
 <li>P-A. Melliès,<br>
 "Typed lambda-calculi with explicit substitutions may not terminate".<br>
-TLCA 1995, pp.328&#x2013;334; <a href="https://www.irif.fr/~mellies/papers/Mellies95tlca.ps">Eprint</a>.</li>
+TLCA 1995, pp.328&ndash;334; <a href="https://www.irif.fr/~mellies/papers/Mellies95tlca.ps">Eprint</a>.</li>
 </ul>
 </div>
 </div>

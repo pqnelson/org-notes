@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -309,7 +310,7 @@ These are some quick notes on Josef Urban's "Translating Mizar for First
 Order Theorem Provers", In <i>Mathematical Knowledge Management:
 Proceedings of the Second International Conference</i> (Eds., A. Asperti,
 B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in
-Computer Science vol 2594, 2003, pp. 203&#x2013;215.
+Computer Science vol 2594, 2003, pp. 203&ndash;215.
 </p>
 
 <p>
@@ -486,7 +487,7 @@ occurring in them; so <code>for x being Real holds x-x = 0</code> translates to
 The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Mode-Definition">syntactic structure</a> of <code>&lt;Mode-Definition&gt;</code> is:
 </p>
 
-<pre class="example" id="org7d52102">
+<pre class="example" id="orge65152b">
 &lt;Mode-Definition&gt; =
 	"mode" &lt;Mode-Pattern&gt; ( [ &lt;Specification&gt; ] [ "means" &lt;Definiens&gt; ] ";"
 &lt;Correctness-Conditions&gt; | "is" &lt;Type-Expression&gt; ";" ) { &lt;Mode-Property&gt; } .
@@ -503,14 +504,14 @@ An example of this might be:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span> <span class="org-mizar-skeleton">let</span> X;
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span> <span class="org-mizar-skeleton">let</span> X;
   <span class="org-mizar-normal">mode</span> Element <span class="org-mizar-normal">of</span> X <span class="org-mizar-normal">means</span>
   :Def2: <span class="org-mizar-normal">it</span> in X <span class="org-mizar-normal">if</span> X <span class="org-mizar-normal">is</span> non empty
     <span class="org-mizar-normal">otherwise</span> <span class="org-mizar-normal">it</span> <span class="org-mizar-normal">is</span> empty;
   <span class="org-mizar-normal">existence</span><span class="org-type"> by BOOLE:def 1</span>;
   <span class="org-mizar-normal">consistency</span>;
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <ul class="org-ul">
@@ -570,7 +571,7 @@ m1_subset_1(X,Y)))</code>
 Another couple examples, from <a href="http://www.mizar.org/version/current/mml/binop_1.miz"><code>binop_1.miz</code></a>:
 </p>
 
-<pre class="example" id="org60b36c5">
+<pre class="example" id="org1f07134">
 definition
   let A be set; :: loci-declaration
   :: defines a unary operation on A
@@ -589,9 +590,9 @@ The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predic
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ebnf">&lt;Predicate-Definition&gt; =
+<pre class="src src-ebnf"><code>&lt;Predicate-Definition&gt; =
   "pred" &lt;Predicate-Pattern&gt; [ "means" &lt;Definiens&gt; ] ";" &lt;Correctness-Conditions&gt; { &lt;Predicate-Property&gt; } .
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-f048d47c-ccaf-4522-899a-8cd3bbec0cfc" class="outline-4">
@@ -601,7 +602,7 @@ The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predic
 An example given:
 </p>
 
-<pre class="example" id="orge4f2e82">
+<pre class="example" id="orgcdcfb58">
 definition let X,Y:
   pred X c= Y means
 :: TARSKI:def 3
@@ -659,21 +660,21 @@ property, e.g., proving <code>r1_tarski(X,X)</code>.
 Attributes are very similar to predicates. They are used to restrict a
 type to a subtype. They are <i>adjectives</i> which can be assembled together
 (e.g., <code>finite non empty set</code> uses the adjectives <code>finite</code> and <code>non
-empty</code> &#x2014; <code>finite</code> and <code>empty</code> are attributes, <code>non empty</code> is the
+empty</code> &mdash; <code>finite</code> and <code>empty</code> are attributes, <code>non empty</code> is the
 negation of <code>empty</code>). The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Attribute-Definition">syntax</a> for it is:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ebnf">&lt;Attribute-Definition&gt; =
+<pre class="src src-ebnf"><code>&lt;Attribute-Definition&gt; =
   "attr" &lt;Attribute-Pattern&gt; "means" &lt;Definiens&gt; ";" &lt;Correctness-Conditions&gt; .
-</pre>
+</code></pre>
 </div>
 
 <p>
 Here's an example:
 </p>
 
-<pre class="example" id="orgaff0d26">
+<pre class="example" id="org4d9bdd8">
 definition let i be number;
  attr i is even means
   ex j being Integer st i = 2*j;
@@ -682,7 +683,7 @@ end;
 
 <ul class="org-ul">
 <li>We have the <code>&lt;Loci-Definition&gt;</code> be "<code>let i be number</code>"</li>
-<li>The <code>&lt;Attribute-Pattern&gt;</code> is here "<code>i is even</code>" &#x2014; <code>is</code> is a keyword, <code>even</code> is the attribute we are defining.</li>
+<li>The <code>&lt;Attribute-Pattern&gt;</code> is here "<code>i is even</code>" &mdash; <code>is</code> is a keyword, <code>even</code> is the attribute we are defining.</li>
 <li>The <code>&lt;Definiens&gt;</code> is "<code>ex j being Integer st i = 2*j</code>"</li>
 </ul>
 
@@ -697,7 +698,7 @@ associative] law of composition). Mizar refers to a <code>multMagma</code> as a
 magma with a single law of composition.
 </p>
 
-<pre class="example" id="org5b5b258">
+<pre class="example" id="org2400241">
 definition
   let IT be multMagma;
 
@@ -750,7 +751,7 @@ result. Several <code>&lt;Functor-Properties&gt;</code> (like <code>commutativit
 associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Functor-Definition">syntax</a> is:
 </p>
 
-<pre class="example" id="org7b79c27">
+<pre class="example" id="org5a8a8c1">
 &lt;Functor-Definition&gt; =
  "func" &lt;Functor-Pattern&gt; [ &lt;Specification&gt; ] [ ( "means" | "equals" ) &lt;Definiens&gt; ] ";"
  &lt;Correctness-Conditions&gt; { &lt;Functor-Property&gt; } .
@@ -767,7 +768,7 @@ and uniqueness.
 The example given:
 </p>
 
-<pre class="example" id="orge07c6db">
+<pre class="example" id="orga7ff1a7">
 definition let x be real number;
   func -x -&gt; real number means :Def1: x + it = 0;
   existence by AXIOMS:19;
@@ -804,7 +805,7 @@ theorem, <code>Th10</code>)</li>
 The definition creates one new pattern, and one new constructor. 
 </p>
 
-<div class="remark" id="orgc244a62">
+<div class="remark" id="orgaa2d98a">
 <p>
 Defining a "morphism" requires some involved work with cluster
 registrations, it's not as simple as defining a new function. See, e.g.,
@@ -826,7 +827,7 @@ Intuitively, a structure is a tuple with named components.
 From <a href="http://www.mizar.org/version/current/mml/algstr_0.miz"><code>algstr_0.miz</code></a>, we have:
 </p>
 
-<pre class="example" id="org1b477b4">
+<pre class="example" id="org3324198">
 :: Multiplicative structures
 definition
   struct (1-sorted) multMagma (# carrier -&gt; set,
@@ -848,7 +849,7 @@ end;
 <p>
 This introduces a <code>multMagma</code> structure, which inherits the <code>1-sorted</code>
 structure. Loosely, structures are analogous to classes (they define new
-types, they have a constructor &#x2014; in this case, it's <code>multMagma(# X, op #)</code>,
+types, they have a constructor &mdash; in this case, it's <code>multMagma(# X, op #)</code>,
 and so on). We can access the <i>fields</i> of the structure by writing
 things like <code>the multF of M</code> to get the <code>multF</code> field, and <code>the carrier</code>
 to get its underlying set.
@@ -861,7 +862,7 @@ underlying set of a mathematical gadget.)
 
 <p>
 Our intuition should be that a <code>struct</code> is how Mizar encodes stuff and
-structure (in the <a href="http://nlab-pages.s3.us-east-2.amazonaws.com/nlab/show/stuff,+structure,+property">Baez&#x2013;Dolan sense</a>). Indeed, idiomatic Mizar will
+structure (in the <a href="http://nlab-pages.s3.us-east-2.amazonaws.com/nlab/show/stuff,+structure,+property">Baez&ndash;Dolan sense</a>). Indeed, idiomatic Mizar will
 encode a mathematical gadget in this manner, with a <code>Gadget-like</code>
 attribute for a <code>GadgetStr</code> structure, then we will find a
 <code>mode Gadget means Gadget-like GadgetStr</code> type definition.
@@ -871,7 +872,7 @@ attribute for a <code>GadgetStr</code> structure, then we will find a
 Another example of a structure (from <a href="http://mizar.org/version/current/html/vectsp_1.html#L1"><code>VECTSP_1</code></a>), this time using <code>over</code>:
 </p>
 
-<pre class="example" id="orgccdc93b">
+<pre class="example" id="org5d27541">
 :: VECTSP_1
 definition
   let F be 1-sorted;
@@ -921,7 +922,7 @@ For further reading about attributes, see:
 "Mizar attributes: A technique to encode mathematical knowledge into
 type systems."<br>
 <i>Studies in Logic, Grammar and Rhetoric</i> <b>10</b>, no. 23 (2007)
-pp.387&#x2013;400.</li>
+pp.387&ndash;400.</li>
 </ul>
 </div>
 </div>
@@ -943,15 +944,15 @@ Springer, Berlin, Heidelberg, 2007.</li>
 "Mizar attributes: A technique to encode mathematical knowledge into
 type systems."<br>
 <i>Studies in Logic, Grammar and Rhetoric</i> <b>10</b>, no. 23 (2007)
-pp.387&#x2013;400.</li>
+pp.387&ndash;400.</li>
 <li>Kazuhisa Nakasho and Hiroyuki Okazaki and Hiroshi Yamazaki and
 Yasunari Shidama,<br>
 "Formalization of Fundamental Theorem of Finite Abelian Groups in Mizar".<br>
-In <i>6th Podlasie Conference on Mathematics (6PCM)</i> (2014) pp.23&#x2013;34.</li>
+In <i>6th Podlasie Conference on Mathematics (6PCM)</i> (2014) pp.23&ndash;34.</li>
 <li>Josef Urban,<br>
 "Translating Mizar for First Order Theorem Provers".<br>
 In <i>Mathematical Knowledge Management: Proceedings of the Second International Conference</i> (Eds., A. Asperti,
-B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in Computer Science vol 2594, 2003, pp. 203&#x2013;215.</li>
+B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in Computer Science vol 2594, 2003, pp. 203&ndash;215.</li>
 <li>F. Wiedijk,<br>
 "Mizar's Soft Type System."<br>
 In: K. Schneider &amp; J. Brandt (eds.), <span class="underline">Theorem Proving in Higher Order Logics 2007</span>, LNCS <b><b>4732</b></b>, 383-399, 2007 <a href="http://www.cs.ru.nl/F.Wiedijk/mizar/miztype.pdf">pdf</a>.<br>
@@ -960,7 +961,7 @@ In: K. Schneider &amp; J. Brandt (eds.), <span class="underline">Theorem Proving
 </ul></li>
 <li>C. Kaliszyk and K. Pąk,<br>
 "Semantics of Mizar as an Isabelle Object Logic".<br>
-<i>J Autom Reasoning</i> <b>63</b> (2019) pp.557&#x2013;595.
+<i>J Autom Reasoning</i> <b>63</b> (2019) pp.557&ndash;595.
 <a href="https://doi.org/10.1007/s10817-018-9479-z">https://doi.org/10.1007/s10817-018-9479-z</a>
 <ul class="org-ul">
 <li>Discusses implementing Mizar in Isabelle, a fascinating exercise</li>

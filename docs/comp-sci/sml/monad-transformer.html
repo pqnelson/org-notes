@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -263,7 +264,7 @@ functor. For example,
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">functor</span> <span class="org-module-def">StateT</span>(<span class="org-keyword">type</span> <span class="org-type-def">state</span>
+<pre class="src src-sml"><code><span class="org-keyword">functor</span> <span class="org-module-def">StateT</span>(<span class="org-keyword">type</span> <span class="org-type-def">state</span>
                <span class="org-keyword">structure</span> <span class="org-module-def">M</span> : MONAD) : MONAD =
 <span class="org-keyword">struct</span>
   <span class="org-keyword">type</span> <span class="org-type-def">state</span> = state;
@@ -278,7 +279,7 @@ functor. For example,
 
   <span class="org-comment-delimiter">(* </span><span class="org-comment">etc.</span><span class="org-comment-delimiter"> *)</span>
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -290,13 +291,13 @@ I'm going to stick with the signature for a "generic" monad:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">MONAD</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">MONAD</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> 'a <span class="org-type-def">m</span>;
   <span class="org-keyword">val</span> <span class="org-variable-name">return</span> : 'a -&gt; 'a m;
   <span class="org-keyword">val</span> <span class="org-variable-name">bind</span> : 'a m -&gt; ('a -&gt; 'b m) -&gt; 'b m;
   <span class="org-keyword">val</span> <span class="org-variable-name">exec</span> : 'a m -&gt; 'a;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-455d86fa-703b-4583-be03-710369a37dfd" class="outline-3">
@@ -320,7 +321,7 @@ of the <code>bind</code> function.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">READER_MONAD</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">READER_MONAD</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> <span class="org-type-def">env</span>;
   <span class="org-keyword">val</span> <span class="org-variable-name">init_env</span> : env;
   <span class="org-keyword">include</span> MONAD;
@@ -351,15 +352,15 @@ of the <code>bind</code> function.
 
   <span class="org-keyword">val</span> <span class="org-variable-name">ask</span> = Reader (<span class="org-keyword">fn</span> x =&gt; x);
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
-And as a transformer&#x2026;
+And as a transformer&hellip;
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">READER_T</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">READER_T</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> <span class="org-type-def">env</span>;
   <span class="org-keyword">include</span> MONAD;
   <span class="org-keyword">val</span> <span class="org-variable-name">ask</span> : env m;
@@ -388,7 +389,7 @@ And as a transformer&#x2026;
 
   <span class="org-keyword">val</span> <span class="org-variable-name">ask</span> = ReaderT M.return;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -405,7 +406,7 @@ More generally, we could replace <code>string</code> with any <a href="monoid.ht
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">WRITER_MONAD</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">WRITER_MONAD</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">include</span> MONAD;
   <span class="org-keyword">val</span> <span class="org-variable-name">get_log</span> : 'a m -&gt; string;
   <span class="org-keyword">val</span> <span class="org-variable-name">tell</span> : string -&gt; unit m;
@@ -429,7 +430,7 @@ More generally, we could replace <code>string</code> with any <a href="monoid.ht
   
   <span class="org-keyword">fun</span> <span class="org-function-name">tell</span> s = ((), s);
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -437,7 +438,7 @@ As a monad transformer, we would have something like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">WRITER_T</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">WRITER_T</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">structure</span> <span class="org-module-def">M</span> : MONAD;
   <span class="org-keyword">include</span> MONAD;
   <span class="org-keyword">val</span> <span class="org-variable-name">get_log</span> : 'a m -&gt; string;
@@ -471,7 +472,7 @@ As a monad transformer, we would have something like:
 
   <span class="org-keyword">fun</span> <span class="org-function-name">tell</span> w = WriterT (M.return ((), w));
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -485,13 +486,13 @@ Again, we should generalize this from using strings to an arbitrary
 <div class="outline-text-3" id="text-h-24a6c87a-4b3b-48da-99d6-4d5867ccdf73">
 <p>
 In Standard ML, we can use the <code>exn</code> type for exceptions rather than
-allowing the user to provide one&#x2026;well, in full generality, we could
+allowing the user to provide one&hellip;well, in full generality, we could
 simply use a type variable (and then instantiate it to <code>exn</code> for the
 exception monad).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">structure</span> <span class="org-module-def">ExceptionMonad</span> : MONAD = <span class="org-keyword">struct</span>
+<pre class="src src-sml"><code><span class="org-keyword">structure</span> <span class="org-module-def">ExceptionMonad</span> : MONAD = <span class="org-keyword">struct</span>
   <span class="org-keyword">datatype</span> 'a <span class="org-type-def">m</span> = V <span class="org-keyword">of</span> 'a
                 | E <span class="org-keyword">of</span> exn;
 
@@ -502,7 +503,7 @@ exception monad).
                    | (V a) =&gt; f a;
   <span class="org-keyword">fun</span> <span class="org-function-name">exec</span> (V a) = a;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -513,7 +514,7 @@ impossible to implement using Standard ML's type system):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">EXCEPTION_T</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">EXCEPTION_T</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> ('a, 'e) <span class="org-type-def">outcome</span>;
   <span class="org-keyword">structure</span> <span class="org-module-def">M</span> : MONAD;
 
@@ -551,7 +552,7 @@ impossible to implement using Standard ML's type system):
   <span class="org-keyword">fun</span> <span class="org-function-name">catch</span> m f = M.bind m (<span class="org-keyword">fn</span> (E e) =&gt; f e
                              | (V v) =&gt; M.return (V v));
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>

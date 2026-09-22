@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -305,16 +306,15 @@ construct a cube with approximately the same area, its side length
 \end{equation}
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span class="org-keyword">let</span> ((radius (/ 20e3 pi)))
+<pre class="src src-elisp"><code>(<span class="org-keyword">let</span> ((radius (/ 20e3 pi)))
   (sqrt (/ (* 4 pi (expt radius 2))
            6)))
-</pre>
+</code></pre>
 </div>
 
 <pre class="example">
 9213.177319235614
 </pre>
-
 
 <p>
 This gives \(\ell\approx 9213\) kilometers. More generally, for a planet
@@ -338,14 +338,14 @@ terminology from <i>Dwarf Fortress</i>.)
 <p>
 Suppose we have 8-by-8 region tiles for a face (for a total of 64
 regions per face, and 384 regions on the planet). This would require
-each region having an area of \((\ell/8)^{2}\) &#x2014; for Earth, this is
+each region having an area of \((\ell/8)^{2}\) &mdash; for Earth, this is
 1,326,291 square kilometers
 (slightly larger than the combined areas of California, Nevada, Arizona,
 and Utah).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span class="org-keyword">defun</span> <span class="org-function-name">sq</span> (x) (* x x))
+<pre class="src src-elisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">sq</span> (x) (* x x))
 
 (<span class="org-keyword">let*</span> ((radius (/ 20e3 pi))
        (side-length (sqrt (/ (* 4 pi (expt radius 2))
@@ -354,10 +354,10 @@ and Utah).
         <span class="org-builtin">:2-byte</span> (sq (/ side-length 16))
         <span class="org-builtin">:4-byte</span> (sq (/ side-length 32))
         <span class="org-builtin">:8-byte</span> (sq (/ side-length 64))))
-</pre>
+</code></pre>
 </div>
 
-<pre class="example" id="org9e102f8">
+<pre class="example" id="orgf427a40">
 - :1-byte
 - 1326291.1924324615
 - :2-byte
@@ -378,8 +378,8 @@ area of New Jersey [19,047 square km]).
 </p>
 
 <p>
-For context, many war games &#x2014; like Gary Grigsby's <i>War in the East 2</i>
-&#x2014; use 10 nautical miles for each tile length (about 18.5 kilometers).
+For context, many war games &mdash; like Gary Grigsby's <i>War in the East 2</i>
+&mdash; use 10 nautical miles for each tile length (about 18.5 kilometers).
 If we try to make each local area tile have side length 18.5 kilometers,
 then we find one face of the "planet cube" consists of 498-by-498 local
 area tiles. We can observe \(512=2^{9}\approx 498\) and thus if we choose
@@ -397,7 +397,7 @@ with latitude, but it gives us a sense of size (about 5 times larger
 than our local area tile's edge length).
 </p>
 
-<div class="remark" id="orgaa2a587">
+<div class="remark" id="orgd3344d8">
 <p>
 Do we really <i>need</i> all these local area tiles? It depends on what
 degree of error and accuracy we wish. For a region tile which is

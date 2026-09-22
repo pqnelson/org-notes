@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -300,7 +301,7 @@ introducing a function <code>EGAL</code>. The basic template is as follows:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-common-lisp">  (<span class="org-keyword">defun</span> <span class="org-function-name">egal</span> (x y)
+<pre class="src src-common-lisp"><code>  (<span class="org-keyword">defun</span> <span class="org-function-name">egal</span> (x y)
     (and (egal (type-of x) (type-of y))
          (<span class="org-keyword">cond</span> ((symbolp x) (eq x y))
                ((numberp x) (egal-number x y))
@@ -315,7 +316,7 @@ introducing a function <code>EGAL</code>. The basic template is as follows:
                              (egal (funcall component x)
                                    (funcall component y)))
                          (components (type-of x)))))))
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-757d8938-0379-490c-a8a8-a0b42265ee35" class="outline-3">
@@ -327,7 +328,7 @@ types <b>must agree</b>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-common-lisp">  (<span class="org-keyword">defun</span> <span class="org-function-name">egal-number</span> (x y)
+<pre class="src src-common-lisp"><code>  (<span class="org-keyword">defun</span> <span class="org-function-name">egal-number</span> (x y)
     (and (egal (type-of x) (type-of y))
          (<span class="org-keyword">cond</span> ((complexp x)
                 (and (egal-number (realpart x) (realpart y))
@@ -336,13 +337,13 @@ types <b>must agree</b>.
                 (and (egal-number (numerator x) (numerator y))
                      (egal-number (denominator x) (denominator y))))
                ((floatp x)
-                (and (= (float-sign x) (float-sign y)) <span class="org-comment">; for IEEE-75415</span>
-                     (= x y)))
+                (and (= (float-sign x) (float-sign y)) <span class="org-comment">; for IEEE-75415
+</span>                     (= x y)))
                ((and (fixnump x) (fixnump y)) (eq x y))
                ((and (bignump x) (bignump y))
                 (every #'eq (digits x) (digits y)))
                (t nil))))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -363,7 +364,7 @@ Otherwise, the predicate is false.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-common-lisp">  (<span class="org-keyword">defun</span> <span class="org-function-name">egal-vector</span> (x y)
+<pre class="src src-common-lisp"><code>  (<span class="org-keyword">defun</span> <span class="org-function-name">egal-vector</span> (x y)
     (<span class="org-keyword">cond</span> ((and (mutable-vector-p x) (mutable-vector-p y))
            (eq x y))
           ((and (immutable-vector-p x) (immutable-vector-p y))
@@ -372,7 +373,7 @@ Otherwise, the predicate is false.
                   (<span class="org-keyword">unless</span> (egal (aref x i) (aref y i))
                     (<span class="org-keyword">return</span> nil)))))
           (t nil)))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -385,9 +386,9 @@ it. Therefore, pointer equality seems best.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-common-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">egal-function</span> (x y)
+<pre class="src src-common-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">egal-function</span> (x y)
   (eq x y))
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -410,7 +411,7 @@ I just implement this using:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-common-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">egal-hashtable</span> (x y)
+<pre class="src src-common-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">egal-hashtable</span> (x y)
   (and (= (hash-table-count x) (hash-table-count y))
        (<span class="org-keyword">with-hash-table-iterator</span> (iterator x)
          (<span class="org-keyword">loop</span> (<span class="org-keyword">multiple-value-bind</span> (entry-p key value) (iterator)
@@ -418,7 +419,7 @@ I just implement this using:
                      (<span class="org-keyword">unless</span> (egal (gethash key y) value)
                        (<span class="org-keyword">return</span>))
                      (<span class="org-keyword">return</span> t)))))))
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -436,9 +437,9 @@ to pointer equality.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-common-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">egal-stream</span> (x y)
+<pre class="src src-common-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">egal-stream</span> (x y)
   (eq x y))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>

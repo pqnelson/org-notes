@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -286,7 +287,7 @@
 <div id="outline-container-h-edc440ad-dc16-46df-9865-b20fe366520d" class="outline-3">
 <h3 id="h-edc440ad-dc16-46df-9865-b20fe366520d"><span class="section-number-3">1.1.</span> General Linear Group</h3>
 <div class="outline-text-3" id="text-h-edc440ad-dc16-46df-9865-b20fe366520d">
-<div class="definition" id="org83ef172">
+<div class="definition" id="orgfce0825">
 <p>
 Let \(K\) be a field, \(n\in\NN\) be a positive integer.
 The <dfn>General Linear Group</dfn> denoted \(GL(n,K)\) or \(GL_{n}(K)\) is
@@ -296,7 +297,7 @@ the group consisting of invertible \(n\times n\) matrices over the field
 
 </div>
 
-<div class="remark" id="orgca7bb99">
+<div class="remark" id="org6d62396">
 <p>
 We don't really need \(K\) to be a field, it could just be an associative
 unital ring (see the entry in the <a href="https://encyclopediaofmath.org/wiki/General_linear_group"><cite class="book-title">Encyclopedia of Mathematics</cite></a>).
@@ -326,7 +327,7 @@ Associativity of matrix multiplication is proven in <a href="http://mizar.org/ve
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> n, k, m <span class="org-mizar-normal">be</span> Nat;
   <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> Ring;
   <span class="org-mizar-skeleton">let</span> A <span class="org-mizar-normal">be</span> Matrix <span class="org-mizar-normal">of</span> n,k,K;
@@ -361,9 +362,9 @@ Associativity of matrix multiplication is proven in <a href="http://mizar.org/ve
   <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 
-<span class="org-comment-delimiter">:: </span><span class="org-comment">MATRIX_3:18 proves (1.(K,n))*A = A</span>
-<span class="org-comment-delimiter">:: </span><span class="org-comment">MATRIX_3:19 proves A*(1.(K,n)) = A</span>
-<span class="org-mizar-main">theorem</span>
+<span class="org-comment-delimiter">:: </span><span class="org-comment">MATRIX_3:18 proves (1.(K,n))*A = A
+</span><span class="org-comment-delimiter">:: </span><span class="org-comment">MATRIX_3:19 proves A*(1.(K,n)) = A
+</span><span class="org-mizar-main">theorem</span>
   <span class="org-mizar-formula">for</span> n <span class="org-mizar-formula">being</span> Nat
   <span class="org-mizar-formula">for</span> K <span class="org-mizar-formula">being</span> Field
   <span class="org-mizar-formula">holds</span> 1_(GL(n,K)) = 1.(K,n)<span class="org-type"> by GROUP_1:def 4,MATRIX_3:18,19</span>;
@@ -373,7 +374,7 @@ Associativity of matrix multiplication is proven in <a href="http://mizar.org/ve
   <span class="org-mizar-formula">for</span> K <span class="org-mizar-formula">being</span> Field
   <span class="org-mizar-formula">for</span> M <span class="org-mizar-formula">being</span> Element <span class="org-mizar-normal">of</span> GL(n,K)
   <span class="org-mizar-formula">holds</span> inverse_op(GL(n,K)).M = M ~<span class="org-type"> by MATRIX_6:def 4,GROUP_1:def 6</span>;
-</pre>
+</code></pre>
 </div>
 
 <ul class="org-ul">
@@ -388,7 +389,7 @@ as <a href="http://mizar.uwb.edu.pl/version/current/html/matrlin2.html#K4"><code
 <div id="outline-container-h-ba74f292-740f-42d2-911a-8309a7f159bc" class="outline-3">
 <h3 id="h-ba74f292-740f-42d2-911a-8309a7f159bc"><span class="section-number-3">1.2.</span> Special Linear Group</h3>
 <div class="outline-text-3" id="text-h-ba74f292-740f-42d2-911a-8309a7f159bc">
-<div class="definition" id="orgf3b46eb">
+<div class="definition" id="org4f2f7e4">
 <p>
 Let \(n\) be a positive integer, \(K\) be a field.
 The <dfn>Special Linear Group</dfn> \(SL(n,K)\) consists of
@@ -404,7 +405,7 @@ The determinant of the identity matrix being unity is proven in theorem
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> n <span class="org-mizar-normal">be</span> Nat;
   <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> Field;
   <span class="org-mizar-normal">func</span> SL(n,K) -&gt; Group <span class="org-mizar-normal">means</span>
@@ -448,7 +449,7 @@ The determinant of the identity matrix being unity is proven in theorem
   the multF <span class="org-mizar-normal">of</span> GL(n,K) = matrix_mult||UG<span class="org-type"> by GROUP_2:def 5</span>;
   <span class="org-mizar-skeleton">hence</span> <span class="org-mizar-normal">thesis</span><span class="org-type"> by A2,FUNCT_1:51</span>;
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -460,7 +461,7 @@ We could then define the projective linear groups as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> n <span class="org-mizar-normal">be</span> Nat;
   <span class="org-mizar-skeleton">let</span> K <span class="org-mizar-normal">be</span> Field;
   <span class="org-mizar-normal">func</span> PGL(n,K) -&gt; Group <span class="org-mizar-normal">equals</span> GL(n,K)./.(center GL(n,K));
@@ -475,10 +476,10 @@ We could then define the projective linear groups as:
     <span class="org-mizar-skeleton">thus</span> SL(n,K)./.(center SL(n,K)) <span class="org-mizar-normal">is</span> Group;
   <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 
-<div class="remark" id="org14b10a9">
+<div class="remark" id="org0774cdf">
 <p>
 If we include <code>NAT_6</code> in our registrations, then we can register
 <code>positive</code> for <code>Nat</code>. Be sure to include <code>XCMPLX_0</code> in the vocabulary.
@@ -486,7 +487,7 @@ If we include <code>NAT_6</code> in our registrations, then we can register
 
 </div>
 
-<pre class="example" id="org1ca30dc">
+<pre class="example" id="org6582e7c">
 registration
   cluster positive for Nat;
   existence

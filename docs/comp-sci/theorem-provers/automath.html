@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -316,7 +317,7 @@ There are four or five types of expressions:
 <li>Symbols (namespaced identifiers within paragraphs/modules, <i>or</i> "just
 identifiers")</li>
 <li>Lambda abstractions, written <code>[x:T]e</code> where <code>e</code> is an expression
-(sometimes <code>[x,T]e</code> is used in older literature) &#x2014; note here that
+(sometimes <code>[x,T]e</code> is used in older literature) &mdash; note here that
 <code>x</code> is an identifier, not a symbol</li>
 <li>Applications, <code>&lt;arg&gt;fn</code> instead of <code>fn arg</code></li>
 <li>Abbreviations, <code>d(c_1, ..., c_k)</code></li>
@@ -326,14 +327,14 @@ identifiers")</li>
 <p>
 What's the difference between an abbreviation and an application? Well,
 we typically do things in math like "Let <code>G</code> be a group, then we call
-<code>H</code> a subgroup of <code>G</code> if&#x2026;". If we want to say <code>N</code> is a subgroup of <code>M</code>
+<code>H</code> a subgroup of <code>G</code> if&hellip;". If we want to say <code>N</code> is a subgroup of <code>M</code>
 in Automath, we write <code>N : Subgroup(M)</code>.
 </p>
 
 <p>
 As far as the kernel cares, it could treat the two as the same, with the
 caveat that if <code>d</code> is an abbreviation with <code>n&gt;k</code> parameters, then
-<code>d(c_1, ..., c_k)</code> fixes the last <code>k</code> parameters (<code>x_(n-k)=c_1</code>, &#x2026;,
+<code>d(c_1, ..., c_k)</code> fixes the last <code>k</code> parameters (<code>x_(n-k)=c_1</code>, &hellip;,
 <code>x_n=c_k</code>).
 </p>
 </div>
@@ -436,7 +437,7 @@ the context to be empty by just writing <code>&lt;turnstile&gt;</code>.
 Consider the following (adapted from Freek Wiedijk's formalization of
 <a href="http://www.cs.ru.nl/~freek/zfc-etc/holl.aut">HOL Light's logic</a>):
 </p>
-<pre class="example" id="org9be0ad7">
+<pre class="example" id="orgbd0bdf9">
   * type : TYPE := PRIM    # sets the context to be initial empty context
   * bool : type := PRIM
   * A : type := ---        # sets the context to be A
@@ -466,14 +467,14 @@ context ending at <code>A</code>, creating a new context <code>A:type, B:type</c
 <p>
 The kernel interprets a line of the form
 </p>
-<pre class="example" id="orgaa456e7">
+<pre class="example" id="orgf238671">
 a * [x:T] b := ... : T'
 </pre>
 
 <p>
 as two lines:
 </p>
-<pre class="example" id="org7d15f3f">
+<pre class="example" id="org79048e9">
 a * x := --- : T
 x * b := ... : T'
 </pre>
@@ -495,7 +496,7 @@ have a proposition be a 2-expression ("type") of the form <code>p : PROP</code>.
 predicate would parametrize this by a "term":
 </p>
 
-<pre class="example" id="orgdd58e50">
+<pre class="example" id="org5b12162">
    * T : TYPE := ---
  T * [x:T]predicate : [x:T]PROP := PN
 </pre>
@@ -509,7 +510,7 @@ But is <code>[x:T]PROP</code> a valid expression? De Bruijn calls such a thing a
 <p>
 Quantifiers can be written down easily as:
 </p>
-<pre class="example" id="org97ded47">
+<pre class="example" id="orgb589b28">
 T * [p:[z:T]PROP] forall : PROP := p
   * [a:PROP][b:PROP] imp:PROP := [x:a]b
   * false : PROP := PRIM

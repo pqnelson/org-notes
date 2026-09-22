@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -331,13 +332,13 @@ Hinze gives us:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-haskell-keyword">type</span> <span class="org-haskell-type">Var</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-type">String</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">variables</span>
-<span class="org-haskell-keyword">type</span> <span class="org-haskell-type">Con</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-type">Int</span>    <span class="org-comment-delimiter">-- </span><span class="org-comment">desugared type constructors</span>
-<span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Sys</span> x <span class="org-haskell-keyword">where</span>  <span class="org-comment-delimiter">-- </span><span class="org-comment">primitive functions</span>
-  <span class="org-haskell-constructor">SVal</span> <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> a <span class="org-comment-delimiter">-- </span><span class="org-comment">values, like bools, ints, characters, etc.</span>
-  <span class="org-haskell-constructor">SUnary</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Sys</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> b <span class="org-comment-delimiter">-- </span><span class="org-comment">primitive unary operators</span>
-  <span class="org-haskell-constructor">SBin</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Sys</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> b <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> c <span class="org-comment-delimiter">-- </span><span class="org-comment">primitive bindary operators</span>
-
+<pre class="src src-haskell"><code><span class="org-haskell-keyword">type</span> <span class="org-haskell-type">Var</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-type">String</span> <span class="org-comment-delimiter">-- </span><span class="org-comment">variables
+</span><span class="org-haskell-keyword">type</span> <span class="org-haskell-type">Con</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-type">Int</span>    <span class="org-comment-delimiter">-- </span><span class="org-comment">desugared type constructors
+</span><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Sys</span> x <span class="org-haskell-keyword">where</span>  <span class="org-comment-delimiter">-- </span><span class="org-comment">primitive functions
+</span>  <span class="org-haskell-constructor">SVal</span> <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> a <span class="org-comment-delimiter">-- </span><span class="org-comment">values, like bools, ints, characters, etc.
+</span>  <span class="org-haskell-constructor">SUnary</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Sys</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> b <span class="org-comment-delimiter">-- </span><span class="org-comment">primitive unary operators
+</span>  <span class="org-haskell-constructor">SBin</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Sys</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> b <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Sys</span> c <span class="org-comment-delimiter">-- </span><span class="org-comment">primitive bindary operators
+</span>
 <span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Expr</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">EVar</span> <span class="org-haskell-constructor">Var</span>
           <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">ApplyPrim</span> <span class="org-haskell-constructor">Sys</span> [<span class="org-haskell-constructor">Expr</span>]
           <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">EmptyTuple</span>
@@ -356,7 +357,7 @@ Hinze gives us:
          <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">PLayer</span> <span class="org-haskell-constructor">Var</span> <span class="org-haskell-constructor">Pat</span>;
 
 <span class="org-haskell-constructor">Compile</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Expr</span> <span class="org-haskell-operator">-&gt;</span> [<span class="org-haskell-type">Instruction</span>]
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -372,7 +373,7 @@ CUP, 1986.</li>
 <a href="http://pauillac.inria.fr/~huet/PUBLIC/cat.pdf">PDF</a>, 13 pages.</li>
 <li>Cousineau G., Curien P.-L., Mauny M.
 "The categorical abstract machine".
-LNCS, 201, <cite class="book-title">Functional programming languages computer architecture</cite>, 1985, pp.50&#x2013;64.</li>
+LNCS, 201, <cite class="book-title">Functional programming languages computer architecture</cite>, 1985, pp.50&ndash;64.</li>
 <li>Ralf Hinze,
 "The Categorical Abstract Machine: Basics and Enhancements".
 <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.3358&amp;rep=rep1&amp;type=pdf">PDF</a> dated April 28, 1993.</li>

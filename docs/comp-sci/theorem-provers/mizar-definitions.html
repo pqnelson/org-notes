@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -272,7 +273,7 @@ These are some quick notes on Josef Urban's "Translating Mizar for First
 Order Theorem Provers", In <i>Mathematical Knowledge Management:
 Proceedings of the Second International Conference</i> (Eds., A. Asperti,
 B. Buchberger, J.H. Davenport), Springer-Verlag, Lecture Notes in
-Computer Science vol 2594, 2003, pp. 203&#x2013;215.
+Computer Science vol 2594, 2003, pp. 203&ndash;215.
 </p>
 
 
@@ -438,7 +439,7 @@ occurring in them; so <code>for x being Real holds x-x = 0</code> translates to
 The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Mode-Definition">syntactic structure</a> of <code>&lt;Mode-Definition&gt;</code> is:
 </p>
 
-<pre class="example" id="orgb33a916">
+<pre class="example" id="orgaf7ef12">
 &lt;Mode-Definition&gt; =
 	"mode" &lt;Mode-Pattern&gt; ( [ &lt;Specification&gt; ] [ "means" &lt;Definiens&gt; ] ";"
 &lt;Correctness-Conditions&gt; | "is" &lt;Type-Expression&gt; ";" ) { &lt;Mode-Property&gt; } .
@@ -455,14 +456,14 @@ An example of this might be:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span> <span class="org-mizar-skeleton">let</span> X;
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span> <span class="org-mizar-skeleton">let</span> X;
   <span class="org-mizar-normal">mode</span> Element <span class="org-mizar-normal">of</span> X <span class="org-mizar-normal">means</span>
   :Def2: <span class="org-mizar-normal">it</span> in X <span class="org-mizar-normal">if</span> X <span class="org-mizar-normal">is</span> non empty
     <span class="org-mizar-normal">otherwise</span> <span class="org-mizar-normal">it</span> <span class="org-mizar-normal">is</span> empty;
   existency<span class="org-type"> by BOOLE:def 1</span>;
   <span class="org-mizar-normal">consistency</span>;
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <ul class="org-ul">
@@ -522,7 +523,7 @@ m1_subset_1(X,Y)))</code>
 Another couple examples, from <a href="http://www.mizar.org/version/current/mml/binop_1.miz"><code>binop_1.miz</code></a>:
 </p>
 
-<pre class="example" id="orgc553248">
+<pre class="example" id="orgd6cf6ce">
 definition
   let A be set; :: loci-declaration
   :: defines a unary operation on A
@@ -541,9 +542,9 @@ The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predic
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ebnf">&lt;Predicate-Definition&gt; =
+<pre class="src src-ebnf"><code>&lt;Predicate-Definition&gt; =
   "pred" &lt;Predicate-Pattern&gt; [ "means" &lt;Definiens&gt; ] ";" &lt;Correctness-Conditions&gt; { &lt;Predicate-Property&gt; } .
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-f048d47c-ccaf-4522-899a-8cd3bbec0cfc" class="outline-4">
@@ -553,7 +554,7 @@ The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Predic
 An example given:
 </p>
 
-<pre class="example" id="org9698c8d">
+<pre class="example" id="orga6a098c">
 definition let X,Y:
   pred X c= Y means
 :: TARSKI:def 3
@@ -611,21 +612,21 @@ property, e.g., proving <code>r1_tarski(X,X)</code>.
 Attributes are very similar to predicates. They are used to restrict a
 type to a subtype. They are <i>adjectives</i> which can be assembled together
 (e.g., <code>finite non empty set</code> uses the adjectives <code>finite</code> and <code>non
-empty</code> &#x2014; <code>finite</code> and <code>empty</code> are attributes, <code>non empty</code> is the
+empty</code> &mdash; <code>finite</code> and <code>empty</code> are attributes, <code>non empty</code> is the
 negation of <code>empty</code>). The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Attribute-Definition">syntax</a> for it is:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ebnf">&lt;Attribute-Definition&gt; =
+<pre class="src src-ebnf"><code>&lt;Attribute-Definition&gt; =
   "attr" &lt;Attribute-Pattern&gt; "means" &lt;Definiens&gt; ";" &lt;Correctness-Conditions&gt; .
-</pre>
+</code></pre>
 </div>
 
 <p>
 Here's an example:
 </p>
 
-<pre class="example" id="orgedaa2e8">
+<pre class="example" id="orgecb8c4e">
 definition let i be number;
  attr i is even means
   ex j being Integer st i = 2*j;
@@ -634,7 +635,7 @@ end;
 
 <ul class="org-ul">
 <li>We have the <code>&lt;Loci-Definition&gt;</code> be "<code>let i be number</code>"</li>
-<li>The <code>&lt;Attribute-Pattern&gt;</code> is here "<code>i is even</code>" &#x2014; <code>is</code> is a keyword, <code>even</code> is the attribute we are defining.</li>
+<li>The <code>&lt;Attribute-Pattern&gt;</code> is here "<code>i is even</code>" &mdash; <code>is</code> is a keyword, <code>even</code> is the attribute we are defining.</li>
 <li>The <code>&lt;Definiens&gt;</code> is "<code>ex j being Integer st i = 2*j</code>"</li>
 </ul>
 
@@ -649,7 +650,7 @@ associative] law of composition). Mizar refers to a <code>multMagma</code> as a
 magma with a single law of composition.
 </p>
 
-<pre class="example" id="org9ca664a">
+<pre class="example" id="org5cbb7d6">
 definition
   let IT be multMagma;
 
@@ -695,7 +696,7 @@ result. Several <code>&lt;Functor-Properties&gt;</code> (like <code>commutativit
 associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSyntax/syntax.xml#Functor-Definition">syntax</a> is:
 </p>
 
-<pre class="example" id="orge603b29">
+<pre class="example" id="org981b3af">
 &lt;Functor-Definition&gt; =
  "func" &lt;Functor-Pattern&gt; [ &lt;Specification&gt; ] [ ( "means" | "equals" ) &lt;Definiens&gt; ] ";"
  &lt;Correctness-Conditions&gt; { &lt;Functor-Property&gt; } .
@@ -707,7 +708,7 @@ associated with them. The <a href="http://wiki.mizar.org/twiki/pub/Mizar/MizarSy
 The example given:
 </p>
 
-<pre class="example" id="orgcd1bf5d">
+<pre class="example" id="org33f7952">
 definition let x be real number;
   func -x -&gt; real number means :Def1: x + it = 0;
   existence by AXIOMS:19;
@@ -744,7 +745,7 @@ theorem, <code>Th10</code>)</li>
 The definition creates one new pattern, and one new constructor. 
 </p>
 
-<div class="remark" id="org56e9f7d">
+<div class="remark" id="orgae86a24">
 <p>
 Defining a "morphism" requires some involved work with cluster
 registrations, it's not as simple as defining a new function. See, e.g.,
@@ -762,7 +763,7 @@ how group morphisms are defined in
 From <a href="http://www.mizar.org/version/current/mml/algstr_0.miz"><code>algstr_0.miz</code></a>, we have:
 </p>
 
-<pre class="example" id="orgbb9cf41">
+<pre class="example" id="orgc40c188">
 :: Multiplicative structures
 definition
   struct (1-sorted) multMagma (# carrier -&gt; set, multF -&gt; BinOp of the carrier

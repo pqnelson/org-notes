@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -237,7 +238,7 @@
 <li><a href="#h-b106ae0d-9e48-4b83-946a-196e0a157a3c">2. State Monad</a></li>
 <li><a href="#h-ae2fffc8-6678-42d4-ac03-0bf3c39d9b28">3. Input Output Monad</a>
 <ul>
-<li><a href="#h-08a4f52f-3779-44f3-981f-8d68675beb2c">3.1. How Haskell Does it&#x2026;</a></li>
+<li><a href="#h-08a4f52f-3779-44f3-981f-8d68675beb2c">3.1. How Haskell Does it&hellip;</a></li>
 <li><a href="#h-9898e93b-cd74-49f3-95cc-681d75bca8a0">3.2. Standard ML Hackery</a></li>
 </ul>
 </li>
@@ -313,7 +314,7 @@ marriage of effects and monads").
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">MONAD</span> =
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">MONAD</span> =
 <span class="org-keyword">sig</span>
   <span class="org-keyword">type</span> 'a <span class="org-type-def">m</span>;
   <span class="org-keyword">val</span> <span class="org-variable-name">return</span> : 'a -&gt; 'a m;
@@ -322,7 +323,7 @@ marriage of effects and monads").
   <span class="org-comment-delimiter">(* </span><span class="org-comment">m &gt;&gt;= f   =   bind m f</span><span class="org-comment-delimiter"> *)</span>
   <span class="org-keyword">val</span> <span class="org-variable-name">exec</span> : 'a m -&gt; 'a;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -334,7 +335,7 @@ The state monad encodes a computation <code>state -&gt; (a, state)</code>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">STATE</span> =
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">STATE</span> =
 <span class="org-keyword">sig</span>
     <span class="org-keyword">type</span> <span class="org-type-def">state</span>;
     <span class="org-keyword">include</span> MONAD <span class="org-keyword">where</span> <span class="org-keyword">type</span> 'a <span class="org-type-def">m</span> = state -&gt; 'a * state;
@@ -351,7 +352,7 @@ The state monad encodes a computation <code>state -&gt; (a, state)</code>.
     <span class="org-keyword">val</span> <span class="org-variable-name">mapState</span> : ('a * state -&gt; 'b * state) -&gt; 'a m -&gt; 'b m;
     <span class="org-keyword">val</span> <span class="org-variable-name">withState</span> : (state -&gt; state) -&gt; 'a m -&gt; 'a m;
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -373,7 +374,7 @@ So <code>type IO a = RealWorld -&gt; (RealWorld, a)</code>?
 </p>
 </div>
 <div id="outline-container-h-08a4f52f-3779-44f3-981f-8d68675beb2c" class="outline-3">
-<h3 id="h-08a4f52f-3779-44f3-981f-8d68675beb2c"><span class="section-number-3">3.1.</span> How Haskell Does it&#x2026;</h3>
+<h3 id="h-08a4f52f-3779-44f3-981f-8d68675beb2c"><span class="section-number-3">3.1.</span> How Haskell Does it&hellip;</h3>
 <div class="outline-text-3" id="text-h-08a4f52f-3779-44f3-981f-8d68675beb2c">
 <p>
 Looking through the GHC source code, it seems that the IO Monad is
@@ -381,20 +382,20 @@ defined in <a href="https://github.com/ghc/ghc/blob/b73c9c5face16cc8bedf4168ce10
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-doc">{- |</span>
-<span class="org-doc">A value of type @'IO' a@ is a computation which, when performed,</span>
-<span class="org-doc">does some I\/O before returning a value of type @a@.</span>
-<span class="org-doc">There is really only one way to \"perform\" an I\/O action: bind it to</span>
-<span class="org-doc">@Main.main@ in your program.  When your program is run, the I\/O will</span>
-<span class="org-doc">be performed.  It isn't possible to perform I\/O from an arbitrary</span>
-<span class="org-doc">function, unless that function is itself in the 'IO' monad and called</span>
-<span class="org-doc">at some point, directly or indirectly, from @Main.main@.</span>
-<span class="org-doc">'IO' is a monad, so 'IO' actions can be combined using either the do-notation</span>
-<span class="org-doc">or the 'Prelude.&gt;&gt;' and 'Prelude.&gt;&gt;=' operations from the 'Prelude.Monad'</span>
-<span class="org-doc">class.</span>
-<span class="org-doc">-}</span>
+<pre class="src src-haskell"><code><span class="org-doc">{- |
+A value of type @'IO' a@ is a computation which, when performed,
+does some I\/O before returning a value of type @a@.
+There is really only one way to \"perform\" an I\/O action: bind it to
+@Main.main@ in your program.  When your program is run, the I\/O will
+be performed.  It isn't possible to perform I\/O from an arbitrary
+function, unless that function is itself in the 'IO' monad and called
+at some point, directly or indirectly, from @Main.main@.
+'IO' is a monad, so 'IO' actions can be combined using either the do-notation
+or the 'Prelude.&gt;&gt;' and 'Prelude.&gt;&gt;=' operations from the 'Prelude.Monad'
+class.
+-}</span>
 <span class="org-haskell-keyword">newtype</span> <span class="org-haskell-type">IO</span> a <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">IO</span> (<span class="org-haskell-constructor">State#</span> <span class="org-haskell-constructor">RealWorld</span> <span class="org-haskell-operator">-&gt;</span> (<span class="org-haskell-operator">#</span> <span class="org-haskell-constructor">State#</span> <span class="org-haskell-constructor">RealWorld</span>, a <span class="org-haskell-operator">#</span>))
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -404,11 +405,11 @@ But it's used all over the place:
 <ul class="org-ul">
 <li><a href="https://github.com/ghc/ghc/blob/master/libraries/base/GHC/IO.hs">GHC.IO</a> asserts <code>IO</code> is just an <code>ST</code> monad, "The IO Monad is just an
 instance of the ST monad, where the state thread is the real world."</li>
-<li>Its monadic structure is defined in <a href="https://github.com/ghc/ghc/blob/0619fb0fb14a98f04aac5f031f6566419fd27495/libraries/base/GHC/Base.hs#L1561-L1565">GHC.Base</a>, Lines 1561&#x2013;1565 (it
+<li>Its monadic structure is defined in <a href="https://github.com/ghc/ghc/blob/0619fb0fb14a98f04aac5f031f6566419fd27495/libraries/base/GHC/Base.hs#L1561-L1565">GHC.Base</a>, Lines 1561&ndash;1565 (it
 seems that <code>bindIO</code> does the heavy lifting).
 <ul class="org-ul">
 <li>Note: <code>State#</code> and <code>RealWorld</code> are defined in <a href="https://github.com/ghc/ghc/blob/a7f9670e899bcbc87276446a1aac2304cade2b2f/compiler/GHC/Builtin/primops.txt.pp#L2759-L2769">GHC.Builtin.primops</a>
-lines 2759&#x2013;2769. They are pseudo-operations.</li>
+lines 2759&ndash;2769. They are pseudo-operations.</li>
 </ul></li>
 </ul>
 
@@ -417,13 +418,13 @@ Note that <code>bindIO</code> is defined as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-comment-delimiter">--  </span><span class="org-comment">ghc/libraries/base/GHC/Base.hs</span>
-<span class="org-haskell-definition">bindIO</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">IO</span> a <span class="org-haskell-operator">-&gt;</span> (a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> b) <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> b
+<pre class="src src-haskell"><code><span class="org-comment-delimiter">--  </span><span class="org-comment">ghc/libraries/base/GHC/Base.hs
+</span><span class="org-haskell-definition">bindIO</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">IO</span> a <span class="org-haskell-operator">-&gt;</span> (a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> b) <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> b
 <span class="org-haskell-definition">bindIO</span> (<span class="org-haskell-constructor">IO</span> m) k <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">IO</span> (<span class="org-haskell-operator">\</span> s <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-keyword">case</span> m s <span class="org-haskell-keyword">of</span> (<span class="org-haskell-operator">#</span> new_s, a <span class="org-haskell-operator">#</span>) <span class="org-haskell-operator">-&gt;</span> unIO (k a) new_s)
 
 <span class="org-haskell-definition">unIO</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">IO</span> a <span class="org-haskell-operator">-&gt;</span> (<span class="org-haskell-type">State#</span> <span class="org-haskell-type">RealWorld</span> <span class="org-haskell-operator">-&gt;</span> (<span class="org-haskell-operator">#</span> <span class="org-haskell-type">State#</span> <span class="org-haskell-type">RealWorld</span>, a <span class="org-haskell-operator">#</span>))
 <span class="org-haskell-definition">unIO</span> (<span class="org-haskell-type">IO</span> a) <span class="org-haskell-operator">=</span> a
-</pre>
+</code></pre>
 </div>
 <p>
 Peyton Jones and Wadler write in their paper, "Imperative Functional Programming", (page 4):
@@ -441,7 +442,7 @@ yielding a value <code>y</code> of type <code>b</code>, then return value <code>
 <p>
 This only makes sense if <code>IO a</code> is a wrapper around <code>(State# RealWorld -&gt; (# State# RealWorld, a #))</code>,
 or (less exciting and probably more accurate): things have changed since
-January 1993&#x2026;
+January 1993&hellip;
 </p>
 
 <p>
@@ -450,9 +451,9 @@ example:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-haskell-definition">putStr</span>          <span class="org-haskell-operator">::</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
+<pre class="src src-haskell"><code><span class="org-haskell-definition">putStr</span>          <span class="org-haskell-operator">::</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
 <span class="org-haskell-definition">putStr</span> s        <span class="org-haskell-operator">=</span>  hPutStr stdout s
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -461,16 +462,16 @@ This delegates the heavy lifting to <a href="https://github.com/ghc/ghc/blob/061
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-haskell-definition">hPutStr</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Handle</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
+<pre class="src src-haskell"><code><span class="org-haskell-definition">hPutStr</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Handle</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
 <span class="org-haskell-definition">hPutStr</span> handle str <span class="org-haskell-operator">=</span> hPutStr' handle str <span class="org-haskell-constructor">False</span>
 
-<span class="org-doc">-- | The same as 'hPutStr', but adds a newline character.</span>
-<span class="org-haskell-definition">hPutStrLn</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Handle</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
+<span class="org-doc">-- | The same as 'hPutStr', but adds a newline character.
+</span><span class="org-haskell-definition">hPutStrLn</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Handle</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
 <span class="org-haskell-definition">hPutStrLn</span> handle str <span class="org-haskell-operator">=</span> hPutStr' handle str <span class="org-haskell-constructor">True</span>
-  <span class="org-comment-delimiter">-- </span><span class="org-comment">An optimisation: we treat hPutStrLn specially, to avoid the</span>
-  <span class="org-comment-delimiter">-- </span><span class="org-comment">overhead of a single putChar '\n', which is quite high now that we</span>
-  <span class="org-comment-delimiter">-- </span><span class="org-comment">have to encode eagerly.</span>
-
+  <span class="org-comment-delimiter">-- </span><span class="org-comment">An optimisation: we treat hPutStrLn specially, to avoid the
+</span>  <span class="org-comment-delimiter">-- </span><span class="org-comment">overhead of a single putChar '\n', which is quite high now that we
+</span>  <span class="org-comment-delimiter">-- </span><span class="org-comment">have to encode eagerly.
+</span>
 <span class="org-haskell-pragma">{-# NOINLINE hPutStr' #-}</span>
 <span class="org-haskell-definition">hPutStr'</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Handle</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">String</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Bool</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">IO</span> <span class="org-haskell-constructor">()</span>
 <span class="org-haskell-definition">hPutStr'</span> handle str add_nl <span class="org-haskell-operator">=</span>
@@ -482,13 +483,13 @@ This delegates the heavy lifting to <a href="https://github.com/ghc/ghc/blob/061
 
     <span class="org-haskell-keyword">case</span> buffer_mode <span class="org-haskell-keyword">of</span>
        (<span class="org-haskell-constructor">NoBuffering</span>, <span class="org-haskell-keyword">_</span>) <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-keyword">do</span>
-            hPutChars handle str        <span class="org-comment-delimiter">-- </span><span class="org-comment">v. slow, but we don't care</span>
-            when add_nl <span class="org-haskell-operator">$</span> hPutChar handle <span class="org-string">'\n'</span>
+            hPutChars handle str        <span class="org-comment-delimiter">-- </span><span class="org-comment">v. slow, but we don't care
+</span>            when add_nl <span class="org-haskell-operator">$</span> hPutChar handle <span class="org-string">'\n'</span>
        (<span class="org-haskell-constructor">LineBuffering</span>, buf) <span class="org-haskell-operator">-&gt;</span>
             writeBlocks handle <span class="org-haskell-constructor">True</span>  add_nl nl buf str
        (<span class="org-haskell-constructor">BlockBuffering</span> <span class="org-haskell-keyword">_</span>, buf) <span class="org-haskell-operator">-&gt;</span>
             writeBlocks handle <span class="org-haskell-constructor">False</span> add_nl nl buf str
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -500,10 +501,10 @@ If I try to do something similar with Standard ML, then I'd guess:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">datatype</span> 'a <span class="org-type-def">IO</span> = IO <span class="org-keyword">of</span> (unit -&gt; 'a);
+<pre class="src src-sml"><code><span class="org-keyword">datatype</span> 'a <span class="org-type-def">IO</span> = IO <span class="org-keyword">of</span> (unit -&gt; 'a);
 
 <span class="org-keyword">fun</span> <span class="org-function-name">putStr</span> (s : string) : unit IO = IO (<span class="org-keyword">fn</span> () =&gt; print s);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -511,7 +512,7 @@ This typechecks fine, but it doesn't produce what we'd expect. For
 example, in Hamlet:
 </p>
 
-<pre class="example" id="org4893244">
+<pre class="example" id="org99453fd">
 - putStr "foo";
 val it = IO _fn : unit IO
 - print "foo\n";
@@ -524,7 +525,7 @@ The trick is to use a monad:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">signature</span> <span class="org-interface-def">JOB_MONAD</span> = <span class="org-keyword">sig</span>
+<pre class="src src-sml"><code><span class="org-keyword">signature</span> <span class="org-interface-def">JOB_MONAD</span> = <span class="org-keyword">sig</span>
   <span class="org-keyword">include</span> MONAD;
   <span class="org-keyword">val</span> <span class="org-variable-name">getStr</span> : int -&gt; TextIO.vector m;
   <span class="org-keyword">val</span> <span class="org-variable-name">putStr</span> : string -&gt; unit m;
@@ -545,7 +546,7 @@ The trick is to use a monad:
 
   <span class="org-keyword">fun</span> <span class="org-function-name">putStr</span> s = JOB (<span class="org-keyword">fn</span> _ =&gt; print s);
 <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -562,13 +563,13 @@ monad offers the following primitives:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-haskell-definition">return</span> <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s a
+<pre class="src src-haskell"><code><span class="org-haskell-definition">return</span> <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s a
 (<span class="org-haskell-definition">&gt;&gt;=</span>)  <span class="org-haskell-operator">::</span> <span class="org-haskell-type">ST</span> s a <span class="org-haskell-operator">-&gt;</span> (a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s b) <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s b
 <span class="org-haskell-definition">runST</span>  <span class="org-haskell-operator">::</span> (<span class="org-haskell-keyword">forall</span> s<span class="org-haskell-operator">.</span> <span class="org-haskell-type">ST</span> s a) <span class="org-haskell-operator">-&gt;</span> a 
 <span class="org-haskell-definition">newSTRef</span>   <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s (<span class="org-haskell-type">STRef</span> s a)
 <span class="org-haskell-definition">readSTRef</span>  <span class="org-haskell-operator">::</span> <span class="org-haskell-type">STRef</span> s a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s a
 <span class="org-haskell-definition">writeSTRef</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">STRef</span> s a <span class="org-haskell-operator">-&gt;</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">ST</span> s <span class="org-haskell-constructor">()</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -577,12 +578,12 @@ polymorphism. Why do we need it? Consider:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-comment-delimiter">-- </span><span class="org-comment">This is an error... but let's pretend for a moment...</span>
-<span class="org-haskell-keyword">let</span> a <span class="org-haskell-operator">=</span> runST <span class="org-haskell-operator">$</span> newSTRef (15 <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Int</span>)
+<pre class="src src-haskell"><code><span class="org-comment-delimiter">-- </span><span class="org-comment">This is an error... but let's pretend for a moment...
+</span><span class="org-haskell-keyword">let</span> a <span class="org-haskell-operator">=</span> runST <span class="org-haskell-operator">$</span> newSTRef (15 <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Int</span>)
     b <span class="org-haskell-operator">=</span> runST <span class="org-haskell-operator">$</span> writeSTRef a 20
     c <span class="org-haskell-operator">=</span> runST <span class="org-haskell-operator">$</span> readSTRef a
 <span class="org-haskell-keyword">in</span> b <span class="org-haskell-operator">`seq`</span> c
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -591,8 +592,8 @@ evaluating <code>a</code>, since it would read this as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-haskell-definition">a</span> <span class="org-haskell-operator">=</span> runST (newSTRef (15 <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Int</span>) <span class="org-haskell-operator">::</span> <span class="org-haskell-keyword">forall</span> s<span class="org-haskell-operator">.</span> <span class="org-haskell-type">ST</span> s (<span class="org-haskell-type">STRef</span> s <span class="org-haskell-type">Int</span>))
-</pre>
+<pre class="src src-haskell"><code><span class="org-haskell-definition">a</span> <span class="org-haskell-operator">=</span> runST (newSTRef (15 <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Int</span>) <span class="org-haskell-operator">::</span> <span class="org-haskell-keyword">forall</span> s<span class="org-haskell-operator">.</span> <span class="org-haskell-type">ST</span> s (<span class="org-haskell-type">STRef</span> s <span class="org-haskell-type">Int</span>))
+</code></pre>
 </div>
 
 <p>
@@ -605,18 +606,18 @@ We should instead of done something like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-haskell"><span class="org-comment-delimiter">-- </span><span class="org-comment">Fixed version, this works!</span>
-<span class="org-haskell-definition">example</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Int</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Int</span>
+<pre class="src src-haskell"><code><span class="org-comment-delimiter">-- </span><span class="org-comment">Fixed version, this works!
+</span><span class="org-haskell-definition">example</span> <span class="org-haskell-operator">::</span> <span class="org-haskell-type">Int</span> <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Int</span>
 <span class="org-haskell-definition">example</span> x <span class="org-haskell-operator">=</span> runST <span class="org-haskell-operator">$</span> <span class="org-haskell-keyword">do</span>
   a <span class="org-haskell-operator">&lt;-</span> newSTRef x
   writeSTRef a 20
   readSTRef a
-<span class="org-comment-delimiter">{- </span><span class="org-comment">de-sugared as:</span>
-<span class="org-comment">runST (newSTRef x &gt;&gt;= \a -&gt;</span>
-<span class="org-comment">  writeSTRef a 20 &gt;&gt;</span>
-<span class="org-comment">  readSTRef a)</span>
-<span class="org-comment-delimiter">-}</span>
-</pre>
+<span class="org-comment-delimiter">{- </span><span class="org-comment">de-sugared as:
+runST (newSTRef x &gt;&gt;= \a -&gt;
+  writeSTRef a 20 &gt;&gt;
+  readSTRef a)
+</span><span class="org-comment-delimiter">-}</span>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-728063c4-42ba-44f2-8d5e-f0f49a4bccc9" class="outline-3">
@@ -635,10 +636,10 @@ Recall, the type signature for mutable references in Standard ML:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml">ref : 'a -&gt; 'a ref            <span class="org-comment-delimiter">(* </span><span class="org-comment">"data constructor"</span><span class="org-comment-delimiter"> *)</span>
+<pre class="src src-sml"><code>ref : 'a -&gt; 'a ref            <span class="org-comment-delimiter">(* </span><span class="org-comment">"data constructor"</span><span class="org-comment-delimiter"> *)</span>
 (<span class="org-keyword">op</span> !) : 'a ref -&gt; 'a         <span class="org-comment-delimiter">(* </span><span class="org-comment">dereferencing</span><span class="org-comment-delimiter"> *)</span>
 (<span class="org-keyword">op</span> :=) : 'a ref * 'a -&gt; unit <span class="org-comment-delimiter">(* </span><span class="org-comment">updating</span><span class="org-comment-delimiter"> *)</span>
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -666,7 +667,7 @@ explicitly gives an example of a monad in Standard ML in section 2.</li>
 "Close Encounters of the Higher Kind Emulating Constructor Classes in Standard ML".<br>
 <a href="https://arxiv.org/abs/1608.03350">arXiv:1608.03350</a>, 3 pages; implements <code>Applicative</code>, <code>Monad</code>,
 etc., in Standard ML. The code is <a href="https://www.isa-afp.org/browser_info/current/AFP/Proof_Strategy_Language/files/Constructor_Class.ML.html">available</a>, with some <a href="https://www.isa-afp.org/browser_info/current/AFP/Proof_Strategy_Language/files/Instantiation.ML.html">instances</a>.
-(It was discussed on a <a href="https://keens.github.io/blog/2016/10/10/smldemonado/">blog</a>, if you can read Japanese&#x2026;also see <a href="https://github.com/br0ns/PreML">PreML</a>
+(It was discussed on a <a href="https://keens.github.io/blog/2016/10/10/smldemonado/">blog</a>, if you can read Japanese&hellip;also see <a href="https://github.com/br0ns/PreML">PreML</a>
 for <code>do</code>-notation in Standard ML.)</li>
 <li>HOL4 <a href="https://github.com/HOL-Theorem-Prover/HOL/tree/7e6911ab3c3bf9dfac6f0ef0a0bcecf3ae285e44/src/portableML/monads">Monads</a> implementing <code>ST</code>, <code>error</code>, <code>reader</code>, among other monads.</li>
 </ul>

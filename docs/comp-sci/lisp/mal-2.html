@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -324,17 +325,17 @@ have a "base class" type implemented as a <code>struct</code>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
 <span class="org-keyword">typedef</span> <span class="org-keyword">enum</span> <span class="org-type">ObjectType</span> {
-    <span class="org-comment-delimiter">// </span><span class="org-comment">...</span>
-} <span class="org-type">ObjectType</span>;
+    <span class="org-comment-delimiter">// </span><span class="org-comment">...
+</span>} <span class="org-type">ObjectType</span>;
 
 <span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">Object</span> {
     <span class="org-type">ObjectType</span> <span class="org-variable-name">type</span>;
-    <span class="org-comment-delimiter">// </span><span class="org-comment">gc metadata</span>
-    <span class="org-comment-delimiter">// </span><span class="org-comment">other metadata</span>
-} <span class="org-type">Object</span>;
-</pre>
+    <span class="org-comment-delimiter">// </span><span class="org-comment">gc metadata
+</span>    <span class="org-comment-delimiter">// </span><span class="org-comment">other metadata
+</span>} <span class="org-type">Object</span>;
+</code></pre>
 </div>
 
 <p>
@@ -371,12 +372,12 @@ cache this as metadata in the <code>struct Object</code>.)
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
 <span class="org-keyword">typedef</span> <span class="org-type">int</span> <span class="org-type">hash_t</span>;
 
 <span class="org-type">hash_t</span> <span class="org-function-name">hashCode</span>(<span class="org-type">Object</span> *<span class="org-variable-name">object</span>);
 <span class="org-type">bool</span> <span class="org-function-name">equals</span>(<span class="org-type">Object</span> *<span class="org-variable-name">lhs</span>, <span class="org-type">Object</span> *<span class="org-variable-name">rhs</span>);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -386,7 +387,7 @@ The contracts we demand of these functions:
 <li>Let <code>Object *x, *y</code> be non-null.
 If <code>equals(x, y)</code> is true, then <code>hashCode(x) == hashCode(y)</code>.
 <ul class="org-ul">
-<li>We <i>do not</i> require the <a href="https://en.wikipedia.org/wiki/Inverse_(logic)">inverse</a> of this proposition &#x2014; i.e., we do
+<li>We <i>do not</i> require the <a href="https://en.wikipedia.org/wiki/Inverse_(logic)">inverse</a> of this proposition &mdash; i.e., we do
 not require if <code>equals(x, y)</code> is false, then <code>hashCode(x) != hashCode(y)</code>.</li>
 </ul></li>
 <li>The <code>equals()</code> function is an equivalence relation, so
@@ -440,7 +441,7 @@ Primitive values would naively be represented by structures like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
 <span class="org-keyword">struct</span> <span class="org-type">Int</span> {
     <span class="org-type">Object</span> <span class="org-variable-name">header</span>;
     <span class="org-type">int</span> <span class="org-variable-name">value</span>;
@@ -455,7 +456,7 @@ Primitive values would naively be represented by structures like:
     <span class="org-type">Object</span> <span class="org-variable-name">header</span>;
     <span class="org-type">bool</span> <span class="org-variable-name">value</span>;
 };
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -471,21 +472,21 @@ addresses giving us 16 bits of metadata).
 <p>
 There are several different ways to represent a string. C uses a
 null-terminated sequence of characters. Pascal uses length-prefixed
-strings &#x2014; by convention, the first <i>k</i> bytes are interpreted as an
+strings &mdash; by convention, the first <i>k</i> bytes are interpreted as an
 integer, encoding the length of the string. C++ (and, I guess, Java)
 encodes a string as a record (well, Java uses classes). We'll follow the
 structure encoding:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
 <span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">String</span> <span class="org-type">String</span>;
 
 <span class="org-type">String</span>* <span class="org-function-name">string_new</span>(<span class="org-type">char</span> *<span class="org-variable-name">str</span>, <span class="org-type">int</span> <span class="org-variable-name">length</span>);
 <span class="org-type">void</span> <span class="org-function-name">string_free</span>(<span class="org-type">String</span> **<span class="org-variable-name">string</span>);
 <span class="org-type">bool</span> <span class="org-function-name">string_isEqual</span>(<span class="org-type">String</span> *<span class="org-variable-name">this</span>, <span class="org-type">String</span> *<span class="org-variable-name">other</span>);
 <span class="org-type">hash_t</span> <span class="org-function-name">string_hashCode</span>(<span class="org-type">String</span> *<span class="org-variable-name">this</span>);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -503,13 +504,13 @@ The data structure for a string would be implemented as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 <span class="org-keyword">struct</span> <span class="org-type">String</span> {
     <span class="org-type">Object</span> <span class="org-variable-name">header</span>;
     <span class="org-type">size_t</span> <span class="org-variable-name">length</span>;
     <span class="org-type">char</span> *<span class="org-variable-name">text</span>;
 };
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-3a3dc182-6b69-4a88-84b5-3600a4925da7" class="outline-4">
@@ -527,7 +528,7 @@ parameter is negative)</li>
 </ol>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-type">String</span>* <span class="org-function-name">string_new</span>(<span class="org-type">char</span> *<span class="org-variable-name">str</span>, <span class="org-type">int</span> <span class="org-variable-name">length</span>) {
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == src) <span class="org-keyword">return</span> <span class="org-constant">NULL</span>;
@@ -551,7 +552,7 @@ parameter is negative)</li>
     }
     <span class="org-keyword">return</span> string;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -565,7 +566,7 @@ Finally we make sure to update the pointer to the string to point to NULL.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">void</span> <span class="org-function-name">string_free</span>(<span class="org-type">String</span> **<span class="org-variable-name">this</span>) {
+<pre class="src src-c"><code><span class="org-type">void</span> <span class="org-function-name">string_free</span>(<span class="org-type">String</span> **<span class="org-variable-name">this</span>) {
     <span class="org-keyword">if</span> ((<span class="org-constant">NULL</span> == this) || (<span class="org-constant">NULL</span> == *this)) <span class="org-keyword">return</span>;
 
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> != (*this)-&gt;text) {
@@ -574,7 +575,7 @@ Finally we make sure to update the pointer to the string to point to NULL.
     free((*this));
     *this = <span class="org-constant">NULL</span>;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -595,7 +596,7 @@ underlying character array.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">bool</span> <span class="org-function-name">string_equals</span>(<span class="org-type">String</span> *<span class="org-variable-name">lhs</span>, <span class="org-type">String</span> *<span class="org-variable-name">rhs</span>) {
+<pre class="src src-c"><code><span class="org-type">bool</span> <span class="org-function-name">string_equals</span>(<span class="org-type">String</span> *<span class="org-variable-name">lhs</span>, <span class="org-type">String</span> *<span class="org-variable-name">rhs</span>) {
     <span class="org-keyword">if</span> (lhs == rhs) <span class="org-keyword">return</span> <span class="org-constant">true</span>;
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == lhs) <span class="org-keyword">return</span> <span class="org-constant">false</span>;
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == rhs) <span class="org-keyword">return</span> <span class="org-constant">false</span>;
@@ -603,7 +604,7 @@ underlying character array.
 
     <span class="org-keyword">return</span> 0 == memcmp(lhs-&gt;text, rhs-&gt;text, lhs-&gt;length);
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -614,13 +615,13 @@ underlying character array.
 There are a number of ways to compute the hash code for a string.
 Following the generic strategy of computing the hash code for a list
 (discussed below), treating the String as a list of characters.
-(If we wanted to borrow, e.g., Fowler&#x2013;Noll&#x2013;Vo hashing, we would
+(If we wanted to borrow, e.g., Fowler&ndash;Noll&ndash;Vo hashing, we would
 replace <code>h*31</code> by <code>h*FNV_prime</code>, and the addition by an XOR. The initial
 value of the hash would be the <code>FNV_offset_basis</code>.)
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">hash_t</span> <span class="org-function-name">string_hashCode</span>(<span class="org-type">String</span> *<span class="org-variable-name">string</span>) {
+<pre class="src src-c"><code><span class="org-type">hash_t</span> <span class="org-function-name">string_hashCode</span>(<span class="org-type">String</span> *<span class="org-variable-name">string</span>) {
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == string) <span class="org-keyword">return</span> 0;
     <span class="org-keyword">if</span> (0 == string-&gt;length) <span class="org-keyword">return</span> 0;
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == string-&gt;text) <span class="org-keyword">return</span> 0;
@@ -630,7 +631,7 @@ value of the hash would be the <code>FNV_offset_basis</code>.)
     }
     <span class="org-keyword">return</span> h;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -653,13 +654,13 @@ some other data structure.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
 <span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">Symbol</span> <span class="org-type">Symbol</span>;
 
 <span class="org-type">Symbol</span>* <span class="org-function-name">intern</span>(<span class="org-type">char</span> *<span class="org-variable-name">name</span>);
 <span class="org-type">void</span> <span class="org-function-name">symbol_free</span>(<span class="org-type">Symbol</span> **<span class="org-variable-name">symbol</span>);
 <span class="org-type">hash_t</span> <span class="org-function-name">symbol_hashCode</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">this</span>);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -673,13 +674,13 @@ Again, we are using opaque pointers (since it's good style):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-keyword">struct</span> <span class="org-type">Symbol</span> {
     <span class="org-type">Object</span> <span class="org-variable-name">header</span>;
     <span class="org-type">String</span> *<span class="org-variable-name">name</span>;
 };
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -706,7 +707,7 @@ Otherwise, we may end up with race conditions regarding the <code>symbol_table</
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-keyword">static</span> <span class="org-type">HashMap</span> *<span class="org-variable-name">symbol_table</span> = <span class="org-constant">NULL</span>;
+<pre class="src src-c"><code><span class="org-keyword">static</span> <span class="org-type">HashMap</span> *<span class="org-variable-name">symbol_table</span> = <span class="org-constant">NULL</span>;
 
 <span class="org-keyword">static</span> <span class="org-type">void</span> <span class="org-function-name">init_symbol_table</span>() {
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == symbol_table) {
@@ -730,12 +731,12 @@ Otherwise, we may end up with race conditions regarding the <code>symbol_table</
         symbol = symbol_name(key);
         hashmap_put(&amp;symbol_table, key, symbol);
     } <span class="org-keyword">else</span> {
-        <span class="org-comment-delimiter">// </span><span class="org-comment">cache hit</span>
-        string_free(&amp;key);
+        <span class="org-comment-delimiter">// </span><span class="org-comment">cache hit
+</span>        string_free(&amp;key);
     }
     <span class="org-keyword">return</span> symbol;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -748,14 +749,14 @@ delete the symbol and its underlying string.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">void</span> <span class="org-function-name">symbol_free</span>(<span class="org-type">Symbol</span> **<span class="org-variable-name">symbol</span>) {
+<pre class="src src-c"><code><span class="org-type">void</span> <span class="org-function-name">symbol_free</span>(<span class="org-type">Symbol</span> **<span class="org-variable-name">symbol</span>) {
     <span class="org-keyword">if</span> ((<span class="org-constant">NULL</span> == symbol) || (<span class="org-constant">NULL</span> == *symbol)) <span class="org-keyword">return</span>;
     hashmap_remove(symbol_table, (*symbol)-&gt;name);
     string-&gt;free(&amp;((*symbol)-&gt;name));
     free(*symbol);
     (*symbol) = <span class="org-constant">NULL</span>;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -768,11 +769,11 @@ associated string.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">hash_t</span> <span class="org-function-name">symbol_hashCode</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">symbol</span>) {
+<pre class="src src-c"><code><span class="org-type">hash_t</span> <span class="org-function-name">symbol_hashCode</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">symbol</span>) {
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == symbol) <span class="org-keyword">return</span> 0;
     <span class="org-keyword">return</span> string_hashCode(symbol-&gt;name);
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -781,13 +782,13 @@ associated string.
 <div class="outline-text-4" id="text-h-a80606b8-63e7-4729-8331-d497f6ac0d39">
 <p>
 Since we're interning symbols, we could use pointer equality. But
-ostensibly we'll extend symbols to a multithreaded environment&#x2026;so we
+ostensibly we'll extend symbols to a multithreaded environment&hellip;so we
 could end up in a tricky situation where pointer comparison does not
 work.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-type">bool</span> <span class="org-function-name">symbol_equals</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">lhs</span>, <span class="org-type">Symbol</span> *<span class="org-variable-name">rhs</span>) {
+<pre class="src src-c"><code><span class="org-type">bool</span> <span class="org-function-name">symbol_equals</span>(<span class="org-type">Symbol</span> *<span class="org-variable-name">lhs</span>, <span class="org-type">Symbol</span> *<span class="org-variable-name">rhs</span>) {
     <span class="org-keyword">if</span> (lhs == rhs) <span class="org-keyword">return</span> <span class="org-constant">true</span>;
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == lhs) <span class="org-keyword">return</span> <span class="org-constant">false</span>;
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == rhs) <span class="org-keyword">return</span> <span class="org-constant">true</span>;
@@ -800,7 +801,7 @@ work.
     <span class="org-keyword">return</span> <span class="org-constant">false</span>;
 <span class="org-preprocessor">#endif</span> <span class="org-comment-delimiter">/* </span><span class="org-comment">defined(MULTITHREADED_PARANOID)</span><span class="org-comment-delimiter"> */</span>
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -815,13 +816,13 @@ the only data type with pointers, so far.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
 <span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">Cons</span> <span class="org-type">Cons</span>;
 
 <span class="org-type">Cons</span>* <span class="org-function-name">cons_new</span>(<span class="org-type">Object</span> *<span class="org-variable-name">car</span>, <span class="org-type">Object</span> *<span class="org-variable-name">cdr</span>);
 <span class="org-type">void</span> <span class="org-function-name">cons_free</span>(<span class="org-type">Cons</span> **<span class="org-variable-name">this</span>);
 <span class="org-type">hash_t</span> <span class="org-function-name">cons_hashCode</span>(<span class="org-type">Cons</span> *<span class="org-variable-name">this</span>);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -829,7 +830,7 @@ The opaque pointer refers to:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 <span class="org-keyword">struct</span> <span class="org-type">Cons</span> {
     <span class="org-type">Object</span> <span class="org-variable-name">header</span>;
     <span class="org-type">Object</span> **<span class="org-variable-name">car</span>;
@@ -837,7 +838,7 @@ The opaque pointer refers to:
 };
 <span class="org-preprocessor">#define</span> <span class="org-function-name">safe_car</span>(<span class="org-variable-name">cell</span>) (<span class="org-constant">NULL</span> == (cell)-&gt;car ? <span class="org-constant">NULL</span> : *((cell)-&gt;car))
 <span class="org-preprocessor">#define</span> <span class="org-function-name">safe_cdr</span>(<span class="org-variable-name">cell</span>) (<span class="org-constant">NULL</span> == (cell)-&gt;cdr ? <span class="org-constant">NULL</span> : *((cell)-&gt;cdr))
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -858,7 +859,7 @@ pointer will point to NULL.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 <span class="org-type">Cons</span>* <span class="org-function-name">cons_new</span>(<span class="org-type">Object</span> *<span class="org-variable-name">car</span>, <span class="org-type">Object</span> *<span class="org-variable-name">cdr</span>) {
     <span class="org-type">Cons</span> *<span class="org-variable-name">cell</span> = alloc(<span class="org-keyword">sizeof</span>(*cell));
     cell-&gt;header.type = TYPE_CONS;
@@ -866,7 +867,7 @@ pointer will point to NULL.
     cell-&gt;cdr = (<span class="org-constant">NULL</span> == cdr) ? <span class="org-constant">NULL</span> : &amp;cdr;
     <span class="org-keyword">return</span> cell;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -880,17 +881,17 @@ and metadata for the Cons cell itself.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 <span class="org-type">void</span> <span class="org-function-name">cons_free</span>(<span class="org-type">Cons</span> **<span class="org-variable-name">this</span>) {
     <span class="org-keyword">if</span> ((<span class="org-constant">NULL</span> == this) || (<span class="org-constant">NULL</span> == *this)) <span class="org-keyword">return</span>;
     obj_free((*this)-&gt;car);
-    <span class="org-comment-delimiter">//</span><span class="org-comment">@ assert (\null == \old(*this)-&gt;car) || (\null == *((*this)-&gt;car));</span>
-    obj_free((*this)-&gt;cdr);
-    <span class="org-comment-delimiter">//</span><span class="org-comment">@ assert (\null == \old(*this)-&gt;cdr) || (\null == *((*this)-&gt;cdr));</span>
-    free(*this);
+    <span class="org-comment-delimiter">//</span><span class="org-comment">@ assert (\null == \old(*this)-&gt;car) || (\null == *((*this)-&gt;car));
+</span>    obj_free((*this)-&gt;cdr);
+    <span class="org-comment-delimiter">//</span><span class="org-comment">@ assert (\null == \old(*this)-&gt;cdr) || (\null == *((*this)-&gt;cdr));
+</span>    free(*this);
     (*this) = <span class="org-constant">NULL</span>;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -916,7 +917,7 @@ where <code>cell == nil</code>, when it should be zero.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 <span class="org-type">hash_t</span> <span class="org-function-name">cons_hashCode</span>(<span class="org-type">Cons</span> *<span class="org-variable-name">cell</span>) {
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == cell) <span class="org-keyword">return</span> 0;
 
@@ -932,7 +933,7 @@ where <code>cell == nil</code>, when it should be zero.
     }
     <span class="org-keyword">return</span> h;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -946,7 +947,7 @@ Component-wise equality, in other words.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 <span class="org-type">bool</span> <span class="org-function-name">cons_equals</span>(<span class="org-type">Cons</span> *<span class="org-variable-name">lhs</span>, <span class="org-type">Cons</span> *<span class="org-variable-name">rhs</span>) {
     <span class="org-keyword">if</span> (lhs == rhs) <span class="org-keyword">return</span> <span class="org-constant">true</span>;
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == lhs) <span class="org-keyword">return</span> <span class="org-constant">false</span>;
@@ -957,7 +958,7 @@ Component-wise equality, in other words.
     }
     <span class="org-keyword">return</span> <span class="org-constant">false</span>;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -967,7 +968,7 @@ Component-wise equality, in other words.
 <div class="outline-text-2" id="text-h-29531eeb-d7cf-4663-b39d-a9844134da25">
 <p>
 There are many different implementations. Basically the difference boils
-down to using "chaining" (the buckets are a linked list &#x2014; Java did
+down to using "chaining" (the buckets are a linked list &mdash; Java did
 this prior to version 8) or <a href="https://en.wikipedia.org/wiki/Open_addressing">"open addressing"</a>.
 </p>
 
@@ -988,7 +989,7 @@ We will implement a Hash Table in C.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.h</span><span class="org-comment-delimiter"> */</span>
 <span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">HashMap</span> <span class="org-type">HashMap</span>;
 
 <span class="org-type">HashMap</span>* <span class="org-function-name">hashmap_new</span>();
@@ -999,7 +1000,7 @@ We will implement a Hash Table in C.
 <span class="org-type">Object</span>* <span class="org-function-name">hashmap_put</span>(<span class="org-type">HashMap</span> *<span class="org-variable-name">this</span>, <span class="org-type">Object</span> *<span class="org-variable-name">key</span>, <span class="org-type">Object</span> *<span class="org-variable-name">value</span>);
 <span class="org-type">void</span> <span class="org-function-name">hashmap_remove</span>(<span class="org-type">HashMap</span> *<span class="org-variable-name">this</span>, <span class="org-type">Object</span> *<span class="org-variable-name">key</span>);
 <span class="org-type">size_t</span> <span class="org-function-name">hashmap_size</span>(<span class="org-type">HashMap</span> *<span class="org-variable-name">this</span>);
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -1011,7 +1012,7 @@ Arguably, there may be other functions to consider implementing.
 <div class="outline-text-3" id="text-h-59a6d948-fa1d-47a9-8253-2068ba12ea09">
 <p>
 We will use simple chaining. The idea is to use an array of buckets (a
-bucket is a linked list of "Entries" &#x2014; key-value pairs plus some extra metadata),
+bucket is a linked list of "Entries" &mdash; key-value pairs plus some extra metadata),
 associating a key-value pair to exactly one bucket. When there are too
 many entries, we increase the number of buckets, then rebalance the
 entries.
@@ -1026,7 +1027,7 @@ code for the key (so we compute it once).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-keyword">typedef</span> <span class="org-keyword">struct</span> <span class="org-type">Entry</span> {
     <span class="org-type">Object</span> *<span class="org-variable-name">key</span>;
@@ -1034,7 +1035,7 @@ code for the key (so we compute it once).
     <span class="org-type">hash_t</span> <span class="org-variable-name">hash</span>;
     <span class="org-keyword">struct</span> <span class="org-type">Entry</span> *<span class="org-variable-name">next</span>;
 } <span class="org-type">Entry</span>;
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-50fe776c-1679-4f94-860a-21f1265082d0" class="outline-5">
@@ -1046,7 +1047,7 @@ destructor.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-type">Entry</span>* <span class="org-function-name">entry_new</span>(<span class="org-type">Object</span> *<span class="org-variable-name">key</span>, <span class="org-type">Object</span> *<span class="org-variable-name">value</span>, <span class="org-type">hash_t</span> <span class="org-variable-name">hash</span>) {
     <span class="org-type">Entry</span> *<span class="org-variable-name">entry</span> = alloc(<span class="org-keyword">sizeof</span>(*entry));
@@ -1056,7 +1057,7 @@ destructor.
     entry-&gt;hash = hash;
     <span class="org-keyword">return</span> entry;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1069,7 +1070,7 @@ destructor will not recursively destroy its next Entry.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-type">void</span> <span class="org-function-name">entry_free</span>(<span class="org-type">Entry</span> **<span class="org-variable-name">entry</span>) {
     <span class="org-keyword">if</span> ((<span class="org-constant">NULL</span> == entry) || (<span class="org-constant">NULL</span> == *entry)) <span class="org-keyword">return</span>;
@@ -1077,7 +1078,7 @@ destructor will not recursively destroy its next Entry.
     free(*entry);
     (*entry) = <span class="org-constant">NULL</span>;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1091,7 +1092,7 @@ linked list is sorted by hash code.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 <span class="org-type">void</span> <span class="org-function-name">entry_insert</span>(<span class="org-type">Entry</span> **<span class="org-variable-name">list</span>, <span class="org-type">Entry</span> *<span class="org-variable-name">entry</span>) {
     assert(<span class="org-constant">NULL</span> != entry);
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == list) <span class="org-keyword">return</span>;
@@ -1108,8 +1109,8 @@ linked list is sorted by hash code.
         <span class="org-type">Entry</span> *<span class="org-variable-name">prev</span> = *item;
         <span class="org-type">Entry</span> *<span class="org-variable-name">e</span> = <span class="org-constant">NULL</span>;
         <span class="org-keyword">for</span> (e = prev-&gt;next; <span class="org-constant">NULL</span> != *e; e = e-&gt;next) {
-            <span class="org-comment-delimiter">// </span><span class="org-comment">if (prev &lt; entry &lt;= e)</span>
-            <span class="org-keyword">if</span> (((prev-&gt;hash) &lt; (entry-&gt;hash)) &amp;&amp;
+            <span class="org-comment-delimiter">// </span><span class="org-comment">if (prev &lt; entry &lt;= e)
+</span>            <span class="org-keyword">if</span> (((prev-&gt;hash) &lt; (entry-&gt;hash)) &amp;&amp;
                 ((entry-&gt;hash) &lt;= (e-&gt;hash))) {
                 prev-&gt;next = entry;
                 entry-&gt;next = e;
@@ -1117,14 +1118,14 @@ linked list is sorted by hash code.
             }
             prev = e;
         }
-        <span class="org-comment-delimiter">// </span><span class="org-comment">append at the end of the linked list</span>
-        assert(<span class="org-constant">NULL</span> == e);
+        <span class="org-comment-delimiter">// </span><span class="org-comment">append at the end of the linked list
+</span>        assert(<span class="org-constant">NULL</span> == e);
         assert(<span class="org-constant">NULL</span> != prev);
         prev-&gt;next = entry;
         entry-&gt;next = <span class="org-constant">NULL</span>;
     }
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1139,7 +1140,7 @@ exceeds the <code>capacity</code>, we grow the number of buckets and rebalance.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-keyword">struct</span> <span class="org-type">HashMap</span> {
     <span class="org-type">Object</span> <span class="org-variable-name">header</span>;
@@ -1147,7 +1148,7 @@ exceeds the <code>capacity</code>, we grow the number of buckets and rebalance.
     <span class="org-type">size_t</span> <span class="org-variable-name">capacity</span>;
     <span class="org-type">size_t</span> <span class="org-variable-name">size</span>;
 };
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1161,7 +1162,7 @@ map would be 16, its initial size 0.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-preprocessor">#define</span> <span class="org-variable-name">INITIAL_HASH_MAP_CAPACITY</span> 16 <span class="org-comment-delimiter">/* </span><span class="org-comment">must be power of 2</span><span class="org-comment-delimiter"> */</span>
 
@@ -1173,7 +1174,7 @@ map would be 16, its initial size 0.
     map-&gt;table = alloc_array(<span class="org-keyword">sizeof</span>(<span class="org-keyword">struct</span> <span class="org-type">Entry</span>*), map-&gt;capacity);
     <span class="org-keyword">return</span> map;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1186,7 +1187,7 @@ the table entries.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-type">void</span> <span class="org-function-name">hashmap_free</span>(<span class="org-type">HashMap</span> **<span class="org-variable-name">this</span>) {
     <span class="org-keyword">if</span> ((<span class="org-constant">NULL</span> == this) || (<span class="org-constant">NULL</span> == *this)) <span class="org-keyword">return</span>;
@@ -1203,7 +1204,7 @@ the table entries.
     free(*this);
     (*this) = <span class="org-constant">NULL</span>;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1218,12 +1219,12 @@ bitwise-and is faster than the modulo operator.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-keyword">static</span> <span class="org-type">size_t</span> <span class="org-function-name">indexFor</span>(<span class="org-type">hash_t</span> <span class="org-variable-name">hash</span>, <span class="org-type">size_t</span> <span class="org-variable-name">length</span>) {
     <span class="org-keyword">return</span> hash &amp; (length - 1);
 }
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -1233,7 +1234,7 @@ index, and when finding that key, returning the associated value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-type">Object</span>* <span class="org-function-name">hashmap_get</span>(<span class="org-type">HashMap</span> *<span class="org-variable-name">this</span>, <span class="org-type">Object</span> *<span class="org-variable-name">key</span>) {
     assert (<span class="org-constant">NULL</span> != this);
@@ -1247,7 +1248,7 @@ index, and when finding that key, returning the associated value:
     }
     <span class="org-keyword">return</span> <span class="org-constant">NULL</span>;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1270,7 +1271,7 @@ key, we return a null pointer.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-preprocessor">#define</span> <span class="org-variable-name">CAPACITY_FACTOR</span> 0.75
 
@@ -1283,8 +1284,8 @@ key, we return a null pointer.
     <span class="org-type">size_t</span> <span class="org-variable-name">index</span> = indexFor(h, this-&gt;capacity);
     <span class="org-type">Entry</span> *<span class="org-variable-name">entry</span> = this-&gt;table[index];
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> != entry) {
-        <span class="org-comment-delimiter">// </span><span class="org-comment">try updating the value associated to key, if key is present</span>
-        <span class="org-type">Entry</span> *<span class="org-variable-name">e</span> = entry;
+        <span class="org-comment-delimiter">// </span><span class="org-comment">try updating the value associated to key, if key is present
+</span>        <span class="org-type">Entry</span> *<span class="org-variable-name">e</span> = entry;
         <span class="org-keyword">while</span> (e != <span class="org-constant">NULL</span>) {
             <span class="org-keyword">if</span> ((e-&gt;hash == h) &amp;&amp; equals(keys, e-&gt;key)) {
                 <span class="org-type">Object</span> *<span class="org-variable-name">old_val</span> = e-&gt;value;
@@ -1293,12 +1294,12 @@ key, we return a null pointer.
             }
             e = e-&gt;next;
         }
-        <span class="org-comment-delimiter">// </span><span class="org-comment">fall-through: no key associated with that value, then prepend entry</span>
-    }
-    <span class="org-comment-delimiter">// </span><span class="org-comment">key is not present, so add entry</span>
-    <span class="org-type">Entry</span> *<span class="org-variable-name">new_entry</span> = entry_new(key, value, h);
-    <span class="org-comment-delimiter">// </span><span class="org-comment">entry_insert(&amp;(this-&gt;table[index]), new_entry);</span>
-    new_entry-&gt;next = this-&gt;table[index];
+        <span class="org-comment-delimiter">// </span><span class="org-comment">fall-through: no key associated with that value, then prepend entry
+</span>    }
+    <span class="org-comment-delimiter">// </span><span class="org-comment">key is not present, so add entry
+</span>    <span class="org-type">Entry</span> *<span class="org-variable-name">new_entry</span> = entry_new(key, value, h);
+    <span class="org-comment-delimiter">// </span><span class="org-comment">entry_insert(&amp;(this-&gt;table[index]), new_entry);
+</span>    new_entry-&gt;next = this-&gt;table[index];
     this-&gt;table[index] = new_entry;
     this-&gt;size++;
 
@@ -1307,7 +1308,7 @@ key, we return a null pointer.
     }
     <span class="org-keyword">return</span> <span class="org-constant">NULL</span>;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-afd9bea1-3433-47c3-b212-8f0c7ee29225" class="outline-4">
@@ -1321,7 +1322,7 @@ update the table pointer, and the hash map's capacity.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-keyword">static</span> <span class="org-type">void</span> <span class="org-function-name">transfer</span>(<span class="org-type">Entry</span> **<span class="org-variable-name">old_table</span>, <span class="org-type">Entry</span> **<span class="org-variable-name">new_table</span>,
                      <span class="org-type">size_t</span> <span class="org-variable-name">length</span>, <span class="org-type">size_t</span> <span class="org-variable-name">new_length</span>);
@@ -1335,7 +1336,7 @@ update the table pointer, and the hash map's capacity.
     this-&gt;table = new_table;
     this-&gt;capacity = new_capacity;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1348,7 +1349,7 @@ for <code>i=0</code> to the number of buckets.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-keyword">static</span> <span class="org-type">void</span> <span class="org-function-name">transfer_rows</span>(<span class="org-type">Entry</span> *<span class="org-variable-name">row</span>, <span class="org-type">Entry</span> **<span class="org-variable-name">new_table</span>, <span class="org-type">size_t</span> <span class="org-variable-name">new_length</span>);
 
@@ -1364,8 +1365,8 @@ for <code>i=0</code> to the number of buckets.
     <span class="org-keyword">while</span> (<span class="org-constant">NULL</span> != e) {
         <span class="org-type">Entry</span> *<span class="org-variable-name">next</span> = e-&gt;next;
         <span class="org-type">size_t</span> <span class="org-variable-name">index</span> = indexFor(e-&gt;hash, new_length);
-        <span class="org-comment-delimiter">// </span><span class="org-comment">entry_insert(&amp;new_table[index], e);</span>
-        <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == new_table[index]) {
+        <span class="org-comment-delimiter">// </span><span class="org-comment">entry_insert(&amp;new_table[index], e);
+</span>        <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == new_table[index]) {
             e-&gt;next = <span class="org-constant">NULL</span>;
         } <span class="org-keyword">else</span> {
             e-&gt;next = new_table[index];
@@ -1374,7 +1375,7 @@ for <code>i=0</code> to the number of buckets.
         e = next;
     }
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1394,7 +1395,7 @@ pointer here, but I found it less clear after a second glance.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-type">void</span> <span class="org-function-name">hashmap_remove</span>(<span class="org-type">HashMap</span> *<span class="org-variable-name">this</span>, <span class="org-type">Object</span> *<span class="org-variable-name">key</span>) {
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == this) <span class="org-keyword">return</span>;
@@ -1416,7 +1417,7 @@ pointer here, but I found it less clear after a second glance.
         }
     }
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1430,14 +1431,14 @@ to zero.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-type">size_t</span> <span class="org-function-name">hashmap_size</span>(<span class="org-type">HashMap</span> *<span class="org-variable-name">this</span>) {
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == this) <span class="org-keyword">return</span> 0;
 
     <span class="org-keyword">return</span> this-&gt;size;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1456,7 +1457,7 @@ See, e.g., <a href="https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-keyword">static</span> <span class="org-type">hash_t</span> <span class="org-function-name">entry_hashCode</span>(<span class="org-type">Entry</span> *<span class="org-variable-name">entry</span>) {
     <span class="org-keyword">if</span> (<span class="org-constant">NULL</span> == entry) <span class="org-keyword">return</span> 0;
@@ -1472,7 +1473,7 @@ See, e.g., <a href="https://github.com/openjdk/jdk/blob/jdk8-b120/jdk/src/share/
     }
     <span class="org-keyword">return</span> h;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -1487,7 +1488,7 @@ equal, and the method returns true. All other scenarios return false.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
+<pre class="src src-c"><code><span class="org-comment-delimiter">/* </span><span class="org-comment">types.c</span><span class="org-comment-delimiter"> */</span>
 
 <span class="org-type">bool</span> <span class="org-function-name">hashmap_equals</span>(<span class="org-type">HashMap</span> *<span class="org-variable-name">lhs</span>, <span class="org-type">HashMap</span> *<span class="org-variable-name">rhs</span>) {
     <span class="org-keyword">if</span> (lhs == rhs) <span class="org-keyword">return</span> <span class="org-constant">true</span>;
@@ -1504,7 +1505,7 @@ equal, and the method returns true. All other scenarios return false.
     }
     <span class="org-keyword">return</span> <span class="org-constant">true</span>;
 }
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
