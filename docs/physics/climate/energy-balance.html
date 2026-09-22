@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -316,7 +317,7 @@ where:
 <li>\(T_{s}\) is the surface temperature of the Earth</li>
 <li>\(\varepsilon\) is the emissivity of the Earth</li>
 <li>\(C\approx 2.08\times 10^{8}J\,K^{-1}m^{-2}\) is the effective heat capacity of the Earth</li>
-<li>\(\sigma = 5.67\times 10^{-8}W\,m^{-2}\,K^{-4}\) is the Stefan&#x2013;Boltzmann constant</li>
+<li>\(\sigma = 5.67\times 10^{-8}W\,m^{-2}\,K^{-4}\) is the Stefan&ndash;Boltzmann constant</li>
 <li>\(\alpha\) is the Earth's albedo</li>
 <li>\(S\approx 1370 \,W\,m^{-2}\) is the solar constant</li>
 </ul>
@@ -339,7 +340,7 @@ values of emissivity (a parameter between 0 and 1).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span class="org-keyword">defun</span> <span class="org-function-name">full-model</span> (emissivity)
+<pre class="src src-elisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">full-model</span> (emissivity)
   (<span class="org-keyword">let</span> ((solar-constant 1361.1972737230658)
         (stefan-boltzmann 5.67037441918443e-008)
         (albedo 0.32))
@@ -351,7 +352,7 @@ values of emissivity (a parameter between 0 and 1).
 (mapcar (<span class="org-keyword">lambda</span> (emissivity)
           (list emissivity (full-model emissivity)))
         '(0.01 0.25 0.5 0.75 0.8 0.85 0.9 0.95 0.9655 1)))
-</pre>
+</code></pre>
 </div>
 
 <table>
@@ -448,7 +449,7 @@ The exact value may be determined:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span class="org-keyword">defun</span> <span class="org-function-name">celsius-&gt;kelvin</span> (temp)
+<pre class="src src-elisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">celsius-&gt;kelvin</span> (temp)
   (+ temp 273.15))
 
 (<span class="org-keyword">defun</span> <span class="org-function-name">linearized-solution</span> ()
@@ -462,13 +463,12 @@ The exact value may be determined:
         b))))
 
 (linearized-solution)
-</pre>
+</code></pre>
 </div>
 
 <pre class="example">
 254.97685576802633
 </pre>
-
 
 <p>
 We can estimate the emissivity for this value of the Earth's surface
@@ -476,7 +476,7 @@ temperature:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span class="org-keyword">defun</span> <span class="org-function-name">equilibrium-emissivity</span> (temperature)
+<pre class="src src-elisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">equilibrium-emissivity</span> (temperature)
   (<span class="org-keyword">let</span> ((solar-constant 1361.1972737230658)
         (stefan-boltzmann 5.67037441918443e-008)
         (albedo 0.32))
@@ -485,7 +485,7 @@ temperature:
        ))
 
 (equilibrium-emissivity (linearized-solution))
-</pre>
+</code></pre>
 </div>
 
 <pre class="example">
@@ -500,7 +500,7 @@ temperature:
 We find the linearized approximation yield results similar to the
 quartic equation, which is good. Further the effective temperature of
 the surface of the Earth \(T_{s}\approx 255\,K\) is <i>less</i> than the
-<a href="effective-temperature.html">effective temperature</a> we estimated using only the Stefan&#x2013;Boltzmann law,
+<a href="effective-temperature.html">effective temperature</a> we estimated using only the Stefan&ndash;Boltzmann law,
 but that <i>should</i> be expected <i>because</i> we're now also modeling the fact
 the Earth radiates off heat. And again we've yet to include any modeling
 of greenhouse gases.

@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -248,72 +249,69 @@ the Earth is from the Sun.
 
 <p>
 <b>Setup and Execute:</b>
-We need to use the Stefan&#x2013;Boltzmann constant:
+We need to use the Stefan&ndash;Boltzmann constant:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">stefan-boltzman</span> ()
+<pre class="src src-emacs-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">stefan-boltzman</span> ()
   (<span class="org-keyword">let</span> ((kb 1.380649e-23)
         (hbar (* 0.5 (/ 6.62607015e-34 pi)))
         (c 299792458.0))
     (/ (* pi pi (expt kb 4.0))
        (* 60.0 (expt (* c hbar) 2.0) hbar))))
 (stefan-boltzman)
-</pre>
+</code></pre>
 </div>
 
 <pre class="example">
 5.6703744191844294e-08
 </pre>
 
-
 <p>
 The luminosity of the Sun would be, theoretically:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">luminosity</span> (r temperature)
+<pre class="src src-emacs-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">luminosity</span> (r temperature)
   (* 4 pi
      (expt r 2.0)
      (stefan-boltzman)
      (expt temperature 4.0)))
 
-(<span class="org-keyword">let</span> ((sun-temperature     5772.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">K</span>
-      (sun-radius        695700.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (earth-distance 149596000.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (km                  1000.0)
-      (earth-radius        6378.1366)) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-  (luminosity (* sun-radius km) sun-temperature))
-</pre>
+(<span class="org-keyword">let</span> ((sun-temperature     5772.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">K
+</span>      (sun-radius        695700.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km
+</span>      (earth-distance 149596000.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km
+</span>      (km                  1000.0)
+      (earth-radius        6378.1366)) <span class="org-comment-delimiter">;; </span><span class="org-comment">km
+</span>  (luminosity (* sun-radius km) sun-temperature))
+</code></pre>
 </div>
 
 <pre class="example">
 3.827990903277097e+26
 </pre>
 
-
 <p>
 The irradiance on a point on the Earth would be
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">irradiance</span> (lumos distance)
+<pre class="src src-emacs-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">irradiance</span> (lumos distance)
   (* (/ lumos pi) (expt (* 2 distance) -2)))
 
-(<span class="org-keyword">let</span> ((sun-temperature     5772.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">K</span>
-      (sun-radius        695700.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (earth-distance 149596000.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (earth-radius        6378.1366) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (km                  1000.0)) <span class="org-comment-delimiter">;; </span><span class="org-comment">m/km</span>
-  (irradiance (luminosity (* sun-radius km) sun-temperature)
+(<span class="org-keyword">let</span> ((sun-temperature     5772.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">K
+</span>      (sun-radius        695700.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km
+</span>      (earth-distance 149596000.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km
+</span>      (earth-radius        6378.1366) <span class="org-comment-delimiter">;; </span><span class="org-comment">km
+</span>      (km                  1000.0)) <span class="org-comment-delimiter">;; </span><span class="org-comment">m/km
+</span>  (irradiance (luminosity (* sun-radius km) sun-temperature)
               (* km earth-distance)))
-</pre>
+</code></pre>
 </div>
 
 <pre class="example">
 1361.197273723066
 </pre>
-
 
 <p>
 Compare this to the <a href="https://en.wikipedia.org/wiki/Solar_constant">empirical value of the Solar constant</a> which is about

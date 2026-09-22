@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -282,15 +283,15 @@ no atmosphere.
 <h3 id="h-47370783-5efa-4873-9124-8a68f2bb5669"><span class="section-number-3">2.1.</span> Computing the Approximate Temperature of the Earth</h3>
 <div class="outline-text-3" id="text-h-47370783-5efa-4873-9124-8a68f2bb5669">
 <p>
-<b>Identify</b>. We use the Stefan&#x2013;Boltzmann law for the Sun's luminosity,
+<b>Identify</b>. We use the Stefan&ndash;Boltzmann law for the Sun's luminosity,
 then considering the Irradiance of the Earth receiving this radiation,
-we assume the Earth is in a steady state&#x2026;so its luminosity (from the
-Stefan&#x2013;Boltzmann law) of radiation emitted equals its irradiance
+we assume the Earth is in a steady state&hellip;so its luminosity (from the
+Stefan&ndash;Boltzmann law) of radiation emitted equals its irradiance
 received from the Sun.
 </p>
 
 <p>
-<b>Setup and Execute.</b> We use the Stefan&#x2013;Boltzmann law for black-body
+<b>Setup and Execute.</b> We use the Stefan&ndash;Boltzmann law for black-body
 temperature, the Luminosity of the sun is then stipulated to be:
 </p>
 
@@ -366,17 +367,16 @@ for the temperature of the Earth.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span class="org-keyword">let</span> ((sun-temperature 5772.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">K</span>
-      (sun-radius 695700.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-      (earth-distance 149596000.0)) <span class="org-comment-delimiter">;; </span><span class="org-comment">km</span>
-  (* sun-temperature (sqrt (/ sun-radius (* 2.0 earth-distance)))))
-</pre>
+<pre class="src src-emacs-lisp"><code>(<span class="org-keyword">let</span> ((sun-temperature 5772.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">K
+</span>      (sun-radius 695700.0) <span class="org-comment-delimiter">;; </span><span class="org-comment">km
+</span>      (earth-distance 149596000.0)) <span class="org-comment-delimiter">;; </span><span class="org-comment">km
+</span>  (* sun-temperature (sqrt (/ sun-radius (* 2.0 earth-distance)))))
+</code></pre>
 </div>
 
 <pre class="example">
 278.3314843147163
 </pre>
-
 
 <p>
 Thus the temperature of the Earth \(T_{\odot}\approx 278\mbox{ K}\) or

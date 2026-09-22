@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -342,7 +343,7 @@
 <li><a href="#h-6e70c7d3-4d07-4b3f-ae83-a13566fe504f">1.10.7. Planar Flow for Incompressible Fluids of Constant Density</a></li>
 <li><a href="#h-d329223b-aa65-43fa-894e-2442e19b7c7a">1.10.8. Mass Flux Across a curve</a></li>
 <li><a href="#h-0ab44558-3f8e-4f8e-8774-f3c624d84bea">1.10.9. Methods of Solving Two-Dimensional Irrotational Flow</a></li>
-<li><a href="#h-1a23bded-5ad1-44a4-80b1-b7f5cc880298">1.10.10. &#x2026;and when <i>is</i> the Fluid Incompressible?</a></li>
+<li><a href="#h-1a23bded-5ad1-44a4-80b1-b7f5cc880298">1.10.10. &hellip;and when <i>is</i> the Fluid Incompressible?</a></li>
 </ul>
 </li>
 <li><a href="#h-5229ac06-e5f4-420e-94c3-b40ab819b95b">1.11. Drag force in potential flow past a body</a>
@@ -408,7 +409,7 @@ We think of the velocity vector as a vector field parametrized by
 time.
 </p>
 
-<div class="remark" id="org21441a0">
+<div class="remark" id="org8c20c04">
 <p>
 Landau and Lifshitz note the pressure and density, plus the
 equations of state, determine the thermodynamics properties of the
@@ -434,7 +435,7 @@ We can think of it as translating a time derivative in the frame of a
 given fluid packet to the lab frame.
 </p>
 
-<div class="exercise" id="org808482d">
+<div class="exercise" id="org217a09d">
 <p>
 Prove that the material derivative is linear
 </p>
@@ -445,7 +446,7 @@ Prove that the material derivative is linear
 
 </div>
 
-<div class="exercise" id="orgc8a0169">
+<div class="exercise" id="orgaf81237">
 <p>
 Prove that the material derivative obeys the Leibniz rule
 </p>
@@ -456,7 +457,7 @@ Prove that the material derivative obeys the Leibniz rule
 
 </div>
 
-<div class="exercise" id="orga8b07f7">
+<div class="exercise" id="org0b1a97b">
 <p>
 Prove that the material derivative obeys the chain rule
 </p>
@@ -502,7 +503,7 @@ We also add the force of gravity \(\rho \vec{g}\) to get
  = \frac{-1}{\rho}\vec\nabla p + \vec{g}.
 \end{equation}
 
-<div class="remark" id="org32e1859">
+<div class="remark" id="orgcfba047">
 <p>
 We often we will write Euler's equations as
 </p>
@@ -526,7 +527,7 @@ heat exchange between different parts of the fluid, nor between the
 fluid and its environment.
 </p>
 
-<div class="corollary" id="org29dd7e9">
+<div class="corollary" id="org6fd9330">
 <p>
 This absence of heat exchange between components of the fluid (and
 between the fluid and its environment) implies the motion is
@@ -557,7 +558,7 @@ continuity" for entropy in terms of it:
 \partial_{t}(\rho s) + \vec{\nabla}\cdot(\rho s\vec{v}) = 0.
 \end{equation}
 
-<div class="remark" id="orgd56d84f">
+<div class="remark" id="org983b56d">
 <p>
 Edwige Godlewski and Pierre-Arnaud Raviart's <cite class="book-title">Numerical Approximation of Hyperbolic Systems of Conservation Laws</cite>
 (first ed) note (either &sect;2 or &sect;3 of the introductory chapter) that we
@@ -587,7 +588,7 @@ and L&amp;L usually does so. In this case, such a motion is said to be
 <dfn>Isentropic</dfn>.
 </p>
 
-<div class="puzzle" id="org2689fdb">
+<div class="puzzle" id="org3ad4d7c">
 <p>
 When will entropy <b>not</b> be constant throughout the fluid at some moment
 in time?
@@ -595,7 +596,7 @@ in time?
 
 </div>
 
-<div class="theorem" id="org7f903bc">
+<div class="theorem" id="orgbebf366">
 <p>
 The Euler equations of motion for an isentropic fluid may be
 rewritten as
@@ -611,7 +612,7 @@ which involves only the velocity.
 
 </div>
 
-<div class="remark" id="org40c79a6">
+<div class="remark" id="org2034c17">
 <p>
 This derivation of Euler's equations, and isentropic stuff,
 comes from L&amp;L, vol.6, &sect;2.
@@ -619,7 +620,7 @@ comes from L&amp;L, vol.6, &sect;2.
 
 </div>
 
-<div class="remark" id="orgb47c5ef">
+<div class="remark" id="org8bdb7d1">
 <p>
 Isentropic flow occurs when the change in flow variables is small and
 gradual. The ideal fluid is an example of this. (C.f., <a href="https://www.grc.nasa.gov/www/BGH/isentrop.html">NASA</a>)
@@ -653,7 +654,7 @@ The next steps are to study this equation when the fluid is at rest
 and when \(\partial_{t}\vec{v}=0\) is constant (Bernoulli's law).
 </p>
 
-<div class="remark" id="orgdf96906">
+<div class="remark" id="org09e5b18">
 <p>
 See also later discussions of boundary conditions <a href="#h-ea1b79a9-b3cb-465a-ac40-b5c897c0fe8e">(&sect;10)</a>.
 </p>
@@ -678,16 +679,16 @@ Euler's equation takes the form
 This equation describes the mechanical equilibrium of the fluid.
 </p>
 
-<div class="definition" id="org2182283">
+<div class="definition" id="orgc232cd5">
 <p>
 We say a fluid is in <dfn>Mechanical Equilibrium</dfn> if it
-exhibits no macroscopic motion. (L&amp;L, vol.6, &sect;4 &#x2014; note: L&amp;L never
+exhibits no macroscopic motion. (L&amp;L, vol.6, &sect;4 &mdash; note: L&amp;L never
 actually define this term throughout their 10-volume series)
 </p>
 
 </div>
 
-<div class="remark" id="org0565485">
+<div class="remark" id="org8837872">
 <p>
 If there are no external forces, then this equation becomes
 \(\vec{\nabla}p=0\) or equivalently \(p = \mbox{constant}\). The
@@ -812,12 +813,12 @@ or equivalently
 \Phi + gz = \mbox{constant}.
 \end{equation}
 
-<div class="remark" id="orga5d3497">
+<div class="remark" id="orgbe81f6a">
 <p>
 Does this make sense? Well, \(\Phi + gz = \mbox{constant}\) is known
 to be the condition for thermodynamic equilirium of a system in an
 external field. Good, recovering well-known results tell us we're
-on the right track&#x2026;or, we've been on the wrong track for such a
+on the right track&hellip;or, we've been on the wrong track for such a
 long time that we can't tell. At any rate, we're consistent, and
 that's good.
 </p>
@@ -921,7 +922,7 @@ Again, this fails to hold for a rotating body (like the Earth).
 <div class="outline-text-3" id="text-h-0b6c9531-1af9-4148-bea9-eff3f018d078">
 <p>
 We've concluded from our discussion of hydrostatics that a fluid
-can be in <a href="#org2182283">mechanical equilibrium</a> (i.e., exhibit no macroscopic motion)
+can be in <a href="#orgc232cd5">mechanical equilibrium</a> (i.e., exhibit no macroscopic motion)
 without being in thermodynamic equilibrium. The hydrostatic
 equation can be satisfied even if the temperature is not constant
 throughout the fluid.
@@ -949,7 +950,7 @@ of convection".
 <div id="outline-container-h-43e69ae5-52f4-4782-8841-1dc1474fe653" class="outline-4">
 <h4 id="h-43e69ae5-52f4-4782-8841-1dc1474fe653"><span class="section-number-4">1.5.1.</span> Steady Flows</h4>
 <div class="outline-text-4" id="text-h-43e69ae5-52f4-4782-8841-1dc1474fe653">
-<div class="definition" id="org8923c8f">
+<div class="definition" id="orgf310c83">
 <p>
 By <dfn>Steady Flow</dfn>, we mean one in which the velocity is
 constant in time at any point occupied in the fluid. I.e.,
@@ -959,7 +960,7 @@ constant in time at any point occupied in the fluid. I.e.,
 </div>
 
 <p>
-In a steady flow, the <a href="#org7f903bc">isentropic Euler equations</a> becomes
+In a steady flow, the <a href="#orgbebf366">isentropic Euler equations</a> becomes
 </p>
 
 \begin{equation}
@@ -980,7 +981,7 @@ determined by the system of differential equations
 \frac{\D x}{v_{x}} = \frac{\D y}{v_{y}} = \frac{\D z}{v_{z}}.
 \end{equation}
 
-<div class="remark" id="orgc7bdbc5">
+<div class="remark" id="org38275f9">
 <p>
 This can be phrased differently, as the integral curve of the velocity
 vector fields, i.e., as
@@ -1124,7 +1125,7 @@ respect to time.
 <div id="outline-container-h-129ff822-8040-4c0f-9c45-91bdf6fdef5c" class="outline-4">
 <h4 id="h-129ff822-8040-4c0f-9c45-91bdf6fdef5c"><span class="section-number-4">1.6.2.</span> Conservation Equation</h4>
 <div class="outline-text-4" id="text-h-129ff822-8040-4c0f-9c45-91bdf6fdef5c">
-<div class="theorem" id="orgb340385">
+<div class="theorem" id="org5b822b8">
 <p>
 Assuming an adiabatic fluid, the conservation of energy implies
 </p>
@@ -1273,7 +1274,7 @@ through unit area perpendicular to the direction of the
 velocity. Nifty.</li>
 </ul>
 
-<div class="remark" id="org29452ea">
+<div class="remark" id="orgad12be2">
 <p>
 The expression \(\rho\vec{v}(w + v^{2}/2)\) shows any unit mass of
 fluid carries with it during its motion an amount of energy \(w+v^{2}/2\).
@@ -1461,7 +1462,7 @@ or in vector form
 <div id="outline-container-h-f1ffae11-a494-4ffc-b204-e5f632bcb061" class="outline-3">
 <h3 id="h-f1ffae11-a494-4ffc-b204-e5f632bcb061"><span class="section-number-3">1.8.</span> Conservation of Circulation</h3>
 <div class="outline-text-3" id="text-h-f1ffae11-a494-4ffc-b204-e5f632bcb061">
-<div class="definition" id="org2915e6d">
+<div class="definition" id="org8e5e7f1">
 <p>
 The integral
 </p>
@@ -1477,7 +1478,7 @@ around that contour.
 
 </div>
 
-<div class="theorem" id="org138794c">
+<div class="theorem" id="orgb432e66">
 <p>
 In an ideal fluid, the velocity circulation round a closed "fluid"
 contour is constant in time.
@@ -1485,7 +1486,7 @@ contour is constant in time.
 
 </div>
 
-<div class="proof" id="orga9ff878">
+<div class="proof" id="orgeda352a">
 <p>
 We compute the time-derivative of the velocity circulation
 </p>
@@ -1514,7 +1515,7 @@ closed curve vanishes (i.e., is zero). This leaves us
 \end{equation}
 
 <p>
-Using <a href="#org32e1859">Euler's equations</a>
+Using <a href="#orgcfba047">Euler's equations</a>
 </p>
 
 \begin{equation}
@@ -1553,7 +1554,7 @@ Thus we have Kelvin's theorem.
 
 </div>
 
-<div class="corollary" id="orgbb56e40">
+<div class="corollary" id="org2169193">
 <p>
 We have from Kelvin's theorem,
 </p>
@@ -1564,7 +1565,7 @@ We have from Kelvin's theorem,
 
 </div>
 
-<div class="definition" id="org2309d77">
+<div class="definition" id="org08f1acb">
 <p>
 We refer to the quantity \(\curl\vec{v}\) (the curl of the
 velocity vector field) as the <dfn>Vorticity</dfn> of the field.
@@ -1577,7 +1578,7 @@ Our intuition should think of the corollary to Kelvin's theorem as
 saying "The vorticity moves with the fluid".
 </p>
 
-<div class="exercise" id="orgae124ce">
+<div class="exercise" id="orgdeeb7a5">
 <p>
 Show: in flows which are not isentropic, any moving particle carries
 with it a constant value of the product \(\rho^{-1}\vec{\nabla}s\cdot\curl\vec{v}\).
@@ -1607,7 +1608,7 @@ trajectory of a fluid parcel. (This is because streamlines do not
 coincide with trajectories in non-steady flowing fluids.)
 </p>
 
-<div class="puzzle" id="org0032b07">
+<div class="puzzle" id="org1cf5062">
 <p>
 Observe we are assuming we can always draw a closed contour around
 every point of a streamline. Is this a valid assumption to make?
@@ -1615,7 +1616,7 @@ every point of a streamline. Is this a valid assumption to make?
 
 </div>
 
-<div class="definition" id="orgf1fd377">
+<div class="definition" id="org7b25ff4">
 <p>
 A flow for which \(\curl\vec{v}=0\) for every point in the
 flow is called a <dfn>Potential Flow</dfn> or
@@ -1630,7 +1631,7 @@ flow is called a <dfn>Potential Flow</dfn> or
 <div class="outline-text-4" id="text-h-19fba6e3-045e-4e20-96a9-b5ea8af8053b">
 <p>
 We may be excited and hope to base several arguments upon this
-non-steady flow result. For example&#x2026;
+non-steady flow result. For example&hellip;
 </p>
 
 <ul class="org-ul">
@@ -1648,12 +1649,12 @@ occupies a simply-connected region of space; for a
 multiply-connected region, we need restrictions on the choice of
 contours for this derivation to work.)</li>
 <li><b>Thus</b> we then conclude this will hold at any future instant, i.e.,
-we should find that &#x2014; if there is potential flow at some instant,
+we should find that &mdash; if there is potential flow at some instant,
 then there is potential flow at all subsequent instants. (In
 particular, any flow for which the fluid is initially at rest must
 be a potential flow.)</li>
 <li>This is in accordance with the fact if \(\curl\vec{v}=0\),
-then the <a href="#org7f903bc">isentropic Euler equations</a> hold automatically.</li>
+then the <a href="#orgbebf366">isentropic Euler equations</a> hold automatically.</li>
 </ul></li>
 </ul>
 </div>
@@ -1676,8 +1677,8 @@ The equations of motion for an ideal fluid admit solutions for which
 streamlines follow the surface, until the surface ends, and the
 streamlines become separated and continue into the fluid. The resulting
 flow pattern is characterized by the presence of a <dfn>Surface of Discontinuity</dfn>
-proceeding from the body. On this surface, the fluid velocity &#x2014; which
-is everywhere tangential to the surface &#x2014; has a discontinuity. In
+proceeding from the body. On this surface, the fluid velocity &mdash; which
+is everywhere tangential to the surface &mdash; has a discontinuity. In
 other words, at this surface one layer of fluid "slides" on another.
 (Mathematically speaking, the discontinuity in the tangential velocity
 components corresponds to a surface on which the curl of the velocity is
@@ -1685,7 +1686,7 @@ nonzero.)
 </p>
 
 
-<div id="org218f2ea" class="figure">
+<div id="orgd4393e8" class="figure">
 <p><img src="../../img/fluid-0.png" alt="fluid-0.png">
 </p>
 <p><span class="figure-number">Figure 1: </span>An example of surfaces of discontinuity.</p>
@@ -1838,7 +1839,7 @@ potential flow.</li>
 </ul></li>
 </ul>
 
-<div class="remark" id="org2b84817">
+<div class="remark" id="org210c1d0">
 <p>
 The velocity potential \(\phi\) was first introduced by Euler. Thank God
 Laplace invented his equation, or else we'd have yet another Euler's
@@ -1852,7 +1853,7 @@ equation.
 <div id="outline-container-h-1df74f1c-c899-4563-903a-0222e0b5b8bf" class="outline-3">
 <h3 id="h-1df74f1c-c899-4563-903a-0222e0b5b8bf"><span class="section-number-3">1.10.</span> Incompressible Fluids</h3>
 <div class="outline-text-3" id="text-h-1df74f1c-c899-4563-903a-0222e0b5b8bf">
-<div class="definition" id="orge93b497">
+<div class="definition" id="orga4dd62b">
 <p>
 Many cases, for the flow of liquids (and sometimes for gases), their
 density may be supposed invariable (i.e., constant throughout the volume
@@ -1865,7 +1866,7 @@ such situations <dfn>Incompressible Flow</dfn>.
 
 <p>
 Euler's equations greatly simplify for an incompressible fluid. Believe
-me? (No&#x2026;) OK, if we take \(\rho\) constant, then&#x2026;uh&#x2026;well, we can
+me? (No&hellip;) OK, if we take \(\rho\) constant, then&hellip;uh&hellip;well, we can
 take it under the gradient:
 </p>
 
@@ -1875,7 +1876,7 @@ take it under the gradient:
 \end{equation}
 
 <p>
-See? Completely different! OK, maybe not, so&#x2026;well, the equation of
+See? Completely different! OK, maybe not, so&hellip;well, the equation of
 continuity, aha, <i>that</i> simplifies greatly to:
 </p>
 
@@ -2025,7 +2026,7 @@ p_{\text{max}} = p_{0} + \frac{\rho u^{2}}{2}.
 \end{equation}
 
 
-<div id="org876bc06" class="figure">
+<div id="org64fce7f" class="figure">
 <p><img src="../../img/fluid-1.png" alt="fluid-1.png">
 </p>
 <p><span class="figure-number">Figure 2: </span>An example of a stagnation point \(S\).</p>
@@ -2035,7 +2036,7 @@ p_{\text{max}} = p_{0} + \frac{\rho u^{2}}{2}.
 <div id="outline-container-h-6e70c7d3-4d07-4b3f-ae83-a13566fe504f" class="outline-4">
 <h4 id="h-6e70c7d3-4d07-4b3f-ae83-a13566fe504f"><span class="section-number-4">1.10.7.</span> Planar Flow for Incompressible Fluids of Constant Density</h4>
 <div class="outline-text-4" id="text-h-6e70c7d3-4d07-4b3f-ae83-a13566fe504f">
-<div class="definition" id="org47762b6">
+<div class="definition" id="orgb029600">
 <p>
 If the velocity distribution in a moving fluid depends on only two
 coordinates (say, \(x\) and \(y\)), and if the velocity is everywhere
@@ -2071,7 +2072,7 @@ The equation of continuity is satisfied automatically, if we write the
 velocity in this manner (prove this to yourself).
 </p>
 
-<div class="remark" id="org2ad4c96">
+<div class="remark" id="org2f31ca4">
 <p>
 The critical property for the existence of stream functions is that we
 are working with 2-dimensional problems, <b>not</b> that we're working in a
@@ -2169,7 +2170,7 @@ v_{y}=\partial_{y}\phi = -\partial_{x}\psi.
 \end{equation*}
 
 <p>
-These are the Cauchy&#x2013;Riemann equations for the complex expression
+These are the Cauchy&ndash;Riemann equations for the complex expression
 </p>
 
 \begin{equation}
@@ -2235,7 +2236,7 @@ all the residues are in this case purely imaginary.
 </div>
 </div>
 <div id="outline-container-h-1a23bded-5ad1-44a4-80b1-b7f5cc880298" class="outline-4">
-<h4 id="h-1a23bded-5ad1-44a4-80b1-b7f5cc880298"><span class="section-number-4">1.10.10.</span> &#x2026;and when <i>is</i> the Fluid Incompressible?</h4>
+<h4 id="h-1a23bded-5ad1-44a4-80b1-b7f5cc880298"><span class="section-number-4">1.10.10.</span> &hellip;and when <i>is</i> the Fluid Incompressible?</h4>
 <div class="outline-text-4" id="text-h-1a23bded-5ad1-44a4-80b1-b7f5cc880298">
 <p>
 Let us consider the conditions which the fluid may be regarded as
@@ -2295,7 +2296,7 @@ interactions in the fluid may be regarded as instantaneous.</li>
 are fulfilled, the fluid may be regarded as incompressible.</li>
 </ul>
 
-<div class="exercise" id="orgc093554">
+<div class="exercise" id="org04d0ebd">
 <p>
 Determine the shape of the surface of an incompressible fluid subject to
 a gravitational field, contained in a cylindrical vessel which rotates
@@ -2304,7 +2305,7 @@ about its (vertical) axis with a constant angular velocity \(\Omega\).
 
 </div>
 
-<div class="exercise" id="org4aae862">
+<div class="exercise" id="org6a6ae59">
 <p>
 A sphere, with radius \(R\), moves with velocity \(\vec{u}\) in an
 incompressible ideal fluid. Determine the potential flow of the fluid
@@ -2313,20 +2314,20 @@ past the sphere.
 
 </div>
 
-<div class="exercise" id="org45a7128">
+<div class="exercise" id="org3aafeb4">
 <p>
 The same as the previous problem, but for an infinite cylinder moving
 perpendicular to its axis. (The solution for more general problems may
 be found in N.E. Kochin, I.A. Kibel, and N.V. Roze
 <cite class="book-title">Theoretical Hydromechanics</cite> (1963), English translation
 published by John Wiley &amp; Sons (1964)  ISBN-13 : 978-0470497050; H. Lamb,
-<cite class="book-title">Hydrodynamics</cite> (1932) &sect;&sect;103&#x2013;116, Dover has
+<cite class="book-title">Hydrodynamics</cite> (1932) &sect;&sect;103&ndash;116, Dover has
 republished its sixth edition.)
 </p>
 
 </div>
 
-<div class="exercise" id="orgeb71e3a">
+<div class="exercise" id="orgf37dd6d">
 <p>
 Determine the potential flow of an incompressible ideal fluid in an
 ellipsoidal vessel rotating about a principal axis with angular velocity
@@ -2335,33 +2336,33 @@ ellipsoidal vessel rotating about a principal axis with angular velocity
 
 </div>
 
-<div class="exercise" id="org688e2b4">
+<div class="exercise" id="orgda022f8">
 <p>
 Determine the flow near a stagnation point.
 </p>
 
 </div>
 
-<div class="exercise" id="orgb78a855">
+<div class="exercise" id="org421c81c">
 <p>
 Determine the potential flow near an angle formed by two intersecting planes.
 </p>
 
 </div>
 
-<div class="exercise" id="org103c172">
+<div class="exercise" id="orgdf9f52c">
 <p>
 A spherical hole with radius \(a\) suddenly forms in an incompressible
 fluid filling all space. Determine the time taken for the hole to be
 filled with fluid.
 (W.H.Besant <cite class="book-title">A Treatise on Hydrostatics and Hydrodynamics</cite> 1859;
 L. Rayleigh, "On the pressure developed in a liquid during the collapse of a spherical cavity".
-<i>Philosophical Magazine</i> <b>34</b> no.200 (1917) pp.94&#x2013;98.)
+<i>Philosophical Magazine</i> <b>34</b> no.200 (1917) pp.94&ndash;98.)
 </p>
 
 </div>
 
-<div class="exercise" id="org663132f">
+<div class="exercise" id="orgffd58a7">
 <p>
 A sphere immersed in an incompressible fluid expands according to a
 given law \(R=R(t)\). Determine the fluid pressure at the surface of the sphere.
@@ -2369,7 +2370,7 @@ given law \(R=R(t)\). Determine the fluid pressure at the surface of the sphere.
 
 </div>
 
-<div class="exercise" id="orgb1dacba">
+<div class="exercise" id="org48140fc">
 <p>
 Determine the form of a jet emerging from an infinitely long slit in a
 plane wall.
@@ -2385,7 +2386,7 @@ plane wall.
 <p>
 Consider the problem of irrotational flow of an incompressible ideal
 fluid past some solid body. (Of course, this is the same problem as the
-motion of a fluid when the same body moves through it&#x2026;just change
+motion of a fluid when the same body moves through it&hellip;just change
 coordinates in which the fluid is at rest at infinity.)
 </p>
 
@@ -2419,14 +2420,14 @@ The general form of Laplace's equation is
 where \(a\), \(\vec{A}\) are independent of coordinates.
 </p>
 
-<div class="proposition" id="org4fd4fca">
+<div class="proposition" id="org2f90832">
 <p>
 The constant \(a\) must be zero.
 </p>
 
 </div>
 
-<div class="proof" id="org6b9bf44">
+<div class="proof" id="orgc6ea642">
 <p>
 Suppose \(\phi=-a/r\). Then the velocity is \(\vec{v}=-\vec{\nabla}(a/r)=a\vec{r}/r^{3}\).
 What is the mass flux through some closed surface (say a sphere with
@@ -2469,14 +2470,14 @@ the surface of the moving body.
 <div id="outline-container-h-8bb1ef72-bb2d-433c-9eac-f792bcbd01d1" class="outline-4">
 <h4 id="h-8bb1ef72-bb2d-433c-9eac-f792bcbd01d1"><span class="section-number-4">1.11.2.</span> Total Energy</h4>
 <div class="outline-text-4" id="text-h-8bb1ef72-bb2d-433c-9eac-f792bcbd01d1">
-<div class="lemma" id="orgf6f4476">
+<div class="lemma" id="orga851404">
 <p>
 The internal energy of an incompressible fluid is constant.
 </p>
 
 </div>
 
-<div class="theorem" id="org0e3875a">
+<div class="theorem" id="org8e0a79c">
 <p>
 The total energy of the fluid is
 </p>
@@ -2493,7 +2494,7 @@ the shape of the body.
 
 </div>
 
-<div class="proof" id="org6180936">
+<div class="proof" id="orgb6dc7f1">
 <ul class="org-ul">
 <li>The total kinetic energy for the fluid is \(\frac{1}{2}\int\rho v^{2}\,\D V\)
 where we integrate over all space <i>outside</i> the body.</li>
@@ -2542,7 +2543,7 @@ expression for the total energy of the fluid
 
 </div>
 
-<div class="remark" id="org21f44a0">
+<div class="remark" id="org1f213a7">
 <p>
 The integral we must perform in the last step is taken over a sphere,
 and since the integrands are constant, it amounts to multiplying by
@@ -2551,7 +2552,7 @@ and since the integrands are constant, it amounts to multiplying by
 
 </div>
 
-<div class="definition" id="org1964199">
+<div class="definition" id="org2dde10e">
 <p>
 We can rewrite the energy \(E\) just computed as a quadratic function of
 the components of \(\vec{u}\) as
@@ -2578,7 +2579,7 @@ We can compute the total momentum \(\vec{P}\) for the fluid from the
 energy. How?
 </p>
 
-<div class="lemma" id="org1e6d060">
+<div class="lemma" id="org80af29d">
 <p>
 Observe an infinitesimal change in \(E\) and \(\vec{P}\) are
 related by
@@ -2590,7 +2591,7 @@ related by
 
 </div>
 
-<div class="proof" id="org9d0e85c">
+<div class="proof" id="org9ab492e">
 <ul class="org-ul">
 <li>Assume the body accelerated by some external force \(\vec{F}\)</li>
 <li>Then the momentum of the fluid will be increased by \(\D\vec{P}\) during
@@ -2605,7 +2606,7 @@ equal to the increase \(\D E\) in the energy of the fluid)</li>
 </div>
 
 <p>
-It follows from the definition of <a href="#org1964199">induced mass tensor</a> that
+It follows from the definition of <a href="#org2dde10e">induced mass tensor</a> that
 </p>
 
 \begin{equation}
@@ -2636,7 +2637,7 @@ called the <dfn>Drag Force</dfn> and the perpendicular component is
 called the <dfn>Lift Force</dfn>.
 </p>
 
-<div class="proposition" id="org8cac811">
+<div class="proposition" id="orgcd38aa8">
 <p>
 (D'Alembert Paradox)
 If it were possible to have potential flow past a body moving uniformly
@@ -2661,7 +2662,7 @@ infinity.
 <div id="outline-container-h-90547b18-da64-494c-8862-46c04f2b112b" class="outline-4">
 <h4 id="h-90547b18-da64-494c-8862-46c04f2b112b"><span class="section-number-4">1.11.4.</span> Converse Problem</h4>
 <div class="outline-text-4" id="text-h-90547b18-da64-494c-8862-46c04f2b112b">
-<div class="puzzle" id="org001de1a">
+<div class="puzzle" id="org9858f92">
 <p>
 Suppose the fluid executes some oscillatory motion due to some cause
 external to the body. This motion will set the body in motion, too.
@@ -2835,10 +2836,10 @@ Cambridge, 1859. <a href="https://archive.org/details/atreatiseonhydr00besagoog/
 <i>Naturwiss.</i> <b>30</b> (1942) 543–544.</li>
 <li>Hans Ertel,<br>
 "Ein neuer hydrodynamischer Wirbelsatz".<br>
-<i>Meteorol. Z.</i> <b>59</b>, no.9 (1942) pp.277&#x2013;281.</li>
+<i>Meteorol. Z.</i> <b>59</b>, no.9 (1942) pp.277&ndash;281.</li>
 <li>Hans Ertel,<br>
 "Über das Verhältnis des neuen hydrodynamischen Wirbelsatzes zum Zirkulationssatz von V. Bjerknes".<br>
-<i>Meteor. Z.</i> <b>59</b> (1942) pp.385&#x2013;387.</li>
+<i>Meteor. Z.</i> <b>59</b> (1942) pp.385&ndash;387.</li>
 <li>N.E. Kochin, I.A. Kibel, and N.V. Roze,<br>
 <cite class="book-title">Theoretical Hydromechanics</cite>.<br>
 John Wiley &amp; Sons (1964) ISBN-13 : 978-0470497050;</li>
@@ -2847,7 +2848,7 @@ John Wiley &amp; Sons (1964) ISBN-13 : 978-0470497050;</li>
 <a href="https://archive.org/details/hydrodynamics00lamb">Archived version</a></li>
 <li>L. Rayleigh,<br>
 "On the pressure developed in a liquid during the collapse of a spherical cavity".<br>
-<i>Philosophical Magazine</i> <b>34</b> no.200 (1917) pp.94&#x2013;98.</li>
+<i>Philosophical Magazine</i> <b>34</b> no.200 (1917) pp.94&ndash;98.</li>
 </ul>
 </div>
 </div>

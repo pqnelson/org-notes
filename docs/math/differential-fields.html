@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -366,7 +367,7 @@ We can use a naive long division algorithm.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+<pre class="src src-lisp"><code>(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
 (<span class="org-keyword">defun</span> <span class="org-function-name">divide</span> (a b <span class="org-type">&amp;aux</span> q r s)
   <span class="org-doc">"When A and B are polynomials over a field, division uses this method."</span>
   (<span class="org-keyword">declare</span> (type polynomial a b))
@@ -381,9 +382,9 @@ We can use a naive long division algorithm.
                         (expt 'x (- (degree r) (degree b)))))
              (setf q (+ q s))
              (setf r (- r (* b s)))))
-  <span class="org-comment-delimiter">;; </span><span class="org-comment">(assert (equal? a (+ (* q b) r)))</span>
-  (values q r))
-</pre>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(assert (equal? a (+ (* q b) r)))
+</span>  (values q r))
+</code></pre>
 </div>
 
 <p>
@@ -392,7 +393,7 @@ this.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+<pre class="src src-lisp"><code>(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
 
 (<span class="org-keyword">defmethod</span> <span class="org-function-name">quotient</span> ((a polynomial) (b polynomial))
   (multiple-values-bind (q r) (divide a b)
@@ -401,7 +402,7 @@ this.
 (<span class="org-keyword">defmethod</span> <span class="org-function-name">rem</span> ((a polynomial) (b polynomial))
   (multiple-values-bind (q r) (divide a b)
                         r))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -422,7 +423,7 @@ denoted \(\mathrm{prem}(A,B)\) by Bronstein.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+<pre class="src src-lisp"><code>(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
 (<span class="org-keyword">defun</span> <span class="org-function-name">pseudo-divide</span> (a b <span class="org-type">&amp;aux</span> c n q r s)
   (<span class="org-keyword">declare</span> (type polynomial a b))
   (<span class="org-warning">assert</span> (not (zero? b)))
@@ -440,7 +441,7 @@ denoted \(\mathrm{prem}(A,B)\) by Bronstein.
              (setf r (- (* c r) (* s b)))))
   (<span class="org-keyword">let</span> ((factor (expt c n)))
     (values (* factor q) (* factor r))))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -452,7 +453,7 @@ There are several variations of Euclid's algorithm for GCD with polynomials.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+<pre class="src src-lisp"><code>(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
 (<span class="org-keyword">defun</span> <span class="org-function-name">euclid</span> (a b <span class="org-type">&amp;key</span> (divide #'poly-divide) <span class="org-type">&amp;aux</span> x y)
   (<span class="org-keyword">declare</span> (type polynomial a b))
   (setf x a)
@@ -463,7 +464,7 @@ There are several variations of Euclid's algorithm for GCD with polynomials.
                                  (setf x y)
                                  (setf y r)))
   x)
-</pre>
+</code></pre>
 </div>
 </div>
 <div id="outline-container-h-f44a2567-777a-4120-ad6b-f041226af660" class="outline-4">
@@ -475,7 +476,7 @@ algorithm could be implemented quite quickly.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+<pre class="src src-lisp"><code>(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
 (<span class="org-keyword">defun</span> <span class="org-function-name">naive-extended-euclid</span> (a b <span class="org-type">&amp;key</span> (divide #'poly-divide) <span class="org-type">&amp;aux</span> r1 r2)
   (<span class="org-keyword">declare</span> (type polynomial a b))
   (<span class="org-keyword">let</span> ((a0 a)
@@ -486,8 +487,8 @@ algorithm could be implemented quite quickly.
         (b2 1))
     (<span class="org-keyword">loop</span> while (not (zero? b0))
           do (multiple-values-bind (q r) (funcall #'divide a0 b0)
-                                   <span class="org-comment-delimiter">;; </span><span class="org-comment">(= a0 (+ r (* b0 q)))</span>
-                                   (setf a0 b0)
+                                   <span class="org-comment-delimiter">;; </span><span class="org-comment">(= a0 (+ r (* b0 q)))
+</span>                                   (setf a0 b0)
                                    (setf b0 r)
                                    (setf r1 (- a1 (* q b1)))
                                    (setf r2 (- a2 (* q b2)))
@@ -495,9 +496,9 @@ algorithm could be implemented quite quickly.
                                    (setf a2 b2)
                                    (setf b1 r1)
                                    (setf b2 r2)))
-    <span class="org-comment-delimiter">;; </span><span class="org-comment">(assert (equal? (+ (* a1 a) (* a2 b)) a0))</span>
-    (values a1 a2 a)))
-</pre>
+    <span class="org-comment-delimiter">;; </span><span class="org-comment">(assert (equal? (+ (* a1 a) (* a2 b)) a0))
+</span>    (values a1 a2 a)))
+</code></pre>
 </div>
 </div>
 </div>
@@ -511,7 +512,7 @@ variant of the Euclidean algorithm which Bronstein calls the
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+<pre class="src src-lisp"><code>(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
 (<span class="org-keyword">defun</span> <span class="org-function-name">half-extended-euclid</span> (a b <span class="org-type">&amp;key</span> (divide #'poly-divide) <span class="org-type">&amp;aux</span> r1)
   (<span class="org-keyword">let</span> ((a0 a)
         (a1 1)
@@ -519,14 +520,14 @@ variant of the Euclidean algorithm which Bronstein calls the
         (b1 0))
     (<span class="org-keyword">loop</span> while (not (zero? b0))
           do (multiple-values-bind (q r) (funcall #'divide a0 b0)
-                                   <span class="org-comment-delimiter">;; </span><span class="org-comment">(= a0 (+ r (* b0 q)))</span>
-                                   (setf a0 b0)
+                                   <span class="org-comment-delimiter">;; </span><span class="org-comment">(= a0 (+ r (* b0 q)))
+</span>                                   (setf a0 b0)
                                    (setf b0 r)
                                    (setf r1 (- a1 (* q b1)))
                                    (setf a1 b1)
                                    (setf b1 r1)))
     (values a1 a)))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -539,12 +540,12 @@ implementation of Euclid's algorithm.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
+<pre class="src src-lisp"><code>(<span class="org-keyword">in-package</span> <span class="org-builtin">:polynomial</span>)
 (<span class="org-keyword">defun</span> <span class="org-function-name">extended-euclid</span> (a b <span class="org-type">&amp;key</span> (divide #'poly-divide) <span class="org-type">&amp;aux</span> u v)
   (<span class="org-keyword">declare</span> (type polynomial a b))
   (multiple-values-bind (s g) (half-extended-euclid a b <span class="org-builtin">:divide</span> #'divide)
                         (values s (funcall #'divide (- g (* s a)) b) g)))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -559,7 +560,7 @@ are the unknowns.
 
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">diophantine-naive-extended-euclid</span> (a b c)
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">diophantine-naive-extended-euclid</span> (a b c)
   (multiple-values-bind
    (s u g) (extended-euclid a b)
    (multiple-values-bind (q r) (poly-divide c g)
@@ -575,7 +576,7 @@ are the unknowns.
       (setf s r)
       (setf u (+ u (* q a)))))
    (values s u))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -597,7 +598,7 @@ where the division is always exact.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">diophantine-half-extended-euclidean</span> (a b c)
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">diophantine-half-extended-euclidean</span> (a b c)
   (multiple-values-bind
    (s g) (half-extended-euclidean a b)
    (multiple-values-bind
@@ -610,10 +611,10 @@ where the division is always exact.
               (&gt;= (degree s) (degree b)))
      (multiple-values-bind
       (q r) (poly-divide s b)
-      <span class="org-comment-delimiter">;; </span><span class="org-comment">(assert (equal? s (+ r (* b q))))</span>
-      (setf s r)))
+      <span class="org-comment-delimiter">;; </span><span class="org-comment">(assert (equal? s (+ r (* b q))))
+</span>      (setf s r)))
    s)
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -621,12 +622,12 @@ This gives us a more efficient diophantine extended Euclidean method
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">diophantine-extended-euclidean</span> (a b c)
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">diophantine-extended-euclidean</span> (a b c)
   (<span class="org-keyword">let</span> ((s (diophantine-half-extended-euclidean a b c)))
     (multiple-values-bind
      (q r) (poly-divide (- c (* s a)) b))
     (values s q)))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -641,22 +642,22 @@ irreducible) factors \(\gcd(d_{i},d_{j})=1\) for \(i\neq j\).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">distinct-partial-fraction</span> (a <span class="org-type">&amp;rest</span> denom-factors)
-  <span class="org-doc">"Returns a list of a constant term followed by numerators for</span>
-<span class="org-doc">the corresponding denominator factors."</span>
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">distinct-partial-fraction</span> (a <span class="org-type">&amp;rest</span> denom-factors)
+  <span class="org-doc">"Returns a list of a constant term followed by numerators for
+the corresponding denominator factors."</span>
   (<span class="org-keyword">if</span> (null denom-factors)
       a
       (multiple-values-bind
        (a0 r) (poly-divide a (apply #'* denom-factors))
-       (<span class="org-keyword">when</span> (singleton? denom-factors) <span class="org-comment">; n = 1</span>
-         (<span class="org-keyword">return-from</span> distinct-partial-fraction (cons a0 r)))
-       (multiple-values-bind            <span class="org-comment">; n &gt; 1</span>
-        (a1 s) (extended-euclidean (apply #'* (cdr denom-factors)) r)
+       (<span class="org-keyword">when</span> (singleton? denom-factors) <span class="org-comment">; n = 1
+</span>         (<span class="org-keyword">return-from</span> distinct-partial-fraction (cons a0 r)))
+       (multiple-values-bind            <span class="org-comment">; n &gt; 1
+</span>        (a1 s) (extended-euclidean (apply #'* (cdr denom-factors)) r)
         (<span class="org-warning">assert</span> (&lt; (degree a1) (degree (car denom-factors))))
         (<span class="org-keyword">let</span> ((numerators (apply #'distinct-partial-fraction s (cdr denom-factors))))
           (cons (+ a0 (car numerators))
                 (cons a1 (cdr numerators))))))))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -684,7 +685,7 @@ Then
 
 <p>
 If \(m=1\), we're done. Otherwise, we recursively find \(a_{0}\), \(a_{1}\),
-&#x2026;, \(a_{m-1}\in D\) such that either \(a_{j}=0\) or \(\nu(a_{j})\lt\nu(d)\)
+&hellip;, \(a_{m-1}\in D\) such that either \(a_{j}=0\) or \(\nu(a_{j})\lt\nu(d)\)
 for \(j\geq1\), and
 </p>
 
@@ -728,7 +729,7 @@ respect to the factorization \(d = \prod_{i} d_{i}^{e_{i}}\).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">complete-partial-fraction</span> (a <span class="org-type">&amp;rest</span> denom-expt-pairs)
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">complete-partial-fraction</span> (a <span class="org-type">&amp;rest</span> denom-expt-pairs)
   (<span class="org-keyword">let*</span> ((all-numerators (apply #'distinct-partial-fraction
                                 (cons a (mapcar #'(<span class="org-keyword">lambda</span> (d-e)
                                                     (expt (car d-e) (cadr d-e)))
@@ -739,7 +740,7 @@ respect to the factorization \(d = \prod_{i} d_{i}^{e_{i}}\).
         ()
       (<span class="org-keyword">do</span> ((
     ))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
@@ -762,16 +763,16 @@ Then we'll want to split a given polynomial
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">split-factor</span> (p deriv)
-  <span class="org-doc">"Given a derivation `</span><span class="org-doc"><span class="org-constant">deriv</span></span><span class="org-doc">' on `</span><span class="org-doc"><span class="org-constant">k[t]</span></span><span class="org-doc">' and `</span><span class="org-doc"><span class="org-constant">p</span></span><span class="org-doc">' an element of `</span><span class="org-doc"><span class="org-constant">k[t]</span></span><span class="org-doc">',</span>
-<span class="org-doc">return the pair (normal-polynomial . special-polynomial) such that</span>
-<span class="org-doc">(= p (* normal-polynomial special-polynomial))."</span>
+<pre class="src src-lisp"><code>(<span class="org-keyword">defun</span> <span class="org-function-name">split-factor</span> (p deriv)
+  <span class="org-doc">"Given a derivation `</span><span class="org-doc"><span class="org-constant">deriv</span></span><span class="org-doc">' on `</span><span class="org-doc"><span class="org-constant">k[t]</span></span><span class="org-doc">' and `</span><span class="org-doc"><span class="org-constant">p</span></span><span class="org-doc">' an element of `</span><span class="org-doc"><span class="org-constant">k[t]</span></span><span class="org-doc">',
+return the pair (normal-polynomial . special-polynomial) such that
+(= p (* normal-polynomial special-polynomial))."</span>
   (<span class="org-keyword">let</span> ((s (/ (gcd p (deriv p))
               (gcd p (d p t)))))
     (<span class="org-keyword">if</span> (zerop (degree s))
         (cons p 1)
       (split-factor (/ p s) deriv))))
-</pre>
+</code></pre>
 </div>
 </div>
 </div>
