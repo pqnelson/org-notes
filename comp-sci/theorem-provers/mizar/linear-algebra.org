@@ -239,7 +239,7 @@ If we want to consider the complex numbers as a field, we would use
   $\mathbb{F}$ to consist of a set $V$ equipped with
   - a binary operator $\cdot\colon\mathbb{F}\times V\to V$ called
     /scalar multiplication/
-  - a binary operator $+\colon V\times V\to V$ called /vector addition
+  - a binary operator $+\colon V\times V\to V$ called /vector addition/
   - a constant $0\in V$ called the /zero vector/
 
   (i.e., it consists of a ~ModuleStr~ over $\mathbb{F}$)
@@ -277,15 +277,16 @@ If we want to consider the complex numbers as a field, we would use
 - *Notation 1.24.*
   - If $S$ is a set, then $\mathbb{F}^{S}$ is the set of functions from
     $S$ to $\mathbb{F}$
-    - Mizar notation: [[https://mizar.uwb.edu.pl/version/current/html/funct_2.html#K1][~Funcs(S,the carrier of F)~]]
-  - For $f,g\in\mathbb{F}^{S}$, the sum $f+g\mathbb{F}^{S}$ is defined
+    - Mizar notation: [[https://mizar.uwb.edu.pl/version/current/html/funct_2.html#K1][~Funcs(S,the carrier of F)~]] for the underlying
+      set, and [[https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K17][~Maps(S, F)~]] as a vector space (or module)
+  - For $f,g\in\mathbb{F}^{S}$, the sum $f+g\in\mathbb{F}^{S}$ is defined
     by $(f+g)(x)=f(x)+g(x)$ for all $x\in S$.
-    - This is definition [[https://mizar.uwb.edu.pl/version/current/html/valued_1.html#K1][~VALUED_1:def 1~]]
+    - This is definition [[https://mizar.uwb.edu.pl/version/current/html/valued_1.html#K1][~VALUED_1:def 1~]] and also
+      [[https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K15][~VECTSP_13:def 14~]]
   - If $\lambda\in\mathbb{F}$ and $f\in\mathbb{F}^{S}$, the product
     $\lambda f\in\mathbb{F}^{S}$ is defined by $(\lambda f)(x)=\lambda f(x)$
     for every $x\in S$.
-    - This is probably defined somewhere, I think ~(S --> {lambda}) [#] f~
-      is a kludge solution
+    - This is [[https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K16][~VECTSP13:def 15~]]
 - *Theorem 1.26* (Unique additive identity).
   A vector space has a unique additive identity. (This is built into
   the definition of a module.)
@@ -528,8 +529,12 @@ it would be useful.
   2. The set of linear maps from $V$ to $V$ is denoted $\mathcal{L}(V)=\mathcal{L}(V,V)$
 - *Examples 3.3.*
   1. The zero map $V\to W$ sending every vector to the zero vector of
-     $W$ is linear. {{{missing()}}}
-  2. The identity operator $\id\colon V\to V$ is linear. {{{missing()}}}
+     $W$ is linear.
+     (This is the ~ZeroMap(V,W)~ term, it is registered as additive in
+     [[https://mizar.uwb.edu.pl/version/current/html/grcat_1.html#FC4][~GRCAT_1~]] and homogeneous in [[https://mizar.uwb.edu.pl/version/current/html/mod_2.html#FC1][~MOD_2~]])
+  2. The identity operator $\id\colon V\to V$ is linear.
+     (Registered as additive in [[https://mizar.uwb.edu.pl/version/current/html/grcat_1.html#FC8][~GRCAT_1~]], and homogeneous is
+     registered in [[https://mizar.uwb.edu.pl/version/current/html/mod_2.html#FC3][~MOD_2~]])
 - *Theorem 3.4.* Suppose $v_{1}$, ..., $v_{n}$ is a basis for $V$ and
   $w_{1}$, ..., $w_{n}$ is a basis for $W$. Then there exists a linear
   transformation $T\colon V\to W$ such that $T(v_{i})=w_{i}$ for each
@@ -551,6 +556,12 @@ it would be useful.
   for every $v\in V$. ([[https://mizar.uwb.edu.pl/version/current/html/matrlin.html#K4][~MATRLIN:def 4~]])
 - *Theorem 3.6.* With these operations we just defined,
   $\mathcal{L}(V,W)$ forms a vector space over $\mathbb{F}$.
+  - More generally, the collection of *all* functions from $V$ to $W$
+    forms a vector space called ~Maps(V, W)~ in Mizar and it's
+    [[https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K23][~VECTSP13:def 22~]] and registrations (and a redefinition) make it a vector space
+  - There is a subspace corresponding to $\mathcal{L}(V, W)$
+    in Mizar it is ~LinTrans(U, V)~
+    ([[https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K25][~VECTSP13:def 23~]])
 - *Definition 3.7.* Let $S\in\mathcal{U,W}$, $T\in\mathcal{L}(V,U)$. We define the
   {{{dfn(Composition)}}} of linear operators $S\circ T$ to be defined as
   $(S\circ T)(v)=S(T(v))$ for every $v\in V$.
@@ -801,7 +812,7 @@ there exists (in this case) a linear bijective function.
 - *Theorem 3.72.* Suppose $V$ and $W$ are finite-dimensional vector
   spaces. Then $\mathcal{L}(V,W)$ is finite-dimensional and
   $\dim\mathcal{L}(V,W)=(\dim V)(\dim W)$. {{{missing()}}}
-
+    
 *** Linear Maps Thought of as Matrix Multiplication
 :PROPERTIES:
 :CUSTOM_ID: h-153320cc-2523-41e4-88fa-bd64733c79aa

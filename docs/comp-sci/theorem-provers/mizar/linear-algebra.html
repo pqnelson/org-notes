@@ -389,10 +389,7 @@ the same order.
 <ul class="org-ul">
 <li>\(\mathbb{F}^{n}\) denotes the set of all lists of
 length \(n\) of elements of \(\mathbb{F}\)
-<ul class="org-ul">
-<li>In Mizar, this could be formalized as <code>Funcs(Seg n,COMPLEX)</code> or
-<code>Funcs(Seg n,REAL)</code></li>
-</ul></li>
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K8"><code>VECTSP13:def 7</code></a>)</li>
 <li>If \((x_{1},\dots,x_{n})\in\mathbb{F}^{n}\) and \(k\in\{1,\dots,n\}\),
 then \(x_{k}\) is the \(k^{\text{th}}\) coordinate of \(x\).
 <ul class="org-ul">
@@ -576,7 +573,7 @@ When \(\mathbb{F}\) is a field, we define a <dfn>Vector Space</dfn> over
 <ul class="org-ul">
 <li>a binary operator \(\cdot\colon\mathbb{F}\times V\to V\) called
 <i>scalar multiplication</i></li>
-<li>a binary operator \(+\colon V\times V\to V\) called /vector addition</li>
+<li>a binary operator \(+\colon V\times V\to V\) called <i>vector addition</i></li>
 <li>a constant \(0\in V\) called the <i>zero vector</i></li>
 </ul>
 
@@ -625,23 +622,25 @@ refer to them as <a href="https://mizar.uwb.edu.pl/version/current/html/rlvect_1
 <li>If \(S\) is a set, then \(\mathbb{F}^{S}\) is the set of functions from
 \(S\) to \(\mathbb{F}\)
 <ul class="org-ul">
-<li>Mizar notation: <a href="https://mizar.uwb.edu.pl/version/current/html/funct_2.html#K1"><code>Funcs(S,the carrier of F)</code></a></li>
+<li>Mizar notation: <a href="https://mizar.uwb.edu.pl/version/current/html/funct_2.html#K1"><code>Funcs(S,the carrier of F)</code></a> for the underlying
+set, and <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K17"><code>Maps(S, F)</code></a> as a vector space (or module)</li>
 </ul></li>
-<li>For \(f,g\in\mathbb{F}^{S}\), the sum \(f+g\mathbb{F}^{S}\) is defined
+<li>For \(f,g\in\mathbb{F}^{S}\), the sum \(f+g\in\mathbb{F}^{S}\) is defined
 by \((f+g)(x)=f(x)+g(x)\) for all \(x\in S\).
 <ul class="org-ul">
-<li>This is definition <a href="https://mizar.uwb.edu.pl/version/current/html/valued_1.html#K1"><code>VALUED_1:def 1</code></a></li>
+<li>This is definition <a href="https://mizar.uwb.edu.pl/version/current/html/valued_1.html#K1"><code>VALUED_1:def 1</code></a> and also
+<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K15"><code>VECTSP_13:def 14</code></a></li>
 </ul></li>
 <li>If \(\lambda\in\mathbb{F}\) and \(f\in\mathbb{F}^{S}\), the product
 \(\lambda f\in\mathbb{F}^{S}\) is defined by \((\lambda f)(x)=\lambda f(x)\)
 for every \(x\in S\).
 <ul class="org-ul">
-<li>This is probably defined somewhere, I think <code>(S --&gt; {lambda}) [#] f</code>
-is a kludge solution</li>
+<li>This is <a href="https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K16"><code>VECTSP13:def 15</code></a></li>
 </ul></li>
 </ul></li>
 <li><b>Theorem 1.26</b> (Unique additive identity).
-A vector space has a unique additive identity. <span class="missing">Missing from Mizar</span></li>
+A vector space has a unique additive identity. (This is built into
+the definition of a module.)</li>
 <li><b>Theorem 1.27</b> (Unique additive inverse).
 Every element in a vector space has a unique additive inverse.
 (<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp_1.html#T16"><code>VECTSP_1:16</code></a>)</li>
@@ -929,8 +928,12 @@ such that it is:
 <li><b>Examples 3.3.</b>
 <ol class="org-ol">
 <li>The zero map \(V\to W\) sending every vector to the zero vector of
-\(W\) is linear. <span class="missing">Missing from Mizar</span></li>
-<li>The identity operator \(\id\colon V\to V\) is linear. <span class="missing">Missing from Mizar</span></li>
+\(W\) is linear.
+(This is the <code>ZeroMap(V,W)</code> term, it is registered as additive in
+<a href="https://mizar.uwb.edu.pl/version/current/html/grcat_1.html#FC4"><code>GRCAT_1</code></a> and homogeneous in <a href="https://mizar.uwb.edu.pl/version/current/html/mod_2.html#FC1"><code>MOD_2</code></a>)</li>
+<li>The identity operator \(\id\colon V\to V\) is linear.
+(Registered as additive in <a href="https://mizar.uwb.edu.pl/version/current/html/grcat_1.html#FC8"><code>GRCAT_1</code></a>, and homogeneous is
+registered in <a href="https://mizar.uwb.edu.pl/version/current/html/mod_2.html#FC3"><code>MOD_2</code></a>)</li>
 </ol></li>
 <li><b>Theorem 3.4.</b> Suppose \(v_{1}\), &hellip;, \(v_{n}\) is a basis for \(V\) and
 \(w_{1}\), &hellip;, \(w_{n}\) is a basis for \(W\). Then there exists a linear
@@ -957,7 +960,15 @@ linear transformation defined by \((\lambda S)(v)=\lambda\cdot S(v)\)
 for every \(v\in V\). (<a href="https://mizar.uwb.edu.pl/version/current/html/matrlin.html#K4"><code>MATRLIN:def 4</code></a>)
 </p></li>
 <li><b>Theorem 3.6.</b> With these operations we just defined,
-\(\mathcal{L}(V,W)\) forms a vector space over \(\mathbb{F}\).</li>
+\(\mathcal{L}(V,W)\) forms a vector space over \(\mathbb{F}\).
+<ul class="org-ul">
+<li>More generally, the collection of <b>all</b> functions from \(V\) to \(W\)
+forms a vector space called <code>Maps(V, W)</code> in Mizar and it's
+<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K23"><code>VECTSP13:def 22</code></a> and registrations (and a redefinition) make it a vector space</li>
+<li>There is a subspace corresponding to \(\mathcal{L}(V, W)\)
+in Mizar it is <code>LinTrans(U, V)</code>
+(<a href="https://mizar.uwb.edu.pl/version/current/html/vectsp13.html#K25"><code>VECTSP13:def 23</code></a>)</li>
+</ul></li>
 <li><b>Definition 3.7.</b> Let \(S\in\mathcal{U,W}\), \(T\in\mathcal{L}(V,U)\). We define the
 <dfn>Composition</dfn> of linear operators \(S\circ T\) to be defined as
 \((S\circ T)(v)=S(T(v))\) for every \(v\in V\).
@@ -1369,7 +1380,7 @@ to the column rank of \(\mathcal{M}(T)\).
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated: Thu, 23 Nov 2023 08:06:40 -0800
+<p class="postamble">Last Updated: Tue, 22 Sep 2026 15:04:35 -0700
 </div>
 </body>
 </html>
