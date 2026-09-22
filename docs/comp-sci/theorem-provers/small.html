@@ -338,7 +338,7 @@ Thus the upper-bound on a program to be a candidate for being "bug free"
 is approximately 441 lines of code.
 </p>
 
-<div class="remark" id="org46da45f">
+<div id="h-6d153a0c-938d-49a4-b55d-b3cc4a589a79" class="remark">
 <p>
 If we then use this estimate for the number of lines \(n\leq 50k^{2}\)
 for a <i>Binomial</i> distributed random variable (<b>NOT</b> a <i>negative</i>
@@ -348,7 +348,7 @@ bug within 3 sigmas of 0 bugs is greater than 50%.
 
 </div>
 
-<div class="remark" id="org223f814">
+<div id="h-11f7303c-d2a0-4c1e-bb3e-d0aa0006dc19" class="remark">
 <p>
 Just a quick consistency check, we can use the <a href="https://en.wikipedia.org/wiki/Binomial_distribution#Poisson_approximation">Poisson approximation</a> to
 a Binomial distribution to find a heuristic upper bound on the number of
@@ -367,7 +367,7 @@ of lines of code \(N\) such that the probability of finding no more than
 The R code which let me solve this by brute force:
 </p>
 
-<pre class="example" id="orgf03ffc1">
+<pre id="h-93496776-9e63-490d-a38b-3e65506200b9" class="example">
 p_bug &lt;- 0.02
 q_bug &lt;- 1 - p_bug
 
@@ -394,7 +394,7 @@ greatest value of <code>n</code> such that <code>guess(n) &gt;= 0.5</code>.
 If we wanted to be more certain, we could modify the code:
 </p>
 
-<pre class="example" id="org0d10b22">
+<pre id="h-4703cb1a-95fa-435c-8615-2bc58ccb0c8e" class="example">
 guess &lt;- function(n, k=3) { pbinom(round(k*sd_bug*sqrt(n)), n, p_bug)}
 
 expected_bugs &lt;- function(n) { p_bug*n }
@@ -456,7 +456,7 @@ The concern for small trusted kernel is generically referred to as the
 Specifically, Berendregt writes:
 </p>
 
-<blockquote>
+<blockquote id="h-45e3c854-c7bb-4358-b4ce-3b92db3b7838">
 <p>
 If a complicated computer system claims that a certain mathematical
 statement is correct, then one may wonder whether this is indeed the case.

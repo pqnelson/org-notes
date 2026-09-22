@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -381,7 +382,7 @@ then \(R\) is an integral domain <span class="missing">Missing from Mizar</span>
 <h4 id="h-a25efa10-1acd-4d99-bc1b-a73f0963dc61">Polynomial rings</h4>
 <div class="outline-text-4" id="text-h-a25efa10-1acd-4d99-bc1b-a73f0963dc61">
 <p>
-Polynomial rings are&#x2026;well&#x2026;tricky. After all, it's given an entire
+Polynomial rings are&hellip;well&hellip;tricky. After all, it's given an entire
 chapter in Dummit and Foote, but it could easily be given its own book.
 </p>
 
@@ -429,7 +430,7 @@ Instead focus on group rings, since that is far more useful for
 representation theory.
 </p></li>
 <li>Consult Lang's <i>Algebra</i> (Springer, Third ed., 2002) Chapter II
-&sect;3 (pp. 104&#x2013;106) about the
+&sect;3 (pp. 104&ndash;106) about the
 formalization of monoid rings.
 <ul class="org-ul">
 <li>Lang discusses how, if \(R\) is a ring and \(X\) is a set and \(M\) is the free
@@ -459,7 +460,7 @@ ellipses with appropriate Mizar code):</li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-normal">be</span> doubleLoopStr;
   <span class="org-mizar-skeleton">let</span> M <span class="org-mizar-normal">be</span> unital non empty multMagmaStr;
   <span class="org-mizar-normal">func</span> MonoidRing R,M -&gt; strict doubleLoopStr <span class="org-mizar-normal">means</span>
@@ -471,11 +472,11 @@ ellipses with appropriate Mizar code):</li>
     ({1_M} --&gt; {the OneF <span class="org-mizar-normal">of</span> R});
   <span class="org-mizar-normal">existence</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">...
+</span>  <span class="org-mizar-block">end</span>;
   <span class="org-mizar-normal">uniqueness</span>;
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <ul class="org-ul">
@@ -484,13 +485,13 @@ ellipses with appropriate Mizar code):</li>
 underlying binary operators and set, so you can then define the
 <code>MonoidRing</code> as follows (the advantage being that the
 well-definedness of these functions are far easier to prove than
-the well-definedness of the multMagma version &#x2014; plus you can
+the well-definedness of the multMagma version &mdash; plus you can
 prove properties of the binary operators directly, like they're
 associative or they have a unity or whatever):</li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">definition</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-normal">be</span> doubleLoopStr;
   <span class="org-mizar-skeleton">let</span> M <span class="org-mizar-normal">be</span> multMagmaStr;
   <span class="org-mizar-normal">func</span> MonoidRing_set R,M -&gt; set <span class="org-mizar-normal">equals</span>
@@ -502,15 +503,15 @@ associative or they have a unity or whatever):</li>
   <span class="org-mizar-skeleton">let</span> M <span class="org-mizar-normal">be</span> unital non empty multMagma;
   <span class="org-mizar-skeleton">let</span> b <span class="org-mizar-normal">be</span> Element <span class="org-mizar-normal">of</span> M;
   <span class="org-mizar-normal">func</span> decomp b -&gt; FinSequence <span class="org-mizar-normal">of</span> 2-tuples_on (the carrier <span class="org-mizar-normal">of</span> M) <span class="org-mizar-normal">means</span> 
-  <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
-  <span class="org-mizar-normal">existence</span>
+  <span class="org-comment-delimiter">:: </span><span class="org-comment">...
+</span>  <span class="org-mizar-normal">existence</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">...
+</span>  <span class="org-mizar-block">end</span>;
   <span class="org-mizar-normal">uniqueness</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">...
+</span>  <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 
 <span class="org-mizar-main">definition</span>
@@ -522,12 +523,12 @@ associative or they have a unity or whatever):</li>
   <span class="org-mizar-formula">holds</span> <span class="org-mizar-normal">it</span>.(x,y) = f + g;
   <span class="org-mizar-normal">existence</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">...
+</span>  <span class="org-mizar-block">end</span>;
   <span class="org-mizar-normal">uniqueness</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">...
+</span>  <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 
 <span class="org-mizar-main">definition</span>
@@ -545,27 +546,27 @@ associative or they have a unity or whatever):</li>
       <span class="org-mizar-formula">&amp;</span> s /. k = (x . b1) * (y * b2));
   <span class="org-mizar-normal">existence</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">...
+</span>  <span class="org-mizar-block">end</span>;
   <span class="org-mizar-normal">uniqueness</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">...</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">...
+</span>  <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 
 <span class="org-mizar-main">definition</span>
   <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-formula">being</span> doubleLoopStr;
   <span class="org-mizar-skeleton">let</span> M <span class="org-mizar-formula">being</span> unital non empty multMagmaStr;
   <span class="org-mizar-normal">func</span> MonoidRing R,M -&gt; strict doubleLoopStr <span class="org-mizar-normal">equals</span>
-  (# MonoidRing_set R,M,   <span class="org-comment-delimiter">:: </span><span class="org-comment">carrier</span>
-     MonoidRing_addF R,M,  <span class="org-comment-delimiter">:: </span><span class="org-comment">addF</span>
-     MonoidRing_multF R,M, <span class="org-comment-delimiter">:: </span><span class="org-comment">multF</span>
-     ((the carrier <span class="org-mizar-normal">of</span> M) --&gt; (the ZeroF <span class="org-mizar-normal">of</span> R) +*
-       ({1_M} --&gt; {the OneF <span class="org-mizar-normal">of</span> R})), <span class="org-comment-delimiter">:: </span><span class="org-comment">OneF</span>
-     (the carrier <span class="org-mizar-normal">of</span> M) --&gt; (the ZeroF <span class="org-mizar-normal">of</span> R) #) <span class="org-comment-delimiter">:: </span><span class="org-comment">ZeroF</span>
-  <span class="org-mizar-normal">coherence</span>;
+  (# MonoidRing_set R,M,   <span class="org-comment-delimiter">:: </span><span class="org-comment">carrier
+</span>     MonoidRing_addF R,M,  <span class="org-comment-delimiter">:: </span><span class="org-comment">addF
+</span>     MonoidRing_multF R,M, <span class="org-comment-delimiter">:: </span><span class="org-comment">multF
+</span>     ((the carrier <span class="org-mizar-normal">of</span> M) --&gt; (the ZeroF <span class="org-mizar-normal">of</span> R) +*
+       ({1_M} --&gt; {the OneF <span class="org-mizar-normal">of</span> R})), <span class="org-comment-delimiter">:: </span><span class="org-comment">OneF
+</span>     (the carrier <span class="org-mizar-normal">of</span> M) --&gt; (the ZeroF <span class="org-mizar-normal">of</span> R) #) <span class="org-comment-delimiter">:: </span><span class="org-comment">ZeroF
+</span>  <span class="org-mizar-normal">coherence</span>;
 <span class="org-mizar-block">end</span>;  
-</pre>
+</code></pre>
 </div>
 
 <ul class="org-ul">
@@ -573,14 +574,14 @@ associative or they have a unity or whatever):</li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">registration</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">registration</span>
   <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-normal">be</span> associative non empty doubleLoopStr;
   <span class="org-mizar-skeleton">let</span> M <span class="org-mizar-normal">be</span> unital associative non empty multMagmaStr;
   <span class="org-mizar-normal">cluster</span> MonoidRing R,M -&gt; associative;
   <span class="org-mizar-normal">correctness</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">....</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">....
+</span>  <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 <span class="org-mizar-main">registration</span>
   <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-normal">be</span> Abelian non empty doubleLoopStr;
@@ -588,8 +589,8 @@ associative or they have a unity or whatever):</li>
   <span class="org-mizar-normal">cluster</span> MonoidRing R,M -&gt; Abelian;
   <span class="org-mizar-normal">correctness</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">....</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">....
+</span>  <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 <span class="org-mizar-main">registration</span>
   <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-normal">be</span> right_complementable non empty doubleLoopStr;
@@ -597,8 +598,8 @@ associative or they have a unity or whatever):</li>
   <span class="org-mizar-normal">cluster</span> MonoidRing R,M -&gt; right_complementable;
   <span class="org-mizar-normal">correctness</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">....</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">....
+</span>  <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 <span class="org-mizar-main">registration</span>
   <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-normal">be</span> right_zeroed non empty doubleLoopStr;
@@ -606,8 +607,8 @@ associative or they have a unity or whatever):</li>
   <span class="org-mizar-normal">cluster</span> MonoidRing R,M -&gt; right_zeroed;
   <span class="org-mizar-normal">correctness</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">....</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">....
+</span>  <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
 <span class="org-mizar-main">registration</span>
   <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-normal">be</span> well-unital non empty doubleLoopStr;
@@ -615,16 +616,16 @@ associative or they have a unity or whatever):</li>
   <span class="org-mizar-normal">cluster</span> MonoidRing R,M -&gt; well-unital;
   <span class="org-mizar-normal">correctness</span>
   <span class="org-mizar-block">proof</span>
-    <span class="org-comment-delimiter">:: </span><span class="org-comment">....</span>
-  <span class="org-mizar-block">end</span>;
+    <span class="org-comment-delimiter">:: </span><span class="org-comment">....
+</span>  <span class="org-mizar-block">end</span>;
 <span class="org-mizar-block">end</span>;
-<span class="org-comment-delimiter">:: </span><span class="org-comment">...and so on...</span>
-
+<span class="org-comment-delimiter">:: </span><span class="org-comment">...and so on...
+</span>
 LmDoubleCheckEverythingRegistered:
   <span class="org-mizar-formula">for</span> R <span class="org-mizar-formula">being</span> Ring
   <span class="org-mizar-formula">for</span> G <span class="org-mizar-formula">being</span> Group
   <span class="org-mizar-formula">holds</span> MonoidRing R,G <span class="org-mizar-normal">is</span> Ring;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -637,12 +638,12 @@ You can then provide a synonym for group rings as:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-mizar"><span class="org-mizar-main">notation</span>
+<pre class="src src-mizar"><code><span class="org-mizar-main">notation</span>
   <span class="org-mizar-skeleton">let</span> R <span class="org-mizar-normal">be</span> Ring;
   <span class="org-mizar-skeleton">let</span> G <span class="org-mizar-normal">be</span> Group;
   <span class="org-mizar-normal">synonym</span> GroupRing R,G <span class="org-mizar-formula">for</span> MonoidRing R,G;
 <span class="org-mizar-block">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -1088,7 +1089,7 @@ into two polynomials of smaller degree, then \(p(x)\) is irreducible
 in \(R[x]\). <span class="missing">Missing from Mizar</span></li>
 <li><b>Proposition 13</b> (Eisenstein's criterion). Let \(P\) be a prime ideal
 of the integral domain \(R\) and let \(f(x)=x^{n}+a_{n-1}x^{n-1}+\dots+a_{1}x+a_{0}\)
-be a polynomial in \(R[x]\) (where \(n\geq1\)). Suppose \(a_{n-1}\), &#x2026;,
+be a polynomial in \(R[x]\) (where \(n\geq1\)). Suppose \(a_{n-1}\), &hellip;,
 \(a_{1}\), \(a_{0}\) are elements of \(P\) and suppose \(a_{0}\notin
   P^{2}\). Then \(f(x)\) is irreducible in \(R[x]\). <span class="missing">Missing from Mizar</span></li>
 </ul>
@@ -1097,7 +1098,7 @@ be a polynomial in \(R[x]\) (where \(n\geq1\)). Suppose \(a_{n-1}\), &#x2026;,
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated 2025-12-31 Wed 11:11</p>
+<p class="postamble">Last Updated: Wed, 31 Dec 2025 11:12:20 -0800
 </div>
 </body>
 </html>

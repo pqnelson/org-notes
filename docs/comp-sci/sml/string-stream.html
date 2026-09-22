@@ -54,6 +54,7 @@
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
   pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -68,7 +69,7 @@
   pre.src-haskell:before { content: 'Haskell'; }
   pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
+  pre.src-js:before { content: 'JavaScript'; }
   pre.src-latex:before { content: 'LaTeX'; }
   pre.src-ledger:before { content: 'Ledger'; }
   pre.src-lisp:before { content: 'Lisp'; }
@@ -263,7 +264,7 @@ We would create a <code>TextPrimIO.reader</code> object, something like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">mk_string_reader</span> (source : string) : TextPrimIO.reader =
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">mk_string_reader</span> (source : string) : TextPrimIO.reader =
   <span class="org-keyword">let</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">pos</span> = ref 0;
     <span class="org-keyword">fun</span> <span class="org-function-name">read</span> n =
@@ -298,7 +299,7 @@ We would create a <code>TextPrimIO.reader</code> object, something like:
                   close = (<span class="org-keyword">fn</span> () =&gt; ()),
                   ioDesc = NONE}
   <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -313,7 +314,7 @@ closed. Something like:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> <span class="org-function-name">mk_string_reader</span> (source : string) : TextPrimIO.reader =
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> <span class="org-function-name">mk_string_reader</span> (source : string) : TextPrimIO.reader =
   <span class="org-keyword">let</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">pos</span> = ref 0;
     <span class="org-keyword">val</span> <span class="org-variable-name">is_closed</span> = ref false;
@@ -356,7 +357,7 @@ closed. Something like:
                   close = (<span class="org-keyword">fn</span> () =&gt; is_closed := true),
                   ioDesc = NONE}
   <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -365,13 +366,13 @@ stream type:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> stringReader(source : string) =
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> stringReader(source : string) =
   <span class="org-keyword">let</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">reader</span> : TextIO.StreamIO.reader = mk_string_reader sou<span class="org-highlight-beyond-fill-column">rce;</span>
   <span class="org-keyword">in</span>
     TextIO.StreamIO.mkInstream(reader, <span class="org-string">""</span>)
   <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -406,20 +407,20 @@ the reference by appending to it.
 <p>
 On SML/NJ, it seems that only <code>writeVec'</code> is needed for an unbuffered
 string stream. MLton also appears to only require <code>writeVec'</code>. I should
-really test this on other implementations&#x2026;
+really test this on other implementations&hellip;
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-comment-delimiter">(*</span>
-<span class="org-comment">Creates a string writer, which writes to the supplied string b</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">uffer.</span></span>
+<pre class="src src-sml"><code><span class="org-comment-delimiter">(*
+</span><span class="org-comment">Creates a string writer, which writes to the supplied string b</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">uffer.</span></span><span class="org-comment">
 
-<span class="org-comment">@param: buffer is the underlying string reference which accumu</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">lates</span></span>
-<span class="org-comment">        everything the writer writes.</span>
+@param: buffer is the underlying string reference which accumu</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">lates</span></span><span class="org-comment">
+        everything the writer writes.
 
-<span class="org-comment">@see: https://smlfamily.github.io/Basis/prim-io.html#SIG:PRIM_</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">IO.writer:TY</span></span>
-<span class="org-comment">@see: https://smlfamily.github.io/Basis/mono-array-slice.html</span>
-<span class="org-comment">@see: https://smlfamily.github.io/Basis/mono-array.html</span>
-<span class="org-comment-delimiter">*)</span>
+@see: https://smlfamily.github.io/Basis/prim-io.html#SIG:PRIM_</span><span class="org-comment"><span class="org-highlight-beyond-fill-column">IO.writer:TY</span></span><span class="org-comment">
+@see: https://smlfamily.github.io/Basis/mono-array-slice.html
+@see: https://smlfamily.github.io/Basis/mono-array.html</span><span class="org-comment-delimiter">
+*)</span>
 <span class="org-keyword">fun</span> stringWriter(buffer : string ref) : TextPrimIO.writer =
   <span class="org-keyword">let</span>
     <span class="org-keyword">fun</span> <span class="org-function-name">writeVec'</span> (v : TextPrimIO.vector_slice)
@@ -452,7 +453,7 @@ really test this on other implementations&#x2026;
       close = closing,
       ioDesc = NONE}
   <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -471,13 +472,13 @@ writer":
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">fun</span> stringStream(buffer : string ref) =
+<pre class="src src-sml"><code><span class="org-keyword">fun</span> stringStream(buffer : string ref) =
   <span class="org-keyword">let</span>
     <span class="org-keyword">val</span> <span class="org-variable-name">writer</span> : TextIO.StreamIO.writer = stringWriter(buffer)
   <span class="org-keyword">in</span>
     TextIO.StreamIO.mkOutstream(writer, IO.NO_BUF)
   <span class="org-keyword">end</span>;
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -485,7 +486,7 @@ Now we can show an example usage:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sml"><span class="org-keyword">val</span> <span class="org-variable-name">b1</span> : string ref = ref <span class="org-string">""</span>;
+<pre class="src src-sml"><code><span class="org-keyword">val</span> <span class="org-variable-name">b1</span> : string ref = ref <span class="org-string">""</span>;
 <span class="org-keyword">val</span> <span class="org-variable-name">ss1</span> = stringStream(b1);
 
 <span class="org-keyword">fun</span> <span class="org-function-name">ss_print</span> (s : string) =
@@ -500,7 +501,7 @@ ss_print(<span class="org-string">"foobar"</span>);
 print(<span class="org-string">"\n\n!b1 = "</span>^(!b1)^<span class="org-string">"\n\n"</span>);
     
 <span class="org-comment-delimiter">(* </span><span class="org-comment">then `!b1` evaluates to "foobar"</span><span class="org-comment-delimiter"> *)</span>
-</pre>
+</code></pre>
 </div>
 
 <p>
@@ -513,7 +514,7 @@ to make the order correct).</p>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="postamble">Last Updated: Fri, 4 Jul 2025 12:32:40 -0700
+<p class="postamble">Last Updated: Fri, 4 Jul 2025 12:36:41 -0700
 </div>
 </body>
 </html>

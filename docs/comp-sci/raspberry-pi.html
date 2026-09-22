@@ -362,7 +362,7 @@ apt-build and these go into <code>/etc/apt/apt-build.conf</code>, then I can use
 I didn't want to start from scratch, so I simply did the following:
 </p>
 
-<pre class="example" id="orgf059b5d">
+<pre id="h-7003919b-bc52-4bbe-9563-444fdbdfa46e" class="example">
 ~$ cd /etc/apt/
 /etc/apt$ sudo cp sources.list sources.list.bak
 /etc/apt$ sudo nano sources.list
@@ -373,7 +373,7 @@ Then I made <code>sources.list</code> look like (replacing all instances of
 "buster" by "bullseye"):
 </p>
 
-<pre class="example" id="org34a3fa7">
+<pre id="h-164db043-3bd8-4dea-8d9c-d4bde75e59be" class="example">
 # sources.list
 deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 </pre>
@@ -382,7 +382,7 @@ deb http://raspbian.raspberrypi.org/raspbian/ bullseye main contrib non-free rpi
 I saved it, closed nano, then ran the commands:
 </p>
 
-<pre class="example" id="org3542655">
+<pre id="h-dffc27cd-0002-432c-b4c3-cd77b8aaf479" class="example">
 /etc/apt$ sudo apt update
 ...
 /etc/apt$ sudo apt upgrade -y
@@ -584,7 +584,7 @@ When I byte-compile my <code>init.el</code> and my <code>./.emacs</code> file ju
 For my Desktop, I tried:
 </p>
 
-<pre class="example" id="orgbdfcce2">
+<pre id="h-508ff8f6-2c74-4dab-a5ce-dda673be57e8" class="example">
 $ ./configure --with-wide-int --with-x-toolkit=lucid --with-gnutls=ifavailable --with-m17n-flt --with-modules --with-json --with-threads --with-compress-install "CFLAGS=-O3 -pipe -mtune=native -march=native -fno-finite-math-only"
 </pre>
 </div>
@@ -686,7 +686,7 @@ I run into a problem compiling SBCL from the RPi package, experiencing
 an error (as of git commit <code>b430f314c</code>, date Wed Apr 20 03:46:44 2022 +0300):
 </p>
 
-<pre class="example" id="orgb33eaec">
+<pre id="h-eef2844d-bbff-4494-97d5-683518b26174" class="example">
 ~/src/sbcl $ sh make.sh
 ...
 cc -g -Wall -Wundef -Wsign-compare -Wpointer-arith -O3 -std=gnu99 -fno-pie -I.  -c -o os-common.o os-common.c
@@ -872,6 +872,7 @@ department yet.
 <p>
 I am using a script
 </p>
+
 <div class="org-src-container">
 <pre class="src src-bash"><code><span class="org-comment-delimiter">#</span><span class="org-comment">!/usr/local/bin/</span><span class="org-keyword">bash</span><span class="org-comment">
 </span>
@@ -923,7 +924,7 @@ command <code>/opt/vc/bin/vcgencmd measure_temp</code>. I've stuck this into a
 script:
 </p>
 
-<pre class="example" id="orga3a8338">
+<pre id="h-b35de812-09b4-4e97-9bfa-64ec60e9a9ca" class="example">
 #!/bin/bash
 
 # ~/temperature.sh
@@ -944,7 +945,7 @@ I couldn't get Mizar working on my Raspberry Pi 2, and it does not work on
 Raspberry Pi 4B either. Get the latest version <a href="http://mizar.uwb.edu.pl/system/index.html#download">here</a> for Linux (ARM).
 </p>
 
-<pre class="example" id="orga35f627">
+<pre id="h-1672ce6b-3e88-418e-aeb3-c1c6795c887c" class="example">
 ~/src/$ mkdir mizar
 ~/src/$ cd mizar
 ~/src/mizar/$ wget mizar-&lt;version&gt;-arm-linux.tar
@@ -959,7 +960,7 @@ Raspberry Pi 4B either. Get the latest version <a href="http://mizar.uwb.edu.pl/
 When I try running, say, <code>mizf</code> on 32-bit mode, I get errors:
 </p>
 
-<pre class="example" id="org5e50bad">
+<pre id="h-693bcda3-1021-412e-8f4c-2021ebc5e97b" class="example">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char.miz
 Illegal instruction
 Illegal instruction
@@ -970,7 +971,8 @@ alex@raspberrypi:~/src/mizar-playground $
 <p>
 In 64-bit mode, I get errors:
 </p>
-<pre class="example" id="orgce511b4">
+
+<pre id="h-a2329411-50bd-4222-936b-c6611be96ecd" class="example">
 alex@raspberrypi:~/src/mizar-playground $ mizf text/char
 /usr/local/bin/mizf: 8: makeenv: Exec format error
 /usr/local/bin/mizf: 13: errflag: Exec format error
@@ -990,7 +992,7 @@ Raspberry Pi. The basic instructions:
 <b>Step 1: install Free Pascal.</b>
 </p>
 
-<pre class="example" id="orgadaff62">
+<pre id="h-83f861c2-b31d-4703-84bb-5072591338bd" class="example">
 alex@raspberrypi:~$ sudo apt-get update
 alex@raspberrypi:~$ sudo apt-get upgrade
 alex@raspberrypi:~$ sudo apt-get install fpc
@@ -1007,7 +1009,7 @@ binaries, but it installs the MML and documentation locally.
 If you tried using the pre-built binaries, then you can skip this step.
 </p>
 
-<pre class="example" id="orge08dd12">
+<pre id="h-89f930a5-9a7f-4d69-9da9-10aae6c7c872" class="example">
 alex@raspberrypi:~ $ cd src
 alex@raspberrypi:~/src $ mkdir mizar
 alex@raspberrypi:~/src $ cd mizar
@@ -1052,7 +1054,7 @@ changes are adding install instructions, the compile script, and
 adjusting two parameters in the code) and run the following commands:
 </p>
 
-<pre class="example" id="org11abffe">
+<pre id="h-0e855e82-72ce-40a8-b077-12265e08b8dd" class="example">
 alex@raspberrypi:~/src $ git clone https://github.com/CoghettoR/MizarSystem/
 alex@raspberrypi:~/src $ cd MizarSystem
 alex@raspberrypi:~/src/MizarSystem $ time sh compile_rpi.sh
@@ -1075,7 +1077,7 @@ To make Raspberry Pi 4 run in 64-bit mode, add the following line to the
 bottom of your <code>/boot/config.txt</code>:
 </p>
 
-<pre class="example" id="org3a17d2f">
+<pre id="h-a0649f95-487b-4690-8b5d-ea96e55d4a8f" class="example">
 arm_64bit=1
 </pre>
 

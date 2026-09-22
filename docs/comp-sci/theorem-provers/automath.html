@@ -437,7 +437,8 @@ the context to be empty by just writing <code>&lt;turnstile&gt;</code>.
 Consider the following (adapted from Freek Wiedijk's formalization of
 <a href="http://www.cs.ru.nl/~freek/zfc-etc/holl.aut">HOL Light's logic</a>):
 </p>
-<pre class="example" id="orgbd0bdf9">
+
+<pre id="h-36f0f4b9-ed21-40a8-a131-4dcf1394c6d7" class="example">
   * type : TYPE := PRIM    # sets the context to be initial empty context
   * bool : type := PRIM
   * A : type := ---        # sets the context to be A
@@ -467,14 +468,16 @@ context ending at <code>A</code>, creating a new context <code>A:type, B:type</c
 <p>
 The kernel interprets a line of the form
 </p>
-<pre class="example" id="orgf238671">
+
+<pre id="h-c3b94854-dba9-4a5b-83e4-bca49192aff8" class="example">
 a * [x:T] b := ... : T'
 </pre>
 
 <p>
 as two lines:
 </p>
-<pre class="example" id="org79048e9">
+
+<pre id="h-350b93af-43d4-443a-9d94-2fc88ae6a7b2" class="example">
 a * x := --- : T
 x * b := ... : T'
 </pre>
@@ -496,7 +499,7 @@ have a proposition be a 2-expression ("type") of the form <code>p : PROP</code>.
 predicate would parametrize this by a "term":
 </p>
 
-<pre class="example" id="org5b12162">
+<pre id="h-c9545030-8c4b-4a36-9b11-f9eb7ecd8cd2" class="example">
    * T : TYPE := ---
  T * [x:T]predicate : [x:T]PROP := PN
 </pre>
@@ -510,7 +513,8 @@ But is <code>[x:T]PROP</code> a valid expression? De Bruijn calls such a thing a
 <p>
 Quantifiers can be written down easily as:
 </p>
-<pre class="example" id="orgb589b28">
+
+<pre id="h-80b8da51-bfb6-40e5-82c6-f3ec5eecfc88" class="example">
 T * [p:[z:T]PROP] forall : PROP := p
   * [a:PROP][b:PROP] imp:PROP := [x:a]b
   * false : PROP := PRIM
