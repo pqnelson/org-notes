@@ -195,11 +195,18 @@ is call-by-value, the only evaluation rules we really need are for the
 special functions like ~andalso~, ~orelse~, etc.
 
 #+begin_remark
-What exactly /are/ "values"? They correspond to non-expansive
-expressions as found in \sect4.7 of [[https://smlfamily.github.io/sml97-defn.pdf][the 1997 Definition of Standard ML]].
-These are literal values ("special constants"), tuples of non-expansive
-expressions, function values, constructors applied to non-expansive
-expressions, etc.
+What exactly /are/ "values"? +They correspond to non-expansive
+expressions as found in \sect4.7 of [[https://smlfamily.github.io/sml97-defn.pdf][the 1997 Definition of Standard ML]].+
++These are literal values ("special constants"), tuples of non-expansive+
++expressions, function values, constructors applied to non-expansive
+expressions, etc.+ Non-expansive expressions are misleadingly referred
+to as "syntactic values" (because they can be determined /by the parser/
+[hence "syntactic"] as respecting the value-restriction side condition
+for ~let~-expressions). Values are specified by Figure 13 (see Chapter 6) in
+the 1997 Definition, but they loosely correspond to literal values
+("special constants"), function closures, records whose entries are
+values, some complicated rule for mutable references, and data
+constructors whose payload is a value.
 #+end_remark
 
 * Initial Specification of a Few Types
