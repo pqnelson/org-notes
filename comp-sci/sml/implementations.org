@@ -14,6 +14,41 @@
 This is just a cursory "How to build [SML implementation] on Raspberry
 Pi" post.
 
+* Moscow ML
+:PROPERTIES:
+:CUSTOM_ID: h-df127601-dd53-4610-ba46-5678e38fb6f4
+:END:
+
+This is the easiest implementation to build, if you have a C compiler
+available. The [[https://mosml.org/][homepage]] has some documentation, and you ultimately just
+need to clone the [[https://github.com/kfl/mosml][github repo]].
+
+#+begin_danger
+Moscow ML has about half of the Standard Basis library implemented. It's
+[[https://github.com/kfl/mosml/issues/79][missing]] about 8 required signatures and 5 required structures (possibly
+more). So if you want to implement anything involving floating-point
+arithmetic, or certain tricky IO code, then you are in trouble.
+#+end_danger
+
+Unfortunately, the documentation is a little out of date. My experience
+has been the following works:
+
+#+begin_src bash
+~$ git clone https://github.com/kfl/mosml/
+~$ cd mosml
+~/mosml$ cd src
+~/mosml/src$ make
+...
+~/mosml/src$ sudo make install
+#+end_src
+
+This will install ~mosml~ to ~/usr/local/bin/~ and all the libraries are
+placed where needed in the ~/usr/local/~ prefixed directories.
+
+*Note:* You may need to update ~Max_stack_size~ in
+~mosml/src/runtime/config.h~. [[https://github.com/kfl/mosml/issues/81][Some people need more]], but I never needed
+that much memory.
+
 * Poly/ML
 :PROPERTIES:
 :CUSTOM_ID: h-542dda25-92a9-4242-981a-326396c9d891
@@ -150,3 +185,15 @@ Raspberry Pi. Formerly, MLKit had a bytecode interpreter, but this was
 removed to support Javascript.
 
 - [[https://github.com/melsman/mlkit][Github page]]
+* Hamlet
+:PROPERTIES:
+:CUSTOM_ID: h-ecafbc37-30f4-480e-b369-74c552b982b0
+:END:
+
+If you already have a Standard ML implementation (including Moscow ML!),
+then you can build the Hamlet interpreter. See the
+[[https://github.com/rossberg/hamlet][github repo]] for details, but it's "follow your nose": clone it, then run
+~make~, and enjoy.
+
+You can even have Hamlet build itself, if you can tolerate the sluggish
+performance.
