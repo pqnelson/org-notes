@@ -30,7 +30,16 @@ There seems to be no adequate way to formally specify
 input/output. Consequently, this is the only source of impurity which
 does not appear in the formal definition of Standard ML.
 
-I also do not believe there is any adequate way to reason about IO.
+#+begin_remark
+Perhaps I am wildly optimistic and/or ignorant here. For example, there
+may be some impurity in concurrent programming that I am unaware
+of...
+#+end_remark
+
+I also do not believe there is any adequate way to reason about IO. The
+naive solution is to treat Standard ML's streams like a stack of strings
+(possibly with metadata like timestamps). But this is inadequate for
+concurrent systems.
 
 * Haskell
 :PROPERTIES:
