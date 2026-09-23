@@ -19,6 +19,53 @@
 I will review the various subgroup series, and --- if they've been
 already defined (implicitly or explicitly) --- their implementation.
 
+** Derived Series
+:PROPERTIES:
+:CUSTOM_ID: h-97bf7445-54dc-40e3-96cd-bf3e0b4d5471
+:END:
+
+I formalized in ~group_25~ the transfinite derived series for a group
+$G$ defined on all ordinals less than $\alpha$ as:
+
+#+ATTR_HTML: :id h-1a4ea520-453c-49eb-afbf-782e852a0755
+#+begin_src mizar
+definition
+  let G be Group;
+  let alpha be Ordinal;
+  func derived_series(G,alpha) -> Sequence of Subgroups G means
+:: GROUP_25:def 2
+  dom it = alpha
+  & (0 in alpha implies it.0 = (Omega).G)
+  & (for A being Ordinal st succ A in alpha
+     for H being strict Subgroup of G
+     st it.A = H
+     holds it.(succ A) = H`)
+  & (for A being Ordinal st A in alpha & A <> 0 & A is limit_ordinal
+     for H being strict Subgroup of G
+     st it.A = H
+     holds the carrier of H = meet { U where U is Subset of G : ex K being
+     strict Subgroup of G st U = the carrier of K & K in rng(it | A) });
+end;
+#+end_src
+
+Informally, the transfinite derived series $D(G,\alpha)$ is a
+transfinite sequence satisfying:
+
+- Its domain is $\alpha$
+- If $0\in\alpha$ then $D(G,\alpha)_{0}=G$
+- If $A+1\in\alpha$ and $H=D(G,\alpha)_{A}$ is a subgroup of $G$, then $D(G,\alpha)_{A+1}=[H,H]$
+- If $\lambda\in\alpha$ is a limit ordinal and
+  $H=D(G,\alpha)_{\lambda}$ is a subgroup of $G$,
+  then $H=\bigcap D(G,\alpha)|_{\lambda}$ is the intersection of all
+  subgroups appearing earlier in the series
+  
+This is an important example of a descending /transfinite/ series of subgroups. 
+
+To help our finite group theorist friends, we should also prove
+theorems about $D(G,\omega)_{n}$ where $\omega$ is the smallest
+nonzero limit ordinal (i.e., the natural numbers as an ordinal)
+and $n\in\mathbb{N}$ is any natural number (i.e., any non-negative integer).
+
 ** Central Series
 :PROPERTIES:
 :CUSTOM_ID: h-4ecb1fc1-3d39-4555-8a61-3cf134915242
@@ -29,6 +76,7 @@ $G=Z_{1}\geq Z_{2}\geq\dots\geq Z_{n}=\mathbf{1}$ where
 each $Z_{k}\trianglelefteq G$ and the quotient satisfies
 $Z_{k}/Z_{k+1}\leq Z(G/Z_{k+1})$.
 
+#+ATTR_HTML: :id h-0f06f40e-8583-4643-8599-fb51c99044d7
 #+begin_src mizar
 definition
   let IT be Group;
@@ -54,6 +102,7 @@ $G=N_{1}\trianglerighteq N_{2}\trianglerighteq\dots\trianglerighteq N_{n}=\mathb
 --- that is, $N_{j+1}\trianglelefteq N_{j}$ for $j=0,\dots,n-1$ ---
 whose factor groups $N_{k}/N_{k+1}$ are Abelian.
 
+#+ATTR_HTML: :id h-1fc04192-e665-455c-b9d9-8151823bb3b8
 #+begin_src mizar
 definition
   let IT be Group;
@@ -83,6 +132,7 @@ series (as a ``maximal'' subnormal series) requires the
 ~jordan_holder~ attribute (again, this follows Bourbaki's
 /Algebra/ Definition 10 in I.4.7).
 
+#+ATTR_HTML: :id h-68f43697-7327-4d58-8f09-228147b93ddb
 #+begin_src mizar
 :: ALG I.4.7 Definition 9
 definition
@@ -109,6 +159,7 @@ $G=A_{1}\trianglerighteq A_{2}\trianglerighteq\dots\trianglerighteq A_{n}=\mathb
 where $A_{k+1}=[A_{k},G]=[G,A_{k}]$.
 Mizar implicitly defines this in ~GRNILP1:Th27~
 
+#+ATTR_HTML: :id h-a6c22d68-5b80-4bf7-9cd5-0a2c2efbb161
 #+begin_src mizar
 theorem :: GRNILP_1:27
   for G being Group
@@ -142,6 +193,7 @@ $$ Z^{n+1}(G) = \{x\in G\mid \forall y\in G, [x,y]\in Z^{n}(G)\}. $$
 We could thus propose the definition (based on modifying the definition
 ~GRNILP_1:def 2~ to use ~NAT_1~ for ~mode sequence of X is Function of NAT,X~):
 
+#+ATTR_HTML: :id h-857e6a13-f5fe-4888-984f-ff71601d092b
 #+begin_src mizar
 definition
   let G be Group;
@@ -181,6 +233,7 @@ end;
 
 We would then have to prove
 
+#+ATTR_HTML: :id h-a3c705a9-166f-4164-b2b9-e57d90ced52c
 #+begin_src mizar
 theorem
   for G be Group
